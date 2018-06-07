@@ -51,7 +51,6 @@ public class LogTool extends Tool
     protected EditText textFilterEditText;
     private String textFilter = "";
 
-    protected String selectedLogLevel = "I";
     private TextView outputToast;
     private RelativeLayout outputContainer;
     private Handler removeToastHandler;
@@ -223,7 +222,7 @@ public class LogTool extends Tool
 
         levelSpinner = getView().findViewById(R.id.log_level_spinner);
         levelSpinner.setAdapter(spinnerAdapter);
-        //levelSpinner.setSelection(0);
+
         OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
             public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -238,6 +237,8 @@ public class LogTool extends Tool
         };
         levelSpinner.setOnItemSelectedListener(listener);
         levelSpinner.setOnTouchListener(listener);
+
+        levelSpinner.setSelection(2);
     }
 
     /*

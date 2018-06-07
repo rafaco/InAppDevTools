@@ -37,6 +37,14 @@ public class LogFilterConfig {
     }
 
     public Boolean validate(LogLine logLine) {
+
+        //Filter by Level
+        if (!LogLine.validateLevel(logLine.getLogLevel(), logFilter)) {
+            return false;
+        }
+
+        return true;
+        /*
         //Filter by PID
         if (onlyMyPid()
                 && logLine.getProcessId() != pid()) {
@@ -49,18 +57,13 @@ public class LogFilterConfig {
             return false;
         }
 
-        //Filter by Level
-        if (!LogLine.validateLevel(logLine.getLogLevel(), logFilter)) {
-            return false;
-        }
-
         //Filter by Text
         if (!TextUtils.isEmpty(textFilter)
                 && logLine.getLogOutput().toLowerCase().contains(textFilter)) {
             return false;
         }
 
-        return true;
+        return true;*/
     }
 
 
