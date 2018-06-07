@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.text.Editable;
@@ -85,9 +86,13 @@ public class LogTool extends Tool
         initOutputView();
         startLogReader();
 
-
-
-        showFilterOutputToast();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFilterOutputToast();
+            }
+        }, 1000);
     }
 
     private void initLogLineAdaptor() {
@@ -190,12 +195,14 @@ public class LogTool extends Tool
         presetSpinner = getView().findViewById(R.id.log_options_spinner);
         presetSpinner.setAdapter(spinnerAdapter);
         //presetSpinner.setSelection(1);
-        presetSpinner.setOnItemSelectedListener(new OnTouchSelectedListener() {
+        OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
             public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
                 updateFilter();
             }
-        });
+        };
+        presetSpinner.setOnItemSelectedListener(listener);
+        presetSpinner.setOnTouchListener(listener);
     }
 
     private void initLevelFilter() {
@@ -217,7 +224,7 @@ public class LogTool extends Tool
         levelSpinner = getView().findViewById(R.id.log_level_spinner);
         levelSpinner.setAdapter(spinnerAdapter);
         //levelSpinner.setSelection(0);
-        levelSpinner.setOnItemSelectedListener(new OnTouchSelectedListener() {
+        OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
             public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String selectedLogLevel = getSelectedLevel();
@@ -228,7 +235,9 @@ public class LogTool extends Tool
                 ((TextView) view).setText(levelFilters.get(levelSpinner.getSelectedItemPosition()).first.toUpperCase());
                 updateFilter();
             }
-        });
+        };
+        levelSpinner.setOnItemSelectedListener(listener);
+        levelSpinner.setOnTouchListener(listener);
     }
 
     /*
@@ -295,7 +304,7 @@ public class LogTool extends Tool
     }
     private void initSearchButton() {
         //Throw exception as playground
-        Button searchButton = (Button) getView().findViewById(getResourceId(getView(), "id", "search_button"));
+        Button searchButton = getView().findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

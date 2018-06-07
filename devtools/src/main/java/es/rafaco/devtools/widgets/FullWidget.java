@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.utils.OnTouchSelectedListener;
 import es.rafaco.devtools.utils.UiUtils;
 
 
@@ -84,25 +85,20 @@ public class FullWidget extends Widget {
     public void initToolSelector(ArrayList<String> toolsList) {
         toolsSpinner = getView().findViewById(R.id.tools_spinner);
 
-
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getView().getContext(),
                 android.R.layout.simple_spinner_item, toolsList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
         toolsSpinner.setAdapter(spinnerAdapter);
-        toolsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String title = spinnerAdapter.getItem(position);
+            public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String title = spinnerAdapter.getItem(pos);
                 manager.startTool(title);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        };
+        toolsSpinner.setOnItemSelectedListener(listener);
+        toolsSpinner.setOnTouchListener(listener);
     }
 
     public void selectTool(String title) {

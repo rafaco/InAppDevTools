@@ -26,6 +26,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.shell.ShellExecuter;
+import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 
 public class InfoTool extends Tool {
@@ -80,26 +81,23 @@ public class InfoTool extends Tool {
                 android.R.layout.simple_spinner_item, list);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mainSpinner.setAdapter(spinnerAdapter);
-        mainSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String title = spinnerAdapter.getItem(position);
+            public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String title = spinnerAdapter.getItem(pos);
                 Log.d(DevTools.TAG, "Info - Main selector changed to: " + title);
 
                 if (title.equals("BuildConfig")) {
                     loadBuildConfig();
-                }
-                else if (title.equals("dumpsys")) {
+                } else if (title.equals("dumpsys")) {
                     onDumpSys();
                 }
             }
+        };
+        mainSpinner.setOnItemSelectedListener(listener);
+        mainSpinner.setOnTouchListener(listener);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        //commandSpinner.setSelection(0);
+        loadBuildConfig();
     }
 
     private void loadBuildConfig() {
