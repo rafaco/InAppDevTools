@@ -27,7 +27,9 @@ public class LogLine {
             "(?:\\*\\s*\\d+)?" +
             "\\): ");
 
+    private String originalLine;
     private int logLevel;
+    private Character logLevelChar;
     private String tag;
     private String logOutput;
     private int processId = -1;
@@ -38,6 +40,7 @@ public class LogLine {
     public static LogLine newLogLine(String originalLine, boolean expanded) {
 
         LogLine logLine = new LogLine();
+        logLine.setOriginalLine(originalLine);
         logLine.setExpanded(expanded);
 
         int startIdx = 0;
@@ -55,9 +58,8 @@ public class LogLine {
         Matcher matcher = logPattern.matcher(originalLine);
 
         if (matcher.find(startIdx)) {
-            char logLevelChar = matcher.group(1).charAt(0);
-
-            logLine.setLogLevel(convertCharToLogLevel(logLevelChar));
+            logLine.setLogLevelChar(matcher.group(1).charAt(0));
+            logLine.setLogLevel(convertCharToLogLevel(logLine.getLogLevelChar()));
             logLine.setTag(matcher.group(2));
             logLine.setProcessId(Integer.parseInt(matcher.group(3)));
 
@@ -76,18 +78,18 @@ public class LogLine {
     private static int convertCharToLogLevel(char logLevelChar) {
 
         switch (logLevelChar) {
-            case 'D':
-                return Log.DEBUG;
-            case 'E':
-                return Log.ERROR;
-            case 'I':
-                return Log.INFO;
             case 'V':
                 return Log.VERBOSE;
+            case 'D':
+                return Log.DEBUG;
+            case 'I':
+                return Log.INFO;
             case 'W':
                 return Log.WARN;
+            case 'E':
+                return Log.ERROR;
             case 'F':
-                return LogLine.LOG_WTF; // 'F' actually stands for 'WTF', which is a real Android log level in 2.2
+                return LOG_WTF; // 'F' actually stands for 'WTF', which is a real Android log level in 2.2
         }
         return -1;
     }
@@ -112,42 +114,22 @@ public class LogLine {
     }
 
     public static boolean validateLevel(int logLevel, String logLevelLimit) {
-        return validateLevel(logLevel, convertCharToLogLevel(logLevelLimit.charAt(0)));
+        return logLevel >= convertCharToLogLevel(logLevelLimit.charAt(0));
     }
 
-    public static boolean validateLevel(int logLevel, int logLevelLimit) {
-
-        int minVal = 0;
-        switch (logLevel) {
-
-            case Log.VERBOSE:
-                minVal = 0;
-                break;
-            case Log.DEBUG:
-                minVal = 1;
-                break;
-            case Log.INFO:
-                minVal = 2;
-                break;
-            case Log.WARN:
-                minVal = 3;
-                break;
-            case Log.ERROR:
-                minVal = 4;
-                break;
-            case LogLine.LOG_WTF:
-                minVal = 5;
-                break;
-            default: // e.g. the starting line that says "output of log such-and-such"
-                return true;
-        }
-
-        return minVal >= logLevelLimit;
-
-    }
 
 
     public String getOriginalLine() {
+        String previousImp = getOriginalLine_OLD();
+        if (!previousImp.equals(originalLine)){
+            Log.w("RAFA", "Originalname problem");
+            //06-07 23:01:37.069 E/AndroidRuntime( 7640): FATAL EXCEPTION: main
+            //06-07 23:01:37.069 E/AndroidRuntime(7640): FATAL EXCEPTION: main
+        }
+        return originalLine;
+    }
+
+    public String getOriginalLine_OLD() {
 
         if (logLevel == -1) { // starter line like "begin of log etc. etc."
             return logOutput;
@@ -172,6 +154,18 @@ public class LogLine {
 
     public String getLogLevelText() {
         return Character.toString(convertLogLevelToChar(logLevel));
+    }
+
+    public void setOriginalLine(String originalLine) {
+        this.originalLine = originalLine;
+    }
+
+    public Character getLogLevelChar() {
+        return logLevelChar;
+    }
+
+    public void setLogLevelChar(Character logLevelChar) {
+        this.logLevelChar = logLevelChar;
     }
 
     public int getLogLevel() {
