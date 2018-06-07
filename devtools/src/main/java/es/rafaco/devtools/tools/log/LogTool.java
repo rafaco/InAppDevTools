@@ -80,19 +80,14 @@ public class LogTool extends Tool
         initPresetFilter();
         initLevelFilter();
         initTextFilter();
-
+        initSearchButton();
         initLogLineAdaptor();
         initOutputView();
         startLogReader();
 
-        //Throw exception as playground
-        Button searchButton = (Button) getView().findViewById(getResourceId(getView(), "id", "search_button"));
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                throw new NullPointerException();
-            }
-        });
+
+
+        showFilterOutputToast();
     }
 
     private void initLogLineAdaptor() {
@@ -101,13 +96,7 @@ public class LogTool extends Tool
     }
 
     private void startLogReader() {
-
-        if (logReaderTask!=null) {
-            logReaderTask.stopTask();
-        }
-        if (adapter !=null && adapter.getCount() > 0) {
-            adapter.clear();
-        }
+        stopLogReader();
 
         //String command = presetFilters.get(presetSpinner.getSelectedItemPosition()).second;
         //command = String.format(command, selectedLogLevel);
@@ -122,14 +111,18 @@ public class LogTool extends Tool
         }
     }
 
-    @Override
-    protected void onStop() {
-        if (logReaderTask!=null){
+    private void stopLogReader() {
+        if (logReaderTask!=null) {
             logReaderTask.stopTask();
         }
         if (adapter !=null && adapter.getCount() > 0) {
             adapter.clear();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        stopLogReader();
     }
 
     @Override
@@ -148,6 +141,10 @@ public class LogTool extends Tool
 
         outputView.setAdapter(adapter);
         //outputView.setOnItemClickListener(this);
+    }
+
+    public void showFilterOutputToast(){
+        showOutputToast(String.format("Showing %s of %s", adapter.getFilteredSize(), adapter.getOriginalSize()));
     }
 
     public void showOutputToast(String text) {
@@ -293,6 +290,16 @@ public class LogTool extends Tool
             }
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+    private void initSearchButton() {
+        //Throw exception as playground
+        Button searchButton = (Button) getView().findViewById(getResourceId(getView(), "id", "search_button"));
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new NullPointerException();
             }
         });
     }

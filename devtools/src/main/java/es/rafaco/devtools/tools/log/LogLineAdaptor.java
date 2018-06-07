@@ -41,9 +41,17 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    @Override
-    public int getCount() {
-        return (filteredData != null) ? filteredData.size() : 0;
+
+    //region [ ADAPTOR ]
+
+    public void add(String value, int id) {
+        LogLine newLine = LogLine.newLogLine(value, false);
+        originalData.add(newLine);
+
+        if (logFilter.getConfig().validate(newLine)){
+            filteredData.add(LogLine.newLogLine(value, false));
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -56,14 +64,9 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         return position;
     }
 
-    public void add(String value, int id) {
-        LogLine newLine = LogLine.newLogLine(value, false);
-        originalData.add(newLine);
-
-        if (logFilter.getConfig().validate(newLine)){
-            filteredData.add(LogLine.newLogLine(value, false));
-            notifyDataSetChanged();
-        }
+    @Override
+    public int getCount() {
+        return (filteredData != null) ? filteredData.size() : 0;
     }
 
     public void clear(){
@@ -73,49 +76,17 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         notifyDataSetInvalidated();
     }
 
+    //endregion
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.tool_log_item, null);
-            holder = new ViewHolder();
-            holder.text = convertView.findViewById(R.id.txtLogString);
-            convertView.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        LogLine itemData = filteredData.get(position);
-        String type = itemData.getLogLevelText();
-        String line = itemData.getLogOutput();
-
-        if(TextUtils.isEmpty(currentFilterString)){
-            holder.text.setText(line);
-        }
-        else{
-            highlightString(line, currentFilterString, holder.text);
-        }
-
-        holder.text.setTextColor(getLogColor(type));
-
-        return convertView;
-    }
-
-    public void updateFilter(LogFilterConfig newConfig) {
-        logFilter.update(newConfig);
-    }
-
-    static class ViewHolder {
-        TextView text;
-    }
 
     //region [ FILTER ]
 
     public Filter getFilter() {
         return logFilter;
+    }
+
+    public void updateFilter(LogFilterConfig newConfig) {
+        logFilter.update(newConfig);
     }
 
     private class LogFilter extends Filter {
@@ -164,8 +135,55 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData = (ArrayList<LogLine>) results.values;
             notifyDataSetChanged();
-            manager.showOutputToast(String.format("Showing %s of %s", filteredData.size(), originalData.size()));
+            manager.showFilterOutputToast();
         }
+    }
+
+    public String getOriginalSize() {
+        return String.valueOf(originalData.size());
+    }
+
+    public String getFilteredSize() {
+        return String.valueOf(filteredData.size());
+    }
+
+    //endregion
+
+
+    //region [ VIEW ]
+
+    static class ViewHolder {
+        TextView text;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        ViewHolder holder;
+
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.tool_log_item, null);
+            holder = new ViewHolder();
+            holder.text = convertView.findViewById(R.id.txtLogString);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        LogLine itemData = filteredData.get(position);
+        String type = itemData.getLogLevelText();
+        String line = itemData.getLogOutput();
+
+        if(TextUtils.isEmpty(currentFilterString)){
+            holder.text.setText(line);
+        }
+        else{
+            highlightString(line, currentFilterString, holder.text);
+        }
+
+        holder.text.setTextColor(getLogColor(type));
+
+        return convertView;
     }
 
     //endregion

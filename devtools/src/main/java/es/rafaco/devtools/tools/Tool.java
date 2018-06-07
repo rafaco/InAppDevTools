@@ -52,6 +52,9 @@ public abstract class Tool {
     public ViewGroup getView() {
         return toolView;
     }
+    public ToolsManager getManager() {
+        return manager;
+    }
 
     protected int getResourceId(View view, String resourceType, String identifier){
         return view.getResources().getIdentifier(
