@@ -114,6 +114,11 @@ public class LogLine {
     }
 
     public static boolean validateLevel(int logLevel, String logLevelLimit) {
+        if (logLevel == -1) {
+            //TODO: // starter lines like "begin of log etc. etc."
+            return true;
+        }
+
         return logLevel >= convertCharToLogLevel(logLevelLimit.charAt(0));
     }
 

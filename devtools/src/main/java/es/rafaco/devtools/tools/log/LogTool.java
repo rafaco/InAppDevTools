@@ -168,7 +168,6 @@ public class LogTool extends Tool
     }
 
     private void initPresetFilter() {
-
         //TODO: get from external config
         presetFilters = new ArrayList<>();
         presetFilters.add(new Pair<>("All", "All"));
@@ -193,7 +192,7 @@ public class LogTool extends Tool
 
         presetSpinner = getView().findViewById(R.id.log_options_spinner);
         presetSpinner.setAdapter(spinnerAdapter);
-        //presetSpinner.setSelection(1);
+
         OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
             public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -202,6 +201,7 @@ public class LogTool extends Tool
         };
         presetSpinner.setOnItemSelectedListener(listener);
         presetSpinner.setOnTouchListener(listener);
+        presetSpinner.setSelection(1);
     }
 
     private void initLevelFilter() {

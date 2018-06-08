@@ -109,13 +109,11 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-
-            currentFilterString = constraint.toString().toLowerCase();
+            //currentFilterString = constraint.toString().toLowerCase();
 
             final List<LogLine> originalList = originalData;
             int count = originalList.size();
             final ArrayList<LogLine> filteredList = new ArrayList<>(count);
-            String filterableString;
             LogLine currentLogLine;
             for (int i = 0; i < count; i++) {
                 currentLogLine = originalList.get(i);
