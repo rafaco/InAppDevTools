@@ -6,6 +6,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Debug;
+import android.util.DebugUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -109,6 +114,9 @@ public class InfoTool extends Tool {
         out.append("\n");
         out.append(getHardwareAndSoftwareInfo());
         out.append("\n");
+        out.append(showMemInfo());
+        out.append("\n");
+
 
         secondSpinner.setVisibility(View.GONE);
     }
@@ -162,10 +170,10 @@ public class InfoTool extends Tool {
                 "DevTools Version: " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")" + "\n" +
                 //"BUILD_TYPE: " + BuildConfig.BUILD_TYPE + "\n" +
                 //"FLAVOR: " + BuildConfig.FLAVOR + "\n" +
+                "\n" + "Tasks: " + tasks + "\n" +
                 "\n" + "PackageInfo:" + "\n" +
                 "Activities: " + activities + "\n" +
                 "Services: " + services + "\n" +
-                "Tasks: " + tasks + "\n" +
                 "Permissions: " + permissions + "\n" +
                 "Features: " + features + "\n" +
                 "Instrumentations: " + instrumentations + "\n";
@@ -259,4 +267,33 @@ public class InfoTool extends Tool {
         });
         secondSpinner.setVisibility(View.VISIBLE);
     }
+
+    public static String showMemInfo() {
+        StringBuilder meminfo = new StringBuilder();
+        try {
+            ArrayList<String> commandLine = new ArrayList<String>();
+            commandLine.add("cat");
+            //commandLine.add("/proc/meminfo");
+            //commandLine.add("/proc/stat");
+            commandLine.add("/proc/version"); //Linux version multiline very complete
+            //commandLine.add("/proc/pid/stat");
+            //commandLine.add("adb top -n 1");
+            //In adb shell: top -n 1
+
+            Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[commandLine.size()]));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                meminfo.append(line);
+                meminfo.append("\n");
+            }
+
+        } catch (IOException e) {
+            Log.e(DevTools.TAG, "Could not read /proc/meminfo", e);
+        }
+
+        return meminfo.toString();
+    }
+
 }
