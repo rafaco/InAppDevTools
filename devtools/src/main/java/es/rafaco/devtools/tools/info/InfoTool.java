@@ -26,6 +26,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.shell.ShellExecuter;
+import es.rafaco.devtools.utils.AppInfoUtils;
 
 
 public class InfoTool extends Tool {
@@ -198,6 +199,7 @@ public class InfoTool extends Tool {
                 c.getString(R.string.board) + " " + Build.BOARD + "\n" +
                 c.getString(R.string.id) + " " + Build.ID + "\n" +
                 c.getString(R.string.serial) + " " + Build.SERIAL + "\n" +
+                "UUID" + " " + AppInfoUtils.getUUID(DevTools.getAppContext()) + "\n" +
                 "IS VIRTUAL: " + isVirtual().toString() + "\n" +
                 "PRODUCT: " + isVirtual().toString() + "\n" +
                 "\n" + "OS: " + "\n" +
