@@ -1,5 +1,8 @@
 package es.rafaco.devtools.tools.log;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -7,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.R;
 
 
 public class LogLine {
@@ -97,14 +101,14 @@ public class LogLine {
     private static char convertLogLevelToChar(int logLevel) {
 
         switch (logLevel) {
+            case Log.VERBOSE:
+                return 'V';
             case Log.DEBUG:
                 return 'D';
             case Log.ERROR:
                 return 'E';
             case Log.INFO:
                 return 'I';
-            case Log.VERBOSE:
-                return 'V';
             case Log.WARN:
                 return 'W';
             case LOG_WTF:
@@ -122,7 +126,28 @@ public class LogLine {
         return logLevel >= convertCharToLogLevel(logLevelLimit.charAt(0));
     }
 
+    public static int getLogColor(Context context, String type) {
+        int color;
+        if(type.equals("V") || type.equals("D")){
+            color = R.color.rally_blue; //Color.rgb(0, 0, 200);
+        }
+        else if(type.equals("I")){
+            color = R.color.rally_green; //Color.rgb(0, 128, 0);
+        }
+        else if(type.equals("W")){
+            color = R.color.rally_yellow; //Color.parseColor("#827717");//rgb(255, 234, 0);
+        }
+        else if(type.equals("E") || type.equals("F")){
+            color = R.color.rally_orange; //Color.rgb(255, 0, 0);
+        }else{
+            color = Color.WHITE;
+        }
+        return ContextCompat.getColor(context, color);
+    }
 
+    public int getLogColor(Context context){
+        return getLogColor(context, String.valueOf(logLevelChar));
+    }
 
     public String getOriginalLine() {
         String previousImp = getOriginalLine_OLD();

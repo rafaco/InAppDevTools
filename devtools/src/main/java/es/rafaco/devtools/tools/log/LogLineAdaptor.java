@@ -171,6 +171,7 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         LogLine itemData = filteredData.get(position);
         String type = itemData.getLogLevelText();
         String line = itemData.getLogOutput();
+        int color = itemData.getLogColor(context);
 
         if(TextUtils.isEmpty(currentFilterString)){
             holder.text.setText(line);
@@ -179,7 +180,7 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
             highlightString(line, currentFilterString, holder.text);
         }
 
-        holder.text.setTextColor(getLogColor(type));
+        holder.text.setTextColor(color);
 
         return convertView;
     }
@@ -188,23 +189,6 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
 
     //region [ UI UTIL ]
-
-    public static int getLogColor(String type) {
-        int color = Color.BLUE;
-        if(type.equals("D")){
-            color = Color.rgb(0, 0, 200);
-        }
-        else if(type.equals("I")){
-            color = Color.rgb(0, 128, 0);
-        }
-        else if(type.equals("W")){
-            color = Color.parseColor("#827717");//rgb(255, 234, 0);
-        }
-        else if(type.equals("E") || type.equals("F")){
-            color = Color.rgb(255, 0, 0);
-        }
-        return color;
-    }
 
     private void highlightString(CharSequence text, String keyword, TextView textView) {
 

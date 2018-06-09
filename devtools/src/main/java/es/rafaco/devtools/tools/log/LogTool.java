@@ -29,10 +29,7 @@ import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
-import static es.rafaco.devtools.tools.log.LogLineAdaptor.getLogColor;
-
-public class LogTool extends Tool
-                              implements AdapterView.OnItemClickListener {
+public class LogTool extends Tool implements AdapterView.OnItemClickListener {
 
     public static final String VERBOSE = "Verbose";
     public static final String DEBUG = "Debug";
@@ -230,7 +227,7 @@ public class LogTool extends Tool
 
                 Log.d(DevTools.TAG, "Verbosity level changed to: " + selectedLogLevel);
                 //stop();
-                ((TextView) view).setTextColor(getLogColor(selectedLogLevel));
+                ((TextView) view).setTextColor(LogLine.getLogColor(view.getContext(), selectedLogLevel));
                 ((TextView) view).setText(levelFilters.get(levelSpinner.getSelectedItemPosition()).first.toUpperCase());
                 updateFilter();
             }
