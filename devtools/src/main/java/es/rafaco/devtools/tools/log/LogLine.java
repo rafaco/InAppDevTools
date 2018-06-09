@@ -127,7 +127,7 @@ public class LogLine {
     public String getOriginalLine() {
         String previousImp = getOriginalLine_OLD();
         if (!previousImp.equals(originalLine)){
-            Log.w("RAFA", "Originalname problem");
+            //Log.w("RAFA", "Originalname problem");
             //06-07 23:01:37.069 E/AndroidRuntime( 7640): FATAL EXCEPTION: main
             //06-07 23:01:37.069 E/AndroidRuntime(7640): FATAL EXCEPTION: main
         }

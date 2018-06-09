@@ -23,9 +23,9 @@
             android:id="@+id/filter_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Type to filter"
+            android:hint="Type"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true" />
         <Button
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#DC3ABC00"/>
+        android:background="@color/rally_blue"/>
 
     <RelativeLayout
         android:id="@+id/output_container"
@@ -57,7 +57,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:background="#DC3ABC00"
-            android:textColor="@color/charcoal" />
+            android:textColor="@color/charcoal"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 

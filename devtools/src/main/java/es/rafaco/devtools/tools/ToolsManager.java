@@ -38,7 +38,6 @@ public class ToolsManager {
         addTool(new LogTool(this));
         addTool(new ShellTool(this));
         addTool(new ReportTool(this));
-
     }
 
     public ArrayList<String> getToolList() {
