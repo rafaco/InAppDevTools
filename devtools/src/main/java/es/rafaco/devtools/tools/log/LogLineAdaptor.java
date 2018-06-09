@@ -202,7 +202,7 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         int indexOfKeyword = spannableString.toString().indexOf(keyword);
         while (indexOfKeyword > 0) {
-            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.parseColor("#DC3ABC00"));
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.parseColor("@color/rally_blue"));
             spannableString.setSpan(backgroundColorSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             //ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });

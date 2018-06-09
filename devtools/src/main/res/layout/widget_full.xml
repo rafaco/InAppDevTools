@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="#DC3ABC00"
+                android:background="@color/rally_blue"
                 android:textColor="@color/charcoal" /> -->
         </LinearLayout>
 

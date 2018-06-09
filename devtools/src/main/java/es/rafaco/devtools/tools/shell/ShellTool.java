@@ -1,17 +1,16 @@
 package es.rafaco.devtools.tools.shell;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 
 public class ShellTool extends Tool {
-
 
     private EditText input;
     private Button btn;
@@ -40,9 +39,9 @@ public class ShellTool extends Tool {
 
     @Override
     protected void onStart(View toolView) {
-        input = (EditText) getView().findViewById(getResourceId(getView(), "id", "txt"));
-        btn = (Button) getView().findViewById(getResourceId(getView(), "id", "btn"));
-        out = (TextView) getView().findViewById(getResourceId(getView(), "id", "out"));
+        input = getView().findViewById(R.id.txt);
+        btn = getView().findViewById(R.id.btn);
+        out = getView().findViewById(R.id.out);
         btn.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -31,7 +31,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#DC3ABC00"/>
+            android:background="@color/rally_blue"/>
 
         <ScrollView
             android:layout_width="match_parent"
