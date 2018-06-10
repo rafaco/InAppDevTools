@@ -1,16 +1,15 @@
 package es.rafaco.devtools.tools.home;
 
-class HomeInfo {
-    int color;
+public class HomeInfo {
     String title;
     String message;
     String iconAction;
+    int color;
 
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
+    public HomeInfo(String title, String message, String iconAction, int color) {
+        this.title = title;
+        this.message = message;
+        this.iconAction = iconAction;
         this.color = color;
     }
 
@@ -37,4 +36,13 @@ class HomeInfo {
     public void setIconAction(String iconAction) {
         this.iconAction = iconAction;
     }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
 }

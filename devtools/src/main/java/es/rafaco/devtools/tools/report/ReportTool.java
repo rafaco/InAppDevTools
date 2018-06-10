@@ -1,9 +1,13 @@
 package es.rafaco.devtools.tools.report;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +19,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.home.HomeInfo;
 
 public class ReportTool extends Tool {
 
@@ -64,6 +71,16 @@ public class ReportTool extends Tool {
     protected void onDestroy() {
         if (process != null)
             process.destroy();
+    }
+
+    @Override
+    public HomeInfo getHomeInfo(){
+        HomeInfo info = new HomeInfo(
+                getTitle() + " Tool", //"Send a Report"
+                "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
+                "",
+                ContextCompat.getColor(getContext(), R.color.rally_green));
+        return  info;
     }
 
 

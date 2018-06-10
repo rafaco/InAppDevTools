@@ -6,12 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Debug;
-import android.util.DebugUtils;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -30,6 +27,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.home.HomeInfo;
 import es.rafaco.devtools.tools.shell.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
@@ -78,7 +76,16 @@ public class InfoTool extends Tool {
     }
 
     @Override
-    public String getInfo(){
+    public HomeInfo getHomeInfo(){
+        HomeInfo info = new HomeInfo(
+                getTitle() + " Tool",
+                getHomeInfoMessage(),
+                "",
+                ContextCompat.getColor(getContext(), R.color.rally_blue));
+        return  info;
+    }
+
+    public String getHomeInfoMessage(){
         String out = "";
         Context context = DevTools.getAppContext();
         PackageInfo pInfo = getPackageInfo(context);

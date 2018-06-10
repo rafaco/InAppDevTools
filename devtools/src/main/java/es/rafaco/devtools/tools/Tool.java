@@ -1,9 +1,12 @@
 package es.rafaco.devtools.tools;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import es.rafaco.devtools.tools.home.HomeInfo;
 
 public abstract class Tool {
     private final ToolsManager manager;
@@ -43,9 +46,7 @@ public abstract class Tool {
         getContainer().removeAllViews();
     }
 
-    public ViewGroup getContainer() {
-        return manager.getContainer();
-    }
+
     public LayoutInflater getInflater() {
         return manager.getInflater();
     }
@@ -55,8 +56,14 @@ public abstract class Tool {
     public ToolsManager getManager() {
         return manager;
     }
+    public ViewGroup getContainer() {
+        return manager.getContainer();
+    }
+    public Context getContext() {
+        return manager.getContainer().getContext();
+    }
 
-    public String getInfo() {
+    public HomeInfo getHomeInfo() {
         return null;
     }
 
