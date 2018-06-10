@@ -127,7 +127,7 @@ public class LogLine {
     }
 
     public static int getLogColor(Context context, String type) {
-        int color;
+        int color = Color.WHITE;
         if(type.equals("V") || type.equals("D")){
             color = R.color.rally_blue; //Color.rgb(0, 0, 200);
         }
@@ -139,10 +139,14 @@ public class LogLine {
         }
         else if(type.equals("E") || type.equals("F")){
             color = R.color.rally_orange; //Color.rgb(255, 0, 0);
-        }else{
-            color = Color.WHITE;
         }
-        return ContextCompat.getColor(context, color);
+
+        if (color == Color.WHITE){
+            return Color.WHITE;
+        }else{
+
+            return ContextCompat.getColor(context, color);
+        }
     }
 
     public int getLogColor(Context context){

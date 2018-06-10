@@ -62,9 +62,9 @@ public class InfoTool extends Tool {
 
     @Override
     protected void onStart(View toolView) {
-        out = (TextView) getView().findViewById(getResourceId(getView(), "id", "out"));
-        mainSpinner = (Spinner) getView().findViewById(getResourceId(getView(),"id", "info_main_spinner"));
-        secondSpinner = (Spinner) getView().findViewById(getResourceId(getView(),"id", "info_second_spinner"));
+        out = getView().findViewById(R.id.out);
+        mainSpinner =  getView().findViewById(R.id.info_main_spinner);
+        secondSpinner = getView().findViewById(R.id.info_second_spinner);
 
         initMainSelector();
     }
@@ -75,6 +75,20 @@ public class InfoTool extends Tool {
 
     @Override
     protected void onDestroy() {
+    }
+
+    @Override
+    public String getInfo(){
+        String out = "";
+        Context context = DevTools.getAppContext();
+        PackageInfo pInfo = getPackageInfo(context);
+        String appName = getAppName(context, pInfo);
+        out += appName + " "  + pInfo.versionName + " (" + pInfo.versionCode + ")";
+        out += "\n";
+        out += Build.BRAND + " " + Build.MODEL;
+        out += "\n";
+        out += "Android " + Build.VERSION.RELEASE + " (" + getVersionCodeName() + ")";
+        return out;
     }
 
     private void initMainSelector() {
@@ -123,39 +137,13 @@ public class InfoTool extends Tool {
 
     private String getAppInfo() {
         Context context = DevTools.getAppContext();
+
+        PackageInfo pInfo = getPackageInfo(context);
+        String appName = getAppName(context, pInfo);
         String packageName = context.getPackageName();
-        PackageInfo pInfo = new PackageInfo();
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_ACTIVITIES);/* ||
-                    PackageManager.GET_ACTIVITIES ||
-                    PackageManager.GET_SERVICES ||
-                    PackageManager.GET_INSTRUMENTATION);*/
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        String services = "";
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getPackageName().equals(packageName)){
-                services += service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
-            }
-        }
-
-        String tasks = "";
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
-        Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
-        while(itr.hasNext()){
-            ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo)itr.next();
-            int id = runningTaskInfo.id;
-            CharSequence desc= runningTaskInfo.description;
-            int numOfActivities = runningTaskInfo.numActivities;
-            String topActivity = runningTaskInfo.topActivity.getShortClassName();
-            tasks += String.valueOf(id) + desc + String.valueOf(numOfActivities) + topActivity + "\n";
-        }
-
-        String appName = pInfo.applicationInfo.labelRes == 0 ? pInfo.applicationInfo.nonLocalizedLabel.toString() : context.getString(pInfo.applicationInfo.labelRes);
+        String services = getRunningServices(context);
+        String tasks = getRunningTasks(context);
         String permissions = parsePackageInfoArray(pInfo.permissions);
         String activities = parsePackageInfoArray(pInfo.activities);
         //String services = parsePackageInfoArray(pInfo.services);
@@ -179,21 +167,10 @@ public class InfoTool extends Tool {
                 "Instrumentations: " + instrumentations + "\n";
     }
 
-    private String parsePackageInfoArray(PackageItemInfo[] infos) {
-        String result;
-        if (infos == null){
-            return "Unavailable";
-        }
-        result = "[" + infos.length + "] ";
-        if (infos.length > 0){
-            for (PackageItemInfo info: infos) {
-                result += info.name + "\n";
-            }
-            //result = result.substring(0, result.length() - 2);
-            //result += ".";
-        }
-        return result;
+    private String getAppName(Context context, PackageInfo pInfo) {
+        return pInfo.applicationInfo.labelRes == 0 ? pInfo.applicationInfo.nonLocalizedLabel.toString() : context.getString(pInfo.applicationInfo.labelRes);
     }
+
 
     private String getHardwareAndSoftwareInfo() {
         Context c = getContainer().getContext();
@@ -296,4 +273,61 @@ public class InfoTool extends Tool {
         return meminfo.toString();
     }
 
+    public String getRunningServices(Context context) {
+        String output = "";
+        String packageName = context.getPackageName();
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (service.service.getPackageName().equals(packageName)){
+                output += service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
+            }
+        }
+        return output;
+    }
+
+    private String getRunningTasks(Context context) {
+        String output = "";
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
+        Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
+        while(itr.hasNext()){
+            ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo)itr.next();
+            int id = runningTaskInfo.id;
+            CharSequence desc= runningTaskInfo.description;
+            int numOfActivities = runningTaskInfo.numActivities;
+            String topActivity = runningTaskInfo.topActivity.getShortClassName();
+            output += String.valueOf(id) + desc + String.valueOf(numOfActivities) + topActivity + "\n";
+        }
+        return output;
+    }
+
+    private PackageInfo getPackageInfo(Context context) {
+        PackageInfo pInfo = new PackageInfo();
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_ACTIVITIES);/* ||
+                    PackageManager.GET_ACTIVITIES ||
+                    PackageManager.GET_SERVICES ||
+                    PackageManager.GET_INSTRUMENTATION);*/
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pInfo;
+    }
+
+    private String parsePackageInfoArray(PackageItemInfo[] infos) {
+        String result;
+        if (infos == null){
+            return "Unavailable";
+        }
+        result = "[" + infos.length + "] ";
+        if (infos.length > 0){
+            for (PackageItemInfo info: infos) {
+                result += info.name + "\n";
+            }
+            //result = result.substring(0, result.length() - 2);
+            //result += ".";
+        }
+        return result;
+    }
 }

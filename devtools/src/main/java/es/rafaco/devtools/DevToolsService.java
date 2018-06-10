@@ -92,6 +92,8 @@ public class DevToolsService extends Service {
 
         ArrayList<String> toolsList = toolsManager.getToolList();
         ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
+
+        startTool("Home");
     }
 
     @Override

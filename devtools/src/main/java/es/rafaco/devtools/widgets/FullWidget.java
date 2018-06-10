@@ -1,5 +1,6 @@
 package es.rafaco.devtools.widgets;
 
+import android.animation.LayoutTransition;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -74,6 +76,8 @@ public class FullWidget extends Widget {
                         manager.toogleFullMode(false);
                     }
                 });
+
+        ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
 
     @Override

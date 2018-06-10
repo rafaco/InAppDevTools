@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
 import es.rafaco.devtools.tools.report.ReportTool;
@@ -34,6 +35,7 @@ public class ToolsManager {
     private void initTools() {
         getToolList();
 
+        addTool(new HomeTool(this));
         addTool(new InfoTool(this));
         addTool(new LogTool(this));
         addTool(new ShellTool(this));
@@ -45,6 +47,7 @@ public class ToolsManager {
         /*for (Pair<String,String> pair: presetFilters) {
             toolsList.addWidget(pair.first);
         }*/
+        toolsList.add("Home");
         toolsList.add("Info");
         toolsList.add("Log");
         toolsList.add("Shell");

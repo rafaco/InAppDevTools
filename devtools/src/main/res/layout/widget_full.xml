@@ -87,7 +87,9 @@
             android:id="@+id/content_container"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="normal">
 
             <View
                 android:layout_width="match_parent"

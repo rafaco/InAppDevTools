@@ -2,6 +2,7 @@ package es.rafaco.devtools.tools.log;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -202,7 +203,8 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         int indexOfKeyword = spannableString.toString().indexOf(keyword);
         while (indexOfKeyword > 0) {
-            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.parseColor("@color/rally_blue"));
+            int color = ContextCompat.getColor(context, R.color.rally_blue);
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(color);
             spannableString.setSpan(backgroundColorSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             //ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });
