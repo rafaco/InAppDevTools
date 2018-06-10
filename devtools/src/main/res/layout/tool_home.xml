@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="left">
+
+            <Spinner
+                android:id="@+id/info_main_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Spinner
+                android:id="@+id/info_second_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rally_blue"/>
+
+        <ListView
+            android:id="@+id/home_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"/>
+
+
+        <!--<ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">-->
+
+
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp">
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/decorator1"
+                    android:layout_width="2dp"
+                    android:layout_height="20dp"
+                    android:background="@color/rally_orange"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"/>
+                <TextView
+                    android:id="@+id/out1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:layout_gravity="start"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/decorator1"
+                    android:text="Exception handler is running"/>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp">
+                <View
+                    android:id="@+id/decorator"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/rally_blue"
+                    android:layout_marginRight="10dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_arrow_right_white_24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp">
+                <View
+                    android:id="@+id/decorator3"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/rally_green"
+                    android:layout_marginRight="10dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/title3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="Send a Report"
+                        android:textColor="@color/rally_green"/>
+                    <TextView
+                        android:id="@+id/desc3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/title3"
+                        android:text="You choose between bug or a suggestion, as well as what attachments you want to include. Later in gmail you can add additional comments."
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textColor="#E7E7E7"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_arrow_right_white_24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+-->
+                <!--
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/decorator_wrap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentTop="true">
+                        <View
+                            android:id="@+id/decorator"
+                            android:layout_width="2dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/rally_blue" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/out"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="start"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/decorator_wrap"
+                        android:textAlignment="textStart" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/ic_arrow_right_white_24dp" />
+                </RelativeLayout>-->
+
+            <!--</LinearLayout>-->
+        <!--</ScrollView>-->
+
+    </LinearLayout>
+</LinearLayout>
