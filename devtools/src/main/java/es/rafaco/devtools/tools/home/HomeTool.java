@@ -2,6 +2,7 @@ package es.rafaco.devtools.tools.home;
 
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class HomeTool extends Tool {
 
     private HomeInfoAdapter adapter;
     private ListView homeList;
+    private TextView welcome;
 
     public HomeTool(ToolsManager manager) {
         super(manager);
@@ -38,6 +40,9 @@ public class HomeTool extends Tool {
 
     @Override
     protected void onStart(View toolView) {
+        welcome = toolView.findViewById(R.id.home_welcome);
+        welcome.setText(InfoTool.getWelcomeMessage(getContext()));
+
         initAdapter();
     }
 

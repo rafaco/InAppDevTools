@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/widget_full_shape"
         android:layout_margin="8dp"
-        android:padding="4dp">
+        style="@style/elevated">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -54,56 +54,18 @@
                 android:src="@drawable/ic_settings_white_24dp"
                 android:layout_toLeftOf="@id/half_mode_button"/>
 
-            <!--<LinearLayout
-                android:id="@+id/tools_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tools_button_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/floating_widget_label"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tools_button_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/floating_widget_details"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>-->
-
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/rally_blue"/>
 
         <LinearLayout
             android:id="@+id/content_container"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="normal">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/rally_blue"/>
-
-            <!--<TextView
-                android:id="@+id/initial_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="@color/rally_blue"
-                android:textColor="@color/charcoal" /> -->
+            android:orientation="vertical">
         </LinearLayout>
 
     </LinearLayout>

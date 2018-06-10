@@ -77,10 +77,9 @@ public class InfoTool extends Tool {
 
     @Override
     public HomeInfo getHomeInfo(){
-        HomeInfo info = new HomeInfo(
+        HomeInfo info = new HomeInfo( InfoTool.class,
                 getTitle() + " Tool",
                 getHomeInfoMessage(),
-                "",
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return  info;
     }
@@ -174,7 +173,7 @@ public class InfoTool extends Tool {
                 "Instrumentations: " + instrumentations + "\n";
     }
 
-    private String getAppName(Context context, PackageInfo pInfo) {
+    private static String getAppName(Context context, PackageInfo pInfo) {
         return pInfo.applicationInfo.labelRes == 0 ? pInfo.applicationInfo.nonLocalizedLabel.toString() : context.getString(pInfo.applicationInfo.labelRes);
     }
 
@@ -308,7 +307,7 @@ public class InfoTool extends Tool {
         return output;
     }
 
-    private PackageInfo getPackageInfo(Context context) {
+    public static PackageInfo getPackageInfo(Context context) {
         PackageInfo pInfo = new PackageInfo();
         try {
             pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
@@ -336,5 +335,11 @@ public class InfoTool extends Tool {
             //result += ".";
         }
         return result;
+    }
+
+    public static String getWelcomeMessage(Context context){
+        PackageInfo pInfo = getPackageInfo(context);
+        String output = "Welcome to " + getAppName(context, pInfo) + "'s DevTools";
+        return output;
     }
 }

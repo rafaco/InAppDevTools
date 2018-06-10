@@ -20,7 +20,7 @@ public abstract class Widget {
     }
 
     public void addView() {
-        manager.getInflater().getContext().setTheme(R.style.AppCompatAlertDialogStyle);
+        manager.getInflater().getContext().setTheme(R.style.LibTheme);
         //manager.getInflater().cloneInContext(new ContextThemeWrapper(getBaseContext(), R.style.AppCompatAlertDialogStyle));
 
         view  = manager.getInflater().inflate(getLayoutId(), null);
