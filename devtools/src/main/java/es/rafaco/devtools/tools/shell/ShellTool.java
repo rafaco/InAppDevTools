@@ -70,10 +70,9 @@ public class ShellTool extends Tool {
 
     @Override
     public HomeInfo getHomeInfo(){
-        HomeInfo info = new HomeInfo(
-                "Exception" + " Tool",
+        HomeInfo info = new HomeInfo(ShellTool.class,
+                getTitle(),
                 "Uncaught exception handler is activated.", // You will be prompted if something go wrong. \n No exceptions stored.",
-                "",
                 ContextCompat.getColor(getContext(), R.color.rally_orange));
         return  info;
     }

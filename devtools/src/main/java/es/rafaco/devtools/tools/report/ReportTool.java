@@ -75,10 +75,9 @@ public class ReportTool extends Tool {
 
     @Override
     public HomeInfo getHomeInfo(){
-        HomeInfo info = new HomeInfo(
-                getTitle() + " Tool", //"Send a Report"
+        HomeInfo info = new HomeInfo(ReportTool.class,
+                getTitle(), //"Send a Report"
                 "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
-                "",
                 ContextCompat.getColor(getContext(), R.color.rally_green));
         return  info;
     }

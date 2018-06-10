@@ -78,7 +78,7 @@ public class InfoTool extends Tool {
     @Override
     public HomeInfo getHomeInfo(){
         HomeInfo info = new HomeInfo( InfoTool.class,
-                getTitle() + " Tool",
+                getTitle(),
                 getHomeInfoMessage(),
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return  info;

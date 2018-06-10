@@ -53,8 +53,7 @@ public class ExceptionActivity extends AppCompatActivity {
     }
 
     private void callServiceAction(DevToolsService.IntentAction action) {
-        Intent intent = new Intent(this, DevToolsService.class);
-        intent.putExtra(DevToolsService.EXTRA_INTENT_ACTION, action);
+        Intent intent = DevToolsService.buildIntentAction(action, null);
         startService(intent);
         finish();
     }

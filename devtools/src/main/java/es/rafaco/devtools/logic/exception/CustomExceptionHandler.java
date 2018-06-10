@@ -66,8 +66,8 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
         Log.e("DevTools", "Requesting Exception Dialog...");
         Intent intent = new Intent(appContext, ExceptionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("TITLE", exClass);
-        intent.putExtra("MESSAGE", exMessage);
+        intent.putExtra("TITLE", "DevTools caught a crash");
+        intent.putExtra("MESSAGE", exClass + ": " + exMessage);
         appContext.startActivity(intent);
     }
 

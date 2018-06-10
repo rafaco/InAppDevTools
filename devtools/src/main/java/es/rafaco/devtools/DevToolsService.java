@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -32,7 +33,8 @@ import es.rafaco.devtools.widgets.WidgetsManager;
 public class DevToolsService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
-    public enum IntentAction { RESTART, CLOSE, EXCEPTION, REPORT }
+    public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
+    public enum IntentAction { RESTART, CLOSE, EXCEPTION, REPORT, TOOL }
 
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
@@ -49,24 +51,37 @@ public class DevToolsService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
+        String property = intent.getStringExtra(EXTRA_INTENT_PROPERTY);
         if (action != null){
-            processIntentAction(action);
+            processIntentAction(action, property);
         }else{
             Log.d(DevTools.TAG, "DevToolsService - onStartCommand without action");
         }
         return DevTools.SERVICE_STICKY ? START_STICKY : START_NOT_STICKY;
     }
 
-    private void processIntentAction(IntentAction action) {
+    private void processIntentAction(IntentAction action, String property) {
         Log.d(DevTools.TAG, "DevToolsService - onStartCommand with action: " + IntentAction.RESTART.toString());
+        if (action.equals(IntentAction.TOOL)){
+            startTool(property);
+        }
         if (action.equals(IntentAction.REPORT)){
-            toolsManager.selectTool("Report");
+            startTool("Report");
         }else if (action.equals(IntentAction.CLOSE)){
             killProcess();
         }else if (action.equals(IntentAction.RESTART)){
             programAppRestart();
             killProcess();
         }
+    }
+
+    public static Intent buildIntentAction(DevToolsService.IntentAction action, String property) {
+        Intent intent = new Intent(DevTools.getAppContext(), DevToolsService.class);
+        intent.putExtra(DevToolsService.EXTRA_INTENT_ACTION, action);
+        if (!TextUtils.isEmpty(property)){
+            intent.putExtra(DevToolsService.EXTRA_INTENT_PROPERTY, property);
+        }
+        return intent;
     }
 
     @Override
