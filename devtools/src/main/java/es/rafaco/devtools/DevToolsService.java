@@ -34,7 +34,7 @@ public class DevToolsService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    public enum IntentAction { RESTART, CLOSE, EXCEPTION, REPORT, TOOL }
+    public enum IntentAction { RESTART, CLOSE, EXCEPTION, REPORT, TOOL, ICON }
 
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
@@ -65,10 +65,15 @@ public class DevToolsService extends Service {
         if (action.equals(IntentAction.TOOL)){
             startTool(property);
         }
-        if (action.equals(IntentAction.REPORT)){
+        else if (action.equals(IntentAction.ICON)) {
+            widgetsManager.toogleFullMode(true);
+        }
+        else if (action.equals(IntentAction.REPORT)){
             startTool("Report");
-        }else if (action.equals(IntentAction.CLOSE)){
+        }
+        else if (action.equals(IntentAction.CLOSE)){
             killProcess();
+
         }else if (action.equals(IntentAction.RESTART)){
             programAppRestart();
             killProcess();
@@ -94,7 +99,7 @@ public class DevToolsService extends Service {
     private void initOrRequestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             //Start a flash activity to request required permissions
-            Intent intent = new Intent(this, PermissionActivity.class);
+            Intent intent = PermissionActivity.buildIntent(PermissionActivity.IntentAction.OVERLAY, getApplicationContext());
             startActivity(intent, null);
         } else {
             init();

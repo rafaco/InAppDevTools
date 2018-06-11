@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.utils.AppUtils;
@@ -61,5 +62,14 @@ public class DevTools {
 
     public static ActivityLogManager getActivityLogManager() {
         return activityLogManager;
+    }
+
+    public static void showMessage(int stringId) {
+        showMessage(getAppContext().getResources().getString(stringId));
+    }
+
+    public static void showMessage(String text) {
+        //TODO: use a custom overlay toast
+        Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
     }
 }

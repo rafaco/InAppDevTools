@@ -10,7 +10,7 @@ import android.widget.TextView;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.home.HomeInfo;
+import es.rafaco.devtools.tools.DecoratedToolInfo;
 
 public class ShellTool extends Tool {
 
@@ -69,8 +69,8 @@ public class ShellTool extends Tool {
     }
 
     @Override
-    public HomeInfo getHomeInfo(){
-        HomeInfo info = new HomeInfo(ShellTool.class,
+    public DecoratedToolInfo getHomeInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(ShellTool.class,
                 getTitle(),
                 "Uncaught exception handler is activated.", // You will be prompted if something go wrong. \n No exceptions stored.",
                 ContextCompat.getColor(getContext(), R.color.rally_orange));
