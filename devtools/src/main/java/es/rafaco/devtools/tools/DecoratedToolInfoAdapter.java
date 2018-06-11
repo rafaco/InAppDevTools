@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.home;
+package es.rafaco.devtools.tools;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,20 +16,20 @@ import java.util.List;
 
 import es.rafaco.devtools.DevToolsService;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.tools.Tool;
 
-public class HomeInfoAdapter extends BaseAdapter {
+public class DecoratedToolInfoAdapter extends BaseAdapter {
 
-    private final HomeTool tool;
+    private final Tool tool;
     private Context context;
-    private List<HomeInfo> originalData;
+    private List<DecoratedToolInfo> originalData;
     private LayoutInflater mInflater;
+    private boolean switchMode = false;
 
-    public HomeInfoAdapter(HomeTool tool, ArrayList<HomeInfo> data) {
+    public DecoratedToolInfoAdapter(Tool tool, ArrayList<DecoratedToolInfo> data) {
         this.tool = tool;
-        this.context = tool.getView().getContext();
+        this.context = tool.getContext();
         this.originalData = data;
-        Log.d("RAFA", "new HomeInfoAdapter created with "+data.size()+" data.");
+        Log.d("RAFA", "new DecoratedToolInfoAdapter created with "+data.size()+" data.");
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -52,6 +53,7 @@ public class HomeInfoAdapter extends BaseAdapter {
         TextView title;
         TextView message;
         ImageView icon;
+        Switch switchButton;
     }
 
     @Override
@@ -60,19 +62,20 @@ public class HomeInfoAdapter extends BaseAdapter {
        ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.home_info_item, null);
+            convertView = mInflater.inflate(R.layout.decorated_tool_info_item, null);
             holder = new ViewHolder();
             holder.decorator = convertView.findViewById(R.id.decorator);
             holder.title = convertView.findViewById(R.id.title);
             holder.message = convertView.findViewById(R.id.message);
             holder.icon = convertView.findViewById(R.id.icon);
+            holder.switchButton = convertView.findViewById(R.id.switch_button);
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final HomeInfo data = originalData.get(position);
+        final DecoratedToolInfo data = originalData.get(position);
 
         holder.title.setText(data.title + " Tool");
         holder.message.setText(data.message);
@@ -80,14 +83,23 @@ public class HomeInfoAdapter extends BaseAdapter {
         holder.title.setTextColor(data.color);
         holder.decorator.setBackgroundColor(data.color);
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTool(data.title);
-            }
-        });
+        if(!switchMode){
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startTool(data.title);
+                }
+            });
+        }else{
+            holder.icon.setVisibility(View.GONE);
+            holder.switchButton.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
+    }
+
+    public void enableSwitchMode(){
+        switchMode = true;
     }
 
     public void startTool(String title){

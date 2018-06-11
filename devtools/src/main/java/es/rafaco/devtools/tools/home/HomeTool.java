@@ -7,7 +7,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
+import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.report.ReportTool;
@@ -15,7 +17,7 @@ import es.rafaco.devtools.tools.shell.ShellTool;
 
 public class HomeTool extends Tool {
 
-    private HomeInfoAdapter adapter;
+    private DecoratedToolInfoAdapter adapter;
     private ListView homeList;
     private TextView welcome;
 
@@ -40,19 +42,22 @@ public class HomeTool extends Tool {
 
     @Override
     protected void onStart(View toolView) {
-        welcome = toolView.findViewById(R.id.home_welcome);
-        welcome.setText(InfoTool.getWelcomeMessage(getContext()));
-
+        initView(toolView);
         initAdapter();
     }
 
+    private void initView(View toolView) {
+        welcome = toolView.findViewById(R.id.home_welcome);
+        welcome.setText(InfoTool.getWelcomeMessage(getContext()));
+    }
+
     private void initAdapter() {
-        ArrayList<HomeInfo> array = new ArrayList<>();
+        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
         array.add(getManager().getTool(InfoTool.class).getHomeInfo());
         array.add(getManager().getTool(ShellTool.class).getHomeInfo());
         array.add(getManager().getTool(ReportTool.class).getHomeInfo());
 
-        adapter = new HomeInfoAdapter(this, array);
+        adapter = new DecoratedToolInfoAdapter(this, array);
         homeList = getView().findViewById(R.id.home_list);
         homeList.setAdapter(adapter);
     }

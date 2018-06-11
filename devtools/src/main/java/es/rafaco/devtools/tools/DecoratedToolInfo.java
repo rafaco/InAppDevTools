@@ -1,15 +1,15 @@
-package es.rafaco.devtools.tools.home;
+package es.rafaco.devtools.tools;
 
 import es.rafaco.devtools.tools.Tool;
 
-public class HomeInfo {
+public class DecoratedToolInfo {
     String title;
     String message;
+    int color;
     String toolName;
     Class<? extends Tool> toolClass;
-    int color;
 
-    public HomeInfo(Class<? extends Tool> toolClass, String title, String message, int color) {
+    public DecoratedToolInfo(Class<? extends Tool> toolClass, String title, String message, int color) {
         //this.toolName = toolName;
         this.toolClass = toolClass;
         this.title = title;

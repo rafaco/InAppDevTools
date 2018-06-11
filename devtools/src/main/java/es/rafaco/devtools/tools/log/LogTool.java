@@ -3,9 +3,11 @@ package es.rafaco.devtools.tools.log;
 import android.animation.LayoutTransition;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,13 +22,18 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.info.InfoTool;
+import es.rafaco.devtools.tools.shell.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogTool extends Tool implements AdapterView.OnItemClickListener {
@@ -51,6 +58,7 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
     private TextView outputToast;
     private RelativeLayout outputContainer;
     private Handler removeToastHandler;
+    private Process process;
 
 
     public LogTool(ToolsManager manager) {
@@ -119,6 +127,9 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         if (adapter !=null && adapter.getCount() > 0) {
             adapter.clear();
         }
+
+        if (process != null)
+            process.destroy();
     }
 
     @Override
@@ -132,6 +143,8 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
             logReaderTask.stopTask();
             logReaderTask = null;
         }
+        if (process != null)
+            process.destroy();
         getContainer().removeAllViews();
     }
 
@@ -344,5 +357,87 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
 
     private String getSelectedLevel() {
         return levelFilters.get(levelSpinner.getSelectedItemPosition()).second;
+    }
+
+
+    @Override
+    public DecoratedToolInfo getHomeInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo( LogTool.class,
+                getTitle(),
+                "Live log is available. Automatic log to disk coming soon.",
+                ContextCompat.getColor(getContext(), R.color.rally_white));
+        return info;
+    }
+
+    @Override
+    public DecoratedToolInfo getReportInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(LogTool.class,
+                getTitle(),
+                "Include full log.",
+                ContextCompat.getColor(getContext(), R.color.rally_white));
+        return info;
+    }
+
+    @Override
+    public Object getReport(){
+
+        return saveLogcatToFile();
+
+        /*ShellExecuter exe = new ShellExecuter();
+        String command = "logcat -d *:V";
+        String output = exe.Executer(command);
+        return  output;*/
+    }
+
+
+    public String saveLogcatToFile(){
+        if(isExternalStorageWritable()){
+
+            File appDirectory = new File(Environment.getExternalStorageDirectory() + "/DevTools");
+            File logDirectory = new File(appDirectory + "/log");
+            File logFile = new File(logDirectory, "logcat_" + System.currentTimeMillis() + ".txt");
+
+            // create app folder
+            if (!appDirectory.exists()) {
+                appDirectory.mkdir();
+            }
+
+            // create log folder
+            if (!logDirectory.exists()) {
+                logDirectory.mkdir();
+            }
+
+            // clear the previous logcat and then write the new one to the file
+            try {
+                process = Runtime.getRuntime().exec("logcat -d -f " + logFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return logFile.getPath();
+
+        } else if(isExternalStorageReadable() ){
+            // only readable
+        } else{
+            // not accessible
+        }
+
+        return null;
+    }
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
+            return true;
+        }
+        return false;
     }
 }

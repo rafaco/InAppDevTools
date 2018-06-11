@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import es.rafaco.devtools.tools.home.HomeInfo;
-
 public abstract class Tool {
     private final ToolsManager manager;
     private ViewGroup toolView;
@@ -63,7 +61,13 @@ public abstract class Tool {
         return manager.getContainer().getContext();
     }
 
-    public HomeInfo getHomeInfo() {
+    public DecoratedToolInfo getHomeInfo() {
+        return null;
+    }
+    public DecoratedToolInfo getReportInfo() {
+        return null;
+    }
+    public Object getReport() {
         return null;
     }
 

@@ -27,7 +27,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.home.HomeInfo;
+import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.shell.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
@@ -76,26 +76,30 @@ public class InfoTool extends Tool {
     }
 
     @Override
-    public HomeInfo getHomeInfo(){
-        HomeInfo info = new HomeInfo( InfoTool.class,
+    public DecoratedToolInfo getHomeInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo( InfoTool.class,
                 getTitle(),
                 getHomeInfoMessage(),
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
-        return  info;
+        return info;
     }
 
-    public String getHomeInfoMessage(){
-        String out = "";
-        Context context = DevTools.getAppContext();
-        PackageInfo pInfo = getPackageInfo(context);
-        String appName = getAppName(context, pInfo);
-        out += appName + " "  + pInfo.versionName + " (" + pInfo.versionCode + ")";
-        out += "\n";
-        out += Build.BRAND + " " + Build.MODEL;
-        out += "\n";
-        out += "Android " + Build.VERSION.RELEASE + " (" + getVersionCodeName() + ")";
-        return out;
+    @Override
+    public DecoratedToolInfo getReportInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(InfoTool.class,
+                getTitle(),
+                "Include all. Brief info is always added",
+                ContextCompat.getColor(getContext(), R.color.rally_blue));
+        return info;
     }
+
+    @Override
+    public Object getReport(){
+        return buildReport();
+    }
+
+
+
 
     private void initMainSelector() {
         ArrayList<String> list = new ArrayList<>();
@@ -126,19 +130,35 @@ public class InfoTool extends Tool {
     }
 
     private void loadBuildConfig() {
-        out.setText("");
-
-        out.append(getAppInfo());
-        out.append("\n");
-        out.append(DevTools.getActivityLogManager().getLog());
-        out.append("\n");
-        out.append(getHardwareAndSoftwareInfo());
-        out.append("\n");
-        out.append(showMemInfo());
-        out.append("\n");
-
-
+        String report = buildReport();
+        out.setText(report);
         secondSpinner.setVisibility(View.GONE);
+    }
+
+    private String buildReport() {
+        String result = "";
+        result += getAppInfo();
+        result += "\n";
+        result += DevTools.getActivityLogManager().getLog();
+        result += "\n";
+        result += getHardwareAndSoftwareInfo();
+        result += "\n";
+        result += showMemInfo();
+        result += "\n";
+        return result;
+    }
+
+    public String getHomeInfoMessage(){
+        String out = "";
+        Context context = DevTools.getAppContext();
+        PackageInfo pInfo = getPackageInfo(context);
+        String appName = getAppName(context, pInfo);
+        out += appName + " "  + pInfo.versionName + " (" + pInfo.versionCode + ")";
+        out += "\n";
+        out += Build.BRAND + " " + Build.MODEL;
+        out += "\n";
+        out += "Android " + Build.VERSION.RELEASE + " (" + getVersionCodeName() + ")";
+        return out;
     }
 
     private String getAppInfo() {
@@ -340,6 +360,12 @@ public class InfoTool extends Tool {
     public static String getWelcomeMessage(Context context){
         PackageInfo pInfo = getPackageInfo(context);
         String output = "Welcome to " + getAppName(context, pInfo) + "'s DevTools";
+        return output;
+    }
+
+    public static String getEmailSubject(Context context){
+        PackageInfo pInfo = getPackageInfo(context);
+        String output = getAppName(context, pInfo) + " report from " + Build.BRAND + " " + Build.MODEL;
         return output;
     }
 }
