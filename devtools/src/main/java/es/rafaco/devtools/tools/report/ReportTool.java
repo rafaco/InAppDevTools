@@ -1,22 +1,21 @@
 package es.rafaco.devtools.tools.report;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +26,9 @@ import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
+import es.rafaco.devtools.tools.info.InfoHelper;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
-import es.rafaco.devtools.tools.shell.ShellTool;
 
 public class ReportTool extends Tool {
 
@@ -122,12 +121,13 @@ public class ReportTool extends Tool {
                 return;
             }
         }
-        sendEmail();
+        sendEmailIntent();
     }
 
-    private void sendEmail() {
-        String emailTo = "rafaco@gmail.com";
-        String subject = ((InfoTool)getManager().getTool(InfoTool.class)).getEmailSubject(getContext());
+    private void sendEmailIntent() {
+        String emailTo = getEmailTo();
+        String subject = getEmailSubject();
+
         String emailbody = "[Replace this line by your comments]" + "\n\n\n";
         List<String> filePaths = new ArrayList<>();
 
@@ -141,15 +141,24 @@ public class ReportTool extends Tool {
             filePaths.add(logcatPath);
         }
 
-        sendEmail(emailTo, "",
+        sendEmailIntent(emailTo, "",
                 subject,
                 emailbody,
                 filePaths);
     }
 
+    @NonNull
+    private String getEmailTo() {
+        return "rafaco@gmail.com";
+    }
 
-    public void sendEmail(String emailTo, String emailCC,
-                      String subject, String emailText, List<String> filePaths) {
+    private String getEmailSubject(){
+        InfoHelper helper = new InfoHelper(getContext());
+        return helper.getAppName() + " report from " + Build.BRAND + " " + Build.MODEL;
+    }
+
+    private void sendEmailIntent(String emailTo, String emailCC,
+                                String subject, String emailText, List<String> filePaths) {
 
         final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -177,7 +186,6 @@ public class ReportTool extends Tool {
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getView().getContext().startActivity(chooserIntent);
     }
-
 
     //endregion
 }

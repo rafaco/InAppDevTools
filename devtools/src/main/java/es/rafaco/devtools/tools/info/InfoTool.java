@@ -1,10 +1,5 @@
 package es.rafaco.devtools.tools.info;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageItemInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -17,12 +12,8 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
@@ -38,6 +29,7 @@ public class InfoTool extends Tool {
     private Spinner mainSpinner;
     private ShellExecuter exe;
     private Spinner secondSpinner;
+    private InfoHelper helper;
 
     public InfoTool(ToolsManager manager) {
         super(manager);
@@ -55,7 +47,7 @@ public class InfoTool extends Tool {
 
     @Override
     protected void onInit() {
-
+        helper = new InfoHelper(getContext());
     }
 
     @Override
@@ -137,100 +129,33 @@ public class InfoTool extends Tool {
 
     private String buildReport() {
         String result = "";
-        result += getAppInfo();
+        result += helper.getAppInfo().toString();
+        result += "\n";
+        result += helper.getDeviceInfo().toString();
+        result += "\n";
+        result += helper.getOsInfo().toString();
+        result += "\n";
+        result += helper.getRunningInfo().toString();
         result += "\n";
         result += DevTools.getActivityLogManager().getLog();
         result += "\n";
-        result += getHardwareAndSoftwareInfo();
-        result += "\n";
         result += showMemInfo();
+        result += "\n";
+        result += helper.getExtraPackageInfo().toString();
         result += "\n";
         return result;
     }
 
     public String getHomeInfoMessage(){
         String out = "";
-        Context context = DevTools.getAppContext();
-        PackageInfo pInfo = getPackageInfo(context);
-        String appName = getAppName(context, pInfo);
-        out += appName + " "  + pInfo.versionName + " (" + pInfo.versionCode + ")";
+        out += helper.getAppName() + " "  + helper.getPackageInfo().versionName + " (" + helper.getPackageInfo().versionCode + ")";
         out += "\n";
         out += Build.BRAND + " " + Build.MODEL;
         out += "\n";
-        out += "Android " + Build.VERSION.RELEASE + " (" + getVersionCodeName() + ")";
+        out += "Android " + Build.VERSION.RELEASE + " (" + helper.getVersionCodeName() + ")";
         return out;
     }
 
-    private String getAppInfo() {
-        Context context = DevTools.getAppContext();
-
-        PackageInfo pInfo = getPackageInfo(context);
-        String appName = getAppName(context, pInfo);
-        String packageName = context.getPackageName();
-
-        String services = getRunningServices(context);
-        String tasks = getRunningTasks(context);
-        String permissions = parsePackageInfoArray(pInfo.permissions);
-        String activities = parsePackageInfoArray(pInfo.activities);
-        //String services = parsePackageInfoArray(pInfo.services);
-        String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
-        String features = "No available";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            //features = parsePackageInfoArray(pInfo.featureGroups.fe);
-            features = "No implemented already";
-        }
-        return  "\n" + "App: " + appName + " (" + packageName + ")" + "\n" +
-                "App Version: " + pInfo.versionName + " (" + pInfo.versionCode + ")" + "\n" +
-                "DevTools Version: " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")" + "\n" +
-                //"BUILD_TYPE: " + BuildConfig.BUILD_TYPE + "\n" +
-                //"FLAVOR: " + BuildConfig.FLAVOR + "\n" +
-                "\n" + "Tasks: " + tasks + "\n" +
-                "\n" + "PackageInfo:" + "\n" +
-                "Activities: " + activities + "\n" +
-                "Services: " + services + "\n" +
-                "Permissions: " + permissions + "\n" +
-                "Features: " + features + "\n" +
-                "Instrumentations: " + instrumentations + "\n";
-    }
-
-    private static String getAppName(Context context, PackageInfo pInfo) {
-        return pInfo.applicationInfo.labelRes == 0 ? pInfo.applicationInfo.nonLocalizedLabel.toString() : context.getString(pInfo.applicationInfo.labelRes);
-    }
-
-
-    private String getHardwareAndSoftwareInfo() {
-        Context c = getContainer().getContext();
-        return  "\n" + "Device: " + "\n" +
-                c.getString(R.string.manufacturer) + " " + Build.MANUFACTURER + "\n" +
-                c.getString(R.string.brand) + " " + Build.BRAND + "\n" +
-                c.getString(R.string.model) + " " + Build.MODEL + "\n" +
-                c.getString(R.string.board) + " " + Build.BOARD + "\n" +
-                c.getString(R.string.id) + " " + Build.ID + "\n" +
-                c.getString(R.string.serial) + " " + Build.SERIAL + "\n" +
-                "IS VIRTUAL: " + isVirtual().toString() + "\n" +
-                "PRODUCT: " + isVirtual().toString() + "\n" +
-                "\n" + "OS: " + "\n" +
-                "VERSION NAME: " + getVersionCodeName() + "\n" +
-                c.getString(R.string.versioncode) + " " + Build.VERSION.RELEASE + "\n" +
-                c.getString(R.string.sdk) + " " + Build.VERSION.SDK_INT + "\n" +
-                c.getString(R.string.base) + " " + Build.VERSION.BASE_OS + "\n" +
-                c.getString(R.string.incremental) + " " + Build.VERSION.INCREMENTAL + "\n" +
-                c.getString(R.string.type) + " " + Build.TYPE + "\n" +
-                c.getString(R.string.user) + " " + Build.USER + "\n" +
-                c.getString(R.string.host) + " " + Build.HOST + "\n" +
-                c.getString(R.string.fingerprint) + " " + Build.FINGERPRINT + "\n";
-    }
-
-    public static String getVersionCodeName(){
-        Field[] fields = Build.VERSION_CODES.class.getFields();
-        String osName = fields[Build.VERSION.SDK_INT + 1].getName();
-        return osName;
-    }
-
-    public Boolean isVirtual() {
-        return Build.FINGERPRINT.contains("generic") ||
-                Build.PRODUCT.contains("sdk");
-    }
 
 
     private void onDumpSys() {
@@ -297,75 +222,5 @@ public class InfoTool extends Tool {
         }
 
         return meminfo.toString();
-    }
-
-    public String getRunningServices(Context context) {
-        String output = "";
-        String packageName = context.getPackageName();
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getPackageName().equals(packageName)){
-                output += service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
-            }
-        }
-        return output;
-    }
-
-    private String getRunningTasks(Context context) {
-        String output = "";
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
-        Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
-        while(itr.hasNext()){
-            ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo)itr.next();
-            int id = runningTaskInfo.id;
-            CharSequence desc= runningTaskInfo.description;
-            int numOfActivities = runningTaskInfo.numActivities;
-            String topActivity = runningTaskInfo.topActivity.getShortClassName();
-            output += String.valueOf(id) + desc + String.valueOf(numOfActivities) + topActivity + "\n";
-        }
-        return output;
-    }
-
-    public static PackageInfo getPackageInfo(Context context) {
-        PackageInfo pInfo = new PackageInfo();
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_ACTIVITIES);/* ||
-                    PackageManager.GET_ACTIVITIES ||
-                    PackageManager.GET_SERVICES ||
-                    PackageManager.GET_INSTRUMENTATION);*/
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return pInfo;
-    }
-
-    private String parsePackageInfoArray(PackageItemInfo[] infos) {
-        String result;
-        if (infos == null){
-            return "Unavailable";
-        }
-        result = "[" + infos.length + "] ";
-        if (infos.length > 0){
-            for (PackageItemInfo info: infos) {
-                result += info.name + "\n";
-            }
-            //result = result.substring(0, result.length() - 2);
-            //result += ".";
-        }
-        return result;
-    }
-
-    public static String getWelcomeMessage(Context context){
-        PackageInfo pInfo = getPackageInfo(context);
-        String output = "Welcome to " + getAppName(context, pInfo) + "'s DevTools";
-        return output;
-    }
-
-    public static String getEmailSubject(Context context){
-        PackageInfo pInfo = getPackageInfo(context);
-        String output = getAppName(context, pInfo) + " report from " + Build.BRAND + " " + Build.MODEL;
-        return output;
     }
 }

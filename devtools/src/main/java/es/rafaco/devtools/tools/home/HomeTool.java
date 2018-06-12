@@ -1,5 +1,6 @@
 package es.rafaco.devtools.tools.home;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.info.InfoHelper;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.report.ReportTool;
 import es.rafaco.devtools.tools.shell.ShellTool;
@@ -48,7 +50,12 @@ public class HomeTool extends Tool {
 
     private void initView(View toolView) {
         welcome = toolView.findViewById(R.id.home_welcome);
-        welcome.setText(InfoTool.getWelcomeMessage(getContext()));
+        welcome.setText(getWelcomeMessage());
+    }
+
+    public String getWelcomeMessage(){
+        InfoHelper helper = new InfoHelper(getContext());
+        return "Welcome to " + helper.getAppName() + "'s DevTools";
     }
 
     private void initAdapter() {
