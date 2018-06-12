@@ -71,9 +71,9 @@ public class InfoHelper {
     }
 
     public InfoGroup getRunningInfo() {
-        InfoGroup group = new InfoGroup.Builder("App")
+        InfoGroup group = new InfoGroup.Builder("Currently running")
                 .add("Services", getRunningServices(context))
-                .add("Package name", getRunningTasks(context))
+                .add("Tasks", getRunningTasks(context))
                 .build();
         return group;
     }
@@ -132,10 +132,10 @@ public class InfoHelper {
         PackageInfo pInfo = new PackageInfo();
         try {
             pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_ACTIVITIES);/* ||
-                    PackageManager.GET_ACTIVITIES ||
-                    PackageManager.GET_SERVICES ||
-                    PackageManager.GET_INSTRUMENTATION);*/
+                    PackageManager.GET_ACTIVITIES |
+                    PackageManager.GET_ACTIVITIES |
+                    PackageManager.GET_SERVICES |
+                    PackageManager.GET_INSTRUMENTATION);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -160,11 +160,13 @@ public class InfoHelper {
 
     public String getRunningServices(Context context) {
         String output = "";
+        String formatWithoutLabel = "        %s";
         String packageName = context.getPackageName();
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (service.service.getPackageName().equals(packageName)){
-                output += service.service.getShortClassName() + "(" + service.service.getPackageName() + ") " + "\n";
+                String text = service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
+                output += String.format(formatWithoutLabel, text) + "\n";
             }
         }
         return output;
@@ -172,6 +174,7 @@ public class InfoHelper {
 
     private String getRunningTasks(Context context) {
         String output = "";
+        String formatWithoutLabel = "        %s";
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
         Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
@@ -181,7 +184,8 @@ public class InfoHelper {
             CharSequence desc= runningTaskInfo.description;
             int numOfActivities = runningTaskInfo.numActivities;
             String topActivity = runningTaskInfo.topActivity.getShortClassName();
-            output += String.valueOf(id) + "(" + desc + ") top of " + String.valueOf(numOfActivities) + " is " + topActivity + "\n";
+            String text = String.valueOf(id) + "(" + desc + ") top of " + String.valueOf(numOfActivities) + " is " + topActivity;
+            output += String.format(formatWithoutLabel, text) + "\n";
         }
         return output;
     }

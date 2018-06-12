@@ -137,6 +137,7 @@ public class InfoTool extends Tool {
         result += "\n";
         result += helper.getRunningInfo().toString();
         result += "\n";
+        result += "ActivityLog:" + "\n";
         result += DevTools.getActivityLogManager().getLog();
         result += "\n";
         result += showMemInfo();
