@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -24,7 +25,10 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
@@ -32,8 +36,6 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.info.InfoTool;
-import es.rafaco.devtools.tools.shell.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogTool extends Tool implements AdapterView.OnItemClickListener {
@@ -86,6 +88,8 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         initLevelFilter();
         initTextFilter();
         initSearchButton();
+        initDeleteButton();
+
         initLogLineAdaptor();
         initOutputView();
         startLogReader();
@@ -313,13 +317,24 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
             }
         });
     }
+
     private void initSearchButton() {
-        //Throw exception as playground
-        Button searchButton = getView().findViewById(R.id.search_button);
+        ImageView searchButton = getView().findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new NullPointerException();
+                //TODO: REMOVE Throw exception as playground
+                throw new NullPointerException("Ups, search button has simulated an exception for you :)");
+            }
+        });
+    }
+
+    private void initDeleteButton() {
+        ImageView deleteButton = getView().findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearLog();
             }
         });
     }
@@ -439,5 +454,40 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
             return true;
         }
         return false;
+    }
+
+    public void onClearLog(){
+        Log.v(DevTools.TAG, "Logcat clear requested");
+        logReaderTask.stopTask(new Runnable() {
+            @Override
+            public void run() {
+                adapter.clear();
+                clearLogcatBuffer();
+            }
+        });
+        stopLogReader();
+
+    }
+
+    private void clearLogcatBuffer() {
+        String[] fullCommand = new String[] { LogReaderTask.BASH_PATH, LogReaderTask.BASH_ARGS, "logcat -c"};
+        Process process;
+        try {
+            new ProcessBuilder()
+                    .command(fullCommand)//"logcat", "-c")
+                    .redirectErrorStream(true)
+                    .start();
+            //process = Runtime.getRuntime().exec(fullCommand);
+            Log.i(DevTools.TAG, "LogcatBuffer cleared");
+        } catch (IOException e) {
+            Log.e(DevTools.TAG, "LogcatBuffer clear has failed :(");
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTraceString = sw.toString();
+            Log.e(DevTools.TAG, stackTraceString);
+        } finally {
+            Log.d(DevTools.TAG, "LogcatBuffer restarted with clear request");
+            startLogReader();
+        }
     }
 }

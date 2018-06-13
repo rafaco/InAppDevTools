@@ -73,7 +73,6 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
     public void clear(){
         originalData.clear();
         filteredData.clear();
-
         notifyDataSetInvalidated();
     }
 
