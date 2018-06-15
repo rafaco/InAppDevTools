@@ -44,7 +44,7 @@ It have few preconfigured modes based on how aggressively the library integrate 
 - Non intrusive with your views, stack or focus (system overlay layer)
 - Only on release mode 
 
-**Screenshoots**
+**Screenshots**
 
 -
 

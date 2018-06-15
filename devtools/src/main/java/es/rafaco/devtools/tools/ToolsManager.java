@@ -15,6 +15,7 @@ import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
 import es.rafaco.devtools.tools.report.ReportTool;
+import es.rafaco.devtools.tools.screenshot.ScreenTool;
 import es.rafaco.devtools.tools.shell.ShellTool;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -37,6 +38,7 @@ public class ToolsManager {
 
         addTool(new HomeTool(this));
         addTool(new InfoTool(this));
+        addTool(new ScreenTool(this));
         addTool(new LogTool(this));
         addTool(new ShellTool(this));
         addTool(new ReportTool(this));
@@ -49,6 +51,7 @@ public class ToolsManager {
         }*/
         toolsList.add("Home");
         toolsList.add("Info");
+        toolsList.add("Screen");
         toolsList.add("Log");
         toolsList.add("Shell");
         toolsList.add("Report");
@@ -117,10 +120,6 @@ public class ToolsManager {
         return inflater;
     }
 
-    public ViewGroup getContainer() {
-        return ((DevToolsService)context).getToolContainer();
-    }
-
     private void stopService() {
         ((DevToolsService)context).stopSelf();
     }
@@ -130,4 +129,11 @@ public class ToolsManager {
             tool.destroy();
         }
     }
+
+
+    //TODO: REFACTOR
+    public ViewGroup getContainer() {
+        return ((DevToolsService)context).getToolContainer();
+    }
+
 }

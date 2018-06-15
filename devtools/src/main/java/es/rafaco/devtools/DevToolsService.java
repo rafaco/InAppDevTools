@@ -61,7 +61,7 @@ public class DevToolsService extends Service {
     }
 
     private void processIntentAction(IntentAction action, String property) {
-        Log.d(DevTools.TAG, "DevToolsService - onStartCommand with action: " + IntentAction.RESTART.toString());
+        Log.d(DevTools.TAG, "DevToolsService - onStartCommand with action: " + action.toString());
         if (action.equals(IntentAction.TOOL)){
             startTool(property);
         }
@@ -128,13 +128,8 @@ public class DevToolsService extends Service {
         widgetsManager.selectTool(title);
     }
 
-    public ViewGroup getToolContainer() {
-        return ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).getToolContainer();
-    }
-
     @Override
     public void onDestroy() {
-
         toolsManager.destroy();
         widgetsManager.destroy();
 
@@ -142,51 +137,8 @@ public class DevToolsService extends Service {
     }
 
 
-    //region [ TOOLS PLAYGROUND ]
 
-    private String m_Text = "";
-
-
-    private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-            // create bitmap screen capture
-            //View v1 = getWindow().getDecorView().getRootView();
-            ViewGroup v1 = (ViewGroup) ((ViewGroup) widgetsManager.getView(Widget.Type.FULL).findViewById(android.R.id.content)).getChildAt(0);
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            openScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-    }
-
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
-    }
-
-    //endregion
-
+    //TODO: EXTRACT
     private void programAppRestart() {
         Log.e("DevTools", "Programming restart...");
         PackageManager pm = getApplicationContext().getPackageManager();
@@ -208,5 +160,11 @@ public class DevToolsService extends Service {
         //android.os.Process.killProcess(android.os.Process.myPid());
         Log.d("DevTools", "Killing application");
         System.exit(10);
+    }
+
+
+    //TODO: REFACTOR
+    public ViewGroup getToolContainer() {
+        return ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).getToolContainer();
     }
 }
