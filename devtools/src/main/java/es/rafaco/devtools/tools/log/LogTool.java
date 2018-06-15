@@ -339,6 +339,16 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         });
     }
 
+    private void initSaveButton() {
+        ImageView saveButton = getView().findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveLogcatToFile();
+            }
+        });
+    }
+
 
 
     @Override

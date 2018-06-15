@@ -14,7 +14,8 @@
         <Spinner
             android:id="@+id/log_options_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
         <Spinner
             android:id="@+id/log_level_spinner"
             android:layout_width="wrap_content"
@@ -26,7 +27,8 @@
             android:layout_height="wrap_content"
             android:hint="Type"
             android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:focusableInTouchMode="true"
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/filter_button"
@@ -44,7 +46,13 @@
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_forever_white_24dp" />
+            android:src="@drawable/ic_delete_forever_rally_24dp" />
+
+        <ImageButton
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save_rally_24dp" />
 
     </LinearLayout>
 
