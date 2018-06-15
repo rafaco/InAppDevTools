@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.github.anrwatchdog.ANRError;
+import com.github.anrwatchdog.ANRWatchDog;
+
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.logic.exception.CustomExceptionHandler;
@@ -26,6 +29,7 @@ public class DevTools {
 
         appContext = context.getApplicationContext();
         startUncaughtExceptionHandler(context);
+        startAnrWatchDog();
         startStrictMode();
         startService(context);
         startActivityLog(context);
@@ -48,6 +52,17 @@ public class DevTools {
         }else{
             Log.d(DevTools.TAG, "Exception handler already attach on thread");
         }
+    }
+
+    private static void startAnrWatchDog(){
+
+        new ANRWatchDog().setANRListener(new ANRWatchDog.ANRListener() {
+            @Override
+            public void onAppNotResponding(ANRError error) {
+                // Handle the error. For example, log it to HockeyApp:
+                Log.w(DevTools.TAG, "ANRWatchDog: " + error.getMessage() + " - " + error.getCause() );
+            }
+        }).start();
     }
 
     private static void startStrictMode() {
