@@ -50,7 +50,7 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     private void requestStoragePermission() {
-        if (checkPermission(IntentAction.STORAGE)) {
+        if (!checkPermission(IntentAction.STORAGE)) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -61,7 +61,7 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     public void requestOverlayPermission() {
-        if (checkPermission(IntentAction.OVERLAY)) {
+        if (!checkPermission(IntentAction.OVERLAY)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, OVERLAY_REQUEST_CODE);
@@ -90,7 +90,8 @@ public class PermissionActivity extends AppCompatActivity {
 
 
     private void onOverlayPermissionGranted() {
-        startService(new Intent(PermissionActivity.this, DevToolsService.class));
+        Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.PERMISSION_GRANTED, "Overlay");
+        startService(intent);
         finish();
     }
 

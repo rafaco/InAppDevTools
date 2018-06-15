@@ -29,7 +29,6 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
         this.tool = tool;
         this.context = tool.getContext();
         this.originalData = data;
-        Log.d("RAFA", "new DecoratedToolInfoAdapter created with "+data.size()+" data.");
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -106,5 +105,4 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
         Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.TOOL, title);
         context.startService(intent);
     }
-
 }

@@ -34,7 +34,7 @@ public class DevToolsService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    public enum IntentAction { RESTART, CLOSE, EXCEPTION, REPORT, TOOL, ICON }
+    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, TOOL, FULL, ICON }
 
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
@@ -55,18 +55,27 @@ public class DevToolsService extends Service {
         if (action != null){
             processIntentAction(action, property);
         }else{
-            Log.d(DevTools.TAG, "DevToolsService - onStartCommand without action");
+            Log.v(DevTools.TAG, "DevToolsService - onStartCommand without action");
         }
         return DevTools.SERVICE_STICKY ? START_STICKY : START_NOT_STICKY;
     }
 
     private void processIntentAction(IntentAction action, String property) {
-        Log.d(DevTools.TAG, "DevToolsService - onStartCommand with action: " + action.toString());
+        Log.v(DevTools.TAG, "DevToolsService - onStartCommand with action: " + action.toString());
         if (action.equals(IntentAction.TOOL)){
             startTool(property);
         }
         else if (action.equals(IntentAction.ICON)) {
+            widgetsManager.toogleFullMode(false);
+        }
+        else if (action.equals(IntentAction.FULL)) {
+            if (toolsManager.getCurrent() == null){
+                startTool("Home");
+            }
             widgetsManager.toogleFullMode(true);
+        }
+        else if (action.equals(IntentAction.PERMISSION_GRANTED)) {
+            initOrRequestPermission();
         }
         else if (action.equals(IntentAction.REPORT)){
             startTool("Report");
@@ -113,7 +122,10 @@ public class DevToolsService extends Service {
         ArrayList<String> toolsList = toolsManager.getToolList();
         ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
 
-        startTool("Home");
+        //TODO: replace by icon
+        //startTool("Home");
+        widgetsManager.toogleFullMode(false);
+        DevTools.showMessage("DevTools is watching your back");
     }
 
     @Override

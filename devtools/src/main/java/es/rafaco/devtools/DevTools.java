@@ -23,6 +23,7 @@ public class DevTools {
     private static Context appContext;
     private static ActivityLogManager activityLogManager;
     public static int readerCounter = 0;
+    private static ANRWatchDog anrWatchDog;
 
     public static void install(@Nullable final Context context) {
         Log.d(DevTools.TAG, "Initializing DevTools...");
@@ -56,13 +57,17 @@ public class DevTools {
 
     private static void startAnrWatchDog(){
 
-        new ANRWatchDog().setANRListener(new ANRWatchDog.ANRListener() {
+        // Handle the error. For example, log it to HockeyApp:
+        anrWatchDog = new ANRWatchDog()
+                .setANRListener(new ANRWatchDog.ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {
                 // Handle the error. For example, log it to HockeyApp:
                 Log.w(DevTools.TAG, "ANRWatchDog: " + error.getMessage() + " - " + error.getCause() );
             }
-        }).start();
+        });
+        anrWatchDog.start();
+        Log.d(DevTools.TAG, "ANRWatchDog added");
     }
 
     private static void startStrictMode() {

@@ -2,6 +2,7 @@ package es.rafaco.devtools.widgets;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Build;
@@ -399,7 +400,8 @@ public class WidgetsManager {
     }
 
     private void onIconWidgetClick() {
-        toogleFullMode(true);
+        Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.FULL, null);
+        context.startService(intent);
     }
 
     public void startTool(String title) {
