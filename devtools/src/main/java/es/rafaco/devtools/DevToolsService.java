@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
@@ -23,6 +24,8 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.widgets.FullWidget;
@@ -122,10 +125,33 @@ public class DevToolsService extends Service {
         ArrayList<String> toolsList = toolsManager.getToolList();
         ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
 
+        testUserDao();
+
         //TODO: replace by icon
         //startTool("Home");
         widgetsManager.toogleFullMode(false);
         DevTools.showMessage("DevTools is watching your back");
+    }
+
+    private void testUserDao() {
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                User user = new User();
+                user.setFirstName("Ajay");
+                user.setLastName("Saini");
+                user.setAge(25);
+
+                DevToolsDatabase db = DevTools.getDatabase();
+                Log.d(DevTools.TAG, "Database size is: " + db.userDao().countUsers());
+                db.userDao().insertAll(user);
+                Log.d(DevTools.TAG, "Database size is: " + db.userDao().countUsers());
+
+                User stored = db.userDao().findByName("Ajay", "Saini");
+                Log.d(DevTools.TAG, "Database age is: " + stored.getAge());
+            }
+        });
     }
 
     @Override

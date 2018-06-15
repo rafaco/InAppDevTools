@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 
+import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.logic.exception.CustomExceptionHandler;
@@ -58,7 +59,7 @@ public class DevTools {
     private static void startAnrWatchDog(){
 
         // Handle the error. For example, log it to HockeyApp:
-        anrWatchDog = new ANRWatchDog()
+        anrWatchDog = new ANRWatchDog(10000 /*timeout*/)
                 .setANRListener(new ANRWatchDog.ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {
@@ -91,5 +92,9 @@ public class DevTools {
     public static void showMessage(String text) {
         //TODO: use a custom overlay toast
         Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    public static DevToolsDatabase getDatabase() {
+        return DevToolsDatabase.getInstance();
     }
 }
