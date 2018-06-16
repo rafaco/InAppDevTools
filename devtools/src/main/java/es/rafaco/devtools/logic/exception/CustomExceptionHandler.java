@@ -6,15 +6,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.db.Crash;
+import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.utils.ThreadUtils;
 
 public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
 
@@ -31,29 +36,48 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
-        String exClass = ex.getClass().getSimpleName();
-        String exMessage = ex.getMessage();
-        String exStack = ex.getStackTrace().toString();
+    public void uncaughtException(final Thread thread, final Throwable ex) {
 
+        final Crash crash = new Crash();
+        crash.setDate(new Date().getTime());
+        crash.setException(ex.getClass().getSimpleName());
+        crash.setMessage(ex.getMessage());
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
         String stackTraceString = sw.toString();
-
         //Reduce data to 128KB so we don't get a TransactionTooLargeException when sending the intent.
         //The limit is 1MB on Android but some devices seem to have it lower.
         if (stackTraceString.length() > MAX_STACK_TRACE_SIZE) {
             String disclaimer = " [stack trace too large]";
             //stackTraceString = stackTraceString.substring(0, MAX_STACK_TRACE_SIZE - disclaimer.length()) + disclaimer;
         }
-        //intent.putExtra(EXTRA_STACK_TRACE, stackTraceString);
+        crash.setStacktrace(sw.toString());
 
-        Log.e("DevTools", "EXCEPTION: " + exClass + " -> " + exMessage);
+        Log.e("DevTools", "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
         Log.e("DevTools", stackTraceString);
+        Log.e("DevTools", String.format("Thread %s [%s] is %s. Main:  ",
+                thread.getName(),
+                thread.getId(),
+                thread.getState().name(),
+                String.valueOf(ThreadUtils.isTheUiThread(thread))));
 
+        Log.e("DevTools", "Custom message: " + getErrorMessgae(ex.getCause()));
+
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DevToolsDatabase db = DevTools.getDatabase();
+                db.crashDao().insertAll(crash);
+                Log.d(DevTools.TAG, "Crash db size is: " + db.crashDao().count());
+                onCrashStored(thread, ex, crash);
+            }
+        });
+    }
+
+    private void onCrashStored(Thread thread, Throwable ex, Crash crash) {
         //showDialog(exClass, exMessage);
-
-        startExceptionActivity(exClass, exMessage);
+        startExceptionActivity(crash.getException(), crash.getMessage());
 
         if (DevTools.CALL_DEFAULT_EXCEPTION_HANDLER){
             previousHandle.uncaughtException(thread, ex);
@@ -126,5 +150,30 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
         alertDialog.show();
+    }
+
+    private String getErrorMessgae(Throwable e) {
+        StackTraceElement[] stackTrackElementArray = e.getStackTrace();
+        String crashLog = e.toString() + "\n\n";
+        crashLog += "--------- Stack trace ---------\n\n";
+        for (int i = 0; i < stackTrackElementArray.length; i++) {
+            crashLog += "    " + stackTrackElementArray[i].toString() + "\n";
+        }
+        crashLog += "-------------------------------\n\n";
+
+        // If the exception was thrown in a background thread inside
+        // AsyncTask, then the actual exception can be found with getCause
+        crashLog += "--------- Cause ---------\n\n";
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            crashLog += cause.toString() + "\n\n";
+            stackTrackElementArray = cause.getStackTrace();
+            for (int i = 0; i < stackTrackElementArray.length; i++) {
+                crashLog += "    " + stackTrackElementArray[i].toString()
+                        + "\n";
+            }
+        }
+        crashLog += "-------------------------------\n\n";
+        return crashLog;
     }
 }

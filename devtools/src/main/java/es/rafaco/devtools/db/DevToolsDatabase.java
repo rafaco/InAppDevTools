@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 
 import es.rafaco.devtools.DevTools;
 
-@Database(entities = {User.class}, version = 1)
+@Database(version = 1, entities = {User.class, Crash.class}, exportSchema = true)
 public abstract class DevToolsDatabase extends RoomDatabase {
 
     private static DevToolsDatabase INSTANCE;
@@ -31,6 +31,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     //region [ DAOs ]
 
     public abstract UserDao userDao();
+    public abstract CrashDao crashDao();
 
     //endregion
 }
