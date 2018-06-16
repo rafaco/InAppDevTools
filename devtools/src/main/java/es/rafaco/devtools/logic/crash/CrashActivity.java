@@ -10,7 +10,7 @@ import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsUiService;
-import es.rafaco.devtools.db.Crash;
+import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 
 

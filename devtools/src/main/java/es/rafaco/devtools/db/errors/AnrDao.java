@@ -1,4 +1,4 @@
-package es.rafaco.devtools.db;
+package es.rafaco.devtools.db.errors;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

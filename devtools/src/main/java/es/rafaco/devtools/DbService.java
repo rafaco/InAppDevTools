@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.io.Serializable;
 
-import es.rafaco.devtools.db.Crash;
+import es.rafaco.devtools.db.errors.Crash;
 
 public class DbService extends IntentService {
     /**

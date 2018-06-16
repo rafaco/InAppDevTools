@@ -1,13 +1,11 @@
-package es.rafaco.devtools.db;
+package es.rafaco.devtools.db.errors;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.io.Serializable;
-
-@Entity(tableName = "crash")
-public class Crash implements Serializable {
+@Entity(tableName = "anr")
+public class Anr {
 
     @PrimaryKey(autoGenerate = true)
     private int uid;
@@ -21,8 +19,14 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "message")
     private String message;
 
+    @ColumnInfo(name = "cause")
+    private String cause;
+
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
+
+    @ColumnInfo(name = "iswarning")
+    private boolean isWarning;
 
     public int getUid() {
         return uid;
@@ -62,5 +66,21 @@ public class Crash implements Serializable {
 
     public void setStacktrace(String stacktrace) {
         this.stacktrace = stacktrace;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
+    }
+
+    public boolean isWarning() {
+        return isWarning;
+    }
+
+    public void setWarning(boolean warning) {
+        isWarning = warning;
     }
 }

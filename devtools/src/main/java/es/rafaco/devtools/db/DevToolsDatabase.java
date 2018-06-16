@@ -5,6 +5,10 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.db.errors.Anr;
+import es.rafaco.devtools.db.errors.AnrDao;
+import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.db.errors.CrashDao;
 
 @Database(version = 3, entities = {User.class, Crash.class, Anr.class}, exportSchema = true)
 public abstract class DevToolsDatabase extends RoomDatabase {

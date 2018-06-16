@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 
-import es.rafaco.devtools.db.Anr;
+import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.crash.CrashHandler;

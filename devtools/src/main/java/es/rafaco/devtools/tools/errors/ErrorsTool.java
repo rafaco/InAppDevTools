@@ -14,7 +14,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.Crash;
+import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
