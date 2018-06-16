@@ -4,8 +4,10 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "crash")
-public class Crash {
+public class Crash implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int uid;

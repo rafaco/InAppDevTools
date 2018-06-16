@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface AnrDao {
 
-    @Query("SELECT * FROM anr")
+    @Query("SELECT * FROM anr ORDER BY date DESC")
     List<Anr> getAll();
 
     @Query("SELECT * FROM anr where uid LIKE :uid")

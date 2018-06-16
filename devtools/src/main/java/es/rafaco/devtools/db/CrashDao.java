@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface CrashDao {
 
-    @Query("SELECT * FROM crash")
+    @Query("SELECT * FROM crash ORDER BY date DESC")
     List<Crash> getAll();
 
     @Query("SELECT * FROM crash where uid LIKE :uid")
