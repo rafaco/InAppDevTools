@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.tools.errors.ErrorsTool;
 import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
@@ -38,6 +39,7 @@ public class ToolsManager {
 
         addTool(new HomeTool(this));
         addTool(new InfoTool(this));
+        addTool(new ErrorsTool(this));
         addTool(new ScreenTool(this));
         addTool(new LogTool(this));
         addTool(new ShellTool(this));
@@ -51,6 +53,7 @@ public class ToolsManager {
         }*/
         toolsList.add("Home");
         toolsList.add("Info");
+        toolsList.add("Errors");
         toolsList.add("Screen");
         toolsList.add("Log");
         toolsList.add("Shell");

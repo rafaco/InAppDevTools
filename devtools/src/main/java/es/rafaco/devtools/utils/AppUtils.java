@@ -1,11 +1,15 @@
 package es.rafaco.devtools.utils;
 
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
 
@@ -74,5 +78,26 @@ public class AppUtils {
                 android.os.Process.killProcess(proc.pid);
             }
         }
+    }
+
+    public static void programRestart(Context context) {
+        Log.e("DevTools", "Programming restart after 100ms");
+        PackageManager pm = context.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
+
+        intent.putExtra("crash", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+    }
+
+    public static void exit() {
+        //Log.e("DevTools", "Killing process...");
+        //android.os.Process.killProcess(android.os.Process.myPid());
+        Log.d("DevTools", "Killing application");
+        System.exit(10);
     }
 }

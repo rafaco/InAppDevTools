@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 
 import es.rafaco.devtools.DevTools;
 
-@Database(version = 1, entities = {User.class, Crash.class}, exportSchema = true)
+@Database(version = 2, entities = {User.class, Crash.class}, exportSchema = true)
 public abstract class DevToolsDatabase extends RoomDatabase {
 
     private static DevToolsDatabase INSTANCE;
@@ -18,6 +18,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
                             // allow queries on the main thread.
                             // Don't do this on a real app! See PersistenceBasicSample for an example.
                             //.allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .build();
         }
         return INSTANCE;

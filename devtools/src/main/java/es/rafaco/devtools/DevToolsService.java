@@ -28,6 +28,7 @@ import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
+import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.widgets.FullWidget;
 import es.rafaco.devtools.widgets.Widget;
 import es.rafaco.devtools.widgets.WidgetsManager;
@@ -87,7 +88,7 @@ public class DevToolsService extends Service {
             killProcess();
 
         }else if (action.equals(IntentAction.RESTART)){
-            programAppRestart();
+            AppUtils.programRestart(getApplicationContext());
             killProcess();
         }
     }
@@ -133,8 +134,54 @@ public class DevToolsService extends Service {
         DevTools.showMessage("DevTools is watching your back");
     }
 
-    private void testUserDao() {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        widgetsManager.onConfigurationChanged(newConfig);
+    }
 
+
+
+    //region [ STOP ]
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent){
+        Log.e("DevTools", "onTaskRemoved");
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e("DevTools", "onDestroy");
+        toolsManager.destroy();
+        widgetsManager.destroy();
+
+        super.onDestroy();
+    }
+
+    //TODO: EXTRACT
+
+
+    private void killProcess(){
+        Log.d("DevTools", "Stopping service");
+        stopSelf();
+
+        AppUtils.exit();
+
+
+    }
+
+    //region
+
+
+
+    public void startTool(String title) {
+        toolsManager.selectTool(title);
+        widgetsManager.toogleFullMode(true);
+        widgetsManager.selectTool(title);
+    }
+
+    //TODO: REMOVE
+    private void testUserDao() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -153,53 +200,6 @@ public class DevToolsService extends Service {
             }
         });
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        widgetsManager.onConfigurationChanged(newConfig);
-    }
-
-    public void startTool(String title) {
-        toolsManager.selectTool(title);
-        widgetsManager.toogleFullMode(true);
-        widgetsManager.selectTool(title);
-    }
-
-    @Override
-    public void onDestroy() {
-        toolsManager.destroy();
-        widgetsManager.destroy();
-
-        super.onDestroy();
-    }
-
-
-
-    //TODO: EXTRACT
-    private void programAppRestart() {
-        Log.e("DevTools", "Programming restart...");
-        PackageManager pm = getApplicationContext().getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName());
-
-        intent.putExtra("crash", true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext().getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-    }
-
-    private void killProcess(){
-        Log.d("DevTools", "Stopping service");
-        stopSelf();
-        //Log.e("DevTools", "Killing process...");
-        //android.os.Process.killProcess(android.os.Process.myPid());
-        Log.d("DevTools", "Killing application");
-        System.exit(10);
-    }
-
 
     //TODO: REFACTOR
     public ViewGroup getToolContainer() {

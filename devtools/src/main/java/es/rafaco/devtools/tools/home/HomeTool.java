@@ -1,6 +1,5 @@
 package es.rafaco.devtools.tools.home;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
