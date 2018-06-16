@@ -2,6 +2,7 @@ package es.rafaco.devtools;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 
+import es.rafaco.devtools.db.Anr;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.utils.AppUtils;
@@ -24,7 +26,8 @@ public class DevTools {
     private static Context appContext;
     private static ActivityLogManager activityLogManager;
     public static int readerCounter = 0;
-    private static ANRWatchDog anrWatchDog;
+    private static ANRWatchDog anrWarningWatcher;
+    private static ANRWatchDog anrErrorWatcher;
 
     public static void install(@Nullable final Context context) {
         Log.d(DevTools.TAG, "Initializing DevTools...");
@@ -58,17 +61,49 @@ public class DevTools {
 
     private static void startAnrWatchDog(){
 
-        // Handle the error. For example, log it to HockeyApp:
-        anrWatchDog = new ANRWatchDog(10000 /*timeout*/)
+        anrWarningWatcher = new ANRWatchDog(10000 /*timeout*/)
                 .setANRListener(new ANRWatchDog.ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {
-                // Handle the error. For example, log it to HockeyApp:
-                Log.w(DevTools.TAG, "ANRWatchDog: " + error.getMessage() + " - " + error.getCause() );
+                storeAnr(error, true);
             }
         });
-        anrWatchDog.start();
+        anrWarningWatcher.start();
+
+        anrErrorWatcher = new ANRWatchDog()
+                .setANRListener(new ANRWatchDog.ANRListener() {
+                    @Override
+                    public void onAppNotResponding(ANRError error) {
+                        storeAnr(error, false);
+                    }
+                });
+        anrErrorWatcher.start();
         Log.d(DevTools.TAG, "ANRWatchDog added");
+    }
+
+    private static void storeAnr(ANRError error, boolean isWarning) {
+
+        if(isWarning){
+            Log.w(DevTools.TAG, String.format("ANR 1sec warning: %s - %s", error.getMessage(), error.getCause()));
+        }else{
+            Log.e(DevTools.TAG, String.format("ANR WARNING: %s - %s", error.getMessage(), error.getCause()));
+        }
+
+        Anr anr = new Anr();
+        anr.setMessage(error.getMessage().toString());
+        anr.setCause(error.getCause().toString());
+        storeAnr(anr);
+    }
+
+    private static void storeAnr(final Anr anr) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DevToolsDatabase db = getDatabase();
+                db.anrDao().insertAll(anr);
+                Log.d(DevTools.TAG, "Anr stored in db");
+            }
+        });
     }
 
     private static void startStrictMode() {
