@@ -13,8 +13,8 @@ import com.github.anrwatchdog.ANRWatchDog;
 import es.rafaco.devtools.db.Anr;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
+import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.logic.exception.CustomExceptionHandler;
 
 public class DevTools {
 
@@ -51,8 +51,8 @@ public class DevTools {
 
     private static void startUncaughtExceptionHandler(Context context) {
         Thread.UncaughtExceptionHandler currentHanler = Thread.getDefaultUncaughtExceptionHandler();
-        if (currentHanler != null || !currentHanler.getClass().isInstance(CustomExceptionHandler.class)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(context.getApplicationContext(), context, currentHanler));
+        if (currentHanler != null || !currentHanler.getClass().isInstance(CrashHandler.class)) {
+            Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context.getApplicationContext(), context, currentHanler));
             Log.d(DevTools.TAG, "Exception handler added");
         }else{
             Log.d(DevTools.TAG, "Exception handler already attach on thread");
@@ -113,7 +113,7 @@ public class DevTools {
     }
 
     private static void startService(Context context) {
-        context.startService(new Intent(context, DevToolsService.class));
+        context.startService(new Intent(context, DevToolsUiService.class));
     }
 
     public static ActivityLogManager getActivityLogManager() {

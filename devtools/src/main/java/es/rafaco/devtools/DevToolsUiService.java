@@ -1,17 +1,10 @@
 package es.rafaco.devtools;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -19,10 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
@@ -34,7 +24,7 @@ import es.rafaco.devtools.widgets.Widget;
 import es.rafaco.devtools.widgets.WidgetsManager;
 
 
-public class DevToolsService extends Service {
+public class DevToolsUiService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
@@ -43,7 +33,7 @@ public class DevToolsService extends Service {
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
 
-    public DevToolsService() {
+    public DevToolsUiService() {
     }
 
     @Nullable
@@ -59,13 +49,13 @@ public class DevToolsService extends Service {
         if (action != null){
             processIntentAction(action, property);
         }else{
-            Log.v(DevTools.TAG, "DevToolsService - onStartCommand without action");
+            Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand without action");
         }
         return DevTools.SERVICE_STICKY ? START_STICKY : START_NOT_STICKY;
     }
 
     private void processIntentAction(IntentAction action, String property) {
-        Log.v(DevTools.TAG, "DevToolsService - onStartCommand with action: " + action.toString());
+        Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand with action: " + action.toString());
         if (action.equals(IntentAction.TOOL)){
             startTool(property);
         }
@@ -93,11 +83,11 @@ public class DevToolsService extends Service {
         }
     }
 
-    public static Intent buildIntentAction(DevToolsService.IntentAction action, String property) {
-        Intent intent = new Intent(DevTools.getAppContext(), DevToolsService.class);
-        intent.putExtra(DevToolsService.EXTRA_INTENT_ACTION, action);
+    public static Intent buildIntentAction(DevToolsUiService.IntentAction action, String property) {
+        Intent intent = new Intent(DevTools.getAppContext(), DevToolsUiService.class);
+        intent.putExtra(DevToolsUiService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
-            intent.putExtra(DevToolsService.EXTRA_INTENT_PROPERTY, property);
+            intent.putExtra(DevToolsUiService.EXTRA_INTENT_PROPERTY, property);
         }
         return intent;
     }

@@ -12,11 +12,11 @@
 
         <activity
             android:label="@string/app_name"
-            android:name=".logic.exception.ExceptionActivity"
+            android:name=".logic.crash.CrashActivity"
             android:theme="@style/LibTheme.Dialog"/>
 
         <service
-            android:name="es.rafaco.devtools.DevToolsService" />
+            android:name="es.rafaco.devtools.DevToolsUiService" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

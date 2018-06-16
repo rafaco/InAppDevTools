@@ -1,4 +1,4 @@
-package es.rafaco.devtools.logic.exception;
+package es.rafaco.devtools.logic.crash;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,17 +9,16 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
 import es.rafaco.devtools.db.Crash;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 
-public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
+public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final int MAX_STACK_TRACE_SIZE = 131071; //128 KB - 1
 
@@ -27,7 +26,7 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
     private Context appContext;
     private Context baseContext;
 
-    public CustomExceptionHandler(Context appContext, Context baseContext, Thread.UncaughtExceptionHandler previousHandler) {
+    public CrashHandler(Context appContext, Context baseContext, Thread.UncaughtExceptionHandler previousHandler) {
         this.appContext = appContext;
         this.baseContext = baseContext;
         this.previousHandle = previousHandler;
@@ -38,7 +37,7 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
 
 
         try {
-            Log.d(DevTools.TAG, "CustomExceptionHandler.uncaughtException() called");
+            Log.d(DevTools.TAG, "CrashHandler.uncaughtException() called");
             //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
             final Crash crash = buildCrash(thread, ex);
 
@@ -54,9 +53,9 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
                 }
             });*/
             onCrashStored( thread, ex, crash);
-            Log.d(DevTools.TAG, "CustomExceptionHandler.uncaughtException() finished ok");
+            Log.d(DevTools.TAG, "CrashHandler.uncaughtException() finished ok");
         } catch (Exception e) {
-            Log.e(DevTools.TAG, "CustomExceptionHandler.uncaughtException() EXCEPTION");
+            Log.e(DevTools.TAG, "CrashHandler.uncaughtException() EXCEPTION");
             e.printStackTrace();
         }
     }
@@ -104,7 +103,7 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private void startExceptionActivity(String exClass, String exMessage, Crash crash) {
         Log.e(DevTools.TAG, "Requesting Exception Dialog...");
-        Intent intent = new Intent(appContext, ExceptionActivity.class);
+        Intent intent = new Intent(appContext, CrashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("TITLE", "DevTools caught a crash");
         intent.putExtra("MESSAGE", exClass + ": " + exMessage);
@@ -113,8 +112,8 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void callService() {
-        Intent intent = new Intent(appContext, DevToolsService.class);
-        intent.putExtra(DevToolsService.EXTRA_INTENT_ACTION, DevToolsService.IntentAction.EXCEPTION);
+        Intent intent = new Intent(appContext, DevToolsUiService.class);
+        intent.putExtra(DevToolsUiService.EXTRA_INTENT_ACTION, DevToolsUiService.IntentAction.EXCEPTION);
         appContext.startService(intent);
     }
 

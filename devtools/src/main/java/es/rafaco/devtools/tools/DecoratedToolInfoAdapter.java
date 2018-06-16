@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.ThreadUtils;
 
@@ -102,7 +102,7 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
     }
 
     public void startTool(String title){
-        Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.TOOL, title);
+        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.TOOL, title);
         context.startService(intent);
     }
 

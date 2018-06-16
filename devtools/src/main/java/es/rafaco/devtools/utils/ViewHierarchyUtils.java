@@ -12,7 +12,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 
-public class AllWindowsUtils {
+public class ViewHierarchyUtils {
 
     public static void logRootViews() {
         List<Pair<String, View>> rootViews = getRootViews(true);

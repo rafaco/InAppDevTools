@@ -1,6 +1,5 @@
 package es.rafaco.devtools.tools.screenshot;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,8 +26,7 @@ import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.log.LogTool;
-import es.rafaco.devtools.utils.AllWindowsUtils;
-import es.rafaco.devtools.utils.MediaStoreUtils;
+import es.rafaco.devtools.utils.ViewHierarchyUtils;
 
 public class ScreenTool extends Tool {
 
@@ -93,7 +91,7 @@ public class ScreenTool extends Tool {
 
     private void takeScreenshot() {
         Log.d(DevTools.TAG, "Permissions are: " + LogTool.isExternalStorageWritable());
-        List<Pair<String, View>> rootViews = AllWindowsUtils.getRootViews(true);
+        List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);
         // create bitmap screen capture
         //View v1 = getWindow().getDecorView().getRootView();
         //ViewGroup v1 = (ViewGroup) ((ViewGroup) widgetsManager.getView(Widget.Type.FULL).findViewById(android.R.id.content)).getChildAt(0);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
 import es.rafaco.devtools.tools.errors.ErrorsTool;
 import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
@@ -124,7 +124,7 @@ public class ToolsManager {
     }
 
     private void stopService() {
-        ((DevToolsService)context).stopSelf();
+        ((DevToolsUiService)context).stopSelf();
     }
 
     public void destroy() {
@@ -136,7 +136,7 @@ public class ToolsManager {
 
     //TODO: REFACTOR
     public ViewGroup getContainer() {
-        return ((DevToolsService)context).getToolContainer();
+        return ((DevToolsUiService)context).getToolContainer();
     }
 
 }

@@ -1,7 +1,6 @@
 package es.rafaco.devtools.logic;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
 import es.rafaco.devtools.R;
 
 public class PermissionActivity extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class PermissionActivity extends AppCompatActivity {
                 requestStoragePermission();
             }
         } else {
-            Log.d(DevTools.TAG, "DevToolsService - onStartCommand without action");
+            Log.d(DevTools.TAG, "DevToolsUiService - onStartCommand without action");
         }
 
     }
@@ -90,13 +89,13 @@ public class PermissionActivity extends AppCompatActivity {
 
 
     private void onOverlayPermissionGranted() {
-        Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.PERMISSION_GRANTED, "Overlay");
+        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.PERMISSION_GRANTED, "Overlay");
         startService(intent);
         finish();
     }
 
     private void onStoragePermissionGranted() {
-        Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.TOOL, "Screen");
+        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.TOOL, "Screen");
         startService(intent);
         finish();
     }
