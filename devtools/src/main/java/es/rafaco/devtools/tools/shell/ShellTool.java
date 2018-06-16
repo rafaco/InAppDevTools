@@ -71,7 +71,7 @@ public class ShellTool extends Tool {
     @Override
     public DecoratedToolInfo getHomeInfo(){
         DecoratedToolInfo info = new DecoratedToolInfo(ShellTool.class,
-                getTitle(),
+                getFullTitle(),
                 "Uncaught exception handler is activated.", // You will be prompted if something go wrong. \n No exceptions stored.",
                 ContextCompat.getColor(getContext(), R.color.rally_orange));
         return  info;

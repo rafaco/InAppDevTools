@@ -77,4 +77,8 @@ public abstract class Tool {
                 resourceType,
                 view.getContext().getPackageName());
     }
+
+    protected String getFullTitle(){
+        return getTitle() + " Tool";
+    }
 }

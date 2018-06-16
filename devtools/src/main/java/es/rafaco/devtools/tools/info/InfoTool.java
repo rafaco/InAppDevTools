@@ -70,7 +70,7 @@ public class InfoTool extends Tool {
     @Override
     public DecoratedToolInfo getHomeInfo(){
         DecoratedToolInfo info = new DecoratedToolInfo( InfoTool.class,
-                getTitle(),
+                getFullTitle(),
                 getHomeInfoMessage(),
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return info;
@@ -79,7 +79,7 @@ public class InfoTool extends Tool {
     @Override
     public DecoratedToolInfo getReportInfo(){
         DecoratedToolInfo info = new DecoratedToolInfo(InfoTool.class,
-                getTitle(),
+                getFullTitle(),
                 "Include all. Brief info is always added",
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return info;
