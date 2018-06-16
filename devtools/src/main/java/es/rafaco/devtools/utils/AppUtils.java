@@ -69,15 +69,21 @@ public class AppUtils {
         }
     }
 
-    private static void killProcessesAround(Context activity) throws PackageManager.NameNotFoundException {
-        ActivityManager am = (ActivityManager)activity.getSystemService(Context.ACTIVITY_SERVICE);
-        String myProcessPrefix = activity.getApplicationInfo().processName;
+    public static void killProcessesAround(Context context) throws PackageManager.NameNotFoundException {
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        String myProcessPrefix = context.getApplicationInfo().processName;
+        //TODO: Not working, fix following
         String myProcessName = "";//activity.getPackageManager().getActivityInfo(activity.getComponentName(), 0).processName;
         for (ActivityManager.RunningAppProcessInfo proc : am.getRunningAppProcesses()) {
             if (proc.processName.startsWith(myProcessPrefix) && !proc.processName.equals(myProcessName)) {
                 android.os.Process.killProcess(proc.pid);
             }
         }
+    }
+
+    public static void killMyProces(){
+        Log.e("DevTools", "Killing process...");
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     public static void programRestart(Context context) {

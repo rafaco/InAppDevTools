@@ -2,6 +2,7 @@ package es.rafaco.devtools.tools.errors;
 
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,18 +16,20 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.utils.ThreadUtils;
 
 public class ErrorsTool extends Tool {
 
     private DecoratedToolInfoAdapter adapter;
     private ListView errorList;
     private TextView welcome;
-    private Button crashButton;
+
+    private Button crashUiButton;
+    private Button crashBackButton;
 
     public ErrorsTool(ToolsManager manager) {
         super(manager);
@@ -66,17 +69,47 @@ public class ErrorsTool extends Tool {
         welcome = toolView.findViewById(R.id.welcome);
         welcome.setText(getWelcomeMessage());
 
-        crashButton = toolView.findViewById(R.id.crash_button);
-        crashButton.setOnClickListener(new View.OnClickListener() {
+        initAdapter();
+
+        crashUiButton = toolView.findViewById(R.id.crash_ui_button);
+        crashUiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCrashButton();
+                onCrashUiButton();
+            }
+        });
+
+        crashBackButton = toolView.findViewById(R.id.crash_back_button);
+        crashBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCrashBackButton();
+            }
+        });
+
+        if (ThreadUtils.amIOnUiThread()){
+            Log.d(DevTools.TAG, "ErrorsTool is on UI thread");
+        }else{
+            Log.d(DevTools.TAG, "ErrorsTool is NOT ON UI thread");
+        }
+    }
+
+    public void onCrashUiButton() {
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException("Ups, you throw an exception on the ui thread :)");
             }
         });
     }
 
-    private void onCrashButton() {
-        throw new RuntimeException("Ups, crash button has throw an exception for you :)");
+    public void onCrashBackButton() {
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException("Ups, you throw an exception on a background thread :)");
+            }
+        });
     }
 
     public String getWelcomeMessage(){
@@ -90,20 +123,34 @@ public class ErrorsTool extends Tool {
                 DevToolsDatabase db = DevTools.getDatabase();
                 List<Crash> crashes = db.crashDao().getAll();
                 Log.d(DevTools.TAG, "Crash db size is: " + crashes.size());
-                initAdapter(crashes);
+                replaceList(crashes);
             }
         });
     }
 
-    private void initAdapter(List<Crash> crashes) {
-
+    private void replaceList(List<Crash> crashes) {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
         for (Crash crash : crashes){
-            array.add(new DecoratedToolInfo(ErrorsTool.class, crash.getException(), crash.getMessage(),
+            array.add(new DecoratedToolInfo(ErrorsTool.class,
+                    "Crash " + getElapsedTimeString(crash.getDate()),
+                    crash.getException() + " - " + crash.getMessage(),
                     ContextCompat.getColor(getContext(), R.color.rally_orange)));
         }
 
-        adapter = new DecoratedToolInfoAdapter(this, array);
+        adapter.replaceAll(array);
+    }
+
+    public String getElapsedTimeString(long oldTime){
+        CharSequence relativeDate =
+                DateUtils.getRelativeTimeSpanString(oldTime,
+                        System.currentTimeMillis(),
+                        DateUtils.MINUTE_IN_MILLIS,
+                        DateUtils.FORMAT_ABBREV_RELATIVE);
+        return relativeDate.toString();
+    }
+
+    private void initAdapter(){
+        adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
         errorList = getView().findViewById(R.id.list);
         errorList.setAdapter(adapter);
     }

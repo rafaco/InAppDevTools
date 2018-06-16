@@ -15,6 +15,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevToolsService;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.utils.ThreadUtils;
 
 public class DecoratedToolInfoAdapter extends BaseAdapter {
 
@@ -103,5 +104,22 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
     public void startTool(String title){
         Intent intent = DevToolsService.buildIntentAction(DevToolsService.IntentAction.TOOL, title);
         context.startService(intent);
+    }
+
+    public void add(DecoratedToolInfo data){
+        originalData.add(data);
+        notifyDataSetChanged();
+    }
+
+    public void replaceAll(final List<DecoratedToolInfo> data){
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //originalData.clear();
+                //notifyDataSetInvalidated();
+                originalData = data;
+                notifyDataSetChanged();
+            }
+        });
     }
 }

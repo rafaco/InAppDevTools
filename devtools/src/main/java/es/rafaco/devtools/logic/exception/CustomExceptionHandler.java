@@ -3,6 +3,7 @@ package es.rafaco.devtools.logic.exception;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
@@ -34,9 +35,34 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
-        Log.e(DevTools.TAG, "uncaughtException called");
-        //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
 
+
+        try {
+            Log.d(DevTools.TAG, "CustomExceptionHandler.uncaughtException() called");
+            //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
+            final Crash crash = buildCrash(thread, ex);
+
+            //appContext.startService(DbService.buildCrashIntent(appContext, crash));
+
+            /*AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    DevToolsDatabase db = DevTools.getDatabase();
+                    db.crashDao().insertAll(crash);
+                    Log.d(DevTools.TAG, "Crash db size is: " + db.crashDao().count());
+                    onCrashStored(thread, ex, crash);
+                }
+            });*/
+            onCrashStored( thread, ex, crash);
+            Log.d(DevTools.TAG, "CustomExceptionHandler.uncaughtException() finished ok");
+        } catch (Exception e) {
+            Log.e(DevTools.TAG, "CustomExceptionHandler.uncaughtException() EXCEPTION");
+            e.printStackTrace();
+        }
+    }
+
+    @NonNull
+    private Crash buildCrash(Thread thread, Throwable ex) {
         final Crash crash = new Crash();
         crash.setDate(new Date().getTime());
         crash.setException(ex.getClass().getSimpleName());
@@ -52,29 +78,14 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
         }
         crash.setStacktrace(sw.toString());
 
-        Log.e(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
-        Log.e(DevTools.TAG, stackTraceString);
-        Log.e(DevTools.TAG, String.format("Thread %s [%s] is %s. Main:  ",
+        Log.d(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
+        Log.d(DevTools.TAG, stackTraceString);
+        Log.d(DevTools.TAG, String.format("Thread %s [%s] is %s. Main:  ",
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),
                 String.valueOf(ThreadUtils.isTheUiThread(thread))));
-
-        //appContext.startService(DbService.buildCrashIntent(appContext, crash));
-
-        /*AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
-                db.crashDao().insertAll(crash);
-                Log.d(DevTools.TAG, "Crash db size is: " + db.crashDao().count());
-                onCrashStored(thread, ex, crash);
-            }
-        });*/
-
-
-        onCrashStored( thread, ex, crash);
-        Log.e(DevTools.TAG, "uncaughtException finished");
+        return crash;
     }
 
     private void onCrashStored(Thread thread, Throwable ex, Crash crash) {
@@ -86,7 +97,8 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
             previousHandle.uncaughtException(thread, ex);
         }else{
             Log.e(DevTools.TAG, "onCrashStored destroy");
-            AppUtils.exit();
+            //AppUtils.exit();
+            AppUtils.killMyProces();
         }
     }
 
@@ -96,7 +108,7 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("TITLE", "DevTools caught a crash");
         intent.putExtra("MESSAGE", exClass + ": " + exMessage);
-        intent.putExtra("CRASH", (Serializable) crash);
+        intent.putExtra("CRASH", crash);
         appContext.startActivity(intent);
     }
 

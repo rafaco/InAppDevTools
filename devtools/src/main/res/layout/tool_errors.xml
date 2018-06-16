@@ -21,14 +21,29 @@
             android:layout_height="wrap_content"
             style="@style/content_margin" />
 
-        <Button
-            android:id="@+id/crash_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Simulate a Crash"
-            android:backgroundTint="@color/rally_orange"
-            style="@style/content_margin"/>
+            android:orientation="horizontal"
+            style="@style/content_margin">
 
+            <Button
+                android:id="@+id/crash_ui_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="Crash UI"
+                android:backgroundTint="@color/rally_orange"/>
+
+            <Button
+                android:id="@+id/crash_back_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Crash BG"
+                android:backgroundTint="@color/rally_orange"/>
+
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package es.rafaco.devtools.utils;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,5 +19,9 @@ public class ThreadUtils {
 
     public static void runOnUiThread(Runnable runnable){
         new Handler(Looper.getMainLooper()).post(runnable);
+    }
+
+    public static void runOnBackThread(Runnable runnable){
+        AsyncTask.execute(runnable);
     }
 }
