@@ -24,4 +24,7 @@ public interface CrashDao {
 
     @Delete
     void delete(Crash crash);
+
+    @Query("DELETE FROM crash")
+    void deleteAll();
 }

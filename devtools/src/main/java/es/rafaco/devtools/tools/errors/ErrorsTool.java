@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -85,6 +86,20 @@ public class ErrorsTool extends Tool {
     private void initView(View toolView) {
         welcome = toolView.findViewById(R.id.welcome);
         welcome.setText(getWelcomeMessage());
+        ImageView refreshButton = getView().findViewById(R.id.refresh_button);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRefresh();
+            }
+        });
+        ImageView deleteButton = getView().findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearAll();
+            }
+        });
 
         initAdapter();
 
@@ -117,6 +132,24 @@ public class ErrorsTool extends Tool {
         }else{
             Log.d(DevTools.TAG, "ErrorsTool is NOT ON UI thread");
         }
+    }
+
+    private void onRefresh() {
+        getErrors();
+    }
+
+    private void onClearAll() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DevToolsDatabase db = DevTools.getDatabase();
+                db.crashDao().deleteAll();
+                db.anrDao().deleteAll();
+
+                ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+                replaceList(array);
+            }
+        });
     }
 
     public void onAnrButton() {

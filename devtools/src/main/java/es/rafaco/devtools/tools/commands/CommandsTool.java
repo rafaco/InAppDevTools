@@ -70,14 +70,6 @@ public class CommandsTool extends Tool {
             }
         });
 
-        installedButton = toolView.findViewById(R.id.installed_button);
-        installedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppUtils.openInstalledApps(getContext());
-            }
-        });
-
         devOptionsButton = toolView.findViewById(R.id.dev_options_button);
         devOptionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +90,7 @@ public class CommandsTool extends Tool {
         fullRestartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUtils.openDeveloperOptions(getContext());
+                AppUtils.fullRestart(getContext());
             }
         });
 

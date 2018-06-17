@@ -9,12 +9,33 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/welcome"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/content_margin"/>
+            style="@style/content_margin">
 
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_forever_rally_24dp"
+                android:layout_alignParentRight="true"/>
+
+            <ImageButton
+                android:id="@+id/refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_refresh_rally_24dp"
+                android:layout_toLeftOf="@id/delete_button"/>
+
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/refresh_button"
+                android:layout_alignParentLeft="true"/>
+
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/list"

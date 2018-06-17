@@ -124,6 +124,7 @@ public class AppUtils {
         context.startActivity(intent);
     }
 
+    //TODO: DELETE? it seems not working
     public static void openInstalledApps(final Context context) {
         if (context == null) {
             return;
@@ -139,4 +140,8 @@ public class AppUtils {
     }
 
 
+    public static void fullRestart(Context context) {
+        programRestart(context);
+        exit();
+    }
 }

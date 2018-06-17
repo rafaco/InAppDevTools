@@ -24,4 +24,7 @@ public interface AnrDao {
 
     @Delete
     void delete(Anr anr);
+
+    @Query("DELETE FROM anr")
+    void deleteAll();
 }

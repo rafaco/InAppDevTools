@@ -95,7 +95,8 @@ public class ScreenTool extends Tool {
         // create bitmap screen capture
         //View v1 = getWindow().getDecorView().getRootView();
         //ViewGroup v1 = (ViewGroup) ((ViewGroup) widgetsManager.getView(Widget.Type.FULL).findViewById(android.R.id.content)).getChildAt(0);
-        View v1 = rootViews.get(3).second;
+
+        View v1 = rootViews.get(0).second;
 
         Date now = new Date();
         String formattedDate = DateFormat.format("yyyy-MM-dd_hh:mm:ss", now).toString();

@@ -11,11 +11,11 @@
         android:padding="0dp">
     <!--android:background="@color/grayLight"-->
         <TextView
-        android:id="@+id/welcome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/content_margin"
-        android:text="Run useful predefined commands or type a shell commands to run in the device. (Comming soon) Custom commands can be added via configuration."/>
+            android:id="@+id/welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin"
+            android:text="Run predefined commands or your own ones (add them via configuration)"/>
 
         <LinearLayout
             android:id="@+id/command_buttons"
@@ -31,15 +31,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="right"
                 android:text="Info"
-                android:backgroundTint="@color/rally_green"/>
-
-            <Button
-                android:id="@+id/installed_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="right"
-                android:text="Installed"
                 android:backgroundTint="@color/rally_green"/>
 
             <Button
@@ -76,9 +67,17 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/welcome2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin"
+            android:text="Run any bash command directly on the device and view the output. You have the same privilege level than your app"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            style="@style/content_margin">
             <Button
                 android:id="@+id/btn"
                 android:layout_width="wrap_content"
@@ -101,7 +100,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            style="@style/content_margin">
 
             <TextView
                 android:layout_width="fill_parent"
