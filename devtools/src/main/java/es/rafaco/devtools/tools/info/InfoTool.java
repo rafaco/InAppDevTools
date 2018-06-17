@@ -19,7 +19,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
-import es.rafaco.devtools.tools.shell.ShellExecuter;
+import es.rafaco.devtools.tools.commands.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 

@@ -11,13 +11,13 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.tools.commands.CommandsTool;
 import es.rafaco.devtools.tools.errors.ErrorsTool;
 import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
 import es.rafaco.devtools.tools.report.ReportTool;
 import es.rafaco.devtools.tools.screenshot.ScreenTool;
-import es.rafaco.devtools.tools.shell.ShellTool;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -42,7 +42,7 @@ public class ToolsManager {
         addTool(new ErrorsTool(this));
         addTool(new ScreenTool(this));
         addTool(new LogTool(this));
-        addTool(new ShellTool(this));
+        addTool(new CommandsTool(this));
         addTool(new ReportTool(this));
     }
 
@@ -56,7 +56,7 @@ public class ToolsManager {
         toolsList.add("Errors");
         toolsList.add("Screen");
         toolsList.add("Log");
-        toolsList.add("Shell");
+        toolsList.add("Commands");
         toolsList.add("Report");
 
         return toolsList;

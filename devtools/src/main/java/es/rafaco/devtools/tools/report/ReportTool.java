@@ -100,7 +100,7 @@ public class ReportTool extends Tool {
     private void initAdapter() {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
         array.add(getManager().getTool(InfoTool.class).getReportInfo());
-        //array.add(getManager().getTool(ShellTool.class).getReportInfo());
+        //array.add(getManager().getTool(CommandsTool.class).getReportInfo());
         array.add(getManager().getTool(LogTool.class).getReportInfo());
 
         adapter = new DecoratedToolInfoAdapter(this, array);

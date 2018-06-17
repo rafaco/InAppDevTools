@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
@@ -106,4 +108,35 @@ public class AppUtils {
         Log.d("DevTools", "Killing application");
         System.exit(10);
     }
+
+
+
+
+    public static void openDeveloperOptions(Context context){
+        context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+    }
+
+    public static void openAppSettings(Context context){
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        context.startActivity(intent);
+    }
+
+    public static void openInstalledApps(final Context context) {
+        if (context == null) {
+            return;
+        }
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.shell;
+package es.rafaco.devtools.tools.commands;
 
 
 import java.io.BufferedReader;

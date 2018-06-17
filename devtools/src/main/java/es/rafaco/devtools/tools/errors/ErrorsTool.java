@@ -24,6 +24,7 @@ import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
 public class ErrorsTool extends Tool {
@@ -68,6 +69,17 @@ public class ErrorsTool extends Tool {
 
     @Override
     protected void onDestroy() {
+    }
+
+
+    @Override
+    public DecoratedToolInfo getHomeInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(CommandsTool.class,
+                getFullTitle(),
+                "Crash handler activated. \n ANR handler activated.",
+                4,
+                ContextCompat.getColor(getContext(), R.color.rally_orange));
+        return  info;
     }
 
     private void initView(View toolView) {

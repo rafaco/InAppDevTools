@@ -11,10 +11,11 @@ import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.errors.ErrorsTool;
 import es.rafaco.devtools.tools.info.InfoHelper;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.report.ReportTool;
-import es.rafaco.devtools.tools.shell.ShellTool;
+import es.rafaco.devtools.tools.commands.CommandsTool;
 
 public class HomeTool extends Tool {
 
@@ -60,7 +61,7 @@ public class HomeTool extends Tool {
     private void initAdapter() {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
         array.add(getManager().getTool(InfoTool.class).getHomeInfo());
-        array.add(getManager().getTool(ShellTool.class).getHomeInfo());
+        array.add(getManager().getTool(ErrorsTool.class).getHomeInfo());
         array.add(getManager().getTool(ReportTool.class).getHomeInfo());
 
         adapter = new DecoratedToolInfoAdapter(this, array);
