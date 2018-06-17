@@ -77,9 +77,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         crash.setStacktrace(sw.toString());
 
-        Log.d(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
-        Log.d(DevTools.TAG, stackTraceString);
-        Log.d(DevTools.TAG, String.format("Thread %s [%s] is %s. Main:  ",
+        Log.e(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
+        Log.e(DevTools.TAG, stackTraceString);
+        Log.e(DevTools.TAG, String.format("Thread %s [%s] is %s. Main: %s",
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),

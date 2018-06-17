@@ -40,11 +40,17 @@ import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogTool extends Tool implements AdapterView.OnItemClickListener {
 
-    public static final String VERBOSE = "Verbose";
+    /*public static final String VERBOSE = "Verbose";
     public static final String DEBUG = "Debug";
     public static final String INFO = "Info";
     public static final String WARNING = "Warning";
-    public static final String ERROR = "Error";
+    public static final String ERROR = "Error";*/
+
+    public static final String VERBOSE = "V";
+    public static final String DEBUG = "D";
+    public static final String INFO = "I";
+    public static final String WARNING = "W";
+    public static final String ERROR = "E";
 
     protected LogLineAdaptor adapter;
     protected LogReaderTask logReaderTask = null;
@@ -89,6 +95,7 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         initTextFilter();
         initSearchButton();
         initDeleteButton();
+        initSaveButton();
 
         initLogLineAdaptor();
         initOutputView();
@@ -344,7 +351,8 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveLogcatToFile();
+                String path = saveLogcatToFile();
+                DevTools.showMessage("Log stored to " + path);
             }
         });
     }
