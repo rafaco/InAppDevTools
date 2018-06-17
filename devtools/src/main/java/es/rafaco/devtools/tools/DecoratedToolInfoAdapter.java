@@ -76,7 +76,7 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
 
         final DecoratedToolInfo data = originalData.get(position);
 
-        holder.title.setText(data.title + " Tool");
+        holder.title.setText(data.title);
         holder.message.setText(data.message);
 
         holder.title.setTextColor(data.color);

@@ -390,6 +390,7 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         DecoratedToolInfo info = new DecoratedToolInfo( LogTool.class,
                 getFullTitle(),
                 "Live log is available. Automatic log to disk coming soon.",
+                2,
                 ContextCompat.getColor(getContext(), R.color.rally_white));
         return info;
     }
@@ -399,6 +400,7 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
         DecoratedToolInfo info = new DecoratedToolInfo(LogTool.class,
                 getFullTitle(),
                 "Include full log.",
+                2,
                 ContextCompat.getColor(getContext(), R.color.rally_white));
         return info;
     }

@@ -57,7 +57,7 @@ public class DevToolsUiService extends Service {
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand with action: " + action.toString());
         if (action.equals(IntentAction.TOOL)){
-            startTool(property);
+            startTool(property.replace(" Tool", ""));
         }
         else if (action.equals(IntentAction.ICON)) {
             widgetsManager.toogleFullMode(false);

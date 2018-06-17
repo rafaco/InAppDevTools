@@ -6,14 +6,16 @@ public class DecoratedToolInfo {
     String title;
     String message;
     int color;
+    Long order;
     String toolName;
     Class<? extends Tool> toolClass;
 
-    public DecoratedToolInfo(Class<? extends Tool> toolClass, String title, String message, int color) {
+    public DecoratedToolInfo(Class<? extends Tool> toolClass, String title, String message, long order, int color) {
         //this.toolName = toolName;
         this.toolClass = toolClass;
         this.title = title;
         this.message = message;
+        this.order = order;
         this.color = color;
     }
 
@@ -57,4 +59,11 @@ public class DecoratedToolInfo {
         this.color = color;
     }
 
+    public Long getOrder() {
+        return order;
+    }
+
+    public void setOrder(Long order) {
+        this.order = order;
+    }
 }

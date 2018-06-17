@@ -73,6 +73,7 @@ public class ShellTool extends Tool {
         DecoratedToolInfo info = new DecoratedToolInfo(ShellTool.class,
                 getFullTitle(),
                 "Uncaught exception handler is activated.", // You will be prompted if something go wrong. \n No exceptions stored.",
+                4,
                 ContextCompat.getColor(getContext(), R.color.rally_orange));
         return  info;
     }

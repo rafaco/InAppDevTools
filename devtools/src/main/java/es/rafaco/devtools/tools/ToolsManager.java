@@ -58,7 +58,6 @@ public class ToolsManager {
         toolsList.add("Log");
         toolsList.add("Shell");
         toolsList.add("Report");
-        toolsList.add("Close");
 
         return toolsList;
     }
@@ -95,11 +94,6 @@ public class ToolsManager {
 
     public void selectTool(String title) {
         Log.d(DevTools.TAG, "Requested new tool: " + title);
-
-        if (title.equals("Close")){
-            stopService();
-            return;
-        }
 
         //Ignore if already selected
         if (getCurrent() != null && title.equals(getCurrent().getTitle())) {

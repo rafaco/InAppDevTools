@@ -76,6 +76,7 @@ public class ReportTool extends Tool {
         DecoratedToolInfo info = new DecoratedToolInfo(ReportTool.class,
                 getFullTitle(), //"Send a Report"
                 "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
+                3,
                 ContextCompat.getColor(getContext(), R.color.rally_green));
         return  info;
     }

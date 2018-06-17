@@ -72,6 +72,7 @@ public class InfoTool extends Tool {
         DecoratedToolInfo info = new DecoratedToolInfo( InfoTool.class,
                 getFullTitle(),
                 getHomeInfoMessage(),
+                1,
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return info;
     }
@@ -81,6 +82,7 @@ public class InfoTool extends Tool {
         DecoratedToolInfo info = new DecoratedToolInfo(InfoTool.class,
                 getFullTitle(),
                 "Include all. Brief info is always added",
+                1,
                 ContextCompat.getColor(getContext(), R.color.rally_blue));
         return info;
     }
