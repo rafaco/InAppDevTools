@@ -10,11 +10,14 @@ import android.widget.Toast;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 
+import java.util.Date;
+
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.utils.AppUtils;
+import es.rafaco.devtools.utils.ThreadUtils;
 
 public class DevTools {
 
@@ -36,9 +39,16 @@ public class DevTools {
         startUncaughtExceptionHandler(context);
         startAnrWatchDog();
         startStrictMode();
-        startService(context);
+        startUiService(context);
         startActivityLog(context);
         //throwExceptionWithDelay(10000);
+
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                getDatabase().printOverview();
+            }
+        });
     }
 
     private static void startActivityLog(Context context) {
@@ -90,6 +100,8 @@ public class DevTools {
         }
 
         Anr anr = new Anr();
+        anr.setDate(new Date().getTime());
+        anr.setWarning(isWarning);
         anr.setMessage(error.getMessage().toString());
         anr.setCause(error.getCause().toString());
         storeAnr(anr);
@@ -112,7 +124,7 @@ public class DevTools {
         }
     }
 
-    private static void startService(Context context) {
+    private static void startUiService(Context context) {
         context.startService(new Intent(context, DevToolsUiService.class));
     }
 
@@ -127,6 +139,21 @@ public class DevTools {
     public static void showMessage(String text) {
         //TODO: use a custom overlay toast
         Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
+
+        /*Tooltip.make(DevTools.getAppContext(),
+                new Tooltip.Builder(101)
+                        .closePolicy(new Tooltip.ClosePolicy()
+                                .insidePolicy(true, false)
+                                .outsidePolicy(true, false), 3000)
+                        .activateDelay(800)
+                        .showDelay(300)
+                        .text(text)
+                        .maxWidth(500)
+                        .withArrow(true)
+                        .withOverlay(true)
+                        .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                        .build()
+        ).show();*/
     }
 
     public static DevToolsDatabase getDatabase() {

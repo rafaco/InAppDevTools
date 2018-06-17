@@ -3,6 +3,7 @@ package es.rafaco.devtools.db;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Anr;
@@ -34,11 +35,14 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
 
     //region [ DAOs ]
-
     public abstract UserDao userDao();
     public abstract CrashDao crashDao();
     public abstract AnrDao anrDao();
-
-
     //endregion
+
+    public void printOverview(){
+        //Log.d(DevTools.TAG, "User db size is: " + userDao().countUsers());
+        Log.d(DevTools.TAG, "Crash db size is: " + crashDao().count());
+        Log.d(DevTools.TAG, "Anr db size is: " + anrDao().count());
+    }
 }
