@@ -1,5 +1,6 @@
 package es.rafaco.devtools.tools.errors;
 
+import android.arch.persistence.room.Database;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
@@ -10,10 +11,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.tools.DecoratedToolInfo;
@@ -30,6 +34,7 @@ public class ErrorsTool extends Tool {
 
     private Button crashUiButton;
     private Button crashBackButton;
+    private Button anrButton;
 
     public ErrorsTool(ToolsManager manager) {
         super(manager);
@@ -71,6 +76,14 @@ public class ErrorsTool extends Tool {
 
         initAdapter();
 
+        anrButton = toolView.findViewById(R.id.anr_button);
+        anrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAnrButton();
+            }
+        });
+
         crashUiButton = toolView.findViewById(R.id.crash_ui_button);
         crashUiButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +107,22 @@ public class ErrorsTool extends Tool {
         }
     }
 
+    public void onAnrButton() {
+        Log.i(DevTools.TAG, "ANR requested, sleeping main thread for a while...");
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10 * 1000);
+                } catch (InterruptedException e) {
+                    Log.e(DevTools.TAG, "Something wrong happen", e);
+                }
+            }
+        });
+    }
+
     public void onCrashUiButton() {
+        Log.i(DevTools.TAG, "UI Exception requested, throwing it...");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -104,6 +132,7 @@ public class ErrorsTool extends Tool {
     }
 
     public void onCrashBackButton() {
+        Log.i(DevTools.TAG, "Background Exception requested, throwing it...");
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
@@ -111,6 +140,8 @@ public class ErrorsTool extends Tool {
             }
         });
     }
+
+
 
     public String getWelcomeMessage(){
         return "Crashes, ANRs, memory leaks and exceptions in logcat!";
@@ -121,23 +152,39 @@ public class ErrorsTool extends Tool {
             @Override
             public void run() {
                 DevToolsDatabase db = DevTools.getDatabase();
+                ArrayList<DecoratedToolInfo> array = new ArrayList<>();
                 List<Crash> crashes = db.crashDao().getAll();
-                Log.d(DevTools.TAG, "Crash db size is: " + crashes.size());
-                replaceList(crashes);
+                for (Crash crash : crashes){
+                    array.add(new DecoratedToolInfo(ErrorsTool.class,
+                            "Crash " + getElapsedTimeString(crash.getDate()),
+                            crash.getException() + " - " + crash.getMessage(),
+                            crash.getDate(),
+                            ContextCompat.getColor(getContext(), R.color.rally_orange)));
+                }
+
+                List<Anr> anrs = db.anrDao().getAll();
+                for (Anr anr : anrs){
+                    array.add(new DecoratedToolInfo(ErrorsTool.class,
+                            "ANR " + getElapsedTimeString(anr.getDate()),
+                            anr.getException() + " - " + anr.getMessage(),
+                            anr.getDate(),
+                            ContextCompat.getColor(getContext(), R.color.rally_blue)));
+                }
+
+                Collections.sort(array, new Comparator<DecoratedToolInfo>() {
+                    @Override
+                    public int compare(DecoratedToolInfo o1, DecoratedToolInfo o2) {
+                        return o2.getOrder().compareTo(o1.getOrder());
+                    }
+                });
+
+                replaceList(array);
             }
         });
     }
 
-    private void replaceList(List<Crash> crashes) {
-        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
-        for (Crash crash : crashes){
-            array.add(new DecoratedToolInfo(ErrorsTool.class,
-                    "Crash " + getElapsedTimeString(crash.getDate()),
-                    crash.getException() + " - " + crash.getMessage(),
-                    ContextCompat.getColor(getContext(), R.color.rally_orange)));
-        }
-
-        adapter.replaceAll(array);
+    private void replaceList(List<DecoratedToolInfo> errors) {
+        adapter.replaceAll(errors);
     }
 
     public String getElapsedTimeString(long oldTime){

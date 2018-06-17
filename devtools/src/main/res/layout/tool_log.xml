@@ -71,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:transcriptMode="alwaysScroll"
-            android:stackFromBottom="true"/>
+            android:stackFromBottom="true"
+            style="@style/content_margin"/>
         <TextView
             android:id="@+id/output_toast"
             android:layout_width="wrap_content"
