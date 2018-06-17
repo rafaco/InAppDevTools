@@ -40,9 +40,9 @@ public class ToolsManager {
         addTool(new HomeTool(this));
         addTool(new InfoTool(this));
         addTool(new ErrorsTool(this));
-        addTool(new ScreenTool(this));
         addTool(new LogTool(this));
         addTool(new CommandsTool(this));
+        addTool(new ScreenTool(this));
         addTool(new ReportTool(this));
     }
 
@@ -54,9 +54,9 @@ public class ToolsManager {
         toolsList.add("Home");
         toolsList.add("Info");
         toolsList.add("Errors");
-        toolsList.add("Screen");
         toolsList.add("Log");
         toolsList.add("Commands");
+        toolsList.add("Screen");
         toolsList.add("Report");
 
         return toolsList;

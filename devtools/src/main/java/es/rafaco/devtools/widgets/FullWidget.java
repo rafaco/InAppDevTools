@@ -114,7 +114,7 @@ public class FullWidget extends Widget {
 
     private int getPosition(String title) {
         int count = toolsSpinner.getAdapter().getCount();
-        for (int i = 0; i < count - 1; i++){
+        for (int i = 0; i < count; i++){
             if (toolsSpinner.getAdapter().getItem(i).equals(title)){
                 return i;
             }
