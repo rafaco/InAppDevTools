@@ -71,33 +71,35 @@ public class DevTools {
 
     private static void startAnrWatchDog(){
 
-        anrWarningWatcher = new ANRWatchDog(10000 /*timeout*/)
+        /*
+        anrWarningWatcher = new ANRWatchDog(10000)
                 .setANRListener(new ANRWatchDog.ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {
-                storeAnr(error, true);
+                onAnrDetected(error, true);
             }
-        });
-        anrWarningWatcher.start();
+        })
+                .setIgnoreDebugger(true);
+        anrWarningWatcher.start();*/
 
         anrErrorWatcher = new ANRWatchDog()
                 .setANRListener(new ANRWatchDog.ANRListener() {
                     @Override
                     public void onAppNotResponding(ANRError error) {
-                        storeAnr(error, false);
+                        onAnrDetected(error, false);
                     }
-                });
+                })
+                .setIgnoreDebugger(true);
         anrErrorWatcher.start();
         Log.d(DevTools.TAG, "ANRWatchDog added");
     }
 
-    private static void storeAnr(ANRError error, boolean isWarning) {
-
-        if(isWarning){
-            Log.w(DevTools.TAG, String.format("ANR 1sec warning: %s - %s", error.getMessage(), error.getCause()));
-        }else{
-            Log.e(DevTools.TAG, String.format("ANR WARNING: %s - %s", error.getMessage(), error.getCause()));
-        }
+    private static void onAnrDetected(ANRError error, boolean isWarning) {
+        String errorString;
+        //if(isWarning) errorString = String.format("ANR WARNING: %s - %s", error.getMessage(), error.getCause());
+        errorString = String.format("ANR ERROR: %s - %s", error.getMessage(), error.getCause());
+        showMessage(errorString);
+        Log.e(DevTools.TAG, errorString);
 
         Anr anr = new Anr();
         anr.setDate(new Date().getTime());
@@ -136,10 +138,17 @@ public class DevTools {
         showMessage(getAppContext().getResources().getString(stringId));
     }
 
-    public static void showMessage(String text) {
-        //TODO: use a custom overlay toast
-        Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
+    public static void showMessage(final String text) {
+        Log.d(DevTools.TAG, "Showing message: " + text);
 
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //TODO: use a custom overlay toast
         /*Tooltip.make(DevTools.getAppContext(),
                 new Tooltip.Builder(101)
                         .closePolicy(new Tooltip.ClosePolicy()

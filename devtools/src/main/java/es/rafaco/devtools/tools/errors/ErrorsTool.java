@@ -211,7 +211,7 @@ public class ErrorsTool extends Tool {
                 for (Anr anr : anrs){
                     array.add(new DecoratedToolInfo(ErrorsTool.class,
                             "ANR " + getElapsedTimeString(anr.getDate()),
-                            anr.getException() + " - " + anr.getMessage(),
+                            anr.getCause(),
                             anr.getDate(),
                             ContextCompat.getColor(getContext(), R.color.rally_blue)));
                 }
