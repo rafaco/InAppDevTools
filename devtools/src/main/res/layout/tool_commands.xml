@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="0dp">
+    <!--android:background="@color/grayLight"-->
+        <TextView
+            android:id="@+id/welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin"
+            android:text="Run predefined commands or your own ones (add them via configuration)"/>
+
+        <LinearLayout
+            android:id="@+id/command_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/content_margin">
+
+            <Button
+                android:id="@+id/info_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="Info"
+                android:backgroundTint="@color/rally_green"/>
+
+            <Button
+                android:id="@+id/dev_options_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="Dev Options"
+                android:backgroundTint="@color/rally_green"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/close_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/content_margin">
+            <Button
+                android:id="@+id/force_close_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Force Close"
+                android:backgroundTint="@color/rally_orange"/>
+
+            <Button
+                android:id="@+id/full_restart_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Full Restart"
+                android:backgroundTint="@color/rally_orange"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/welcome2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin"
+            android:text="Run any bash command directly on the device and view the output. You have the same privilege level than your app"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin">
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="RUN" />
+            <EditText
+                android:id="@+id/txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn"
+                android:hint="Type a command"
+                android:text="logcat -d DevTools:V *:S"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rally_blue"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/content_margin">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/out"
+                android:textAlignment="textStart" />
+
+        </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 throw new NullPointerException("A simulated exception from MainActivity fab button");
-                /*Intent intent = new Intent(getApplicationContext(), ExceptionActivity.class);
+                /*Intent intent = new Intent(getApplicationContext(), CrashActivity.class);
                 intent.putExtra("TITLE", "title");
                 intent.putExtra("MESSAGE", "exMessage");
                 getApplicationContext().startActivity(intent);*/

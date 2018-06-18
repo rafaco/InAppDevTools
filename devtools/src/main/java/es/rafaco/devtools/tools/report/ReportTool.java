@@ -1,28 +1,42 @@
 package es.rafaco.devtools.tools.report;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Build;
 
-import android.view.LayoutInflater;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.PermissionActivity;
+import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.tools.Tool;
 import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.tools.DecoratedToolInfo;
+import es.rafaco.devtools.tools.info.InfoHelper;
+import es.rafaco.devtools.tools.info.InfoTool;
+import es.rafaco.devtools.tools.log.LogTool;
 
 public class ReportTool extends Tool {
 
     private TextView out;
     private Button sendButton;
-    private Process process;
+    private DecoratedToolInfoAdapter adapter;
+    private ListView reportList;
+    private TextView header;
 
     public ReportTool(ToolsManager manager) {
         super(manager);
@@ -45,15 +59,8 @@ public class ReportTool extends Tool {
 
     @Override
     protected void onStart(View toolView) {
-        out = (TextView) getView().findViewById(getResourceId(getView(), "id", "out"));
-        sendButton = (Button) getView().findViewById(getResourceId(getView(), "id", "report_button"));
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSendEmailPressed();
-            }
-        });
+        initView();
+        initAdapter();
     }
 
     @Override
@@ -62,24 +69,98 @@ public class ReportTool extends Tool {
 
     @Override
     protected void onDestroy() {
-        if (process != null)
-            process.destroy();
+    }
+
+    @Override
+    public DecoratedToolInfo getHomeInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(ReportTool.class,
+                getFullTitle(), //"Send a Report"
+                "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
+                3,
+                ContextCompat.getColor(getContext(), R.color.rally_green));
+        return  info;
     }
 
 
+
+    private void initView() {
+        out = getView().findViewById(R.id.out);
+        header = getView().findViewById(R.id.report_welcome);
+        sendButton = getView().findViewById(R.id.report_button);
+
+        header.setText("Choose elements to send and press Send");
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSendEmailPressed();
+            }
+        });
+    }
+
+    private void initAdapter() {
+        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+        array.add(getManager().getTool(InfoTool.class).getReportInfo());
+        //array.add(getManager().getTool(CommandsTool.class).getReportInfo());
+        array.add(getManager().getTool(LogTool.class).getReportInfo());
+
+        adapter = new DecoratedToolInfoAdapter(this, array);
+        adapter.enableSwitchMode();
+        reportList = getView().findViewById(R.id.report_list);
+        reportList.setAdapter(adapter);
+    }
+
+
+    //region [ TOOL SPECIFIC ]
 
     private void onSendEmailPressed() {
-        List<String> files = new ArrayList<>();
-        files.add(saveLogcatToFile());
-        sendEmail("rafaco@gmail.com", "",
-                "DevTools report from ",
-                "[Replace this line by your comments]" + "\n",
-                files);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+                    (getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
+                DevTools.showMessage("Permissions needed");
+                Intent intent = PermissionActivity.buildIntent(PermissionActivity.IntentAction.STORAGE, getContext());
+                getContext().startActivity(intent, null);
+                return;
+            }
+        }
+        sendEmailIntent();
     }
 
+    private void sendEmailIntent() {
+        String emailTo = getEmailTo();
+        String subject = getEmailSubject();
 
-    public void sendEmail(String emailTo, String emailCC,
-                      String subject, String emailText, List<String> filePaths) {
+        String emailbody = "[Replace this line by your comments]" + "\n\n\n";
+        List<String> filePaths = new ArrayList<>();
+
+        if(true){
+            String info = (String) getManager().getTool(InfoTool.class).getReport();
+            emailbody += info;
+        }
+
+        if(true){
+            String logcatPath = (String)getManager().getTool(LogTool.class).getReport();
+            filePaths.add(logcatPath);
+        }
+
+        sendEmailIntent(emailTo, "",
+                subject,
+                emailbody,
+                filePaths);
+    }
+
+    @NonNull
+    private String getEmailTo() {
+        return "rafaco@gmail.com";
+    }
+
+    private String getEmailSubject(){
+        InfoHelper helper = new InfoHelper(getContext());
+        return helper.getAppName() + " report from " + Build.BRAND + " " + Build.MODEL;
+    }
+
+    private void sendEmailIntent(String emailTo, String emailCC,
+                                String subject, String emailText, List<String> filePaths) {
+
         final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         emailIntent.setType("text/plain");
@@ -87,67 +168,25 @@ public class ReportTool extends Tool {
         emailIntent.putExtra(Intent.EXTRA_CC, new String[]{emailCC});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-        
-        ArrayList<Uri> uris = new ArrayList<>();
-        for (String file : filePaths) {
-            File fileIn = new File(file);
-            Uri u = Uri.fromFile(fileIn);
-            uris.add(u);
+
+        if (filePaths != null && filePaths.size()>0){
+            ArrayList<Uri> uris = new ArrayList<>();
+            for (String file : filePaths) {
+                File fileIn = new File(file);
+                if (!fileIn.exists() || !fileIn.canRead()) {
+                    DevTools.showMessage("Attachment Error");
+                    return;
+                }
+                Uri u = Uri.fromFile(fileIn);
+                uris.add(u);
+            }
+            emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         }
-        emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+
         Intent chooserIntent = Intent.createChooser(emailIntent, "Send mail...");
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getView().getContext().startActivity(chooserIntent);
     }
 
-    public String saveLogcatToFile(){
-        if(isExternalStorageWritable()){
-
-            File appDirectory = new File(Environment.getExternalStorageDirectory() + "/MyPersonalAppFolder");
-            File logDirectory = new File(appDirectory + "/log");
-            File logFile = new File(logDirectory, "logcat_" + System.currentTimeMillis() + ".txt");
-
-            // create app folder
-            if (!appDirectory.exists()) {
-                appDirectory.mkdir();
-            }
-
-            // create log folder
-            if (!logDirectory.exists()) {
-                logDirectory.mkdir();
-            }
-
-            // clear the previous logcat and then write the new one to the file
-            try {
-                process = Runtime.getRuntime().exec("logcat -d -f " + logFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return logFile.getPath();
-
-        } else if(isExternalStorageReadable() ){
-            // only readable
-        } else{
-            // not accessible
-        }
-
-        return null;
-    }
-
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
+    //endregion
 }

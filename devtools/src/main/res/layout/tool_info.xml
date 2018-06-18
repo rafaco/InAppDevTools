@@ -31,7 +31,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#DC3ABC00"/>
+            android:background="@color/rally_blue"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -42,7 +42,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textStart"
-                android:layout_gravity="start" />
+                android:layout_gravity="start"
+                style="@style/content_margin"/>
 
         </ScrollView>
 

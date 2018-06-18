@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.tools.commands.CommandsTool;
+import es.rafaco.devtools.tools.errors.ErrorsTool;
+import es.rafaco.devtools.tools.home.HomeTool;
 import es.rafaco.devtools.tools.info.InfoTool;
 import es.rafaco.devtools.tools.log.LogTool;
 import es.rafaco.devtools.tools.report.ReportTool;
-import es.rafaco.devtools.tools.shell.ShellTool;
+import es.rafaco.devtools.tools.screenshot.ScreenTool;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -34,11 +37,13 @@ public class ToolsManager {
     private void initTools() {
         getToolList();
 
+        addTool(new HomeTool(this));
         addTool(new InfoTool(this));
+        addTool(new ErrorsTool(this));
         addTool(new LogTool(this));
-        addTool(new ShellTool(this));
+        addTool(new CommandsTool(this));
+        addTool(new ScreenTool(this));
         addTool(new ReportTool(this));
-
     }
 
     public ArrayList<String> getToolList() {
@@ -46,11 +51,13 @@ public class ToolsManager {
         /*for (Pair<String,String> pair: presetFilters) {
             toolsList.addWidget(pair.first);
         }*/
+        toolsList.add("Home");
         toolsList.add("Info");
+        toolsList.add("Errors");
         toolsList.add("Log");
-        toolsList.add("Shell");
+        toolsList.add("Commands");
+        toolsList.add("Screen");
         toolsList.add("Report");
-        toolsList.add("Close");
 
         return toolsList;
     }
@@ -88,11 +95,6 @@ public class ToolsManager {
     public void selectTool(String title) {
         Log.d(DevTools.TAG, "Requested new tool: " + title);
 
-        if (title.equals("Close")){
-            stopService();
-            return;
-        }
-
         //Ignore if already selected
         if (getCurrent() != null && title.equals(getCurrent().getTitle())) {
             return;
@@ -115,12 +117,8 @@ public class ToolsManager {
         return inflater;
     }
 
-    public ViewGroup getContainer() {
-        return ((DevToolsService)context).getToolContainer();
-    }
-
     private void stopService() {
-        ((DevToolsService)context).stopSelf();
+        ((DevToolsUiService)context).stopSelf();
     }
 
     public void destroy() {
@@ -128,4 +126,11 @@ public class ToolsManager {
             tool.destroy();
         }
     }
+
+
+    //TODO: REFACTOR
+    public ViewGroup getContainer() {
+        return ((DevToolsUiService)context).getToolContainer();
+    }
+
 }

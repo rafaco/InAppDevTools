@@ -2,6 +2,7 @@ package es.rafaco.devtools.widgets;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Build;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.devtools.DevToolsService;
+import es.rafaco.devtools.DevToolsUiService;
 import es.rafaco.devtools.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -399,11 +400,12 @@ public class WidgetsManager {
     }
 
     private void onIconWidgetClick() {
-        toogleFullMode(true);
+        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.FULL, null);
+        context.startService(intent);
     }
 
     public void startTool(String title) {
-        ((DevToolsService)context).startTool(title);
+        ((DevToolsUiService)context).startTool(title);
     }
 
     public void selectTool(String title) {
@@ -411,7 +413,7 @@ public class WidgetsManager {
     }
 
     private void stopService() {
-        ((DevToolsService)context).stopSelf();
+        ((DevToolsUiService)context).stopSelf();
     }
 
     public void destroy() {

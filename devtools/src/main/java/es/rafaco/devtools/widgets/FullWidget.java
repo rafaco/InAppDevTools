@@ -1,5 +1,6 @@
 package es.rafaco.devtools.widgets;
 
+import android.animation.LayoutTransition;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.utils.OnTouchSelectedListener;
 import es.rafaco.devtools.utils.UiUtils;
 
 
@@ -73,6 +76,8 @@ public class FullWidget extends Widget {
                         manager.toogleFullMode(false);
                     }
                 });
+
+        ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
 
     @Override
@@ -84,25 +89,20 @@ public class FullWidget extends Widget {
     public void initToolSelector(ArrayList<String> toolsList) {
         toolsSpinner = getView().findViewById(R.id.tools_spinner);
 
-
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getView().getContext(),
                 android.R.layout.simple_spinner_item, toolsList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
         toolsSpinner.setAdapter(spinnerAdapter);
-        toolsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        OnTouchSelectedListener listener = new OnTouchSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String title = spinnerAdapter.getItem(position);
+            public void onTouchSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String title = spinnerAdapter.getItem(pos);
                 manager.startTool(title);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        };
+        toolsSpinner.setOnItemSelectedListener(listener);
+        toolsSpinner.setOnTouchListener(listener);
     }
 
     public void selectTool(String title) {
@@ -114,7 +114,7 @@ public class FullWidget extends Widget {
 
     private int getPosition(String title) {
         int count = toolsSpinner.getAdapter().getCount();
-        for (int i = 0; i < count - 1; i++){
+        for (int i = 0; i < count; i++){
             if (toolsSpinner.getAdapter().getItem(i).equals(title)){
                 return i;
             }

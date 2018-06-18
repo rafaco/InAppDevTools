@@ -6,8 +6,8 @@ android {
         applicationId "es.rafaco.devtoollib"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 45
+        versionName "0.1.34"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

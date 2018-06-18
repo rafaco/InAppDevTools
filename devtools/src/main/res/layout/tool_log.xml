@@ -19,25 +19,46 @@
             android:id="@+id/log_level_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
         <EditText
             android:id="@+id/filter_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Type to filter"
+            android:hint="Filter"
             android:focusable="true"
             android:focusableInTouchMode="true"/>
-        <Button
+
+        <ImageButton
+            android:id="@+id/filter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_filter_list_rally_24dp"
+            android:visibility="gone"/>
+
+        <ImageButton
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="S"/>
+            android:src="@drawable/ic_search_rally_24dp"
+            android:visibility="gone"/>
+        <ImageButton
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save_rally_24dp" />
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_forever_rally_24dp" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#DC3ABC00"/>
+        android:background="@color/rally_blue"/>
 
     <RelativeLayout
         android:id="@+id/output_container"
@@ -49,15 +70,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:transcriptMode="alwaysScroll"
-            android:stackFromBottom="true"/>
+            android:stackFromBottom="true"
+            style="@style/content_margin"/>
         <TextView
             android:id="@+id/output_toast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:background="#DC3ABC00"
-            android:textColor="@color/charcoal" />
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,89 +9,63 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/widget_full_shape"
-        android:layout_margin="10dp"
-        android:padding="5dp">
+        android:layout_margin="8dp"
+        style="@style/elevated">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/expanded_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"/>
 
             <Spinner
                 android:id="@+id/tools_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <!--<LinearLayout
-                android:id="@+id/tools_button"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tools_button_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/floating_widget_label"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tools_button_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/floating_widget_details"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/open_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:src="@drawable/ic_aspect_ratio_black_24dp" />-->
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/expanded_icon" />
 
             <ImageView
                 android:id="@+id/close_expanded_view"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:padding="10dp"
-                android:src="@drawable/ic_close_white_24dp" />
+                android:src="@drawable/ic_close_white_24dp"
+                android:layout_alignParentRight="true"/>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/half_mode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/ic_overscan_white_24dp"
+                android:layout_toLeftOf="@id/close_expanded_view"/>
+
+            <ImageView
+                android:id="@+id/settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/ic_settings_white_24dp"
+                android:layout_toLeftOf="@id/half_mode_button"/>
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#DC3ABC00"/>
+            android:layout_height="1dp"
+            android:background="@color/rally_blue"/>
 
         <LinearLayout
             android:id="@+id/content_container"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/initial_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="#DC3ABC00"
-                android:textColor="@color/charcoal" />
         </LinearLayout>
 
     </LinearLayout>

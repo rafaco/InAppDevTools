@@ -7,46 +7,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="0dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/report_welcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="left">
+            style="@style/content_margin"/>
 
-            <TextView
-                android:id="@+id/report_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="Select elements first:" />
-            <Button
-                android:id="@+id/report_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Send..."/>
-
-        </LinearLayout>
-
-        <View
+        <ListView
+            android:id="@+id/report_list"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#DC3ABC00"/>
+            android:layout_height="wrap_content"
+            style="@style/content_margin" />
 
-        <ScrollView
+        <Button
+            android:id="@+id/report_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/out"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="textStart" />
-
-        </ScrollView>
-
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Send..."
+            style="@style/content_margin"/>
     </LinearLayout>
 </LinearLayout>

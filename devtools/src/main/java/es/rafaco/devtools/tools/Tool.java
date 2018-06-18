@@ -1,5 +1,6 @@
 package es.rafaco.devtools.tools;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +44,31 @@ public abstract class Tool {
         getContainer().removeAllViews();
     }
 
-    public ViewGroup getContainer() {
-        return manager.getContainer();
-    }
+
     public LayoutInflater getInflater() {
         return manager.getInflater();
     }
     public ViewGroup getView() {
         return toolView;
+    }
+    public ToolsManager getManager() {
+        return manager;
+    }
+    public ViewGroup getContainer() {
+        return manager.getContainer();
+    }
+    public Context getContext() {
+        return manager.getContainer().getContext();
+    }
+
+    public DecoratedToolInfo getHomeInfo() {
+        return null;
+    }
+    public DecoratedToolInfo getReportInfo() {
+        return null;
+    }
+    public Object getReport() {
+        return null;
     }
 
     protected int getResourceId(View view, String resourceType, String identifier){
@@ -58,5 +76,9 @@ public abstract class Tool {
                 identifier,
                 resourceType,
                 view.getContext().getPackageName());
+    }
+
+    protected String getFullTitle(){
+        return getTitle() + " Tool";
     }
 }

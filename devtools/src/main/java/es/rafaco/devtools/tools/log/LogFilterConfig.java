@@ -16,7 +16,7 @@ public class LogFilterConfig {
     }
 
     public Boolean onlyMyPid(){
-        return presetFilter != "All";
+        return !presetFilter.equals("All");
     }
 
     public int pid(){
@@ -37,26 +37,26 @@ public class LogFilterConfig {
     }
 
     public Boolean validate(LogLine logLine) {
-        //Filter by PID
-        if (onlyMyPid()
-                && logLine.getProcessId() != pid()) {
-            return false;
-        }
-
-        //Filter by Tag
-        if (tag() != null
-                && !logLine.getTag().equals(tag())) {
-            return false;
-        }
 
         //Filter by Level
         if (!LogLine.validateLevel(logLine.getLogLevel(), logFilter)) {
             return false;
         }
 
-        //Filter by Text
+        //Filter by PID
+        if (onlyMyPid()
+                && logLine.getProcessId() != pid()) {
+            return false;
+        }
+        //Filter by Tag
+        if (tag() != null
+                && !logLine.getTag().equals(tag())) {
+            return false;
+        }
+
+        //Filter by text
         if (!TextUtils.isEmpty(textFilter)
-                && logLine.getLogOutput().toLowerCase().contains(textFilter)) {
+                && !logLine.getLogOutput().toLowerCase().contains(textFilter)) {
             return false;
         }
 

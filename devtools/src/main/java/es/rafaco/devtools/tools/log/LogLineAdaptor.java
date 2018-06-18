@@ -2,6 +2,7 @@ package es.rafaco.devtools.tools.log;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -41,9 +42,17 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    @Override
-    public int getCount() {
-        return (filteredData != null) ? filteredData.size() : 0;
+
+    //region [ ADAPTOR ]
+
+    public void add(String value, int id) {
+        LogLine newLine = LogLine.newLogLine(value, false);
+        originalData.add(newLine);
+
+        if (logFilter.getConfig().validate(newLine)){
+            filteredData.add(LogLine.newLogLine(value, false));
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -56,66 +65,28 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         return position;
     }
 
-    public void add(String value, int id) {
-        LogLine newLine = LogLine.newLogLine(value, false);
-        originalData.add(newLine);
-
-        if (logFilter.getConfig().validate(newLine)){
-            filteredData.add(LogLine.newLogLine(value, false));
-            notifyDataSetChanged();
-        }
+    @Override
+    public int getCount() {
+        return (filteredData != null) ? filteredData.size() : 0;
     }
 
     public void clear(){
         originalData.clear();
         filteredData.clear();
-
         notifyDataSetInvalidated();
     }
 
+    //endregion
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.tool_log_item, null);
-            holder = new ViewHolder();
-            holder.text = convertView.findViewById(R.id.txtLogString);
-            convertView.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        LogLine itemData = filteredData.get(position);
-        String type = itemData.getLogLevelText();
-        String line = itemData.getLogOutput();
-
-        if(TextUtils.isEmpty(currentFilterString)){
-            holder.text.setText(line);
-        }
-        else{
-            highlightString(line, currentFilterString, holder.text);
-        }
-
-        holder.text.setTextColor(getLogColor(type));
-
-        return convertView;
-    }
-
-    public void updateFilter(LogFilterConfig newConfig) {
-        logFilter.update(newConfig);
-    }
-
-    static class ViewHolder {
-        TextView text;
-    }
 
     //region [ FILTER ]
 
     public Filter getFilter() {
         return logFilter;
+    }
+
+    public void updateFilter(LogFilterConfig newConfig) {
+        logFilter.update(newConfig);
     }
 
     private class LogFilter extends Filter {
@@ -138,13 +109,11 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-
-            currentFilterString = constraint.toString().toLowerCase();
+            //currentFilterString = constraint.toString().toLowerCase();
 
             final List<LogLine> originalList = originalData;
             int count = originalList.size();
             final ArrayList<LogLine> filteredList = new ArrayList<>(count);
-            String filterableString;
             LogLine currentLogLine;
             for (int i = 0; i < count; i++) {
                 currentLogLine = originalList.get(i);
@@ -164,31 +133,62 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData = (ArrayList<LogLine>) results.values;
             notifyDataSetChanged();
-            manager.showOutputToast(String.format("Showing %s of %s", filteredData.size(), originalData.size()));
+            manager.showFilterOutputToast();
         }
+    }
+
+    public String getOriginalSize() {
+        return String.valueOf(originalData.size());
+    }
+
+    public String getFilteredSize() {
+        return String.valueOf(filteredData.size());
+    }
+
+    //endregion
+
+
+    //region [ VIEW ]
+
+    static class ViewHolder {
+        TextView text;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        ViewHolder holder;
+
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.tool_log_item, null);
+            holder = new ViewHolder();
+            holder.text = convertView.findViewById(R.id.txtLogString);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        LogLine itemData = filteredData.get(position);
+        String type = itemData.getLogLevelText();
+        String line = itemData.getLogOutput();
+        int color = itemData.getLogColor(context);
+
+        if(TextUtils.isEmpty(currentFilterString)){
+            holder.text.setText(line);
+        }
+        else{
+            highlightString(line, currentFilterString, holder.text);
+        }
+
+        holder.text.setTextColor(color);
+
+        return convertView;
     }
 
     //endregion
 
 
     //region [ UI UTIL ]
-
-    public static int getLogColor(String type) {
-        int color = Color.BLUE;
-        if(type.equals("D")){
-            color = Color.rgb(0, 0, 200);
-        }
-        else if(type.equals("I")){
-            color = Color.rgb(0, 128, 0);
-        }
-        else if(type.equals("W")){
-            color = Color.parseColor("#827717");//rgb(255, 234, 0);
-        }
-        else if(type.equals("E") || type.equals("F")){
-            color = Color.rgb(255, 0, 0);
-        }
-        return color;
-    }
 
     private void highlightString(CharSequence text, String keyword, TextView textView) {
 
@@ -202,7 +202,8 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         int indexOfKeyword = spannableString.toString().indexOf(keyword);
         while (indexOfKeyword > 0) {
-            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.parseColor("#DC3ABC00"));
+            int color = ContextCompat.getColor(context, R.color.rally_blue);
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(color);
             spannableString.setSpan(backgroundColorSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             //ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });

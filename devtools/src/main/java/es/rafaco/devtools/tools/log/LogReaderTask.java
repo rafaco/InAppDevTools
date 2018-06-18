@@ -12,8 +12,8 @@ import es.rafaco.devtools.DevTools;
 
 public class LogReaderTask extends AsyncTask<Void, String, Void>
 {
-    private final String BASH_PATH = "/system/bin/sh";
-    private final String BASH_ARGS = "-c";
+    public static final String BASH_PATH = "/system/bin/sh";
+    public static final String BASH_ARGS = "-c";
     private final int BUFFER_SIZE = 1024;
     private final String commandScript;
     private final int id;
@@ -25,6 +25,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     private int nullCounter = 0;
     private int sameCounter = 0;
     private int processedCounter = 0;
+    private Runnable onCancelledCallback;
 
     public LogReaderTask(LogLineAdaptor adaptor, String commandScript) {
         this.adaptor = adaptor;
@@ -81,7 +82,13 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
         isRunning = false;
         if (logprocess != null) logprocess.destroy();
         Log.d(DevTools.TAG, "LogReaderTask " + id + " onCancelled");
-        Log.d(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)", adaptor.getCount(), readCounter, processedCounter, nullCounter, sameCounter));
+        Log.d(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
+                adaptor.getCount(), readCounter, processedCounter, nullCounter, sameCounter));
+
+        if(onCancelledCallback !=null){
+            onCancelledCallback.run();
+            onCancelledCallback = null;
+        }
         super.onCancelled();
         //stopTask();
     }
@@ -127,5 +134,10 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     public void stopTask(){
         isRunning = false;
         this.cancel(true);
+    }
+
+    public void stopTask(Runnable callback){
+        onCancelledCallback = callback;
+        stopTask();
     }
 }
