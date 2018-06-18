@@ -149,20 +149,6 @@ public class DevTools {
         });
 
         //TODO: use a custom overlay toast
-        /*Tooltip.make(DevTools.getAppContext(),
-                new Tooltip.Builder(101)
-                        .closePolicy(new Tooltip.ClosePolicy()
-                                .insidePolicy(true, false)
-                                .outsidePolicy(true, false), 3000)
-                        .activateDelay(800)
-                        .showDelay(300)
-                        .text(text)
-                        .maxWidth(500)
-                        .withArrow(true)
-                        .withOverlay(true)
-                        .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
-                        .build()
-        ).show();*/
     }
 
     public static DevToolsDatabase getDatabase() {

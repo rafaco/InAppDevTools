@@ -1,6 +1,5 @@
 package es.rafaco.devtools.tools.errors;
 
-import android.arch.persistence.room.Database;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
