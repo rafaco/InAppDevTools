@@ -52,7 +52,6 @@ public class CommandsTool extends Tool {
 
             @Override
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
                 exe = new ShellExecuter();
                 command = input.getText().toString();
 

@@ -28,7 +28,7 @@ public class DevToolsUiService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, TOOL, FULL, ICON }
+    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, FULL, ICON }
 
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
@@ -51,7 +51,7 @@ public class DevToolsUiService extends Service {
         }else{
             Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand without action");
         }
-        return DevTools.SERVICE_STICKY ? START_STICKY : START_NOT_STICKY;
+        return DevTools.getConfig().overlayUiServiceSticky ? START_STICKY : START_NOT_STICKY;
     }
 
     private void processIntentAction(IntentAction action, String property) {
@@ -72,6 +72,9 @@ public class DevToolsUiService extends Service {
             initOrRequestPermission();
         }
         else if (action.equals(IntentAction.REPORT)){
+            startTool("Report");
+        }
+        else if (action.equals(IntentAction.SCREEN)){
             startTool("Report");
         }
         else if (action.equals(IntentAction.CLOSE)){
@@ -148,16 +151,10 @@ public class DevToolsUiService extends Service {
         super.onDestroy();
     }
 
-    //TODO: EXTRACT
-
-
     private void killProcess(){
         Log.d("DevTools", "Stopping service");
         stopSelf();
-
         AppUtils.exit();
-
-
     }
 
     //region

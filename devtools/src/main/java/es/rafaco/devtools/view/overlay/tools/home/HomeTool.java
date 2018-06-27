@@ -71,7 +71,6 @@ public class HomeTool extends Tool {
 
     @Override
     protected void onStop() {
-        //TODO!! exe.Executer(cancel previous commmand)
     }
 
     @Override

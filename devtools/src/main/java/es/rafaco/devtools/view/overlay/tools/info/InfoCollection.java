@@ -40,6 +40,7 @@ public class InfoCollection {
             return this;
         }
 
+
         public Builder set(List<InfoGroup> entries) {
             this.entries = entries;
             return this;

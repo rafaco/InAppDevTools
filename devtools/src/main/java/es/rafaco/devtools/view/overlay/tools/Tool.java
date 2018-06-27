@@ -34,6 +34,7 @@ public abstract class Tool {
         getContainer().addView(toolView);
         onStart(toolView);
     }
+
     public void stop(){
         getContainer().removeView(toolView);
         onStop();

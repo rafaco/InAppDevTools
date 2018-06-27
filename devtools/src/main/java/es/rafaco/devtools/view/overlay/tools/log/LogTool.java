@@ -124,7 +124,6 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
 
         logReaderTask = new LogReaderTask(adapter, command);
         if(Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
-            //TODO: research!! cordova.getThreadPool().execute()
             logReaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             logReaderTask.execute();
