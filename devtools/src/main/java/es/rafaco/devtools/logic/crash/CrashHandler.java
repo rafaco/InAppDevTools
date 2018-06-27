@@ -13,7 +13,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
@@ -91,7 +91,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //showDialog(exClass, exMessage);
         startExceptionActivity(crash.getException(), crash.getMessage(), crash);
 
-        if (DevTools.CALL_DEFAULT_EXCEPTION_HANDLER){
+        if (DevTools.getConfig().crashHandlerCallDefaultHandler){
             Log.e(DevTools.TAG, "onCrashStored let the exception propagate");
             previousHandle.uncaughtException(thread, ex);
         }else{
@@ -112,8 +112,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void callService() {
-        Intent intent = new Intent(appContext, DevToolsUiService.class);
-        intent.putExtra(DevToolsUiService.EXTRA_INTENT_ACTION, DevToolsUiService.IntentAction.EXCEPTION);
+        Intent intent = new Intent(appContext, OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, OverlayUIService.IntentAction.EXCEPTION);
         appContext.startService(intent);
     }
 

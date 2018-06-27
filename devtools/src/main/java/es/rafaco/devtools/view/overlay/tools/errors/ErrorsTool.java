@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.errors;
+package es.rafaco.devtools.view.overlay.tools.errors;
 
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
@@ -20,11 +20,11 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.tools.DecoratedToolInfo;
-import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.tools.Tool;
-import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.commands.CommandsTool;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
 public class ErrorsTool extends Tool {

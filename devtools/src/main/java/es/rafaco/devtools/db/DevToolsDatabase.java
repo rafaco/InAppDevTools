@@ -42,7 +42,8 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
     public void printOverview(){
         //Log.d(DevTools.TAG, "User db size is: " + userDao().countUsers());
-        Log.d(DevTools.TAG, "Crash db size is: " + crashDao().count());
-        Log.d(DevTools.TAG, "Anr db size is: " + anrDao().count());
+        Log.d(DevTools.TAG, "Internal db: ");
+        Log.d(DevTools.TAG, "  Crash: " + crashDao().count());
+        Log.d(DevTools.TAG, "  Anr: " + anrDao().count());
     }
 }

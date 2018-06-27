@@ -12,9 +12,7 @@ import java.util.Locale;
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
-    private static boolean isInBackground = true;
     private final ActivityLogManager manager;
-    int currentlyStartedActivities = 0;
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     public MyActivityLifecycleCallbacks(ActivityLogManager manager) {
@@ -35,8 +33,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityStarted(Activity activity) {
-        currentlyStartedActivities++;
-        isInBackground = (currentlyStartedActivities == 0);
+        manager.currentlyStartedActivities++;
+        manager.isInBackground = (manager.currentlyStartedActivities == 0);
         //Do nothing
     }
 
@@ -53,8 +51,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     @Override
     public void onActivityStopped(Activity activity) {
         //Do nothing
-        currentlyStartedActivities--;
-        isInBackground = (currentlyStartedActivities == 0);
+        manager.currentlyStartedActivities--;
+        manager.isInBackground = (manager.currentlyStartedActivities == 0);
     }
 
     @Override

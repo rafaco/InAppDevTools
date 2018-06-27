@@ -1,4 +1,4 @@
-package es.rafaco.devtools.widgets;
+package es.rafaco.devtools.view.overlay.widgets;
 
 
 import android.content.Context;
@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -400,12 +400,12 @@ public class WidgetsManager {
     }
 
     private void onIconWidgetClick() {
-        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.FULL, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
         context.startService(intent);
     }
 
     public void startTool(String title) {
-        ((DevToolsUiService)context).startTool(title);
+        ((OverlayUIService)context).startTool(title);
     }
 
     public void selectTool(String title) {
@@ -413,7 +413,7 @@ public class WidgetsManager {
     }
 
     private void stopService() {
-        ((DevToolsUiService)context).stopSelf();
+        ((OverlayUIService)context).stopSelf();
     }
 
     public void destroy() {

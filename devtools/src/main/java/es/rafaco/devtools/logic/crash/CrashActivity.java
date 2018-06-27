@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 
@@ -49,20 +49,20 @@ public class CrashActivity extends AppCompatActivity {
                 .setNeutralButton("REPORT",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        callServiceAction(DevToolsUiService.IntentAction.REPORT);
+                        callServiceAction(OverlayUIService.IntentAction.REPORT);
                     }
                 })
                 .setNegativeButton("RESTART",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        callServiceAction(DevToolsUiService.IntentAction.RESTART);
+                        callServiceAction(OverlayUIService.IntentAction.RESTART);
                     }
                 })
                 .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        callServiceAction(DevToolsUiService.IntentAction.CLOSE);
+                        callServiceAction(OverlayUIService.IntentAction.CLOSE);
                     }
                 });
 
@@ -70,8 +70,8 @@ public class CrashActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void callServiceAction(DevToolsUiService.IntentAction action) {
-        Intent intent = DevToolsUiService.buildIntentAction(action, null);
+    private void callServiceAction(OverlayUIService.IntentAction action) {
+        Intent intent = OverlayUIService.buildIntentAction(action, null);
         startService(intent);
         finish();
     }

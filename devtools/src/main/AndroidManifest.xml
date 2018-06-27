@@ -7,7 +7,7 @@
 
     <application>
         <activity
-            android:name="es.rafaco.devtools.logic.PermissionActivity"
+            android:name=".logic.PermissionActivity"
             android:theme="@style/LibTheme.Dialog"/>
 
         <activity
@@ -16,7 +16,12 @@
             android:theme="@style/LibTheme.Dialog"/>
 
         <service
-            android:name="es.rafaco.devtools.DevToolsUiService" />
+            android:name=".view.OverlayUIService" />
+
+        <service
+            android:name=".view.NotificationUIService"
+            android:enabled="true"
+            android:exported="true" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

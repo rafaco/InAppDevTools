@@ -1,4 +1,4 @@
-package es.rafaco.devtools;
+package es.rafaco.devtools.view;
 
 import android.app.Service;
 import android.content.Intent;
@@ -14,17 +14,18 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.widgets.FullWidget;
-import es.rafaco.devtools.widgets.Widget;
-import es.rafaco.devtools.widgets.WidgetsManager;
+import es.rafaco.devtools.view.overlay.widgets.FullWidget;
+import es.rafaco.devtools.view.overlay.widgets.Widget;
+import es.rafaco.devtools.view.overlay.widgets.WidgetsManager;
 
 
-public class DevToolsUiService extends Service {
+public class OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
@@ -33,7 +34,7 @@ public class DevToolsUiService extends Service {
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
 
-    public DevToolsUiService() {
+    public OverlayUIService() {
     }
 
     @Nullable
@@ -49,13 +50,13 @@ public class DevToolsUiService extends Service {
         if (action != null){
             processIntentAction(action, property);
         }else{
-            Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand without action");
+            Log.v(DevTools.TAG, "OverlayUIService - onStartCommand without action");
         }
         return DevTools.getConfig().overlayUiServiceSticky ? START_STICKY : START_NOT_STICKY;
     }
 
     private void processIntentAction(IntentAction action, String property) {
-        Log.v(DevTools.TAG, "DevToolsUiService - onStartCommand with action: " + action.toString());
+        Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
         if (action.equals(IntentAction.TOOL)){
             startTool(property.replace(" Tool", ""));
         }
@@ -86,11 +87,11 @@ public class DevToolsUiService extends Service {
         }
     }
 
-    public static Intent buildIntentAction(DevToolsUiService.IntentAction action, String property) {
-        Intent intent = new Intent(DevTools.getAppContext(), DevToolsUiService.class);
-        intent.putExtra(DevToolsUiService.EXTRA_INTENT_ACTION, action);
+    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = new Intent(DevTools.getAppContext(), OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
-            intent.putExtra(DevToolsUiService.EXTRA_INTENT_PROPERTY, property);
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, property);
         }
         return intent;
     }

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.commands;
+package es.rafaco.devtools.view.overlay.tools.commands;
 
 
 import java.io.BufferedReader;

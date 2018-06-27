@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.commands;
+package es.rafaco.devtools.view.overlay.tools.commands;
 
 import android.util.Log;
 import android.view.View;
@@ -7,8 +7,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.tools.Tool;
-import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
 import es.rafaco.devtools.utils.AppUtils;
 
 public class CommandsTool extends Tool {

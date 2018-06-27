@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools;
+package es.rafaco.devtools.view.overlay.tools;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsUiService;
-import es.rafaco.devtools.tools.commands.CommandsTool;
-import es.rafaco.devtools.tools.errors.ErrorsTool;
-import es.rafaco.devtools.tools.home.HomeTool;
-import es.rafaco.devtools.tools.info.InfoTool;
-import es.rafaco.devtools.tools.log.LogTool;
-import es.rafaco.devtools.tools.report.ReportTool;
-import es.rafaco.devtools.tools.screenshot.ScreenTool;
+import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
+import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
+import es.rafaco.devtools.view.overlay.tools.home.HomeTool;
+import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
+import es.rafaco.devtools.view.overlay.tools.log.LogTool;
+import es.rafaco.devtools.view.overlay.tools.report.ReportTool;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -118,7 +118,7 @@ public class ToolsManager {
     }
 
     private void stopService() {
-        ((DevToolsUiService)context).stopSelf();
+        ((OverlayUIService)context).stopSelf();
     }
 
     public void destroy() {
@@ -130,7 +130,7 @@ public class ToolsManager {
 
     //TODO: REFACTOR
     public ViewGroup getContainer() {
-        return ((DevToolsUiService)context).getToolContainer();
+        return ((OverlayUIService)context).getToolContainer();
     }
 
 }

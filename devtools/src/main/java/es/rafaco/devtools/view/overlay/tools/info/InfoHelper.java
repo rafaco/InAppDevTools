@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.info;
+package es.rafaco.devtools.view.overlay.tools.info;
 
 import android.app.ActivityManager;
 import android.content.Context;

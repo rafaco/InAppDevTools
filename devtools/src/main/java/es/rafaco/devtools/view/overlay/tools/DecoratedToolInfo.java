@@ -1,6 +1,6 @@
-package es.rafaco.devtools.tools;
+package es.rafaco.devtools.view.overlay.tools;
 
-import es.rafaco.devtools.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.Tool;
 
 public class DecoratedToolInfo {
     String title;

@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 
 public class PermissionActivity extends AppCompatActivity {
@@ -43,7 +43,7 @@ public class PermissionActivity extends AppCompatActivity {
                 requestStoragePermission();
             }
         } else {
-            Log.d(DevTools.TAG, "DevToolsUiService - onStartCommand without action");
+            Log.d(DevTools.TAG, "OverlayUIService - onStartCommand without action");
         }
 
     }
@@ -89,13 +89,13 @@ public class PermissionActivity extends AppCompatActivity {
 
 
     private void onOverlayPermissionGranted() {
-        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.PERMISSION_GRANTED, "Overlay");
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.PERMISSION_GRANTED, "Overlay");
         startService(intent);
         finish();
     }
 
     private void onStoragePermissionGranted() {
-        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.TOOL, "Screen");
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.TOOL, "Screen");
         startService(intent);
         finish();
     }

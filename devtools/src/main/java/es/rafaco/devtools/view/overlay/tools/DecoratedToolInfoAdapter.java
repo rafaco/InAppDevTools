@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools;
+package es.rafaco.devtools.view.overlay.tools;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.devtools.DevToolsUiService;
+import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.ThreadUtils;
 
@@ -102,7 +102,7 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
     }
 
     public void startTool(String title){
-        Intent intent = DevToolsUiService.buildIntentAction(DevToolsUiService.IntentAction.TOOL, title);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.TOOL, title);
         context.startService(intent);
     }
 

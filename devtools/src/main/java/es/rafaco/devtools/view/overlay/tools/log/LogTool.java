@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.log;
+package es.rafaco.devtools.view.overlay.tools.log;
 
 import android.animation.LayoutTransition;
 import android.os.AsyncTask;
@@ -33,9 +33,9 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.tools.DecoratedToolInfo;
-import es.rafaco.devtools.tools.Tool;
-import es.rafaco.devtools.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogTool extends Tool implements AdapterView.OnItemClickListener {

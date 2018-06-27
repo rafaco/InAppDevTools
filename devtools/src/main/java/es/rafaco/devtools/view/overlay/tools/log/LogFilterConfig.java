@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.log;
+package es.rafaco.devtools.view.overlay.tools.log;
 
 import android.text.TextUtils;
 import android.util.Log;

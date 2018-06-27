@@ -1,4 +1,4 @@
-package es.rafaco.devtools.widgets;
+package es.rafaco.devtools.view.overlay.widgets;
 
 import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;

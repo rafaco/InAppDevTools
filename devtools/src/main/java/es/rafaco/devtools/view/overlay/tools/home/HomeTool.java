@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.home;
+package es.rafaco.devtools.view.overlay.tools.home;
 
 import android.view.View;
 import android.widget.ListView;
@@ -7,15 +7,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.tools.Tool;
-import es.rafaco.devtools.tools.DecoratedToolInfo;
-import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.errors.ErrorsTool;
-import es.rafaco.devtools.tools.info.InfoHelper;
-import es.rafaco.devtools.tools.info.InfoTool;
-import es.rafaco.devtools.tools.report.ReportTool;
-import es.rafaco.devtools.tools.commands.CommandsTool;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
+import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
+import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
+import es.rafaco.devtools.view.overlay.tools.report.ReportTool;
+import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 
 public class HomeTool extends Tool {
 

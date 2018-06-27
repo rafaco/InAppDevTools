@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools.info;
+package es.rafaco.devtools.view.overlay.tools.info;
 
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.tools.Tool;
-import es.rafaco.devtools.tools.ToolsManager;
-import es.rafaco.devtools.tools.DecoratedToolInfo;
-import es.rafaco.devtools.tools.commands.ShellExecuter;
+import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.tools.commands.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 

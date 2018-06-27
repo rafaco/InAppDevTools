@@ -1,4 +1,4 @@
-package es.rafaco.devtools.tools;
+package es.rafaco.devtools.view.overlay.tools;
 
 import android.content.Context;
 import android.view.LayoutInflater;
