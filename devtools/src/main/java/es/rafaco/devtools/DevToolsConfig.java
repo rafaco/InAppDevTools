@@ -15,9 +15,10 @@ public class DevToolsConfig {
     public boolean activityLoggerEnabled;
 
     public boolean notificationUiEnabled;
-    public boolean overlayUiEnabled;
 
+    public boolean overlayUiEnabled;
     public boolean overlayUiServiceSticky;
+    public boolean overlayUiOverOtherApps;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -34,6 +35,7 @@ public class DevToolsConfig {
         notificationUiEnabled = builder.notificationUiEnabled;
         overlayUiEnabled = builder.overlayUiEnabled;
         overlayUiServiceSticky = builder.overlayUiServiceSticky;
+        overlayUiOverOtherApps = builder.overlayUiOverOtherApps;
     }
 
     public static final class Builder {
@@ -47,6 +49,7 @@ public class DevToolsConfig {
         private boolean notificationUiEnabled = true;
         private boolean overlayUiEnabled = true;
         private boolean overlayUiServiceSticky = false;
+        private boolean overlayUiOverOtherApps;
 
         private Builder() {
         }
@@ -98,6 +101,11 @@ public class DevToolsConfig {
 
         public Builder overlayUiServiceSticky(boolean val) {
             overlayUiServiceSticky = val;
+            return this;
+        }
+
+        public Builder overlayUiOverOtherApps(boolean val) {
+            overlayUiOverOtherApps = val;
             return this;
         }
 

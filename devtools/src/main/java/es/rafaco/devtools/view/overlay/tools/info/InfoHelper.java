@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import es.rafaco.devtools.BuildConfig;
-import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+
 
 public class InfoHelper {
 
