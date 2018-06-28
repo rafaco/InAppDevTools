@@ -75,6 +75,11 @@ public class NotificationUIService extends Service {
                     Toast.makeText(getApplicationContext(), "You click REPORT button.", Toast.LENGTH_LONG).show();
                     DevTools.sendReport();
                     break;
+                case ACTION_CLEAN:
+                    UiUtils.closeAllSystemWindows(getApplicationContext());
+                    Toast.makeText(getApplicationContext(), "You click CLEAN button.", Toast.LENGTH_LONG).show();
+                    DevTools.cleanSession();
+                    break;
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -118,8 +123,7 @@ public class NotificationUIService extends Service {
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         //bigTextStyle.setSummaryText("DevTools activated, expand me");
         bigTextStyle.setBigContentTitle("Report tool is recording underneath");
-        bigTextStyle.bigText("Press send report when ready and choose what to include. Take some screenshots before and clean logs to minimize analysis time.\\\n"
-                            + "On crash you will be automatically prompted");
+        bigTextStyle.bigText("Press send report when ready and choose what to include. Take some screenshots before and clean logs to minimize analysis time.\n" + "On crash you will be automatically prompted");
         builder.setStyle(bigTextStyle);
 
         builder.addAction(buildAction(ACTION_REPORT));
@@ -137,7 +141,7 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "";
+                title = "TAKE SCREEN";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
             case ACTION_CLEAN:

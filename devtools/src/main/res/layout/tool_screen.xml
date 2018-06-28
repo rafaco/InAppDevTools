@@ -16,6 +16,13 @@
             style="@style/content_margin"
             android:text="Take a screenshot and save it into your gallery. You can include them in your reports or share it."/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+
         <Button
             android:id="@+id/shot_button"
             android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 
@@ -85,13 +86,7 @@ public class WidgetsManager {
     //region [ ICON WIDGET MOVEMENT ]
 
     private void initDisplaySize() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
-            windowManager.getDefaultDisplay().getSize(szWindow);
-        else {
-            int w = windowManager.getDefaultDisplay().getWidth();
-            int h = windowManager.getDefaultDisplay().getHeight();
-            szWindow.set(w, h);
-        }
+        szWindow = UiUtils.getDisplaySize(context);
     }
 
     /*  Implement Touch Listener to Icon Widget Root View

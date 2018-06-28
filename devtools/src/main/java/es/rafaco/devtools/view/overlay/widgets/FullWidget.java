@@ -173,7 +173,7 @@ public class FullWidget extends Widget {
                     inputAlert();
                 }
                 else if (title.equals("Report")){
-                    takeScreenshot();
+                    takeScreen();
                 }
                 else if (title.equals("Close")){
                     stopSelf();

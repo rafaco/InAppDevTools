@@ -2,8 +2,9 @@
 <resources>
     <color name="charcoal">#1A2732</color>
 
-    <color name="rally_bg_blur">#32333C</color>
     <color name="rally_bg_solid">#3C3D45</color>
+    <color name="rally_bg_blur">#32333C</color>
+    <color name="rally_bg_blur_alpha">#cc32333c</color>
 
     <color name="rally_green">#1EB980</color>
     <color name="rally_dark_green">#045D56</color>

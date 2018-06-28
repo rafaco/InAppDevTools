@@ -25,7 +25,7 @@ public class Anr {
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
 
-    @ColumnInfo(name = "iswarning")
+    @ColumnInfo(name = "isWarning")
     private boolean isWarning;
 
     public int getUid() {

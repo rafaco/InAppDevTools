@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
-
 import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
-import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenshotHelper;
+import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.NotificationUIService;
@@ -140,21 +140,32 @@ public class DevTools {
 
     public static void takeScreenshot() {
 
-        Boolean hasPermission = PermissionActivity.startIfNeeded(appContext, PermissionActivity.IntentAction.STORAGE);
-        Log.d(DevTools.TAG, "hasPermission is: " + String.valueOf(hasPermission));
+        if (!PermissionActivity.isNeededWithAutoStart(appContext,
+                PermissionActivity.IntentAction.STORAGE))
+            return;
 
-        //TODO:
-        //if (hasPermission)
-        ScreenshotHelper helper = new ScreenshotHelper(appContext);
-        File screen = helper.takeScreenshot();
+        ScreenHelper helper = new ScreenHelper(appContext);
+        final Screen screen = helper.takeScreen();
+        if (screen != null){
+            ThreadUtils.runOnBackThread(new Runnable() {
+                @Override
+                public void run() {
+                    getDatabase().screenDao().insertAll(screen);
+                }
+            });
+        }
 
         if(config.overlayUiEnabled){
-            helper.openFile(screen);
+            helper.openFileExternally(screen.getAbsolutePath());
         }
     }
 
     public static void sendReport() {
 
+    }
+
+    public static void cleanSession() {
+        LogHelper.clearLogcatBuffer();
     }
 
     //endregion

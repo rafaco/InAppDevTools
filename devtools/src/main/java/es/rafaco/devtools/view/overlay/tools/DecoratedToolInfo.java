@@ -1,7 +1,5 @@
 package es.rafaco.devtools.view.overlay.tools;
 
-import es.rafaco.devtools.view.overlay.tools.Tool;
-
 public class DecoratedToolInfo {
     String title;
     String message;

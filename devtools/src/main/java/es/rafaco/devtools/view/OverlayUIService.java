@@ -25,7 +25,8 @@ import es.rafaco.devtools.view.overlay.widgets.Widget;
 import es.rafaco.devtools.view.overlay.widgets.WidgetsManager;
 
 
-public class OverlayUIService extends Service {
+public class
+OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";

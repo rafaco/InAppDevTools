@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.tools.screenshot;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,10 +7,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -21,10 +20,12 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.db.errors.Screen;
+import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
 import es.rafaco.devtools.utils.ViewHierarchyUtils;
 
-public class ScreenshotHelper {
+public class ScreenHelper {
 
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s_%s.jpg";
@@ -32,27 +33,31 @@ public class ScreenshotHelper {
 
     private Context context;
 
-    public ScreenshotHelper(Context context) {
+    public ScreenHelper(Context context) {
         this.context = context;
     }
 
-    public File takeScreenshot() {
-        Log.d(DevTools.TAG, "Permissions are: " + LogTool.isExternalStorageWritable());
+    public Screen takeScreen() {
+
+        if (!PermissionActivity.isNeededWithAutoStart(context,
+                PermissionActivity.IntentAction.STORAGE))
+            return null;
+        Log.d(DevTools.TAG, "isExternalStorageWritable?: " + LogTool.isExternalStorageWritable());
+
+
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);
-        // create bitmap screen capture
-        //View v1 = getWindow().getDecorView().getRootView();
-        //ViewGroup v1 = (ViewGroup) ((ViewGroup) widgetsManager.getView(Widget.Type.FULL).findViewById(android.R.id.content)).getChildAt(0);
+        Pair<String, View> selectedRootView = rootViews.get(0);
+        String selectedName = selectedRootView.first;
+        View selectedView = selectedRootView.second;
+        //ViewHierarchyUtils.getWindowName(selectedView);
 
-        View v1 = rootViews.get(0).second;
-
-        Date now = new Date();
-        String formattedDate = DateFormat.format("yyyy-MM-dd_hh:mm:ss", now).toString();
+        String activityName = ViewHierarchyUtils.getActivityNameFromRootView(selectedView);
 
         try {
-            v1.setDrawingCacheEnabled(true);
-            v1.buildDrawingCache();
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
+            selectedView.setDrawingCacheEnabled(true);
+            selectedView.buildDrawingCache();
+            Bitmap bitmap = Bitmap.createBitmap(selectedView.getDrawingCache());
+            selectedView.setDrawingCacheEnabled(false);
 
             //File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File folder = new File(Environment.getExternalStoragePublicDirectory(
@@ -71,10 +76,18 @@ public class ScreenshotHelper {
             outputStream.flush();
             outputStream.close();
 
-            ContentResolver cr = context.getContentResolver();
+            //TODO: update MediaStore
+            //ContentResolver cr = context.getContentResolver();
             //MediaStoreUtils.insertImage(cr, )
 
-            return imageFile;
+            Screen screen = new Screen();
+            screen.setSession(0);
+            screen.setRootViewName(selectedName);
+            screen.setActivityName(activityName);
+            screen.setDate(mImageTime);
+            screen.setAbsolutePath(imageFile.getAbsolutePath());
+            return screen;
+
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM
             e.printStackTrace();
@@ -82,12 +95,8 @@ public class ScreenshotHelper {
         return null;
     }
 
-    public void openFile(File imageFile) {
-        Intent intent = buildViewIntent(imageFile);
-        context.startActivity(intent);
-    }
-
-    private Intent buildViewIntent(File file){
+    public void openFileExternally(String filePath) {
+        File file = new File(filePath);
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         String type = mime.getMimeTypeFromExtension(extension);
@@ -102,6 +111,6 @@ public class ScreenshotHelper {
         } else {
             intent.setDataAndType(Uri.fromFile(file), type);
         }
-        return intent;
+        context.startActivity(intent);
     }
 }

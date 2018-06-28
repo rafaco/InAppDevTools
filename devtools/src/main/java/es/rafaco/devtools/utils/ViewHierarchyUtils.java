@@ -89,4 +89,17 @@ public class ViewHierarchyUtils {
         }
         return true;
     }
+
+    public static String getWindowName(View root) {
+        return  root.getClass().getName() + '@' + Integer.toHexString(root.hashCode());
+    }
+
+    public static String getActivityNameFromRootView(View selectedView) {
+        WindowManager.LayoutParams wlp = (WindowManager.LayoutParams) selectedView.getLayoutParams();
+        String windowTitle = wlp.getTitle().toString();
+        String activityName = windowTitle.substring(windowTitle.lastIndexOf('.') + 1);
+        //TODO: fallback with another extractor
+
+        return activityName;
+    }
 }

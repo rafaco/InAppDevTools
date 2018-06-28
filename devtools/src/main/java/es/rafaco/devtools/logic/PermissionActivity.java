@@ -113,10 +113,10 @@ public class PermissionActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean checkStandardPermission(String readExternalStorage) {
+    public static boolean checkStandardPermission(String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return ContextCompat.checkSelfPermission(DevTools.getAppContext(),
-                    readExternalStorage) == PackageManager.PERMISSION_GRANTED;
+                    permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
     }
@@ -129,20 +129,14 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
 
-    public static boolean startIfNeeded(Context context, IntentAction action) {
+    public static boolean isNeededWithAutoStart(Context context, IntentAction action) {
         if (!checkPermission(action)){
-            DevTools.showMessage("Permissions needed, starting PermissionActivity");
+            //TODO: callback when granted
+            DevTools.showMessage("Permission needed, try again when granted.");
             Intent intent = PermissionActivity.buildIntent(action, context);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 context.startActivity(intent, null);
             return false;
-        }else{
-            if(!checkPermission(action)) {
-                Intent intent = PermissionActivity.buildIntent(action, context);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    context.startActivity(intent, null);
-                return false;
-            }
         }
         //Permission granted or no dynamic permission needed
         return true;

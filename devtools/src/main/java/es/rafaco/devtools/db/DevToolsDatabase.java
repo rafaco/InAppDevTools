@@ -10,8 +10,14 @@ import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.AnrDao;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.CrashDao;
+import es.rafaco.devtools.db.errors.Screen;
+import es.rafaco.devtools.db.errors.ScreenDao;
 
-@Database(version = 3, entities = {User.class, Crash.class, Anr.class}, exportSchema = true)
+@Database(version = 5, exportSchema = true,
+        entities = {User.class,
+                    Crash.class,
+                    Anr.class,
+                    Screen.class})
 public abstract class DevToolsDatabase extends RoomDatabase {
 
     private static DevToolsDatabase INSTANCE;
@@ -38,6 +44,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract CrashDao crashDao();
     public abstract AnrDao anrDao();
+    public abstract ScreenDao screenDao();
     //endregion
 
     public void printOverview(){
@@ -45,5 +52,6 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         Log.d(DevTools.TAG, "Internal db: ");
         Log.d(DevTools.TAG, "  Crash: " + crashDao().count());
         Log.d(DevTools.TAG, "  Anr: " + anrDao().count());
+        Log.d(DevTools.TAG, "  Screen: " + screenDao().count());
     }
 }

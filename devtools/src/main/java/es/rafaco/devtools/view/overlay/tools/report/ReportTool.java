@@ -113,15 +113,11 @@ public class ReportTool extends Tool {
     //region [ TOOL SPECIFIC ]
 
     private void onSendEmailPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if ((getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
-                    (getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
-                DevTools.showMessage("Permissions needed");
-                Intent intent = PermissionActivity.buildIntent(PermissionActivity.IntentAction.STORAGE, getContext());
-                getContext().startActivity(intent, null);
-                return;
-            }
-        }
+
+        if (!PermissionActivity.isNeededWithAutoStart(getContext(),
+                PermissionActivity.IntentAction.STORAGE))
+            return;
+
         sendEmailIntent();
     }
 

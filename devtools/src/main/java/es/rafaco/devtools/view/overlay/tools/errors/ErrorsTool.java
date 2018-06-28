@@ -27,6 +27,8 @@ import es.rafaco.devtools.view.overlay.tools.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
+import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeString;
+
 public class ErrorsTool extends Tool {
 
     private DecoratedToolInfoAdapter adapter;
@@ -76,7 +78,7 @@ public class ErrorsTool extends Tool {
     public DecoratedToolInfo getHomeInfo(){
         DecoratedToolInfo info = new DecoratedToolInfo(CommandsTool.class,
                 getFullTitle(),
-                "Crash handler activated. \n ANR handler activated.",
+                "Crash handler activated." + "\n" + "ANR handler activated.",
                 4,
                 ContextCompat.getColor(getContext(), R.color.rally_orange));
         return  info;
@@ -229,15 +231,6 @@ public class ErrorsTool extends Tool {
 
     private void replaceList(List<DecoratedToolInfo> errors) {
         adapter.replaceAll(errors);
-    }
-
-    public String getElapsedTimeString(long oldTime){
-        CharSequence relativeDate =
-                DateUtils.getRelativeTimeSpanString(oldTime,
-                        System.currentTimeMillis(),
-                        DateUtils.MINUTE_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_RELATIVE);
-        return relativeDate.toString();
     }
 
     private void initAdapter(){

@@ -12,9 +12,16 @@
         <item name="android:textColor">@color/rally_white</item>
         <item name="android:typeface">sans</item>
         <item name="android:fontFamily" tools:targetApi="16">sans-serif-condensed</item>
+
+        <item name="android:popupTheme">@style/popupMenuStyle</item>
+
     </style>
 
     <style name="LibTheme.Dialog">
+    </style>
+
+    <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/rally_bg_solid</item>
     </style>
 
 

@@ -481,32 +481,10 @@ public class LogTool extends Tool implements AdapterView.OnItemClickListener {
             @Override
             public void run() {
                 adapter.clear();
-                clearLogcatBuffer();
+                LogHelper.clearLogcatBuffer();
+                startLogReader();
             }
         });
         stopLogReader();
-
-    }
-
-    private void clearLogcatBuffer() {
-        String[] fullCommand = new String[] { LogReaderTask.BASH_PATH, LogReaderTask.BASH_ARGS, "logcat -c"};
-        Process process;
-        try {
-            new ProcessBuilder()
-                    .command(fullCommand)//"logcat", "-c")
-                    .redirectErrorStream(true)
-                    .start();
-            //process = Runtime.getRuntime().exec(fullCommand);
-            Log.i(DevTools.TAG, "LogcatBuffer cleared");
-        } catch (IOException e) {
-            Log.e(DevTools.TAG, "LogcatBuffer clear has failed :(");
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String stackTraceString = sw.toString();
-            Log.e(DevTools.TAG, stackTraceString);
-        } finally {
-            Log.d(DevTools.TAG, "LogcatBuffer restarted with clear request");
-            startLogReader();
-        }
     }
 }

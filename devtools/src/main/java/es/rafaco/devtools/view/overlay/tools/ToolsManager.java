@@ -133,4 +133,8 @@ public class ToolsManager {
         return ((OverlayUIService)context).getToolContainer();
     }
 
+    public void updateHomeInfoContent(Class<?> toolClass, String content){
+        ((HomeTool)getTool(HomeTool.class)).updateContent(toolClass, content);
+    }
+
 }
