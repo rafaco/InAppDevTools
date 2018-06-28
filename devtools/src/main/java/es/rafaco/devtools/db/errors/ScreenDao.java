@@ -13,6 +13,9 @@ public interface ScreenDao {
     @Query("SELECT * FROM screen ORDER BY date DESC")
     List<Screen> getAll();
 
+    /*@Query("SELECT * FROM screen ORDER BY date DESC")
+    LiveData<List<Screen>> getAllLive();*/
+
     @Query("SELECT * FROM screen where uid LIKE :uid")
     Screen findById(int uid);
 

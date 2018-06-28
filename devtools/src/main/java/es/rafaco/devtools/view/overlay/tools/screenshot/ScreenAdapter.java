@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.tools.screenshot;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -19,25 +20,10 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.utils.DateUtils;
 
-public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyViewHolder> {
+public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
 
     private Context mContext;
     private List<Screen> screenList;
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
-
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.subtitle);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
-        }
-    }
-
 
     public ScreenAdapter(Context mContext, List<Screen> screenList) {
         this.mContext = mContext;
@@ -45,15 +31,22 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyViewHold
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public int getItemCount() {
+        return screenList.size();
+    }
+
+    //region [ VIEW HOLDER ]
+
+    @Override
+    public ScreenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.tool_screen_item, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new ScreenViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final ScreenViewHolder holder, int position) {
         Screen screen = screenList.get(position);
         holder.title.setText(screen.getActivityName());
         holder.count.setText(DateUtils.getElapsedTimeString(screen.getDate()));
@@ -71,9 +64,68 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyViewHold
         });
     }
 
-    /**
-     * Showing popup menu when tapping on 3 dots
-     */
+    public class ScreenViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, count;
+        public ImageView thumbnail, overflow;
+
+        public ScreenViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.title);
+            count = view.findViewById(R.id.subtitle);
+            thumbnail = view.findViewById(R.id.thumbnail);
+            overflow = view.findViewById(R.id.overflow);
+        }
+    }
+
+    //endregion
+
+    //region [ SET DATA ]
+
+    public void setData(List<Screen> newData) {
+        if (screenList != null) {
+            ScreenDiffCallback postDiffCallback = new ScreenDiffCallback(screenList, newData);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
+
+            screenList.clear();
+            screenList.addAll(newData);
+            diffResult.dispatchUpdatesTo(this);
+        }
+    }
+
+    class ScreenDiffCallback extends DiffUtil.Callback {
+
+        private final List<Screen> oldPosts, newPosts;
+
+        public ScreenDiffCallback(List<Screen> oldPosts, List<Screen> newPosts) {
+            this.oldPosts = oldPosts;
+            this.newPosts = newPosts;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldPosts.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newPosts.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldPosts.get(oldItemPosition).getUid() == newPosts.get(newItemPosition).getUid();
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldPosts.get(oldItemPosition).equals(newPosts.get(newItemPosition));
+        }
+    }
+
+    //endregion
+
+    //region [ ACTIONS POP UP ]
+
     private void showPopupMenu(View view) {
 
         Context wrapper = new ContextThemeWrapper(mContext, R.style.popupMenuStyle);
@@ -84,9 +136,6 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyViewHold
         popup.show();
     }
 
-    /**
-     * Click listener for popup menu items
-     */
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
 
         public MyMenuItemClickListener() {
@@ -109,8 +158,5 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyViewHold
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return screenList.size();
-    }
+    //endregion
 }

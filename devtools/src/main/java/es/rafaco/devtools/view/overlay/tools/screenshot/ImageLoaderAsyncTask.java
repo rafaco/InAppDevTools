@@ -26,15 +26,13 @@ public class ImageLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
         if(imgFile.exists()){
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-            Log.d("RAFA", "Original size: " + bitmap.getWidth() + " x " + bitmap.getHeight());
-
             Point screenDimensions = UiUtils.getDisplaySize(imageView.getContext());
-            Log.d("RAFA", "Screen size: " + screenDimensions.x + " x " + screenDimensions.y);
-
-            int sizeX = (screenDimensions.x /2) - 99;
+            int sizeX = (screenDimensions.x /2) - 54;
             Bitmap scaled = getProportionalBitmap(bitmap, sizeX, "X");
 
-            Log.d("RAFA", "Scaled size: " + scaled.getWidth() + " x " + scaled.getHeight());
+            /*Log.d("RAFA", "Original size: " + bitmap.getWidth() + " x " + bitmap.getHeight());
+            Log.d("RAFA", "Screen size: " + screenDimensions.x + " x " + screenDimensions.y);
+            Log.d("RAFA", "Scaled size: " + scaled.getWidth() + " x " + scaled.getHeight());*/
 
             /*int scaleToUse = 20; // this will be our percentage
             int sizeY = screenResolution.y * scaleToUse / 100;

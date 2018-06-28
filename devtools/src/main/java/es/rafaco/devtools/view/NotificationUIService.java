@@ -59,11 +59,11 @@ public class NotificationUIService extends Service {
             {
                 case ACTION_START_FOREGROUND_SERVICE:
                     startForegroundService();
-                    Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
                     break;
                 case ACTION_STOP_FOREGROUND_SERVICE:
                     stopForegroundService();
-                    Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
                     break;
                 case ACTION_SCREEN:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
