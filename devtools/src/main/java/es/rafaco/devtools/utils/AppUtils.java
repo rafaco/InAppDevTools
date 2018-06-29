@@ -109,6 +109,25 @@ public class AppUtils {
         System.exit(10);
     }
 
+    public static Intent getAppLauncherIntent(Context context){
+        String packageName = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+
+        Class<?> mainActivityClass = null;
+        try {
+            mainActivityClass = Class.forName(launchIntent.getComponent().getClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(context, mainActivityClass);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        return intent;
+    }
+
 
 
 

@@ -23,6 +23,8 @@ import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 
+import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
+
 public class NotificationUIService extends Service {
 
     private static final String TAG = "FOREGROUND_SERVICE";
@@ -87,6 +89,8 @@ public class NotificationUIService extends Service {
                 case ACTION_TOOLS:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
                     Toast.makeText(getApplicationContext(), "You click TOOLS button.", Toast.LENGTH_LONG).show();
+                    Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
+                    getApplicationContext().startActivity(app);
                     DevTools.openTools(false);
                     break;
             }
@@ -126,7 +130,8 @@ public class NotificationUIService extends Service {
                 .setGroup(GROUP_ID)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setOnlyAlertOnce(true)
                 .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
                 .setColor(getResources().getColor(R.color.rally_blue_med))

@@ -3,12 +3,15 @@ package es.rafaco.devtools.logic.activityLog;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import es.rafaco.devtools.DevTools;
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
@@ -21,6 +24,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        //TODO: Crash Handler
         if (false){ //activity.getClass() != config.getErrorActivityClass()) {
             // Copied from ACRA:
             // Ignore activityClass because we want the last
@@ -29,6 +33,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             manager.lastActivityCreated = new WeakReference<>(activity);
         }
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " created\n");
+        Log.d(DevTools.TAG, "Activity created: " + activity.getClass().getSimpleName());
     }
 
     @Override

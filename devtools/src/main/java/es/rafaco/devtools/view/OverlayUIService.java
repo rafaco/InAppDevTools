@@ -97,6 +97,11 @@ public class OverlayUIService extends Service {
         return intent;
     }
 
+    public static void runAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = buildIntentAction(action, property);
+        DevTools.getAppContext().startService(intent);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
