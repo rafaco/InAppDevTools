@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -18,7 +19,9 @@ import android.widget.Toast;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.UiUtils;
+import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 
 public class NotificationUIService extends Service {
 
@@ -107,27 +110,37 @@ public class NotificationUIService extends Service {
     private Notification buildNotification(PendingIntent pendingIntent) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
+        InfoHelper infoHelper = new InfoHelper(getApplicationContext());
+        PackageInfo packageInfo = infoHelper.getPackageInfo();
+        String environment = "DEBUG";
+        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+        String fullAppName = String.format("%s %s %s", infoHelper.getAppName(), environment, version);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setGroup(GROUP_ID)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setSmallIcon(UiUtils.getAppIconResourceId())
+                .setPriority(Notification.PRIORITY_MAX)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
+                .setColor(getResources().getColor(R.color.rally_blue_med))
+                .setColorized(true)
                 //.setFullScreenIntent(pendingIntent, true)
-                .setContentTitle("Report tool is recording") //Collapsed Main
-                .setContentText("Expand me to use it")   //Collapsed Second
+                .setContentTitle(fullAppName) //Collapsed Main
+                .setContentText("Expand me for options...")   //Collapsed Second
+                //.setContentText("Reproduce the issues and take screenshots, we are logging everything underneath. When ready, press REPORT and choose what to include.")   //Collapsed Second
                 //.setSubText("setSubText")           //Group second
                 .setWhen(System.currentTimeMillis());//Group third
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        //bigTextStyle.setSummaryText("DevTools activated, expand me");
-        bigTextStyle.setBigContentTitle("Report tool is recording underneath");
-        bigTextStyle.bigText("Press send report when ready and choose what to include. Take some screenshots before and clean logs to minimize analysis time.\n" + "On crash you will be automatically prompted");
+        bigTextStyle.setBigContentTitle(fullAppName);
+        bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
+        //bigTextStyle.bigText("Send reports straight to developers!\nYou can start reproducing issues, we are logging everything underneath. SAVE SCREENS if you fancy and press SEND REPORT when ready.\n(Environment selector coming soon!)");
+        // + "On crash you will be automatically prompted");
         builder.setStyle(bigTextStyle);
 
-        builder.addAction(buildAction(ACTION_REPORT));
         builder.addAction(buildAction(ACTION_SCREEN));
+        builder.addAction(buildAction(ACTION_REPORT));
         builder.addAction(buildAction(ACTION_CLEAN));
 
         // Build the notification.
@@ -141,16 +154,16 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "TAKE SCREEN";
+                title = "SAVE SCREEN";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
             case ACTION_CLEAN:
-                title = "CLEAN LOGS";
+                title = "DEV TOOLS";
                 icon = R.drawable.ic_delete_forever_rally_24dp;
                 break;
             case ACTION_REPORT:
             default:
-                title = "SEND REPORT";
+                title = "REPORT";
                 icon = R.drawable.ic_email_rally_24dp;
                 break;
         }
@@ -198,6 +211,7 @@ public class NotificationUIService extends Service {
                 //TODO: add DevTools icon
                 //.setLargeIcon(emailObject.getSenderAvatar())
                 .setGroup(GROUP_ID)
+                .setPriority(Notification.PRIORITY_MAX)
                 .build();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(SUMMARY_ID, summaryNotification);
@@ -215,9 +229,8 @@ public class NotificationUIService extends Service {
                                 .addLine("Jeff Chang    Launch Party")
                                 .setBigContentTitle("2 new messages")
                                 .setSummaryText("janedoe@example.com"))
-                        //specify which group this notification belongs to
                         .setGroup(GROUP_ID)
-                        //set this notification as the summary for the group
+                        .setPriority(Notification.PRIORITY_MAX)
                         .setGroupSummary(true)
                         .build();
 
