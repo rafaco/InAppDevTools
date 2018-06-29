@@ -21,7 +21,6 @@ import es.rafaco.devtools.utils.UiUtils;
 
 public class FullWidget extends Widget {
 
-    //private View expandedView;
     private ImageView expandedIcon;
     private ViewGroup toolContainer;
     private Spinner toolsSpinner;
@@ -125,65 +124,5 @@ public class FullWidget extends Widget {
     public ViewGroup getToolContainer() {
         return toolContainer;
     }
-    /*private void initToolSelector_old() {
-
-        presetFilters = new ArrayList<>();
-        presetFilters.addWidget(new Pair<>(("Log", ));
-        presetFilters.addWidget(new Pair<>(("Shell", ));
-        presetFilters.addWidget(new Pair<>(("Storage",));
-        presetFilters.addWidget(new Pair<>(("Report"),));
-        presetFilters.addWidget(new Pair<>(("Watchers",));
-
-        toolsSpinner = (LinearLayout)fullWidgetView.findViewById(getResourceId("id", "tools_spinner"));
-
-        final PopupMenu popup = new PopupMenu(fullWidgetView.getContext(), toolsButton);
-        Menu menu = popup.getMenu();
-        menu.addWidget("Log").setChecked(true);
-        menu.addWidget("Shell");
-        //menu.addWidget("Storage");
-        menu.addWidget("Report");
-        //menu.addWidget("Watchers");
-        menu.addWidget("Close");
-        toolsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popup.show();
-            }
-        });
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                String title = (String) item.getTitle();
-                if (currentTool != null &&
-                        title.equals(currentTool.getTitle())){
-                    return true;
-                }
-
-                //Destroy current tool
-                if (currentTool != null){
-                    currentTool.destroy();
-                }
-
-                //Start new tool
-                if (title.equals("Log")){
-                    currentTool = new LogTool(toolContainer, getInflater());
-                }
-                else if (title.equals("Shell")){
-                    currentTool = null;
-                    inputAlert();
-                }
-                else if (title.equals("Report")){
-                    takeScreen();
-                }
-                else if (title.equals("Close")){
-                    stopSelf();
-                }
-                Log.d(es.rafaco.devtools.DevTools.TAG, "Tool changed to: " + title);
-                toolsButtonTitle.setText(title);
-                return true;
-            }
-        });
-    }*/
-
 
 }

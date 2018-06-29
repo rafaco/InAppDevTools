@@ -1,11 +1,9 @@
 package es.rafaco.devtools.view.overlay.widgets;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
@@ -28,7 +27,7 @@ public class WidgetsManager {
 
     private Context context;
     private WindowManager windowManager;
-    private LayoutInflater inflater = null;
+    private LayoutInflater inflater;
     private List<Widget> widgets;
 
     private Point szWindow = new Point();
@@ -43,12 +42,16 @@ public class WidgetsManager {
 
         initDisplaySize();
         initWidgets();
-        implementTouchListenerToIconWidgetView();
     }
 
+    //region [ WIDGET INIT ]
+
     private void initWidgets() {
-        addWidget(new RemoveWidget(this));
-        addWidget(new IconWidget(this));
+        if (DevTools.getConfig().overlayUiIconEnabled){
+            addWidget(new RemoveWidget(this));
+            addWidget(new IconWidget(this));
+            implementTouchListenerToIconWidgetView();
+        }
         addWidget(new FullWidget(this));
     }
 
@@ -81,12 +84,55 @@ public class WidgetsManager {
         return inflater;
     }
 
+    public void destroy() {
+        for (Widget widget : widgets) {
+            widget.destroy();
+        }
+    }
 
+    //endregion
+
+    //region [ UI ACTIONS ]
+
+    public void initToolList(ArrayList<String> toolsList) {
+        ((FullWidget)getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
+    }
+
+    public void startTool(String title) {
+        ((OverlayUIService)context).startTool(title);
+    }
+
+    public void selectTool(String title) {
+        ((FullWidget)getWidget(Widget.Type.FULL)).selectTool(title);
+    }
+
+    public void toogleFullMode(boolean fullMode) {
+        if (fullMode) {
+            getView(Widget.Type.FULL).setVisibility(View.VISIBLE);
+            if (DevTools.getConfig().overlayUiIconEnabled)
+                getView(Widget.Type.ICON).setVisibility(View.GONE);
+        } else {
+            getView(Widget.Type.FULL).setVisibility(View.GONE);
+            if (DevTools.getConfig().overlayUiIconEnabled)
+                getView(Widget.Type.ICON).setVisibility(View.VISIBLE);
+        }
+    }
+
+    //endregion
 
     //region [ ICON WIDGET MOVEMENT ]
 
     private void initDisplaySize() {
         szWindow = UiUtils.getDisplaySize(context);
+    }
+
+    private void onIconWidgetClick() {
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
+        context.startService(intent);
+    }
+
+    private void onIconDroppedAtRemove() {
+        ((OverlayUIService)context).stopSelf();
     }
 
     /*  Implement Touch Listener to Icon Widget Root View
@@ -159,7 +205,7 @@ public class WidgetsManager {
 
                         //If user drag and drop the floating widget view into remove view then stop the service
                         if (inBounded) {
-                            stopService();
+                            onIconDroppedAtRemove();
                             inBounded = false;
                             break;
                         }
@@ -231,7 +277,7 @@ public class WidgetsManager {
                                 layoutParams.y = y_cord_remove + (Math.abs(removeWidgetView.getHeight() - iconWidgetView.getHeight())) / 2;
 
                                 //Update the layout with new X & Y coordinate
-                               windowManager.updateViewLayout(iconWidgetView, layoutParams);
+                                windowManager.updateViewLayout(iconWidgetView, layoutParams);
                                 break;
                             } else {
                                 //If Floating window gets out of the Remove view update Remove view again
@@ -373,47 +419,4 @@ public class WidgetsManager {
 
     //endregion
 
-
-
-
-    public void toogleFullMode(boolean fullMode) {
-        if (fullMode) {
-            getView(Widget.Type.FULL).setVisibility(View.VISIBLE);
-            getView(Widget.Type.ICON).setVisibility(View.GONE);
-            //fullWidgetView.setVisibility(View.VISIBLE);
-            //expandedView.setVisibility(View.VISIBLE);
-            //collapsedView.setVisibility(View.GONE);
-            //iconWidgetView.setVisibility(View.GONE);
-        } else {
-            getView(Widget.Type.FULL).setVisibility(View.GONE);
-            getView(Widget.Type.ICON).setVisibility(View.VISIBLE);
-            //fullWidgetView.setVisibility(View.GONE);
-            //expandedView.setVisibility(View.GONE);
-            //collapsedView.setVisibility(View.VISIBLE);
-            //iconWidgetView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void onIconWidgetClick() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
-        context.startService(intent);
-    }
-
-    public void startTool(String title) {
-        ((OverlayUIService)context).startTool(title);
-    }
-
-    public void selectTool(String title) {
-        ((FullWidget)getWidget(Widget.Type.FULL)).selectTool(title);
-    }
-
-    private void stopService() {
-        ((OverlayUIService)context).stopSelf();
-    }
-
-    public void destroy() {
-        for (Widget widget : widgets) {
-            widget.destroy();
-        }
-    }
 }

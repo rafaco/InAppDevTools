@@ -168,5 +168,10 @@ public class DevTools {
         LogHelper.clearLogcatBuffer();
     }
 
+    public static void openTools(boolean atHome) {
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
+        getAppContext().startService(intent);
+    }
+
     //endregion
 }

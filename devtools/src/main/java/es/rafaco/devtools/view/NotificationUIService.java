@@ -36,6 +36,7 @@ public class NotificationUIService extends Service {
     public static final String ACTION_REPORT = "ACTION_REPORT";
     public static final String ACTION_SCREEN = "ACTION_SCREEN";
     public static final String ACTION_CLEAN = "ACTION_CLEAN";
+    public static final String ACTION_TOOLS = "ACTION_TOOLS";
 
     public NotificationUIService() {
     }
@@ -83,6 +84,11 @@ public class NotificationUIService extends Service {
                     Toast.makeText(getApplicationContext(), "You click CLEAN button.", Toast.LENGTH_LONG).show();
                     DevTools.cleanSession();
                     break;
+                case ACTION_TOOLS:
+                    UiUtils.closeAllSystemWindows(getApplicationContext());
+                    Toast.makeText(getApplicationContext(), "You click TOOLS button.", Toast.LENGTH_LONG).show();
+                    DevTools.openTools(false);
+                    break;
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -119,6 +125,7 @@ public class NotificationUIService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setGroup(GROUP_ID)
                 .setPriority(Notification.PRIORITY_MAX)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
@@ -127,20 +134,18 @@ public class NotificationUIService extends Service {
                 //.setFullScreenIntent(pendingIntent, true)
                 .setContentTitle(fullAppName) //Collapsed Main
                 .setContentText("Expand me for options...")   //Collapsed Second
-                //.setContentText("Reproduce the issues and take screenshots, we are logging everything underneath. When ready, press REPORT and choose what to include.")   //Collapsed Second
                 //.setSubText("setSubText")           //Group second
-                .setWhen(System.currentTimeMillis());//Group third
+                .setWhen(System.currentTimeMillis()); //Group third
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(fullAppName);
         bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
-        //bigTextStyle.bigText("Send reports straight to developers!\nYou can start reproducing issues, we are logging everything underneath. SAVE SCREENS if you fancy and press SEND REPORT when ready.\n(Environment selector coming soon!)");
-        // + "On crash you will be automatically prompted");
         builder.setStyle(bigTextStyle);
 
         builder.addAction(buildAction(ACTION_SCREEN));
         builder.addAction(buildAction(ACTION_REPORT));
+        builder.addAction(buildAction(ACTION_TOOLS));
         builder.addAction(buildAction(ACTION_CLEAN));
 
         // Build the notification.
@@ -154,17 +159,21 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "SAVE SCREEN";
+                title = "SCREEN";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
-            case ACTION_CLEAN:
-                title = "DEV TOOLS";
-                icon = R.drawable.ic_delete_forever_rally_24dp;
-                break;
             case ACTION_REPORT:
-            default:
                 title = "REPORT";
                 icon = R.drawable.ic_email_rally_24dp;
+                break;
+            case ACTION_CLEAN:
+                title = "CLEAN";
+                icon = R.drawable.ic_delete_forever_rally_24dp;
+                break;
+            case ACTION_TOOLS:
+            default:
+                title = "TOOLS";
+                icon = R.drawable.ic_more_vert_rally_24dp;
                 break;
         }
 

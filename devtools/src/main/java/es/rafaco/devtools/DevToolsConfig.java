@@ -19,6 +19,7 @@ public class DevToolsConfig {
     public boolean overlayUiEnabled;
     public boolean overlayUiServiceSticky;
     public boolean overlayUiOverOtherApps;
+    public boolean overlayUiIconEnabled;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -36,6 +37,7 @@ public class DevToolsConfig {
         overlayUiEnabled = builder.overlayUiEnabled;
         overlayUiServiceSticky = builder.overlayUiServiceSticky;
         overlayUiOverOtherApps = builder.overlayUiOverOtherApps;
+        overlayUiIconEnabled = builder.overlayUiIconEnabled;
     }
 
     public static final class Builder {
@@ -50,6 +52,7 @@ public class DevToolsConfig {
         private boolean overlayUiEnabled = true;
         private boolean overlayUiServiceSticky = false;
         private boolean overlayUiOverOtherApps;
+        private boolean overlayUiIconEnabled = false;
 
         private Builder() {
         }
@@ -106,6 +109,11 @@ public class DevToolsConfig {
 
         public Builder overlayUiOverOtherApps(boolean val) {
             overlayUiOverOtherApps = val;
+            return this;
+        }
+
+        public Builder overlayUiIconEnabled(boolean val) {
+            overlayUiIconEnabled = val;
             return this;
         }
 

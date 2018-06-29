@@ -65,6 +65,7 @@ public class OverlayUIService extends Service {
         }
         else if (action.equals(IntentAction.FULL)) {
             if (toolsManager.getCurrent() == null){
+                //TODO: load home if forced from parameter
                 startTool("Home");
             }
             widgetsManager.toogleFullMode(true);
@@ -118,14 +119,13 @@ public class OverlayUIService extends Service {
         toolsManager = new ToolsManager(this);
 
         ArrayList<String> toolsList = toolsManager.getToolList();
-        ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
+        widgetsManager.initToolList(toolsList);
 
-        testUserDao();
+        //testUserDao();
 
         //TODO: replace by icon
         //startTool("Home");
         widgetsManager.toogleFullMode(false);
-        DevTools.showMessage("DevTools is watching your back");
     }
 
     @Override
