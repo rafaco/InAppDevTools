@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/expanded_view"
+        android:id="@+id/full_container"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/expanded_icon"
+                android:id="@+id/full_app_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"/>
@@ -28,33 +28,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/expanded_icon" />
+                android:layout_toRightOf="@id/full_app_icon" />
 
             <ImageView
-                android:id="@+id/close_expanded_view"
+                android:id="@+id/full_close_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/ic_close_white_24dp"
+                android:src="@drawable/ic_close_rally_24dp"
                 android:layout_alignParentRight="true"
                 android:clickable="true"/>
 
             <ImageView
-                android:id="@+id/half_mode_button"
+                android:id="@+id/full_half_position_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/ic_overscan_white_24dp"
-                android:layout_toLeftOf="@id/close_expanded_view"
+                android:src="@drawable/ic_arrow_down_rally_24dp"
+                android:layout_toLeftOf="@id/full_close_button"
                 android:clickable="true"/>
 
             <ImageView
-                android:id="@+id/settings_button"
+                android:id="@+id/full_settings_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:src="@drawable/ic_settings_white_24dp"
-                android:layout_toLeftOf="@id/half_mode_button"
+                android:layout_toLeftOf="@id/full_half_position_button"
                 android:clickable="true"/>
 
         </RelativeLayout>

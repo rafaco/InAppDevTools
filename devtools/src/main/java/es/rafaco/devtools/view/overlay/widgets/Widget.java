@@ -1,5 +1,6 @@
 package es.rafaco.devtools.view.overlay.widgets;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
@@ -9,6 +10,10 @@ import es.rafaco.devtools.R;
 public abstract class Widget {
 
     protected final WidgetsManager manager;
+
+    public void onConfigurationChange(Configuration newConfig) {
+
+    }
 
     public enum Type { ICON, REMOVE, FULL }
 

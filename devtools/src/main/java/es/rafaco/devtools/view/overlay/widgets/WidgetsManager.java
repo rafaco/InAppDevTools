@@ -22,6 +22,7 @@ import es.rafaco.devtools.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class WidgetsManager {
 
@@ -33,6 +34,7 @@ public class WidgetsManager {
     private Point szWindow = new Point();
     private boolean isLeft = true;
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin;
+    private boolean halfModeState;
 
     public WidgetsManager(Context context) {
         this.context = context;
@@ -116,6 +118,17 @@ public class WidgetsManager {
             if (DevTools.getConfig().overlayUiIconEnabled)
                 getView(Widget.Type.ICON).setVisibility(View.VISIBLE);
         }
+    }
+
+    public void toogleHalfMode() {
+        boolean newState = !halfModeState;
+        if (newState) {
+            int halfHeight = UiUtils.getDisplaySize(context).y / 2;
+            getView(Widget.Type.FULL).getLayoutParams().height = halfHeight;
+        } else {
+            getView(Widget.Type.FULL).getLayoutParams().height = MATCH_PARENT;
+        }
+        halfModeState = newState;
     }
 
     //endregion
@@ -395,24 +408,28 @@ public class WidgetsManager {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        View iconWidgetView = getView(Widget.Type.ICON);
-        initDisplaySize();
-        WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
+        ((FullWidget)getWidget(Widget.Type.FULL)).onConfigurationChange(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (layoutParams.y + (iconWidgetView.getHeight() + getStatusBarHeight()) > szWindow.y) {
-                layoutParams.y = szWindow.y - (iconWidgetView.getHeight() + getStatusBarHeight());
-                windowManager.updateViewLayout(iconWidgetView, layoutParams);
-            }
+        if (DevTools.getConfig().overlayUiIconEnabled){
+            View iconWidgetView = getView(Widget.Type.ICON);
+            initDisplaySize();
+            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
-            if (layoutParams.x != 0 && layoutParams.x < szWindow.x) {
-                resetPosition(szWindow.x);
-            }
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (layoutParams.y + (iconWidgetView.getHeight() + getStatusBarHeight()) > szWindow.y) {
+                    layoutParams.y = szWindow.y - (iconWidgetView.getHeight() + getStatusBarHeight());
+                    windowManager.updateViewLayout(iconWidgetView, layoutParams);
+                }
 
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if (layoutParams.x != 0 && layoutParams.x < szWindow.x) {
+                    resetPosition(szWindow.x);
+                }
 
-            if (layoutParams.x > szWindow.x) {
-                resetPosition(szWindow.x);
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                if (layoutParams.x > szWindow.x) {
+                    resetPosition(szWindow.x);
+                }
             }
         }
     }

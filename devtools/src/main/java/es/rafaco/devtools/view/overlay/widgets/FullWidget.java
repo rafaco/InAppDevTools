@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.widgets;
 
 import android.animation.LayoutTransition;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
@@ -18,12 +19,17 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 import es.rafaco.devtools.utils.UiUtils;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 
 public class FullWidget extends Widget {
 
-    private ImageView expandedIcon;
+    private ImageView appIcon;
     private ViewGroup toolContainer;
     private Spinner toolsSpinner;
+    private boolean currentHalfMode = false;
+    private boolean isFirstHalfMode = false;
+    private ImageView halfPositionButton;
 
     public FullWidget(WidgetsManager manager) {
         super(manager);
@@ -54,27 +60,34 @@ public class FullWidget extends Widget {
 
     @Override
     protected void beforeAttachView(View view) {
-        //expandedView = view.findViewById(R.id.expanded_view);
-        expandedIcon = view.findViewById(R.id.expanded_icon);
+        appIcon = view.findViewById(R.id.full_app_icon);
         toolContainer = view.findViewById(R.id.content_container);
 
         //expandedView.setVisibility(View.GONE);
-        UiUtils.setAppIconAsBackground(expandedIcon);
+        UiUtils.setAppIconAsBackground(appIcon);
 
-        expandedIcon.setOnClickListener(new View.OnClickListener() {
+        appIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     manager.toogleFullMode(false);
                 }
             });
 
-        view.findViewById(R.id.close_expanded_view)
-                .setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.full_close_button)
+            .setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    manager.toogleFullMode(false);
+                }
+            });
+
+        halfPositionButton = view.findViewById(R.id.full_half_position_button);
+        halfPositionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        manager.toogleFullMode(false);
-                    }
-                });
+                    toogleHalfPosition();
+                }
+            });
 
         ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
@@ -123,6 +136,43 @@ public class FullWidget extends Widget {
 
     public ViewGroup getToolContainer() {
         return toolContainer;
+    }
+
+
+    public enum HalfPosition { FULL, HALF_FIRST, HALF_SECOND}
+    private HalfPosition currentHalfPosition = HalfPosition.FULL;
+
+    public void toogleHalfPosition() {
+
+        WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
+        if (currentHalfPosition.equals(HalfPosition.FULL)) {
+            currentHalfPosition = HalfPosition.HALF_FIRST;
+            halfPositionButton.setImageResource(R.drawable.ic_arrow_up_rally_24dp);
+
+            int halfHeight = UiUtils.getDisplaySize(view.getContext()).y / 2;
+            layoutParams.height = halfHeight;
+            layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
+        }
+        else if (currentHalfPosition.equals(HalfPosition.HALF_FIRST)) {
+            currentHalfPosition = HalfPosition.HALF_SECOND;
+            halfPositionButton.setImageResource(R.drawable.ic_unfold_more_rally_24dp);
+
+            layoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+        }
+        else {
+            currentHalfPosition = HalfPosition.FULL;
+            halfPositionButton.setImageResource(R.drawable.ic_arrow_down_rally_24dp);
+
+            layoutParams.height = MATCH_PARENT;
+            layoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+        }
+        manager.getWindowManager().updateViewLayout(getView(), layoutParams);
+    }
+
+    @Override
+    public void onConfigurationChange(Configuration newConfig) {
+        //TODO
+        // if half:  top is left and bottom is right
     }
 
 }
