@@ -19,14 +19,14 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
 
-public class ReportTool extends Tool {
+public class ReportTool extends OverlayTool {
 
     private TextView out;
     private Button sendButton;

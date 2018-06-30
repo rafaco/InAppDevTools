@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import es.rafaco.devtools.view.overlay.ToolsManager;
 
-public abstract class Tool {
+public abstract class OverlayTool {
     private final ToolsManager manager;
     private ViewGroup toolView;
     private boolean isInitialized = false;
@@ -20,7 +20,7 @@ public abstract class Tool {
     protected abstract void onStop();
     protected abstract void onDestroy();
 
-    public Tool(ToolsManager manager) {
+    public OverlayTool(ToolsManager manager) {
         this.manager = manager;
         onInit();
     }
@@ -82,6 +82,6 @@ public abstract class Tool {
     }
 
     protected String getFullTitle(){
-        return getTitle() + " Tool";
+        return getTitle() + " OverlayTool";
     }
 }

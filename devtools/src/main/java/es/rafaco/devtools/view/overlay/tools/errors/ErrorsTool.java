@@ -21,14 +21,14 @@ import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
 import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeString;
 
-public class ErrorsTool extends Tool {
+public class ErrorsTool extends OverlayTool {
 
     private DecoratedToolInfoAdapter adapter;
     private ListView errorList;

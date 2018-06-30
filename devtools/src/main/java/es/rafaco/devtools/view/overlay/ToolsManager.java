@@ -11,7 +11,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.view.OverlayUIService;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
 import es.rafaco.devtools.view.overlay.tools.home.HomeTool;
@@ -25,8 +25,8 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class ToolsManager {
     protected Context context;
     private final LayoutInflater inflater;
-    private List<Tool> tools;
-    private Tool currentTool = null;
+    private List<OverlayTool> tools;
+    private OverlayTool currentOverlayTool = null;
 
     public ToolsManager(Context context) {
         this.context = context;
@@ -63,32 +63,32 @@ public class ToolsManager {
         return toolsList;
     }
 
-    public void addTool(Tool Tool){
-        tools.add(Tool);
-        //Tool.init();
+    public void addTool(OverlayTool OverlayTool){
+        tools.add(OverlayTool);
+        //OverlayTool.init();
     }
 
     public View getView(Class<?> toolClass){
-        Tool tool = getTool(toolClass);
-        if (tool != null)
-            return tool.getView();
+        OverlayTool overlayTool = getTool(toolClass);
+        if (overlayTool != null)
+            return overlayTool.getView();
         return null;
     }
 
-    public Tool getTool(Class<?> toolClass){
-        for (Tool tool : tools) {
-            if (toolClass.isInstance(tool)){
-                return tool;
+    public OverlayTool getTool(Class<?> toolClass){
+        for (OverlayTool overlayTool : tools) {
+            if (toolClass.isInstance(overlayTool)){
+                return overlayTool;
             }
         }
         return null;
     }
 
-    public Tool getCurrent(){
-        //if(currentTool < 0 || currentTool > tools.size() - 1){
+    public OverlayTool getCurrent(){
+        //if(currentOverlayTool < 0 || currentOverlayTool > tools.size() - 1){
         //    return null;
         //}
-        return currentTool;//.get(currentTool);
+        return currentOverlayTool;//.get(currentOverlayTool);
     }
 
 
@@ -106,10 +106,10 @@ public class ToolsManager {
             getCurrent().stop();
         }
 
-        for(Tool tool : tools){
-            if (tool.getTitle().equals(title)){
-                currentTool = tool;
-                tool.start();
+        for(OverlayTool overlayTool : tools){
+            if (overlayTool.getTitle().equals(title)){
+                currentOverlayTool = overlayTool;
+                overlayTool.start();
             }
         }
     }
@@ -123,8 +123,8 @@ public class ToolsManager {
     }
 
     public void destroy() {
-        for (Tool tool : tools) {
-            tool.destroy();
+        for (OverlayTool overlayTool : tools) {
+            overlayTool.destroy();
         }
     }
 

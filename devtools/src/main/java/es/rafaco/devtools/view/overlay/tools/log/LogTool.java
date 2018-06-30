@@ -30,11 +30,11 @@ import java.util.List;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
-public class LogTool extends Tool implements AdapterView.OnItemClickListener {
+public class LogTool extends OverlayTool implements AdapterView.OnItemClickListener {
 
     /*public static final String VERBOSE = "Verbose";
     public static final String DEBUG = "Debug";

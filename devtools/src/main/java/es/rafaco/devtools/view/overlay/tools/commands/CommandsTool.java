@@ -8,11 +8,11 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.OverlayUIService;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.utils.AppUtils;
 
-public class CommandsTool extends Tool {
+public class CommandsTool extends OverlayTool {
 
     private EditText input;
     private Button btn;

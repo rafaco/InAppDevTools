@@ -19,15 +19,15 @@ import es.rafaco.devtools.utils.ThreadUtils;
 
 public class DecoratedToolInfoAdapter extends BaseAdapter {
 
-    private final Tool tool;
+    private final OverlayTool tool;
     private Context context;
     private List<DecoratedToolInfo> originalData;
     private LayoutInflater mInflater;
     private boolean switchMode = false;
 
-    public DecoratedToolInfoAdapter(Tool tool, ArrayList<DecoratedToolInfo> data) {
-        this.tool = tool;
-        this.context = tool.getContext();
+    public DecoratedToolInfoAdapter(OverlayTool overlayTool, ArrayList<DecoratedToolInfo> data) {
+        this.tool = overlayTool;
+        this.context = overlayTool.getContext();
         this.originalData = data;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

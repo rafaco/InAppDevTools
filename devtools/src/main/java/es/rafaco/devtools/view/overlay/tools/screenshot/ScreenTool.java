@@ -16,10 +16,10 @@ import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 
-public class ScreenTool extends Tool {
+public class ScreenTool extends OverlayTool {
 
     private Button shotButton;
     private RecyclerView recyclerView;

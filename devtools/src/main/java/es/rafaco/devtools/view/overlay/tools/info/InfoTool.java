@@ -16,14 +16,14 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.commands.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 
-public class InfoTool extends Tool {
+public class InfoTool extends OverlayTool {
 
     private TextView out;
     private Spinner mainSpinner;

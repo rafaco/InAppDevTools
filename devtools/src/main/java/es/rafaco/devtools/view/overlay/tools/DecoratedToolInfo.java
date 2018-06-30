@@ -6,9 +6,9 @@ public class DecoratedToolInfo {
     int color;
     Long order;
     String toolName;
-    Class<? extends Tool> toolClass;
+    Class<? extends OverlayTool> toolClass;
 
-    public DecoratedToolInfo(Class<? extends Tool> toolClass, String title, String message, long order, int color) {
+    public DecoratedToolInfo(Class<? extends OverlayTool> toolClass, String title, String message, long order, int color) {
         //this.toolName = toolName;
         this.toolClass = toolClass;
         this.title = title;
@@ -25,11 +25,11 @@ public class DecoratedToolInfo {
         this.toolName = toolName;
     }
 
-    public Class<? extends Tool> getToolClass() {
+    public Class<? extends OverlayTool> getToolClass() {
         return toolClass;
     }
 
-    public void setToolClass(Class<? extends Tool> toolClass) {
+    public void setToolClass(Class<? extends OverlayTool> toolClass) {
         this.toolClass = toolClass;
     }
 

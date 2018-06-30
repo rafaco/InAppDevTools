@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.overlay.tools.Tool;
+import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
@@ -17,7 +17,7 @@ import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 import es.rafaco.devtools.view.overlay.tools.report.ReportTool;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 
-public class HomeTool extends Tool {
+public class HomeTool extends OverlayTool {
 
     private DecoratedToolInfoAdapter adapter;
     private ListView homeList;
