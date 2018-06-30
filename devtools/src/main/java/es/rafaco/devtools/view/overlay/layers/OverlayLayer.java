@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.widgets;
+package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.res.Configuration;
 import android.os.Build;
@@ -6,10 +6,11 @@ import android.view.View;
 import android.view.WindowManager;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
-public abstract class Widget {
+public abstract class OverlayLayer {
 
-    protected final WidgetsManager manager;
+    protected final OverlayLayersManager manager;
 
     public void onConfigurationChange(Configuration newConfig) {
 
@@ -20,7 +21,7 @@ public abstract class Widget {
 
     protected View view;
 
-    public Widget(WidgetsManager manager) {
+    public OverlayLayer(OverlayLayersManager manager) {
         this.manager = manager;
     }
 
@@ -70,7 +71,7 @@ public abstract class Widget {
         }
     }*/
 
-    public abstract Widget.Type getType();
+    public abstract OverlayLayer.Type getType();
     protected abstract int getLayoutId();
     protected abstract WindowManager.LayoutParams getLayoutParams();
     protected abstract void beforeAttachView(View view);

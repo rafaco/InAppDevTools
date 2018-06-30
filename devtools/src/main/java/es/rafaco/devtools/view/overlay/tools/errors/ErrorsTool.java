@@ -2,7 +2,6 @@ package es.rafaco.devtools.view.overlay.tools.errors;
 
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +22,7 @@ import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.Tool;
-import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 

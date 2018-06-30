@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.tools;
+package es.rafaco.devtools.view.overlay;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.tools.Tool;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
 import es.rafaco.devtools.view.overlay.tools.home.HomeTool;

@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.view.overlay.widgets.MainWidget;
-import es.rafaco.devtools.view.overlay.widgets.Widget;
-import es.rafaco.devtools.view.overlay.widgets.WidgetsManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayer;
+import es.rafaco.devtools.view.overlay.layers.OverlayLayer;
+import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
 
 public class OverlayUIService extends Service {
@@ -33,7 +33,7 @@ public class OverlayUIService extends Service {
 
     public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
 
-    private WidgetsManager widgetsManager;
+    private OverlayLayersManager overlayLayersManager;
     private ToolsManager toolsManager;
 
     public OverlayUIService() {
@@ -68,14 +68,14 @@ public class OverlayUIService extends Service {
             startTool(property.replace(" Tool", ""));
         }
         else if (action.equals(IntentAction.ICON)) {
-            widgetsManager.setMainVisibility(false);
+            overlayLayersManager.setMainVisibility(false);
         }
         else if (action.equals(IntentAction.MAIN)) {
             if (toolsManager.getCurrent() == null){
                 //TODO: load home if forced from parameter
                 startTool("Home");
             }
-            widgetsManager.setMainVisibility(true);
+            overlayLayersManager.setMainVisibility(true);
         }
         else if (action.equals(IntentAction.PERMISSION_GRANTED)) {
             isInitialised();
@@ -133,23 +133,23 @@ public class OverlayUIService extends Service {
     }
 
     private void init() {
-        widgetsManager = new WidgetsManager(this);
+        overlayLayersManager = new OverlayLayersManager(this);
         toolsManager = new ToolsManager(this);
 
         ArrayList<String> toolsList = toolsManager.getToolList();
-        widgetsManager.initToolList(toolsList);
+        overlayLayersManager.initToolList(toolsList);
 
         //testUserDao();
 
         //TODO: replace by icon
         //startTool("Home");
-        widgetsManager.setMainVisibility(false);
+        overlayLayersManager.setMainVisibility(false);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        widgetsManager.onConfigurationChanged(newConfig);
+        overlayLayersManager.onConfigurationChanged(newConfig);
     }
 
 
@@ -165,7 +165,7 @@ public class OverlayUIService extends Service {
     public void onDestroy() {
         Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
         toolsManager.destroy();
-        widgetsManager.destroy();
+        overlayLayersManager.destroy();
 
         super.onDestroy();
     }
@@ -182,8 +182,8 @@ public class OverlayUIService extends Service {
 
     public void startTool(String title) {
         toolsManager.selectTool(title);
-        widgetsManager.setMainVisibility(true);
-        widgetsManager.selectTool(title);
+        overlayLayersManager.setMainVisibility(true);
+        overlayLayersManager.selectTool(title);
     }
 
     //TODO: REMOVE
@@ -209,6 +209,6 @@ public class OverlayUIService extends Service {
 
     //TODO: REFACTOR
     public ViewGroup getToolContainer() {
-        return ((MainWidget)widgetsManager.getWidget(Widget.Type.MAIN)).getToolContainer();
+        return ((MainOverlayLayer) overlayLayersManager.getWidget(OverlayLayer.Type.MAIN)).getToolContainer();
     }
 }

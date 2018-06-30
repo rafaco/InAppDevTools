@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.widgets;
+package es.rafaco.devtools.view.overlay.layers;
 
 import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;
@@ -8,12 +8,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
-public class RemoveWidget extends Widget {
+public class RemoveOverlayLayer extends OverlayLayer {
 
     public ImageView remove_image_view;
 
-    public RemoveWidget(WidgetsManager manager) {
+    public RemoveOverlayLayer(OverlayLayersManager manager) {
         super(manager);
     }
 
@@ -24,7 +25,7 @@ public class RemoveWidget extends Widget {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.widget_remove;
+        return R.layout.overlay_layer_remove;
     }
 
     @NonNull

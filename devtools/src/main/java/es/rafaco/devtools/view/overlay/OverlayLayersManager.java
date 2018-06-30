@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.widgets;
+package es.rafaco.devtools.view.overlay;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,26 +19,30 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.view.overlay.layers.IconOverlayLayer;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayer;
+import es.rafaco.devtools.view.overlay.layers.OverlayLayer;
+import es.rafaco.devtools.view.overlay.layers.RemoveOverlayLayer;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
 
-public class WidgetsManager {
+public class OverlayLayersManager {
 
     private Context context;
     private WindowManager windowManager;
     private LayoutInflater inflater;
-    private List<Widget> widgets;
+    private List<OverlayLayer> overlayLayers;
 
     private Point szWindow = new Point();
     private boolean isLeft = true;
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin;
 
-    public WidgetsManager(Context context) {
+    public OverlayLayersManager(Context context) {
         this.context = context;
         this.windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        this.widgets = new ArrayList<>();
+        this.overlayLayers = new ArrayList<>();
 
         initDisplaySize();
         initWidgets();
@@ -48,29 +52,29 @@ public class WidgetsManager {
 
     private void initWidgets() {
         if (DevTools.getConfig().overlayUiIconEnabled){
-            addWidget(new RemoveWidget(this));
-            addWidget(new IconWidget(this));
+            addWidget(new RemoveOverlayLayer(this));
+            addWidget(new IconOverlayLayer(this));
             implementTouchListenerToIconWidgetView();
         }
-        addWidget(new MainWidget(this));
+        addWidget(new MainOverlayLayer(this));
     }
 
-    public void addWidget(Widget widget){
-        widgets.add(widget);
-        widget.addView();
+    public void addWidget(OverlayLayer overlayLayer){
+        overlayLayers.add(overlayLayer);
+        overlayLayer.addView();
     }
 
-    public View getView(Widget.Type widgetType){
-        Widget widget = getWidget(widgetType);
-        if (widget != null)
-            return widget.getView();
+    public View getView(OverlayLayer.Type widgetType){
+        OverlayLayer overlayLayer = getWidget(widgetType);
+        if (overlayLayer != null)
+            return overlayLayer.getView();
         return null;
     }
 
-    public Widget getWidget(Widget.Type widgetType){
-        for (Widget widget : widgets) {
-            if (widget.getType().equals(widgetType)){
-                return widget;
+    public OverlayLayer getWidget(OverlayLayer.Type widgetType){
+        for (OverlayLayer overlayLayer : overlayLayers) {
+            if (overlayLayer.getType().equals(widgetType)){
+                return overlayLayer;
             }
         }
         return null;
@@ -85,8 +89,8 @@ public class WidgetsManager {
     }
 
     public void destroy() {
-        for (Widget widget : widgets) {
-            widget.destroy();
+        for (OverlayLayer overlayLayer : overlayLayers) {
+            overlayLayer.destroy();
         }
     }
 
@@ -95,7 +99,7 @@ public class WidgetsManager {
     //region [ UI ACTIONS ]
 
     public void initToolList(ArrayList<String> toolsList) {
-        ((MainWidget)getWidget(Widget.Type.MAIN)).initToolSelector(toolsList);
+        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).initToolSelector(toolsList);
     }
 
     public void startTool(String title) {
@@ -103,18 +107,18 @@ public class WidgetsManager {
     }
 
     public void selectTool(String title) {
-        ((MainWidget)getWidget(Widget.Type.MAIN)).selectTool(title);
+        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).selectTool(title);
     }
 
     public void setMainVisibility(boolean mainVisible) {
         if (mainVisible) {
-            getView(Widget.Type.MAIN).setVisibility(View.VISIBLE);
+            getView(OverlayLayer.Type.MAIN).setVisibility(View.VISIBLE);
             if (DevTools.getConfig().overlayUiIconEnabled)
-                getView(Widget.Type.ICON).setVisibility(View.GONE);
+                getView(OverlayLayer.Type.ICON).setVisibility(View.GONE);
         } else {
-            getView(Widget.Type.MAIN).setVisibility(View.GONE);
+            getView(OverlayLayer.Type.MAIN).setVisibility(View.GONE);
             if (DevTools.getConfig().overlayUiIconEnabled)
-                getView(Widget.Type.ICON).setVisibility(View.VISIBLE);
+                getView(OverlayLayer.Type.ICON).setVisibility(View.VISIBLE);
         }
     }
 
@@ -135,12 +139,12 @@ public class WidgetsManager {
         ((OverlayUIService)context).stopSelf();
     }
 
-    /*  Implement Touch Listener to Icon Widget Root View
+    /*  Implement Touch Listener to Icon OverlayLayer Root View
      *   Control Drag and move icon view using user's touch action.  */
     private void implementTouchListenerToIconWidgetView() {
-        final View iconWidgetView = getView(Widget.Type.ICON);
-        final View removeWidgetView = getView(Widget.Type.REMOVE);
-        final ImageView remove_image_view = ((RemoveWidget) getWidget(Widget.Type.REMOVE)).remove_image_view;
+        final View iconWidgetView = getView(OverlayLayer.Type.ICON);
+        final View removeWidgetView = getView(OverlayLayer.Type.REMOVE);
+        final ImageView remove_image_view = ((RemoveOverlayLayer) getWidget(OverlayLayer.Type.REMOVE)).remove_image_view;
 
         View rootContainer = iconWidgetView.findViewById(R.id.root_container);
         rootContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -155,7 +159,7 @@ public class WidgetsManager {
             Runnable runnable_longClick = new Runnable() {
                 @Override
                 public void run() {
-                    //On Floating Widget Long Click
+                    //On Floating OverlayLayer Long Click
 
                     //Set isLongClick as true
                     isLongClick = true;
@@ -301,7 +305,7 @@ public class WidgetsManager {
         });
     }
 
-    /*  Reset position of Floating Widget view on dragging  */
+    /*  Reset position of Floating OverlayLayer view on dragging  */
     private void resetPosition(int x_cord_now) {
         if (x_cord_now <= szWindow.x / 2) {
             isLeft = true;
@@ -315,10 +319,10 @@ public class WidgetsManager {
     /*  Method to move the Floating widget view to Left  */
     private void moveToLeft(final int current_x_cord) {
         final int x = szWindow.x - current_x_cord;
-        final View iconWidgetView = getView(Widget.Type.ICON);
+        final View iconWidgetView = getView(OverlayLayer.Type.ICON);
 
         new CountDownTimer(500, 5) {
-            //get params of Floating Widget view
+            //get params of Floating OverlayLayer view
             WindowManager.LayoutParams mParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
             public void onTick(long t) {
@@ -328,14 +332,14 @@ public class WidgetsManager {
                 mParams.x = 0 - (int) (double) bounceValue(step, x);
                 // mParams.x = 0 - (int) (current_x_cord * current_x_cord * step);
 
-                //Update window manager for Floating Widget
+                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
 
             public void onFinish() {
                 mParams.x = 0;
 
-                //Update window manager for Floating Widget
+                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
         }.start();
@@ -343,10 +347,10 @@ public class WidgetsManager {
 
     /*  Method to move the Floating widget view to Right  */
     private void moveToRight(final int current_x_cord) {
-        final View iconWidgetView = getView(Widget.Type.ICON);
+        final View iconWidgetView = getView(OverlayLayer.Type.ICON);
 
         new CountDownTimer(500, 5) {
-            //get params of Floating Widget view
+            //get params of Floating OverlayLayer view
             WindowManager.LayoutParams mParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
             public void onTick(long t) {
@@ -356,14 +360,14 @@ public class WidgetsManager {
                 //mParams.x = szWindow.x + (int) (double) bounceValue(step, x_cord_now) - iconWidgetView.getWidth();
                 mParams.x = (int) (szWindow.x + (current_x_cord * current_x_cord * step) - iconWidgetView.getWidth());
 
-                //Update window manager for Floating Widget
+                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
 
             public void onFinish() {
                 mParams.x = szWindow.x - iconWidgetView.getWidth();
 
-                //Update window manager for Floating Widget
+                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
         }.start();
@@ -379,7 +383,7 @@ public class WidgetsManager {
     }
 
     private void onIconWidgetLongClick() {
-        View removeWidgetView = getView(Widget.Type.REMOVE);
+        View removeWidgetView = getView(OverlayLayer.Type.REMOVE);
         //Get remove Floating view params
         WindowManager.LayoutParams removeParams = (WindowManager.LayoutParams) removeWidgetView.getLayoutParams();
 
@@ -395,10 +399,10 @@ public class WidgetsManager {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        ((MainWidget)getWidget(Widget.Type.MAIN)).onConfigurationChange(newConfig);
+        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).onConfigurationChange(newConfig);
 
         if (DevTools.getConfig().overlayUiIconEnabled){
-            View iconWidgetView = getView(Widget.Type.ICON);
+            View iconWidgetView = getView(OverlayLayer.Type.ICON);
             initDisplaySize();
             WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.widgets;
+package es.rafaco.devtools.view.overlay.layers;
 
 import android.animation.LayoutTransition;
 import android.content.res.Configuration;
@@ -18,11 +18,12 @@ import java.util.ArrayList;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 import es.rafaco.devtools.utils.UiUtils;
+import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 
-public class MainWidget extends Widget {
+public class MainOverlayLayer extends OverlayLayer {
 
     private ImageView appIcon;
     private ViewGroup toolContainer;
@@ -31,7 +32,7 @@ public class MainWidget extends Widget {
     private boolean isFirstHalfMode = false;
     private ImageView sizePositionButton;
 
-    public MainWidget(WidgetsManager manager) {
+    public MainOverlayLayer(OverlayLayersManager manager) {
         super(manager);
     }
 
@@ -42,7 +43,7 @@ public class MainWidget extends Widget {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.widget_main;
+        return R.layout.overlay_layer_main;
     }
 
     @Override

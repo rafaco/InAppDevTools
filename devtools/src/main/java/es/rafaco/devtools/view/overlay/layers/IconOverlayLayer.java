@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.widgets;
+package es.rafaco.devtools.view.overlay.layers;
 
 import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;
@@ -9,11 +9,12 @@ import android.widget.ImageView;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.UiUtils;
+import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
-public class IconWidget extends Widget {
+public class IconOverlayLayer extends OverlayLayer {
     private View collapsedView;
 
-    public IconWidget(WidgetsManager manager) {
+    public IconOverlayLayer(OverlayLayersManager manager) {
         super(manager);
     }
 
@@ -24,7 +25,7 @@ public class IconWidget extends Widget {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.widget_icon;
+        return R.layout.overlay_layer_icon;
     }
 
     @NonNull

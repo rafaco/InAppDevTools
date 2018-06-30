@@ -6,11 +6,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.view.overlay.tools.Tool;
-import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.ToolsManager;
 import es.rafaco.devtools.utils.AppUtils;
 
 public class CommandsTool extends Tool {

@@ -19,7 +19,7 @@
             android:padding="3dp"
             style="@style/elevated">
 
-            <!--   ImageView of floating widget  -->
+            <!--   ImageView of floating overlayLayer  -->
             <ImageView
                 android:id="@+id/collapsed_icon"
                 android:layout_width="40dp"

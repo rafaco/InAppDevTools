@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import es.rafaco.devtools.view.overlay.ToolsManager;
+
 public abstract class Tool {
     private final ToolsManager manager;
     private ViewGroup toolView;

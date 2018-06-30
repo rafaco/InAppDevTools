@@ -17,7 +17,7 @@ import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.Tool;
-import es.rafaco.devtools.view.overlay.tools.ToolsManager;
+import es.rafaco.devtools.view.overlay.ToolsManager;
 
 public class ScreenTool extends Tool {
 

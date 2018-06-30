@@ -89,7 +89,7 @@ public class PermissionActivity extends AppCompatActivity {
 
 
     private void onOverlayPermissionGranted() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.PERMISSION_GRANTED, "Overlay");
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.PERMISSION_GRANTED, "OverlayLayer");
         startService(intent);
         finish();
     }
