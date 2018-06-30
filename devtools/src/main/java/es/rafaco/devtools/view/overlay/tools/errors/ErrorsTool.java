@@ -22,7 +22,7 @@ import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
@@ -38,7 +38,7 @@ public class ErrorsTool extends OverlayTool {
     private Button crashBackButton;
     private Button anrButton;
 
-    public ErrorsTool(ToolsManager manager) {
+    public ErrorsTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -48,9 +48,7 @@ public class ErrorsTool extends OverlayTool {
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_errors";
-    }
+    public int getLayoutId() { return R.layout.tool_errors; }
 
     @Override
     protected void onInit() {

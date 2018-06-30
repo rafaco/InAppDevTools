@@ -28,8 +28,6 @@ public class MainOverlayLayer extends OverlayLayer {
     private ImageView appIcon;
     private ViewGroup toolContainer;
     private Spinner toolsSpinner;
-    private boolean currentHalfMode = false;
-    private boolean isFirstHalfMode = false;
     private ImageView sizePositionButton;
 
     public MainOverlayLayer(OverlayLayersManager manager) {

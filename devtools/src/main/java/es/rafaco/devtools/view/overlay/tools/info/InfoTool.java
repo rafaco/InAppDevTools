@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.commands.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
@@ -31,7 +31,7 @@ public class InfoTool extends OverlayTool {
     private Spinner secondSpinner;
     private InfoHelper helper;
 
-    public InfoTool(ToolsManager manager) {
+    public InfoTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -41,9 +41,7 @@ public class InfoTool extends OverlayTool {
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_info";
-    }
+    public int getLayoutId() { return R.layout.tool_info; }
 
     @Override
     protected void onInit() {

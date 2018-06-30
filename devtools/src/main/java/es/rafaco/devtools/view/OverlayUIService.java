@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayer;
@@ -34,7 +34,7 @@ public class OverlayUIService extends Service {
     public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
 
     private OverlayLayersManager overlayLayersManager;
-    private ToolsManager toolsManager;
+    private OverlayToolsManager overlayToolsManager;
 
     public OverlayUIService() {
     }
@@ -71,7 +71,7 @@ public class OverlayUIService extends Service {
             overlayLayersManager.setMainVisibility(false);
         }
         else if (action.equals(IntentAction.MAIN)) {
-            if (toolsManager.getCurrent() == null){
+            if (overlayToolsManager.getCurrent() == null){
                 //TODO: load home if forced from parameter
                 startTool("Home");
             }
@@ -134,9 +134,9 @@ public class OverlayUIService extends Service {
 
     private void init() {
         overlayLayersManager = new OverlayLayersManager(this);
-        toolsManager = new ToolsManager(this);
+        overlayToolsManager = new OverlayToolsManager(this);
 
-        ArrayList<String> toolsList = toolsManager.getToolList();
+        ArrayList<String> toolsList = overlayToolsManager.getToolList();
         overlayLayersManager.initToolList(toolsList);
 
         //testUserDao();
@@ -164,7 +164,7 @@ public class OverlayUIService extends Service {
     @Override
     public void onDestroy() {
         Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
-        toolsManager.destroy();
+        overlayToolsManager.destroy();
         overlayLayersManager.destroy();
 
         super.onDestroy();
@@ -181,7 +181,7 @@ public class OverlayUIService extends Service {
 
 
     public void startTool(String title) {
-        toolsManager.selectTool(title);
+        overlayToolsManager.selectTool(title);
         overlayLayersManager.setMainVisibility(true);
         overlayLayersManager.selectTool(title);
     }
@@ -208,7 +208,7 @@ public class OverlayUIService extends Service {
     }
 
     //TODO: REFACTOR
-    public ViewGroup getToolContainer() {
+    public ViewGroup getMainLayerContainer() {
         return ((MainOverlayLayer) overlayLayersManager.getWidget(OverlayLayer.Type.MAIN)).getToolContainer();
     }
 }

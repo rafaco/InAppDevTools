@@ -6,29 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 
 public abstract class OverlayTool {
-    private final ToolsManager manager;
+    private final OverlayToolsManager manager;
     private ViewGroup toolView;
-    private boolean isInitialized = false;
 
     public abstract String getTitle();
-    public abstract String getLayoutId();
+    public abstract int getLayoutId();
     protected abstract void onInit();
     protected abstract void onStart(View toolView);
     protected abstract void onStop();
     protected abstract void onDestroy();
 
-    public OverlayTool(ToolsManager manager) {
+    public OverlayTool(OverlayToolsManager manager) {
         this.manager = manager;
         onInit();
     }
 
     public void start(){
-        //init(LayoutInflater.from(containerView.getContext()));
-        int layoutId = getResourceId(getContainer(), "layout", getLayoutId());
-        toolView = (ViewGroup) getInflater().inflate(layoutId, getContainer(), false);
+        toolView = (ViewGroup) getInflater().inflate(getLayoutId(), getContainer(), false);
         toolView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -54,7 +51,7 @@ public abstract class OverlayTool {
     public ViewGroup getView() {
         return toolView;
     }
-    public ToolsManager getManager() {
+    public OverlayToolsManager getManager() {
         return manager;
     }
     public ViewGroup getContainer() {
@@ -72,13 +69,6 @@ public abstract class OverlayTool {
     }
     public Object getReport() {
         return null;
-    }
-
-    protected int getResourceId(View view, String resourceType, String identifier){
-        return view.getResources().getIdentifier(
-                identifier,
-                resourceType,
-                view.getContext().getPackageName());
     }
 
     protected String getFullTitle(){

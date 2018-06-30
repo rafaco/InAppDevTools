@@ -17,7 +17,7 @@ import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 
 public class ScreenTool extends OverlayTool {
 
@@ -26,7 +26,7 @@ public class ScreenTool extends OverlayTool {
     private ScreenAdapter adapter;
     private ArrayList<Screen> screenList;
 
-    public ScreenTool(ToolsManager manager) {
+    public ScreenTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -36,9 +36,7 @@ public class ScreenTool extends OverlayTool {
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_screen";
-    }
+    public int getLayoutId() { return R.layout.tool_screen; }
 
     @Override
     protected void onInit() {

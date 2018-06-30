@@ -22,13 +22,13 @@ import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class ToolsManager {
+public class OverlayToolsManager {
     protected Context context;
     private final LayoutInflater inflater;
     private List<OverlayTool> tools;
     private OverlayTool currentOverlayTool = null;
 
-    public ToolsManager(Context context) {
+    public OverlayToolsManager(Context context) {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.tools = new ArrayList<>();
@@ -131,7 +131,7 @@ public class ToolsManager {
 
     //TODO: REFACTOR
     public ViewGroup getContainer() {
-        return ((OverlayUIService)context).getToolContainer();
+        return ((OverlayUIService)context).getMainLayerContainer();
     }
 
     public void updateHomeInfoContent(Class<?> toolClass, String content){

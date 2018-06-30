@@ -10,7 +10,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
@@ -24,7 +24,7 @@ public class HomeTool extends OverlayTool {
     private TextView welcome;
     private ArrayList<DecoratedToolInfo> dataList;
 
-    public HomeTool(ToolsManager manager) {
+    public HomeTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -34,9 +34,7 @@ public class HomeTool extends OverlayTool {
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_home";
-    }
+    public int getLayoutId() { return R.layout.tool_home; }
 
     @Override
     protected void onInit() {

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.utils.AppUtils;
 
 public class CommandsTool extends OverlayTool {
@@ -25,7 +25,7 @@ public class CommandsTool extends OverlayTool {
     private Button fullRestartButton;
     private Button installedButton;
 
-    public CommandsTool(ToolsManager manager) {
+    public CommandsTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -35,9 +35,7 @@ public class CommandsTool extends OverlayTool {
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_commands";
-    }
+    public int getLayoutId() { return R.layout.tool_commands; }
 
     @Override
     protected void onInit() {

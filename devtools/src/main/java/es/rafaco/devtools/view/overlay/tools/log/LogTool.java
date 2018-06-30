@@ -31,7 +31,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
-import es.rafaco.devtools.view.overlay.ToolsManager;
+import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogTool extends OverlayTool implements AdapterView.OnItemClickListener {
@@ -65,7 +65,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     private Process process;
 
 
-    public LogTool(ToolsManager manager) {
+    public LogTool(OverlayToolsManager manager) {
         super(manager);
     }
 
@@ -75,9 +75,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     }
 
     @Override
-    public String getLayoutId() {
-        return "tool_log";
-    }
+    public int getLayoutId() { return R.layout.tool_log; }
 
     @Override
     protected void onInit() {
