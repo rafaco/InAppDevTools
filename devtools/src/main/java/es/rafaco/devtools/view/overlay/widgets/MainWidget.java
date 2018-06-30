@@ -22,27 +22,27 @@ import es.rafaco.devtools.utils.UiUtils;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 
-public class FullWidget extends Widget {
+public class MainWidget extends Widget {
 
     private ImageView appIcon;
     private ViewGroup toolContainer;
     private Spinner toolsSpinner;
     private boolean currentHalfMode = false;
     private boolean isFirstHalfMode = false;
-    private ImageView halfPositionButton;
+    private ImageView sizePositionButton;
 
-    public FullWidget(WidgetsManager manager) {
+    public MainWidget(WidgetsManager manager) {
         super(manager);
     }
 
     @Override
     public Type getType() {
-        return Type.FULL;
+        return Type.MAIN;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.widget_full;
+        return R.layout.widget_main;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class FullWidget extends Widget {
         appIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    manager.toogleFullMode(false);
+                    manager.setMainVisibility(false);
                 }
             });
 
@@ -77,15 +77,15 @@ public class FullWidget extends Widget {
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    manager.toogleFullMode(false);
+                    manager.setMainVisibility(false);
                 }
             });
 
-        halfPositionButton = view.findViewById(R.id.full_half_position_button);
-        halfPositionButton.setOnClickListener(new View.OnClickListener() {
+        sizePositionButton = view.findViewById(R.id.full_half_position_button);
+        sizePositionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    toogleHalfPosition();
+                    toogleSizePosition();
                 }
             });
 
@@ -139,29 +139,29 @@ public class FullWidget extends Widget {
     }
 
 
-    public enum HalfPosition { FULL, HALF_FIRST, HALF_SECOND}
-    private HalfPosition currentHalfPosition = HalfPosition.FULL;
+    public enum SizePosition { FULL, HALF_FIRST, HALF_SECOND}
+    private SizePosition currentSizePosition = SizePosition.FULL;
 
-    public void toogleHalfPosition() {
+    public void toogleSizePosition() {
 
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
-        if (currentHalfPosition.equals(HalfPosition.FULL)) {
-            currentHalfPosition = HalfPosition.HALF_FIRST;
-            halfPositionButton.setImageResource(R.drawable.ic_arrow_up_rally_24dp);
+        if (currentSizePosition.equals(SizePosition.FULL)) {
+            currentSizePosition = SizePosition.HALF_FIRST;
+            sizePositionButton.setImageResource(R.drawable.ic_arrow_up_rally_24dp);
 
             int halfHeight = UiUtils.getDisplaySize(view.getContext()).y / 2;
             layoutParams.height = halfHeight;
             layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
         }
-        else if (currentHalfPosition.equals(HalfPosition.HALF_FIRST)) {
-            currentHalfPosition = HalfPosition.HALF_SECOND;
-            halfPositionButton.setImageResource(R.drawable.ic_unfold_more_rally_24dp);
+        else if (currentSizePosition.equals(SizePosition.HALF_FIRST)) {
+            currentSizePosition = SizePosition.HALF_SECOND;
+            sizePositionButton.setImageResource(R.drawable.ic_unfold_more_rally_24dp);
 
             layoutParams.gravity = Gravity.TOP | Gravity.CENTER;
         }
         else {
-            currentHalfPosition = HalfPosition.FULL;
-            halfPositionButton.setImageResource(R.drawable.ic_arrow_down_rally_24dp);
+            currentSizePosition = SizePosition.FULL;
+            sizePositionButton.setImageResource(R.drawable.ic_arrow_down_rally_24dp);
 
             layoutParams.height = MATCH_PARENT;
             layoutParams.gravity = Gravity.TOP | Gravity.CENTER;

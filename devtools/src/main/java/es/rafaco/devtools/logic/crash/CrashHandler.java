@@ -1,5 +1,6 @@
 package es.rafaco.devtools.logic.crash;
 
+import android.app.ApplicationErrorReport;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.view.NotificationUIService;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.AppUtils;
@@ -39,6 +42,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         try {
             Log.d(DevTools.TAG, "CrashHandler.uncaughtException() called");
             //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
+
+            stopServices();
             final Crash crash = buildCrash(thread, ex);
 
             //appContext.startService(DbService.buildCrashIntent(appContext, crash));
@@ -53,11 +58,24 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 }
             });*/
             onCrashStored( thread, ex, crash);
+
+            //TODO: RESEARCH handleApplicationCrash
+            /*// Bring up crash dialog, wait for it to be dismissed
+            ActivityManagerNative.getDefault().handleApplicationCrash(
+                    mApplicationObject, new ApplicationErrorReport.CrashInfo(e));*/
             Log.d(DevTools.TAG, "CrashHandler.uncaughtException() finished ok");
         } catch (Exception e) {
             Log.e(DevTools.TAG, "CrashHandler.uncaughtException() EXCEPTION");
             e.printStackTrace();
         }
+    }
+
+    private void stopServices() {
+        Context context = DevTools.getAppContext();
+        Intent in = new Intent(context, OverlayUIService.class);
+        context.stopService(in);
+        in = new Intent(context, NotificationUIService.class);
+        context.stopService(in);
     }
 
     @NonNull
@@ -87,18 +105,31 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return crash;
     }
 
-    private void onCrashStored(Thread thread, Throwable ex, Crash crash) {
+    private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
         //showDialog(exClass, exMessage);
-        startExceptionActivity(crash.getException(), crash.getMessage(), crash);
+        //startExceptionActivity(crash.getException(), crash.getMessage(), crash);
+
+        PendingCrashUtil.savePending();
+        storeCrash(crash);
 
         if (DevTools.getConfig().crashHandlerCallDefaultHandler){
-            Log.e(DevTools.TAG, "onCrashStored let the exception propagate");
+            Log.i(DevTools.TAG, "onCrashStored - Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{
-            Log.e(DevTools.TAG, "onCrashStored destroy");
+            Log.e(DevTools.TAG, "onCrashStored - Destroy app");
             //AppUtils.exit();
-            AppUtils.killMyProces();
+            //AppUtils.killMyProcess();
+
+            //OverlayUIService.runAction(OverlayUIService.IntentAction.RESTART, null);
+            AppUtils.programRestart(DevTools.getAppContext());
+            AppUtils.killMyProcess();
         }
+    }
+
+    private void storeCrash(final Crash crash) {
+        DevToolsDatabase db = DevTools.getDatabase();
+        db.crashDao().insertAll(crash);
+        Log.d(DevTools.TAG, "Crash stored in db");
     }
 
     private void startExceptionActivity(String exClass, String exMessage, Crash crash) {

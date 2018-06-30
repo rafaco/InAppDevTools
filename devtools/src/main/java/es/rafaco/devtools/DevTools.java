@@ -169,7 +169,7 @@ public class DevTools {
     }
 
     public static void openTools(boolean atHome) {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
         getAppContext().startService(intent);
     }
 

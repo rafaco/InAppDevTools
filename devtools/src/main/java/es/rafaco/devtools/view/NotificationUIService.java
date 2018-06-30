@@ -17,13 +17,15 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
-
-import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
 public class NotificationUIService extends Service {
 
@@ -39,6 +41,7 @@ public class NotificationUIService extends Service {
     public static final String ACTION_SCREEN = "ACTION_SCREEN";
     public static final String ACTION_CLEAN = "ACTION_CLEAN";
     public static final String ACTION_TOOLS = "ACTION_TOOLS";
+    public static final String ACTION_DISMISS = "ACTION_DISMISS";
 
     public NotificationUIService() {
     }
@@ -108,23 +111,89 @@ public class NotificationUIService extends Service {
         // Create notification default intent.
         Intent intent = new Intent();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        Notification notification = buildNotification(pendingIntent);
+
+        Notification notification = buildMainNotification(pendingIntent,
+                PendingCrashUtil.isPending() ? new Crash() : null);
 
         //createNotificationGroup();
         //createNotificationSummary();
 
         // Start foreground service.
         startForeground(NOTIFICATION_ID, notification);
+
+        if (PendingCrashUtil.isPending()){
+            //Notification crashNotification = buildCrashNotification(pendingIntent);
+            //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            //notificationManager.notify((int)new Date().getTime(), crashNotification);
+
+            PendingCrashUtil.clearPending();
+        }
     }
 
-    private Notification buildNotification(PendingIntent pendingIntent) {
+    private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
         InfoHelper infoHelper = new InfoHelper(getApplicationContext());
         PackageInfo packageInfo = infoHelper.getPackageInfo();
-        String environment = "DEBUG";
-        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
-        String fullAppName = String.format("%s %s %s", infoHelper.getAppName(), environment, version);
+        String title, subTitle;
+        if (crash == null){
+            String environment = "DEBUG";
+            String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+
+            title = String.format("%s %s %s", infoHelper.getAppName(), environment, version);
+            subTitle = "Expand me for options...";
+        }else{
+            title = String.format("Ups, %s crashed", infoHelper.getAppName());
+            subTitle = "Expand me for options...";
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setGroup(GROUP_ID)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setOnlyAlertOnce(true)
+                .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
+                .setLargeIcon(largeIconBitmap)
+                .setColorized(true)
+                //.setFullScreenIntent(pendingIntent, true)
+                .setContentTitle(title) //Collapsed Main
+                .setContentText(subTitle)   //Collapsed Second
+                //.setSubText("setSubText")           //Group second
+                .setWhen(System.currentTimeMillis()); //Group third
+
+        if (crash == null){
+            builder.setColor(getResources().getColor(R.color.rally_blue_med));
+        }else{
+            builder.setColor(getResources().getColor(R.color.rally_orange));
+        }
+
+        // Make notification show big text.
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(title);
+        bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
+        builder.setStyle(bigTextStyle);
+
+        if (crash == null)
+            builder.addAction(buildAction(ACTION_SCREEN));
+        else
+            builder.addAction(buildAction(ACTION_DISMISS));
+
+        builder.addAction(buildAction(ACTION_REPORT));
+        builder.addAction(buildAction(ACTION_TOOLS));
+
+        if (crash == null)
+            builder.addAction(buildAction(ACTION_CLEAN));
+
+        // Build the notification.
+        return builder.build();
+    }
+
+    private Notification buildCrashNotification(PendingIntent pendingIntent) {
+
+        Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
+        InfoHelper infoHelper = new InfoHelper(getApplicationContext());
+        String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setGroup(GROUP_ID)
@@ -134,24 +203,22 @@ public class NotificationUIService extends Service {
                 .setOnlyAlertOnce(true)
                 .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
-                .setColor(getResources().getColor(R.color.rally_blue_med))
+                .setColor(getResources().getColor(R.color.rally_orange))
                 .setColorized(true)
                 //.setFullScreenIntent(pendingIntent, true)
-                .setContentTitle(fullAppName) //Collapsed Main
+                .setContentTitle(title) //Collapsed Main
                 .setContentText("Expand me for options...")   //Collapsed Second
                 //.setSubText("setSubText")           //Group second
                 .setWhen(System.currentTimeMillis()); //Group third
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle(fullAppName);
+        bigTextStyle.setBigContentTitle(title);
         bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
         builder.setStyle(bigTextStyle);
 
-        builder.addAction(buildAction(ACTION_SCREEN));
         builder.addAction(buildAction(ACTION_REPORT));
         builder.addAction(buildAction(ACTION_TOOLS));
-        builder.addAction(buildAction(ACTION_CLEAN));
 
         // Build the notification.
         return builder.build();

@@ -20,7 +20,7 @@ import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.view.overlay.tools.ToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.view.overlay.widgets.FullWidget;
+import es.rafaco.devtools.view.overlay.widgets.MainWidget;
 import es.rafaco.devtools.view.overlay.widgets.Widget;
 import es.rafaco.devtools.view.overlay.widgets.WidgetsManager;
 
@@ -29,7 +29,9 @@ public class OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, FULL, ICON }
+    private boolean initialised;
+
+    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
 
     private WidgetsManager widgetsManager;
     private ToolsManager toolsManager;
@@ -57,21 +59,26 @@ public class OverlayUIService extends Service {
 
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
+
+        boolean canContinue = isInitialised();
+        if (!canContinue)
+            return;
+
         if (action.equals(IntentAction.TOOL)){
             startTool(property.replace(" Tool", ""));
         }
         else if (action.equals(IntentAction.ICON)) {
-            widgetsManager.toogleFullMode(false);
+            widgetsManager.setMainVisibility(false);
         }
-        else if (action.equals(IntentAction.FULL)) {
+        else if (action.equals(IntentAction.MAIN)) {
             if (toolsManager.getCurrent() == null){
                 //TODO: load home if forced from parameter
                 startTool("Home");
             }
-            widgetsManager.toogleFullMode(true);
+            widgetsManager.setMainVisibility(true);
         }
         else if (action.equals(IntentAction.PERMISSION_GRANTED)) {
-            initOrRequestPermission();
+            isInitialised();
         }
         else if (action.equals(IntentAction.REPORT)){
             startTool("Report");
@@ -105,17 +112,23 @@ public class OverlayUIService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        initOrRequestPermission();
+        initialised = false;
     }
 
-    private void initOrRequestPermission() {
+    private boolean isInitialised() {
+        if (initialised)
+            return true;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             //Start a flash activity to request required permissions
             Intent intent = PermissionActivity.buildIntent(PermissionActivity.IntentAction.OVERLAY, getApplicationContext());
             startActivity(intent, null);
+            return false;
         } else {
             init();
+            initialised = true;
+            Log.w(DevTools.TAG, "OverlayUIService - initialised");
+            return true;
         }
     }
 
@@ -130,7 +143,7 @@ public class OverlayUIService extends Service {
 
         //TODO: replace by icon
         //startTool("Home");
-        widgetsManager.toogleFullMode(false);
+        widgetsManager.setMainVisibility(false);
     }
 
     @Override
@@ -145,12 +158,12 @@ public class OverlayUIService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
-        Log.e("DevTools", "onTaskRemoved");
+        Log.w(DevTools.TAG, "OverlayUIService - onTaskRemoved");
     }
 
     @Override
     public void onDestroy() {
-        Log.e("DevTools", "onDestroy");
+        Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
         toolsManager.destroy();
         widgetsManager.destroy();
 
@@ -158,7 +171,7 @@ public class OverlayUIService extends Service {
     }
 
     private void killProcess(){
-        Log.d("DevTools", "Stopping service");
+        Log.d(DevTools.TAG, "OverlayUIService - Stopping service");
         stopSelf();
         AppUtils.exit();
     }
@@ -169,7 +182,7 @@ public class OverlayUIService extends Service {
 
     public void startTool(String title) {
         toolsManager.selectTool(title);
-        widgetsManager.toogleFullMode(true);
+        widgetsManager.setMainVisibility(true);
         widgetsManager.selectTool(title);
     }
 
@@ -196,6 +209,6 @@ public class OverlayUIService extends Service {
 
     //TODO: REFACTOR
     public ViewGroup getToolContainer() {
-        return ((FullWidget)widgetsManager.getWidget(Widget.Type.FULL)).getToolContainer();
+        return ((MainWidget)widgetsManager.getWidget(Widget.Type.MAIN)).getToolContainer();
     }
 }

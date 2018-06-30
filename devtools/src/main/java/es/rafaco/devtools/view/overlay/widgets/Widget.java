@@ -15,7 +15,7 @@ public abstract class Widget {
 
     }
 
-    public enum Type { ICON, REMOVE, FULL }
+    public enum Type { ICON, REMOVE, MAIN}
 
 
     protected View view;

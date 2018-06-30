@@ -20,15 +20,15 @@ import es.rafaco.devtools.db.errors.ScreenDao;
                     Screen.class})
 public abstract class DevToolsDatabase extends RoomDatabase {
 
+    public static final String DB_NAME = "DevToolsDB";
     private static DevToolsDatabase INSTANCE;
 
     public static DevToolsDatabase getInstance() {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(DevTools.getAppContext(), DevToolsDatabase.class, "user-database")
-                            // allow queries on the main thread.
-                            // Don't do this on a real app! See PersistenceBasicSample for an example.
-                            //.allowMainThreadQueries()
+                    Room.databaseBuilder(DevTools.getAppContext(), DevToolsDatabase.class, DB_NAME)
+                            //TODO: Research alternatives, on crash we can't create new threads
+                            .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build();
         }

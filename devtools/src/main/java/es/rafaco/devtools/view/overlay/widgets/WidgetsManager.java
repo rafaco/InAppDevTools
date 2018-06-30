@@ -22,7 +22,6 @@ import es.rafaco.devtools.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class WidgetsManager {
 
@@ -34,7 +33,6 @@ public class WidgetsManager {
     private Point szWindow = new Point();
     private boolean isLeft = true;
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin;
-    private boolean halfModeState;
 
     public WidgetsManager(Context context) {
         this.context = context;
@@ -54,7 +52,7 @@ public class WidgetsManager {
             addWidget(new IconWidget(this));
             implementTouchListenerToIconWidgetView();
         }
-        addWidget(new FullWidget(this));
+        addWidget(new MainWidget(this));
     }
 
     public void addWidget(Widget widget){
@@ -97,7 +95,7 @@ public class WidgetsManager {
     //region [ UI ACTIONS ]
 
     public void initToolList(ArrayList<String> toolsList) {
-        ((FullWidget)getWidget(Widget.Type.FULL)).initToolSelector(toolsList);
+        ((MainWidget)getWidget(Widget.Type.MAIN)).initToolSelector(toolsList);
     }
 
     public void startTool(String title) {
@@ -105,30 +103,19 @@ public class WidgetsManager {
     }
 
     public void selectTool(String title) {
-        ((FullWidget)getWidget(Widget.Type.FULL)).selectTool(title);
+        ((MainWidget)getWidget(Widget.Type.MAIN)).selectTool(title);
     }
 
-    public void toogleFullMode(boolean fullMode) {
-        if (fullMode) {
-            getView(Widget.Type.FULL).setVisibility(View.VISIBLE);
+    public void setMainVisibility(boolean mainVisible) {
+        if (mainVisible) {
+            getView(Widget.Type.MAIN).setVisibility(View.VISIBLE);
             if (DevTools.getConfig().overlayUiIconEnabled)
                 getView(Widget.Type.ICON).setVisibility(View.GONE);
         } else {
-            getView(Widget.Type.FULL).setVisibility(View.GONE);
+            getView(Widget.Type.MAIN).setVisibility(View.GONE);
             if (DevTools.getConfig().overlayUiIconEnabled)
                 getView(Widget.Type.ICON).setVisibility(View.VISIBLE);
         }
-    }
-
-    public void toogleHalfMode() {
-        boolean newState = !halfModeState;
-        if (newState) {
-            int halfHeight = UiUtils.getDisplaySize(context).y / 2;
-            getView(Widget.Type.FULL).getLayoutParams().height = halfHeight;
-        } else {
-            getView(Widget.Type.FULL).getLayoutParams().height = MATCH_PARENT;
-        }
-        halfModeState = newState;
     }
 
     //endregion
@@ -140,7 +127,7 @@ public class WidgetsManager {
     }
 
     private void onIconWidgetClick() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FULL, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
         context.startService(intent);
     }
 
@@ -408,7 +395,7 @@ public class WidgetsManager {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        ((FullWidget)getWidget(Widget.Type.FULL)).onConfigurationChange(newConfig);
+        ((MainWidget)getWidget(Widget.Type.MAIN)).onConfigurationChange(newConfig);
 
         if (DevTools.getConfig().overlayUiIconEnabled){
             View iconWidgetView = getView(Widget.Type.ICON);
