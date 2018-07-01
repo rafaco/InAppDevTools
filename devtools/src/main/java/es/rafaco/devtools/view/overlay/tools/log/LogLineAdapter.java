@@ -1,17 +1,16 @@
 package es.rafaco.devtools.view.overlay.tools.log;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -21,59 +20,77 @@ import java.util.List;
 
 import es.rafaco.devtools.R;
 
-public class LogLineAdaptor extends BaseAdapter implements Filterable {
+public class LogLineAdapter
+        extends RecyclerView.Adapter<LogLineAdapter.LogViewHolder>
+        implements Filterable {
 
     private final LogTool manager;
     private Context context;
     private List<LogLine> originalData;
     private List<LogLine> filteredData;
-    private LayoutInflater mInflater;
 
     private LogFilter logFilter;
     private String currentFilterString;
 
-    public LogLineAdaptor(LogTool manager, ArrayList<LogLine> data, LogFilterConfig config) {
+    public LogLineAdapter(LogTool manager,
+                          ArrayList<LogLine> data,
+                          LogFilterConfig config)
+    {
         this.manager = manager;
         this.context = manager.getView().getContext();
         this.logFilter = new LogFilter(config);
         this.originalData = data;
         this.filteredData = new ArrayList<>(data);
-        Log.d("RAFA", "new LogLineAdaptor created with "+data.size()+" data.");
-        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
     //region [ ADAPTOR ]
 
-    public void add(String value, int id) {
-        LogLine newLine = LogLine.newLogLine(value, false);
-        originalData.add(newLine);
+    @Override
+    public int getItemCount() {
+        return (filteredData != null) ? filteredData.size() : 0;
+    }
 
-        if (logFilter.getConfig().validate(newLine)){
-            filteredData.add(LogLine.newLogLine(value, false));
-            notifyDataSetChanged();
+    @NonNull
+    @Override
+    public LogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.tool_log_item, parent, false);
+
+        return new LogLineAdapter.LogViewHolder(itemView);
+    }
+
+    static class LogViewHolder extends RecyclerView.ViewHolder {
+        TextView text;
+
+        public LogViewHolder(View view) {
+            super(view);
+            text = view.findViewById(R.id.txtLogString);
         }
     }
 
     @Override
-    public LogLine getItem(int position) {
-        return (filteredData != null) ? filteredData.get(position) : null;
+    public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
+        LogLine itemData = getItemByPosition(position);
+
+        String type = itemData.getLogLevelText();
+        String line = itemData.getLogOutput();
+        int color = itemData.getLogColor(context);
+
+        String textFilter = ((LogFilter)getFilter()).getConfig().textFilter;
+        if(TextUtils.isEmpty(textFilter)){
+            holder.text.setText(line);
+        }
+        else{
+            highlightString(line, textFilter, holder.text);
+        }
+
+        holder.text.setTextColor(color);
+
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public int getCount() {
-        return (filteredData != null) ? filteredData.size() : 0;
-    }
-
-    public void clear(){
-        originalData.clear();
-        filteredData.clear();
-        notifyDataSetInvalidated();
+    public LogLine getItemByPosition(int position) {
+        return filteredData.get(position);
     }
 
     //endregion
@@ -109,8 +126,6 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            //currentFilterString = constraint.toString().toLowerCase();
-
             final List<LogLine> originalList = originalData;
             int count = originalList.size();
             final ArrayList<LogLine> filteredList = new ArrayList<>(count);
@@ -147,46 +162,25 @@ public class LogLineAdaptor extends BaseAdapter implements Filterable {
 
     //endregion
 
+    //region [ UPDATE DATA ]
 
-    //region [ VIEW ]
+    public void add(String value, int id) {
+        LogLine newLine = LogLine.newLogLine(value, false);
+        originalData.add(newLine);
 
-    static class ViewHolder {
-        TextView text;
+        if (logFilter.getConfig().validate(newLine)){
+            filteredData.add(LogLine.newLogLine(value, false));
+            notifyDataSetChanged();
+        }
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.tool_log_item, null);
-            holder = new ViewHolder();
-            holder.text = convertView.findViewById(R.id.txtLogString);
-            convertView.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        LogLine itemData = filteredData.get(position);
-        String type = itemData.getLogLevelText();
-        String line = itemData.getLogOutput();
-        int color = itemData.getLogColor(context);
-
-        if(TextUtils.isEmpty(currentFilterString)){
-            holder.text.setText(line);
-        }
-        else{
-            highlightString(line, currentFilterString, holder.text);
-        }
-
-        holder.text.setTextColor(color);
-
-        return convertView;
+    public void clear(){
+        originalData.clear();
+        filteredData.clear();
+        notifyDataSetChanged();
     }
 
     //endregion
-
 
     //region [ UI UTIL ]
 

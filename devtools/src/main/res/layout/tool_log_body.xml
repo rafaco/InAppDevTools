@@ -9,14 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/output_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:transcriptMode="alwaysScroll"
             android:stackFromBottom="true"
-            style="@style/content_margin"/>
+            style="@style/content_margin"
+            android:nestedScrollingEnabled="false"/>
 
         <TextView
             android:id="@+id/output_toast"

@@ -9,6 +9,9 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,9 +51,9 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     public static final String WARNING = "W";
     public static final String ERROR = "E";
 
-    protected LogLineAdaptor adapter;
+    protected LogLineAdapter adapter;
     protected LogReaderTask logReaderTask = null;
-    protected ListView outputView;
+    protected RecyclerView recyclerView;
 
     protected List<Pair<String, String>> presetFilters;
     protected Spinner presetSpinner;
@@ -95,7 +97,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         initDeleteButton();
         initSaveButton();
 
-        initLogLineAdaptor();
+        initLogLineAdapter();
         initOutputView();
         startLogReader();
 
@@ -108,9 +110,43 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         }, 1000);
     }
 
-    private void initLogLineAdaptor() {
-        ArrayList<LogLine> logLineArray = new ArrayList<>();
-        adapter = new LogLineAdaptor(this, logLineArray, getSelectedConfig());
+    private void initLogLineAdapter() {
+        adapter = new LogLineAdapter(this,
+                new ArrayList<LogLine>(), getSelectedConfig());
+
+        recyclerView = getView().findViewById(R.id.output_list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addOnLayoutChangeListener(getLayoutChangeListener());
+        recyclerView.setAdapter(adapter);
+    }
+
+    @NonNull
+    private View.OnLayoutChangeListener getLayoutChangeListener() {
+        return new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v,
+                                       int left, int top, int right, int bottom,
+                                       int oldLeft, int oldTop, int oldRight,
+                                       int oldBottom) {
+                if (bottom < oldBottom) {
+                    recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int pos = recyclerView.getAdapter().getItemCount() - 1;
+                            recyclerView.scrollToPosition(pos);
+                        }
+                    });
+                }
+            }
+        };
+    }
+
+    private void initOutputView() {
+        outputContainer = getView().findViewById(R.id.output_container);
+        outputToast = getView().findViewById(R.id.output_toast);
+        //recyclerView.setOnItemClickListener(this);
     }
 
     private void startLogReader() {
@@ -132,7 +168,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         if (logReaderTask!=null) {
             logReaderTask.stopTask();
         }
-        if (adapter !=null && adapter.getCount() > 0) {
+        if (adapter !=null && adapter.getItemCount() > 0) {
             adapter.clear();
         }
 
@@ -154,15 +190,6 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         if (process != null)
             process.destroy();
         getView().removeAllViews();
-    }
-
-    private void initOutputView() {
-        outputContainer = getView().findViewById(R.id.output_container);
-        outputToast = getView().findViewById(R.id.output_toast);
-        outputView = getView().findViewById(R.id.output_list);
-
-        outputView.setAdapter(adapter);
-        //outputView.setOnItemClickListener(this);
     }
 
     public void showFilterOutputToast(){
@@ -256,7 +283,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         levelSpinner.setOnItemSelectedListener(listener);
         levelSpinner.setOnTouchListener(listener);
 
-        levelSpinner.setSelection(0);
+        levelSpinner.setSelection(2);
     }
 
     /*

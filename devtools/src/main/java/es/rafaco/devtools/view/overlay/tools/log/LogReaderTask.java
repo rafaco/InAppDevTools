@@ -20,14 +20,14 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     private boolean isRunning = true;
     private Process logprocess = null;
     private BufferedReader reader = null;
-    private LogLineAdaptor adaptor = null;
+    private LogLineAdapter adaptor = null;
     private int readCounter = 0;
     private int nullCounter = 0;
     private int sameCounter = 0;
     private int processedCounter = 0;
     private Runnable onCancelledCallback;
 
-    public LogReaderTask(LogLineAdaptor adaptor, String commandScript) {
+    public LogReaderTask(LogLineAdapter adaptor, String commandScript) {
         this.adaptor = adaptor;
         this.commandScript = commandScript;
         this.id = DevTools.readerCounter++;
@@ -83,7 +83,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
         if (logprocess != null) logprocess.destroy();
         Log.d(DevTools.TAG, "LogReaderTask " + id + " onCancelled");
         Log.d(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
-                adaptor.getCount(), readCounter, processedCounter, nullCounter, sameCounter));
+                adaptor.getItemCount(), readCounter, processedCounter, nullCounter, sameCounter));
 
         if(onCancelledCallback !=null){
             onCancelledCallback.run();
@@ -102,7 +102,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
         Log.d(DevTools.TAG, "LogReaderTask " + id + " onPostExecute");
-        Log.d(DevTools.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getCount(), nullCounter, sameCounter));
+        Log.d(DevTools.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
     }
 
     @Override
@@ -120,8 +120,9 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
         }
 
         //Remove duplicated
-        if(adaptor.getCount()>0){
-            String previousLine = adaptor.getItem(adaptor.getCount()-1).getOriginalLine();
+        if(adaptor.getItemCount()>0){
+            String previousLine = adaptor.getItemByPosition(adaptor.getItemCount()-1)
+                    .getOriginalLine();
             if(newLine.equals(previousLine)){
                 //TODO: Add a multiplicity counter to LogLine and increment it
                 sameCounter ++;

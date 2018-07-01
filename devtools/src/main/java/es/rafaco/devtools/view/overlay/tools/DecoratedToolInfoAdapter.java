@@ -17,7 +17,8 @@ import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.ThreadUtils;
 
-public class DecoratedToolInfoAdapter extends RecyclerView.Adapter<DecoratedToolInfoAdapter.DecoratedViewHolder> {
+public class DecoratedToolInfoAdapter
+        extends RecyclerView.Adapter<DecoratedToolInfoAdapter.DecoratedViewHolder> {
 
     private final OverlayTool tool;
     private Context context;
