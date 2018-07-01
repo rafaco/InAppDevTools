@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.tools.screenshot;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,6 +108,7 @@ public class ScreenTool extends OverlayTool {
         adapter = new ScreenAdapter(getContext(), new ArrayList<Screen>());
 
         recyclerView = toolView.findViewById(R.id.recycler_view);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

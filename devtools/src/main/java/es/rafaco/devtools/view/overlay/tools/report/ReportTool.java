@@ -6,6 +6,7 @@ import android.os.Build;
 
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -107,6 +108,7 @@ public class ReportTool extends OverlayTool {
         adapter = new DecoratedToolInfoAdapter(this, array);
         adapter.enableSwitchMode();
         recyclerView = getView().findViewById(R.id.report_list);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

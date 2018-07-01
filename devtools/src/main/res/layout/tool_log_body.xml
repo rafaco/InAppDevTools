@@ -16,8 +16,7 @@
             android:layout_alignParentTop="true"
             android:transcriptMode="alwaysScroll"
             android:stackFromBottom="true"
-            style="@style/content_margin"
-            android:nestedScrollingEnabled="false"/>
+            style="@style/content_margin"/>
 
         <TextView
             android:id="@+id/output_toast"

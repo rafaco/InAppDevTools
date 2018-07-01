@@ -1,5 +1,6 @@
 package es.rafaco.devtools.view.overlay.tools.home;
 
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,6 +74,7 @@ public class HomeTool extends OverlayTool {
         adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
 
         recyclerView = view.findViewById(R.id.home_list);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

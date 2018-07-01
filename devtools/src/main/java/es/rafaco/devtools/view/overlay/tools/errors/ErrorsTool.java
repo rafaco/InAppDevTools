@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.tools.errors;
 
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -239,6 +240,7 @@ public class ErrorsTool extends OverlayTool {
         adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
 
         recyclerView = getView().findViewById(R.id.errors_list);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -19,8 +19,7 @@
             android:id="@+id/report_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/content_margin"
-            android:nestedScrollingEnabled="false"/>
+            style="@style/content_margin"/>
 
         <Button
             android:id="@+id/report_button"

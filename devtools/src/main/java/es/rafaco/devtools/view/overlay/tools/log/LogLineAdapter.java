@@ -170,7 +170,9 @@ public class LogLineAdapter
 
         if (logFilter.getConfig().validate(newLine)){
             filteredData.add(LogLine.newLogLine(value, false));
-            notifyDataSetChanged();
+            //notifyDataSetChanged();
+            notifyItemInserted(filteredData.size()-1);
+            manager.recyclerView.smoothScrollToPosition(getItemCount());
         }
     }
 
