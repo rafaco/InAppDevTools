@@ -3,6 +3,9 @@ package es.rafaco.devtools.view.overlay.layers;
 import android.animation.LayoutTransition;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.support.annotation.NonNull;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,8 @@ public class MainOverlayLayer extends OverlayLayer {
     private ImageView sizePositionButton;
 
     private ViewGroup toolWrapper;
+    private NestedScrollView bodyScroll;
+    private FrameLayout bodyContainer;
 
     public MainOverlayLayer(OverlayLayersManager manager) {
         super(manager);
@@ -62,6 +67,7 @@ public class MainOverlayLayer extends OverlayLayer {
     protected void beforeAttachView(View view) {
         toolWrapper = view.findViewById(R.id.tool_wrapper);
 
+        initScroll();
         initIcon(view);
         initCloseButton(view);
         initPositionButton(view);
@@ -103,6 +109,38 @@ public class MainOverlayLayer extends OverlayLayer {
         });
     }
 
+    //region [ SCROLL ]
+
+    private void initScroll() {
+        bodyScroll = getView().findViewById(R.id.scroll_view);
+        bodyContainer = getView().findViewById(R.id.tool_body_container);
+    }
+
+    public void scrollBottom(){
+        if (isScrollAtBottom()){
+            bodyScroll.post(new Runnable() {
+                @Override
+                public void run() {
+                    bodyScroll.scrollTo(0, bodyContainer.getHeight());
+                }
+            });
+        }
+    }
+
+    public boolean isScrollAtBottom() {
+        // Grab the last child placed in the ScrollView, we need it to determinate the bottom position.
+        View lastItem = bodyScroll.getChildAt(bodyScroll.getChildCount()-1);
+
+        // Calculate the scrolldiff
+        int diff = (lastItem.getBottom()-(bodyScroll.getHeight()+bodyScroll.getScrollY()));
+
+        // if diff is zero, then the bottom has been reached
+        return diff == 0;
+    }
+
+    //endregion
+
+
     //region [ TOOL SELECTOR ]
 
     public void initToolSelector(ArrayList<String> toolsList) {
@@ -129,6 +167,12 @@ public class MainOverlayLayer extends OverlayLayer {
         toolsSpinner.setOnItemSelectedListener(null);
         toolsSpinner.setSelection(getPosition(title));
         toolsSpinner.setOnItemSelectedListener(stored);
+
+        /*if (title.equals("Log")){
+            setAutoScrollOnLayoutChange(true);
+        }else{
+            setAutoScrollOnLayoutChange(false);
+        }*/
     }
 
     private int getPosition(String title) {

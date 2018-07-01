@@ -131,9 +131,11 @@ public class OverlayToolsManager {
         }
     }
 
-
+    public MainOverlayLayer getMainLayer() {
+        return mainLayer;
+    }
     public ViewGroup getToolWrapper() {
-        return mainLayer.getToolWrapper();
+        return getMainLayer().getToolWrapper();
     }
 
 

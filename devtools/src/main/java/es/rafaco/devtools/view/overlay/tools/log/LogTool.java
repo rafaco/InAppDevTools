@@ -120,35 +120,12 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addOnLayoutChangeListener(getLayoutChangeListener());
         recyclerView.setAdapter(adapter);
-    }
-
-    @NonNull
-    private View.OnLayoutChangeListener getLayoutChangeListener() {
-        return new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v,
-                                       int left, int top, int right, int bottom,
-                                       int oldLeft, int oldTop, int oldRight,
-                                       int oldBottom) {
-                if (bottom < oldBottom) {
-                    recyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            int pos = recyclerView.getAdapter().getItemCount() - 1;
-                            recyclerView.scrollToPosition(pos);
-                        }
-                    });
-                }
-            }
-        };
     }
 
     private void initOutputView() {
         outputContainer = getView().findViewById(R.id.output_container);
         outputToast = getView().findViewById(R.id.output_toast);
-        //recyclerView.setOnItemClickListener(this);
     }
 
     private void startLogReader() {
