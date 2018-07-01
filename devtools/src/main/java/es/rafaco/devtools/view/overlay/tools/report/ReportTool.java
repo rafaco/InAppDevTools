@@ -6,7 +6,12 @@ import android.os.Build;
 
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +22,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
@@ -25,13 +31,14 @@ import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenAdapter;
 
 public class ReportTool extends OverlayTool {
 
     private TextView out;
     private Button sendButton;
     private DecoratedToolInfoAdapter adapter;
-    private ListView reportList;
+    private RecyclerView recyclerView;
     private TextView header;
 
     public ReportTool(OverlayToolsManager manager) {
@@ -44,15 +51,15 @@ public class ReportTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_report; }
+    public int getBodyLayoutId() { return R.layout.tool_report; }
 
     @Override
-    protected void onInit() {
+    protected void onCreate() {
 
     }
 
     @Override
-    protected void onStart(View toolView) {
+    protected void onStart(ViewGroup view) {
         initView();
         initAdapter();
     }
@@ -99,8 +106,11 @@ public class ReportTool extends OverlayTool {
 
         adapter = new DecoratedToolInfoAdapter(this, array);
         adapter.enableSwitchMode();
-        reportList = getView().findViewById(R.id.report_list);
-        reportList.setAdapter(adapter);
+        recyclerView = getView().findViewById(R.id.report_list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 
 

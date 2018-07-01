@@ -2,8 +2,12 @@ package es.rafaco.devtools.view.overlay.tools.errors;
 
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -31,7 +35,7 @@ import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeString;
 public class ErrorsTool extends OverlayTool {
 
     private DecoratedToolInfoAdapter adapter;
-    private ListView errorList;
+    private RecyclerView recyclerView;
     private TextView welcome;
 
     private Button crashUiButton;
@@ -48,17 +52,17 @@ public class ErrorsTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_errors; }
+    public int getBodyLayoutId() { return R.layout.tool_errors; }
 
     @Override
-    protected void onInit() {
+    protected void onCreate() {
 
     }
 
 
     @Override
-    protected void onStart(View toolView) {
-        initView(toolView);
+    protected void onStart(ViewGroup view) {
+        initView(view);
         getErrors();
     }
 
@@ -231,8 +235,13 @@ public class ErrorsTool extends OverlayTool {
     }
 
     private void initAdapter(){
+
         adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
-        errorList = getView().findViewById(R.id.list);
-        errorList.setAdapter(adapter);
+
+        recyclerView = getView().findViewById(R.id.errors_list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 }

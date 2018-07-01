@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -41,15 +42,18 @@ public class InfoTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_info; }
+    public int getBodyLayoutId() { return R.layout.tool_info_body; }
 
     @Override
-    protected void onInit() {
+    public int getHeadLayoutId() { return R.layout.tool_info_head; }
+
+    @Override
+    protected void onCreate() {
         helper = new InfoHelper(getContext());
     }
 
     @Override
-    protected void onStart(View toolView) {
+    protected void onStart(ViewGroup view) {
         out = getView().findViewById(R.id.out);
         mainSpinner =  getView().findViewById(R.id.info_main_spinner);
         secondSpinner = getView().findViewById(R.id.info_second_spinner);

@@ -20,8 +20,6 @@ import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.view.overlay.layers.MainOverlayLayer;
-import es.rafaco.devtools.view.overlay.layers.OverlayLayer;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
 
@@ -134,7 +132,7 @@ public class OverlayUIService extends Service {
 
     private void init() {
         overlayLayersManager = new OverlayLayersManager(this);
-        overlayToolsManager = new OverlayToolsManager(this);
+        overlayToolsManager = new OverlayToolsManager(this, overlayLayersManager.getMainLayer());
 
         ArrayList<String> toolsList = overlayToolsManager.getToolList();
         overlayLayersManager.initToolList(toolsList);
@@ -209,6 +207,6 @@ public class OverlayUIService extends Service {
 
     //TODO: REFACTOR
     public ViewGroup getMainLayerContainer() {
-        return ((MainOverlayLayer) overlayLayersManager.getWidget(OverlayLayer.Type.MAIN)).getToolContainer();
+        return overlayLayersManager.getMainLayer().getToolWrapper();
     }
 }

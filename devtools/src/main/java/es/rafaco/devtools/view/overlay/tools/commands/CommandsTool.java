@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.tools.commands;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,15 +36,15 @@ public class CommandsTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_commands; }
+    public int getBodyLayoutId() { return R.layout.tool_commands; }
 
     @Override
-    protected void onInit() {
+    protected void onCreate() {
 
     }
 
     @Override
-    protected void onStart(View toolView) {
+    protected void onStart(ViewGroup view) {
         input = getView().findViewById(R.id.txt);
         btn = getView().findViewById(R.id.btn);
         out = getView().findViewById(R.id.out);
@@ -60,7 +61,7 @@ public class CommandsTool extends OverlayTool {
             }
         });
 
-        infoButton = toolView.findViewById(R.id.info_button);
+        infoButton = view.findViewById(R.id.info_button);
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +70,7 @@ public class CommandsTool extends OverlayTool {
             }
         });
 
-        devOptionsButton = toolView.findViewById(R.id.dev_options_button);
+        devOptionsButton = view.findViewById(R.id.dev_options_button);
         devOptionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +79,7 @@ public class CommandsTool extends OverlayTool {
             }
         });
 
-        forceCloseButton = toolView.findViewById(R.id.force_close_button);
+        forceCloseButton = view.findViewById(R.id.force_close_button);
         forceCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +87,7 @@ public class CommandsTool extends OverlayTool {
             }
         });
 
-        fullRestartButton = toolView.findViewById(R.id.full_restart_button);
+        fullRestartButton = view.findViewById(R.id.full_restart_button);
         fullRestartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

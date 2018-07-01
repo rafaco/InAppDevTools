@@ -37,12 +37,12 @@
 
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/errors_list"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            style="@style/content_margin"/>
+            android:layout_height="wrap_content"
+            style="@style/content_margin"
+            android:nestedScrollingEnabled="false"/>
 
         <LinearLayout
             android:id="@+id/anr_buttons"

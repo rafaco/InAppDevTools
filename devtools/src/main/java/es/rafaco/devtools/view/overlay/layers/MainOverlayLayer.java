@@ -26,9 +26,10 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 public class MainOverlayLayer extends OverlayLayer {
 
     private ImageView appIcon;
-    private ViewGroup toolContainer;
     private Spinner toolsSpinner;
     private ImageView sizePositionButton;
+
+    private ViewGroup toolWrapper;
 
     public MainOverlayLayer(OverlayLayersManager manager) {
         super(manager);
@@ -59,34 +60,11 @@ public class MainOverlayLayer extends OverlayLayer {
 
     @Override
     protected void beforeAttachView(View view) {
-        appIcon = view.findViewById(R.id.full_app_icon);
-        toolContainer = view.findViewById(R.id.content_container);
+        toolWrapper = view.findViewById(R.id.tool_wrapper);
 
-        //expandedView.setVisibility(View.GONE);
-        UiUtils.setAppIconAsBackground(appIcon);
-
-        appIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    manager.setMainVisibility(false);
-                }
-            });
-
-        view.findViewById(R.id.full_close_button)
-            .setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    manager.setMainVisibility(false);
-                }
-            });
-
-        sizePositionButton = view.findViewById(R.id.full_half_position_button);
-        sizePositionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    toogleSizePosition();
-                }
-            });
+        initIcon(view);
+        initCloseButton(view);
+        initPositionButton(view);
 
         ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
@@ -96,6 +74,36 @@ public class MainOverlayLayer extends OverlayLayer {
         //Hide full view on start
         view.setVisibility(View.GONE);
     }
+
+
+    public ViewGroup getToolWrapper() {
+        return toolWrapper;
+    }
+
+
+
+    private void initCloseButton(View view) {
+        view.findViewById(R.id.full_close_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        manager.setMainVisibility(false);
+                    }
+                });
+    }
+
+    private void initIcon(View view) {
+        appIcon = view.findViewById(R.id.full_app_icon);
+        UiUtils.setAppIconAsBackground(appIcon);
+        appIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manager.setMainVisibility(false);
+            }
+        });
+    }
+
+    //region [ TOOL SELECTOR ]
 
     public void initToolSelector(ArrayList<String> toolsList) {
         toolsSpinner = getView().findViewById(R.id.tools_spinner);
@@ -133,13 +141,22 @@ public class MainOverlayLayer extends OverlayLayer {
         return 0;
     }
 
-    public ViewGroup getToolContainer() {
-        return toolContainer;
-    }
+    //endregion
 
+    //region [ POSITION BUTTON ]
 
     public enum SizePosition { FULL, HALF_FIRST, HALF_SECOND}
     private SizePosition currentSizePosition = SizePosition.FULL;
+
+    private void initPositionButton(View view) {
+        sizePositionButton = view.findViewById(R.id.full_half_position_button);
+        sizePositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toogleSizePosition();
+            }
+        });
+    }
 
     public void toogleSizePosition() {
 
@@ -173,5 +190,7 @@ public class MainOverlayLayer extends OverlayLayer {
         //TODO
         // if half:  top is left and bottom is right
     }
+
+    //endregion
 
 }

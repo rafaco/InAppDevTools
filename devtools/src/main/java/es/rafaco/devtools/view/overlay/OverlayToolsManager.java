@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayer;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.tools.commands.CommandsTool;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
@@ -23,13 +24,15 @@ import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class OverlayToolsManager {
+    private final MainOverlayLayer mainLayer;
     protected Context context;
     private final LayoutInflater inflater;
     private List<OverlayTool> tools;
     private OverlayTool currentOverlayTool = null;
 
-    public OverlayToolsManager(Context context) {
+    public OverlayToolsManager(Context context, MainOverlayLayer mainLayer) {
         this.context = context;
+        this.mainLayer = mainLayer;
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.tools = new ArrayList<>();
         initTools();
@@ -50,7 +53,7 @@ public class OverlayToolsManager {
     public ArrayList<String> getToolList() {
         ArrayList<String> toolsList = new ArrayList<>();
         /*for (Pair<String,String> pair: presetFilters) {
-            toolsList.addWidget(pair.first);
+            toolsList.addLayer(pair.first);
         }*/
         toolsList.add("Home");
         toolsList.add("Info");
@@ -129,11 +132,12 @@ public class OverlayToolsManager {
     }
 
 
-    //TODO: REFACTOR
-    public ViewGroup getContainer() {
-        return ((OverlayUIService)context).getMainLayerContainer();
+    public ViewGroup getToolWrapper() {
+        return mainLayer.getToolWrapper();
     }
 
+
+    //TODO:
     public void updateHomeInfoContent(Class<?> toolClass, String content){
         ((HomeTool)getTool(HomeTool.class)).updateContent(toolClass, content);
     }

@@ -4,22 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/home_welcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="0dp">
+        style="@style/content_margin"/>
 
-        <TextView
-            android:id="@+id/home_welcome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/content_margin"/>
-        <ListView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/home_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/content_margin" />
+            style="@style/content_margin"
+            android:nestedScrollingEnabled="false"/>
 
-    </LinearLayout>
+    </FrameLayout>
+
 </LinearLayout>

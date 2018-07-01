@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="true"/>
 
         <Button
             android:id="@+id/shot_button"

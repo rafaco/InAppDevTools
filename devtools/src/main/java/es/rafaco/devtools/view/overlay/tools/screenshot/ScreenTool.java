@@ -5,6 +5,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class ScreenTool extends OverlayTool {
     private Button shotButton;
     private RecyclerView recyclerView;
     private ScreenAdapter adapter;
-    private ArrayList<Screen> screenList;
 
     public ScreenTool(OverlayToolsManager manager) {
         super(manager);
@@ -36,16 +36,16 @@ public class ScreenTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_screen; }
+    public int getBodyLayoutId() { return R.layout.tool_screen; }
 
     @Override
-    protected void onInit() {
+    protected void onCreate() {
 
     }
 
     @Override
-    protected void onStart(View toolView) {
-        initView(toolView);
+    protected void onStart(ViewGroup view) {
+        initView(view);
     }
 
 
@@ -104,11 +104,9 @@ public class ScreenTool extends OverlayTool {
 
 
     private void initAdapter(View toolView) {
-        recyclerView = (RecyclerView) toolView.findViewById(R.id.recycler_view);
+        adapter = new ScreenAdapter(getContext(), new ArrayList<Screen>());
 
-        screenList = new ArrayList<>();
-        adapter = new ScreenAdapter(getContext(), screenList);
-
+        recyclerView = toolView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

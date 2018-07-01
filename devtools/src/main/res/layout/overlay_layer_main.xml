@@ -59,17 +59,39 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/rally_blue"/>
+        <View style="@style/horizontal_separator"
+            android:id="@+id/first_separator"/>
 
         <LinearLayout
-            android:id="@+id/content_container"
+            android:id="@+id/tool_wrapper"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/tool_head_container"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+            </FrameLayout>
+
+            <View style="@style/horizontal_separator"
+                android:id="@+id/second_separator"/>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:id="@+id/tool_body_container"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical">
+                </FrameLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
         </LinearLayout>
 
     </LinearLayout>
+
 </FrameLayout>

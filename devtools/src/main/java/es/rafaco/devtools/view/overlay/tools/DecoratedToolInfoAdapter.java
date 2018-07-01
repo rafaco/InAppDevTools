@@ -2,77 +2,66 @@ package es.rafaco.devtools.view.overlay.tools;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.ThreadUtils;
 
-public class DecoratedToolInfoAdapter extends BaseAdapter {
+public class DecoratedToolInfoAdapter extends RecyclerView.Adapter<DecoratedToolInfoAdapter.DecoratedViewHolder> {
 
     private final OverlayTool tool;
     private Context context;
     private List<DecoratedToolInfo> originalData;
-    private LayoutInflater mInflater;
     private boolean switchMode = false;
 
-    public DecoratedToolInfoAdapter(OverlayTool overlayTool, ArrayList<DecoratedToolInfo> data) {
+    public DecoratedToolInfoAdapter(OverlayTool overlayTool, List<DecoratedToolInfo> data) {
         this.tool = overlayTool;
         this.context = overlayTool.getContext();
         this.originalData = data;
-        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return originalData.size();
     }
 
+    @NonNull
     @Override
-    public Object getItem(int position) {
-        return originalData.get(position);
+    public DecoratedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.decorated_tool_info_item, parent, false);
+
+        return new DecoratedViewHolder(itemView);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    static class ViewHolder {
+    static class DecoratedViewHolder extends RecyclerView.ViewHolder {
         View decorator;
-        TextView title;
-        TextView message;
+        TextView title, message;
         ImageView icon;
         Switch switchButton;
+
+        public DecoratedViewHolder(View view) {
+            super(view);
+            decorator = view.findViewById(R.id.decorator);
+            title = view.findViewById(R.id.title);
+            message = view.findViewById(R.id.message);
+            icon = view.findViewById(R.id.icon);
+            switchButton = view.findViewById(R.id.switch_button);
+        }
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-       ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.decorated_tool_info_item, null);
-            holder = new ViewHolder();
-            holder.decorator = convertView.findViewById(R.id.decorator);
-            holder.title = convertView.findViewById(R.id.title);
-            holder.message = convertView.findViewById(R.id.message);
-            holder.icon = convertView.findViewById(R.id.icon);
-            holder.switchButton = convertView.findViewById(R.id.switch_button);
-            convertView.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+    public void onBindViewHolder(@NonNull DecoratedViewHolder holder, int position) {
 
         final DecoratedToolInfo data = originalData.get(position);
 
@@ -83,7 +72,7 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
         holder.decorator.setBackgroundColor(data.color);
 
         if(!switchMode){
-            convertView.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startTool(data.title);
@@ -93,17 +82,17 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
             holder.icon.setVisibility(View.GONE);
             holder.switchButton.setVisibility(View.VISIBLE);
         }
-
-        return convertView;
-    }
-
-    public void enableSwitchMode(){
-        switchMode = true;
     }
 
     public void startTool(String title){
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.TOOL, title);
         context.startService(intent);
+    }
+
+
+
+    public void enableSwitchMode(){
+        switchMode = true;
     }
 
     public void add(DecoratedToolInfo data){
@@ -115,9 +104,9 @@ public class DecoratedToolInfoAdapter extends BaseAdapter {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //originalData.clear();
+                originalData.clear();
                 //notifyDataSetInvalidated();
-                originalData = data;
+                originalData.addAll(data);
                 notifyDataSetChanged();
             }
         });

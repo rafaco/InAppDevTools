@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -75,14 +76,17 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_log; }
+    public int getBodyLayoutId() { return R.layout.tool_log_body; }
 
     @Override
-    protected void onInit() {
+    public int getHeadLayoutId() { return R.layout.tool_log_head; }
+
+    @Override
+    protected void onCreate() {
     }
 
     @Override
-    protected void onStart(View toolView) {
+    protected void onStart(ViewGroup view) {
 
         initPresetFilter();
         initLevelFilter();
@@ -149,7 +153,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         }
         if (process != null)
             process.destroy();
-        getContainer().removeAllViews();
+        getView().removeAllViews();
     }
 
     private void initOutputView() {
@@ -252,7 +256,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         levelSpinner.setOnItemSelectedListener(listener);
         levelSpinner.setOnTouchListener(listener);
 
-        levelSpinner.setSelection(2);
+        levelSpinner.setSelection(0);
     }
 
     /*
@@ -262,11 +266,11 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
 
         popup = new PopupMenu(getView().getContext(), levelButton);
         Menu menu = popup.getMenu();
-        menu.addWidget(VERBOSE).setChecked(true);
-        menu.addWidget(DEBUG);
-        menu.addWidget(INFO);
-        menu.addWidget(WARNING);
-        menu.addWidget(ERROR);
+        menu.addLayer(VERBOSE).setChecked(true);
+        menu.addLayer(DEBUG);
+        menu.addLayer(INFO);
+        menu.addLayer(WARNING);
+        menu.addLayer(ERROR);
 
         levelButton.setOnClickListener(new View.OnClickListener() {
             @Override

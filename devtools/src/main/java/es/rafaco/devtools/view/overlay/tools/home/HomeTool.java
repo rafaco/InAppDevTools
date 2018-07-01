@@ -1,7 +1,10 @@
 package es.rafaco.devtools.view.overlay.tools.home;
 
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 public class HomeTool extends OverlayTool {
 
     private DecoratedToolInfoAdapter adapter;
-    private ListView homeList;
+    private RecyclerView recyclerView;
     private TextView welcome;
     private ArrayList<DecoratedToolInfo> dataList;
 
@@ -34,18 +37,17 @@ public class HomeTool extends OverlayTool {
     }
 
     @Override
-    public int getLayoutId() { return R.layout.tool_home; }
+    public int getBodyLayoutId() { return R.layout.tool_home_body; }
 
     @Override
-    protected void onInit() {
+    protected void onCreate() {
 
     }
 
     @Override
-    protected void onStart(View toolView) {
-        initView(toolView);
-        initAdapter();
-
+    protected void onStart(ViewGroup view) {
+        initView(view);
+        initAdapter(view);
         updateList();
     }
 
@@ -67,23 +69,28 @@ public class HomeTool extends OverlayTool {
         return "Welcome to " + helper.getAppName() + "'s DevTools";
     }
 
-    private void initAdapter() {
-        dataList = new ArrayList<>();
-        adapter = new DecoratedToolInfoAdapter(this, dataList);
-        homeList = getView().findViewById(R.id.home_list);
-        homeList.setAdapter(adapter);
+    private void initAdapter(View view) {
+        adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
+
+        recyclerView = view.findViewById(R.id.home_list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 
     private void updateList() {
         //TODO: getManager().requestHomeInfos()
-        dataList.add(getManager().getTool(InfoTool.class).getHomeInfo());
-        dataList.add(getManager().getTool(ErrorsTool.class).getHomeInfo());
-        dataList.add(getManager().getTool(ScreenTool.class).getHomeInfo());
-        dataList.add(getManager().getTool(ReportTool.class).getHomeInfo());
+        adapter.add(getManager().getTool(InfoTool.class).getHomeInfo());
+        adapter.add(getManager().getTool(ErrorsTool.class).getHomeInfo());
+        adapter.add(getManager().getTool(ScreenTool.class).getHomeInfo());
+        adapter.add(getManager().getTool(ReportTool.class).getHomeInfo());
 
         adapter.notifyDataSetChanged();
+        recyclerView.requestLayout();
     }
 
+    //TODO: datalist not initialized any more!
     public void updateContent(Class<?> toolClass, String content){
         for (DecoratedToolInfo info: dataList){
             if (info.getClass().equals(toolClass)){

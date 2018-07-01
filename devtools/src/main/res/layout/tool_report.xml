@@ -14,12 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/content_margin"/>
-
-        <ListView
+        
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/report_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/content_margin" />
+            style="@style/content_margin"
+            android:nestedScrollingEnabled="false"/>
 
         <Button
             android:id="@+id/report_button"

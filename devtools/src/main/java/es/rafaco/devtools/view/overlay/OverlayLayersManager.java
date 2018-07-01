@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -45,21 +46,25 @@ public class OverlayLayersManager {
         this.overlayLayers = new ArrayList<>();
 
         initDisplaySize();
-        initWidgets();
+        initLayers();
+    }
+
+    public MainOverlayLayer getMainLayer(){
+        return (MainOverlayLayer) getWidget(OverlayLayer.Type.MAIN);
     }
 
     //region [ WIDGET INIT ]
 
-    private void initWidgets() {
+    private void initLayers() {
         if (DevTools.getConfig().overlayUiIconEnabled){
-            addWidget(new RemoveOverlayLayer(this));
-            addWidget(new IconOverlayLayer(this));
+            addLayer(new RemoveOverlayLayer(this));
+            addLayer(new IconOverlayLayer(this));
             implementTouchListenerToIconWidgetView();
         }
-        addWidget(new MainOverlayLayer(this));
+        addLayer(new MainOverlayLayer(this));
     }
 
-    public void addWidget(OverlayLayer overlayLayer){
+    public void addLayer(OverlayLayer overlayLayer){
         overlayLayers.add(overlayLayer);
         overlayLayer.addView();
     }
