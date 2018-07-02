@@ -6,8 +6,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
+import android.text.format.DateFormat;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -55,20 +59,30 @@ public class InfoHelper {
 
     public InfoGroup getAppInfo() {
         PackageInfo pInfo = getPackageInfo();
-        InfoGroup group = new InfoGroup.Builder("App")
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        InfoGroup group = new InfoGroup.Builder("Host app")
                 .add("App name", getAppName())
                 .add("Package name", getPackageName())
                 .add("App Version", pInfo.versionName + " (" + pInfo.versionCode + ")")
-                .add("DevTools Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
-                //.add("Build type", BuildConfig.BUILD_TYPE)
-                //.add("Flavor", BuildConfig.FLAVOR)
-                .add("firstInstallTime", new Date(pInfo.firstInstallTime).toString())
-                .add("lastUpdateTime", new Date(pInfo.lastUpdateTime).toString())
+                .add("Build type", BuildConfig.BUILD_TYPE)
+                .add("Flavor", BuildConfig.FLAVOR)
+                .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
+                .add("firstInstallTime", formatter.format(new Date(pInfo.firstInstallTime)))
                 .add("Min SDK version", String.valueOf(pInfo.applicationInfo.minSdkVersion))
                 .add("Target SDK version", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
                 .build();
         return group;
     }
+
+    public InfoGroup getDevToolsInfo() {
+        InfoGroup group = new InfoGroup.Builder("DevTools library")
+                .add("DevTools Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+                .add("Status", "enabled")
+                .add("Profile", "developer")
+                .build();
+        return group;
+    }
+
 
     public InfoGroup getRunningInfo() {
         InfoGroup group = new InfoGroup.Builder("Currently running")

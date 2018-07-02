@@ -135,6 +135,8 @@ public class InfoTool extends OverlayTool {
         String result = "";
         result += helper.getAppInfo().toString();
         result += "\n";
+        result += helper.getDevToolsInfo().toString();
+        result += "\n";
         result += helper.getDeviceInfo().toString();
         result += "\n";
         result += helper.getOsInfo().toString();

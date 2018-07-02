@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.rafaco.devtools" >
+    package="es.rafaco.devtools">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -8,15 +9,16 @@
     <application>
         <activity
             android:name=".logic.PermissionActivity"
-            android:theme="@style/LibTheme.Dialog"/>
-
+            android:theme="@style/LibTheme.Dialog" />
         <activity
-            android:label="@string/app_name"
             android:name=".logic.crash.CrashActivity"
-            android:theme="@style/LibTheme.Dialog"/>
+            android:label="@string/lib_name"
+            android:theme="@style/LibTheme.Dialog" />
 
-        <service
-            android:name=".view.OverlayUIService" />
+        <activity android:name=".view.ShowErrorActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
+        <service android:name=".view.OverlayUIService" />
 
         <service
             android:name=".view.NotificationUIService"
@@ -30,8 +32,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
     </application>
 
 </manifest>

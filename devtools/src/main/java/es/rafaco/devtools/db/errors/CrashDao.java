@@ -16,6 +16,9 @@ public interface CrashDao {
     @Query("SELECT * FROM crash where uid LIKE :uid")
     Crash findById(int uid);
 
+    @Query("SELECT * FROM crash ORDER BY uid DESC LIMIT 1")
+    Crash getLast();
+
     @Query("SELECT COUNT(*) from crash")
     int count();
 

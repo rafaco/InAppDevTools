@@ -92,8 +92,9 @@ public class NotificationUIService extends Service {
                 case ACTION_TOOLS:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
                     Toast.makeText(getApplicationContext(), "You click TOOLS button.", Toast.LENGTH_LONG).show();
-                    Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
-                    getApplicationContext().startActivity(app);
+                    //TODO: research a better way to close the headup notification
+                    //Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
+                    //getApplicationContext().startActivity(app);
                     DevTools.openTools(false);
                     break;
             }
@@ -126,7 +127,7 @@ public class NotificationUIService extends Service {
             //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             //notificationManager.notify((int)new Date().getTime(), crashNotification);
 
-            PendingCrashUtil.clearPending();
+            //PendingCrashUtil.clearPending();
         }
     }
 
