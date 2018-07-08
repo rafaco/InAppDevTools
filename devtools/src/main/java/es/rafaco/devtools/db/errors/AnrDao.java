@@ -16,6 +16,9 @@ public interface AnrDao {
     @Query("SELECT * FROM anr where uid LIKE :uid")
     Anr findById(int uid);
 
+    @Query("SELECT * FROM anr ORDER BY uid DESC LIMIT 1")
+    Anr getLast();
+
     @Query("SELECT COUNT(*) from anr")
     int count();
 

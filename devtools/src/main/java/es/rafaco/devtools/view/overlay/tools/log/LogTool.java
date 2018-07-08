@@ -354,7 +354,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = saveLogcatToFile();
+                String path = (String) getReport();
                 DevTools.showMessage("Log stored to " + path);
             }
         });
@@ -419,64 +419,12 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     @Override
     public Object getReport(){
 
-        return saveLogcatToFile();
+        return new LogHelper(getContext()).saveLogcatToFile();
 
         /*ShellExecuter exe = new ShellExecuter();
         String command = "logcat -d *:V";
         String output = exe.Executer(command);
         return  output;*/
-    }
-
-
-    public String saveLogcatToFile(){
-        if(isExternalStorageWritable()){
-
-            File appDirectory = new File(Environment.getExternalStorageDirectory() + "/DevTools");
-            File logDirectory = new File(appDirectory + "/log");
-            File logFile = new File(logDirectory, "logcat_" + System.currentTimeMillis() + ".txt");
-
-            // create app folder
-            if (!appDirectory.exists()) {
-                appDirectory.mkdir();
-            }
-
-            // create log folder
-            if (!logDirectory.exists()) {
-                logDirectory.mkdir();
-            }
-
-            // clear the previous logcat and then write the new one to the file
-            try {
-                process = Runtime.getRuntime().exec("logcat -d -f " + logFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return logFile.getPath();
-
-        } else if(isExternalStorageReadable() ){
-            // only readable
-        } else{
-            // not accessible
-        }
-
-        return null;
-    }
-
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
-            return true;
-        }
-        return false;
     }
 
     public void onClearLog(){

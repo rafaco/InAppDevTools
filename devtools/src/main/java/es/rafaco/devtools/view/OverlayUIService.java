@@ -147,7 +147,9 @@ public class OverlayUIService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        overlayLayersManager.onConfigurationChanged(newConfig);
+        if (overlayLayersManager != null){
+            overlayLayersManager.onConfigurationChanged(newConfig);
+        }
     }
 
 

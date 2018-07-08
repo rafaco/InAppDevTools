@@ -245,7 +245,7 @@ public class NotificationUIService extends Service {
                 break;
             case ACTION_TOOLS:
             default:
-                title = "TOOLS";
+                title = "<TOOLS>";
                 icon = R.drawable.ic_more_vert_rally_24dp;
                 break;
         }

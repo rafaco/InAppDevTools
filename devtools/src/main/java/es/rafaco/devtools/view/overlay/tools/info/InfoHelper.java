@@ -8,15 +8,21 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import es.rafaco.devtools.BuildConfig;
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 
 
@@ -26,6 +32,28 @@ public class InfoHelper {
 
     public InfoHelper(Context context) {
         this.context = context;
+    }
+
+    public String buildReport() {
+        String result = "";
+        result += getAppInfo().toString();
+        result += "\n";
+        result += getDevToolsInfo().toString();
+        result += "\n";
+        result += getDeviceInfo().toString();
+        result += "\n";
+        result += getOsInfo().toString();
+        result += "\n";
+        result += getRunningInfo().toString();
+        result += "\n";
+        result += "ActivityLog:" + "\n";
+        result += DevTools.getActivityLogManager().getLog();
+        result += "\n";
+        result += getMemInfo();
+        result += "\n";
+        result += getExtraPackageInfo().toString();
+        result += "\n";
+        return result;
     }
 
     public InfoCollection getFullInfoCollection(){
@@ -202,5 +230,33 @@ public class InfoHelper {
             output += String.format(formatWithoutLabel, text) + "\n";
         }
         return output;
+    }
+
+    public static String getMemInfo() {
+        StringBuilder meminfo = new StringBuilder();
+        try {
+            ArrayList<String> commandLine = new ArrayList<String>();
+            commandLine.add("cat");
+            //commandLine.add("/proc/meminfo");
+            //commandLine.add("/proc/stat");
+            commandLine.add("/proc/version"); //Linux version multiline very complete
+            //commandLine.add("/proc/pid/stat");
+            //commandLine.add("adb top -n 1");
+            //In adb shell: top -n 1
+
+            Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[commandLine.size()]));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                meminfo.append(line);
+                meminfo.append("\n");
+            }
+
+        } catch (IOException e) {
+            Log.e(DevTools.TAG, "Could not read /proc/meminfo", e);
+        }
+
+        return meminfo.toString();
     }
 }

@@ -105,7 +105,7 @@ public class ReportTool extends OverlayTool {
         //array.add(getManager().getTool(CommandsTool.class).getReportInfo());
         array.add(getManager().getTool(LogTool.class).getReportInfo());
 
-        adapter = new DecoratedToolInfoAdapter(this, array);
+        adapter = new DecoratedToolInfoAdapter(getContext(), array);
         adapter.enableSwitchMode();
         recyclerView = getView().findViewById(R.id.report_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -119,76 +119,11 @@ public class ReportTool extends OverlayTool {
     //region [ TOOL SPECIFIC ]
 
     private void onSendEmailPressed() {
-
-        if (!PermissionActivity.isNeededWithAutoStart(getContext(),
-                PermissionActivity.IntentAction.STORAGE))
-            return;
-
-        sendEmailIntent();
+       new ReportEmailHelper(getContext())
+               .sendEmailIntent();
     }
 
-    private void sendEmailIntent() {
-        String emailTo = getEmailTo();
-        String subject = getEmailSubject();
 
-        String emailbody = "[Replace this line by your comments]" + "\n\n\n";
-        List<String> filePaths = new ArrayList<>();
-
-        if(true){
-            String info = (String) getManager().getTool(InfoTool.class).getReport();
-            emailbody += info;
-        }
-
-        if(true){
-            String logcatPath = (String)getManager().getTool(LogTool.class).getReport();
-            filePaths.add(logcatPath);
-        }
-
-        sendEmailIntent(emailTo, "",
-                subject,
-                emailbody,
-                filePaths);
-    }
-
-    @NonNull
-    private String getEmailTo() {
-        return "rafaco@gmail.com";
-    }
-
-    private String getEmailSubject(){
-        InfoHelper helper = new InfoHelper(getContext());
-        return helper.getAppName() + " report from " + Build.BRAND + " " + Build.MODEL;
-    }
-
-    private void sendEmailIntent(String emailTo, String emailCC,
-                                String subject, String emailText, List<String> filePaths) {
-
-        final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-        emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailTo});
-        emailIntent.putExtra(Intent.EXTRA_CC, new String[]{emailCC});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-
-        if (filePaths != null && filePaths.size()>0){
-            ArrayList<Uri> uris = new ArrayList<>();
-            for (String file : filePaths) {
-                File fileIn = new File(file);
-                if (!fileIn.exists() || !fileIn.canRead()) {
-                    DevTools.showMessage("Attachment Error");
-                    return;
-                }
-                Uri u = Uri.fromFile(fileIn);
-                uris.add(u);
-            }
-            emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-        }
-
-        Intent chooserIntent = Intent.createChooser(emailIntent, "Send mail...");
-        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getView().getContext().startActivity(chooserIntent);
-    }
 
     //endregion
 }

@@ -2,8 +2,12 @@ package es.rafaco.devtools.logic.activityLog;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -44,13 +48,42 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(final Activity activity) {
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " resumed\n");
+
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        if (decorView == null){
+            Log.d(DevTools.TAG, "Resumed activity without decorView");
+            return;
+        }
+        decorView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(DevTools.TAG, "Click X:" + event.getX() + " Y:" + event.getY() + " at " + activity.getClass().getSimpleName() +
+                    " - " + v.getClass().getSimpleName() + ": " + getResourceName(v, activity));
+                return false;
+            }
+        });
+    }
+
+    private String getResourceName(View v, Activity activity) {
+        try{
+            return activity.getResources().getResourceName(v.getId());
+        }catch (Resources.NotFoundException e){
+            return "[ not set ]";
+        }
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
+
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        if (decorView == null){
+            Log.d(DevTools.TAG, "Paused activity without decorView");
+            return;
+        }
+        decorView.setOnTouchListener(null);
     }
 
     @Override

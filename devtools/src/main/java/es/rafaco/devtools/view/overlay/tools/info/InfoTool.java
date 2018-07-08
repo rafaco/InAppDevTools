@@ -91,7 +91,7 @@ public class InfoTool extends OverlayTool {
 
     @Override
     public Object getReport(){
-        return buildReport();
+        return helper.buildReport();
     }
 
 
@@ -126,31 +126,9 @@ public class InfoTool extends OverlayTool {
     }
 
     private void loadBuildConfig() {
-        String report = buildReport();
+        String report = helper.buildReport();
         out.setText(report);
         secondSpinner.setVisibility(View.GONE);
-    }
-
-    private String buildReport() {
-        String result = "";
-        result += helper.getAppInfo().toString();
-        result += "\n";
-        result += helper.getDevToolsInfo().toString();
-        result += "\n";
-        result += helper.getDeviceInfo().toString();
-        result += "\n";
-        result += helper.getOsInfo().toString();
-        result += "\n";
-        result += helper.getRunningInfo().toString();
-        result += "\n";
-        result += "ActivityLog:" + "\n";
-        result += DevTools.getActivityLogManager().getLog();
-        result += "\n";
-        result += showMemInfo();
-        result += "\n";
-        result += helper.getExtraPackageInfo().toString();
-        result += "\n";
-        return result;
     }
 
     public String getHomeInfoMessage(){
@@ -201,33 +179,5 @@ public class InfoTool extends OverlayTool {
             }
         });
         secondSpinner.setVisibility(View.VISIBLE);
-    }
-
-    public static String showMemInfo() {
-        StringBuilder meminfo = new StringBuilder();
-        try {
-            ArrayList<String> commandLine = new ArrayList<String>();
-            commandLine.add("cat");
-            //commandLine.add("/proc/meminfo");
-            //commandLine.add("/proc/stat");
-            commandLine.add("/proc/version"); //Linux version multiline very complete
-            //commandLine.add("/proc/pid/stat");
-            //commandLine.add("adb top -n 1");
-            //In adb shell: top -n 1
-
-            Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[commandLine.size()]));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                meminfo.append(line);
-                meminfo.append("\n");
-            }
-
-        } catch (IOException e) {
-            Log.e(DevTools.TAG, "Could not read /proc/meminfo", e);
-        }
-
-        return meminfo.toString();
     }
 }

@@ -404,27 +404,33 @@ public class OverlayLayersManager {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).onConfigurationChange(newConfig);
+        initDisplaySize();
+
+        if (getMainLayer() != null){
+            getMainLayer().onConfigurationChange(newConfig);
+        }
 
         if (DevTools.getConfig().overlayUiIconEnabled){
             View iconWidgetView = getView(OverlayLayer.Type.ICON);
-            initDisplaySize();
-            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
+            if (iconWidgetView != null) {
 
-            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (layoutParams.y + (iconWidgetView.getHeight() + getStatusBarHeight()) > szWindow.y) {
-                    layoutParams.y = szWindow.y - (iconWidgetView.getHeight() + getStatusBarHeight());
-                    windowManager.updateViewLayout(iconWidgetView, layoutParams);
-                }
+                WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
-                if (layoutParams.x != 0 && layoutParams.x < szWindow.x) {
-                    resetPosition(szWindow.x);
-                }
+                if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (layoutParams.y + (iconWidgetView.getHeight() + getStatusBarHeight()) > szWindow.y) {
+                        layoutParams.y = szWindow.y - (iconWidgetView.getHeight() + getStatusBarHeight());
+                        windowManager.updateViewLayout(iconWidgetView, layoutParams);
+                    }
 
-            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    if (layoutParams.x != 0 && layoutParams.x < szWindow.x) {
+                        resetPosition(szWindow.x);
+                    }
 
-                if (layoutParams.x > szWindow.x) {
-                    resetPosition(szWindow.x);
+                } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                    if (layoutParams.x > szWindow.x) {
+                        resetPosition(szWindow.x);
+                    }
                 }
             }
         }

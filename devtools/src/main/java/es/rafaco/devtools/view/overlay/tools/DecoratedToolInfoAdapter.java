@@ -20,14 +20,12 @@ import es.rafaco.devtools.utils.ThreadUtils;
 public class DecoratedToolInfoAdapter
         extends RecyclerView.Adapter<DecoratedToolInfoAdapter.DecoratedViewHolder> {
 
-    private final OverlayTool tool;
     private Context context;
     private List<DecoratedToolInfo> originalData;
     private boolean switchMode = false;
 
-    public DecoratedToolInfoAdapter(OverlayTool overlayTool, List<DecoratedToolInfo> data) {
-        this.tool = overlayTool;
-        this.context = overlayTool.getContext();
+    public DecoratedToolInfoAdapter(Context context, List<DecoratedToolInfo> data) {
+        this.context = context;
         this.originalData = data;
     }
 

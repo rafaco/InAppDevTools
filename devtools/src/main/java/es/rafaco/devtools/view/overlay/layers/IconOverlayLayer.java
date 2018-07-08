@@ -1,5 +1,6 @@
 package es.rafaco.devtools.view.overlay.layers;
 
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
 public class IconOverlayLayer extends OverlayLayer {
+
     private View collapsedView;
 
     public IconOverlayLayer(OverlayLayersManager manager) {
@@ -50,5 +52,12 @@ public class IconOverlayLayer extends OverlayLayer {
 
         collapsedView.setVisibility(View.VISIBLE);
         UiUtils.setAppIconAsBackground(collapsedIcon);
+    }
+
+
+    @Override
+    public void onConfigurationChange(Configuration newConfig) {
+        //TODO
+        // if half:  top is left and bottom is right
     }
 }

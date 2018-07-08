@@ -15,7 +15,10 @@
             android:label="@string/lib_name"
             android:theme="@style/LibTheme.Dialog" />
 
-        <activity android:name=".view.ShowErrorActivity"
+        <activity android:name=".view.dialog.CrashDialogActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
+        <activity android:name=".view.dialog.ReportDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
         <service android:name=".view.OverlayUIService" />

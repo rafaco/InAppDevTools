@@ -12,7 +12,8 @@ import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.view.ShowErrorActivity;
+import es.rafaco.devtools.view.dialog.CrashDialogActivity;
+import es.rafaco.devtools.view.dialog.ReportDialogActivity;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 import es.rafaco.devtools.utils.AppUtils;
@@ -63,7 +64,7 @@ public class DevTools {
         Log.i(DevTools.TAG, "DevTools initialized");
 
         if (PendingCrashUtil.isPending()){
-            Intent intent = new Intent(getAppContext(), ShowErrorActivity.class);
+            Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
             getAppContext().startActivity(intent);
             PendingCrashUtil.clearPending();
         }
@@ -169,7 +170,8 @@ public class DevTools {
     }
 
     public static void sendReport() {
-
+        Intent intent = new Intent(getAppContext(), ReportDialogActivity.class);
+        getAppContext().startActivity(intent);
     }
 
     public static void cleanSession() {

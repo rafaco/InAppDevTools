@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".view.dialog.CrashDialogActivity">
+
+    <LinearLayout
+        android:id="@+id/crash_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/crash_continue_buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CONTINUE"/>
+
+        <Button
+            android:id="@+id/crash_report_buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="REPORT"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/crash_vertical_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/crash_buttons">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/crash_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/subtitle"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/rally_orange"
+                android:typeface="sans"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="23dp"/>
+
+            <HorizontalScrollView
+                android:id="@+id/crash_horizontal_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_below="@id/crash_title">
+
+                <TextView
+                    android:id="@+id/crash_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/rally_orange"
+                    android:typeface="sans"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="15dp"/>
+            </HorizontalScrollView>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

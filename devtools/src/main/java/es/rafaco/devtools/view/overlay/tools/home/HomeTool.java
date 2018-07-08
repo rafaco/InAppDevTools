@@ -71,7 +71,7 @@ public class HomeTool extends OverlayTool {
     }
 
     private void initAdapter(View view) {
-        adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
+        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>());
 
         recyclerView = view.findViewById(R.id.home_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);

@@ -19,6 +19,9 @@ public interface ScreenDao {
     @Query("SELECT * FROM screen where uid LIKE :uid")
     Screen findById(int uid);
 
+    @Query("SELECT * FROM screen ORDER BY uid DESC LIMIT 1")
+    Screen getLast();
+
     @Query("SELECT COUNT(*) from screen")
     int count();
 

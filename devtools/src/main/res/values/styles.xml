@@ -18,6 +18,7 @@
     </style>
 
     <style name="LibTheme.Dialog">
+        <item name="android:background">@color/rally_bg_solid</item>
     </style>
 
     <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -40,6 +41,14 @@
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
+
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">@color/rally_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:background">@color/rally_bg_solid</item>
+    </style>
 
     <style name="content_margin">
         <item name="android:layout_marginBottom">5dp</item>

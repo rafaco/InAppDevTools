@@ -174,7 +174,7 @@ public class ErrorsTool extends OverlayTool {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException("Ups, you throw an exception on the ui thread :)");
+                throw new RuntimeException("Simulated exception on the UI thread");
             }
         });
     }
@@ -184,7 +184,7 @@ public class ErrorsTool extends OverlayTool {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException("Ups, you throw an exception on a background thread :)");
+                throw new RuntimeException("Simulated exception on Background thread");
             }
         });
     }
@@ -237,7 +237,7 @@ public class ErrorsTool extends OverlayTool {
 
     private void initAdapter(){
 
-        adapter = new DecoratedToolInfoAdapter(this, new ArrayList<DecoratedToolInfo>());
+        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>());
 
         recyclerView = getView().findViewById(R.id.errors_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
