@@ -16,6 +16,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 
 public class ReportEmailHelper {
 
@@ -41,8 +42,6 @@ public class ReportEmailHelper {
         String bigJump = "\n\n\n";
         String emailbody;
 
-        List<String> filePaths = new ArrayList<>();
-
         if(!isHtml){
             emailbody = new  StringBuilder()
                     .append(getEmailSubject())
@@ -58,17 +57,23 @@ public class ReportEmailHelper {
                     .toString();
         }
 
-        if(true){
-            String logcatPath = new LogHelper(context).buildReport();
-            filePaths.add(logcatPath);
-            String infoPath = new InfoHelper(context).buildReport();
-            filePaths.add(infoPath);
-        }
+        List<String> filePaths = getAttachmentPaths();
 
         sendEmailIntent(emailTo, "",
                 subject,
                 emailbody,
                 filePaths);
+    }
+
+    @NonNull
+    private List<String> getAttachmentPaths() {
+        List<String> filePaths = new ArrayList<>();
+        if(true){
+            filePaths.add(new LogHelper(context).buildReport());
+            filePaths.add(new InfoHelper(context).buildReport());
+            filePaths.add(new ScreenHelper(context).buildReport());
+        }
+        return filePaths;
     }
 
     @NonNull
@@ -101,6 +106,8 @@ public class ReportEmailHelper {
             ArrayList<Uri> uris = new ArrayList<>();
             for (String filePath : filePaths) {
                 File file = new File(filePath);
+
+                //TODO:??
                 if (!file.exists() || !file.canRead()) {
                     DevTools.showMessage("Attachment Error");
                     //return;

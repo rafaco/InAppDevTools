@@ -20,6 +20,7 @@ import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.OverlayToolsManager;
+import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 
 public class ScreenTool extends OverlayTool {
 
@@ -79,6 +80,16 @@ public class ScreenTool extends OverlayTool {
         });
 
         return  info;
+    }
+
+    @Override
+    public DecoratedToolInfo getReportInfo(){
+        DecoratedToolInfo info = new DecoratedToolInfo(InfoTool.class,
+                getFullTitle(),
+                "Included last one of " + DevTools.getDatabase().screenDao().count(),
+                3,
+                ContextCompat.getColor(getContext(), R.color.rally_purple));
+        return info;
     }
 
     private void initView(View toolView) {

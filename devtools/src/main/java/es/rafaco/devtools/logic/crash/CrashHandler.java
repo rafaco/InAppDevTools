@@ -1,6 +1,5 @@
 package es.rafaco.devtools.logic.crash;
 
-import android.app.ApplicationErrorReport;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,11 +14,13 @@ import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.view.NotificationUIService;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
@@ -44,7 +45,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
 
             stopServices();
-            final Crash crash = buildCrash(thread, ex);
+            Crash crash = buildCrash(thread, ex);
+            storeCrash(crash);
+            PendingCrashUtil.savePending();
+
+            saveScreenshot();
 
             //appContext.startService(DbService.buildCrashIntent(appContext, crash));
 
@@ -57,6 +62,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     onCrashStored(thread, ex, crash);
                 }
             });*/
+
             onCrashStored( thread, ex, crash);
 
             //TODO: RESEARCH handleApplicationCrash
@@ -109,9 +115,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //showDialog(exClass, exMessage);
         //startExceptionActivity(crash.getException(), crash.getMessage(), crash);
 
-        PendingCrashUtil.savePending();
-        storeCrash(crash);
-
         if (DevTools.getConfig().crashHandlerCallDefaultHandler){
             Log.i(DevTools.TAG, "onCrashStored - Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
@@ -131,6 +134,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         db.crashDao().insertAll(crash);
         Log.d(DevTools.TAG, "Crash stored in db");
     }
+
+    private void saveScreenshot(){
+        ScreenHelper helper = new ScreenHelper(appContext);
+        Screen screen = helper.takeScreen();
+        if (screen != null){
+            DevToolsDatabase db = DevTools.getDatabase();
+            db.screenDao().insertAll(screen);
+            Log.d(DevTools.TAG, "Crash screen stored in db");
+        }
+    }
+
+
+
 
     private void startExceptionActivity(String exClass, String exMessage, Crash crash) {
         Log.e(DevTools.TAG, "Requesting Exception Dialog...");

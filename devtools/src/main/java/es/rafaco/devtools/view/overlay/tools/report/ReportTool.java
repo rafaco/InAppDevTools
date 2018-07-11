@@ -18,6 +18,7 @@ import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
+import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenTool;
 
 public class ReportTool extends OverlayTool {
 
@@ -86,9 +87,10 @@ public class ReportTool extends OverlayTool {
 
     private void initAdapter() {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+
         array.add(getManager().getTool(InfoTool.class).getReportInfo());
-        //array.add(getManager().getTool(CommandsTool.class).getReportInfo());
         array.add(getManager().getTool(LogTool.class).getReportInfo());
+        array.add(getManager().getTool(ScreenTool.class).getReportInfo());
 
         adapter = new DecoratedToolInfoAdapter(getContext(), array);
         adapter.enableSwitchMode();

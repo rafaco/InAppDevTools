@@ -71,15 +71,15 @@ public class ReportDialogActivity extends AppCompatActivity {
         loadData(adapter, crashes, anrs, screens);
 
 
-        AppCompatButton crashContinueButton = dialogView.findViewById(R.id.dialog_continue_buttons);
-        crashContinueButton.setOnClickListener(new View.OnClickListener() {
+        AppCompatButton crashCancelButton = dialogView.findViewById(R.id.dialog_cancel_button);
+        crashCancelButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                alertDialog.dismiss();
                finish();
            }
         });
-        AppCompatButton crashReportButton = dialogView.findViewById(R.id.dialog_report_buttons);
+        AppCompatButton crashReportButton = dialogView.findViewById(R.id.dialog_report_button);
         crashReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,10 +109,17 @@ public class ReportDialogActivity extends AppCompatActivity {
     private void loadData(DecoratedToolInfoAdapter adapter, List<Crash> crashes, List<Anr> anrs, List<Screen> screens) {
 
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+
+        array.add(new DecoratedToolInfo(ErrorsTool.class,
+                "Info",
+                " - ",
+                1,
+                ContextCompat.getColor(this, R.color.rally_white)));
+
         array.add(new DecoratedToolInfo(ErrorsTool.class,
                 "Errors",
                 crashes.size() + " crashes and " + anrs.size() + " ANRs",
-                1,
+                3,
                 ContextCompat.getColor(this, R.color.rally_orange)));
 
         array.add(new DecoratedToolInfo(ErrorsTool.class,
@@ -125,7 +132,7 @@ public class ReportDialogActivity extends AppCompatActivity {
         Collections.sort(array, new Comparator<DecoratedToolInfo>() {
             @Override
             public int compare(DecoratedToolInfo o1, DecoratedToolInfo o2) {
-                return o2.getOrder().compareTo(o1.getOrder());
+                return o1.getOrder().compareTo(o2.getOrder());
             }
         });
 

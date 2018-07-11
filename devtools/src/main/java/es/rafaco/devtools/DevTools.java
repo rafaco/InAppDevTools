@@ -154,17 +154,12 @@ public class DevTools {
             return;
 
         ScreenHelper helper = new ScreenHelper(appContext);
-        final Screen screen = helper.takeScreen();
-        if (screen != null){
-            ThreadUtils.runOnBackThread(new Runnable() {
-                @Override
-                public void run() {
-                    getDatabase().screenDao().insertAll(screen);
-                }
-            });
-        }
+        Screen screen = helper.takeAndSaveScreen();
 
         if(config.overlayUiEnabled){
+            Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
+            getAppContext().startService(intent);
+
             helper.openFileExternally(screen.getAbsolutePath());
         }
     }

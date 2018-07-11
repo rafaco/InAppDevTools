@@ -76,12 +76,10 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_SCREEN:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
-                    Toast.makeText(getApplicationContext(), "You click SCREEN button.", Toast.LENGTH_LONG).show();
                     DevTools.takeScreenshot();
                     break;
                 case ACTION_REPORT:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
-                    Toast.makeText(getApplicationContext(), "You click REPORT button.", Toast.LENGTH_LONG).show();
                     DevTools.sendReport();
                     break;
                 case ACTION_CLEAN:
@@ -91,7 +89,6 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_TOOLS:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
-                    Toast.makeText(getApplicationContext(), "You click TOOLS button.", Toast.LENGTH_LONG).show();
                     //TODO: research a better way to close the headup notification
                     //Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
                     //getApplicationContext().startActivity(app);

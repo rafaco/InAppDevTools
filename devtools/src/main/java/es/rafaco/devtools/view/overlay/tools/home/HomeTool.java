@@ -94,10 +94,12 @@ public class HomeTool extends OverlayTool {
 
     //TODO: datalist not initialized any more!
     public void updateContent(Class<?> toolClass, String content){
-        for (DecoratedToolInfo info: dataList){
-            if (info.getClass().equals(toolClass)){
-                info.setMessage(content);
-                adapter.notifyDataSetChanged();
+        if (dataList!=null && dataList.size()>0){
+            for (DecoratedToolInfo info: dataList){
+                if (info.getClass().equals(toolClass)){
+                    info.setMessage(content);
+                    adapter.notifyDataSetChanged();
+                }
             }
         }
     }
