@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class ReportEmailHelper {
 
     Context context;
 
-    boolean isHtml = true;
+    boolean isHtml = false;
 
     public ReportEmailHelper(Context context) {
         this.context = context;
@@ -36,13 +37,18 @@ public class ReportEmailHelper {
         String emailTo = getEmailTo();
         String subject = getEmailSubject();
 
-        String emailbody = "[Replace this line by your comments]" + "\n\n\n";
+        String userTextPlaceholder = "[Replace this line by your comments]";
+        String bigJump = "\n\n\n";
+        String emailbody;
+
         List<String> filePaths = new ArrayList<>();
 
         if(!isHtml){
-
-            String info = new InfoHelper(context).buildReport();
-            emailbody += info;
+            emailbody = new  StringBuilder()
+                    .append(getEmailSubject())
+                    .append(userTextPlaceholder)
+                    .append(bigJump)
+                    .toString();
         }else{
             emailbody = new  StringBuilder()
                     .append("<h2><b>DevTools report!</b></h2>")
@@ -53,8 +59,10 @@ public class ReportEmailHelper {
         }
 
         if(true){
-            String logcatPath = new LogHelper(context).saveLogcatToFile();
+            String logcatPath = new LogHelper(context).buildReport();
             filePaths.add(logcatPath);
+            String infoPath = new InfoHelper(context).buildReport();
+            filePaths.add(infoPath);
         }
 
         sendEmailIntent(emailTo, "",
@@ -91,14 +99,22 @@ public class ReportEmailHelper {
 
         if (filePaths != null && filePaths.size()>0){
             ArrayList<Uri> uris = new ArrayList<>();
-            for (String file : filePaths) {
-                File fileIn = new File(file);
-                if (!fileIn.exists() || !fileIn.canRead()) {
+            for (String filePath : filePaths) {
+                File file = new File(filePath);
+                if (!file.exists() || !file.canRead()) {
                     DevTools.showMessage("Attachment Error");
                     //return;
                 }
-                Uri u = Uri.fromFile(fileIn);
-                uris.add(u);
+
+                Uri contentUri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    String authority = context.getApplicationContext().getPackageName() + ".devtools.provider";
+                    contentUri = FileProvider.getUriForFile(context, authority, file);
+                } else {
+                    contentUri = Uri.fromFile(file);
+                }
+                uris.add(contentUri);
             }
             emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         }

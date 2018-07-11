@@ -126,7 +126,7 @@ public class InfoTool extends OverlayTool {
     }
 
     private void loadBuildConfig() {
-        String report = helper.buildReport();
+        String report = helper.getReport();
         out.setText(report);
         secondSpinner.setVisibility(View.GONE);
     }

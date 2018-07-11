@@ -2,7 +2,6 @@ package es.rafaco.devtools.view.overlay.tools.log;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -11,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.utils.FileUtils;
 
 public class LogHelper {
 
@@ -20,56 +20,27 @@ public class LogHelper {
         this.context = context;
     }
 
-    public String saveLogcatToFile(){
+    public String buildReport(){
 
-        if(isExternalStorageWritable()){
+        if(FileUtils.isExternalStorageWritable()){
+            File file = FileUtils.createNewFile("log", "logcat_" + System.currentTimeMillis() + ".txt");
 
-            File appDirectory = new File(Environment.getExternalStorageDirectory() + "/DevTools");
-            File logDirectory = new File(appDirectory + "/log");
-            File logFile = new File(logDirectory, "logcat_" + System.currentTimeMillis() + ".txt");
-
-            // create app folder
-            if (!appDirectory.exists()) {
-                appDirectory.mkdir();
-            }
-
-            // create log folder
-            if (!logDirectory.exists()) {
-                logDirectory.mkdir();
-            }
-
+            //TODO: IS REALLY DOING WHAT THE NEXT COMMENTS SAID??
             // clear the previous logcat and then write the new one to the file
             try {
-                Process process = Runtime.getRuntime().exec("logcat -d -f " + logFile);
+                Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return logFile.getPath();
+            return file.getPath();
 
-        } else if(isExternalStorageReadable() ){
+        } else if(FileUtils.isExternalStorageReadable() ){
             // only readable
         } else{
             // not accessible
         }
 
         return null;
-    }
-
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
-            return true;
-        }
-        return false;
     }
 
     public static void clearLogcatBuffer() {

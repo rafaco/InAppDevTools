@@ -3,7 +3,6 @@ package es.rafaco.devtools.view.overlay.tools.log;
 import android.animation.LayoutTransition;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -26,8 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -419,7 +416,7 @@ public class LogTool extends OverlayTool implements AdapterView.OnItemClickListe
     @Override
     public Object getReport(){
 
-        return new LogHelper(getContext()).saveLogcatToFile();
+        return new LogHelper(getContext()).buildReport();
 
         /*ShellExecuter exe = new ShellExecuter();
         String command = "logcat -d *:V";

@@ -22,6 +22,7 @@ import java.util.List;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.logic.PermissionActivity;
+import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
 import es.rafaco.devtools.utils.ViewHierarchyUtils;
@@ -43,7 +44,7 @@ public class ScreenHelper {
         if (!PermissionActivity.isNeededWithAutoStart(context,
                 PermissionActivity.IntentAction.STORAGE))
             return null;
-        Log.d(DevTools.TAG, "isExternalStorageWritable?: " + LogHelper.isExternalStorageWritable());
+        Log.d(DevTools.TAG, "isExternalStorageWritable?: " + FileUtils.isExternalStorageWritable());
 
 
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);

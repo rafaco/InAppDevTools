@@ -6,16 +6,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.SystemClock;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-
+import es.rafaco.devtools.utils.FileUtils;
 
 public class InfoHelper {
 
@@ -34,7 +34,39 @@ public class InfoHelper {
         this.context = context;
     }
 
-    public String buildReport() {
+    public String buildReport(){
+
+        String reportText = getReport();
+
+        if(FileUtils.isExternalStorageWritable()){
+
+            File file = FileUtils.createNewFile("info", "info_" + System.currentTimeMillis() + ".txt");
+
+            try {
+                FileOutputStream fOut = new FileOutputStream(file);
+                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                myOutWriter.append(reportText);
+
+                myOutWriter.close();
+                fOut.flush();
+                fOut.close();
+            }
+            catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
+
+            return file.getPath();
+
+        } else if(FileUtils.isExternalStorageReadable() ){
+            // only readable
+        } else{
+            // not accessible
+        }
+
+        return null;
+    }
+
+    public String getReport() {
         String result = "";
         result += getAppInfo().toString();
         result += "\n";

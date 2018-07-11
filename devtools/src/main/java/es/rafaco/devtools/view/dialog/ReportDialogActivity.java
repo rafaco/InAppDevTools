@@ -1,10 +1,12 @@
 package es.rafaco.devtools.view.dialog;
 
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,7 +58,8 @@ public class ReportDialogActivity extends AppCompatActivity {
 
     private void buildDialog(List<Crash> crashes, List<Anr> anrs, List<Screen> screens) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_report, null);
         builder.setView(dialogView)

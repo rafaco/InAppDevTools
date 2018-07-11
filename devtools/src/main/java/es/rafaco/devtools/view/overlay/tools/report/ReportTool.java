@@ -1,38 +1,23 @@
 package es.rafaco.devtools.view.overlay.tools.report;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-
-import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
 import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoTool;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
-import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenAdapter;
 
 public class ReportTool extends OverlayTool {
 
@@ -122,8 +107,6 @@ public class ReportTool extends OverlayTool {
        new ReportEmailHelper(getContext())
                .sendEmailIntent();
     }
-
-
 
     //endregion
 }
