@@ -3,20 +3,25 @@ package es.rafaco.devtools.view;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
+import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
