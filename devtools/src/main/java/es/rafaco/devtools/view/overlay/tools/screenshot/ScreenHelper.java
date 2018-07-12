@@ -29,6 +29,7 @@ import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.FileUtils;
+import es.rafaco.devtools.utils.ImageUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.log.LogTool;
@@ -120,9 +121,7 @@ public class ScreenHelper {
 
     public void openFileExternally(String filePath) {
         File file = new File(filePath);
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
-        String type = mime.getMimeTypeFromExtension(extension);
+        String type = FileUtils.getMimeType(file);
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);

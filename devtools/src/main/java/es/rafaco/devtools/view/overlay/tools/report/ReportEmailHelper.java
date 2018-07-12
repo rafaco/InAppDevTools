@@ -1,5 +1,6 @@
 package es.rafaco.devtools.view.overlay.tools.report;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,11 +10,13 @@ import android.support.v4.content.FileProvider;
 import android.text.Html;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.PermissionActivity;
+import es.rafaco.devtools.utils.SqliteExporter;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
@@ -72,6 +75,14 @@ public class ReportEmailHelper {
             filePaths.add(new LogHelper(context).buildReport());
             filePaths.add(new InfoHelper(context).buildReport());
             filePaths.add(new ScreenHelper(context).buildReport());
+
+            try {
+                SupportSQLiteDatabase db = DevTools.getDatabase().getOpenHelper().getReadableDatabase();
+                String name = DevTools.getDatabase().getOpenHelper().getDatabaseName();
+                filePaths.add(SqliteExporter.export(name, db));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return filePaths;
     }
