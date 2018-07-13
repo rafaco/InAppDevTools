@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
+
 
 /**
  * Can export an sqlite database into a csv file.
@@ -29,7 +31,13 @@ public class SqliteExporter {
 
     private static final String TAG = SqliteExporter.class.getSimpleName();
     public static final String DB_BACKUP_DB_VERSION_KEY = "dbVersion";
+    public static final String DB_BACKUP_DB_NAME_KEY = "dbName";
     public static final String DB_BACKUP_TABLE_NAME = "table";
+    private static final String SEPARATOR = "\n";
+
+    public static String[] getAllDatabases(){
+        return DevTools.getAppContext().databaseList();
+    }
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{
 
@@ -41,7 +49,7 @@ public class SqliteExporter {
         List<String> tables = getTablesOnDataBase(db);
         Log.d(TAG, "Started to fill the backup file in " + backupFile.getAbsolutePath());
         long starTime = System.currentTimeMillis();
-        writeCsv(backupFile, db, tables);
+        writeCsv(backupFile, dbName, db, tables);
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "Creating backup took " + (endTime - starTime) + "ms.");
 
@@ -81,13 +89,15 @@ public class SqliteExporter {
         return tables;
     }
 
-    private static void writeCsv(File backupFile, SupportSQLiteDatabase db, List<String> tables){
+    private static void writeCsv(File backupFile, String dbName, SupportSQLiteDatabase db, List<String> tables){
         CSVWriter csvWrite = null;
         Cursor curCSV = null;
         try {
             csvWrite = new CSVWriter(new FileWriter(backupFile));
             writeSingleValue(csvWrite, DB_BACKUP_DB_VERSION_KEY + "=" + db.getVersion());
+            writeSingleValue(csvWrite, DB_BACKUP_DB_NAME_KEY + "=" + dbName);
             for(String table: tables){
+                writeSingleValue(csvWrite, SEPARATOR);
                 writeSingleValue(csvWrite, DB_BACKUP_TABLE_NAME + "=" + table);
                 curCSV = db.query("SELECT * FROM " + table);
                 csvWrite.writeNext(curCSV.getColumnNames());
