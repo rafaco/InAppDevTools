@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
@@ -15,6 +16,7 @@ import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.view.dialog.CrashDialogActivity;
 import es.rafaco.devtools.view.dialog.ReportDialogActivity;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
+import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
@@ -137,11 +139,10 @@ public class DevTools {
 
     public static void showMessage(final String text) {
         Log.d(DevTools.TAG, "Showing message: " + text);
-
-        //TODO: use a custom overlay toast
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                //TODO: use a custom overlay toast
                 Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
             }
         });
@@ -162,6 +163,21 @@ public class DevTools {
 
             helper.openFileExternally(screen.getAbsolutePath());
         }
+    }
+
+    public static void sendCrashReport(final int crashId) {
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                Crash crash;
+                if (crashId<0){
+                    crash = getDatabase().crashDao().getLast();
+                }else{
+                    crash = getDatabase().crashDao().findById(crashId);
+                }
+                new ReportHelper(appContext).sendCrashReport(crash);
+            }
+        });
     }
 
     public static void sendReport() {

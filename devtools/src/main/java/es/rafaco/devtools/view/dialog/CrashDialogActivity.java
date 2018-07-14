@@ -37,7 +37,7 @@ public class CrashDialogActivity extends AppCompatActivity {
         });
     }
 
-    private void buildDialog(Crash crash) {
+    private void buildDialog(final Crash crash) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         LayoutInflater inflater = getLayoutInflater();
@@ -65,7 +65,7 @@ public class CrashDialogActivity extends AppCompatActivity {
         crashReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DevTools.sendReport();
+                DevTools.sendCrashReport(crash.getUid());
                 alertDialog.dismiss();
                 finish();
             }

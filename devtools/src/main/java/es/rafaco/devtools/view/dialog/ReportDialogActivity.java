@@ -39,7 +39,8 @@ import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
-import es.rafaco.devtools.view.overlay.tools.report.ReportEmailHelper;
+import es.rafaco.devtools.view.overlay.tools.report.EmailUtils;
+import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
 
 public class ReportDialogActivity extends AppCompatActivity {
 
@@ -245,7 +246,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
     private void onImagesSelected(ArrayList<Uri> mArrayUri) {
         //TODO: use selected images
-        new ReportEmailHelper(ReportDialogActivity.this).sendEmailIntent();
+        new ReportHelper(this, ReportHelper.ReportType.SESSION, null);
         alertDialog.dismiss();
         finish();
     }
