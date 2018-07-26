@@ -36,19 +36,11 @@ public class ReportHelper {
             return;
     }
 
-    public void build(){
-        if (type.equals(ReportType.CRASH)){
-            sendCrashReport((Crash) target);
-        }else if (type.equals(ReportType.SESSION)){
-            buildSessionReport();
-        }
+    public void start(){
+        buildReport();
     }
 
-    public void sendCrashReport(Crash crash){
-
-    }
-
-    public void buildSessionReport(){
+    private void buildReport(){
 
         boolean isHtml = false;
         String emailTo = getEmailTo();
@@ -84,9 +76,10 @@ public class ReportHelper {
     @NonNull
     private List<String> getAttachmentPaths() {
         List<String> filePaths = new ArrayList<>();
-        if(true){
+        filePaths.add(new InfoHelper(context).buildReport());
+
+        if(type.equals(ReportType.SESSION)){
             filePaths.add(new LogHelper(context).buildReport());
-            filePaths.add(new InfoHelper(context).buildReport());
             filePaths.add(new ScreenHelper(context).buildReport());
 
             try {
@@ -96,6 +89,9 @@ public class ReportHelper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (type.equals(ReportType.CRASH)){
+            Crash crash = (Crash) target;
+            filePaths.addAll(new CrashHelper(context).buildReport(crash));
         }
         return filePaths;
     }
@@ -107,6 +103,17 @@ public class ReportHelper {
 
     private String getEmailSubject(){
         InfoHelper helper = new InfoHelper(context);
-        return helper.getAppName() + " report from " + Build.BRAND + " " + Build.MODEL;
+        String formatter = "%s %s report from %s %s";
+        String currentType = "";
+        if(type.equals(ReportType.SESSION)){
+            currentType = "session";
+        }else if (type.equals(ReportType.CRASH)){
+            currentType = "crash";
+        }else if (type.equals(ReportType.FULL)){
+            currentType = "full";
+        }
+        return String.format(formatter,
+                helper.getAppName(), currentType,
+                Build.BRAND, Build.MODEL);
     }
 }

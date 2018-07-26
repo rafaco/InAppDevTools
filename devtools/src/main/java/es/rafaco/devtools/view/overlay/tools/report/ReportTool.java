@@ -106,8 +106,8 @@ public class ReportTool extends OverlayTool {
     //region [ TOOL SPECIFIC ]
 
     private void onSendEmailPressed() {
-       new EmailUtils(getContext())
-               .sendEmailIntent();
+       new ReportHelper(getContext(), ReportHelper.ReportType.SESSION, null)
+               .start();
     }
 
     //endregion

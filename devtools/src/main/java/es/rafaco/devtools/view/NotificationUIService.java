@@ -99,7 +99,7 @@ public class NotificationUIService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    /* Used to build and start foreground service. */
+    /* Used to start and start foreground service. */
     private void startForegroundService()
     {
         Log.d(TAG, "Start foreground service.");
@@ -302,7 +302,7 @@ public class NotificationUIService extends Service {
                         .setContentTitle("Summary Title")
                         .setContentText("Summary text")
                         .setSmallIcon(UiUtils.getAppIconResourceId())
-                        //build summary info into InboxStyle template
+                        //start summary info into InboxStyle template
                         .setStyle(new NotificationCompat.InboxStyle()
                                 .addLine("Alex Faarborg  Check this out")
                                 .addLine("Jeff Chang    Launch Party")

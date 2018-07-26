@@ -14,7 +14,7 @@ public interface AnrDao {
     List<Anr> getAll();
 
     @Query("SELECT * FROM anr where uid LIKE :uid")
-    Anr findById(int uid);
+    Anr findById(long uid);
 
     @Query("SELECT * FROM anr ORDER BY uid DESC LIMIT 1")
     Anr getLast();
@@ -23,7 +23,10 @@ public interface AnrDao {
     int count();
 
     @Insert
-    void insertAll(Anr... anrs);
+    long insert(Anr anr);
+
+    @Insert
+    long[] insertAll(Anr... anrs);
 
     @Delete
     void delete(Anr anr);

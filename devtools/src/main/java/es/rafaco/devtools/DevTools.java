@@ -165,7 +165,7 @@ public class DevTools {
         }
     }
 
-    public static void sendCrashReport(final int crashId) {
+    public static void sendCrashReport(final long crashId) {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
@@ -175,7 +175,7 @@ public class DevTools {
                 }else{
                     crash = getDatabase().crashDao().findById(crashId);
                 }
-                new ReportHelper(appContext).sendCrashReport(crash);
+                new ReportHelper(appContext, ReportHelper.ReportType.CRASH, crash).start();
             }
         });
     }

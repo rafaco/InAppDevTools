@@ -20,6 +20,7 @@ import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -29,6 +30,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler previousHandle;
     private Context appContext;
     private Context baseContext;
+    private long crashId;
 
     public CrashHandler(Context appContext, Context baseContext, Thread.UncaughtExceptionHandler previousHandler) {
         this.appContext = appContext;
@@ -39,29 +41,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
 
-
         try {
             Log.d(DevTools.TAG, "CrashHandler.uncaughtException() called");
-            //Log.e(DevTools.TAG, "Custom message: " + getErrorMessgae(ex.getCause()));
 
-            stopServices();
+            stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
+            printLogcatError(thread, crash);
             storeCrash(crash);
             PendingCrashUtil.savePending();
 
             saveScreenshot();
-
-            //appContext.startService(DbService.buildCrashIntent(appContext, crash));
-
-            /*AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    DevToolsDatabase db = DevTools.getDatabase();
-                    db.crashDao().insertAll(crash);
-                    Log.d(DevTools.TAG, "Crash db size is: " + db.crashDao().count());
-                    onCrashStored(thread, ex, crash);
-                }
-            });*/
+            saveLogcat();
 
             onCrashStored( thread, ex, crash);
 
@@ -69,6 +59,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             /*// Bring up crash dialog, wait for it to be dismissed
             ActivityManagerNative.getDefault().handleApplicationCrash(
                     mApplicationObject, new ApplicationErrorReport.CrashInfo(e));*/
+
             Log.d(DevTools.TAG, "CrashHandler.uncaughtException() finished ok");
         } catch (Exception e) {
             Log.e(DevTools.TAG, "CrashHandler.uncaughtException() EXCEPTION");
@@ -76,7 +67,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private void stopServices() {
+    //TODO: Close our services before to prevent "Schedule restart"
+    private void stopDevToolsServices() {
         Context context = DevTools.getAppContext();
         Intent in = new Intent(context, OverlayUIService.class);
         context.stopService(in);
@@ -101,14 +93,54 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         crash.setStacktrace(sw.toString());
 
+        return crash;
+    }
+
+    private void printLogcatError(Thread thread, Crash crash) {
         Log.e(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
-        Log.e(DevTools.TAG, stackTraceString);
+        Log.e(DevTools.TAG, crash.getStacktrace());
         Log.e(DevTools.TAG, String.format("Thread %s [%s] is %s. Main: %s",
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),
                 String.valueOf(ThreadUtils.isTheUiThread(thread))));
-        return crash;
+    }
+
+    private void storeCrash(final Crash crash) {
+        DevToolsDatabase db = DevTools.getDatabase();
+        crashId = db.crashDao().insert(crash);
+        Log.d(DevTools.TAG, "Crash stored in db");
+    }
+
+    private Boolean saveScreenshot(){
+        ScreenHelper helper = new ScreenHelper(appContext);
+        Screen screen = helper.takeScreen();
+        if (screen != null){
+            DevToolsDatabase db = DevTools.getDatabase();
+            long screenId = db.screenDao().insert(screen);
+            if (screenId > 0){
+                Crash current = db.crashDao().getLast();
+                current.setScreenId(screenId);
+                db.crashDao().update(current);
+                Log.d(DevTools.TAG, "Crash screen stored in db");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean saveLogcat(){
+        LogHelper helper = new LogHelper(appContext);
+        long logcatId = helper.buildCrashReport();
+        if (logcatId > 0){
+            DevToolsDatabase db = DevTools.getDatabase();
+            Crash current = db.crashDao().getLast();
+            current.setLogcatId(logcatId);
+            db.crashDao().update(current);
+            Log.d(DevTools.TAG, "Crash log stored in file");
+            return true;
+        }
+        return false;
     }
 
     private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
@@ -120,33 +152,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             previousHandle.uncaughtException(thread, ex);
         }else{
             Log.e(DevTools.TAG, "onCrashStored - Destroy app");
-            //AppUtils.exit();
-            //AppUtils.killMyProcess();
-
-            //OverlayUIService.runAction(OverlayUIService.IntentAction.RESTART, null);
             AppUtils.programRestart(DevTools.getAppContext());
             AppUtils.killMyProcess();
         }
     }
 
-    private void storeCrash(final Crash crash) {
-        DevToolsDatabase db = DevTools.getDatabase();
-        db.crashDao().insertAll(crash);
-        Log.d(DevTools.TAG, "Crash stored in db");
-    }
-
-    private void saveScreenshot(){
-        ScreenHelper helper = new ScreenHelper(appContext);
-        Screen screen = helper.takeScreen();
-        if (screen != null){
-            DevToolsDatabase db = DevTools.getDatabase();
-            db.screenDao().insertAll(screen);
-            Log.d(DevTools.TAG, "Crash screen stored in db");
-        }
-    }
 
 
-
+    //TODO: REMOVE AFTER REVIEW
+    //region [ OLD STUFF TO REMOVE ]
 
     private void startExceptionActivity(String exClass, String exMessage, Crash crash) {
         Log.e(DevTools.TAG, "Requesting Exception Dialog...");
@@ -219,4 +233,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crashLog += "-------------------------------\n\n";
         return crashLog;
     }
+
+    //endregion
 }

@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class Anr {
 
     @PrimaryKey(autoGenerate = true)
-    private int uid;
+    private long uid;
 
     @ColumnInfo(name = "date")
     private long date;
@@ -28,11 +28,11 @@ public class Anr {
     @ColumnInfo(name = "isWarning")
     private boolean isWarning;
 
-    public int getUid() {
+    public long getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(long uid) {
         this.uid = uid;
     }
 

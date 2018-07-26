@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.db.errors.Logcat;
 import es.rafaco.devtools.utils.FileUtils;
 
 public class LogHelper {
@@ -24,12 +26,12 @@ public class LogHelper {
 
         if(FileUtils.isExternalStorageWritable()){
             File file = FileUtils.createNewFile("log", "logcat_" + System.currentTimeMillis() + ".txt");
-
-            //TODO: IS REALLY DOING WHAT THE NEXT COMMENTS SAID??
-            // clear the previous logcat and then write the new one to the file
             try {
                 Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
+                process.waitFor();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return file.getPath();
@@ -41,6 +43,36 @@ public class LogHelper {
         }
 
         return null;
+    }
+
+    public long buildCrashReport(){
+
+        if(FileUtils.isExternalStorageWritable()){
+            long logcatId = -1;
+            File file = FileUtils.createNewFile("crash", "crash_" + System.currentTimeMillis() + ".txt");
+            try {
+                Process process = Runtime.getRuntime().exec("logcat -d -t 100 -f " + file);
+                process.waitFor();
+
+                Logcat logcat = new Logcat();
+                logcat.setDate(new Date().getTime());
+                logcat.setPath(file.getPath());
+                logcatId = DevTools.getDatabase().logcatDao().insert(logcat);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return logcatId;
+
+        } else if(FileUtils.isExternalStorageReadable() ){
+            // only readable
+        } else{
+            // not accessible
+        }
+
+        return -1;
     }
 
     public static void clearLogcatBuffer() {

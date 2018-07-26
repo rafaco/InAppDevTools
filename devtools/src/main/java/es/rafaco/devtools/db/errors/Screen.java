@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Screen implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int uid;
+    private long uid;
 
     @ColumnInfo(name = "date")
     private long date;
@@ -27,11 +27,11 @@ public class Screen implements Serializable {
     @ColumnInfo(name = "rootViewName")
     private String rootViewName;
 
-    public int getUid() {
+    public long getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(long uid) {
         this.uid = uid;
     }
 

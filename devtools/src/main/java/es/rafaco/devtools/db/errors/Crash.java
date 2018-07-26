@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Crash implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int uid;
+    private long uid;
 
     @ColumnInfo(name = "date")
     private long date;
@@ -24,11 +24,17 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
 
-    public int getUid() {
+    @ColumnInfo(name = "screenId")
+    private long screenId;
+
+    @ColumnInfo(name = "logcatId")
+    private long logcatId;
+
+    public long getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(long uid) {
         this.uid = uid;
     }
 
@@ -62,5 +68,21 @@ public class Crash implements Serializable {
 
     public void setStacktrace(String stacktrace) {
         this.stacktrace = stacktrace;
+    }
+
+    public long getScreenId() {
+        return screenId;
+    }
+
+    public void setScreenId(long screenId) {
+        this.screenId = screenId;
+    }
+
+    public long getLogcatId() {
+        return logcatId;
+    }
+
+    public void setLogcatId(long logcatId) {
+        this.logcatId = logcatId;
     }
 }

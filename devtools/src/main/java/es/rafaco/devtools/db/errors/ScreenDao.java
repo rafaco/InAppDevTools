@@ -17,7 +17,7 @@ public interface ScreenDao {
     LiveData<List<Screen>> getAllLive();*/
 
     @Query("SELECT * FROM screen where uid LIKE :uid")
-    Screen findById(int uid);
+    Screen findById(long uid);
 
     @Query("SELECT * FROM screen ORDER BY uid DESC LIMIT 1")
     Screen getLast();
@@ -26,7 +26,10 @@ public interface ScreenDao {
     int count();
 
     @Insert
-    void insertAll(Screen... screens);
+    long insert(Screen screen);
+
+    @Insert
+    long[] insertAll(Screen... screens);
 
     @Delete
     void delete(Screen screen);
