@@ -18,8 +18,8 @@ public class Screen implements Serializable {
     @ColumnInfo(name = "session")
     private int session;
 
-    @ColumnInfo(name = "absolutePath")
-    private String absolutePath;
+    @ColumnInfo(name = "path")
+    private String path;
 
     @ColumnInfo(name = "activityName")
     private String activityName;
@@ -51,12 +51,12 @@ public class Screen implements Serializable {
         this.session = session;
     }
 
-    public String getAbsolutePath() {
-        return absolutePath;
+    public String getPath() {
+        return path;
     }
 
-    public void setAbsolutePath(String absolutePath) {
-        this.absolutePath = absolutePath;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getActivityName() {

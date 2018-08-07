@@ -10,16 +10,11 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,10 +24,7 @@ import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.FileUtils;
-import es.rafaco.devtools.utils.ImageUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
-import es.rafaco.devtools.view.overlay.tools.log.LogTool;
 import es.rafaco.devtools.utils.ViewHierarchyUtils;
 
 public class ScreenHelper {
@@ -108,7 +100,7 @@ public class ScreenHelper {
             screen.setRootViewName(selectedName);
             screen.setActivityName(activityName);
             screen.setDate(mImageTime);
-            screen.setAbsolutePath(imageFile.getAbsolutePath());
+            screen.setPath(imageFile.getAbsolutePath());
 
             return screen;
 
@@ -119,23 +111,6 @@ public class ScreenHelper {
         return null;
     }
 
-    public void openFileExternally(String filePath) {
-        File file = new File(filePath);
-        String type = FileUtils.getMimeType(file);
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            String authority = context.getApplicationContext().getPackageName() + ".devtools.provider";
-            Uri contentUri = FileProvider.getUriForFile(context, authority, file);
-            intent.setDataAndType(contentUri, type);
-        } else {
-            intent.setDataAndType(Uri.fromFile(file), type);
-        }
-        context.startActivity(intent);
-    }
-
     public String buildReport(){
 
         //TODO: ThreadUtils.runOnBackThread(new Runnable() {
@@ -143,7 +118,7 @@ public class ScreenHelper {
         final Screen lastScreen = screenDao.getLast();
 
         if (lastScreen != null){
-            return lastScreen.getAbsolutePath();
+            return lastScreen.getPath();
         }else{
             return null;
         }

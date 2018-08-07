@@ -14,7 +14,7 @@ public interface LogcatDao {
     List<Logcat> getAll();
 
     @Query("SELECT * FROM logcat where uid LIKE :uid")
-    Logcat findById(int uid);
+    Logcat findById(long uid);
 
     @Query("SELECT * FROM logcat ORDER BY uid DESC LIMIT 1")
     Logcat getLast();

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "c9762dafda846f8bb3e4db95834289dc",
+    "identityHash": "2a47590c659de0be9a6cf51ef09fe8cd",
     "entities": [
       {
         "tableName": "user",
@@ -156,7 +156,7 @@
       },
       {
         "tableName": "screen",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `session` INTEGER NOT NULL, `absolutePath` TEXT, `activityName` TEXT, `rootViewName` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `session` INTEGER NOT NULL, `path` TEXT, `activityName` TEXT, `rootViewName` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -177,8 +177,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "absolutePath",
-            "columnName": "absolutePath",
+            "fieldPath": "path",
+            "columnName": "path",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -245,7 +245,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c9762dafda846f8bb3e4db95834289dc\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2a47590c659de0be9a6cf51ef09fe8cd\")"
     ]
   }
 }

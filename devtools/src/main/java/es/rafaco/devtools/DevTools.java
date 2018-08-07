@@ -13,6 +13,7 @@ import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
+import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.dialog.CrashDialogActivity;
 import es.rafaco.devtools.view.dialog.ReportDialogActivity;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
@@ -67,6 +68,7 @@ public class DevTools {
 
         if (PendingCrashUtil.isPending()){
             Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getAppContext().startActivity(intent);
             PendingCrashUtil.clearPending();
         }
@@ -161,7 +163,7 @@ public class DevTools {
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
             getAppContext().startService(intent);
 
-            helper.openFileExternally(screen.getAbsolutePath());
+            FileUtils.openFileExternally(getAppContext(), screen.getPath());
         }
     }
 

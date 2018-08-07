@@ -53,8 +53,8 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
         // loading album cover using Glide library
         //Glide.with(mContext).load(screen.getThumbnail()).into(holder.thumbnail);
-        //ImageUtils.loadInto(screen.getAbsolutePath(), holder.thumbnail);
-        new ImageLoaderAsyncTask(holder.thumbnail).execute(screen.getAbsolutePath());
+        //ImageUtils.loadInto(screen.getPath(), holder.thumbnail);
+        new ImageLoaderAsyncTask(holder.thumbnail).execute(screen.getPath());
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override

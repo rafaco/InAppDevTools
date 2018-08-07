@@ -13,6 +13,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.SqliteExporter;
+import es.rafaco.devtools.view.overlay.tools.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
 import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;

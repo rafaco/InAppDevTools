@@ -6,14 +6,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,35 +33,11 @@ public class InfoHelper {
     }
 
     public String buildReport(){
+        String filePath = FileUtils.createFileWithContent("info",
+                "info_" + System.currentTimeMillis() + ".txt",
+                getReport());
 
-        String reportText = getReport();
-
-        if(FileUtils.isExternalStorageWritable()){
-
-            File file = FileUtils.createNewFile("info", "info_" + System.currentTimeMillis() + ".txt");
-
-            try {
-                FileOutputStream fOut = new FileOutputStream(file);
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                myOutWriter.append(reportText);
-
-                myOutWriter.close();
-                fOut.flush();
-                fOut.close();
-            }
-            catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
-            }
-
-            return file.getPath();
-
-        } else if(FileUtils.isExternalStorageReadable() ){
-            // only readable
-        } else{
-            // not accessible
-        }
-
-        return null;
+        return filePath;
     }
 
     public String getReport() {
@@ -128,10 +102,19 @@ public class InfoHelper {
                 .add("Flavor", BuildConfig.FLAVOR)
                 .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
                 .add("firstInstallTime", formatter.format(new Date(pInfo.firstInstallTime)))
-                .add("Min SDK version", String.valueOf(pInfo.applicationInfo.minSdkVersion))
+                .add("Min SDK version", getMinSdkVersion(pInfo))
                 .add("Target SDK version", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
                 .build();
         return group;
+    }
+
+    @NonNull
+    private String getMinSdkVersion(PackageInfo pInfo) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return String.valueOf(pInfo.applicationInfo.minSdkVersion);
+        }
+        //TODO: get minSDK for api < 24
+        return "Unavailable";
     }
 
     public InfoGroup getDevToolsInfo() {
@@ -193,7 +176,7 @@ public class InfoHelper {
 
     public String getVersionCodeName(){
         Field[] fields = Build.VERSION_CODES.class.getFields();
-        String osName = fields[Build.VERSION.SDK_INT + 1].getName();
+        String osName = fields[Build.VERSION.SDK_INT].getName();
         return osName;
     }
 
