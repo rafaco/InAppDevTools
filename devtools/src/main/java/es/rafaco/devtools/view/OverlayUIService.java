@@ -3,25 +3,18 @@ package es.rafaco.devtools.view;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
@@ -32,7 +25,7 @@ public class OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    private boolean initialised;
+    private static Boolean initialised = false;
 
     public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
 
@@ -63,9 +56,13 @@ public class OverlayUIService extends Service {
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
 
-        boolean canContinue = isInitialised();
-        if (!canContinue)
+        if (!isInitialised(action, property))
             return;
+
+        //Restore previous request on permission granted
+        if (action.equals(IntentAction.PERMISSION_GRANTED)) {
+            //TODO: remove
+        }
 
         if (action.equals(IntentAction.TOOL)){
             startTool(property.replace(" Tool", ""));
@@ -79,9 +76,6 @@ public class OverlayUIService extends Service {
                 startTool("Home");
             }
             overlayLayersManager.setMainVisibility(true);
-        }
-        else if (action.equals(IntentAction.PERMISSION_GRANTED)) {
-            isInitialised();
         }
         else if (action.equals(IntentAction.REPORT)){
             startTool("Report");
@@ -118,16 +112,26 @@ public class OverlayUIService extends Service {
         initialised = false;
     }
 
-    private boolean isInitialised() {
+    public static boolean isInitialize() {
+        return initialised;
+    }
+
+    private boolean isInitialised(final IntentAction action, final String property) {
         if (initialised)
             return true;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            //Start a flash activity to request required permissions
-            Intent intent = PermissionActivity.buildIntent(PermissionActivity.IntentAction.OVERLAY, getApplicationContext());
-            startActivity(intent, null);
-            return false;
-        } else {
+        if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            //TODO: remove
+            throw new UnsupportedOperationException("Alguien ha llamado a OverlayUIService desde fuera!!!");
+            /*PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
+                    new Runnable(){
+                        @Override
+                        public void run() { processIntentAction(action, property);
+                        }
+                    }, null);
+            return false;*/
+        }
+        else {
             init();
             initialised = true;
             Log.w(DevTools.TAG, "OverlayUIService - initialised");
@@ -169,8 +173,8 @@ public class OverlayUIService extends Service {
     @Override
     public void onDestroy() {
         Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
-        overlayToolsManager.destroy();
-        overlayLayersManager.destroy();
+        if (overlayToolsManager != null) overlayToolsManager.destroy();
+        if (overlayLayersManager != null) overlayLayersManager.destroy();
 
         super.onDestroy();
     }

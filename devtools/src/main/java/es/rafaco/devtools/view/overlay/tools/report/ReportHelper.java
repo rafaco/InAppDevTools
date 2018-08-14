@@ -2,8 +2,10 @@ package es.rafaco.devtools.view.overlay.tools.report;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.SqliteExporter;
 import es.rafaco.devtools.view.overlay.tools.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
@@ -30,11 +31,6 @@ public class ReportHelper {
         this.context = context;
         this.type = type;
         this.target = target;
-
-        //TODO: remove this dependency
-        if (!PermissionActivity.isNeededWithAutoStart(context,
-                PermissionActivity.IntentAction.STORAGE))
-            return;
     }
 
     public void start(){
@@ -47,15 +43,15 @@ public class ReportHelper {
         String emailTo = getEmailTo();
         String subject = getEmailSubject();
 
-        String userTextPlaceholder = "[Replace this line by your comments]";
-        String bigJump = "\n\n\n";
+        String userTextPlaceholder = "Hi devs,\n\n";
+        String jump = "\n";
         String emailbody;
 
         if(!isHtml){
             emailbody = new  StringBuilder()
-                    .append(getEmailSubject())
+                    //.append(getEmailSubject())
                     .append(userTextPlaceholder)
-                    .append(bigJump)
+                    //.append(jump)
                     .toString();
         }else{
             emailbody = new  StringBuilder()
@@ -80,8 +76,20 @@ public class ReportHelper {
         filePaths.add(new InfoHelper(context).buildReport());
 
         if(type.equals(ReportType.SESSION)){
+
             filePaths.add(new LogHelper(context).buildReport());
             filePaths.add(new ScreenHelper(context).buildReport());
+
+            try{
+                ArrayList<Uri> screens = (ArrayList<Uri>)target;
+                if (screens != null && screens.size()>0){
+                    for (Uri screen : screens) {
+                        filePaths.add(screen.getPath());
+                    }
+                }
+            }catch (Exception e){
+                Log.e(DevTools.TAG, "Exception parsing screens for report");
+            }
 
             try {
                 SupportSQLiteDatabase db = DevTools.getDatabase().getOpenHelper().getReadableDatabase();
@@ -90,7 +98,8 @@ public class ReportHelper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if (type.equals(ReportType.CRASH)){
+        }
+        else if (type.equals(ReportType.CRASH)){
             Crash crash = (Crash) target;
             filePaths.addAll(new CrashHelper(context).buildReport(crash));
         }

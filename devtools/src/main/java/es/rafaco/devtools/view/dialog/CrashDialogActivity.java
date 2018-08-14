@@ -14,6 +14,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
 
@@ -54,24 +55,32 @@ public class CrashDialogActivity extends AppCompatActivity {
         crashSubtitle.setText(crash.getStacktrace());
 
         AppCompatButton crashContinueButton = dialogView.findViewById(R.id.crash_continue_buttons);
+        AppCompatButton crashReportButton = dialogView.findViewById(R.id.crash_report_buttons);
+
         crashContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                finish();
+                destroyDialog();
             }
         });
-        AppCompatButton crashReportButton = dialogView.findViewById(R.id.crash_report_buttons);
         crashReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DevTools.sendCrashReport(crash.getUid());
-                alertDialog.dismiss();
-                finish();
+                onCrashReport(crash);
             }
         });
 
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void onCrashReport(Crash crash) {
+        DevTools.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+        destroyDialog();
+    }
+
+    private void destroyDialog() {
+        alertDialog.dismiss();
+        finish();
     }
 }

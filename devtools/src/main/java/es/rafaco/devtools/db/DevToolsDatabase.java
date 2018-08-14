@@ -15,7 +15,7 @@ import es.rafaco.devtools.db.errors.LogcatDao;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
 
-@Database(version = 6, exportSchema = true,
+@Database(version = 7, exportSchema = true,
         entities = {User.class,
                     Crash.class,
                     Anr.class,

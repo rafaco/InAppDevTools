@@ -13,8 +13,7 @@ public class PendingCrashUtil {
 
     public static boolean isPending(){
         Context context = DevTools.getAppContext();
-        SharedPreferences prefs = context.getSharedPreferences(
-                PREF_KEY, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
         return prefs.getBoolean(PENDING_CRASH_KEY, false);
     }
 

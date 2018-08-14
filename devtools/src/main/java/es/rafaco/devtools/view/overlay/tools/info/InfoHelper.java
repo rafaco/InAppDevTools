@@ -34,7 +34,7 @@ public class InfoHelper {
 
     public String buildReport(){
         String filePath = FileUtils.createFileWithContent("info",
-                "info_" + System.currentTimeMillis() + ".txt",
+                "system_info_" + System.currentTimeMillis() + ".txt",
                 getReport());
 
         return filePath;

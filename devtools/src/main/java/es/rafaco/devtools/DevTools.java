@@ -2,6 +2,7 @@ package es.rafaco.devtools;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -152,37 +153,71 @@ public class DevTools {
 
     public static void takeScreenshot() {
 
-        if (!PermissionActivity.isNeededWithAutoStart(appContext,
-                PermissionActivity.IntentAction.STORAGE))
+        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
+            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
+                    new Runnable(){
+                        @Override
+                        public void run() {
+                            takeScreenshot();
+                        }
+                    }, null);
             return;
+        }
 
         ScreenHelper helper = new ScreenHelper(appContext);
         Screen screen = helper.takeAndSaveScreen();
 
-        if(config.overlayUiEnabled){
+        if(config.overlayUiEnabled && OverlayUIService.isInitialize()){
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
             getAppContext().startService(intent);
+        }
+        FileUtils.openFileExternally(getAppContext(), screen.getPath());
+    }
 
-            FileUtils.openFileExternally(getAppContext(), screen.getPath());
+    public static void sendReport(final ReportHelper.ReportType type, final Object params) {
+
+        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
+            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
+                    new Runnable(){
+                        @Override
+                        public void run() {
+                            sendReport(type, params);
+                        }
+                    }, null);
+            return;
+        }
+
+        switch (type){
+            case CRASH:
+                ThreadUtils.runOnBackThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        long crashId = (long)params;
+                        Crash crash;
+                        if (crashId<0){
+                            crash = getDatabase().crashDao().getLast();
+                        }else{
+                            crash = getDatabase().crashDao().findById(crashId);
+                        }
+                        new ReportHelper(appContext, ReportHelper.ReportType.CRASH, crash).start();
+                    }
+                });
+                break;
+
+            case SESSION:
+                ThreadUtils.runOnBackThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //ArrayList<Uri> files = (ArrayList<Uri>)params;
+                        //TODO: Session report
+                        new ReportHelper(appContext, ReportHelper.ReportType.SESSION, params).start();
+                    }
+                });
+                break;
         }
     }
 
-    public static void sendCrashReport(final long crashId) {
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                Crash crash;
-                if (crashId<0){
-                    crash = getDatabase().crashDao().getLast();
-                }else{
-                    crash = getDatabase().crashDao().findById(crashId);
-                }
-                new ReportHelper(appContext, ReportHelper.ReportType.CRASH, crash).start();
-            }
-        });
-    }
-
-    public static void sendReport() {
+    public static void startReportDialog() {
         Intent intent = new Intent(getAppContext(), ReportDialogActivity.class);
         getAppContext().startActivity(intent);
     }
@@ -192,6 +227,18 @@ public class DevTools {
     }
 
     public static void openTools(boolean atHome) {
+
+        if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
+                    new Runnable(){
+                        @Override
+                        public void run() {
+                            openTools(false);
+                        }
+                    }, null);
+            return;
+        }
+
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
         getAppContext().startService(intent);
     }

@@ -8,13 +8,14 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.view.NotificationUIService;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
@@ -50,8 +51,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             storeCrash(crash);
             PendingCrashUtil.savePending();
 
-            saveScreenshot();
             saveLogcat();
+            saveScreenshot();
 
             onCrashStored( thread, ex, crash);
 
@@ -62,7 +63,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
             Log.d(DevTools.TAG, "CrashHandler.uncaughtException() finished ok");
         } catch (Exception e) {
-            Log.e(DevTools.TAG, "CrashHandler.uncaughtException() EXCEPTION");
+            Log.e(DevTools.TAG, "CrashHandler got an exception");
+            Log.e(DevTools.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
+            Log.e(DevTools.TAG, String.valueOf(e.getStackTrace()));
             e.printStackTrace();
         }
     }
@@ -114,7 +117,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private Boolean saveScreenshot(){
         ScreenHelper helper = new ScreenHelper(appContext);
-        Screen screen = helper.takeScreen();
+        byte[] screen = helper.takeScreenAsByteArray();
+        if (screen != null){
+            DevToolsDatabase db = DevTools.getDatabase();
+            Crash current = db.crashDao().getLast();
+            current.setRawScreen(screen);
+            db.crashDao().update(current);
+            Log.d(DevTools.TAG, "Raw screen stored in crash");
+            return true;
+        }
+
+        /*Screen screen = helper.takeScreen();
         if (screen != null){
             DevToolsDatabase db = DevTools.getDatabase();
             long screenId = db.screenDao().insert(screen);
@@ -125,19 +138,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Log.d(DevTools.TAG, "Crash screen stored in db");
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
     private Boolean saveLogcat(){
         LogHelper helper = new LogHelper(appContext);
-        long logcatId = helper.buildCrashReport();
-        if (logcatId > 0){
+        String logcat = helper.buildRawReport();
+        if (!StringUtils.isEmpty(logcat)){
             DevToolsDatabase db = DevTools.getDatabase();
             Crash current = db.crashDao().getLast();
-            current.setLogcatId(logcatId);
+            current.setRawLogcat(logcat);
             db.crashDao().update(current);
-            Log.d(DevTools.TAG, "Crash log stored in file");
+            Log.d(DevTools.TAG, "Raw logcat stored in crash");
             return true;
         }
         return false;

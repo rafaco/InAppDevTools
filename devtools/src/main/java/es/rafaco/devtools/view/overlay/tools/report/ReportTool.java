@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.overlay.tools.OverlayTool;
@@ -80,7 +82,7 @@ public class ReportTool extends OverlayTool {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSendEmailPressed();
+                onSendReportPressed();
             }
         });
     }
@@ -105,9 +107,9 @@ public class ReportTool extends OverlayTool {
 
     //region [ TOOL SPECIFIC ]
 
-    private void onSendEmailPressed() {
-       new ReportHelper(getContext(), ReportHelper.ReportType.SESSION, null)
-               .start();
+    private void onSendReportPressed() {
+        //TODO:
+        DevTools.sendReport(ReportHelper.ReportType.SESSION, null);
     }
 
     //endregion

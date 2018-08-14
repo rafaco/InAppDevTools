@@ -17,13 +17,10 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Date;
-
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
 
@@ -80,7 +77,7 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_REPORT:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
-                    DevTools.sendReport();
+                    DevTools.startReportDialog();
                     break;
                 case ACTION_CLEAN:
                     UiUtils.closeAllSystemWindows(getApplicationContext());
