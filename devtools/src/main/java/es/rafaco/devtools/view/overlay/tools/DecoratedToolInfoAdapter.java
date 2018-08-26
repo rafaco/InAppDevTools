@@ -74,13 +74,17 @@ public class DecoratedToolInfoAdapter
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startTool(data.title);
+                    onItemClick(data);
                 }
             });
         }else{
             holder.icon.setVisibility(View.GONE);
             holder.switchButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    protected void onItemClick(DecoratedToolInfo data) {
+        startTool(data.title);
     }
 
     public void startTool(String title){

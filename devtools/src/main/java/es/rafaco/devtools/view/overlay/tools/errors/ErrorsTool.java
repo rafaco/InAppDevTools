@@ -129,12 +129,6 @@ public class ErrorsTool extends OverlayTool {
                 onCrashBackButton();
             }
         });
-
-        if (ThreadUtils.amIOnUiThread()){
-            Log.d(DevTools.TAG, "ErrorsTool is on UI thread");
-        }else{
-            Log.d(DevTools.TAG, "ErrorsTool is NOT ON UI thread");
-        }
     }
 
     private void onRefresh() {
@@ -237,7 +231,12 @@ public class ErrorsTool extends OverlayTool {
 
     private void initAdapter(){
 
-        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>());
+        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>()){
+            @Override
+            protected void onItemClick(DecoratedToolInfo data) {
+                super.onItemClick(data);
+            }
+        };
 
         recyclerView = getView().findViewById(R.id.errors_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
