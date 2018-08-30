@@ -10,15 +10,22 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.view.overlay.OverlayToolsManager;
 import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
+import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
+import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
+import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
+import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
+import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 
 
 public class OverlayUIService extends Service {
@@ -30,7 +37,7 @@ public class OverlayUIService extends Service {
     public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
 
     private OverlayLayersManager overlayLayersManager;
-    private OverlayToolsManager overlayToolsManager;
+    private OverlayScreenManager overlayScreenManager;
 
     public OverlayUIService() {
     }
@@ -71,7 +78,7 @@ public class OverlayUIService extends Service {
             overlayLayersManager.setMainVisibility(false);
         }
         else if (action.equals(IntentAction.MAIN)) {
-            if (overlayToolsManager.getCurrent() == null){
+            if (overlayScreenManager.getCurrentScreen() == null){
                 //TODO: load home if forced from parameter
                 startTool("Home");
             }
@@ -141,9 +148,19 @@ public class OverlayUIService extends Service {
 
     private void init() {
         overlayLayersManager = new OverlayLayersManager(this);
-        overlayToolsManager = new OverlayToolsManager(this, overlayLayersManager.getMainLayer());
+        overlayScreenManager = new OverlayScreenManager(this, overlayLayersManager.getMainLayer());
 
-        ArrayList<String> toolsList = overlayToolsManager.getToolList();
+        //TODO: delegate to ToolManager
+        overlayScreenManager.registerScreen(HomeScreen.class);
+        overlayScreenManager.registerScreen(InfoScreen.class);
+        overlayScreenManager.registerScreen(ErrorsScreen.class);
+        overlayScreenManager.registerScreen(LogScreen.class);
+        overlayScreenManager.registerScreen(CommandsScreen.class);
+        overlayScreenManager.registerScreen(ScreensScreen.class);
+        overlayScreenManager.registerScreen(ReportScreen.class);
+
+        //TODO: delegate to ToolManager
+        List<String> toolsList = overlayScreenManager.getMainScreens();
         overlayLayersManager.initToolList(toolsList);
 
         //testUserDao();
@@ -173,7 +190,7 @@ public class OverlayUIService extends Service {
     @Override
     public void onDestroy() {
         Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
-        if (overlayToolsManager != null) overlayToolsManager.destroy();
+        if (overlayScreenManager != null) overlayScreenManager.destroy();
         if (overlayLayersManager != null) overlayLayersManager.destroy();
 
         super.onDestroy();
@@ -189,10 +206,10 @@ public class OverlayUIService extends Service {
 
 
 
-    public void startTool(String title) {
-        overlayToolsManager.selectTool(title);
+    public void startTool(String name) {
+        overlayScreenManager.loadScreen(name, null);
         overlayLayersManager.setMainVisibility(true);
-        overlayLayersManager.selectTool(title);
+        overlayLayersManager.selectTool(name);
     }
 
     //TODO: REMOVE
@@ -218,6 +235,6 @@ public class OverlayUIService extends Service {
 
     //TODO: REFACTOR
     public ViewGroup getMainLayerContainer() {
-        return overlayLayersManager.getMainLayer().getToolWrapper();
+        return overlayLayersManager.getMainLayer().getScreenWrapper();
     }
 }

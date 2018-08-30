@@ -21,8 +21,8 @@ import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
-import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
+import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
+import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 

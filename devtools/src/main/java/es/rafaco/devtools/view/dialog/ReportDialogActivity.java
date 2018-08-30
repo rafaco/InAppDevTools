@@ -36,10 +36,10 @@ import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.tools.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.overlay.tools.errors.ErrorsTool;
-import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
+import es.rafaco.devtools.view.DecoratedToolInfo;
+import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 
 public class ReportDialogActivity extends AppCompatActivity {
 
@@ -120,19 +120,19 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
 
-        array.add(new DecoratedToolInfo(ErrorsTool.class,
+        array.add(new DecoratedToolInfo(ErrorsScreen.class,
                 "Info",
                 " - ",
                 1,
                 ContextCompat.getColor(this, R.color.rally_white)));
 
-        array.add(new DecoratedToolInfo(ErrorsTool.class,
+        array.add(new DecoratedToolInfo(ErrorsScreen.class,
                 "Errors",
                 crashes.size() + " crashes and " + anrs.size() + " ANRs",
                 3,
                 ContextCompat.getColor(this, R.color.rally_orange)));
 
-        array.add(new DecoratedToolInfo(ErrorsTool.class,
+        array.add(new DecoratedToolInfo(ErrorsScreen.class,
                 "Screenshots",
                 screens.size() + " screens",
                 5,

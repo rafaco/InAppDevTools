@@ -14,7 +14,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
+import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
 

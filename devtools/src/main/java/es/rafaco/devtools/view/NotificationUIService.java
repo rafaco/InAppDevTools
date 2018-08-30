@@ -22,7 +22,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.utils.UiUtils;
-import es.rafaco.devtools.view.overlay.tools.info.InfoHelper;
+import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
 public class NotificationUIService extends Service {
 

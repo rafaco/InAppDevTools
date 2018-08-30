@@ -103,7 +103,7 @@ public class OverlayLayersManager {
 
     //region [ UI ACTIONS ]
 
-    public void initToolList(ArrayList<String> toolsList) {
+    public void initToolList(List<String> toolsList) {
         ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).initToolSelector(toolsList);
     }
 

@@ -3,9 +3,7 @@ package es.rafaco.devtools.view.overlay.layers;
 import android.animation.LayoutTransition;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
@@ -32,7 +30,7 @@ public class MainOverlayLayer extends OverlayLayer {
     private Spinner toolsSpinner;
     private ImageView sizePositionButton;
 
-    private ViewGroup toolWrapper;
+    private ViewGroup screenWrapper;
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
 
@@ -65,7 +63,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
     @Override
     protected void beforeAttachView(View view) {
-        toolWrapper = view.findViewById(R.id.tool_wrapper);
+        screenWrapper = view.findViewById(R.id.screen_wrapper);
 
         initScroll();
         initIcon(view);
@@ -82,8 +80,8 @@ public class MainOverlayLayer extends OverlayLayer {
     }
 
 
-    public ViewGroup getToolWrapper() {
-        return toolWrapper;
+    public ViewGroup getScreenWrapper() {
+        return screenWrapper;
     }
 
 
@@ -143,7 +141,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
     //region [ TOOL SELECTOR ]
 
-    public void initToolSelector(ArrayList<String> toolsList) {
+    public void initToolSelector(List<String> toolsList) {
         toolsSpinner = getView().findViewById(R.id.tools_spinner);
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getView().getContext(),

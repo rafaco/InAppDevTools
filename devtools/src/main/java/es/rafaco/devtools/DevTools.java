@@ -2,7 +2,6 @@ package es.rafaco.devtools;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,9 +16,9 @@ import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.dialog.CrashDialogActivity;
 import es.rafaco.devtools.view.dialog.ReportDialogActivity;
-import es.rafaco.devtools.view.overlay.tools.log.LogHelper;
-import es.rafaco.devtools.view.overlay.tools.report.ReportHelper;
-import es.rafaco.devtools.view.overlay.tools.screenshot.ScreenHelper;
+import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
+import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
+import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.NotificationUIService;

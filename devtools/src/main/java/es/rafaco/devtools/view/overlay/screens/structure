@@ -1,0 +1,11 @@
+View
+    OverlayUiService
+        OverlayLayersManager
+            OverlayLayer
+
+        OverlayScreensManager
+            OverlayScreen  (OverlayTool)
+
+Logic
+    ToolManager
+        Tool (name, screen, helper)

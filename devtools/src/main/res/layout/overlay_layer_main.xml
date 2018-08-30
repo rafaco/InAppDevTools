@@ -63,7 +63,7 @@
             android:id="@+id/first_separator"/>
 
         <LinearLayout
-            android:id="@+id/tool_wrapper"
+            android:id="@+id/screen_wrapper"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical">

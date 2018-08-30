@@ -2,6 +2,7 @@ package es.rafaco.devtools.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -113,5 +114,16 @@ public class FileUtils {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         return mime.getMimeTypeFromExtension(extension);
+    }
+
+    public static void scanMediaFile(Context context, File file) {
+        // Tell the media scanner about the new file so that it is immediately available to the user.
+        MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
     }
 }
