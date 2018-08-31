@@ -8,7 +8,7 @@
 
     <application>
         <activity
-            android:name=".logic.PermissionActivity"
+            android:name=".view.activities.PermissionActivity"
             android:theme="@style/LibTheme.Dialog" />
         <activity
             android:name=".logic.crash.CrashActivity"

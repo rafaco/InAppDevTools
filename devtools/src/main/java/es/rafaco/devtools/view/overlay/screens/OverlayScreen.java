@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.OverlayScreenManager;
-import es.rafaco.devtools.view.DecoratedToolInfo;
 
 public abstract class OverlayScreen {
 
@@ -74,28 +73,16 @@ public abstract class OverlayScreen {
     }
 
 
-    public OverlayScreenManager getManager() {
+    public OverlayScreenManager getScreenManager() {
         return manager;
     }
     public Context getContext() {
-        return getManager().getContext();
+        return getScreenManager().getContext();
     }
     public LayoutInflater getInflater() {
-        return getManager().getInflater();
+        return getScreenManager().getInflater();
     }
     public ViewGroup getView() {
-        return getManager().getView();
-    }
-
-
-
-    public DecoratedToolInfo getHomeInfo() {
-        return null;
-    }
-    public DecoratedToolInfo getReportInfo() {
-        return null;
-    }
-    public Object getReport() {
-        return null;
+        return getScreenManager().getView();
     }
 }

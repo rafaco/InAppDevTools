@@ -60,37 +60,6 @@ public class ScreensScreen extends OverlayScreen {
 
     }
 
-    @Override
-    public DecoratedToolInfo getHomeInfo(){
-
-        final DecoratedToolInfo info = new DecoratedToolInfo(ScreensScreen.class,
-                getFullTitle(),
-                "No screen saved.",
-                3,
-                ContextCompat.getColor(getContext(), R.color.rally_purple));
-
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                final int count = DevTools.getDatabase().screenDao().count();
-                if (count > 0){
-                    getManager().updateHomeInfoContent(ScreensScreen.class, count + " screens saved." );
-                }
-            }
-        });
-
-        return  info;
-    }
-
-    @Override
-    public DecoratedToolInfo getReportInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(InfoScreen.class,
-                getFullTitle(),
-                "Included last one of " + DevTools.getDatabase().screenDao().count(),
-                3,
-                ContextCompat.getColor(getContext(), R.color.rally_purple));
-        return info;
-    }
 
     private void initView(View toolView) {
         initShotButton(toolView);

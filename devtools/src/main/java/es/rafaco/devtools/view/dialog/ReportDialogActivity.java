@@ -124,19 +124,19 @@ public class ReportDialogActivity extends AppCompatActivity {
                 "Info",
                 " - ",
                 1,
-                ContextCompat.getColor(this, R.color.rally_white)));
+                R.color.rally_white));
 
         array.add(new DecoratedToolInfo(ErrorsScreen.class,
                 "Errors",
                 crashes.size() + " crashes and " + anrs.size() + " ANRs",
                 3,
-                ContextCompat.getColor(this, R.color.rally_orange)));
+                R.color.rally_orange));
 
         array.add(new DecoratedToolInfo(ErrorsScreen.class,
                 "Screenshots",
                 screens.size() + " screens",
                 5,
-                ContextCompat.getColor(this, R.color.rally_purple)));
+                R.color.rally_purple));
 
 
         Collections.sort(array, new Comparator<DecoratedToolInfo>() {

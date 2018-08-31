@@ -116,7 +116,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveScreenshot(){
-        ScreenHelper helper = new ScreenHelper(appContext);
+        ScreenHelper helper = new ScreenHelper();
         byte[] screen = helper.takeScreenAsByteArray();
         if (screen != null){
             DevToolsDatabase db = DevTools.getDatabase();
@@ -143,7 +143,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveLogcat(){
-        LogHelper helper = new LogHelper(appContext);
+        LogHelper helper = new LogHelper();
         String logcat = helper.buildRawReport();
         if (!StringUtils.isEmpty(logcat)){
             DevToolsDatabase db = DevTools.getDatabase();

@@ -8,7 +8,15 @@ import android.widget.Toast;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.logic.PermissionActivity;
+import es.rafaco.devtools.logic.tools.CommandsTool;
+import es.rafaco.devtools.logic.tools.ErrorsTool;
+import es.rafaco.devtools.logic.tools.HomeTool;
+import es.rafaco.devtools.logic.tools.InfoTool;
+import es.rafaco.devtools.logic.tools.LogTool;
+import es.rafaco.devtools.logic.tools.ReportTool;
+import es.rafaco.devtools.logic.tools.ScreenTool;
+import es.rafaco.devtools.logic.tools.ToolManager;
+import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
@@ -30,6 +38,7 @@ public class DevTools {
 
     private static Context appContext;
     private static DevToolsConfig config;
+    private static ToolManager toolManager;
     private static ActivityLogManager activityLogManager;
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
@@ -50,6 +59,18 @@ public class DevTools {
         Log.d(DevTools.TAG, "Initializing DevTools...");
         appContext = context.getApplicationContext();
         DevTools.config = config;
+
+        toolManager = new ToolManager(appContext);
+
+        //TODO: adapt with config Profiles
+        toolManager.registerTool(HomeTool.class);
+        toolManager.registerTool(InfoTool.class);
+        toolManager.registerTool(ErrorsTool.class);
+        toolManager.registerTool(LogTool.class);
+        toolManager.registerTool(CommandsTool.class);
+        toolManager.registerTool(ScreenTool.class);
+        toolManager.registerTool(ReportTool.class);
+
 
         if (config.crashHandlerEnabled) startCrashHandler(context);
         if (config.anrLoggerEnabled) startAnrLogger();
@@ -121,14 +142,17 @@ public class DevTools {
     public static Context getAppContext() {
         return appContext;
     }
-    public static DevToolsDatabase getDatabase() {
-        return DevToolsDatabase.getInstance();
+    public static DevToolsConfig getConfig() {
+        return config;
+    }
+    public static ToolManager getToolManager() {
+        return toolManager;
     }
     public static ActivityLogManager getActivityLogManager() {
         return activityLogManager;
     }
-    public static DevToolsConfig getConfig() {
-        return config;
+    public static DevToolsDatabase getDatabase() {
+        return DevToolsDatabase.getInstance();
     }
 
     //endregion
@@ -163,8 +187,7 @@ public class DevTools {
             return;
         }
 
-        ScreenHelper helper = new ScreenHelper(appContext);
-        Screen screen = helper.takeAndSaveScreen();
+        Screen screen = new ScreenHelper().takeAndSaveScreen();
 
         if(config.overlayUiEnabled && OverlayUIService.isInitialize()){
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
@@ -198,7 +221,7 @@ public class DevTools {
                         }else{
                             crash = getDatabase().crashDao().findById(crashId);
                         }
-                        new ReportHelper(appContext, ReportHelper.ReportType.CRASH, crash).start();
+                        new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
                     }
                 });
                 break;
@@ -209,7 +232,7 @@ public class DevTools {
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;
                         //TODO: Session report
-                        new ReportHelper(appContext, ReportHelper.ReportType.SESSION, params).start();
+                        new ReportHelper().start(ReportHelper.ReportType.SESSION, params);
                     }
                 });
                 break;

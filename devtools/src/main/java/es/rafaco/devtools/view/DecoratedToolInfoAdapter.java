@@ -3,6 +3,7 @@ package es.rafaco.devtools.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,8 +67,9 @@ public class DecoratedToolInfoAdapter
         holder.title.setText(data.title);
         holder.message.setText(data.message);
 
-        holder.title.setTextColor(data.color);
-        holder.decorator.setBackgroundColor(data.color);
+        int contextualizedColor = ContextCompat.getColor(holder.itemView.getContext(),data.color);
+        holder.title.setTextColor(contextualizedColor);
+        holder.decorator.setBackgroundColor(contextualizedColor);
 
         if(!switchMode){
             holder.itemView.setOnClickListener(new View.OnClickListener() {

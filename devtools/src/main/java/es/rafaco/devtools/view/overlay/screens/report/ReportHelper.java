@@ -13,31 +13,33 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.SqliteExporter;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 
-public class ReportHelper {
+public class ReportHelper extends ToolHelper{
+
+    @Override
+    public String getReportPath() {
+        return null;
+    }
+
+    @Override
+    public String getReportContent() {
+        return null;
+    }
 
     public enum ReportType { CRASH, SESSION, FULL }
 
-    Context context;
     ReportType type;
     Object target;
 
-    public ReportHelper(Context context, ReportType type, Object target) {
-        this.context = context;
+    public void start(ReportType type, Object target) {
         this.type = type;
         this.target = target;
-    }
-
-    public void start(){
-        buildReport();
-    }
-
-    private void buildReport(){
 
         boolean isHtml = false;
         String emailTo = getEmailTo();
@@ -73,12 +75,12 @@ public class ReportHelper {
     @NonNull
     private List<String> getAttachmentPaths() {
         List<String> filePaths = new ArrayList<>();
-        filePaths.add(new InfoHelper(context).buildReport());
+        filePaths.add(new InfoHelper().getReportPath());
 
         if(type.equals(ReportType.SESSION)){
 
-            filePaths.add(new LogHelper(context).buildReport());
-            filePaths.add(new ScreenHelper(context).buildReport());
+            filePaths.add(new LogHelper().getReportPath());
+            filePaths.add(new ScreenHelper().getReportPath());
 
             try{
                 ArrayList<Uri> screens = (ArrayList<Uri>)target;
@@ -101,7 +103,7 @@ public class ReportHelper {
         }
         else if (type.equals(ReportType.CRASH)){
             Crash crash = (Crash) target;
-            filePaths.addAll(new CrashHelper(context).buildReport(crash));
+            filePaths.addAll(new CrashHelper().buildReport(crash));
         }
         return filePaths;
     }
@@ -112,7 +114,7 @@ public class ReportHelper {
     }
 
     private String getEmailSubject(){
-        InfoHelper helper = new InfoHelper(context);
+        InfoHelper helper = new InfoHelper();
         String formatter = "%s %s report from %s %s";
         String currentType = "";
         if(type.equals(ReportType.SESSION)){

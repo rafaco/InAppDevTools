@@ -30,6 +30,7 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.view.overlay.OverlayScreenManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.DecoratedToolInfo;
@@ -351,7 +352,8 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = (String) getReport();
+                ToolHelper helper = new LogHelper();
+                String path = (String) helper.getReportPath();
                 DevTools.showMessage("Log stored to " + path);
             }
         });
@@ -390,38 +392,6 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
 
     private String getSelectedLevel() {
         return levelFilters.get(levelSpinner.getSelectedItemPosition()).second;
-    }
-
-
-    @Override
-    public DecoratedToolInfo getHomeInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo( LogScreen.class,
-                getFullTitle(),
-                "Live log is available. Automatic log to disk coming soon.",
-                2,
-                ContextCompat.getColor(getContext(), R.color.rally_white));
-        return info;
-    }
-
-    @Override
-    public DecoratedToolInfo getReportInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(LogScreen.class,
-                getFullTitle(),
-                "Include full log.",
-                2,
-                ContextCompat.getColor(getContext(), R.color.rally_white));
-        return info;
-    }
-
-    @Override
-    public Object getReport(){
-
-        return new LogHelper(getContext()).buildReport();
-
-        /*ShellExecuter exe = new ShellExecuter();
-        String command = "logcat -d *:V";
-        String output = exe.Executer(command);
-        return  output;*/
     }
 
     public void onClearLog(){

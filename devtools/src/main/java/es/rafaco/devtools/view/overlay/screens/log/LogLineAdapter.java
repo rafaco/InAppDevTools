@@ -174,7 +174,7 @@ public class LogLineAdapter
             //notifyDataSetChanged();
             notifyItemInserted(filteredData.size()-1);
 
-            manager.getManager().getMainLayer().scrollBottom();
+            manager.getScreenManager().getMainLayer().scrollBottom();
         }
     }
 

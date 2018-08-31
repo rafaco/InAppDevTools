@@ -61,17 +61,6 @@ public class ReportScreen extends OverlayScreen {
     protected void onDestroy() {
     }
 
-    @Override
-    public DecoratedToolInfo getHomeInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(ReportScreen.class,
-                getFullTitle(), //"Send a Report"
-                "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
-                3,
-                ContextCompat.getColor(getContext(), R.color.rally_green));
-        return  info;
-    }
-
-
 
     private void initView() {
         out = getView().findViewById(R.id.out);
@@ -89,11 +78,7 @@ public class ReportScreen extends OverlayScreen {
 
     private void initAdapter() {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
-
-        //TODO: make dynamic ( foreach screen if getReportInfo != null)
-        //array.add(getManager().getScreenClass(InfoScreen.class).getReportInfo());
-        //array.add(getManager().getScreenClass(LogScreen.class).getReportInfo());
-        //array.add(getManager().getScreenClass(ScreensScreen.class).getReportInfo());
+        array.addAll(DevTools.getToolManager().getReportInfos());
 
         adapter = new DecoratedToolInfoAdapter(getContext(), array);
         adapter.enableSwitchMode();

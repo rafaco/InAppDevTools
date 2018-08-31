@@ -75,16 +75,6 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
 
-    @Override
-    public DecoratedToolInfo getHomeInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(CommandsScreen.class,
-                getFullTitle(),
-                "Crash handler activated." + "\n" + "ANR handler activated.",
-                4,
-                ContextCompat.getColor(getContext(), R.color.rally_orange));
-        return  info;
-    }
-
     private void initView(View toolView) {
         welcome = toolView.findViewById(R.id.welcome);
         welcome.setText(getWelcomeMessage());
@@ -200,7 +190,7 @@ public class ErrorsScreen extends OverlayScreen {
                             "Crash " + getElapsedTimeString(crash.getDate()),
                             crash.getException() + " - " + crash.getMessage(),
                             crash.getDate(),
-                            ContextCompat.getColor(getContext(), R.color.rally_orange)));
+                            R.color.rally_orange));
                 }
 
                 List<Anr> anrs = db.anrDao().getAll();
@@ -209,7 +199,7 @@ public class ErrorsScreen extends OverlayScreen {
                             "ANR " + getElapsedTimeString(anr.getDate()),
                             anr.getCause(),
                             anr.getDate(),
-                            ContextCompat.getColor(getContext(), R.color.rally_blue)));
+                            R.color.rally_blue));
                 }
 
                 Collections.sort(array, new Comparator<DecoratedToolInfo>() {

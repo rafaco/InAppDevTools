@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.OverlayScreenManager;
@@ -65,7 +66,7 @@ public class HomeScreen extends OverlayScreen {
     }
 
     public String getWelcomeMessage(){
-        InfoHelper helper = new InfoHelper(getContext());
+        InfoHelper helper = new InfoHelper();
         return "Welcome to " + helper.getAppName() + "'s DevTools";
     }
 
@@ -81,11 +82,7 @@ public class HomeScreen extends OverlayScreen {
     }
 
     private void updateList() {
-        //TODO: getManager().requestHomeInfos()
-        //adapter.add(getManager().getScreenClass(InfoScreen.class).getHomeInfo());
-        //adapter.add(getManager().getScreenClass(ErrorsScreen.class).getHomeInfo());
-        //adapter.add(getManager().getScreenClass(ScreensScreen.class).getHomeInfo());
-        //adapter.add(getManager().getScreenClass(ReportScreen.class).getHomeInfo());
+        adapter.replaceAll(DevTools.getToolManager().getHomeInfos());
 
         adapter.notifyDataSetChanged();
         recyclerView.requestLayout();

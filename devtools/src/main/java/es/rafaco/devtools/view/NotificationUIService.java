@@ -128,7 +128,7 @@ public class NotificationUIService extends Service {
     private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
-        InfoHelper infoHelper = new InfoHelper(getApplicationContext());
+        InfoHelper infoHelper = new InfoHelper();
         PackageInfo packageInfo = infoHelper.getPackageInfo();
         String title, subTitle;
         if (crash == null){
@@ -187,8 +187,7 @@ public class NotificationUIService extends Service {
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
-        InfoHelper infoHelper = new InfoHelper(getApplicationContext());
-        String title = String.format("Ups, %s crashed", infoHelper.getAppName());
+        String title = String.format("Ups, %s crashed", new InfoHelper().getAppName());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setGroup(GROUP_ID)

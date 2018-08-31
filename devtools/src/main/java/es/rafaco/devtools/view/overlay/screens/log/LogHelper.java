@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.log;
 
-import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -13,38 +12,38 @@ import java.io.StringWriter;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Logcat;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 
-public class LogHelper {
+public class LogHelper extends ToolHelper{
 
-    private Context context;
-
-    public LogHelper(Context context) {
-        this.context = context;
-    }
-
-    public String buildReport(){
-
+    @Override
+    public String getReportPath() {
         if(FileUtils.isExternalStorageWritable()){
             File file = FileUtils.createNewFile("log",
                     "logcat_" + System.currentTimeMillis() + ".txt");
             try {
                 Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
                 process.waitFor();
+                return file.getPath();
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return file.getPath();
-
         } else if(FileUtils.isExternalStorageReadable() ){
             // only readable
         } else{
             // not accessible
         }
 
+        return null;
+    }
+
+    @Override
+    public String getReportContent() {
         return null;
     }
 

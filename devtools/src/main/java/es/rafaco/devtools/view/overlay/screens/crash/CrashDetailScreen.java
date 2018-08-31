@@ -27,7 +27,7 @@ public class CrashDetailScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-        helper = new CrashHelper(getContext());
+        helper = new CrashHelper();
     }
 
     @Override

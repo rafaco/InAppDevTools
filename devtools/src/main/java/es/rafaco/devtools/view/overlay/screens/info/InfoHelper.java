@@ -22,25 +22,22 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.FileUtils;
 
-public class InfoHelper {
+public class InfoHelper extends ToolHelper {
 
-    private final Context context;
-
-    public InfoHelper(Context context) {
-        this.context = context;
-    }
-
-    public String buildReport(){
+    @Override
+    public String getReportPath() {
         String filePath = FileUtils.createFileWithContent("info",
                 "system_info_" + System.currentTimeMillis() + ".txt",
-                getReport());
+                getReportContent());
 
         return filePath;
     }
 
-    public String getReport() {
+    @Override
+    public String getReportContent() {
         String result = "";
         result += getAppInfo().toString();
         result += "\n";

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.logic;
+package es.rafaco.devtools.view.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,8 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.view.OverlayUIService;
 
 public class PermissionActivity extends AppCompatActivity {
 

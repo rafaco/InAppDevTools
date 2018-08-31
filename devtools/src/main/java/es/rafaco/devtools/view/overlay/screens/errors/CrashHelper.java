@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -10,16 +9,22 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Logcat;
 import es.rafaco.devtools.db.errors.Screen;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.DateUtils;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 
-public class CrashHelper {
-    private final Context context;
+public class CrashHelper extends ToolHelper{
 
-    public CrashHelper(Context context) {
-        this.context = context;
+    @Override
+    public String getReportPath() {
+        return null;
+    }
+
+    @Override
+    public String getReportContent() {
+        return null;
     }
 
     public List<String> buildReport(Crash crash) {
@@ -54,7 +59,7 @@ public class CrashHelper {
     private void addScreen(Crash crash, List<String> filePaths) {
         String filePath = "";
         if (crash.getRawScreen() != null){
-            filePath = new ScreenHelper(context).storeByteArray(crash);
+            filePath = new ScreenHelper().storeByteArray(crash);
         }
         else{
             Screen screen = DevTools.getDatabase().screenDao().findById(crash.getScreenId());
@@ -69,7 +74,7 @@ public class CrashHelper {
     private void addLogcatFile(Crash crash, List<String> filePaths) {
         String filePath = "";
         if (crash.getRawLogcat() != null){
-            filePath = new LogHelper(context).undoRawReport(crash);
+            filePath = new LogHelper().undoRawReport(crash);
         }
         else{
             Logcat logcat = DevTools.getDatabase().logcatDao().findById(crash.getLogcatId());

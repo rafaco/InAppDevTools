@@ -1,7 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.info;
 
-import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +44,7 @@ public class InfoScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-        helper = new InfoHelper(getContext());
+        helper = new InfoHelper();
     }
 
     @Override
@@ -64,31 +62,6 @@ public class InfoScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
-    }
-
-    @Override
-    public DecoratedToolInfo getHomeInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(InfoScreen.class,
-                getFullTitle(),
-                getHomeInfoMessage(),
-                1,
-                ContextCompat.getColor(getContext(), R.color.rally_blue));
-        return info;
-    }
-
-    @Override
-    public DecoratedToolInfo getReportInfo(){
-        DecoratedToolInfo info = new DecoratedToolInfo(InfoScreen.class,
-                getFullTitle(),
-                "Include all. Brief info is always added",
-                1,
-                ContextCompat.getColor(getContext(), R.color.rally_blue));
-        return info;
-    }
-
-    @Override
-    public Object getReport(){
-        return helper.buildReport();
     }
 
 
@@ -123,19 +96,9 @@ public class InfoScreen extends OverlayScreen {
     }
 
     private void loadBuildConfig() {
-        String report = helper.getReport();
+        String report = helper.getReportContent();
         out.setText(report);
         secondSpinner.setVisibility(View.GONE);
-    }
-
-    public String getHomeInfoMessage(){
-        String out = "";
-        out += helper.getAppName() + " "  + helper.getPackageInfo().versionName + " (" + helper.getPackageInfo().versionCode + ")";
-        out += "\n";
-        out += Build.BRAND + " " + Build.MODEL;
-        out += "\n";
-        out += "Android " + Build.VERSION.RELEASE + " (" + helper.getVersionCodeName() + ")";
-        return out;
     }
 
 

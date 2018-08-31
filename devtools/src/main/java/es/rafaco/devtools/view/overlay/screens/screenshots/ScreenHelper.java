@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.screenshots;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -20,25 +19,20 @@ import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
+import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.utils.ViewHierarchyUtils;
 
-public class ScreenHelper {
+public class ScreenHelper extends ToolHelper{
 
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s_%s.jpg";
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
-    private Context context;
 
-    public ScreenHelper(Context context) {
-        this.context = context;
-    }
-
-
-    public String buildReport(){
-
+    @Override
+    public String getReportPath() {
         //TODO: ThreadUtils.runOnBackThread(new Runnable() {
         ScreenDao screenDao = DevToolsDatabase.getInstance().screenDao();
         final Screen lastScreen = screenDao.getLast();
@@ -48,6 +42,11 @@ public class ScreenHelper {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public String getReportContent() {
+        return null;
     }
 
 

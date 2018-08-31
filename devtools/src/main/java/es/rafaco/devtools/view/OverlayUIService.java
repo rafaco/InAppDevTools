@@ -15,8 +15,8 @@ import java.util.List;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.User;
-import es.rafaco.devtools.logic.PermissionActivity;
 import es.rafaco.devtools.utils.AppUtils;
+import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 import es.rafaco.devtools.view.overlay.OverlayScreenManager;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
@@ -80,15 +80,15 @@ public class OverlayUIService extends Service {
         else if (action.equals(IntentAction.MAIN)) {
             if (overlayScreenManager.getCurrentScreen() == null){
                 //TODO: load home if forced from parameter
-                startTool("Home");
+                startTool(HomeScreen.class.getSimpleName());
             }
             overlayLayersManager.setMainVisibility(true);
         }
         else if (action.equals(IntentAction.REPORT)){
-            startTool("Report");
+            startTool(ReportScreen.class.getSimpleName());
         }
         else if (action.equals(IntentAction.SCREEN)){
-            startTool("Report");
+            startTool(ReportScreen.class.getSimpleName());
         }
         else if (action.equals(IntentAction.CLOSE)){
             killProcess();

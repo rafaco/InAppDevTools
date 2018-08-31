@@ -1,5 +1,7 @@
 package es.rafaco.devtools.view;
 
+import android.support.v4.content.ContextCompat;
+
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 
 public class DecoratedToolInfo {
