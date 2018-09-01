@@ -18,4 +18,6 @@
     <dimen name="card_overflow_width">20dp</dimen>
     <dimen name="card_overflow_height">30dp</dimen>
     <dimen name="card_overflow_margin_top">10dp</dimen>
+
+    <dimen name="overlay_dialog_margin">7dp</dimen>
 </resources>

@@ -15,7 +15,32 @@
 
         <item name="android:popupTheme">@style/popupMenuStyle</item>
 
+    <!--<item name="actionBarSize">20dp</item>
+        <item name="actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>-->
     </style>
+
+
+    <!--<style name="MyActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="actionButtonStyle">@style/MyActionButtonStyle</item>
+        <item name="displayOptions">homeAsUp</item>
+    </style>
+
+    <style name="MyActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
+        <item name="android:minWidth">20dp</item>
+        <item name="android:minHeight">20dp</item>
+    </style>-->
+
+    <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="android:textColorPrimary">@color/rally_white</item>
+        <item name="colorControlNormal">@color/rally_white</item>
+        <item name="colorControlHighlight">@color/rally_blue</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+    </style>
+
 
     <style name="LibTheme.Dialog">
         <item name="android:background">@color/rally_bg_solid</item>

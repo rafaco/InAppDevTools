@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_close"
+        android:icon="@drawable/ic_close_rally_24dp"
+        android:orderInCategory="100"
+        android:title="Split view"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_half_position"
+        android:icon="@drawable/ic_arrow_down_rally_24dp"
+        android:orderInCategory="200"
+        android:title="Split view"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:orderInCategory="300"
+        android:title="Settings"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_search_rally_24dp"
+        android:orderInCategory="400"
+        android:title="Share..."
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_forever_rally_24dp"
+        android:orderInCategory="500"
+        android:title="Delete"/>
+
+</menu>

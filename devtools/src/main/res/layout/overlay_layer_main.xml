@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/full_container"
@@ -9,8 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/widget_full_shape"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/overlay_dialog_margin"
         style="@style/elevated">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:maxHeight="40dp"
+            app:popupTheme="@style/popupMenuStyle"
+            android:theme="@style/LibActionBarTheme"
+            style="@style/elevated"/>
+
+        <View style="@style/horizontal_separator"
+            android:layout_height="0.5dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

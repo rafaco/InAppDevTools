@@ -85,7 +85,7 @@ public class DecoratedToolInfoAdapter
     }
 
     protected void onItemClick(DecoratedToolInfo data) {
-        startTool(data.title);
+        startTool(data.screenClass.getSimpleName());
     }
 
     public void startTool(String title){

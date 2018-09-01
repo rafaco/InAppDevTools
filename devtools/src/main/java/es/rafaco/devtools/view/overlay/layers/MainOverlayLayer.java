@@ -4,7 +4,9 @@ import android.animation.LayoutTransition;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 import es.rafaco.devtools.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
+import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -33,6 +37,7 @@ public class MainOverlayLayer extends OverlayLayer {
     private ViewGroup screenWrapper;
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
+    private Toolbar toolbar;
 
     public MainOverlayLayer(OverlayLayersManager manager) {
         super(manager);
@@ -70,6 +75,8 @@ public class MainOverlayLayer extends OverlayLayer {
         initCloseButton(view);
         initPositionButton(view);
 
+        initToolbar(view);
+
         ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
 
@@ -79,33 +86,10 @@ public class MainOverlayLayer extends OverlayLayer {
         view.setVisibility(View.GONE);
     }
 
-
     public ViewGroup getScreenWrapper() {
         return screenWrapper;
     }
 
-
-
-    private void initCloseButton(View view) {
-        view.findViewById(R.id.full_close_button)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        manager.setMainVisibility(false);
-                    }
-                });
-    }
-
-    private void initIcon(View view) {
-        appIcon = view.findViewById(R.id.full_app_icon);
-        UiUtils.setAppIconAsBackground(appIcon);
-        appIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manager.setMainVisibility(false);
-            }
-        });
-    }
 
     //region [ SCROLL ]
 
@@ -137,7 +121,6 @@ public class MainOverlayLayer extends OverlayLayer {
     }
 
     //endregion
-
 
     //region [ TOOL SELECTOR ]
 
@@ -235,4 +218,67 @@ public class MainOverlayLayer extends OverlayLayer {
 
     //endregion
 
+
+    private void initCloseButton(View view) {
+        view.findViewById(R.id.full_close_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        manager.setMainVisibility(false);
+                    }
+                });
+    }
+
+    private void initIcon(View view) {
+        appIcon = view.findViewById(R.id.full_app_icon);
+        UiUtils.setAppIconAsBackground(appIcon);
+        appIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manager.setMainVisibility(false);
+            }
+        });
+    }
+
+
+    //region [ TOOL BAR ]
+
+    private void initToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle the menu item
+                return true;
+            }
+        });
+        toolbar.inflateMenu(R.menu.overlay);
+
+        toolbar.setTitle("DevTools");
+        toolbar.setSubtitle("Sample app");
+
+        toogleBackButton(true);
+    }
+
+    public void toogleBackButton(boolean showBack){
+        if (showBack){
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_rally_24dp);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(toolbar.getContext(), "Back pressed", Toast.LENGTH_LONG).show();
+                    toogleBackButton(false);
+                }
+            });
+            toolbar.setLogo(null);
+            toolbar.setLogoDescription(null);
+        }else{
+            toolbar.setNavigationIcon(null);
+            toolbar.setNavigationOnClickListener(null);
+            toolbar.setLogo(UiUtils.getAppIconResourceId());
+            toolbar.setLogoDescription(new InfoHelper().getAppName());
+        }
+    }
+
+    //endregion
 }
