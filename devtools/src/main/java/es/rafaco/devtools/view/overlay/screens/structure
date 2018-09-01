@@ -1,11 +1,14 @@
 View
     OverlayUiService
         OverlayLayersManager
-            OverlayLayer
+            [OverlayLayers]
+                MainOverlayLayerManager
+                    [OverlayScreens]
 
         OverlayScreensManager
-            OverlayScreen  (OverlayTool)
+
 
 Logic
     ToolManager
         Tool (name, screen, helper)
+            ToolHelper

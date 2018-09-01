@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.OverlayUIService;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.utils.AppUtils;
 
@@ -26,7 +26,7 @@ public class CommandsScreen extends OverlayScreen {
     private Button fullRestartButton;
     private Button installedButton;
 
-    public CommandsScreen(OverlayScreenManager manager) {
+    public CommandsScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 

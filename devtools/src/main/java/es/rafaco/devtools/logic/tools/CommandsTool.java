@@ -1,8 +1,10 @@
 package es.rafaco.devtools.logic.tools;
 
+import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 
 public class CommandsTool extends Tool {
     @Override
@@ -22,7 +24,12 @@ public class CommandsTool extends Tool {
 
     @Override
     public DecoratedToolInfo getHomeInfo() {
-        return null;
+        DecoratedToolInfo info = new DecoratedToolInfo(CommandsScreen.class,
+                getName(),
+                "Type shell commands, run a predefined ones or configure your owns.",
+                4,
+                R.color.rally_white);
+        return  info;
     }
 
     @Override

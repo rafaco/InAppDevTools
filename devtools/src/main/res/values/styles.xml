@@ -33,6 +33,7 @@
 
     <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="android:textColorPrimary">@color/rally_white</item>
+        <item name="android:background">@color/rally_bg_blur</item>
         <item name="colorControlNormal">@color/rally_white</item>
         <item name="colorControlHighlight">@color/rally_blue</item>
         <item name="android:gravity">center_vertical</item>

@@ -26,24 +26,7 @@ public class ScreenTool extends Tool {
 
     @Override
     public DecoratedToolInfo getHomeInfo() {
-        final DecoratedToolInfo info = new DecoratedToolInfo(ScreensScreen.class,
-                getName(),
-                "No screen saved.",
-                3,
-                R.color.rally_purple);
-
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                final int count = DevTools.getDatabase().screenDao().count();
-                if (count > 0){
-                    //TODO: updateHomeInfoContent?????
-                    //getScreenManager().updateHomeInfoContent(ScreensScreen.class, count + " screens saved." );
-                }
-            }
-        });
-
-        return  info;
+        return null;
     }
 
     @Override

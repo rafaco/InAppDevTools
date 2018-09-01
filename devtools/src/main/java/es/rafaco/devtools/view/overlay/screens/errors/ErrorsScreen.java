@@ -1,7 +1,6 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,11 +22,11 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.utils.ThreadUtils;
 
 import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeString;
@@ -42,7 +41,7 @@ public class ErrorsScreen extends OverlayScreen {
     private Button crashBackButton;
     private Button anrButton;
 
-    public ErrorsScreen(OverlayScreenManager manager) {
+    public ErrorsScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
@@ -223,7 +222,8 @@ public class ErrorsScreen extends OverlayScreen {
         adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>()){
             @Override
             protected void onItemClick(DecoratedToolInfo data) {
-                super.onItemClick(data);
+                //TODO
+                //OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_TO, data.getScreenClass(), data.get )
             }
         };
 

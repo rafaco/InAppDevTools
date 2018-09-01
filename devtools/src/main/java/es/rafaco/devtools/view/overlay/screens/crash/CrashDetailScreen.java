@@ -4,14 +4,14 @@ import android.view.ViewGroup;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 
 public class CrashDetailScreen extends OverlayScreen {
 
     private CrashHelper helper;
 
-    public CrashDetailScreen(OverlayScreenManager manager) {
+    public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 

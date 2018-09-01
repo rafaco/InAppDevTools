@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.screenshots;
 
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,10 +16,8 @@ import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.db.errors.ScreenDao;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 
 public class ScreensScreen extends OverlayScreen {
 
@@ -28,13 +25,13 @@ public class ScreensScreen extends OverlayScreen {
     private RecyclerView recyclerView;
     private ScreenAdapter adapter;
 
-    public ScreensScreen(OverlayScreenManager manager) {
+    public ScreensScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
     @Override
     public String getTitle() {
-        return "Screen";
+        return "Screens";
     }
 
     @Override

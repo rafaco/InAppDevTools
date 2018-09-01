@@ -18,7 +18,7 @@ import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
@@ -34,10 +34,12 @@ public class OverlayUIService extends Service {
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
     private static Boolean initialised = false;
 
-    public enum IntentAction { PERMISSION_GRANTED, RESTART, CLOSE, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON }
+    public enum IntentAction { PERMISSION_GRANTED, RESTART_APP, CLOSE_APP, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON,
+        NAVIGATE_TO, NAVIGATE_BACK, HIDE, NAVIGATE_HOME
+    }
 
     private OverlayLayersManager overlayLayersManager;
-    private OverlayScreenManager overlayScreenManager;
+    private MainOverlayLayerManager mainOverlayLayerManager;
 
     public OverlayUIService() {
     }
@@ -72,31 +74,47 @@ public class OverlayUIService extends Service {
         }
 
         if (action.equals(IntentAction.TOOL)){
-            startTool(property.replace(" Tool", ""));
+            navigateTo(property.replace(" Tool", ""));
         }
         else if (action.equals(IntentAction.ICON)) {
-            overlayLayersManager.setMainVisibility(false);
+            hide();
         }
         else if (action.equals(IntentAction.MAIN)) {
-            if (overlayScreenManager.getCurrentScreen() == null){
-                //TODO: load home if forced from parameter
-                startTool(HomeScreen.class.getSimpleName());
+            if (mainOverlayLayerManager.getCurrentScreen() == null){
+                navigateHome();
             }
             overlayLayersManager.setMainVisibility(true);
         }
         else if (action.equals(IntentAction.REPORT)){
-            startTool(ReportScreen.class.getSimpleName());
+            navigateTo(ReportScreen.class.getSimpleName());
         }
         else if (action.equals(IntentAction.SCREEN)){
-            startTool(ReportScreen.class.getSimpleName());
+            navigateTo(ReportScreen.class.getSimpleName());
         }
-        else if (action.equals(IntentAction.CLOSE)){
-            killProcess();
 
-        }else if (action.equals(IntentAction.RESTART)){
+        else if (action.equals(IntentAction.NAVIGATE_TO)){
+            navigateTo(property.replace(" Tool", ""));
+        }
+        else if (action.equals(IntentAction.NAVIGATE_BACK)){
+            navigateBack();
+        }
+        else if (action.equals(IntentAction.NAVIGATE_HOME)){
+            navigateHome();
+        }
+        else if (action.equals(IntentAction.HIDE)){
+            hide();
+        }
+        else if (action.equals(IntentAction.CLOSE_APP)){
+            killProcess();
+        }
+        else if (action.equals(IntentAction.RESTART_APP)){
             AppUtils.programRestart(getApplicationContext());
             killProcess();
         }
+    }
+
+    private void hide() {
+        overlayLayersManager.setMainVisibility(false);
     }
 
     public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
@@ -130,13 +148,6 @@ public class OverlayUIService extends Service {
         if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             //TODO: remove
             throw new UnsupportedOperationException("Alguien ha llamado a OverlayUIService desde fuera!!!");
-            /*PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
-                    new Runnable(){
-                        @Override
-                        public void run() { processIntentAction(action, property);
-                        }
-                    }, null);
-            return false;*/
         }
         else {
             init();
@@ -148,26 +159,18 @@ public class OverlayUIService extends Service {
 
     private void init() {
         overlayLayersManager = new OverlayLayersManager(this);
-        overlayScreenManager = new OverlayScreenManager(this, overlayLayersManager.getMainLayer());
+        mainOverlayLayerManager = new MainOverlayLayerManager(this, overlayLayersManager.getMainLayer());
 
-        //TODO: delegate to ToolManager
-        overlayScreenManager.registerScreen(HomeScreen.class);
-        overlayScreenManager.registerScreen(InfoScreen.class);
-        overlayScreenManager.registerScreen(ErrorsScreen.class);
-        overlayScreenManager.registerScreen(LogScreen.class);
-        overlayScreenManager.registerScreen(CommandsScreen.class);
-        overlayScreenManager.registerScreen(ScreensScreen.class);
-        overlayScreenManager.registerScreen(ReportScreen.class);
+        //TODO: delegate to ToolManager or delete
+        mainOverlayLayerManager.registerScreen(HomeScreen.class);
+        mainOverlayLayerManager.registerScreen(InfoScreen.class);
+        mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
+        mainOverlayLayerManager.registerScreen(LogScreen.class);
+        mainOverlayLayerManager.registerScreen(CommandsScreen.class);
+        mainOverlayLayerManager.registerScreen(ScreensScreen.class);
+        mainOverlayLayerManager.registerScreen(ReportScreen.class);
 
-        //TODO: delegate to ToolManager
-        List<String> toolsList = overlayScreenManager.getMainScreens();
-        overlayLayersManager.initToolList(toolsList);
-
-        //testUserDao();
-
-        //TODO: replace by icon
-        //startTool("Home");
-        overlayLayersManager.setMainVisibility(false);
+        //navigateTo("Home");
     }
 
     @Override
@@ -190,7 +193,7 @@ public class OverlayUIService extends Service {
     @Override
     public void onDestroy() {
         Log.d(DevTools.TAG, "OverlayUIService - onDestroy");
-        if (overlayScreenManager != null) overlayScreenManager.destroy();
+        if (mainOverlayLayerManager != null) mainOverlayLayerManager.destroy();
         if (overlayLayersManager != null) overlayLayersManager.destroy();
 
         super.onDestroy();
@@ -206,35 +209,18 @@ public class OverlayUIService extends Service {
 
 
 
-    public void startTool(String name) {
-        overlayScreenManager.loadScreen(name, null);
+
+    public void navigateHome() {
+        mainOverlayLayerManager.goHome();
+    }
+
+    public void navigateTo(String name) {
         overlayLayersManager.setMainVisibility(true);
-        overlayLayersManager.selectTool(name);
+        mainOverlayLayerManager.goTo(name, null);
     }
 
-    //TODO: REMOVE
-    private void testUserDao() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                User user = new User();
-                user.setFirstName("Ajay");
-                user.setLastName("Saini");
-                user.setAge(25);
-
-                DevToolsDatabase db = DevTools.getDatabase();
-                Log.d(DevTools.TAG, "Database size is: " + db.userDao().countUsers());
-                db.userDao().insertAll(user);
-                Log.d(DevTools.TAG, "Database size is: " + db.userDao().countUsers());
-
-                User stored = db.userDao().findByName("Ajay", "Saini");
-                Log.d(DevTools.TAG, "Database age is: " + stored.getAge());
-            }
-        });
+    public void navigateBack() {
+        mainOverlayLayerManager.goBack();
     }
 
-    //TODO: REFACTOR
-    public ViewGroup getMainLayerContainer() {
-        return overlayLayersManager.getMainLayer().getScreenWrapper();
-    }
 }

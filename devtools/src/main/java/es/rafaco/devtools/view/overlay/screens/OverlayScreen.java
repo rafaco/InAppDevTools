@@ -6,11 +6,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 
 public abstract class OverlayScreen {
 
-    private final OverlayScreenManager manager;
+    private final MainOverlayLayerManager manager;
     private ViewGroup headView;
     private ViewGroup bodyView;
 
@@ -32,7 +32,7 @@ public abstract class OverlayScreen {
     protected abstract void onStop();
     protected abstract void onDestroy();
 
-    public OverlayScreen(OverlayScreenManager manager) {
+    public OverlayScreen(MainOverlayLayerManager manager) {
         this.manager = manager;
         onCreate();
     }
@@ -73,7 +73,7 @@ public abstract class OverlayScreen {
     }
 
 
-    public OverlayScreenManager getScreenManager() {
+    public MainOverlayLayerManager getScreenManager() {
         return manager;
     }
     public Context getContext() {

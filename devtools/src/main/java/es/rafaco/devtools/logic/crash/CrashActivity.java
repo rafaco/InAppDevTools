@@ -52,17 +52,17 @@ public class CrashActivity extends AppCompatActivity {
                         callServiceAction(OverlayUIService.IntentAction.REPORT);
                     }
                 })
-                .setNegativeButton("RESTART",new DialogInterface.OnClickListener() {
+                .setNegativeButton("RESTART_APP",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        callServiceAction(OverlayUIService.IntentAction.RESTART);
+                        callServiceAction(OverlayUIService.IntentAction.RESTART_APP);
                     }
                 })
                 .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        callServiceAction(OverlayUIService.IntentAction.CLOSE);
+                        callServiceAction(OverlayUIService.IntentAction.CLOSE_APP);
                     }
                 });
 

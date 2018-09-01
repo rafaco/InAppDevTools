@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -49,11 +48,8 @@ public class OverlayLayersManager {
         initLayers();
     }
 
-    public MainOverlayLayer getMainLayer(){
-        return (MainOverlayLayer) getWidget(OverlayLayer.Type.MAIN);
-    }
 
-    //region [ WIDGET INIT ]
+    //region [ LAYERS MANAGER ]
 
     private void initLayers() {
         if (DevTools.getConfig().overlayUiIconEnabled){
@@ -70,19 +66,23 @@ public class OverlayLayersManager {
     }
 
     public View getView(OverlayLayer.Type widgetType){
-        OverlayLayer overlayLayer = getWidget(widgetType);
+        OverlayLayer overlayLayer = getLayer(widgetType);
         if (overlayLayer != null)
             return overlayLayer.getView();
         return null;
     }
 
-    public OverlayLayer getWidget(OverlayLayer.Type widgetType){
+    public OverlayLayer getLayer(OverlayLayer.Type widgetType){
         for (OverlayLayer overlayLayer : overlayLayers) {
             if (overlayLayer.getType().equals(widgetType)){
                 return overlayLayer;
             }
         }
         return null;
+    }
+
+    public MainOverlayLayer getMainLayer(){
+        return (MainOverlayLayer) getLayer(OverlayLayer.Type.MAIN);
     }
 
     public WindowManager getWindowManager() {
@@ -101,19 +101,7 @@ public class OverlayLayersManager {
 
     //endregion
 
-    //region [ UI ACTIONS ]
-
-    public void initToolList(List<String> toolsList) {
-        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).initToolSelector(toolsList);
-    }
-
-    public void startTool(String title) {
-        ((OverlayUIService)context).startTool(title);
-    }
-
-    public void selectTool(String title) {
-        ((MainOverlayLayer)getWidget(OverlayLayer.Type.MAIN)).selectTool(title);
-    }
+    //region [ TOGGLE LAYER VISIBILITY ]
 
     public void setMainVisibility(boolean mainVisible) {
         if (mainVisible) {
@@ -149,7 +137,7 @@ public class OverlayLayersManager {
     private void implementTouchListenerToIconWidgetView() {
         final View iconWidgetView = getView(OverlayLayer.Type.ICON);
         final View removeWidgetView = getView(OverlayLayer.Type.REMOVE);
-        final ImageView remove_image_view = ((RemoveOverlayLayer) getWidget(OverlayLayer.Type.REMOVE)).remove_image_view;
+        final ImageView remove_image_view = ((RemoveOverlayLayer) getLayer(OverlayLayer.Type.REMOVE)).remove_image_view;
 
         View rootContainer = iconWidgetView.findViewById(R.id.root_container);
         rootContainer.setOnTouchListener(new View.OnTouchListener() {

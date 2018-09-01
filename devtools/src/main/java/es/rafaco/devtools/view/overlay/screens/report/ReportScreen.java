@@ -1,6 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.report;
 
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +13,10 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
-import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 
 public class ReportScreen extends OverlayScreen {
@@ -29,8 +26,9 @@ public class ReportScreen extends OverlayScreen {
     private DecoratedToolInfoAdapter adapter;
     private RecyclerView recyclerView;
     private TextView header;
+    private Button manageScreensButton;
 
-    public ReportScreen(OverlayScreenManager manager) {
+    public ReportScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
@@ -66,12 +64,19 @@ public class ReportScreen extends OverlayScreen {
         out = getView().findViewById(R.id.out);
         header = getView().findViewById(R.id.report_welcome);
         sendButton = getView().findViewById(R.id.report_button);
+        manageScreensButton = getView().findViewById(R.id.manage_screens_button);
 
         header.setText("Choose elements to send and press Send");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSendReportPressed();
+            }
+        });
+        manageScreensButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onManageScreensPressed();
             }
         });
     }
@@ -96,6 +101,10 @@ public class ReportScreen extends OverlayScreen {
     private void onSendReportPressed() {
         //TODO:
         DevTools.sendReport(ReportHelper.ReportType.SESSION, null);
+    }
+
+    private void onManageScreensPressed() {
+        getScreenManager().goTo(ScreensScreen.class);
     }
 
     //endregion

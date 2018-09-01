@@ -29,7 +29,7 @@ public class LogTool extends Tool {
                 getName(),
                 "Live log is available. Automatic log to disk coming soon.",
                 2,
-                R.color.rally_white);
+                R.color.rally_yellow);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class LogTool extends Tool {
                 getName(),
                 "Include full log.",
                 2,
-                R.color.rally_white);
+                R.color.rally_yellow);
     }
 }

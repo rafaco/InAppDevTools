@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -31,9 +30,8 @@ import java.util.List;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.tools.ToolHelper;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
 public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickListener {
@@ -67,7 +65,7 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
     private Process process;
 
 
-    public LogScreen(OverlayScreenManager manager) {
+    public LogScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 

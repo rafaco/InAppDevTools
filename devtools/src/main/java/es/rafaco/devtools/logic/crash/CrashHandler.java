@@ -202,7 +202,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         //TODO: report
                     }
                 })
-                .setNegativeButton("RESTART",new DialogInterface.OnClickListener() {
+                .setNegativeButton("RESTART_APP",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         AppUtils.programRestart(appContext);

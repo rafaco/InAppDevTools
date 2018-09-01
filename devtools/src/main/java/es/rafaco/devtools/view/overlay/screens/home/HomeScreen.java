@@ -13,14 +13,10 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
-import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
-import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
-import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 
 public class HomeScreen extends OverlayScreen {
 
@@ -29,7 +25,7 @@ public class HomeScreen extends OverlayScreen {
     private TextView welcome;
     private ArrayList<DecoratedToolInfo> dataList;
 
-    public HomeScreen(OverlayScreenManager manager) {
+    public HomeScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 

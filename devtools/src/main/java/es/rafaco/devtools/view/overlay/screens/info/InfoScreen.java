@@ -12,9 +12,8 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.overlay.OverlayScreenManager;
+import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 import es.rafaco.devtools.utils.OnTouchSelectedListener;
 
@@ -27,7 +26,7 @@ public class InfoScreen extends OverlayScreen {
     private Spinner secondSpinner;
     private InfoHelper helper;
 
-    public InfoScreen(OverlayScreenManager manager) {
+    public InfoScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
