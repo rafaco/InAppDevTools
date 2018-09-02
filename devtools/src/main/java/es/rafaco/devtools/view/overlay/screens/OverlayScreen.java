@@ -12,7 +12,7 @@ import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 public abstract class OverlayScreen {
 
     private final MainOverlayLayerManager manager;
-    private ViewGroup headView;
+    public ViewGroup headView;
     public ViewGroup bodyView;
     private String param;
     private ViewGroup headContainer;
@@ -46,8 +46,7 @@ public abstract class OverlayScreen {
             headView.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
-            headView.setVisibility(View.GONE);
-            //targetContainer.removeAllViews();
+            toggleHeadVisibility(false);
             headContainer.addView(headView);
         }
 
@@ -56,8 +55,7 @@ public abstract class OverlayScreen {
         bodyView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        bodyView.setVisibility(View.GONE);
-        //targetContainer.removeAllViews();
+        toggleBodyVisibility(false);
         bodyContainer.addView(bodyView);
 
         onStart(getView());
@@ -69,9 +67,24 @@ public abstract class OverlayScreen {
         onStop();
     }
 
-    public void show(){
-        if (headView !=null) headView.setVisibility(View.VISIBLE);
+    public void toggleVisibility(boolean show){
+        toggleHeadVisibility(show);
+        toggleBodyVisibility(show);
         if (bodyView !=null) bodyView.setVisibility(View.VISIBLE);
+    }
+
+    public void toggleHeadVisibility(boolean show){
+        int visibility = show ? View.VISIBLE : View.GONE;
+        if (headView !=null) headView.setVisibility(visibility);
+    }
+
+    public void toggleBodyVisibility(boolean show){
+        int visibility = show ? View.VISIBLE : View.GONE;
+        if (bodyView !=null) bodyView.setVisibility(visibility);
+    }
+
+    public boolean haveHead() {
+        return getHeadLayoutId() != -1 && headView !=null;
     }
 
     public void destroy(){

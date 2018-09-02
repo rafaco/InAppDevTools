@@ -27,7 +27,7 @@ public class ReportTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(ReportScreen.class, null);
         return new DecoratedToolInfo(
-                getName(), //"Send a Report"
+                "Send a Report",
                 "Send a bug, exception or feedback straight to the developers. Choose which attachments to include and add your own description or steps to reproduce it later in GMail.",
                 R.color.rally_green,
                 3,

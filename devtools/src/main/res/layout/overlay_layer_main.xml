@@ -17,19 +17,18 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:maxHeight="40dp"
             android:theme="@style/LibActionBarTheme"
             app:popupTheme="@style/popupMenuStyle"
             style="@style/elevated">
         </android.support.v7.widget.Toolbar>
 
-        <!-- <View style="@style/horizontal_separator"
-            android:id="@+id/first_separator"/> -->
+        <!--<View style="@style/horizontal_separator"
+            android:id="@+id/first_separator"/>-->
 
         <FrameLayout
             android:id="@+id/tool_head_container"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/rally_bg_blur"
             style="@style/elevated">
         </FrameLayout>

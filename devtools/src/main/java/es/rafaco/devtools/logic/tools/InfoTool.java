@@ -39,7 +39,7 @@ public class InfoTool extends Tool {
 
         NavigationStep step = new NavigationStep(InfoScreen.class, null);
         return new DecoratedToolInfo(
-                getName(),
+                "Info",
                 out,
                 R.color.rally_blue,
                 1,

@@ -71,7 +71,7 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
 
     @Override
     public String getTitle() {
-        return "Log";
+        return "LogCat";
     }
 
     @Override

@@ -93,10 +93,10 @@
                 android:text="logcat -d DevTools:V *:S"/>
         </RelativeLayout>
 
-        <View
+        <!--<View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/rally_blue"/>
+            android:layout_height="1dp"
+            android:background="@color/rally_blue"/>-->
 
         <ScrollView
             android:layout_width="match_parent"

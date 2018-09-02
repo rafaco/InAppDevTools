@@ -29,7 +29,7 @@ public class ErrorsTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(ErrorsScreen.class, null);
         DecoratedToolInfo info = new DecoratedToolInfo(
-                getName(),
+                "Error log",
                 "Crash handler activated." + "\n" + "ANR handler activated.",
                 R.color.rally_orange,
                 4,

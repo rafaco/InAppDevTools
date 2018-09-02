@@ -54,7 +54,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     public String getTitle() {
-        return "Errors";
+        return "Error log";
     }
 
     @Override

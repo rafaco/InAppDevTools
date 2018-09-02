@@ -29,7 +29,7 @@ public class LogTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(LogScreen.class, null);
         return new DecoratedToolInfo(
-                getName(),
+                "Logcat",
                 "Live log is available. Automatic log to disk coming soon.",
                 R.color.rally_yellow,
                 2,

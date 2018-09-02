@@ -3,7 +3,6 @@ package es.rafaco.devtools.view.overlay.layers;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
@@ -86,48 +85,78 @@ public class MainOverlayLayerManager {
             return;
         }
 
+        loadScreen(screenClass, param);
 
-        final ViewGroup loadedViewGroup = loadScreen(screenClass, param);
-        if (getCurrentScreen() == null) {
-            loadedScreen.show();
+        if (getCurrentScreen() == null)
+        {
+            loadedScreen.toggleHeadVisibility(true);
             ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
             currentScreen = loadedScreen;
-        }else{
-            ExpandCollapseUtils.collapse(currentScreen.bodyView,
-                    new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {}
+        }
+        else {
+            if (currentScreen.haveHead()){
+                ExpandCollapseUtils.collapse(currentScreen.headView,
+                        new AnimationEndListener() {
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                if (loadedScreen.haveHead())
+                                    ExpandCollapseUtils.expand(loadedScreen.headView, null);
+                            }
+                        });
+            }else{
+                if (loadedScreen.haveHead())
+                    ExpandCollapseUtils.expand(loadedScreen.headView, null);
+            }
 
+            ExpandCollapseUtils.collapse(currentScreen.bodyView,
+                    new AnimationEndListener() {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             destroyPreviousScreen();
-                            ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
+                            ExpandCollapseUtils.expand(loadedScreen.bodyView,
+                                    new AnimationEndListener(){
+                                        @Override
+                                        public void onAnimationEnd(Animation animation) {
+
+                                        }
+                            });
                             currentScreen = loadedScreen;
                         }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
                     });
-        }
 
-/*
-        ExpandCollapseUtils.start(getView(),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        destroyPreviousScreen();
-                    }
-                },
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        loadScreen(screenClass, param);
-                    }
-                });*/
+            /* TODO: research which animation is better
+            // This one depend on animateLayoutChanges flags but seems to perform poorly
+
+            currentScreen.toggleHeadVisibility(false);
+            currentScreen.toggleBodyVisibility(true);
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    ThreadUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadedScreen.toggleHeadVisibility(true);
+                        }
+                    });
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            ThreadUtils.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadedScreen.toggleBodyVisibility(true);
+                                }
+                            });
+                        }
+                    }, 1 * 500);
+                }
+            }, 1 * 500);
+            destroyPreviousScreen();
+            currentScreen = loadedScreen;*/
+        }
     }
 
     private void destroyPreviousScreen() {
-        //Destroy previous screen
         if (getCurrentScreen() != null) {
             getCurrentScreen().stop();
             getCurrentScreen().destroy();
@@ -148,8 +177,6 @@ public class MainOverlayLayerManager {
 
     private void addNavigationStep(NavigationStep newStep) {
         navigationHistory.add(newStep);
-
-        //Update toolbar
         updateBackbutton();
         updateToolbarTitle();
     }
@@ -164,9 +191,8 @@ public class MainOverlayLayerManager {
 
     public void goBack(){
         if (navigationHistory.size()>1){
-            //Remove current step
+            //Discard the current step and restore the previous one
             navigationHistory.remove(navigationHistory.size()-1);
-            //Restore the previous one
             NavigationStep previousStep = navigationHistory.remove(navigationHistory.size()-1);
             goTo(previousStep.getClassName(), previousStep.getParam());
         }
@@ -205,5 +231,15 @@ public class MainOverlayLayerManager {
             }
         }
         return null;
+    }
+
+    private abstract class AnimationEndListener implements Animation.AnimationListener {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
     }
 }

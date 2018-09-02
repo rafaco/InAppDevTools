@@ -1,9 +1,12 @@
 package es.rafaco.devtools.utils;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+
+import es.rafaco.devtools.DevTools;
 
 public class ExpandCollapseUtils {
 
@@ -42,8 +45,13 @@ public class ExpandCollapseUtils {
     }
 
     public static void collapse(final View v, Animation.AnimationListener listener) {
-        final int initialHeight = v.getMeasuredHeight();
+        if (v==null){
+            Log.d(DevTools.TAG, "Unable to collapse an empty view");
+            listener.onAnimationEnd(null);
+            return;
+        }
 
+        final int initialHeight = v.getMeasuredHeight();
         Animation a = new Animation()
         {
             @Override
@@ -71,6 +79,12 @@ public class ExpandCollapseUtils {
     }
 
     public static void expand(final View v, Animation.AnimationListener listener) {
+        if (v==null){
+            Log.d(DevTools.TAG, "Unable to expand an empty view");
+            listener.onAnimationEnd(null);
+            return;
+        }
+
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
 
