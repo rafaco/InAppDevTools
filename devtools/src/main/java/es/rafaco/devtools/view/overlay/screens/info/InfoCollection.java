@@ -1,5 +1,8 @@
 package es.rafaco.devtools.view.overlay.screens.info;
 
+import android.text.TextUtils;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,38 @@ public class InfoCollection {
         this.entries = entries;
     }
 
+    public void removeGroup(int index) {
+        if (index > 0 && index < entries.size()){
+            entries.remove(index);
+        }
+    }
+
+    public void removeGroupEntries(int index) {
+        if (index > 0 && index < entries.size()){
+            entries.get(index).removeEntries();
+        }
+    }
+
+    @Override
+    public String toString(){
+        String result = "";
+        String formatTitle = "%s:";
+        String lineBreak = "\n";
+
+        result += lineBreak;
+        if (!TextUtils.isEmpty(getName())){
+            result += String.format(formatTitle, getName());
+            result += lineBreak;
+        }
+
+        if (entries.size()>0){
+            for (InfoGroup entry : entries){
+                result += entry.toString();
+            }
+        }
+
+        return result;
+    }
 
     public static class Builder {
         private String name;

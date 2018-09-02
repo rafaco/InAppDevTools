@@ -38,8 +38,11 @@ import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
+import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 
 public class ReportDialogActivity extends AppCompatActivity {
 
@@ -120,23 +123,29 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
 
-        array.add(new DecoratedToolInfo(ErrorsScreen.class,
+        NavigationStep step = new NavigationStep(InfoScreen.class, null);
+        array.add(new DecoratedToolInfo(
                 "Info",
                 " - ",
+                R.color.rally_white,
                 1,
-                R.color.rally_white));
+                step));
 
-        array.add(new DecoratedToolInfo(ErrorsScreen.class,
+        step = new NavigationStep(ErrorsScreen.class, null);
+        array.add(new DecoratedToolInfo(
                 "Errors",
                 crashes.size() + " crashes and " + anrs.size() + " ANRs",
                 3,
-                R.color.rally_orange));
+                R.color.rally_orange,
+                step));
 
-        array.add(new DecoratedToolInfo(ErrorsScreen.class,
+        step = new NavigationStep(ScreensScreen.class, null);
+        array.add(new DecoratedToolInfo(
                 "Screenshots",
                 screens.size() + " screens",
                 5,
-                R.color.rally_purple));
+                R.color.rally_purple,
+                step));
 
 
         Collections.sort(array, new Comparator<DecoratedToolInfo>() {

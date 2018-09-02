@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/content_padding">
+
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subtitle"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/rally_orange"
+        android:typeface="sans"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:id="@+id/detail_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subtitle"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/rally_white"
+        android:typeface="sans"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:layout_gravity="start" />
+
+    <HorizontalScrollView
+        android:id="@+id/crash_horizontal_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black">
+
+        <TextView
+            android:id="@+id/detail_console"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/rally_white"
+            android:layout_margin="3dp"
+            android:typeface="monospace"
+            android:fontFamily="serif-monospace"
+            android:textSize="14dp"/>
+
+    </HorizontalScrollView>
+</LinearLayout>

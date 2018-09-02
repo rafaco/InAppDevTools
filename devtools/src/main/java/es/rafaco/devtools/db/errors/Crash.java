@@ -36,6 +36,19 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "logcatId")
     private long logcatId;
 
+    @ColumnInfo(name = "threadId")
+    private long threadId;
+
+    @ColumnInfo(name = "isMainThread")
+    private boolean isMainThread;
+
+    @ColumnInfo(name = "threadName")
+    private String threadName;
+
+    @ColumnInfo(name = "threadGroupName")
+    private String threadGroupName;
+
+
     public long getUid() {
         return uid;
     }
@@ -106,5 +119,37 @@ public class Crash implements Serializable {
 
     public void setLogcatId(long logcatId) {
         this.logcatId = logcatId;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
+    public boolean isMainThread() {
+        return isMainThread;
+    }
+
+    public void setMainThread(boolean mainThread) {
+        isMainThread = mainThread;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    public String getThreadGroupName() {
+        return threadGroupName;
+    }
+
+    public void setThreadGroupName(String threadGroupName) {
+        this.threadGroupName = threadGroupName;
     }
 }

@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.screens;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -12,14 +13,13 @@ public abstract class OverlayScreen {
 
     private final MainOverlayLayerManager manager;
     private ViewGroup headView;
-    private ViewGroup bodyView;
+    public ViewGroup bodyView;
+    private String param;
+    private ViewGroup headContainer;
+    private ViewGroup bodyContainer;
 
     //Abstract constants to define by implementation
     public abstract String getTitle();
-    protected String getFullTitle(){
-        return getTitle() + " Tool";
-    }
-    public String getName() { return getTitle(); }
     public boolean isMain() {
         return true;
     }
@@ -37,35 +37,41 @@ public abstract class OverlayScreen {
         onCreate();
     }
 
-    public void start(){
-        ViewGroup targetContainer;
+    public void start(String param){
+        this.param = param;
 
         if (getHeadLayoutId() != -1){
-            targetContainer = getView().findViewById(R.id.tool_head_container);
-            headView = (ViewGroup) getInflater().inflate(getHeadLayoutId(), targetContainer, false);
+            headContainer = getView().findViewById(R.id.tool_head_container);
+            headView = (ViewGroup) getInflater().inflate(getHeadLayoutId(), headContainer, false);
             headView.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
-            targetContainer.removeAllViews();
-            targetContainer.addView(headView);
+            headView.setVisibility(View.GONE);
+            //targetContainer.removeAllViews();
+            headContainer.addView(headView);
         }
 
-        targetContainer = getView().findViewById(R.id.tool_body_container);
-        bodyView = (ViewGroup) getInflater().inflate(getBodyLayoutId(), targetContainer, false);
+        bodyContainer = getView().findViewById(R.id.tool_body_container);
+        bodyView = (ViewGroup) getInflater().inflate(getBodyLayoutId(), bodyContainer, false);
         bodyView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        targetContainer.removeAllViews();
-        targetContainer.addView(bodyView);
+        bodyView.setVisibility(View.GONE);
+        //targetContainer.removeAllViews();
+        bodyContainer.addView(bodyView);
 
         onStart(getView());
     }
 
     public void stop(){
+        if (headView !=null) headContainer.removeView(headView); //headView.removeAllViews();
+        if (bodyView !=null) bodyContainer.removeView(bodyView); //bodyView.removeAllViews();
         onStop();
-        //getView().removeAllViews();
-        if (headView !=null) headView.removeAllViews();
-        if (headView !=null) bodyView.removeAllViews();
+    }
+
+    public void show(){
+        if (headView !=null) headView.setVisibility(View.VISIBLE);
+        if (bodyView !=null) bodyView.setVisibility(View.VISIBLE);
     }
 
     public void destroy(){
@@ -75,6 +81,9 @@ public abstract class OverlayScreen {
 
     public MainOverlayLayerManager getScreenManager() {
         return manager;
+    }
+    public String getParam() {
+        return param;
     }
     public Context getContext() {
         return getScreenManager().getContext();

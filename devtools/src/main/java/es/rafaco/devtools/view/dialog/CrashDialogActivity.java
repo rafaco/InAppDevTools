@@ -48,8 +48,8 @@ public class CrashDialogActivity extends AppCompatActivity {
                 .setMessage("It has been restarted and the error is stored.")
                 .setCancelable(false);
 
-        TextView crashTitle = dialogView.findViewById(R.id.crash_title);
-        TextView crashSubtitle = dialogView.findViewById(R.id.crash_subtitle);
+        TextView crashTitle = dialogView.findViewById(R.id.detail_title);
+        TextView crashSubtitle = dialogView.findViewById(R.id.detail_subtitle);
 
         crashTitle.setText(crash.getException());
         crashSubtitle.setText(crash.getStacktrace());

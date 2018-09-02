@@ -49,7 +49,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
     public void onBindViewHolder(final ScreenViewHolder holder, int position) {
         Screen screen = screenList.get(position);
         holder.title.setText(screen.getActivityName());
-        holder.count.setText(DateUtils.getElapsedTimeString(screen.getDate()));
+        holder.count.setText(DateUtils.getElapsedTime(screen.getDate()));
 
         // loading album cover using Glide library
         //Glide.with(mContext).load(screen.getThumbnail()).into(holder.thumbnail);

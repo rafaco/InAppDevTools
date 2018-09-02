@@ -1,12 +1,19 @@
 package es.rafaco.devtools.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import es.rafaco.devtools.db.errors.Crash;
 
 public class DateUtils {
 
-    public static String getElapsedTimeString(long oldTimeMillis){
+    public static String getElapsedTimeLowered(long oldTimeMillis){
+        String elapsed = getElapsedTime(oldTimeMillis);
+        elapsed = Character.toLowerCase(elapsed.charAt(0)) + elapsed.substring(1);
+        return  elapsed;
+    }
+
+    public static String getElapsedTime(long oldTimeMillis){
         CharSequence relativeDate =
                 android.text.format.DateUtils.getRelativeTimeSpanString(
                         oldTimeMillis,
@@ -17,8 +24,8 @@ public class DateUtils {
     }
 
 
-    public static String formatToDateAndTimeString(Crash crash) {
+    public static String format(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        return simpleDateFormat.format(crash.getDate());
+        return simpleDateFormat.format(timeMillis);
     }
 }

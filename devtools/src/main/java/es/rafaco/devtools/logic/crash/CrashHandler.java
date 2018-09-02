@@ -85,17 +85,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setDate(new Date().getTime());
         crash.setException(ex.getClass().getSimpleName());
         crash.setMessage(ex.getMessage());
+
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
         String stackTraceString = sw.toString();
-        //Reduce data to 128KB so we don't get a TransactionTooLargeException when sending the intent.
-        //The limit is 1MB on Android but some devices seem to have it lower.
-        if (stackTraceString.length() > MAX_STACK_TRACE_SIZE) {
-            String disclaimer = " [stack trace too large]";
-            //stackTraceString = stackTraceString.substring(0, MAX_STACK_TRACE_SIZE - disclaimer.length()) + disclaimer;
-        }
-        crash.setStacktrace(sw.toString());
+        crash.setStacktrace(stackTraceString);
 
+        crash.setThreadId(thread.getId());
+        crash.setMainThread(ThreadUtils.isTheUiThread(thread));
+        crash.setThreadName(thread.getName());
+        crash.setThreadGroupName(thread.getThreadGroup().getName());
         return crash;
     }
 

@@ -6,11 +6,14 @@ import android.util.Log;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.errors.Anr;
+import es.rafaco.devtools.utils.ThreadUtils;
 
 public class AnrLogger {
 
@@ -42,9 +45,14 @@ public class AnrLogger {
 
         Anr anr = new Anr();
         anr.setDate(new Date().getTime());
-        anr.setWarning(isWarning);
         anr.setMessage(error.getMessage().toString());
         anr.setCause(error.getCause().toString());
+
+        StringWriter sw = new StringWriter();
+        error.printStackTrace(new PrintWriter(sw));
+        String stackTraceString = sw.toString();
+        anr.setStacktrace(stackTraceString);
+
         storeAnr(anr);
     }
 

@@ -1,7 +1,12 @@
 package es.rafaco.devtools.view.overlay.screens.info;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import es.rafaco.devtools.utils.DateUtils;
 
 public class InfoGroup {
 
@@ -25,6 +30,10 @@ public class InfoGroup {
         this.entries = entries;
     }
 
+    public void removeEntries() {
+        entries.clear();
+    }
+
     @Override
     public String toString(){
         String result = "";
@@ -32,8 +41,10 @@ public class InfoGroup {
         String lineBreak = "\n";
 
         result += lineBreak;
-        result += String.format(formatTitle, getName());
-        result += lineBreak;
+        if (!TextUtils.isEmpty(getName())) {
+            result += String.format(formatTitle, getName());
+            result += lineBreak;
+        }
 
         for (InfoEntry entry : entries){
             result += entry.toString();
@@ -68,6 +79,20 @@ public class InfoGroup {
             return this;
         }
 
+        public Builder add(String label, boolean value) {
+            add(new InfoEntry(label, String.valueOf(value)));
+            return this;
+        }
+
+        public Builder add(String label, long value) {
+            add(new InfoEntry(label, String.valueOf(value)));
+            return this;
+        }
+
+        public Builder addDate(String label, long date) {
+            add(new InfoEntry(label, DateUtils.format(date)));
+            return this;
+        }
 
         public Builder set(List<InfoEntry> entries) {
             this.entries = entries;

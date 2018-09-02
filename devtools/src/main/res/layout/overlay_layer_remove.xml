@@ -12,6 +12,6 @@
         android:layout_height="60dp"
         android:background="@drawable/white_circle_shape"
         android:padding="10dp"
-        android:src="@drawable/ic_close_white_24dp" />
+        android:src="@drawable/ic_close_rally_24dp" />
 
 </RelativeLayout>

@@ -3,22 +3,20 @@ package es.rafaco.devtools.view;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.ViewGroup;
-
-import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.User;
 import es.rafaco.devtools.utils.AppUtils;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
+import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.AnrDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
@@ -32,7 +30,9 @@ public class OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
+    private static final String EXTRA_INTENT_PARAM = "EXTRA_INTENT_PARAM";
     private static Boolean initialised = false;
+    private String lastRequestParam;
 
     public enum IntentAction { PERMISSION_GRANTED, RESTART_APP, CLOSE_APP, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON,
         NAVIGATE_TO, NAVIGATE_BACK, HIDE, NAVIGATE_HOME
@@ -44,6 +44,42 @@ public class OverlayUIService extends Service {
     public OverlayUIService() {
     }
 
+
+    public static void performNavigationStep(NavigationStep step) {
+        if (step == null){
+            return;
+        }
+        Intent intent = buildScreenIntentAction(step.getClassName(), step.getParam());
+        DevTools.getAppContext().startService(intent);
+    }
+
+    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String param) {
+        Intent intent = new Intent(DevTools.getAppContext(), OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
+        if (screenClass!=null){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, screenClass.getSimpleName());
+        }
+        if (!TextUtils.isEmpty(param)){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAM, param);
+        }
+        return intent;
+    }
+    
+    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = new Intent(DevTools.getAppContext(), OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
+        if (!TextUtils.isEmpty(property)){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, property);
+        }
+        return intent;
+    }
+
+    public static void runAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = buildIntentAction(action, property);
+        DevTools.getAppContext().startService(intent);
+    }
+    
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -54,6 +90,8 @@ public class OverlayUIService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
         String property = intent.getStringExtra(EXTRA_INTENT_PROPERTY);
+        //TODO: cleanUp
+        lastRequestParam = intent.getStringExtra(EXTRA_INTENT_PARAM);
         if (action != null){
             processIntentAction(action, property);
         }else{
@@ -93,7 +131,8 @@ public class OverlayUIService extends Service {
         }
 
         else if (action.equals(IntentAction.NAVIGATE_TO)){
-            navigateTo(property.replace(" Tool", ""));
+            String cleanName = property.replace(" Tool", "");
+            navigateTo(cleanName, lastRequestParam);
         }
         else if (action.equals(IntentAction.NAVIGATE_BACK)){
             navigateBack();
@@ -115,20 +154,6 @@ public class OverlayUIService extends Service {
 
     private void hide() {
         overlayLayersManager.setMainVisibility(false);
-    }
-
-    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
-        Intent intent = new Intent(DevTools.getAppContext(), OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
-        if (!TextUtils.isEmpty(property)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, property);
-        }
-        return intent;
-    }
-
-    public static void runAction(OverlayUIService.IntentAction action, String property) {
-        Intent intent = buildIntentAction(action, property);
-        DevTools.getAppContext().startService(intent);
     }
 
     @Override
@@ -169,6 +194,8 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(CommandsScreen.class);
         mainOverlayLayerManager.registerScreen(ScreensScreen.class);
         mainOverlayLayerManager.registerScreen(ReportScreen.class);
+        mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);
+        mainOverlayLayerManager.registerScreen(AnrDetailScreen.class);
 
         //navigateTo("Home");
     }
@@ -215,8 +242,12 @@ public class OverlayUIService extends Service {
     }
 
     public void navigateTo(String name) {
+        navigateTo(name, null);
+    }
+
+    public void navigateTo(String name, String param) {
         overlayLayersManager.setMainVisibility(true);
-        mainOverlayLayerManager.goTo(name, null);
+        mainOverlayLayerManager.goTo(name, param);
     }
 
     public void navigateBack() {

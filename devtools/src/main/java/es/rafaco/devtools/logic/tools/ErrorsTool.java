@@ -2,6 +2,7 @@ package es.rafaco.devtools.logic.tools;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
@@ -26,11 +27,13 @@ public class ErrorsTool extends Tool {
 
     @Override
     public DecoratedToolInfo getHomeInfo() {
-        DecoratedToolInfo info = new DecoratedToolInfo(ErrorsScreen.class,
+        NavigationStep step = new NavigationStep(ErrorsScreen.class, null);
+        DecoratedToolInfo info = new DecoratedToolInfo(
                 getName(),
                 "Crash handler activated." + "\n" + "ANR handler activated.",
+                R.color.rally_orange,
                 4,
-                R.color.rally_orange);
+                step);
         return  info;
     }
 

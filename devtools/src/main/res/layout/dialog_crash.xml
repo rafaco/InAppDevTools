@@ -42,7 +42,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/crash_title"
+                android:id="@+id/detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/subtitle"
@@ -57,10 +57,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_below="@id/crash_title">
+                android:layout_below="@id/detail_title">
 
                 <TextView
-                    android:id="@+id/crash_subtitle"
+                    android:id="@+id/detail_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_orange"

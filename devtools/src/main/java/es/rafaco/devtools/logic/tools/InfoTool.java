@@ -3,7 +3,9 @@ package es.rafaco.devtools.logic.tools;
 import android.os.Build;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.DecoratedToolInfo;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 
@@ -16,7 +18,7 @@ public class InfoTool extends Tool {
 
     @Override
     public Class<? extends ToolHelper> getHelperClass() {
-        return null;
+        return InfoHelper.class;
     }
 
     @Override
@@ -35,19 +37,23 @@ public class InfoTool extends Tool {
         out += "\n";
         out += "Android " + Build.VERSION.RELEASE + " (" + helper.getVersionCodeName() + ")";
 
-        return new DecoratedToolInfo(InfoScreen.class,
+        NavigationStep step = new NavigationStep(InfoScreen.class, null);
+        return new DecoratedToolInfo(
                 getName(),
                 out,
+                R.color.rally_blue,
                 1,
-                R.color.rally_blue);
+                step);
     }
 
     @Override
     public DecoratedToolInfo getReportInfo() {
-        return new DecoratedToolInfo(InfoScreen.class,
+        NavigationStep step = new NavigationStep(InfoScreen.class, null);
+        return new DecoratedToolInfo(
                 getName(),
                 "Include all. Brief info is always added",
+                R.color.rally_blue,
                 1,
-                R.color.rally_blue);
+                step);
     }
 }

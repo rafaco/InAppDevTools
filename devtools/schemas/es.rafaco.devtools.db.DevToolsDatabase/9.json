@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 7,
-    "identityHash": "fa35ef5837463d774b26a6c77cc732ab",
+    "version": 9,
+    "identityHash": "1d7fcfb6d2e92b4b2f0988f4bccc9ee0",
     "entities": [
       {
         "tableName": "user",
@@ -136,7 +136,7 @@
       },
       {
         "tableName": "anr",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `message` TEXT, `cause` TEXT, `stacktrace` TEXT, `isWarning` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `message` TEXT, `cause` TEXT, `stacktrace` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -167,12 +167,6 @@
             "columnName": "stacktrace",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "isWarning",
-            "columnName": "isWarning",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -275,7 +269,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fa35ef5837463d774b26a6c77cc732ab\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1d7fcfb6d2e92b4b2f0988f4bccc9ee0\")"
     ]
   }
 }

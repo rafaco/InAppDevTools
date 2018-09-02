@@ -83,6 +83,13 @@
         <item name="android:layout_marginRight">10dp</item>
     </style>
 
+    <style name="content_padding">
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+
     <style name="elevated">
         <item name="android:elevation" tools:targetApi="21">4dp</item>
     </style>

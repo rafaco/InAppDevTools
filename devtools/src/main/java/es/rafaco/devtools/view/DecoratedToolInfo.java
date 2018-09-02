@@ -1,28 +1,20 @@
 package es.rafaco.devtools.view;
 
-import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 
 public class DecoratedToolInfo {
     String title;
     String message;
     int color;
     Long order;
-    Class<? extends OverlayScreen> screenClass;
+    private final NavigationStep navigationStep;
 
-    public DecoratedToolInfo(Class<? extends OverlayScreen> screenClass, String title, String message, long order, int color) {
-        this.screenClass = screenClass;
+    public DecoratedToolInfo(String title, String message, int color, long order, NavigationStep navigationStep) {
         this.title = title;
         this.message = message;
-        this.order = order;
         this.color = color;
-    }
-
-    public Class<? extends OverlayScreen> getScreenClass() {
-        return screenClass;
-    }
-
-    public void setScreenClass(Class<? extends OverlayScreen> screenClass) {
-        this.screenClass = screenClass;
+        this.order = order;
+        this.navigationStep = navigationStep;
     }
 
     public String getTitle() {
@@ -55,5 +47,9 @@ public class DecoratedToolInfo {
 
     public void setOrder(Long order) {
         this.order = order;
+    }
+
+    public NavigationStep getNavigationStep() {
+        return navigationStep;
     }
 }

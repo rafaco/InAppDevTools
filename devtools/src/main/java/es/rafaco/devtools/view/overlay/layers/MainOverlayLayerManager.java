@@ -3,14 +3,16 @@ package es.rafaco.devtools.view.overlay.layers;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.utils.ClassHelper;
+import es.rafaco.devtools.utils.ExpandCollapseUtils;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 
@@ -22,15 +24,16 @@ public class MainOverlayLayerManager {
     private final MainOverlayLayer mainLayer;
     private final LayoutInflater inflater;
 
-    private List<Class<? extends OverlayScreen>> registredScreens;
+    private List<Class<? extends OverlayScreen>> registeredScreens;
     private List<NavigationStep> navigationHistory;
+    private OverlayScreen loadedScreen = null;
     private OverlayScreen currentScreen = null;
 
     public MainOverlayLayerManager(Context context, MainOverlayLayer mainLayer) {
         this.context = context;
         this.mainLayer = mainLayer;
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        this.registredScreens = new ArrayList<>();
+        this.registeredScreens = new ArrayList<>();
         this.navigationHistory = new ArrayList<>();
     }
 
@@ -64,50 +67,95 @@ public class MainOverlayLayerManager {
 
     //region [ NAVIGATION ]
 
-    public class NavigationStep{
-        public final String screenName;
-        public final Class<? extends OverlayScreen> screenClass;
-        public final Object params;
-
-        public NavigationStep(String screenName, Class<? extends OverlayScreen> screenClass, Object params) {
-            this.screenName = screenName;
-            this.screenClass = screenClass;
-            this.params = params;
-        }
+    public void goTo(String screenName, String param){
+        Class<? extends OverlayScreen> screenClass = getScreenClass(screenName);
+        goTo(screenClass, param);
     }
 
-    public void goTo(String screenName, Object params){
-        Log.d(DevTools.TAG, "Requested new overlay screen: " + screenName);
+    public void goTo(final Class<? extends OverlayScreen> screenClass, final String param){
+
+        //TODO: use params
+        Log.d(DevTools.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + param);
 
         //Ignore if already selected
         /*if (getCurrentScreen() != null && screenName.equals(getCurrentScreen().getName())) {
             return;
         }*/
 
+        if (screenClass == null){
+            return;
+        }
+
+
+        final ViewGroup loadedViewGroup = loadScreen(screenClass, param);
+        if (getCurrentScreen() == null) {
+            loadedScreen.show();
+            ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
+            currentScreen = loadedScreen;
+        }else{
+            ExpandCollapseUtils.collapse(currentScreen.bodyView,
+                    new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            destroyPreviousScreen();
+                            ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
+                            currentScreen = loadedScreen;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+        }
+
+/*
+        ExpandCollapseUtils.start(getView(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        destroyPreviousScreen();
+                    }
+                },
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        loadScreen(screenClass, param);
+                    }
+                });*/
+    }
+
+    private void destroyPreviousScreen() {
         //Destroy previous screen
         if (getCurrentScreen() != null) {
             getCurrentScreen().stop();
             getCurrentScreen().destroy();
         }
+    }
 
-        //Load next screen
-        Class<? extends OverlayScreen> screenClass = getScreenClass(screenName);
-        if (screenClass != null){
-            currentScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
-                    MainOverlayLayerManager.class, this);
-            currentScreen.start(); //TODO: use params
+    private ViewGroup loadScreen(final Class<? extends OverlayScreen> screenClass, final String param) {
+        loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
+                MainOverlayLayerManager.class, this);
+
+        if (loadedScreen != null){
+            loadedScreen.start(param);
+            NavigationStep newStep = new NavigationStep(screenClass, param);
+            addNavigationStep(newStep);
         }
+        return loadedScreen.getView();
+    }
 
-        //Store loaded in history
-        NavigationStep newStep = new NavigationStep(screenName, screenClass, params);
+    private void addNavigationStep(NavigationStep newStep) {
         navigationHistory.add(newStep);
 
+        //Update toolbar
         updateBackbutton();
         updateToolbarTitle();
     }
 
     private void updateToolbarTitle() {
-        getMainLayer().setToolbarTitle(currentScreen.getTitle());
+        getMainLayer().setToolbarTitle(loadedScreen.getTitle());
     }
 
     private void updateBackbutton() {
@@ -120,7 +168,7 @@ public class MainOverlayLayerManager {
             navigationHistory.remove(navigationHistory.size()-1);
             //Restore the previous one
             NavigationStep previousStep = navigationHistory.remove(navigationHistory.size()-1);
-            goTo(previousStep.screenName, previousStep.params);
+            goTo(previousStep.getClassName(), previousStep.getParam());
         }
     }
 
@@ -138,7 +186,7 @@ public class MainOverlayLayerManager {
     //
     public List<String> getRegisteredScreens(){
         List<String> mainScreens = new ArrayList<>();
-        for (Class<? extends OverlayScreen> screen : registredScreens) {
+        for (Class<? extends OverlayScreen> screen : registeredScreens) {
             mainScreens.add(screen.getSimpleName());
         }
         return mainScreens;
@@ -146,12 +194,12 @@ public class MainOverlayLayerManager {
 
     public void registerScreen(Class<? extends OverlayScreen> screenClass){
 
-        //TODO: if ((isClass(screenClass)){
-        registredScreens.add(screenClass);
+        //TODO: if ((isClass(className)){
+        registeredScreens.add(screenClass);
     }
 
     public Class<? extends OverlayScreen> getScreenClass(String name){
-        for (Class<? extends OverlayScreen> screen : registredScreens){
+        for (Class<? extends OverlayScreen> screen : registeredScreens){
             if (screen.getSimpleName().equals(name)){
                 return screen;
             }

@@ -1,5 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.info;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,21 +43,24 @@ public class InfoEntry {
 
     public String toString() {
         String result = "";
-        String formatWithLabel =    " - %s: %s";
-        String formatWithoutLabel = "        %s";
+        String formatFirst = " - %s: %s";
+        String formatOthers = "        %s";
         String lineBreak = "\n";
 
         List<String> values = getValues();
         if (values == null || values.size()<1){
-            result += String.format(formatWithLabel, getLabel(), "Not available");
+            result += String.format(formatFirst, getLabel(), "Not available");
             result += lineBreak;
         }else{
             for (int i = 0; i<values.size(); i++){
                 if(i==0){
-                    result += String.format(formatWithLabel, getLabel(), values.get(0));
+                    if (TextUtils.isEmpty(getLabel()))
+                        result += values.get(0);
+                    else
+                        result += String.format(formatFirst, getLabel(), values.get(0));
                     result += lineBreak;
                 }else{
-                    result += String.format(formatWithoutLabel, getLabel(), values.get(i));
+                    result += String.format(formatOthers, values.get(i));
                     result += lineBreak;
                 }
             }

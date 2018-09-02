@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="charcoal">#1A2732</color>
+    <color name="black">#000000</color>
 
     <color name="rally_bg_solid">#3C3D45</color>
     <color name="rally_bg_blur">#32333C</color>

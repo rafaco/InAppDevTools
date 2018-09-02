@@ -1,6 +1,8 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
+import android.arch.persistence.room.InvalidationTracker;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,20 +18,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.utils.ThreadUtils;
 
-import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeString;
+import static es.rafaco.devtools.utils.DateUtils.getElapsedTime;
+import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeLowered;
 
 public class ErrorsScreen extends OverlayScreen {
 
@@ -40,6 +44,9 @@ public class ErrorsScreen extends OverlayScreen {
     private Button crashUiButton;
     private Button crashBackButton;
     private Button anrButton;
+
+    private InvalidationTracker.Observer observer;
+    private InvalidationTracker tracker;
 
     public ErrorsScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -63,10 +70,23 @@ public class ErrorsScreen extends OverlayScreen {
     protected void onStart(ViewGroup view) {
         initView(view);
         getErrors();
+
+
+        observer = new InvalidationTracker.Observer(new String[]{"anr"}){
+            @Override
+            public void onInvalidated(@NonNull Set<String> tables) {
+                getErrors();
+            }
+        };
+        tracker = DevTools.getDatabase().getInvalidationTracker();
+        tracker.addObserver(observer);
     }
 
     @Override
     protected void onStop() {
+
+        tracker.removeObserver(observer);
+        observer = null;
     }
 
     @Override
@@ -132,7 +152,7 @@ public class ErrorsScreen extends OverlayScreen {
                 db.anrDao().deleteAll();
 
                 ArrayList<DecoratedToolInfo> array = new ArrayList<>();
-                replaceList(array);
+                updateList(array);
             }
         });
     }
@@ -182,23 +202,28 @@ public class ErrorsScreen extends OverlayScreen {
             @Override
             public void run() {
                 DevToolsDatabase db = DevTools.getDatabase();
-                ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+                final ArrayList<DecoratedToolInfo> array = new ArrayList<>();
                 List<Crash> crashes = db.crashDao().getAll();
                 for (Crash crash : crashes){
-                    array.add(new DecoratedToolInfo(ErrorsScreen.class,
-                            "Crash " + getElapsedTimeString(crash.getDate()),
+                    NavigationStep step = new NavigationStep(CrashDetailScreen.class, String.valueOf(crash.getUid()));
+                    array.add(new DecoratedToolInfo(
+                            "Crash " + getElapsedTimeLowered(crash.getDate()),
                             crash.getException() + " - " + crash.getMessage(),
+                            R.color.rally_orange,
                             crash.getDate(),
-                            R.color.rally_orange));
+                            step));
                 }
 
                 List<Anr> anrs = db.anrDao().getAll();
                 for (Anr anr : anrs){
-                    array.add(new DecoratedToolInfo(ErrorsScreen.class,
-                            "ANR " + getElapsedTimeString(anr.getDate()),
+                    //TODO: AnrDetailScreen
+                    NavigationStep step = new NavigationStep(AnrDetailScreen.class, String.valueOf(anr.getUid()));
+                    array.add(new DecoratedToolInfo(
+                            "ANR " + getElapsedTimeLowered(anr.getDate()),
                             anr.getCause(),
+                            R.color.rally_blue,
                             anr.getDate(),
-                            R.color.rally_blue));
+                            step));
                 }
 
                 Collections.sort(array, new Comparator<DecoratedToolInfo>() {
@@ -208,24 +233,19 @@ public class ErrorsScreen extends OverlayScreen {
                     }
                 });
 
-                replaceList(array);
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateList(array);
+                    }
+                });
             }
         });
     }
 
-    private void replaceList(List<DecoratedToolInfo> errors) {
-        adapter.replaceAll(errors);
-    }
-
     private void initAdapter(){
 
-        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>()){
-            @Override
-            protected void onItemClick(DecoratedToolInfo data) {
-                //TODO
-                //OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_TO, data.getScreenClass(), data.get )
-            }
-        };
+        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>());
 
         recyclerView = getView().findViewById(R.id.errors_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -233,5 +253,10 @@ public class ErrorsScreen extends OverlayScreen {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void updateList(List<DecoratedToolInfo> errors) {
+        adapter.replaceAll(errors);
+        recyclerView.requestLayout();
     }
 }

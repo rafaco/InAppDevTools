@@ -4,8 +4,16 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
+import es.rafaco.devtools.DevTools;
 
 public class ThreadUtils {
+
+    public static void logCurrentThread(String fromText){
+        String thread = (amIOnUiThread()) ? "MAIN" : "a background";
+        DevTools.showMessage(fromText + " is running on " + thread + " thread");
+    }
 
     public static boolean amIOnUiThread(){
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

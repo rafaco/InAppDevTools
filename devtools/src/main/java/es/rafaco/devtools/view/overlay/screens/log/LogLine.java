@@ -70,7 +70,7 @@ public class LogLine {
             logLine.setLogOutput(originalLine.substring(matcher.end()));
 
         } else {
-            Log.d(DevTools.TAG, String.format("Line doesn't match pattern: %s", originalLine));
+            //Log.d(DevTools.TAG, String.format("Line doesn't match pattern: %s", originalLine));
             logLine.setLogOutput(originalLine);
             logLine.setLogLevel(-1);
         }

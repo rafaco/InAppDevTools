@@ -85,14 +85,8 @@ public class DecoratedToolInfoAdapter
     }
 
     protected void onItemClick(DecoratedToolInfo data) {
-        startTool(data.screenClass.getSimpleName());
+        OverlayUIService.performNavigationStep(data.getNavigationStep());
     }
-
-    public void startTool(String title){
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.TOOL, title);
-        context.startService(intent);
-    }
-
 
 
     public void enableSwitchMode(){

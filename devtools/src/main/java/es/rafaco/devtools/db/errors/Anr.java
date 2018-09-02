@@ -13,9 +13,6 @@ public class Anr {
     @ColumnInfo(name = "date")
     private long date;
 
-    @ColumnInfo(name = "exception")
-    private String exception;
-
     @ColumnInfo(name = "message")
     private String message;
 
@@ -24,9 +21,6 @@ public class Anr {
 
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
-
-    @ColumnInfo(name = "isWarning")
-    private boolean isWarning;
 
     public long getUid() {
         return uid;
@@ -42,14 +36,6 @@ public class Anr {
 
     public void setDate(long date) {
         this.date = date;
-    }
-
-    public String getException() {
-        return exception;
-    }
-
-    public void setException(String exception) {
-        this.exception = exception;
     }
 
     public String getMessage() {
@@ -76,11 +62,4 @@ public class Anr {
         this.cause = cause;
     }
 
-    public boolean isWarning() {
-        return isWarning;
-    }
-
-    public void setWarning(boolean warning) {
-        isWarning = warning;
-    }
 }

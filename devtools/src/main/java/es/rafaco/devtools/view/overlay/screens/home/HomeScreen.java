@@ -31,7 +31,7 @@ public class HomeScreen extends OverlayScreen {
 
     @Override
     public String getTitle() {
-        return "Home";
+        return "DevTools";
     }
 
     @Override
@@ -79,8 +79,6 @@ public class HomeScreen extends OverlayScreen {
 
     private void updateList() {
         adapter.replaceAll(DevTools.getToolManager().getHomeInfos());
-
-        adapter.notifyDataSetChanged();
         recyclerView.requestLayout();
     }
 
