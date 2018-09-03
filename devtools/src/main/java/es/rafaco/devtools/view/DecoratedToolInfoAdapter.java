@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.tools.ErrorsTool;
 import es.rafaco.devtools.utils.ThreadUtils;
 
 public class DecoratedToolInfoAdapter
@@ -41,6 +42,10 @@ public class DecoratedToolInfoAdapter
                 .inflate(R.layout.decorated_tool_info_item, parent, false);
 
         return new DecoratedViewHolder(itemView);
+    }
+
+    public void update(final int i, Class<ErrorsTool> errorsToolClass) {
+        new ErrorsTool().updateHomeInfo(this);
     }
 
     static class DecoratedViewHolder extends RecyclerView.ViewHolder {

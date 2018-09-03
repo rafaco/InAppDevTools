@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:textStyle="bold"
             android:text="Send a Report"
             android:textColor="@color/rally_green"/>
 

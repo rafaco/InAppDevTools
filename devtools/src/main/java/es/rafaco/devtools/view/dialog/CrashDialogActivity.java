@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.dialog;
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
@@ -44,18 +47,21 @@ public class CrashDialogActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_crash, null);
         builder.setView(dialogView)
-                .setTitle("Your app crashed")
-                .setMessage("It has been restarted and the error is stored.")
+                .setTitle("Your app crashed and we restarted it")
+                .setMessage("Here you have some information about what went wrong.\nPlease report it")
                 .setCancelable(false);
 
         TextView crashTitle = dialogView.findViewById(R.id.detail_title);
         TextView crashSubtitle = dialogView.findViewById(R.id.detail_subtitle);
+        TextView crashConsole = dialogView.findViewById(R.id.detail_console);
 
         crashTitle.setText(crash.getException());
-        crashSubtitle.setText(crash.getStacktrace());
+        crashSubtitle.setText(crash.getMessage());
+        crashConsole.setText(crash.getStacktrace());
 
-        AppCompatButton crashContinueButton = dialogView.findViewById(R.id.crash_continue_buttons);
-        AppCompatButton crashReportButton = dialogView.findViewById(R.id.crash_report_buttons);
+        AppCompatButton crashContinueButton = dialogView.findViewById(R.id.crash_continue_button);
+        AppCompatButton crashReportButton = dialogView.findViewById(R.id.crash_report_button);
+        AppCompatButton crashDetailButton = dialogView.findViewById(R.id.crash_detail_button);
 
         crashContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +75,23 @@ public class CrashDialogActivity extends AppCompatActivity {
                 onCrashReport(crash);
             }
         });
+        crashDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCrashDetail(crash);
+            }
+        });
 
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void onCrashDetail(Crash crash) {
+        if (DevTools.getConfig().overlayUiEnabled){
+            Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, String.valueOf(crash.getUid()));
+            DevTools.getAppContext().startService(intent);
+            destroyDialog();
+        }
     }
 
     private void onCrashReport(Crash crash) {

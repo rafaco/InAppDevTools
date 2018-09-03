@@ -14,18 +14,33 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/crash_continue_buttons"
+            android:id="@+id/crash_continue_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="CONTINUE"/>
 
-        <Button
-            android:id="@+id/crash_report_buttons"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="REPORT"/>
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/crash_detail_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DETAILS"/>
+
+            <Button
+                android:id="@+id/crash_report_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="REPORT"/>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -36,9 +51,10 @@
         android:layout_alignParentTop="true"
         android:layout_above="@id/crash_buttons">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
@@ -46,30 +62,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/subtitle"
-                android:layout_alignParentTop="true"
                 android:textColor="@color/rally_orange"
                 android:typeface="sans"
                 android:fontFamily="sans-serif-condensed"
-                android:textSize="23dp"/>
+                android:textSize="18dp"/>
+
+            <TextView
+                android:id="@+id/detail_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/subtitle"
+                android:textColor="@color/rally_white"
+                android:typeface="sans"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="16dp"/>
 
             <HorizontalScrollView
                 android:id="@+id/crash_horizontal_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_below="@id/detail_title">
+                android:background="@color/black">
 
                 <TextView
-                    android:id="@+id/detail_subtitle"
+                    android:id="@+id/detail_console"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/rally_orange"
-                    android:typeface="sans"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="15dp"/>
+                    android:textColor="@color/rally_white"
+                    android:layout_margin="3dp"
+                    android:typeface="monospace"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="14dp"/>
+
             </HorizontalScrollView>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 

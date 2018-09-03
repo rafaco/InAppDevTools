@@ -4,17 +4,14 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
@@ -31,6 +28,7 @@ public class MainOverlayLayer extends OverlayLayer {
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
     private Toolbar toolbar;
+    private LinearLayout fullContainer;
 
     public MainOverlayLayer(OverlayLayersManager manager) {
         super(manager);
@@ -78,6 +76,7 @@ public class MainOverlayLayer extends OverlayLayer {
     private void initScroll() {
         bodyScroll = getView().findViewById(R.id.scroll_view);
         bodyContainer = getView().findViewById(R.id.tool_body_container);
+        fullContainer = getView().findViewById(R.id.full_container);
     }
 
     public void scrollBottom(){
@@ -107,7 +106,7 @@ public class MainOverlayLayer extends OverlayLayer {
     //region [ TOOL BAR ]
 
     private void initToolbar(View view) {
-        toolbar = view.findViewById(R.id.my_toolbar);
+        toolbar = view.findViewById(R.id.main_toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -116,7 +115,7 @@ public class MainOverlayLayer extends OverlayLayer {
             }
         });
         toogleBackButton(true);
-        toolbar.inflateMenu(R.menu.overlay);
+        toolbar.inflateMenu(R.menu.main_overlay);
     }
 
     public void setToolbarTitle(String title){
@@ -167,6 +166,10 @@ public class MainOverlayLayer extends OverlayLayer {
     private void onBackButtonPressed() {
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_BACK,null);
         DevTools.getAppContext().startService(intent);
+    }
+
+    public View getFullContainer() {
+        return fullContainer;
     }
 
     //endregion

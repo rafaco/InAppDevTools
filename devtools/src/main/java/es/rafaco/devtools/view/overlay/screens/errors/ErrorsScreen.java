@@ -7,7 +7,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +34,6 @@ import es.rafaco.devtools.view.DecoratedToolInfo;
 import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.utils.ThreadUtils;
 
-import static es.rafaco.devtools.utils.DateUtils.getElapsedTime;
 import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeLowered;
 
 public class ErrorsScreen extends OverlayScreen {
@@ -47,6 +48,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     private InvalidationTracker.Observer observer;
     private InvalidationTracker tracker;
+    private Toolbar toolbar;
 
     public ErrorsScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -58,7 +60,10 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_errors; }
+    public int getBodyLayoutId() { return R.layout.tool_errors_body; }
+
+    @Override
+    public int getHeadLayoutId() { return R.layout.tool_errors_head; }
 
     @Override
     protected void onCreate() {
@@ -69,6 +74,7 @@ public class ErrorsScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
         initView(view);
+        initToolbar(view);
         getErrors();
 
 
@@ -259,4 +265,43 @@ public class ErrorsScreen extends OverlayScreen {
         adapter.replaceAll(errors);
         recyclerView.requestLayout();
     }
+
+
+    //region [ TOOL BAR ]
+
+    private void initToolbar(View view) {
+        toolbar = view.findViewById(R.id.errors_toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onToolbarButtonPressed(item);
+                return true;
+            }
+        });
+        toolbar.inflateMenu(R.menu.errors);
+    }
+
+    private void onToolbarButtonPressed(MenuItem item) {
+        int selected = item.getItemId();
+        if (selected == R.id.action_delete)
+        {
+            onClearAll();
+        }
+        else if (selected == R.id.action_simulate)
+        {
+            //TODO: dialog or popup to choose type of error
+            //TODO: show message before crash or anr
+            onCrashUiButton();
+        }
+        else if (selected == R.id.action_send)
+        {
+            //TODO: send all errors
+        }
+        else if (selected == R.id.action_refresh)
+        {
+            onRefresh();
+        }
+    }
+
+    //endregion
 }

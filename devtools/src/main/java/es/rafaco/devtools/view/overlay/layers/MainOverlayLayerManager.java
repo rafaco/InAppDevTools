@@ -94,6 +94,21 @@ public class MainOverlayLayerManager {
             currentScreen = loadedScreen;
         }
         else {
+
+            ExpandCollapseUtils.collapse(mainLayer.getFullContainer(),
+                    new AnimationEndListener() {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            currentScreen.toggleVisibility(false);
+                            loadedScreen.toggleVisibility(true);
+                            destroyPreviousScreen();
+                            ExpandCollapseUtils.expand(mainLayer.getFullContainer(), null);
+                            currentScreen = loadedScreen;
+                        }
+                    });
+
+/*
+
             if (currentScreen.haveHead()){
                 ExpandCollapseUtils.collapse(currentScreen.headView,
                         new AnimationEndListener() {
@@ -123,7 +138,7 @@ public class MainOverlayLayerManager {
                             currentScreen = loadedScreen;
                         }
                     });
-
+*/
             /* TODO: research which animation is better
             // This one depend on animateLayoutChanges flags but seems to perform poorly
 
@@ -176,6 +191,13 @@ public class MainOverlayLayerManager {
     }
 
     private void addNavigationStep(NavigationStep newStep) {
+        //Ensure home screen is always at the bottom. It get complete navigability using back button
+        if (navigationHistory.isEmpty() &&
+                !HomeScreen.class.equals(newStep.getClassName())){
+            NavigationStep homeStep = new NavigationStep(HomeScreen.class, null);
+            navigationHistory.add(homeStep);
+        }
+
         navigationHistory.add(newStep);
         updateBackbutton();
         updateToolbarTitle();
