@@ -46,6 +46,8 @@ public class HomeScreen extends OverlayScreen {
         initView(view);
         initAdapter(view);
         updateList();
+
+        //adapter.update();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -253,6 +254,11 @@ public class MainOverlayLayerManager {
             }
         }
         return null;
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (currentScreen != null)
+            currentScreen.onConfigurationChanged(newConfig);
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_simulate"
+        android:icon="@drawable/ic_bug_report_rally_24dp"
+        android:iconTint="@color/rally_orange"
+        android:orderInCategory="200"
+        android:title="Split view"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_send"
+        android:icon="@drawable/ic_send_rally_24dp"
+        android:iconTint="@color/rally_blue"
+        android:orderInCategory="300"
+        android:title="Send"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_rally_24dp"
+        android:orderInCategory="400"
+        android:title="Share"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_forever_rally_24dp"
+        android:orderInCategory="510"
+        android:title="Delete"
+        app:showAsAction="always" />
+
+</menu>

@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,5 +107,8 @@ public abstract class OverlayScreen {
     }
     public ViewGroup getView() {
         return getScreenManager().getView();
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
     }
 }

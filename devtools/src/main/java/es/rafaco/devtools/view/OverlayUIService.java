@@ -206,6 +206,10 @@ public class OverlayUIService extends Service {
         if (overlayLayersManager != null){
             overlayLayersManager.onConfigurationChanged(newConfig);
         }
+
+        if (mainOverlayLayerManager != null){
+            mainOverlayLayerManager.onConfigurationChanged(newConfig);
+        }
     }
 
 

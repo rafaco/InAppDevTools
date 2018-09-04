@@ -206,11 +206,11 @@ public class MainOverlayLayer extends OverlayLayer {
         manager.getWindowManager().updateViewLayout(getView(), layoutParams);
     }
 
+    //endregion
+
     @Override
     public void onConfigurationChange(Configuration newConfig) {
         //TODO: adapt half to landscape
         // if half: top is left and bottom is right
     }
-
-    //endregion
 }
