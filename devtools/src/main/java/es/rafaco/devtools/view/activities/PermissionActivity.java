@@ -45,10 +45,15 @@ public class PermissionActivity extends AppCompatActivity {
         if (onFailCallback!=null)
             onRevokeCallback = onFailCallback;
 
-        DevTools.showMessage("Permission needed, please accept it.");
-        Intent intent = PermissionActivity.buildIntent(action, DevTools.getAppContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            DevTools.showMessage("Permission needed, please accept it.");
+            Intent intent = PermissionActivity.buildIntent(action, DevTools.getAppContext());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             DevTools.getAppContext().startActivity(intent, null);
+        }else{
+            onSuccessCallback.run();
+        }
+
     }
 
 
