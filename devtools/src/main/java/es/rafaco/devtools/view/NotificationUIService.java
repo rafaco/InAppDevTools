@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -129,13 +128,9 @@ public class NotificationUIService extends Service {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
         InfoHelper infoHelper = new InfoHelper();
-        PackageInfo packageInfo = infoHelper.getPackageInfo();
         String title, subTitle;
         if (crash == null){
-            String environment = "DEBUG";
-            String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
-
-            title = String.format("%s %s %s", infoHelper.getAppName(), environment, version);
+            title = infoHelper.getFormattedAppName();
             subTitle = "Expand me for options...";
         }else{
             title = String.format("Ups, %s crashed", infoHelper.getAppName());

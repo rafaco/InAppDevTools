@@ -44,6 +44,7 @@ public class InfoGroup {
         if (!TextUtils.isEmpty(getName())) {
             result += String.format(formatTitle, getName());
             result += lineBreak;
+            result += lineBreak;
         }
 
         for (InfoEntry entry : entries){

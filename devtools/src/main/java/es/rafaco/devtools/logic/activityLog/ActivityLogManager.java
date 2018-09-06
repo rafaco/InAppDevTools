@@ -29,23 +29,19 @@ public class ActivityLogManager {
 
     public String getLog(){
         StringBuilder activityLogStringBuilder = new StringBuilder();
-        activityLogStringBuilder.append("Activity log:");
-        activityLogStringBuilder.append("\n");
-        activityLogStringBuilder.append("   Started " + currentlyStartedActivities + " activities");
-        activityLogStringBuilder.append("\n");
-        activityLogStringBuilder.append("   Currently on " + (isInBackground ? "Background" : "Foreground"));
-        activityLogStringBuilder.append("\n");
+        activityLogStringBuilder.append("ActivityLog:"+"\n");
         while (!activityLog.isEmpty()) {
+            //TODO: this is deleting the log every time
             activityLogStringBuilder.append(activityLog.poll());
         }
         return activityLogStringBuilder.toString();
     }
 
-    public boolean isIsInBackground(){
+    public boolean isInBackground(){
         return isInBackground;
     }
 
-    public int getCurrentlyStartedActivities() {
+    public int getStartedActivitiesCount() {
         return currentlyStartedActivities;
     }
 }

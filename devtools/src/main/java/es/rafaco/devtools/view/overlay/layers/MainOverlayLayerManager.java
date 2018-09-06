@@ -101,8 +101,8 @@ public class MainOverlayLayerManager {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             currentScreen.toggleVisibility(false);
-                            loadedScreen.toggleVisibility(true);
                             destroyPreviousScreen();
+                            loadedScreen.toggleVisibility(true);
                             ExpandCollapseUtils.expand(mainLayer.getFullContainer(), null);
                             currentScreen = loadedScreen;
                         }

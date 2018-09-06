@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.arch.persistence.room.InvalidationTracker;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.utils.RecyclerViewUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
@@ -46,9 +47,11 @@ public class ErrorsScreen extends OverlayScreen {
     private Button crashBackButton;
     private Button anrButton;
 
-    private InvalidationTracker.Observer observer;
+    private InvalidationTracker.Observer anrObserver;
+    private InvalidationTracker.Observer crashObserver;
     private InvalidationTracker tracker;
     private Toolbar toolbar;
+    private TextView emptyView;
 
     public ErrorsScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -63,7 +66,7 @@ public class ErrorsScreen extends OverlayScreen {
     public int getBodyLayoutId() { return R.layout.tool_errors_body; }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_errors_head; }
+    public int getHeadLayoutId() { return R.layout.tool_toolbar; }
 
     @Override
     protected void onCreate() {
@@ -73,26 +76,33 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        initView(view);
-        initToolbar(view);
+        initView(bodyView);
+        initToolbar(headView);
         getErrors();
 
-
-        observer = new InvalidationTracker.Observer(new String[]{"anr"}){
+        anrObserver = new InvalidationTracker.Observer(new String[]{"anr"}){
+            @Override
+            public void onInvalidated(@NonNull Set<String> tables) {
+                getErrors();
+            }
+        };
+        crashObserver = new InvalidationTracker.Observer(new String[]{"crash"}){
             @Override
             public void onInvalidated(@NonNull Set<String> tables) {
                 getErrors();
             }
         };
         tracker = DevTools.getDatabase().getInvalidationTracker();
-        tracker.addObserver(observer);
+        tracker.addObserver(anrObserver);
+        tracker.addObserver(crashObserver);
     }
 
     @Override
     protected void onStop() {
-
-        tracker.removeObserver(observer);
-        observer = null;
+        tracker.removeObserver(anrObserver);
+        tracker.removeObserver(crashObserver);
+        anrObserver = null;
+        crashObserver = null;
     }
 
     @Override
@@ -103,20 +113,6 @@ public class ErrorsScreen extends OverlayScreen {
     private void initView(View toolView) {
         welcome = toolView.findViewById(R.id.welcome);
         welcome.setText(getWelcomeMessage());
-        ImageView refreshButton = getView().findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRefresh();
-            }
-        });
-        ImageView deleteButton = getView().findViewById(R.id.delete_button);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClearAll();
-            }
-        });
 
         initAdapter();
 
@@ -200,7 +196,7 @@ public class ErrorsScreen extends OverlayScreen {
 
 
     public String getWelcomeMessage(){
-        return "Crashes, ANRs, memory leaks and exceptions in logcat!";
+        return "Crashes and ANRs (memory leaks and logcat exceptions coming soon):";
     }
 
     private void getErrors(){
@@ -259,18 +255,20 @@ public class ErrorsScreen extends OverlayScreen {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        emptyView = getView().findViewById(R.id.empty_errors_list);
     }
 
     private void updateList(List<DecoratedToolInfo> errors) {
         adapter.replaceAll(errors);
-        recyclerView.requestLayout();
+        RecyclerViewUtils.updateEmptyState(recyclerView, emptyView, errors);
     }
 
 
     //region [ TOOL BAR ]
 
     private void initToolbar(View view) {
-        toolbar = view.findViewById(R.id.errors_toolbar);
+        toolbar = view.findViewById(R.id.tool_toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -279,6 +277,12 @@ public class ErrorsScreen extends OverlayScreen {
             }
         });
         toolbar.inflateMenu(R.menu.errors);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toolbar.requestLayout();
     }
 
     private void onToolbarButtonPressed(MenuItem item) {
@@ -296,10 +300,7 @@ public class ErrorsScreen extends OverlayScreen {
         else if (selected == R.id.action_send)
         {
             //TODO: send all errors
-        }
-        else if (selected == R.id.action_refresh)
-        {
-            onRefresh();
+            DevTools.showMessage("Not already implemented");
         }
     }
 

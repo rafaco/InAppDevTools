@@ -68,7 +68,10 @@ public class InfoScreen extends OverlayScreen {
 
     private void initMainSelector() {
         ArrayList<String> list = new ArrayList<>();
-        list.add("BuildConfig");
+        list.add("App Status");
+        list.add("Static info");
+        list.add("/proc/meminfo");
+        list.add("/proc/stat");
         list.add("dumpsys");
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getView().getContext(),
@@ -81,9 +84,19 @@ public class InfoScreen extends OverlayScreen {
                 String title = spinnerAdapter.getItem(pos);
                 Log.d(DevTools.TAG, "Info - Main selector changed to: " + title);
 
-                if (title.equals("BuildConfig")) {
-                    loadBuildConfig();
-                } else if (title.equals("dumpsys")) {
+                if (title.equals("Static info")) {
+                    setReport(helper.getStaticInfo());
+                }
+                else if (title.equals("App Status")) {
+                    setReport(helper.getAppStatus());
+                }
+                else if (title.equals("/proc/stat")) {
+                    setReport(helper.getProcStat());
+                }
+                else if (title.equals("/proc/meminfo")) {
+                    setReport(helper.getMemInfo());
+                }
+                else if (title.equals("dumpsys")) {
                     onDumpSys();
                 }
             }
@@ -91,15 +104,13 @@ public class InfoScreen extends OverlayScreen {
         mainSpinner.setOnItemSelectedListener(listener);
         mainSpinner.setOnTouchListener(listener);
 
-        loadBuildConfig();
+        setReport(helper.getAppStatus());
     }
 
-    private void loadBuildConfig() {
-        String report = helper.getReportContent();
+    private void setReport(String report) {
         out.setText(report);
         secondSpinner.setVisibility(View.GONE);
     }
-
 
 
     private void onDumpSys() {

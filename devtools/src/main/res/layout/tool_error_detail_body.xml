@@ -5,13 +5,6 @@
     android:layout_height="wrap_content"
     style="@style/content_padding">
 
-    <android.support.v7.widget.ActionMenuView
-        android:id="@+id/detail_menu"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#59000000"
-        android:elevation="4dp"/>
-
     <TextView
         android:id="@+id/detail_title"
         android:layout_width="match_parent"

@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.FileUtils;
 
@@ -39,6 +41,18 @@ public class InfoHelper extends ToolHelper {
     @Override
     public String getReportContent() {
         String result = "";
+        result += getAppStatus();
+        result += "\n";
+        result += getStaticInfo();
+        result += "\n";
+        result += getExtraPackageInfo().toString();
+        result += "\n";
+        return result;
+    }
+
+    @NonNull
+    public String getStaticInfo() {
+        String result = "";
         result += getAppInfo().toString();
         result += "\n";
         result += getDevToolsInfo().toString();
@@ -47,15 +61,23 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += getOsInfo().toString();
         result += "\n";
-        result += getRunningInfo().toString();
+        result += getLinuxInfo();
+        return result;
+    }
+
+    public String getAppStatus() {
+        String result = "";
+        ActivityLogManager logManager = DevTools.getActivityLogManager();
+        result += "Top activity is " + getTopActivity();
         result += "\n";
-        result += "ActivityLog:" + "\n";
+        result += "Currently on " + (logManager.isInBackground() ? "Background" : "Foreground");
+        result += "\n";
+        result += logManager.getStartedActivitiesCount() + " activities started";
+        result += "\n";
+        result += "\n";
         result += DevTools.getActivityLogManager().getLog();
         result += "\n";
-        result += getMemInfo();
-        result += "\n";
-        result += getExtraPackageInfo().toString();
-        result += "\n";
+        result += getRunningInfo().toString();
         return result;
     }
 
@@ -78,12 +100,13 @@ public class InfoHelper extends ToolHelper {
         }
         String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
 
-        InfoGroup group = new InfoGroup.Builder("PackageInfo")
+        InfoGroup group = new InfoGroup.Builder("PackageInfo:")
                 .add("Activities", activities)
                 .add("Services", services)
                 .add("Permissions", permissions)
                 .add("Features", features)
                 .add("Instrumentations", instrumentations)
+                .add("Libraries", "Coming soon")
                 .build();
         return group;
     }
@@ -97,10 +120,10 @@ public class InfoHelper extends ToolHelper {
                 .add("App Version", pInfo.versionName + " (" + pInfo.versionCode + ")")
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
-                .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
-                .add("firstInstallTime", formatter.format(new Date(pInfo.firstInstallTime)))
                 .add("Min SDK version", getMinSdkVersion(pInfo))
                 .add("Target SDK version", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
+                .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
+                .add("firstInstallTime", formatter.format(new Date(pInfo.firstInstallTime)))
                 .build();
         return group;
     }
@@ -116,7 +139,7 @@ public class InfoHelper extends ToolHelper {
 
     public InfoGroup getDevToolsInfo() {
         InfoGroup group = new InfoGroup.Builder("DevTools library")
-                .add("DevTools Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+                .add("DevTools version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Status", "enabled")
                 .add("Profile", "developer")
                 .build();
@@ -126,8 +149,9 @@ public class InfoHelper extends ToolHelper {
 
     public InfoGroup getRunningInfo() {
         InfoGroup group = new InfoGroup.Builder("Currently running")
-                .add("Services", getRunningServices(context))
-                .add("Tasks", getRunningTasks(context))
+                .add("Services", getRunningServices())
+                .add("Services 2", getRunningServices2())
+                .add("Tasks", getRunningTasks())
                 .build();
         return group;
     }
@@ -201,7 +225,7 @@ public class InfoHelper extends ToolHelper {
         if (infos == null){
             return "Unavailable";
         }
-        result = "[" + infos.length + "] ";
+        result = "[" + infos.length + "]"+ "\n";
         if (infos.length > 0){
             for (PackageItemInfo info: infos) {
                 result += info.name + "\n";
@@ -212,13 +236,13 @@ public class InfoHelper extends ToolHelper {
         return result;
     }
 
-    public String getRunningServices(Context context) {
+    public String getRunningServices() {
         String output = "";
         String formatWithoutLabel = "        %s";
         String packageName = context.getPackageName();
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getPackageName().equals(packageName)){
+            if (service.service.getPackageName().equals(packageName)) {
                 String text = service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
                 output += String.format(formatWithoutLabel, text) + "\n";
             }
@@ -226,7 +250,25 @@ public class InfoHelper extends ToolHelper {
         return output;
     }
 
-    private String getRunningTasks(Context context) {
+    public String getRunningServices2() {
+        String output = "";
+        String packageName = context.getPackageName();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+        long currentMillis = Calendar.getInstance().getTimeInMillis();
+        Calendar cal = Calendar.getInstance();
+
+        for (ActivityManager.RunningServiceInfo info : services) {
+            if (info.service.getPackageName().equals(packageName)) {
+                cal.setTimeInMillis(currentMillis - info.activeSince);
+                output += String.format("Process %s has been running since: %d ms \n", info.process, info.activeSince);
+            }
+        }
+        return output;
+    }
+
+    private String getRunningTasks() {
         String output = "";
         String formatWithoutLabel = "        %s";
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -244,18 +286,50 @@ public class InfoHelper extends ToolHelper {
         return output;
     }
 
+    private String getTopActivity() {
+        String output = "";
+        String formatWithoutLabel = "        %s";
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(1);
+        ActivityManager.RunningTaskInfo firstTaskInfo = runningTaskInfoList.get(0);
+        ;
+        return firstTaskInfo.topActivity.getShortClassName();
+    }
+
+    public static String getLinuxInfo() {
+        ArrayList<String> commandLine = new ArrayList<String>();
+        commandLine.add("cat");
+        commandLine.add("/proc/version");
+        return runCommandLine(commandLine);
+    }
+
     public static String getMemInfo() {
+        ArrayList<String> commandLine = new ArrayList<String>();
+        commandLine.add("cat");
+        commandLine.add("/proc/meminfo");
+        //commandLine.add("/proc/stat");
+        //commandLine.add("/proc/pid/stat");
+        //commandLine.add("adb top -n 1");
+        //In adb shell: top -n 1
+
+        return runCommandLine(commandLine);
+    }
+
+    public static String getProcStat() {
+        ArrayList<String> commandLine = new ArrayList<String>();
+        commandLine.add("cat");
+        commandLine.add("/proc/stat");
+        //commandLine.add("/proc/pid/stat");
+        //commandLine.add("adb top -n 1");
+        //In adb shell: top -n 1
+
+        return runCommandLine(commandLine);
+    }
+
+    @NonNull
+    private static String runCommandLine(ArrayList<String> commandLine) {
         StringBuilder meminfo = new StringBuilder();
         try {
-            ArrayList<String> commandLine = new ArrayList<String>();
-            commandLine.add("cat");
-            //commandLine.add("/proc/meminfo");
-            //commandLine.add("/proc/stat");
-            commandLine.add("/proc/version"); //Linux version multiline very complete
-            //commandLine.add("/proc/pid/stat");
-            //commandLine.add("adb top -n 1");
-            //In adb shell: top -n 1
-
             Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[commandLine.size()]));
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -270,5 +344,16 @@ public class InfoHelper extends ToolHelper {
         }
 
         return meminfo.toString();
+    }
+
+    public String getFormattedAppName() {
+        PackageInfo packageInfo = getPackageInfo();
+        String environment = "DEBUG"; //TODO: Environment selector propagation
+        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+        return String.format("%s %s %s", getAppName(), environment, version);
+    }
+
+    private String getFormattedDevice() {
+        return String.format("%s %s %s", Build.BRAND, Build.MODEL, isVirtual()? "Emulated!" : "");
     }
 }

@@ -76,7 +76,14 @@ public abstract class OverlayScreen {
 
     public void toggleHeadVisibility(boolean show){
         int visibility = show ? View.VISIBLE : View.GONE;
-        if (headView !=null) headView.setVisibility(visibility);
+        if (headView !=null) {
+            headView.setVisibility(visibility);
+            onHeadVisibilityChanged(visibility);
+        }
+    }
+
+    protected void onHeadVisibilityChanged(int visibility) {
+
     }
 
     public void toggleBodyVisibility(boolean show){

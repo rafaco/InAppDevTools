@@ -8,9 +8,10 @@
     android:layout_marginRight="20dp">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/errors_toolbar"
+        android:id="@+id/tool_toolbar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:background="@color/rally_bg_solid"
         android:theme="@style/LibActionBarTheme"
         app:popupTheme="@style/popupMenuStyle"
         style="@style/elevated">
