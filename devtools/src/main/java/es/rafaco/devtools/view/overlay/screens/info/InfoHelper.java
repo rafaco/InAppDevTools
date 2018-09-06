@@ -45,10 +45,10 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += getStaticInfo();
         result += "\n";
-        result += getExtraPackageInfo().toString();
-        result += "\n";
         return result;
     }
+
+    //region [ REPORT BUILDER ]
 
     @NonNull
     public String getStaticInfo() {
@@ -62,53 +62,10 @@ public class InfoHelper extends ToolHelper {
         result += getOsInfo().toString();
         result += "\n";
         result += getLinuxInfo();
+        result += "\n";
+        getPackageInfoInfo().toString();
+        result += "\n";
         return result;
-    }
-
-    public String getAppStatus() {
-        String result = "";
-        ActivityLogManager logManager = DevTools.getActivityLogManager();
-        result += "Top activity is " + getTopActivity();
-        result += "\n";
-        result += "Currently on " + (logManager.isInBackground() ? "Background" : "Foreground");
-        result += "\n";
-        result += logManager.getStartedActivitiesCount() + " activities started";
-        result += "\n";
-        result += "\n";
-        result += DevTools.getActivityLogManager().getLog();
-        result += "\n";
-        result += getRunningInfo().toString();
-        return result;
-    }
-
-    public InfoCollection getFullInfoCollection(){
-        InfoCollection.Builder collectionBuilder = new InfoCollection.Builder("Hardware and Software")
-                .add(getDeviceInfo())
-                .add(getOsInfo());
-        return collectionBuilder.build();
-    }
-
-    public InfoGroup getExtraPackageInfo() {
-        PackageInfo pInfo = getPackageInfo();
-        String activities = parsePackageInfoArray(pInfo.activities);
-        String services = parsePackageInfoArray(pInfo.services);
-        String permissions = parsePackageInfoArray(pInfo.permissions);
-        String features = "No available";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            //features = parsePackageInfoArray(pInfo.featureGroups.fe);
-            features = "No implemented already";
-        }
-        String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
-
-        InfoGroup group = new InfoGroup.Builder("PackageInfo:")
-                .add("Activities", activities)
-                .add("Services", services)
-                .add("Permissions", permissions)
-                .add("Features", features)
-                .add("Instrumentations", instrumentations)
-                .add("Libraries", "Coming soon")
-                .build();
-        return group;
     }
 
     public InfoGroup getAppInfo() {
@@ -128,30 +85,11 @@ public class InfoHelper extends ToolHelper {
         return group;
     }
 
-    @NonNull
-    private String getMinSdkVersion(PackageInfo pInfo) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return String.valueOf(pInfo.applicationInfo.minSdkVersion);
-        }
-        //TODO: get minSDK for api < 24
-        return "Unavailable";
-    }
-
     public InfoGroup getDevToolsInfo() {
         InfoGroup group = new InfoGroup.Builder("DevTools library")
                 .add("DevTools version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Status", "enabled")
                 .add("Profile", "developer")
-                .build();
-        return group;
-    }
-
-
-    public InfoGroup getRunningInfo() {
-        InfoGroup group = new InfoGroup.Builder("Currently running")
-                .add("Services", getRunningServices())
-                .add("Services 2", getRunningServices2())
-                .add("Tasks", getRunningTasks())
                 .build();
         return group;
     }
@@ -184,6 +122,59 @@ public class InfoHelper extends ToolHelper {
         return group;
     }
 
+    public String getAppStatus() {
+        String result = "";
+        ActivityLogManager logManager = DevTools.getActivityLogManager();
+        result += "Currently on " + (logManager.isInBackground() ? "Background" : "Foreground");
+        result += "\n";
+        result += "Top activity is " + getTopActivity();
+        result += "\n";
+        result += logManager.getStartedActivitiesCount() + " activities started";
+        result += "\n";
+        result += "\n";
+        result += DevTools.getActivityLogManager().getLog();
+        result += "\n";
+        result += getRunningInfo().toString();
+        result += "\n";
+        return result;
+    }
+
+    public InfoGroup getRunningInfo() {
+        InfoGroup group = new InfoGroup.Builder("Currently running")
+                .add("Services", getRunningServices())
+                .add("Services 2", getRunningServices2())
+                .add("Tasks", getRunningTasks())
+                .build();
+        return group;
+    }
+
+    public InfoGroup getPackageInfoInfo() {
+        PackageInfo pInfo = getPackageInfo();
+        String activities = parsePackageInfoArray(pInfo.activities);
+        String services = parsePackageInfoArray(pInfo.services);
+        String permissions = parsePackageInfoArray(pInfo.permissions);
+        String features = "No available";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //features = parsePackageInfoArray(pInfo.featureGroups.fe);
+            features = "No implemented already";
+        }
+        String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
+
+        InfoGroup group = new InfoGroup.Builder("PackageInfo:")
+                .add("Activities", activities)
+                .add("Services", services)
+                .add("Permissions", permissions)
+                .add("Features", features)
+                .add("Instrumentations", instrumentations)
+                .add("Libraries", "Coming soon")
+                .build();
+        return group;
+    }
+
+    //endregion
+
+    //region [ PROPERTY EXTRACTORS ]
+
     public String getAppName() {
         PackageInfo pInfo = getPackageInfo();
         return pInfo.applicationInfo.labelRes == 0
@@ -199,6 +190,15 @@ public class InfoHelper extends ToolHelper {
         Field[] fields = Build.VERSION_CODES.class.getFields();
         String osName = fields[Build.VERSION.SDK_INT].getName();
         return osName;
+    }
+
+    @NonNull
+    private String getMinSdkVersion(PackageInfo pInfo) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return String.valueOf(pInfo.applicationInfo.minSdkVersion);
+        }
+        //TODO: get minSDK for api < 24
+        return "Unavailable";
     }
 
     private Boolean isVirtual() {
@@ -287,12 +287,9 @@ public class InfoHelper extends ToolHelper {
     }
 
     private String getTopActivity() {
-        String output = "";
-        String formatWithoutLabel = "        %s";
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(1);
         ActivityManager.RunningTaskInfo firstTaskInfo = runningTaskInfoList.get(0);
-        ;
         return firstTaskInfo.topActivity.getShortClassName();
     }
 
@@ -307,11 +304,6 @@ public class InfoHelper extends ToolHelper {
         ArrayList<String> commandLine = new ArrayList<String>();
         commandLine.add("cat");
         commandLine.add("/proc/meminfo");
-        //commandLine.add("/proc/stat");
-        //commandLine.add("/proc/pid/stat");
-        //commandLine.add("adb top -n 1");
-        //In adb shell: top -n 1
-
         return runCommandLine(commandLine);
     }
 
@@ -322,7 +314,6 @@ public class InfoHelper extends ToolHelper {
         //commandLine.add("/proc/pid/stat");
         //commandLine.add("adb top -n 1");
         //In adb shell: top -n 1
-
         return runCommandLine(commandLine);
     }
 
@@ -338,7 +329,6 @@ public class InfoHelper extends ToolHelper {
                 meminfo.append(line);
                 meminfo.append("\n");
             }
-
         } catch (IOException e) {
             Log.e(DevTools.TAG, "Could not read /proc/meminfo", e);
         }
@@ -356,4 +346,6 @@ public class InfoHelper extends ToolHelper {
     private String getFormattedDevice() {
         return String.format("%s %s %s", Build.BRAND, Build.MODEL, isVirtual()? "Emulated!" : "");
     }
+
+    //endregion
 }

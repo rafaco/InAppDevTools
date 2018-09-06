@@ -68,8 +68,8 @@ public class InfoScreen extends OverlayScreen {
 
     private void initMainSelector() {
         ArrayList<String> list = new ArrayList<>();
-        list.add("App Status");
         list.add("Static info");
+        list.add("App Status");
         list.add("/proc/meminfo");
         list.add("/proc/stat");
         list.add("dumpsys");
