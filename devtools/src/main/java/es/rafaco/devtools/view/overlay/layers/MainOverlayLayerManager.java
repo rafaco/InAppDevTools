@@ -96,6 +96,13 @@ public class MainOverlayLayerManager {
         }
         else {
 
+            //No animation
+            currentScreen.toggleVisibility(false);
+            destroyPreviousScreen();
+            loadedScreen.toggleVisibility(true);
+            currentScreen = loadedScreen;
+
+            /*
             ExpandCollapseUtils.collapse(mainLayer.getFullContainer(),
                     new AnimationEndListener() {
                         @Override
@@ -107,9 +114,8 @@ public class MainOverlayLayerManager {
                             currentScreen = loadedScreen;
                         }
                     });
-
-/*
-
+*/
+            /*
             if (currentScreen.haveHead()){
                 ExpandCollapseUtils.collapse(currentScreen.headView,
                         new AnimationEndListener() {

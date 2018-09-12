@@ -86,6 +86,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setException(ex.getClass().getSimpleName());
         crash.setMessage(ex.getMessage());
 
+        //TODO: crash.setWhere(ex.getStackTrace()[0].toString());
+        //ex.getStackTrace()[0].getLineNumber()
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
         String stackTraceString = sw.toString();

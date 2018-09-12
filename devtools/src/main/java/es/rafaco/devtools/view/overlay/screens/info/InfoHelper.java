@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.screens.info;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -199,6 +201,31 @@ public class InfoHelper extends ToolHelper {
         }
         //TODO: get minSDK for api < 24
         return "Unavailable";
+    }
+
+    public static String getAppTimeStamp(Context context) {
+        long time = getAppBuildTime(context);
+
+        if (time == -1) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String timeStamp = formatter.format(time);
+        return timeStamp;
+    }
+
+    public static long getAppBuildTime(Context context){
+        long time;
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
+            String appFile = appInfo.sourceDir;
+            time = new File(appFile).lastModified();
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+            time = -1;
+        }
+
+        return time;
     }
 
     private Boolean isVirtual() {

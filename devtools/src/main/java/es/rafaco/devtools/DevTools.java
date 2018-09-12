@@ -16,6 +16,7 @@ import es.rafaco.devtools.logic.tools.LogTool;
 import es.rafaco.devtools.logic.tools.ReportTool;
 import es.rafaco.devtools.logic.tools.ScreenTool;
 import es.rafaco.devtools.logic.tools.ToolManager;
+import es.rafaco.devtools.utils.FirstStartUtil;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
@@ -24,6 +25,7 @@ import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.view.dialog.CrashDialogActivity;
 import es.rafaco.devtools.view.dialog.ReportDialogActivity;
+import es.rafaco.devtools.view.dialog.WelcomeDialogActivity;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
@@ -87,11 +89,18 @@ public class DevTools {
         });
         Log.i(DevTools.TAG, "DevTools initialized");
 
+
         if (PendingCrashUtil.isPending()){
             Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getAppContext().startActivity(intent);
             PendingCrashUtil.clearPending();
+        }
+        else if (FirstStartUtil.isFirstStart()){
+            Intent intent = new Intent(getAppContext(), WelcomeDialogActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getAppContext().startActivity(intent);
+            FirstStartUtil.saveFirstStart();
         }
     }
 

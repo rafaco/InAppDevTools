@@ -15,6 +15,9 @@
             android:label="@string/lib_name"
             android:theme="@style/LibTheme.Dialog" />
 
+        <activity android:name=".view.dialog.WelcomeDialogActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
         <activity android:name=".view.dialog.CrashDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
