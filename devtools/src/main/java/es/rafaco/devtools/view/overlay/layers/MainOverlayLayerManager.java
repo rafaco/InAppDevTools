@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -107,6 +108,8 @@ public class MainOverlayLayerManager {
                             currentScreen = loadedScreen;
                         }
                     });
+
+            Snackbar.make(getMainLayer().getFullContainer(), "SnackBar!!!", Snackbar.LENGTH_LONG).show();
 
 /*
 
