@@ -21,6 +21,9 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "message")
     private String message;
 
+    //@ColumnInfo(name = "where")
+    //private String where;
+
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
 

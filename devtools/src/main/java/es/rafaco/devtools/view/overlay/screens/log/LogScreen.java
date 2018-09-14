@@ -1,6 +1,9 @@
 package es.rafaco.devtools.view.overlay.screens.log;
 
 import android.animation.LayoutTransition;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -8,14 +11,18 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -63,6 +70,7 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
     private RelativeLayout outputContainer;
     private Handler removeToastHandler;
     private Process process;
+    private Toolbar toolbar;
 
 
     public LogScreen(MainOverlayLayerManager manager) {
@@ -78,7 +86,7 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
     public int getBodyLayoutId() { return R.layout.tool_log_body; }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_log_head; }
+    public int getHeadLayoutId() { return R.layout.tool_toolbar; }
 
     @Override
     protected void onCreate() {
@@ -86,6 +94,8 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
 
     @Override
     protected void onStart(ViewGroup view) {
+
+        initToolbar(headView);
 
         initPresetFilter();
         initLevelFilter();
@@ -404,4 +414,81 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
         });
         stopLogReader();
     }
+
+
+    //region [ TOOL BAR ]
+
+    private void initToolbar(View view) {
+        toolbar = view.findViewById(R.id.tool_toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onToolbarButtonPressed(item);
+                return true;
+            }
+        });
+        toolbar.inflateMenu(R.menu.logcat);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toolbar.requestLayout();
+    }
+
+    private void onToolbarButtonPressed(MenuItem item) {
+        int selected = item.getItemId();
+        if (selected == R.id.action_search) {
+            onSearchButton();
+        }
+        else if (selected == R.id.action_level) {
+            onLevelButton();
+        }
+        else if (selected == R.id.action_filter) {
+            onFilterButton();
+        }
+        else if (selected == R.id.action_save) {
+            onSaveButton();
+        }
+        else if (selected == R.id.action_delete) {
+            onClearLog();
+        } else{
+            DevTools.showMessage("Not already implemented");
+        }
+    }
+
+    private void onSaveButton() {
+
+    }
+
+    private void onFilterButton() {
+
+    }
+
+    private void onLevelButton() {
+        String[] stringArray = getContext().getResources().getStringArray(R.array.log_levels);
+        final int initialSelection = 0;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Select log level")
+                .setCancelable(true)
+                .setSingleChoiceItems(stringArray, initialSelection, new OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which!=initialSelection){
+                            dialog.dismiss();
+                        }
+                        DevTools.showMessage("Not already implemented");
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.show();
+    }
+
+    private void onSearchButton() {
+
+    }
+
+    //endregion
 }
