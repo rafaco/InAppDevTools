@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -62,7 +63,7 @@ public class MainOverlayLayer extends OverlayLayer {
         initScroll();
         initToolbar(view);
 
-        ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
+        ((CoordinatorLayout)view).setLayoutTransition(new LayoutTransition());
     }
 
     @Override

@@ -36,6 +36,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "com.android.support:cardview-v7:$support_version"
     implementation "com.android.support:support-media-compat:$support_version"
+    implementation "com.android.support:design:$support_version"
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"

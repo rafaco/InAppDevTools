@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
@@ -19,11 +22,8 @@
             android:background="@color/rally_bg_blur"
             android:theme="@style/LibActionBarTheme"
             app:popupTheme="@style/popupMenuStyle"
-            style="@style/elevated">
-        </android.support.v7.widget.Toolbar>
-
-        <!--<View style="@style/horizontal_separator"
-            android:id="@+id/first_separator"/>-->
+            app:layout_scrollFlags="scroll|enterAlways"
+            style="@style/elevated" />
 
         <LinearLayout
             android:id="@+id/full_container"
@@ -34,7 +34,8 @@
             <FrameLayout
                 android:id="@+id/tool_head_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways">
             </FrameLayout>
 
             <!--<View style="@style/horizontal_separator"
@@ -43,7 +44,8 @@
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <FrameLayout
                     android:id="@+id/tool_body_container"
@@ -56,4 +58,5 @@
 
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
