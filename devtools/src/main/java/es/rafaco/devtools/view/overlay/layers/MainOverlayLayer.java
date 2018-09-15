@@ -63,7 +63,7 @@ public class MainOverlayLayer extends OverlayLayer {
         initScroll();
         initToolbar(view);
 
-        ((CoordinatorLayout)view).setLayoutTransition(new LayoutTransition());
+        ((FrameLayout)view).setLayoutTransition(new LayoutTransition());
     }
 
     @Override

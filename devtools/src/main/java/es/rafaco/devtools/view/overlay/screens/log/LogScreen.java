@@ -3,7 +3,6 @@ package es.rafaco.devtools.view.overlay.screens.log;
 import android.animation.LayoutTransition;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -83,10 +82,12 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_log_body; }
+    public int getToolbarLayoutId() {
+        return R.menu.logcat;
+    }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_toolbar; }
+    public int getBodyLayoutId() { return R.layout.tool_log_body; }
 
     @Override
     protected void onCreate() {
@@ -94,8 +95,6 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
 
     @Override
     protected void onStart(ViewGroup view) {
-
-        initToolbar(headView);
 
         initPresetFilter();
         initLevelFilter();
@@ -418,25 +417,8 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
 
     //region [ TOOL BAR ]
 
-    private void initToolbar(View view) {
-        toolbar = view.findViewById(R.id.tool_toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onToolbarButtonPressed(item);
-                return true;
-            }
-        });
-        toolbar.inflateMenu(R.menu.logcat);
-    }
-
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toolbar.requestLayout();
-    }
-
-    private void onToolbarButtonPressed(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_search) {
             onSearchButton();
@@ -455,6 +437,7 @@ public class LogScreen extends OverlayScreen implements AdapterView.OnItemClickL
         } else{
             DevTools.showMessage("Not already implemented");
         }
+        return super.onMenuItemClick(item);
     }
 
     private void onSaveButton() {

@@ -66,7 +66,9 @@ public class ErrorsScreen extends OverlayScreen {
     public int getBodyLayoutId() { return R.layout.tool_errors_body; }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_toolbar; }
+    public int getToolbarLayoutId() {
+        return R.menu.errors;
+    }
 
     @Override
     protected void onCreate() {
@@ -77,7 +79,7 @@ public class ErrorsScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
         initView(bodyView);
-        initToolbar(headView);
+
         getErrors();
 
         anrObserver = new InvalidationTracker.Observer(new String[]{"anr"}){
@@ -267,25 +269,8 @@ public class ErrorsScreen extends OverlayScreen {
 
     //region [ TOOL BAR ]
 
-    private void initToolbar(View view) {
-        toolbar = view.findViewById(R.id.tool_toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onToolbarButtonPressed(item);
-                return true;
-            }
-        });
-        toolbar.inflateMenu(R.menu.errors);
-    }
-
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toolbar.requestLayout();
-    }
-
-    private void onToolbarButtonPressed(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_delete)
         {
@@ -302,6 +287,7 @@ public class ErrorsScreen extends OverlayScreen {
             //TODO: send all errors
             DevTools.showMessage("Not already implemented");
         }
+        return super.onMenuItemClick(item);
     }
 
     //endregion

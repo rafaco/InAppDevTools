@@ -27,7 +27,6 @@ public class CrashDetailScreen extends OverlayScreen {
     private TextView title;
     private TextView subtitle;
     private TextView console;
-    private Toolbar toolbar;
 
     public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -44,17 +43,12 @@ public class CrashDetailScreen extends OverlayScreen {
     }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_toolbar; }
-
-    @Override
     protected void onCreate() {
     }
 
     @Override
     protected void onStart(ViewGroup view) {
-        initToolbar(headView);
         initView(bodyView);
-
         requestData();
     }
 
@@ -105,30 +99,8 @@ public class CrashDetailScreen extends OverlayScreen {
 
     //region [ TOOL BAR ]
 
-    private void initToolbar(View view) {
-        toolbar = view.findViewById(R.id.tool_toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onToolbarButtonPressed(item);
-                return true;
-            }
-        });
-        toolbar.inflateMenu(R.menu.detail);
-    }
-
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toolbar.requestLayout();
-
-    }
-
-    protected void onHeadVisibilityChanged(int visibility) {
-
-    }
-
-    private void onToolbarButtonPressed(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_send)
         {
@@ -144,6 +116,7 @@ public class CrashDetailScreen extends OverlayScreen {
         {
             onDelete();
         }
+        return super.onMenuItemClick(item);
     }
 
     //endregion

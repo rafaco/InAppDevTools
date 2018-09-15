@@ -2,7 +2,9 @@ package es.rafaco.devtools.view.overlay.screens;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,7 +12,7 @@ import android.widget.LinearLayout;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 
-public abstract class OverlayScreen {
+public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
 
     private final MainOverlayLayerManager manager;
     public ViewGroup headView;
@@ -24,6 +26,9 @@ public abstract class OverlayScreen {
     public boolean isMain() {
         return true;
     }
+    public int getToolbarLayoutId() {
+        return -1;
+    }
     public int getHeadLayoutId() { return -1;}
     public abstract int getBodyLayoutId();
 
@@ -35,6 +40,8 @@ public abstract class OverlayScreen {
 
     public OverlayScreen(MainOverlayLayerManager manager) {
         this.manager = manager;
+        headContainer = getView().findViewById(R.id.tool_head_container);
+        bodyContainer = getView().findViewById(R.id.tool_body_container);
         onCreate();
     }
 
@@ -42,7 +49,6 @@ public abstract class OverlayScreen {
         this.param = param;
 
         if (getHeadLayoutId() != -1){
-            headContainer = getView().findViewById(R.id.tool_head_container);
             headView = (ViewGroup) getInflater().inflate(getHeadLayoutId(), headContainer, false);
             headView.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -51,7 +57,6 @@ public abstract class OverlayScreen {
             headContainer.addView(headView);
         }
 
-        bodyContainer = getView().findViewById(R.id.tool_body_container);
         bodyView = (ViewGroup) getInflater().inflate(getBodyLayoutId(), bodyContainer, false);
         bodyView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -117,5 +122,10 @@ public abstract class OverlayScreen {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 }

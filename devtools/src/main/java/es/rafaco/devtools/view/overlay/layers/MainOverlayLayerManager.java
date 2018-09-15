@@ -2,8 +2,10 @@ package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.R;
 import es.rafaco.devtools.utils.ClassHelper;
 import es.rafaco.devtools.utils.ExpandCollapseUtils;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
@@ -28,6 +31,7 @@ public class MainOverlayLayerManager {
     private List<NavigationStep> navigationHistory;
     private OverlayScreen loadedScreen = null;
     private OverlayScreen currentScreen = null;
+    private Toolbar screenToolbar;
 
     public MainOverlayLayerManager(Context context, MainOverlayLayer mainLayer) {
         this.context = context;
@@ -35,6 +39,7 @@ public class MainOverlayLayerManager {
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.registeredScreens = new ArrayList<>();
         this.navigationHistory = new ArrayList<>();
+        screenToolbar = getView().findViewById(R.id.tool_toolbar);
     }
 
     public Context getContext() {
@@ -190,6 +195,7 @@ public class MainOverlayLayerManager {
                 MainOverlayLayerManager.class, this);
 
         if (loadedScreen != null){
+            updateScreenToolbar(loadedScreen);
             loadedScreen.start(param);
             NavigationStep newStep = new NavigationStep(screenClass, param);
             addNavigationStep(newStep);
@@ -235,6 +241,21 @@ public class MainOverlayLayerManager {
     //endregion
 
 
+    private void updateScreenToolbar(OverlayScreen loadedScreen) {
+        if (loadedScreen.getToolbarLayoutId() != -1){
+            screenToolbar.setVisibility(View.VISIBLE);
+            screenToolbar.inflateMenu(loadedScreen.getToolbarLayoutId());
+            screenToolbar.setOnMenuItemClickListener(loadedScreen);
+        }else {
+            screenToolbar.setVisibility(View.GONE);
+            screenToolbar.getMenu().clear();
+        }
+    }
+
+    public Toolbar getScreenToolbar(){
+        return screenToolbar;
+    }
+
 
     //TODO: remove ALL related registered screens????
     //
@@ -265,6 +286,9 @@ public class MainOverlayLayerManager {
     public void onConfigurationChanged(Configuration newConfig) {
         if (currentScreen != null)
             currentScreen.onConfigurationChanged(newConfig);
+        if (screenToolbar != null){
+            screenToolbar.requestLayout();
+        }
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {
