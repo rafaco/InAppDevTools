@@ -33,8 +33,7 @@ public class InfoTool extends Tool {
         String out = "";
         out += helper.getAppName() + " "  + helper.getPackageInfo().versionName + " (" + helper.getPackageInfo().versionCode + ")";
         out += "\n";
-        out += Build.BRAND + " " + Build.MODEL;
-        out += "\n";
+        out += Build.BRAND + " " + Build.MODEL + ". ";
         out += "Android " + Build.VERSION.RELEASE + " (" + helper.getVersionCodeName() + ")";
 
         NavigationStep step = new NavigationStep(InfoScreen.class, null);
