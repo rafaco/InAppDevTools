@@ -32,6 +32,7 @@
                 android:background="@color/rally_bg_blur"
                 android:theme="@style/LibActionBarTheme"
                 app:popupTheme="@style/popupMenuStyle"
+                app:collapseIcon="@drawable/ic_close_rally_24dp"
                 style="@style/elevated" >
             </android.support.v7.widget.Toolbar>
 

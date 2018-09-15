@@ -121,6 +121,10 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         return getScreenManager().getView();
     }
 
+    protected Toolbar getToolbar() {
+        return getScreenManager().getScreenToolbar();
+    }
+
     public void onConfigurationChanged(Configuration newConfig) {
     }
 
