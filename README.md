@@ -1,11 +1,20 @@
 # DevToolsLib
 
-~~*A bunch of tools to speed up your development from within your own app. Build as a companion for each stage*~~
+~~*A bunch of tools to speed up your development from within your own app. Build as a companion for each stage of the development lifecycle*~~
 
-*A library that provide your apk with a bunch of useful tools carefully preconfigured for each step of your app live cycle (development, test and production).*
+*A library that provide your apk with a bunch of useful tools carefully preconfigured for each step of your app lifecycle (development, test and production).*
 
 
+# Table of contents
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+    1. [Configuration](#configuration)
+3. [Integration](#integration)
+3. [Customization](#customization)
+3. [Sample app](#sample)
 
+
+## Introduction <a name="introduction"></a>
 (For testers) Just installing it, your apk will nicely treat any crash. It prompt the error and allow the user to report the bug by email. Additional information could be typed and the report will auto include the exception, the full logcat since the app started, a custom activity log and more info like versions, device, os, hardware, memory, storage...
 
 (For developer) Your app also get an overlay icon with tools to inspect on runtime and on the go. 
@@ -14,7 +23,7 @@ It have few preconfigured modes based on how aggressively the library integrate 
 
 - Develop
     - Overlay: Always accessible via overlay icon
-    - OnCrash: see full info (exception, tracestack, log, inspect, report...)
+    - OnCrash: see full info (exception, stacktrace, log, inspect, report...)
     - Tools: all enabled and accessible 
 
 - Test: 
@@ -37,14 +46,20 @@ It have few preconfigured modes based on how aggressively the library integrate 
 - Inspector of activities stack, running services, processes and tasks 
 
 
-**Features**
+**Features:**
 
 - Easy to install
 - Accessible everywhere (Overlay icon)
 - Non intrusive with your views, stack or focus (system overlay layer)
 - Only on release mode 
 
-**Screenshots**
+**Invocation methods:**
+- Notification
+- Icon
+- Shake
+- Custom (see integrations)
+
+**Screenshots:**
 
 -
 
@@ -53,18 +68,79 @@ It have few preconfigured modes based on how aggressively the library integrate 
 
 ***
 
-## Instalation
+## Installation
 
-- Add library as a gradle dependency
-- Call DevTools.Init() inside Application.onCreate()
-- TODO: 
+As simple as include 2 lines of code in your project:
+1. Add this library as a gradle dependency (at build.gradle in your app module)
+2. Call DevTools.install(this) at the onCreate() method of your extension from Application 
 
-## Configuration
+```
+dependencies {
+    (...)
+    implementation 'es.rafaco.devtools:devtools'
+}
+```
 
-- Predefined configurations
-- Using the ConfigBuilder
+```java
+public class YourApp extends Application {
 
-## Customization
+    public void onCreate() {
+        super.onCreate();
 
+        DevTools.install(this);
+        (...)
+    }
+    (...)
+}
+```
+
+**Configuration:**
+
+You can redefine how this library works by passing a DevToolsConfig object to the initial DevTools.install method. It has been coded following the builder pattern:
+```
+DevTools.install(this, DevToolsConfig.newBuilder()
+    .addEmail("rafaco@gmail.com")
+    .build()
+);
+```
+
+- //TODO: Reference of configuration properties
+- //TODO: Predefined configurations (default and userMode)
+
+
+
+## Integrations
+This library attempt to extend your app with minimal modification of your source code. Only install is required and you will get...
+Although, you can do a direct integration to get:... 
+
+**Programmatically interacting with tools:**
+- Custom invocation
+- Open Tool
+- Take Screenshot
+- Send Report
+
+
+**Environment selector:**
+
+**Inject details into tools:**
+
+Special properties to include in tools and their reports.
+- Custom properties (setProperty(Name, value))
+- Custom watchers (setWatcher(Name, Runnable))
+- Custom report vs "Custom properties" section at info/status 
+
+**Network inspection:**
+
+- Adding our network interceptor (OkHttpClient & http requests)
+
+**Debugger assistance:**
+- Show debug messages (showInfo, showError,...)
+- Annotations to Debug classes/methods
+- Annotations to improve tracking lifecycle (services, fragments...)
+
+##Customization
 - Create a tool
 - Replace IconWidget by your own trigger
+
+## Sample App available
+A sample app is available to download at [Google Play](https://play.google.com). It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
