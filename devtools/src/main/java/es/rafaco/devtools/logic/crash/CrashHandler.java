@@ -84,7 +84,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         final Crash crash = new Crash();
         crash.setDate(new Date().getTime());
         crash.setException(ex.getClass().getSimpleName());
+        crash.setCauseExceptionAt(ex.getStackTrace()[1].toString());
         crash.setMessage(ex.getMessage());
+
+        Throwable cause = ex.getCause();
+        crash.setCauseException(cause.getClass().getSimpleName());
+        crash.setCauseMessage(cause.getMessage());
+        crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
 
         //TODO: crash.setWhere(ex.getStackTrace()[0].toString());
         //ex.getStackTrace()[0].getLineNumber()
@@ -97,6 +103,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setMainThread(ThreadUtils.isTheUiThread(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
+
+        crash.setForeground(!DevTools.getActivityLogManager().isInBackground());
+        crash.setLastActivity(DevTools.getActivityLogManager().getLastActivityResumed());
         return crash;
     }
 
@@ -118,7 +127,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private Boolean saveScreenshot(){
         ScreenHelper helper = new ScreenHelper();
-        byte[] screen = helper.takeScreenAsByteArray();
+        byte[] screen = helper.buildRawReport();
         if (screen != null){
             DevToolsDatabase db = DevTools.getDatabase();
             Crash current = db.crashDao().getLast();

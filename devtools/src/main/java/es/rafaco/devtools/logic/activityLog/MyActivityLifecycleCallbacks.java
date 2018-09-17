@@ -50,6 +50,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     @Override
     public void onActivityResumed(final Activity activity) {
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " resumed\n");
+        manager.setLastActivityResumed(activity.getClass().getSimpleName());
 
         FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
         if (decorView == null){

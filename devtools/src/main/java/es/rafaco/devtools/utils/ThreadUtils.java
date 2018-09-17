@@ -15,6 +15,11 @@ public class ThreadUtils {
         DevTools.showMessage(fromText + " is running on " + thread + " thread");
     }
 
+    public static String getFormattedThread(){
+        String thread = (amIOnUiThread()) ? "main" : "background";
+        return thread;
+    }
+
     public static boolean amIOnUiThread(){
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 ? Looper.getMainLooper().isCurrentThread()

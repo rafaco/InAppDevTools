@@ -21,12 +21,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TooManyListenersException;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.errors.Anr;
 import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.logic.crash.SimulatedException;
 import es.rafaco.devtools.utils.RecyclerViewUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
@@ -176,21 +178,23 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
     public void onCrashUiButton() {
-        Log.i(DevTools.TAG, "UI Exception requested, throwing it...");
+        Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
+        final Exception cause = new TooManyListenersException("User freak out and pressed the panic button");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException("Simulated exception on the UI thread");
+                throw new SimulatedException("Simulated crash on the UI thread", cause);
             }
         });
     }
 
     public void onCrashBackButton() {
-        Log.i(DevTools.TAG, "Background Exception requested, throwing it...");
+        Log.i(DevTools.TAG, "Simulated crash on a background thread...");
+        final Exception cause = new TooManyListenersException("User freak out and pressed the panic button");
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException("Simulated exception on Background thread");
+                throw new SimulatedException("Simulated crash on a background thread", cause);
             }
         });
     }

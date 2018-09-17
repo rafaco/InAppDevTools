@@ -14,6 +14,7 @@ public class ActivityLogManager {
     protected final Deque<String> activityLog = new ArrayDeque<>(MAX_ACTIVITIES_IN_LOG);
     protected WeakReference<Activity> lastActivityCreated = new WeakReference<>(null);
     protected boolean isInBackground = true;
+    protected String lastActivityResumed = "";
     protected int currentlyStartedActivities = 0;
     private final Context context;
 
@@ -43,5 +44,13 @@ public class ActivityLogManager {
 
     public int getStartedActivitiesCount() {
         return currentlyStartedActivities;
+    }
+
+    public String getLastActivityResumed() {
+        return lastActivityResumed;
+    }
+
+    public void setLastActivityResumed(String lastActivityResumed) {
+        this.lastActivityResumed = lastActivityResumed;
     }
 }

@@ -104,7 +104,7 @@ public class InfoScreen extends OverlayScreen {
         mainSpinner.setOnItemSelectedListener(listener);
         mainSpinner.setOnTouchListener(listener);
 
-        setReport(helper.getAppStatus());
+        setReport(helper.getStaticInfo());
     }
 
     private void setReport(String report) {

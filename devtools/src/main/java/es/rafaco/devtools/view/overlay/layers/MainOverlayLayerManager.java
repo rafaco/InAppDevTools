@@ -195,7 +195,7 @@ public class MainOverlayLayerManager {
                 MainOverlayLayerManager.class, this);
 
         if (loadedScreen != null){
-            updateScreenToolbar(loadedScreen);
+            loadScreenToolbar(loadedScreen);
             loadedScreen.start(param);
             NavigationStep newStep = new NavigationStep(screenClass, param);
             addNavigationStep(newStep);
@@ -241,14 +241,14 @@ public class MainOverlayLayerManager {
     //endregion
 
 
-    private void updateScreenToolbar(OverlayScreen loadedScreen) {
+    private void loadScreenToolbar(OverlayScreen loadedScreen) {
+        screenToolbar.getMenu().clear();
         if (loadedScreen.getToolbarLayoutId() != -1){
             screenToolbar.setVisibility(View.VISIBLE);
             screenToolbar.inflateMenu(loadedScreen.getToolbarLayoutId());
             screenToolbar.setOnMenuItemClickListener(loadedScreen);
         }else {
             screenToolbar.setVisibility(View.GONE);
-            screenToolbar.getMenu().clear();
         }
     }
 

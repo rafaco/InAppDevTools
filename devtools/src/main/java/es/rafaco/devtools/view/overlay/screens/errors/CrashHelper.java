@@ -2,7 +2,6 @@ package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.text.TextUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.DateUtils;
 import es.rafaco.devtools.utils.FileUtils;
+import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
 import es.rafaco.devtools.view.overlay.screens.info.InfoGroup;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
@@ -59,7 +59,6 @@ public class CrashHelper extends ToolHelper{
         InfoGroup links = new InfoGroup.Builder("Linked info")
                 .add("LogcatId", String.valueOf(data.getLogcatId()))
                 .add("ScreenId", String.valueOf(data.getScreenId()))
-                .add("LogcatId", String.valueOf(data.getScreenId()))
                 .build();
 
         InfoGroup stacktrace = new InfoGroup.Builder("Stacktrace")
@@ -89,14 +88,8 @@ public class CrashHelper extends ToolHelper{
     }
 
     private void addScreenFile(Crash crash, List<String> filePaths) {
-        String filePath = "";
-        if (crash.getRawScreen() != null){
-            filePath = new ScreenHelper().storeByteArray(crash);
-        }
-        else{
-            Screen screen = DevTools.getDatabase().screenDao().findById(crash.getScreenId());
-            filePath = screen.getPath();
-        }
+        Screen screen = DevTools.getDatabase().screenDao().findById(crash.getScreenId());
+        String filePath = screen.getPath();
 
         if (!TextUtils.isEmpty(filePath)) {
             filePaths.add(filePath);
@@ -104,17 +97,63 @@ public class CrashHelper extends ToolHelper{
     }
 
     private void addLogcatFile(Crash crash, List<String> filePaths) {
-        String filePath = "";
-        if (crash.getRawLogcat() != null){
-            filePath = new LogHelper().undoRawReport(crash);
-        }
-        else{
-            Logcat logcat = DevTools.getDatabase().logcatDao().findById(crash.getLogcatId());
-            filePath = logcat.getPath();
-        }
+        Logcat logcat = DevTools.getDatabase().logcatDao().findById(crash.getLogcatId());
+        String filePath = logcat.getPath();
 
         if (!TextUtils.isEmpty(filePath)) {
             filePaths.add(filePath);
         }
+    }
+
+    public void undoRawReport(final Crash crash, final Runnable callback){
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                if (crash.getRawLogcat() != null){
+                    new LogHelper().undoRawReport(crash);
+                }
+
+                if (crash.getRawScreen() != null){
+                    new ScreenHelper().undoRawReport(crash);
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.run();
+                    }
+                });
+            }
+        });
+    }
+
+    public String getFormattedAt(Crash data) {
+        String[] split = data.getStacktrace().split("\n\t");
+        return formatAt(split[1]);
+    }
+
+    public String getCaused(Crash data) {
+        String[] split = data.getStacktrace().split("\n\t");
+        for (int i=0; i<split.length; i++){
+            String line = split[i];
+            if (line.contains("Caused by:")){
+                return line.substring(line.indexOf("Caused by:"), line.length());
+            }
+        }
+        return null;
+    }
+
+    public String getCausedAt(Crash data) {
+        String[] split = data.getStacktrace().split("\n\t");
+        for (int i=0; i<split.length; i++){
+            String line = split[i];
+            if (line.contains("Caused by:")){
+                return formatAt(split[i+1]);
+            }
+        }
+        return null;
+    }
+
+    private String formatAt(String text){
+        return text.replace("(", " (");
     }
 }

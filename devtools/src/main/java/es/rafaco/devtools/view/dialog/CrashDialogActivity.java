@@ -17,6 +17,7 @@ import es.rafaco.devtools.db.errors.Crash;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.view.OverlayUIService;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class CrashDialogActivity extends AppCompatActivity {
             @Override
             public void run() {
                 final Crash crash = DevTools.getDatabase().crashDao().getLast();
-                ThreadUtils.runOnUiThread(new Runnable() {
+                new CrashHelper().undoRawReport(crash, new Runnable() {
                     @Override
                     public void run() {
                         buildDialog(crash);

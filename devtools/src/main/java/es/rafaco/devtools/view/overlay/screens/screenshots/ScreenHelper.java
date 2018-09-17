@@ -23,6 +23,7 @@ import es.rafaco.devtools.logic.tools.ToolHelper;
 import es.rafaco.devtools.utils.FileUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
 import es.rafaco.devtools.utils.ViewHierarchyUtils;
+import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 
 public class ScreenHelper extends ToolHelper{
 
@@ -116,8 +117,8 @@ public class ScreenHelper extends ToolHelper{
         return null;
     }
 
-    public byte[] takeScreenAsByteArray() {
-
+    public byte[] buildRawReport() {
+        //takeScreenAsByteArray
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);
         Pair<String, View> selectedRootView = rootViews.get(0);
         View selectedView = selectedRootView.second;
@@ -137,15 +138,14 @@ public class ScreenHelper extends ToolHelper{
         return null;
     }
 
-
-
     private byte[] getByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         return stream.toByteArray();
     }
 
-    public String storeByteArray(Crash crash){
+    public String undoRawReport(Crash crash){
+        //storeByteArray
         long mImageTime = crash.getDate();
         byte[] imageByteArray = crash.getRawScreen();
 
@@ -174,19 +174,19 @@ public class ScreenHelper extends ToolHelper{
 
             Screen screen = new Screen();
             screen.setSession(0);
-            screen.setDate(mImageTime);
+            screen.setDate(crash.getDate());
+            screen.setPath(filePath);
             //TODO: interesting for crash
             //screen.setRootViewName(selectedName);
             //screen.setActivityName(activityName);
-            screen.setPath(filePath);
 
             long screenId = DevTools.getDatabase().screenDao().insert(screen);
             if (!TextUtils.isEmpty(filePath)){
-                crash.setRawScreen(null);
                 crash.setScreenId(screenId);
+                crash.setRawScreen(null);
                 DevTools.getDatabase().crashDao().update(crash);
             }
-            return imageFile.getAbsolutePath();
+            return filePath;
 
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM

@@ -1,23 +1,26 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
-import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.db.errors.Screen;
 import es.rafaco.devtools.utils.DateUtils;
 import es.rafaco.devtools.utils.ThreadUtils;
-import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
+import es.rafaco.devtools.view.overlay.screens.screenshots.ImageLoaderAsyncTask;
 
 public class CrashDetailScreen extends OverlayScreen {
 
@@ -27,6 +30,13 @@ public class CrashDetailScreen extends OverlayScreen {
     private TextView title;
     private TextView subtitle;
     private TextView console;
+    private TextView title2;
+    private TextView subtitle2;
+    private TextView when;
+    private TextView foreground;
+    private TextView lastActivity;
+    private ImageView thumbnail;
+    private TextView thread;
 
     public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -43,7 +53,13 @@ public class CrashDetailScreen extends OverlayScreen {
     }
 
     @Override
+    public int getToolbarLayoutId() {
+        return R.menu.crash_detail;
+    }
+
+    @Override
     protected void onCreate() {
+        helper = new CrashHelper();
     }
 
     @Override
@@ -55,18 +71,57 @@ public class CrashDetailScreen extends OverlayScreen {
 
     private void initView(ViewGroup view) {
         out = view.findViewById(R.id.out);
+        when = view.findViewById(R.id.detail_when);
+        foreground = view.findViewById(R.id.detail_foreground);
+        lastActivity = view.findViewById(R.id.detail_last_activity);
+        thumbnail = view.findViewById(R.id.thumbnail);
+
         title = view.findViewById(R.id.detail_title);
         subtitle = view.findViewById(R.id.detail_subtitle);
+        title2 = view.findViewById(R.id.detail_title2);
+        subtitle2 = view.findViewById(R.id.detail_subtitle2);
+        thread = view.findViewById(R.id.detail_thread);
         console = view.findViewById(R.id.detail_console);
     }
 
     private void updateView() {
-        helper = new CrashHelper();
         InfoCollection report = helper.parseToInfoGroup(crash);
         report.removeGroupEntries(3);
 
-        title.setText(crash.getException() + " " + DateUtils.getElapsedTimeLowered(crash.getDate()));
-        subtitle.setText(crash.getMessage());
+        when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
+        foreground.setText("State: " + (crash.isForeground() ? "Foreground" : "Background"));
+        lastActivity.setText("Last activity: " + crash.getLastActivity());
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                long screenId = crash.getScreenId();
+                Screen screen = DevTools.getDatabase().screenDao().findById(screenId);
+                if (screen!=null && !TextUtils.isEmpty(screen.getPath())){
+                    new ImageLoaderAsyncTask(thumbnail).execute(screen.getPath());
+                }
+            }
+        });
+
+        String message = crash.getMessage();
+        String cause = helper.getCaused(crash);
+        if (cause!=null && message.contains(cause)){
+            message.replace(cause, "(...)");
+        }
+
+        title.setText(crash.getException() + ": " + message);
+        subtitle.setText(helper.getFormattedAt(crash));
+
+        if (cause!=null){
+            title2.setText(cause);
+            subtitle2.setText(helper.getCausedAt(crash));
+        }else{
+            title2.setVisibility(View.GONE);
+            subtitle2.setVisibility(View.GONE);
+        }
+        String threadString = (crash.isMainThread()) ? "the main" : "a background";
+        thread.setText("running on " + threadString + " thread: " + crash.getThreadName());
+
         out.setText(report.toString());
         console.setText(crash.getStacktrace());
     }
@@ -79,7 +134,12 @@ public class CrashDetailScreen extends OverlayScreen {
                 @Override
                 public void run() {
                     crash = DevTools.getDatabase().crashDao().findById(crashId);
-                    updateView();
+                    helper.undoRawReport(crash, new Runnable() {
+                        @Override
+                        public void run() {
+                            updateView();
+                        }
+                    });
                 }
             });
         }else{

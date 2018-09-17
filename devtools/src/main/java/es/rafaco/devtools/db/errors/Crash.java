@@ -18,8 +18,20 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "exception")
     private String exception;
 
+    @ColumnInfo(name = "exceptionAt")
+    private String exceptionAt;
+
     @ColumnInfo(name = "message")
     private String message;
+
+    @ColumnInfo(name = "causeException")
+    private String causeException;
+
+    @ColumnInfo(name = "causeMessage")
+    private String causeMessage;
+
+    @ColumnInfo(name = "causeExceptionAt")
+    private String causeExceptionAt;
 
     //@ColumnInfo(name = "where")
     //private String where;
@@ -51,6 +63,11 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "threadGroupName")
     private String threadGroupName;
 
+    @ColumnInfo(name = "isForeground")
+    private boolean isForeground;
+
+    @ColumnInfo(name = "lastActivity")
+    private String lastActivity;
 
     public long getUid() {
         return uid;
@@ -76,12 +93,44 @@ public class Crash implements Serializable {
         this.exception = exception;
     }
 
+    public String getExceptionAt() {
+        return exceptionAt;
+    }
+
+    public void setExceptionAt(String exceptionAt) {
+        this.exceptionAt = exceptionAt;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getCauseException() {
+        return causeException;
+    }
+
+    public void setCauseException(String causeException) {
+        this.causeException = causeException;
+    }
+
+    public String getCauseExceptionAt() {
+        return causeExceptionAt;
+    }
+
+    public void setCauseExceptionAt(String causeExceptionAt) {
+        this.causeExceptionAt = causeExceptionAt;
+    }
+
+    public String getCauseMessage() {
+        return causeMessage;
+    }
+
+    public void setCauseMessage(String causeMessage) {
+        this.causeMessage = causeMessage;
     }
 
     public String getStacktrace() {
@@ -154,5 +203,21 @@ public class Crash implements Serializable {
 
     public void setThreadGroupName(String threadGroupName) {
         this.threadGroupName = threadGroupName;
+    }
+
+    public boolean isForeground() {
+        return isForeground;
+    }
+
+    public void setForeground(boolean foreground) {
+        isForeground = foreground;
+    }
+
+    public String getLastActivity() {
+        return lastActivity;
+    }
+
+    public void setLastActivity(String lastActivity) {
+        this.lastActivity = lastActivity;
     }
 }

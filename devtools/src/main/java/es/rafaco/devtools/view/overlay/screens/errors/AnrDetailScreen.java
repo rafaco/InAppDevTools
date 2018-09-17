@@ -37,6 +37,11 @@ public class AnrDetailScreen extends OverlayScreen {
     }
 
     @Override
+    public int getToolbarLayoutId() {
+        return R.menu.crash_detail;
+    }
+
+    @Override
     protected void onCreate() {
     }
 

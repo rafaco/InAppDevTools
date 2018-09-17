@@ -98,10 +98,11 @@ public class LogHelper extends ToolHelper{
             Logcat logcat = new Logcat();
             logcat.setDate(crash.getDate());
             logcat.setPath(filePath);
+            logcat.setCrash(true);
             long logcatId = DevTools.getDatabase().logcatDao().insert(logcat);
 
-            crash.setRawLogcat(null);
             crash.setLogcatId(logcatId);
+            crash.setRawLogcat(null);
             DevTools.getDatabase().crashDao().update(crash);
 
             return filePath;
