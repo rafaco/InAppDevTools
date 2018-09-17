@@ -85,8 +85,6 @@ public class CrashDetailScreen extends OverlayScreen {
     }
 
     private void updateView() {
-        InfoCollection report = helper.parseToInfoGroup(crash);
-        report.removeGroupEntries(3);
 
         when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
         foreground.setText("State: " + (crash.isForeground() ? "Foreground" : "Background"));
@@ -122,7 +120,10 @@ public class CrashDetailScreen extends OverlayScreen {
         String threadString = (crash.isMainThread()) ? "the main" : "a background";
         thread.setText("running on " + threadString + " thread: " + crash.getThreadName());
 
+        InfoCollection report = helper.parseToInfoGroup(crash);
+        //report.removeGroupEntries(3);
         out.setText(report.toString());
+
         console.setText(crash.getStacktrace());
     }
 

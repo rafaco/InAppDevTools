@@ -12,31 +12,51 @@
             android:id="@+id/detail_when"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:typeface="sans"
-            android:textColor="@color/rally_white"
-            android:textSize="14dp"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            style="@style/TextCondensedMedium" />
 
         <TextView
             android:id="@+id/detail_foreground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/detail_when"
-            android:fontFamily="sans-serif-condensed"
-            android:typeface="sans"
-            android:textColor="@color/rally_white"
-            android:textSize="14dp" />
+            style="@style/TextCondensedMedium" />
         <TextView
             android:id="@+id/detail_last_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/detail_foreground"
+            style="@style/TextCondensedMedium" />
 
-            android:fontFamily="sans-serif-condensed"
-            android:typeface="sans"
-            android:textColor="@color/rally_white"
-            android:textSize="14dp"/>
+        <LinearLayout
+            android:id="@+id/details_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_last_activity"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/logcat_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="Logcat"
+                android:backgroundTint="@color/rally_yellow"
+                android:textColor="@color/charcoal"/>
+
+            <Button
+                android:id="@+id/screen_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="Screen"
+                android:backgroundTint="@color/rally_green"
+                android:textColor="@color/charcoal"/>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/thumbnail"
@@ -44,6 +64,7 @@
             android:layout_height="120dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/details_buttons"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:scaleType="fitCenter" />
@@ -54,93 +75,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/rally_orange"
-        android:typeface="sans"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="17dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="8dp"
+        style="@style/TextCondensedBig" />
 
     <TextView
         android:id="@+id/detail_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/rally_white"
-        android:typeface="sans"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="15dp"/>
+        style="@style/TextCondensedMedium" />
 
     <TextView
         android:id="@+id/detail_thread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
-        android:typeface="sans"
-        android:textColor="@color/rally_white"
-        android:textSize="15dp"/>
+        style="@style/TextCondensedMedium" />
 
     <TextView
         android:id="@+id/detail_title2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/rally_orange"
-        android:typeface="sans"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="17dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        style="@style/TextCondensedBig" />
 
     <TextView
         android:id="@+id/detail_subtitle2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/rally_white"
-        android:typeface="sans"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="15dp"/>
-
-    <LinearLayout
-        android:id="@+id/details_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
-
-        <Button
-            android:id="@+id/info_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:text="Info"
-            android:backgroundTint="@color/rally_blue"
-            android:textColor="@color/charcoal"/>
-
-        <Button
-            android:id="@+id/logcat_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:text="Logcat"
-            android:backgroundTint="@color/rally_yellow"
-            android:textColor="@color/charcoal"/>
-
-        <Button
-            android:id="@+id/screen_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:text="Screen"
-            android:backgroundTint="@color/rally_green"
-            android:textColor="@color/charcoal"/>
-
-    </LinearLayout>
+        style="@style/TextCondensedMedium" />
 
     <TextView
-        android:id="@+id/out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="textStart"
-        android:layout_gravity="start" />
+        android:text="Full stacktrace:"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="3dp"
+        style="@style/TextCondensedBig" />
 
     <HorizontalScrollView
         android:id="@+id/crash_horizontal_scroll"
@@ -152,11 +122,16 @@
             android:id="@+id/detail_console"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/rally_white"
             android:layout_margin="3dp"
-            android:typeface="monospace"
-            android:fontFamily="serif-monospace"
-            android:textSize="14dp"/>
+            style="@style/TextMonospace" />
 
     </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:layout_gravity="start" />
+
 </LinearLayout>

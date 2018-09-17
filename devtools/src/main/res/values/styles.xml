@@ -99,4 +99,25 @@
         <item name="android:background">@color/rally_blue</item>
     </style>
 
+    <style name="TextCondensedMedium">
+        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/rally_white</item>
+    </style>
+
+    <style name="TextCondensedBig">
+        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/rally_white</item>
+    </style>
+
+    <style name="TextMonospace">
+        <item name="android:typeface">monospace</item>
+        <item name="android:fontFamily">serif-monospace</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:textColor">@color/rally_white</item>
+    </style>
+
 </resources>

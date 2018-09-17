@@ -42,11 +42,23 @@ public class CrashHelper extends ToolHelper{
 
     public InfoCollection parseToInfoGroup(Crash data){
 
+        InfoGroup status = new InfoGroup.Builder("App status")
+                .add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
+                .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
+                .add("LastActivity", data.getLastActivity())
+                .build();
+
         InfoGroup basic = new InfoGroup.Builder("Crash info")
                 .add("CrashId", data.getUid())
                 .add("Date", DateUtils.format(data.getDate()))
+                .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
+                .add("LastActivity", data.getLastActivity())
                 .add("Exception", data.getException())
                 .add("Message", data.getMessage())
+                .add("ExceptionAt", data.getExceptionAt())
+                .add("CauseException", data.getCauseException())
+                .add("CauseMessage", data.getCauseMessage())
+                .add("CauseAt", data.getCauseExceptionAt())
                 .build();
 
         InfoGroup thread = new InfoGroup.Builder("Thread info")
@@ -62,11 +74,11 @@ public class CrashHelper extends ToolHelper{
                 .build();
 
         InfoGroup stacktrace = new InfoGroup.Builder("Stacktrace")
-                .add("", "")
                 .add("", data.getStacktrace())
                 .build();
 
         return new InfoCollection.Builder("")
+                .add(status)
                 .add(basic)
                 .add(thread)
                 .add(links)

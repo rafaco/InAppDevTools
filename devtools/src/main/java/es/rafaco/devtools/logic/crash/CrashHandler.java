@@ -84,7 +84,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         final Crash crash = new Crash();
         crash.setDate(new Date().getTime());
         crash.setException(ex.getClass().getSimpleName());
-        crash.setCauseExceptionAt(ex.getStackTrace()[1].toString());
+        crash.setExceptionAt(ex.getStackTrace()[1].toString());
         crash.setMessage(ex.getMessage());
 
         Throwable cause = ex.getCause();

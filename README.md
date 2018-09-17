@@ -76,7 +76,6 @@ As simple as include 2 lines of code in your project:
 
 ```
 dependencies {
-    (...)
     implementation 'es.rafaco.devtools:devtools'
 }
 ```
@@ -86,11 +85,9 @@ public class YourApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-
         DevTools.install(this);
-        (...)
+        //...
     }
-    (...)
 }
 ```
 

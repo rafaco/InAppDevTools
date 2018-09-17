@@ -179,7 +179,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     public void onCrashUiButton() {
         Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
-        final Exception cause = new TooManyListenersException("User freak out and pressed the panic button");
+        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -190,7 +190,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     public void onCrashBackButton() {
         Log.i(DevTools.TAG, "Simulated crash on a background thread...");
-        final Exception cause = new TooManyListenersException("User freak out and pressed the panic button");
+        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {

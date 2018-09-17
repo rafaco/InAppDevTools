@@ -20,7 +20,6 @@ public class CommandsScreen extends OverlayScreen {
     private TextView out;
     private String command;
     private ShellExecuter exe;
-    private Button infoButton;
     private Button devOptionsButton;
     private Button forceCloseButton;
     private Button fullRestartButton;
@@ -57,15 +56,6 @@ public class CommandsScreen extends OverlayScreen {
                 String outp = exe.Executer(command);
                 out.setText(outp);
                 Log.d("Output", outp);
-            }
-        });
-
-        infoButton = view.findViewById(R.id.info_button);
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
-                AppUtils.openAppSettings(getContext());
             }
         });
 
