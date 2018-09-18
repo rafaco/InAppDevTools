@@ -172,13 +172,22 @@ public class DevTools {
         showMessage(getAppContext().getResources().getString(stringId));
     }
 
-    public static void showMessage(final String text) {
-        Log.d(DevTools.TAG, "Showing message: " + text);
+    private static void showError(final String text) {
+        Log.e(DevTools.TAG, "ERROR: " + text);
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //TODO: use a custom overlay toast
-                Toast.makeText(getAppContext(), text, Toast.LENGTH_LONG).show();
+                Toast.makeText(getAppContext(), "ERROR: " + text, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public static void showMessage(final String text) {
+        Log.i(DevTools.TAG, "INFO: " + text);
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getAppContext(), "INFO: " + text, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -205,14 +214,14 @@ public class DevTools {
         FileUtils.openFileExternally(getAppContext(), screen.getPath());
     }
 
-    public static void sendReport(final ReportHelper.ReportType type, final Object params) {
+    public static void sendReport(final ReportHelper.ReportType type, final Object param) {
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
             PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
                     new Runnable(){
                         @Override
                         public void run() {
-                            sendReport(type, params);
+                            sendReport(type, param);
                         }
                     }, null);
             return;
@@ -223,12 +232,16 @@ public class DevTools {
                 ThreadUtils.runOnBackThread(new Runnable() {
                     @Override
                     public void run() {
-                        long crashId = (long)params;
+                        long crashId = (long)param;
                         Crash crash;
                         if (crashId<0){
                             crash = getDatabase().crashDao().getLast();
                         }else{
                             crash = getDatabase().crashDao().findById(crashId);
+                        }
+                        if (crash == null){
+                            showError("Unable to found it");
+                            return;
                         }
                         new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
                     }
@@ -241,7 +254,7 @@ public class DevTools {
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;
                         //TODO: Session report
-                        new ReportHelper().start(ReportHelper.ReportType.SESSION, params);
+                        new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
                     }
                 });
                 break;

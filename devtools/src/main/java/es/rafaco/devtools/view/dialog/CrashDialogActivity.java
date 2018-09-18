@@ -32,7 +32,7 @@ public class CrashDialogActivity extends AppCompatActivity {
             @Override
             public void run() {
                 final Crash crash = DevTools.getDatabase().crashDao().getLast();
-                new CrashHelper().undoRawReport(crash, new Runnable() {
+                new CrashHelper().solvePendingData(crash, new Runnable() {
                     @Override
                     public void run() {
                         buildDialog(crash);

@@ -88,9 +88,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setMessage(ex.getMessage());
 
         Throwable cause = ex.getCause();
-        crash.setCauseException(cause.getClass().getSimpleName());
-        crash.setCauseMessage(cause.getMessage());
-        crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+        if (cause != null){
+            crash.setCauseException(cause.getClass().getSimpleName());
+            crash.setCauseMessage(cause.getMessage());
+            crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+        }
 
         //TODO: crash.setWhere(ex.getStackTrace()[0].toString());
         //ex.getStackTrace()[0].getLineNumber()
@@ -127,7 +129,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private Boolean saveScreenshot(){
         ScreenHelper helper = new ScreenHelper();
-        byte[] screen = helper.buildRawReport();
+        byte[] screen = helper.buildPendingData();
         if (screen != null){
             DevToolsDatabase db = DevTools.getDatabase();
             Crash current = db.crashDao().getLast();

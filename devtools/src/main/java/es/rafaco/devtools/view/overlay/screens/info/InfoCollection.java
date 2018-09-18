@@ -46,8 +46,8 @@ public class InfoCollection {
         String formatTitle = "%s:";
         String lineBreak = "\n";
 
-        result += lineBreak;
         if (!TextUtils.isEmpty(getName())){
+            result += lineBreak;
             result += String.format(formatTitle, getName());
             result += lineBreak;
         }

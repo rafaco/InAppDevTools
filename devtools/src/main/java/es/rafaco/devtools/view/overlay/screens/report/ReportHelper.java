@@ -1,7 +1,6 @@
 package es.rafaco.devtools.view.overlay.screens.report;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -42,12 +41,43 @@ public class ReportHelper extends ToolHelper{
         this.target = target;
 
         boolean isHtml = false;
-        String emailTo = getEmailTo();
-        String subject = getEmailSubject();
 
+        EmailUtils.sendEmailIntent(context,
+                getEmailTo(),
+                "",
+                getEmailSubject(),
+                getEmailBody(isHtml),
+                getFilePaths(),
+                false);
+    }
+
+    @NonNull
+    private String getEmailTo() {
+        //TODO: IMPORTANT pick from configuration
+        return "rafaco@gmail.com";
+    }
+
+    private String getEmailSubject(){
+        InfoHelper helper = new InfoHelper();
+        String formatter = "%s %s report from %s %s";
+        String currentType = "";
+        if(type.equals(ReportType.SESSION)){
+            currentType = "session";
+        }else if (type.equals(ReportType.CRASH)){
+            currentType = "crash";
+        }else if (type.equals(ReportType.FULL)){
+            currentType = "full";
+        }
+        return String.format(formatter,
+                helper.getAppName(), currentType,
+                Build.BRAND, Build.MODEL);
+    }
+
+    @NonNull
+    private String getEmailBody(boolean isHtml) {
+        String emailbody;
         String userTextPlaceholder = "Hi devs,\n\n";
         String jump = "\n";
-        String emailbody;
 
         if(!isHtml){
             emailbody = new  StringBuilder()
@@ -63,17 +93,11 @@ public class ReportHelper extends ToolHelper{
                     .append("<a href = \"https://example.com\">https://example.com</a>")
                     .toString();
         }
-
-        List<String> filePaths = getAttachmentPaths();
-
-        EmailUtils.sendEmailIntent(context,
-                emailTo, "",
-                subject, emailbody,
-                filePaths, false);
+        return emailbody;
     }
 
     @NonNull
-    private List<String> getAttachmentPaths() {
+    private List<String> getFilePaths() {
         List<String> filePaths = new ArrayList<>();
         filePaths.add(new InfoHelper().getReportPath());
 
@@ -103,29 +127,8 @@ public class ReportHelper extends ToolHelper{
         }
         else if (type.equals(ReportType.CRASH)){
             Crash crash = (Crash) target;
-            filePaths.addAll(new CrashHelper().buildReport(crash));
+            filePaths.addAll(new CrashHelper().getReportPaths(crash));
         }
         return filePaths;
-    }
-
-    @NonNull
-    private String getEmailTo() {
-        return "rafaco@gmail.com";
-    }
-
-    private String getEmailSubject(){
-        InfoHelper helper = new InfoHelper();
-        String formatter = "%s %s report from %s %s";
-        String currentType = "";
-        if(type.equals(ReportType.SESSION)){
-            currentType = "session";
-        }else if (type.equals(ReportType.CRASH)){
-            currentType = "crash";
-        }else if (type.equals(ReportType.FULL)){
-            currentType = "full";
-        }
-        return String.format(formatter,
-                helper.getAppName(), currentType,
-                Build.BRAND, Build.MODEL);
     }
 }

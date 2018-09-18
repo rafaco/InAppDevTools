@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
@@ -89,6 +90,16 @@ public class MainOverlayLayer extends OverlayLayer {
                 }
             });
         }
+    }
+
+    public void scrollToView(final View view){
+        bodyScroll.post(new Runnable() {
+                @Override
+                public void run() {
+                    final Rect rect = new Rect(0, 0, view.getWidth(), view.getHeight());
+                    view.requestRectangleOnScreen(rect, false);
+            }
+        });
     }
 
     public boolean isScrollAtBottom() {

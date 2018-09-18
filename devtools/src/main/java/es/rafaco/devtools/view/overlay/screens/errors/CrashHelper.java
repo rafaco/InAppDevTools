@@ -30,20 +30,10 @@ public class CrashHelper extends ToolHelper{
         return null;
     }
 
-    public List<String> buildReport(Crash crash) {
-        List<String> filePaths = new ArrayList<>();
-
-        addCrashDetailFile(crash, filePaths);
-        addLogcatFile(crash, filePaths);
-        addScreenFile(crash, filePaths);
-
-        return filePaths;
-    }
-
     public InfoCollection parseToInfoGroup(Crash data){
 
         InfoGroup status = new InfoGroup.Builder("App status")
-                .add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
+                //.add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
                 .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
                 .add("LastActivity", data.getLastActivity())
                 .build();
@@ -69,6 +59,7 @@ public class CrashHelper extends ToolHelper{
                 .build();
 
         InfoGroup links = new InfoGroup.Builder("Linked info")
+                .add("ReportPath", String.valueOf(data.getReportPath()))
                 .add("LogcatId", String.valueOf(data.getLogcatId()))
                 .add("ScreenId", String.valueOf(data.getScreenId()))
                 .build();
@@ -86,10 +77,19 @@ public class CrashHelper extends ToolHelper{
                 .build();
     }
 
+    public List<String> getReportPaths(final Crash crash) {
+
+        List<String> filePaths = new ArrayList<>();
+        addCrashDetailFile(crash, filePaths);
+        addLogcatFile(crash, filePaths);
+        addScreenFile(crash, filePaths);
+
+        return filePaths;
+    }
+
     private void addCrashDetailFile(Crash crash, List<String> filePaths) {
 
         String report = parseToInfoGroup(crash).toString();
-
         String filePath = FileUtils.createFileWithContent("crash",
                 "crash_info" + System.currentTimeMillis() + ".txt",
                 report);
@@ -117,16 +117,25 @@ public class CrashHelper extends ToolHelper{
         }
     }
 
-    public void undoRawReport(final Crash crash, final Runnable callback){
+    //region [ DATA CONSOLIDATION ]
+
+    public boolean havePendingData(Crash crash){
+        return crash.getRawLogcat() != null || crash.getRawScreen() != null;
+    }
+
+    public void solvePendingData(final Crash crash, final Runnable callback){
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
                 if (crash.getRawLogcat() != null){
-                    new LogHelper().undoRawReport(crash);
+                    new LogHelper().solvePendingData(crash);
                 }
 
                 if (crash.getRawScreen() != null){
-                    new ScreenHelper().undoRawReport(crash);
+                    new ScreenHelper().solvePendingData(crash);
+                }
+                if (crash.getReportPath() != null){
+                    buildDetailReport(crash);
                 }
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
@@ -137,6 +146,23 @@ public class CrashHelper extends ToolHelper{
             }
         });
     }
+
+    private String buildDetailReport(Crash crash) {
+
+        String report = parseToInfoGroup(crash).toString();
+        String filePath = FileUtils.createFileWithContent("crash",
+                "crash_detail" + crash.getDate() + ".txt",
+                report);
+        crash.setReportPath(filePath);
+        DevTools.getDatabase().crashDao().update(crash);
+
+        return filePath;
+    }
+
+    //endregion
+
+
+    //region [ TEXT FORMATTERS ]
 
     public String getFormattedAt(Crash data) {
         String[] split = data.getStacktrace().split("\n\t");
@@ -168,4 +194,6 @@ public class CrashHelper extends ToolHelper{
     private String formatAt(String text){
         return text.replace("(", " (");
     }
+
+    //endregion
 }

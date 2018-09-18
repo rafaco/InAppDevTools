@@ -1,14 +1,14 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
@@ -37,6 +37,10 @@ public class CrashDetailScreen extends OverlayScreen {
     private TextView lastActivity;
     private ImageView thumbnail;
     private TextView thread;
+    private HorizontalScrollView stacktraceContainer;
+    private AppCompatButton logcatButton;
+    private AppCompatButton stacktraceButton;
+    private AppCompatButton revealDetailsButton;
 
     public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -70,7 +74,7 @@ public class CrashDetailScreen extends OverlayScreen {
 
 
     private void initView(ViewGroup view) {
-        out = view.findViewById(R.id.out);
+
         when = view.findViewById(R.id.detail_when);
         foreground = view.findViewById(R.id.detail_foreground);
         lastActivity = view.findViewById(R.id.detail_last_activity);
@@ -81,7 +85,36 @@ public class CrashDetailScreen extends OverlayScreen {
         title2 = view.findViewById(R.id.detail_title2);
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
         thread = view.findViewById(R.id.detail_thread);
+
+        logcatButton = view.findViewById(R.id.logcat_button);
+        logcatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DevTools.showMessage("Not already implemented");
+            }
+        });
+        stacktraceButton = view.findViewById(R.id.stacktrace_button);
+        stacktraceContainer = view.findViewById(R.id.stacktrace_container);
+        stacktraceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newVisibility = (stacktraceContainer.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
+                stacktraceContainer.setVisibility(newVisibility);
+                getScreenManager().getMainLayer().scrollToView(console);
+            }
+        });
         console = view.findViewById(R.id.detail_console);
+
+        revealDetailsButton = view.findViewById(R.id.reveal_details_button);
+        revealDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newVisibility = (out.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
+                out.setVisibility(newVisibility);
+                getScreenManager().getMainLayer().scrollToView(out);
+            }
+        });
+        out = view.findViewById(R.id.out);
     }
 
     private void updateView() {
@@ -135,7 +168,7 @@ public class CrashDetailScreen extends OverlayScreen {
                 @Override
                 public void run() {
                     crash = DevTools.getDatabase().crashDao().findById(crashId);
-                    helper.undoRawReport(crash, new Runnable() {
+                    helper.solvePendingData(crash, new Runnable() {
                         @Override
                         public void run() {
                             updateView();

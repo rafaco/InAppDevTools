@@ -15,6 +15,15 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "date")
     private long date;
 
+    @ColumnInfo(name = "reportPath")
+    private String reportPath;
+
+    @ColumnInfo(name = "screenId")
+    private long screenId;
+
+    @ColumnInfo(name = "logcatId")
+    private long logcatId;
+
     @ColumnInfo(name = "exception")
     private String exception;
 
@@ -44,12 +53,6 @@ public class Crash implements Serializable {
 
     @ColumnInfo(name = "rawLogcat")
     private String rawLogcat;
-
-    @ColumnInfo(name = "screenId")
-    private long screenId;
-
-    @ColumnInfo(name = "logcatId")
-    private long logcatId;
 
     @ColumnInfo(name = "threadId")
     private long threadId;
@@ -83,6 +86,14 @@ public class Crash implements Serializable {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public String getReportPath() {
+        return reportPath;
+    }
+
+    public void setReportPath(String reportPath) {
+        this.reportPath = reportPath;
     }
 
     public String getException() {

@@ -28,7 +28,7 @@ import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 public class ScreenHelper extends ToolHelper{
 
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
-    private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s_%s.jpg";
+    private static final String FILE_NAME_TEMPLATE = "DevTools_%s_%s.jpg";
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
 
@@ -89,8 +89,8 @@ public class ScreenHelper extends ToolHelper{
                 folder.mkdir();
 
             long mImageTime = System.currentTimeMillis();
-            String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
-            String fileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate, "DT");
+            //String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
+            String fileName = String.format(FILE_NAME_TEMPLATE, "Screen", mImageTime);
             File imageFile = new File(folder, fileName);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
@@ -117,7 +117,7 @@ public class ScreenHelper extends ToolHelper{
         return null;
     }
 
-    public byte[] buildRawReport() {
+    public byte[] buildPendingData() {
         //takeScreenAsByteArray
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);
         Pair<String, View> selectedRootView = rootViews.get(0);
@@ -144,7 +144,7 @@ public class ScreenHelper extends ToolHelper{
         return stream.toByteArray();
     }
 
-    public String undoRawReport(Crash crash){
+    public String solvePendingData(Crash crash){
         //storeByteArray
         long mImageTime = crash.getDate();
         byte[] imageByteArray = crash.getRawScreen();
@@ -161,8 +161,8 @@ public class ScreenHelper extends ToolHelper{
                 folder.mkdir();
 
 
-            String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
-            String fileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate, "DT");
+            //String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
+            String fileName = String.format(FILE_NAME_TEMPLATE, "Crash", mImageTime);
             File imageFile = new File(folder, fileName);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);

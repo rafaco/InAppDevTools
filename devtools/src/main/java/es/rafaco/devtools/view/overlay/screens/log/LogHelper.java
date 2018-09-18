@@ -77,7 +77,7 @@ public class LogHelper extends ToolHelper{
         return  output;
     }
 
-    public String undoRawReport(Crash crash){
+    public String solvePendingData(Crash crash){
         String rawLog = crash.getRawLogcat();
 
         if (rawLog == null){
