@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.logic.tools.ToolHelper;
-import es.rafaco.devtools.utils.SqliteExporter;
+import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.tools.ToolHelper;
+import es.rafaco.devtools.db.SqliteExporter;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;

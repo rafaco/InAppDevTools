@@ -15,7 +15,7 @@ import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 
 public class PermissionActivity extends AppCompatActivity {
 

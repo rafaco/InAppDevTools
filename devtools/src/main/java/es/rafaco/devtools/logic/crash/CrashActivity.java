@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.view.OverlayUIService;
-import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 
 

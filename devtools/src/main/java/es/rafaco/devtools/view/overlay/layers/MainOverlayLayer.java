@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -17,8 +16,8 @@ import android.widget.LinearLayout;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.utils.UiUtils;
-import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.utils.UiUtils;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 

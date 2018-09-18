@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.db.errors.ScreenDao;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.db.entities.ScreenDao;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 

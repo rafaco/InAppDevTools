@@ -6,9 +6,9 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.errors.Anr;
-import es.rafaco.devtools.utils.DateUtils;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.db.entities.Anr;
+import es.rafaco.devtools.logic.utils.DateUtils;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;

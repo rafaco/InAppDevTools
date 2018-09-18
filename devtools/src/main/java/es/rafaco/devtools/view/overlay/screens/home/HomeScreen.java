@@ -14,8 +14,8 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.DecoratedToolInfo;
+import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
 public class HomeScreen extends OverlayScreen {

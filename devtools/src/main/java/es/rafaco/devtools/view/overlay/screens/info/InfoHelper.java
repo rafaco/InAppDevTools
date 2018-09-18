@@ -26,8 +26,8 @@ import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
-import es.rafaco.devtools.logic.tools.ToolHelper;
-import es.rafaco.devtools.utils.FileUtils;
+import es.rafaco.devtools.tools.ToolHelper;
+import es.rafaco.devtools.logic.utils.FileUtils;
 
 public class InfoHelper extends ToolHelper {
 
@@ -131,8 +131,10 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += "Top activity is " + getTopActivity();
         result += "\n";
-        result += logManager.getStartedActivitiesCount() + " activities started";
         result += "\n";
+        result += DevTools.getDatabase().getOverview();
+        result += "\n";
+        result += logManager.getStartedActivitiesCount() + " activities started";
         result += "\n";
         result += DevTools.getActivityLogManager().getLog();
         result += "\n";

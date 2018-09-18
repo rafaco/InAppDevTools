@@ -1,6 +1,6 @@
 package es.rafaco.devtools.logic.crash;
 
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 
 public class SimulatedException extends RuntimeException {
 

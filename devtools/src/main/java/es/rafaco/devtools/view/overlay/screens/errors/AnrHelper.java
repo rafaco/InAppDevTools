@@ -1,8 +1,8 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
-import es.rafaco.devtools.db.errors.Anr;
-import es.rafaco.devtools.logic.tools.ToolHelper;
-import es.rafaco.devtools.utils.DateUtils;
+import es.rafaco.devtools.db.entities.Anr;
+import es.rafaco.devtools.tools.ToolHelper;
+import es.rafaco.devtools.logic.utils.DateUtils;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
 import es.rafaco.devtools.view.overlay.screens.info.InfoGroup;
 

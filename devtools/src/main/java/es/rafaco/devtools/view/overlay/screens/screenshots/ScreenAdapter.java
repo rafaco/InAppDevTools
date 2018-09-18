@@ -17,8 +17,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.utils.DateUtils;
+import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.logic.utils.DateUtils;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
 
@@ -53,7 +53,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
         // loading album cover using Glide library
         //Glide.with(mContext).load(screen.getThumbnail()).into(holder.thumbnail);
-        //ImageUtils.loadInto(screen.getPath(), holder.thumbnail);
+        //ImageLoader.loadInto(screen.getPath(), holder.thumbnail);
         new ImageLoaderAsyncTask(holder.thumbnail).execute(screen.getPath());
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {

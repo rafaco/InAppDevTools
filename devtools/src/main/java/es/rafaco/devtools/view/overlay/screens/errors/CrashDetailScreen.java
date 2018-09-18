@@ -1,5 +1,6 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
@@ -13,13 +14,15 @@ import android.widget.TextView;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.utils.DateUtils;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.logic.utils.DateUtils;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
+import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ImageLoaderAsyncTask;
 
 public class CrashDetailScreen extends OverlayScreen {
@@ -171,6 +174,7 @@ public class CrashDetailScreen extends OverlayScreen {
                     helper.solvePendingData(crash, new Runnable() {
                         @Override
                         public void run() {
+                            crash = DevTools.getDatabase().crashDao().findById(crashId);
                             updateView();
                         }
                     });
@@ -198,8 +202,8 @@ public class CrashDetailScreen extends OverlayScreen {
         int selected = item.getItemId();
         if (selected == R.id.action_send)
         {
-            //TODO: send all errors
-            DevTools.showMessage("Not already implemented");
+            DevTools.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+            getScreenManager().hide();
         }
         else if (selected == R.id.action_share)
         {

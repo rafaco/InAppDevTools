@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.logic.tools.ToolHelper;
+import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 

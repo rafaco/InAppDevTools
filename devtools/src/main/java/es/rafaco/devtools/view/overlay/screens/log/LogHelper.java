@@ -10,10 +10,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.db.errors.Logcat;
-import es.rafaco.devtools.logic.tools.ToolHelper;
-import es.rafaco.devtools.utils.FileUtils;
+import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.db.entities.Logcat;
+import es.rafaco.devtools.tools.ToolHelper;
+import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 
 public class LogHelper extends ToolHelper{

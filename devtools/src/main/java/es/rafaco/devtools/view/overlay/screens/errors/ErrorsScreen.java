@@ -1,7 +1,6 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.arch.persistence.room.InvalidationTracker;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -25,19 +24,19 @@ import java.util.TooManyListenersException;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.errors.Anr;
-import es.rafaco.devtools.db.errors.Crash;
+import es.rafaco.devtools.db.entities.Anr;
+import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.logic.crash.SimulatedException;
-import es.rafaco.devtools.utils.RecyclerViewUtils;
+import es.rafaco.devtools.view.utils.RecyclerViewUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.DecoratedToolInfo;
-import es.rafaco.devtools.view.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.utils.DecoratedToolInfo;
+import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 
-import static es.rafaco.devtools.utils.DateUtils.getElapsedTimeLowered;
+import static es.rafaco.devtools.logic.utils.DateUtils.getElapsedTimeLowered;
 
 public class ErrorsScreen extends OverlayScreen {
 

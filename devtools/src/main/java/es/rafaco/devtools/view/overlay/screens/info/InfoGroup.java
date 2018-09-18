@@ -3,10 +3,9 @@ package es.rafaco.devtools.view.overlay.screens.info;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import es.rafaco.devtools.utils.DateUtils;
+import es.rafaco.devtools.logic.utils.DateUtils;
 
 public class InfoGroup {
 

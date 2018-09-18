@@ -16,11 +16,11 @@ import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.view.NotificationUIService;
-import es.rafaco.devtools.view.OverlayUIService;
-import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.utils.AppUtils;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.view.notifications.NotificationUIService;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.logic.utils.AppUtils;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 

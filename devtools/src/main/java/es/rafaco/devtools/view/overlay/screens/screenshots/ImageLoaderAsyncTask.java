@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-import es.rafaco.devtools.utils.UiUtils;
+import es.rafaco.devtools.view.utils.UiUtils;
 
 public class ImageLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
 

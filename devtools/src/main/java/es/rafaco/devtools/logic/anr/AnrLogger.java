@@ -12,8 +12,7 @@ import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.errors.Anr;
-import es.rafaco.devtools.utils.ThreadUtils;
+import es.rafaco.devtools.db.entities.Anr;
 
 public class AnrLogger {
 

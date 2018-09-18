@@ -8,10 +8,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.OverlayUIService;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.utils.AppUtils;
+import es.rafaco.devtools.logic.utils.AppUtils;
 
 public class CommandsScreen extends OverlayScreen {
 

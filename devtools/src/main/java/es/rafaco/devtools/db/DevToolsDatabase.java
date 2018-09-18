@@ -6,18 +6,17 @@ import android.arch.persistence.room.RoomDatabase;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.errors.Anr;
-import es.rafaco.devtools.db.errors.AnrDao;
-import es.rafaco.devtools.db.errors.Crash;
-import es.rafaco.devtools.db.errors.CrashDao;
-import es.rafaco.devtools.db.errors.Logcat;
-import es.rafaco.devtools.db.errors.LogcatDao;
-import es.rafaco.devtools.db.errors.Screen;
-import es.rafaco.devtools.db.errors.ScreenDao;
+import es.rafaco.devtools.db.entities.Anr;
+import es.rafaco.devtools.db.entities.AnrDao;
+import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.db.entities.CrashDao;
+import es.rafaco.devtools.db.entities.Logcat;
+import es.rafaco.devtools.db.entities.LogcatDao;
+import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.db.entities.ScreenDao;
 
-@Database(version = 12, exportSchema = true,
-        entities = {User.class,
-                    Crash.class,
+@Database(version = 13, exportSchema = true,
+        entities = {Crash.class,
                     Anr.class,
                     Screen.class,
                     Logcat.class})
@@ -44,7 +43,6 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
 
     //region [ DAOs ]
-    public abstract UserDao userDao();
     public abstract CrashDao crashDao();
     public abstract AnrDao anrDao();
     public abstract ScreenDao screenDao();
@@ -52,11 +50,17 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     //endregion
 
     public void printOverview(){
-        //Log.d(DevTools.TAG, "User db size is: " + userDao().countUsers());
-        Log.d(DevTools.TAG, "Internal db: ");
-        Log.d(DevTools.TAG, "  Crash: " + crashDao().count());
-        Log.d(DevTools.TAG, "  Anr: " + anrDao().count());
-        Log.d(DevTools.TAG, "  Screen: " + screenDao().count());
-        Log.d(DevTools.TAG, "  Logcat: " + logcatDao().count());
+        Log.d(DevTools.TAG, getOverview());
+    }
+
+    public String getOverview(){
+        String overview = "";
+        String jump = "\n\t\n\t";
+        overview +="DevTools DB overview: " + jump;
+        overview +="  Crash: " + crashDao().count() + jump;
+        overview +="  Anr: " + anrDao().count() + jump;
+        overview +="  Screen: " + screenDao().count() + jump;
+        overview +="  Logcat: " + logcatDao().count() + jump;
+        return overview;
     }
 }

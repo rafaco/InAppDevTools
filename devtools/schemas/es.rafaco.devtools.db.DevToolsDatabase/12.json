@@ -2,46 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 12,
-    "identityHash": "8e33733051fa1d4bbca7ead05a896d9e",
+    "identityHash": "89bcbb8605aa06606dcbf1b474656db6",
     "entities": [
-      {
-        "tableName": "user",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT, `last_name` TEXT, `age` INTEGER NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "uid",
-            "columnName": "uid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "firstName",
-            "columnName": "first_name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lastName",
-            "columnName": "last_name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "age",
-            "columnName": "age",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "uid"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "crash",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `reportPath` TEXT, `screenId` INTEGER NOT NULL, `logcatId` INTEGER NOT NULL, `exception` TEXT, `exceptionAt` TEXT, `message` TEXT, `causeException` TEXT, `causeMessage` TEXT, `causeExceptionAt` TEXT, `stacktrace` TEXT, `rawScreen` BLOB, `rawLogcat` TEXT, `threadId` INTEGER NOT NULL, `isMainThread` INTEGER NOT NULL, `threadName` TEXT, `threadGroupName` TEXT, `isForeground` INTEGER NOT NULL, `lastActivity` TEXT)",
@@ -311,7 +273,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8e33733051fa1d4bbca7ead05a896d9e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"89bcbb8605aa06606dcbf1b474656db6\")"
     ]
   }
 }

@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.utils.UiUtils;
+import es.rafaco.devtools.view.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.OverlayLayersManager;
 
 public class IconOverlayLayer extends OverlayLayer {

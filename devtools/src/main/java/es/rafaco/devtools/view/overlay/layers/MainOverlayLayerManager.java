@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,8 +15,9 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.utils.ClassHelper;
-import es.rafaco.devtools.utils.ExpandCollapseUtils;
+import es.rafaco.devtools.logic.utils.ClassHelper;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.utils.ExpandCollapseUtils;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 
@@ -289,6 +291,12 @@ public class MainOverlayLayerManager {
         if (screenToolbar != null){
             screenToolbar.requestLayout();
         }
+    }
+
+    public void hide() {
+        //TODO: refactor, it doesn't seems like the best way
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE,null);
+        DevTools.getAppContext().startService(intent);
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {
