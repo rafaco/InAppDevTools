@@ -1,4 +1,4 @@
-package es.rafaco.devtools.filesystem;
+package es.rafaco.devtools.storage.files;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.db;
+package es.rafaco.devtools.storage.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

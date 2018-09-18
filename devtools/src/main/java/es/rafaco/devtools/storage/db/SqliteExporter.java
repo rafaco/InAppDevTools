@@ -1,4 +1,4 @@
-package es.rafaco.devtools.db;
+package es.rafaco.devtools.storage.db;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.database.Cursor;
@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.filesystem.DevToolsFiles;
-import es.rafaco.devtools.filesystem.MediaScannerUtils;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
+import es.rafaco.devtools.storage.files.MediaScannerUtils;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 
 

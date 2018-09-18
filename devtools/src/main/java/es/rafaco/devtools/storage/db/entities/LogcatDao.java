@@ -1,4 +1,4 @@
-package es.rafaco.devtools.db.entities;
+package es.rafaco.devtools.storage.db.entities;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

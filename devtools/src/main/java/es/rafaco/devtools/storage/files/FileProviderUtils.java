@@ -1,4 +1,4 @@
-package es.rafaco.devtools.filesystem;
+package es.rafaco.devtools.storage.files;
 
 import android.content.Context;
 import android.content.Intent;
