@@ -38,7 +38,6 @@ public class ReportHelper extends ToolHelper{
     public void start(ReportType type, Object target) {
         this.type = type;
         this.target = target;
-
         boolean isHtml = false;
 
         EmailUtils.sendEmailIntent(context,

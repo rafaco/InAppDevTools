@@ -13,7 +13,7 @@ public class DevToolsFiles {
     public static String storeCrashDetail(Crash crash, String report) {
         return FileCreator.withContent(
                 "crash",
-                "crash_detail" + crash.getDate() + ".txt",
+                "crash_detail_" + crash.getDate() + ".txt",
                 report);
     }
 

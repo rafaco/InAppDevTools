@@ -78,7 +78,10 @@ public class CrashHelper extends ToolHelper{
     }
 
     public List<String> getReportPaths(final Crash crash) {
-
+        //TODO: Reports exclude crash if not consolidated
+        if (havePendingData(crash)) {
+            solvePendingData(crash, null);
+        }
         List<String> filePaths = new ArrayList<>();
         addCrashDetailFile(crash, filePaths);
         addLogcatFile(crash, filePaths);
@@ -124,11 +127,11 @@ public class CrashHelper extends ToolHelper{
                 if (crash.getRawLogcat() != null){
                     new LogHelper().solvePendingData(crash);
                 }
-
                 if (crash.getRawScreen() != null){
                     new ScreenHelper().solvePendingData(crash);
                 }
-                if (crash.getReportPath() != null){
+
+                if (crash.getReportPath() == null){
                     buildDetailReport(crash);
                 }
                 ThreadUtils.runOnUiThread(new Runnable() {
