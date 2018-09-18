@@ -4,7 +4,6 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -12,31 +11,27 @@ import java.io.StringWriter;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.entities.Logcat;
+import es.rafaco.devtools.filesystem.DevToolsFiles;
 import es.rafaco.devtools.tools.ToolHelper;
-import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 
 public class LogHelper extends ToolHelper{
 
     @Override
     public String getReportPath() {
-        if(FileUtils.isExternalStorageWritable()){
-            File file = FileUtils.createNewFile("log",
-                    "logcat_" + System.currentTimeMillis() + ".txt");
-            try {
-                Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
-                process.waitFor();
-                return file.getPath();
+        File file = DevToolsFiles.prepareLogcat(System.currentTimeMillis());
+        if (file == null)
+            return null;
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if(FileUtils.isExternalStorageReadable() ){
-            // only readable
-        } else{
-            // not accessible
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
+            process.waitFor();
+            return file.getPath();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -85,15 +80,7 @@ public class LogHelper extends ToolHelper{
         }
 
         try {
-            File file = FileUtils.createNewFile("crash",
-                    "crash_logcat_" + crash.getDate() + ".txt");
-
-            FileOutputStream outputStream = new FileOutputStream(file);
-            outputStream.write(rawLog.getBytes());
-            outputStream.close();
-
-            //TODO: update MediaStore
-            String filePath = file.getAbsolutePath();
+            String filePath = DevToolsFiles.storeCrashLog(crash);
 
             Logcat logcat = new Logcat();
             logcat.setDate(crash.getDate());
@@ -113,35 +100,4 @@ public class LogHelper extends ToolHelper{
             return "";
         }
     }
-
-    /*public long buildCrashReport(){
-
-        if(FileUtils.isExternalStorageWritable()){
-            long logcatId = -1;
-            File file = FileUtils.createNewFile("crash",
-                    "crash_" + System.currentTimeMillis() + ".txt");
-            try {
-                Process process = Runtime.getRuntime().exec("logcat -d -t 100 -f " + file);
-                process.waitFor();
-
-                Logcat logcat = new Logcat();
-                logcat.setDate(new Date().getTime());
-                logcat.setPath(file.getPath());
-                logcatId = DevTools.getDatabase().logcatDao().insert(logcat);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return logcatId;
-
-        } else if(FileUtils.isExternalStorageReadable() ){
-            // only readable
-        } else{
-            // not accessible
-        }
-
-        return -1;
-    }*/
 }

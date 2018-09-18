@@ -8,6 +8,7 @@ import android.widget.Toast;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.filesystem.FileProviderUtils;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;
@@ -22,7 +23,6 @@ import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.view.dialogs.CrashDialogActivity;
 import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
@@ -211,7 +211,7 @@ public class DevTools {
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
             getAppContext().startService(intent);
         }
-        FileUtils.openFileExternally(getAppContext(), screen.getPath());
+        FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());
     }
 
     public static void sendReport(final ReportHelper.ReportType type, final Object param) {

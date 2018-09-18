@@ -176,7 +176,7 @@ public class ReportDialogActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(Intent.ACTION_PICK, screenFolderUri);
-        intent.setType("image/*"); //FileUtils.getMimeType(file)
+        intent.setType("image/*"); //FileCreator.getMimeType(file)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
 

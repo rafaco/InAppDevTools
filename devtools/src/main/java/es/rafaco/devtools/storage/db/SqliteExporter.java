@@ -9,13 +9,14 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.FileUtils;
+import es.rafaco.devtools.filesystem.DevToolsFiles;
+import es.rafaco.devtools.filesystem.MediaScannerUtils;
+import es.rafaco.devtools.view.activities.PermissionActivity;
 
 
 /**
@@ -42,11 +43,12 @@ public class SqliteExporter {
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{
 
-        if( !FileUtils.isExternalStorageWritable() ){
+        if( !PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
             throw new IOException("Cannot write to external storage");
         }
 
-        File backupFile = FileUtils.createNewFile("db", createBackupFileName(dbName));
+        File backupFile = DevToolsFiles.prepareDatabase(dbName, new Date().getTime());
+
         List<String> tables = getTablesOnDataBase(db);
         Log.d(TAG, "Started to fill the backup file in " + backupFile.getAbsolutePath());
         long starTime = System.currentTimeMillis();
@@ -54,12 +56,9 @@ public class SqliteExporter {
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "Creating backup took " + (endTime - starTime) + "ms.");
 
-        return backupFile.getAbsolutePath();
-    }
+        MediaScannerUtils.scan(backupFile);
 
-    private static String createBackupFileName(String dbName){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmm");
-        return "db_" + dbName + "_" + sdf.format(new Date()) + ".csv";
+        return backupFile.getAbsolutePath();
     }
 
     /**

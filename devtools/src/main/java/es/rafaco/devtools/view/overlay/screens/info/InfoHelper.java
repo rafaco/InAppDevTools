@@ -25,20 +25,18 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.filesystem.DevToolsFiles;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.tools.ToolHelper;
-import es.rafaco.devtools.logic.utils.FileUtils;
 
 public class InfoHelper extends ToolHelper {
 
     @Override
     public String getReportPath() {
-        String filePath = FileUtils.createFileWithContent("info",
-                "system_info_" + System.currentTimeMillis() + ".txt",
-                getReportContent());
-
+        String filePath = DevToolsFiles.storeInfo(getReportContent(), System.currentTimeMillis());
         return filePath;
     }
+
 
     @Override
     public String getReportContent() {
