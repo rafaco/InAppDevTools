@@ -12,12 +12,12 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Screen;
-import es.rafaco.devtools.db.entities.ScreenDao;
-import es.rafaco.devtools.filesystem.DevToolsFiles;
-import es.rafaco.devtools.filesystem.MediaScannerUtils;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.ScreenDao;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
+import es.rafaco.devtools.storage.files.MediaScannerUtils;
 import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.utils.ViewHierarchyUtils;

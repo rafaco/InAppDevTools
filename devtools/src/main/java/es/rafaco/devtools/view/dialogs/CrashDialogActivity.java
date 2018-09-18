@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;

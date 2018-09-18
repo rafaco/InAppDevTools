@@ -25,7 +25,7 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.filesystem.DevToolsFiles;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.tools.ToolHelper;
 

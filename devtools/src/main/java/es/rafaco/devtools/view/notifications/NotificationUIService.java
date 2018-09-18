@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.view.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;

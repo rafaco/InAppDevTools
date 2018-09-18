@@ -11,8 +11,8 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.entities.Anr;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Anr;
 
 public class AnrLogger {
 

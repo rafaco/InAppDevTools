@@ -6,7 +6,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Crash;
 
 public class DevToolsFiles {
 

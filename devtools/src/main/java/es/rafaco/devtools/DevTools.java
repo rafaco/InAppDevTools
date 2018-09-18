@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Screen;
-import es.rafaco.devtools.filesystem.FileProviderUtils;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Screen;
+import es.rafaco.devtools.storage.files.FileProviderUtils;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;

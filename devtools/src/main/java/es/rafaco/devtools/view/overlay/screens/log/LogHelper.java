@@ -9,9 +9,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Logcat;
-import es.rafaco.devtools.filesystem.DevToolsFiles;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Logcat;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
 import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
 

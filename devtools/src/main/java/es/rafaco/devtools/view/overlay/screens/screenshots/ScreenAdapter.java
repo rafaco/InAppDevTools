@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
