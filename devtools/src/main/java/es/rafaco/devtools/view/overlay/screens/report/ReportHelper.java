@@ -17,7 +17,6 @@ import es.rafaco.devtools.utils.SqliteExporter;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
-import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 
 public class ReportHelper extends ToolHelper{
 
@@ -104,7 +103,9 @@ public class ReportHelper extends ToolHelper{
         if(type.equals(ReportType.SESSION)){
 
             filePaths.add(new LogHelper().getReportPath());
-            filePaths.add(new ScreenHelper().getReportPath());
+
+            //Include only the last one
+            //filePaths.add(new ScreenHelper().getReportPath());
 
             try{
                 ArrayList<Uri> screens = (ArrayList<Uri>)target;

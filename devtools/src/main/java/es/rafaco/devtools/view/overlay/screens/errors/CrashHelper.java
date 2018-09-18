@@ -88,14 +88,8 @@ public class CrashHelper extends ToolHelper{
     }
 
     private void addCrashDetailFile(Crash crash, List<String> filePaths) {
-
-        String report = parseToInfoGroup(crash).toString();
-        String filePath = FileUtils.createFileWithContent("crash",
-                "crash_info" + System.currentTimeMillis() + ".txt",
-                report);
-
-        if (!TextUtils.isEmpty(filePath)) {
-            filePaths.add(filePath);
+        if (!TextUtils.isEmpty(crash.getReportPath())) {
+            filePaths.add(crash.getReportPath());
         }
     }
 
