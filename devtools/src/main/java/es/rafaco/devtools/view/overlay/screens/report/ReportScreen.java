@@ -1,11 +1,15 @@
 package es.rafaco.devtools.view.overlay.screens.report;
 
+import android.content.DialogInterface;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,7 +18,9 @@ import java.util.ArrayList;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
+import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
@@ -82,17 +88,109 @@ public class ReportScreen extends OverlayScreen {
     }
 
     private void initAdapter() {
-        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
-        array.addAll(DevTools.getToolManager().getReportInfos());
 
-        adapter = new DecoratedToolInfoAdapter(getContext(), array);
-        adapter.enableSwitchMode();
+        adapter = new DecoratedToolInfoAdapter(getContext(), getReportSelectors());
+        //adapter.enableSwitchMode();
+
         recyclerView = getView().findViewById(R.id.report_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    private ArrayList<DecoratedToolInfo> getReportSelectors(){
+        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+        NavigationStep step = new NavigationStep(InfoScreen.class, null);
+
+        array.add(new DecoratedToolInfo(
+                "Current session",
+                "From your last restart",
+                R.color.rally_blue, 1,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onSessionReport();
+                    }
+                }));
+
+        array.add(new DecoratedToolInfo(
+                "Last crash report",
+                "",
+                R.color.rally_orange, 1,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onCrashReport();
+                    }
+                }));
+
+
+        array.add(new DecoratedToolInfo(
+                "Custom report",
+                "You choose everything",
+                R.color.rally_yellow, 1,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onCustomReport();
+                    }
+                }));
+
+        array.add(new DecoratedToolInfo(
+                "Full report",
+                "All in a zip",
+                R.color.rally_green, 1,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onFullReport();
+                    }
+                }));
+
+        return array;
+    }
+
+    private void onSessionReport() {
+        DevTools.sendReport(ReportHelper.ReportType.SESSION, null);
+    }
+
+    private void onFullReport() {
+        DevTools.sendReport(ReportHelper.ReportType.FULL, null);
+    }
+
+    private void onCustomReport() {
+        onLevelButton();
+    }
+
+    private void onCrashReport() {
+        DevTools.sendReport(ReportHelper.ReportType.CRASH, null);
+    }
+
+
+
+    private void onLevelButton() {
+        String[] levelsArray = new String[]{ "Stored logs", "Crash", "Screens" };
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Select crash")
+                .setCancelable(true)
+                .setMultiChoiceItems(levelsArray, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                    }
+                })
+                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.show();
     }
 
 

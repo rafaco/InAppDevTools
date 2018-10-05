@@ -232,12 +232,11 @@ public class DevTools {
                 ThreadUtils.runOnBackThread(new Runnable() {
                     @Override
                     public void run() {
-                        long crashId = (long)param;
                         Crash crash;
-                        if (crashId<0){
+                        if (param == null){
                             crash = getDatabase().crashDao().getLast();
                         }else{
-                            crash = getDatabase().crashDao().findById(crashId);
+                            crash = getDatabase().crashDao().findById((long)param);
                         }
                         if (crash == null){
                             showError("Unable to found it");

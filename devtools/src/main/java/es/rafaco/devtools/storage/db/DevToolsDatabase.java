@@ -55,7 +55,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
     public String getOverview(){
         String overview = "";
-        String jump = "\n\t\n\t";
+        String jump = "\n\t";
         overview +="DevTools DB overview: " + jump;
         overview +="  Crash: " + crashDao().count() + jump;
         overview +="  Anr: " + anrDao().count() + jump;

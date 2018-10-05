@@ -30,7 +30,7 @@ public class ReportHelper extends ToolHelper{
         return null;
     }
 
-    public enum ReportType { CRASH, SESSION, FULL }
+    public enum ReportType { SESSION, CRASH, WIZARD, FULL }
 
     ReportType type;
     Object target;

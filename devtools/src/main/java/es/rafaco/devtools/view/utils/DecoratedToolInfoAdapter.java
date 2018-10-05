@@ -90,7 +90,10 @@ public class DecoratedToolInfoAdapter
     }
 
     protected void onItemClick(DecoratedToolInfo data) {
-        OverlayUIService.performNavigationStep(data.getNavigationStep());
+        if (data.getNavigationStep() != null)
+            OverlayUIService.performNavigationStep(data.getNavigationStep());
+        else
+            data.getRunnable().run();
     }
 
 
