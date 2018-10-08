@@ -10,8 +10,8 @@ import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
 
 
 public class CrashActivity extends AppCompatActivity {

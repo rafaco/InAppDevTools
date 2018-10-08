@@ -1,7 +1,6 @@
 package es.rafaco.devtools.view.overlay.screens.screenshots;
 
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
@@ -13,19 +12,18 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Screen;
-import es.rafaco.devtools.db.entities.ScreenDao;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.ScreenDao;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
+import es.rafaco.devtools.storage.files.MediaScannerUtils;
 import es.rafaco.devtools.tools.ToolHelper;
-import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.utils.ViewHierarchyUtils;
 
 public class ScreenHelper extends ToolHelper{
 
-    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
-    private static final String FILE_NAME_TEMPLATE = "DevTools_%s_%s.jpg";
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
 
@@ -79,16 +77,8 @@ public class ScreenHelper extends ToolHelper{
             Bitmap bitmap = Bitmap.createBitmap(selectedView.getDrawingCache());
             selectedView.setDrawingCacheEnabled(false);
 
-            //File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File folder = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
-            if (!folder.exists())
-                folder.mkdir();
-
             long mImageTime = System.currentTimeMillis();
-            //String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
-            String fileName = String.format(FILE_NAME_TEMPLATE, "Screen", mImageTime);
-            File imageFile = new File(folder, fileName);
+            File imageFile = DevToolsFiles.prepareScreen(mImageTime, false);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 80;
@@ -96,7 +86,7 @@ public class ScreenHelper extends ToolHelper{
             outputStream.flush();
             outputStream.close();
 
-            FileUtils.scanMediaFile(context, imageFile);
+            MediaScannerUtils.scan(imageFile);
 
             Screen screen = new Screen();
             screen.setSession(0);
@@ -113,6 +103,7 @@ public class ScreenHelper extends ToolHelper{
         }
         return null;
     }
+
 
     public byte[] buildPendingData() {
         //takeScreenAsByteArray
@@ -151,22 +142,13 @@ public class ScreenHelper extends ToolHelper{
         }
 
         try {
-            //File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File folder = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
-            if (!folder.exists())
-                folder.mkdir();
-
-
-            //String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
-            String fileName = String.format(FILE_NAME_TEMPLATE, "Crash", mImageTime);
-            File imageFile = new File(folder, fileName);
+            File imageFile = DevToolsFiles.prepareScreen(mImageTime, true);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             outputStream.write(imageByteArray);
             outputStream.close();
 
-            FileUtils.scanMediaFile(context, imageFile);
+            MediaScannerUtils.scan(imageFile);
             String filePath = imageFile.getAbsolutePath();
 
             Screen screen = new Screen();

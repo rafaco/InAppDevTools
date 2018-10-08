@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Logcat;
-import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Logcat;
+import es.rafaco.devtools.storage.db.entities.Screen;
+import es.rafaco.devtools.storage.files.DevToolsFiles;
 import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.logic.utils.DateUtils;
-import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
 import es.rafaco.devtools.view.overlay.screens.info.InfoGroup;
@@ -78,7 +78,10 @@ public class CrashHelper extends ToolHelper{
     }
 
     public List<String> getReportPaths(final Crash crash) {
-
+        //TODO: Reports exclude crash if not consolidated
+        if (havePendingData(crash)) {
+            solvePendingData(crash, null);
+        }
         List<String> filePaths = new ArrayList<>();
         addCrashDetailFile(crash, filePaths);
         addLogcatFile(crash, filePaths);
@@ -124,11 +127,11 @@ public class CrashHelper extends ToolHelper{
                 if (crash.getRawLogcat() != null){
                     new LogHelper().solvePendingData(crash);
                 }
-
                 if (crash.getRawScreen() != null){
                     new ScreenHelper().solvePendingData(crash);
                 }
-                if (crash.getReportPath() != null){
+
+                if (crash.getReportPath() == null){
                     buildDetailReport(crash);
                 }
                 ThreadUtils.runOnUiThread(new Runnable() {
@@ -144,9 +147,7 @@ public class CrashHelper extends ToolHelper{
     private String buildDetailReport(Crash crash) {
 
         String report = parseToInfoGroup(crash).toString();
-        String filePath = FileUtils.createFileWithContent("crash",
-                "crash_detail" + crash.getDate() + ".txt",
-                report);
+        String filePath = DevToolsFiles.storeCrashDetail(crash, report);
         crash.setReportPath(filePath);
         DevTools.getDatabase().crashDao().update(crash);
 

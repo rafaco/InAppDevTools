@@ -1,4 +1,4 @@
-package es.rafaco.devtools.db;
+package es.rafaco.devtools.storage.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -6,14 +6,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.entities.Anr;
-import es.rafaco.devtools.db.entities.AnrDao;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.CrashDao;
-import es.rafaco.devtools.db.entities.Logcat;
-import es.rafaco.devtools.db.entities.LogcatDao;
-import es.rafaco.devtools.db.entities.Screen;
-import es.rafaco.devtools.db.entities.ScreenDao;
+import es.rafaco.devtools.storage.db.entities.Anr;
+import es.rafaco.devtools.storage.db.entities.AnrDao;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.CrashDao;
+import es.rafaco.devtools.storage.db.entities.Logcat;
+import es.rafaco.devtools.storage.db.entities.LogcatDao;
+import es.rafaco.devtools.storage.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.ScreenDao;
 
 @Database(version = 13, exportSchema = true,
         entities = {Crash.class,

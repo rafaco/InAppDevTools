@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
@@ -22,6 +22,7 @@ import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
 
+    private Crash crash;
     private AlertDialog alertDialog;
 
     @Override
@@ -31,7 +32,7 @@ public class CrashDialogActivity extends AppCompatActivity {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                final Crash crash = DevTools.getDatabase().crashDao().getLast();
+                crash = DevTools.getDatabase().crashDao().getLast();
                 new CrashHelper().solvePendingData(crash, new Runnable() {
                     @Override
                     public void run() {

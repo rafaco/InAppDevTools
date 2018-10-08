@@ -10,6 +10,7 @@ import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.entities.Screen;
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
+import es.rafaco.devtools.storage.files.FileProviderUtils;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;
@@ -226,7 +227,7 @@ public class DevTools {
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
             getAppContext().startService(intent);
         }
-        FileUtils.openFileExternally(getAppContext(), screen.getPath());
+        FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());
     }
 
     public static void sendReport(final ReportHelper.ReportType type, final Object param) {

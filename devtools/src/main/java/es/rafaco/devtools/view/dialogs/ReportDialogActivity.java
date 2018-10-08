@@ -31,9 +31,9 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.db.entities.Anr;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.storage.db.entities.Anr;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
@@ -176,7 +176,7 @@ public class ReportDialogActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(Intent.ACTION_PICK, screenFolderUri);
-        intent.setType("image/*"); //FileUtils.getMimeType(file)
+        intent.setType("image/*"); //FileCreator.getMimeType(file)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
 

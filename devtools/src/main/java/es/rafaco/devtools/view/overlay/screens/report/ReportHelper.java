@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.tools.ToolHelper;
-import es.rafaco.devtools.db.SqliteExporter;
+import es.rafaco.devtools.storage.db.SqliteExporter;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
@@ -38,7 +38,6 @@ public class ReportHelper extends ToolHelper{
     public void start(ReportType type, Object target) {
         this.type = type;
         this.target = target;
-
         boolean isHtml = false;
 
         EmailUtils.sendEmailIntent(context,
