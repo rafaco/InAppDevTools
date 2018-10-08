@@ -8,6 +8,8 @@ import android.widget.Toast;
 import es.rafaco.devtools.db.DevToolsDatabase;
 import es.rafaco.devtools.db.entities.Crash;
 import es.rafaco.devtools.db.entities.Screen;
+import es.rafaco.devtools.logic.shake.OnShakeListener;
+import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;
@@ -44,6 +46,7 @@ public class DevTools {
     private static ActivityLogManager activityLogManager;
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
+    private static ShakeDetector shakeDetector;
 
 
     //region [ PUBLIC INITIALIZATION ]
@@ -78,6 +81,8 @@ public class DevTools {
         if (config.anrLoggerEnabled) startAnrLogger();
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger(context);
+        //if (config.invocationByShake)
+            startShakeDetector(context);
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
@@ -122,6 +127,16 @@ public class DevTools {
         if (config.strictModeEnabled && BuildConfig.DEBUG) {
             AppUtils.startStrictMode();
         }
+    }
+
+    private static void startShakeDetector(Context context) {
+        shakeDetector = new ShakeDetector(getAppContext(),
+                new OnShakeListener() {
+                    @Override
+                    public void onShake() {
+                        openTools(false);
+                    }
+                });
     }
 
     private static void startActivityLogger(Context context) {
@@ -285,6 +300,10 @@ public class DevTools {
 
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
         getAppContext().startService(intent);
+    }
+
+    public static ShakeDetector getShakeDetector() {
+        return shakeDetector;
     }
 
     //endregion
