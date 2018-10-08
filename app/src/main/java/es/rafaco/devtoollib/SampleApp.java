@@ -2,9 +2,6 @@ package es.rafaco.devtoollib;
 
 import android.app.Application;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsConfig;
 
