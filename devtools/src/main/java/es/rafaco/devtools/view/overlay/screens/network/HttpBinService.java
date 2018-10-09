@@ -1,4 +1,4 @@
-package es.rafaco.devtoollib.api;
+package es.rafaco.devtools.view.overlay.screens.network;
 
 /*
  * Copyright (C) 2017 Jeff Gilfelt.
@@ -17,10 +17,11 @@ package es.rafaco.devtoollib.api;
  */
 //package com.readystatesoftware.chuck.sample;
 
-import android.content.Context;
-
+import es.rafaco.devtools.DevTools;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
@@ -33,7 +34,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public class SampleApiService {
+public class HttpBinService {
 
     public static HttpbinApi getInstance(OkHttpClient client) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -100,5 +101,40 @@ public class SampleApiService {
         Call<Void> cache(@Header("If-Modified-Since") String ifModifiedSince);
         @GET("/cache/{seconds}")
         Call<Void> cache(@Path("seconds") int seconds);
+    }
+
+    public static void simulation(OkHttpClient client) {
+        HttpBinService.HttpbinApi api = HttpBinService.getInstance(client);
+        Callback<Void> cb = new Callback<Void>() {
+            @Override public void onResponse(Call call, Response response) {}
+            @Override public void onFailure(Call call, Throwable t) { t.printStackTrace(); }
+        };
+        api.get().enqueue(cb);
+        api.post(new HttpBinService.Data("posted")).enqueue(cb);
+        api.patch(new HttpBinService.Data("patched")).enqueue(cb);
+        api.put(new HttpBinService.Data("put")).enqueue(cb);
+        api.delete().enqueue(cb);
+        api.status(201).enqueue(cb);
+        api.status(401).enqueue(cb);
+        api.status(500).enqueue(cb);
+        api.delay(9).enqueue(cb);
+        api.delay(15).enqueue(cb);
+        api.redirectTo("https://http2.akamai.com").enqueue(cb);
+        api.redirect(3).enqueue(cb);
+        api.redirectRelative(2).enqueue(cb);
+        api.redirectAbsolute(4).enqueue(cb);
+        api.stream(500).enqueue(cb);
+        api.streamBytes(2048).enqueue(cb);
+        api.image("image/png").enqueue(cb);
+        api.gzip().enqueue(cb);
+        api.xml().enqueue(cb);
+        api.utf8().enqueue(cb);
+        api.deflate().enqueue(cb);
+        api.cookieSet("v").enqueue(cb);
+        api.basicAuth("me", "pass").enqueue(cb);
+        api.drip(512, 5, 1, 200).enqueue(cb);
+        api.deny().enqueue(cb);
+        api.cache("Mon").enqueue(cb);
+        api.cache(30).enqueue(cb);
     }
 }

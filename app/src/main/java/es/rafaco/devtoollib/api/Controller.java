@@ -7,9 +7,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.readystatesoftware.chuck.ChuckInterceptor;
 
-import okhttp3.OkHttpClient;
+import es.rafaco.devtools.DevTools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,14 +24,10 @@ public class Controller implements Callback<List<Change>> {
                 .setLenient()
                 .create();
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new ChuckInterceptor(context))
-                .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(client)
+                .client(DevTools.getOkHttpClient())
                 .build();
 
         GerritAPI gerritAPI = retrofit.create(GerritAPI.class);

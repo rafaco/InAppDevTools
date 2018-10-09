@@ -2,8 +2,10 @@ package es.rafaco.devtools;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+import com.readystatesoftware.chuck.ChuckInterceptor;
 
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
@@ -14,6 +16,7 @@ import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;
 import es.rafaco.devtools.tools.InfoTool;
 import es.rafaco.devtools.tools.LogTool;
+import es.rafaco.devtools.tools.NetworkTool;
 import es.rafaco.devtools.tools.ReportTool;
 import es.rafaco.devtools.tools.ScreenTool;
 import es.rafaco.devtools.tools.ToolManager;
@@ -33,6 +36,9 @@ import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class DevTools {
 
@@ -67,6 +73,7 @@ public class DevTools {
         //TODO: adapt with config Profiles
         toolManager.registerTool(HomeTool.class);
         toolManager.registerTool(InfoTool.class);
+        toolManager.registerTool(NetworkTool.class);
         toolManager.registerTool(ErrorsTool.class);
         toolManager.registerTool(LogTool.class);
         toolManager.registerTool(CommandsTool.class);
@@ -164,6 +171,18 @@ public class DevTools {
         return DevToolsDatabase.getInstance();
     }
 
+    @NonNull
+    public static OkHttpClient getOkHttpClient() {
+        ChuckInterceptor httpGrabberInterceptor = new ChuckInterceptor(getAppContext());
+        httpGrabberInterceptor.showNotification(false);
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(httpGrabberInterceptor)
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
+        return client;
+    }
     //endregion
 
     //region [ PUBLIC ACTIONS ]
