@@ -3,13 +3,15 @@ package es.rafaco.devtools;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.Gravity;
 
-import es.rafaco.devtools.db.DevToolsDatabase;
-import es.rafaco.devtools.db.entities.Crash;
-import es.rafaco.devtools.db.entities.Screen;
+import com.valdesekamdem.library.mdtoast.MDToast;
+
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
+import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
+import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.storage.files.FileProviderUtils;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
@@ -25,7 +27,6 @@ import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.logic.utils.FileUtils;
 import es.rafaco.devtools.view.dialogs.CrashDialogActivity;
 import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
@@ -36,6 +37,7 @@ import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.utils.CustomToast;
 
 public class DevTools {
 
@@ -188,25 +190,17 @@ public class DevTools {
         showMessage(getAppContext().getResources().getString(stringId));
     }
 
-    private static void showError(final String text) {
-        Log.e(DevTools.TAG, "ERROR: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "ERROR: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public static void showMessage(final String text) {
         Log.i(DevTools.TAG, "INFO: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "INFO: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_INFO);
     }
+
+    private static void showError(final String text) {
+        Log.e(DevTools.TAG, "ERROR: " + text);
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_ERROR);
+    }
+
+
 
     public static void takeScreenshot() {
 

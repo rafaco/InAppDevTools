@@ -89,6 +89,8 @@ public class ScreensScreen extends OverlayScreen {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        adapter.setRecycledView(recyclerView);
         recyclerView.setAdapter(adapter);
     }
 

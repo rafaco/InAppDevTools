@@ -14,16 +14,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.valdesekamdem.library.mdtoast.MDToast;
+
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.utils.CustomToast;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
 
     private Context mContext;
     private List<Screen> screenList;
+    private RecyclerView recycledView;
 
     public ScreenAdapter(Context mContext, List<Screen> screenList) {
         this.mContext = mContext;
@@ -145,13 +151,14 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
         public boolean onMenuItemClick(MenuItem menuItem) {
             int i = menuItem.getItemId();
             if (i == R.id.action_preview) {
-                Toast.makeText(mContext, "Preview", Toast.LENGTH_SHORT).show();
+                DevTools.showMessage("Preview");
                 return true;
             } else if (i == R.id.action_open) {
-                Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
+                CustomToast.show(recycledView.getContext(), "Open", CustomToast.TYPE_WARNING);
+
                 return true;
             } else if (i == R.id.action_delete) {
-                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
+                DevTools.showMessage("Delete");
                 return true;
             }
             return false;
@@ -159,4 +166,8 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
     }
 
     //endregion
+
+    public void setRecycledView(RecyclerView view){
+        recycledView = view;
+    }
 }
