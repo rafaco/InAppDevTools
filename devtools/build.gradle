@@ -46,6 +46,8 @@ dependencies {
     implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.readystatesoftware.chuck:library:1.1.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
 
     implementation 'com.valdesekamdem.library:md-toast:0.9.0'
 

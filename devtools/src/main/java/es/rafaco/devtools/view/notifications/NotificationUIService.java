@@ -39,6 +39,9 @@ public class NotificationUIService extends Service {
     public static final String ACTION_TOOLS = "ACTION_TOOLS";
     public static final String ACTION_DISMISS = "ACTION_DISMISS";
 
+    String testerText = "Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.";
+    String developerText = "Inspect your running app on the go and report your findings for further analysis";
+
     public NotificationUIService() {
     }
 
@@ -130,8 +133,8 @@ public class NotificationUIService extends Service {
         InfoHelper infoHelper = new InfoHelper();
         String title, subTitle;
         if (crash == null){
-            title = infoHelper.getFormattedAppName();
-            subTitle = "Expand me for options...";
+            title = infoHelper.getFormattedModeAndVersion();
+            subTitle = developerText;
         }else{
             title = String.format("Ups, %s crashed", infoHelper.getAppName());
             subTitle = "Expand me for options...";
@@ -161,16 +164,17 @@ public class NotificationUIService extends Service {
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(title);
-        bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
+        bigTextStyle.bigText(developerText);
         builder.setStyle(bigTextStyle);
+
+        builder.addAction(buildAction(ACTION_TOOLS));
+        builder.addAction(buildAction(ACTION_REPORT));
 
         if (crash == null)
             builder.addAction(buildAction(ACTION_SCREEN));
         else
             builder.addAction(buildAction(ACTION_DISMISS));
 
-        builder.addAction(buildAction(ACTION_REPORT));
-        builder.addAction(buildAction(ACTION_TOOLS));
 
         if (crash == null)
             builder.addAction(buildAction(ACTION_CLEAN));
@@ -179,6 +183,7 @@ public class NotificationUIService extends Service {
         return builder.build();
     }
 
+    //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
@@ -220,7 +225,7 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "SCREEN";
+                title = "TAKE SCREEN";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
             case ACTION_REPORT:
@@ -233,7 +238,7 @@ public class NotificationUIService extends Service {
                 break;
             case ACTION_TOOLS:
             default:
-                title = "<TOOLS>";
+                title = "INSPECT";
                 icon = R.drawable.ic_more_vert_rally_24dp;
                 break;
         }

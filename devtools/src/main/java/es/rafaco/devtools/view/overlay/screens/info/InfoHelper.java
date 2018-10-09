@@ -370,6 +370,13 @@ public class InfoHelper extends ToolHelper {
         return String.format("%s %s %s", getAppName(), environment, version);
     }
 
+    public String getFormattedModeAndVersion() {
+        PackageInfo packageInfo = getPackageInfo();
+        String mode = "Developer"; //TODO: Environment selector propagation
+        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+        return String.format("%s version %s", mode, version);
+    }
+
     private String getFormattedDevice() {
         return String.format("%s %s %s", Build.BRAND, Build.MODEL, isVirtual()? "Emulated!" : "");
     }
