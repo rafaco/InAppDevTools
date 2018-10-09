@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 import com.readystatesoftware.chuck.ChuckInterceptor;
 
+import es.rafaco.devtools.logic.shake.OnShakeListener;
+import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
@@ -36,9 +37,9 @@ import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import es.rafaco.devtools.view.utils.CustomToast;
 
 public class DevTools {
 
@@ -50,6 +51,7 @@ public class DevTools {
     private static ActivityLogManager activityLogManager;
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
+    private static ShakeDetector shakeDetector;
 
 
     //region [ PUBLIC INITIALIZATION ]
@@ -85,6 +87,8 @@ public class DevTools {
         if (config.anrLoggerEnabled) startAnrLogger();
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger(context);
+        //if (config.invocationByShake)
+            startShakeDetector(context);
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
@@ -131,6 +135,16 @@ public class DevTools {
         }
     }
 
+    private static void startShakeDetector(Context context) {
+        shakeDetector = new ShakeDetector(getAppContext(),
+                new OnShakeListener() {
+                    @Override
+                    public void onShake() {
+                        openTools(false);
+                    }
+                });
+    }
+
     private static void startActivityLogger(Context context) {
         activityLogManager = new ActivityLogManager(context);
     }
@@ -173,6 +187,7 @@ public class DevTools {
 
     @NonNull
     public static OkHttpClient getOkHttpClient() {
+        //TODO: relocate an create a unique interceptor, and a method to return it
         ChuckInterceptor httpGrabberInterceptor = new ChuckInterceptor(getAppContext());
         httpGrabberInterceptor.showNotification(false);
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
@@ -191,25 +206,17 @@ public class DevTools {
         showMessage(getAppContext().getResources().getString(stringId));
     }
 
-    private static void showError(final String text) {
-        Log.e(DevTools.TAG, "ERROR: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "ERROR: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public static void showMessage(final String text) {
         Log.i(DevTools.TAG, "INFO: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "INFO: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_INFO);
     }
+
+    private static void showError(final String text) {
+        Log.e(DevTools.TAG, "ERROR: " + text);
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_ERROR);
+    }
+
+
 
     public static void takeScreenshot() {
 
@@ -303,6 +310,10 @@ public class DevTools {
 
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
         getAppContext().startService(intent);
+    }
+
+    public static ShakeDetector getShakeDetector() {
+        return shakeDetector;
     }
 
     //endregion

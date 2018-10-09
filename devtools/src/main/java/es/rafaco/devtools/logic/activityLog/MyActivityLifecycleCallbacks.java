@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,15 +13,19 @@ import android.widget.FrameLayout;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.shake.ShakeDetector;
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
     private final ActivityLogManager manager;
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
 
     public MyActivityLifecycleCallbacks(ActivityLogManager manager) {
         this.manager = manager;
@@ -52,20 +57,12 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " resumed\n");
         manager.setLastActivityResumed(activity.getClass().getSimpleName());
 
-        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
-        if (decorView == null){
-            Log.d(DevTools.TAG, "Resumed activity without decorView");
-            return;
-        }
-        decorView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.d(DevTools.TAG, "Click X:" + event.getX() + " Y:" + event.getY() + " at " + activity.getClass().getSimpleName() +
-                    " - " + v.getClass().getSimpleName() + ": " + getResourceName(v, activity));
-                return false;
-            }
-        });
+        updateBackgroundStateOnActivityResumed();
+
+        addShakeListener();
+        addTouchListener(activity);
     }
+
 
     private String getResourceName(View v, Activity activity) {
         try{
@@ -79,12 +76,9 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     public void onActivityPaused(Activity activity) {
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
 
-        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
-        if (decorView == null){
-            Log.d(DevTools.TAG, "Paused activity without decorView");
-            return;
-        }
-        decorView.setOnTouchListener(null);
+        updateBackgroundStateOnActivityPaused();
+        removeShakeListener();
+        removeTouchListener(activity);
     }
 
     @Override
@@ -103,4 +97,129 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     public void onActivityDestroyed(Activity activity) {
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " destroyed\n");
     }
+
+
+    //region [ TOUCH LISTENER ]
+
+    private void addTouchListener(final Activity activity) {
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        if (decorView == null){
+            Log.d(DevTools.TAG, "Resumed activity without decorView");
+            return;
+        }
+        decorView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(DevTools.TAG, "Click X:" + event.getX() + " Y:" + event.getY() + " at " + activity.getClass().getSimpleName() +
+                        " - " + v.getClass().getSimpleName() + ": " + getResourceName(v, activity));
+                return false;
+            }
+        });
+    }
+
+    private void removeTouchListener(Activity activity) {
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        if (decorView == null){
+            Log.d(DevTools.TAG, "Paused activity without decorView");
+            return;
+        }
+        decorView.setOnTouchListener(null);
+    }
+
+    //endregion
+
+    //region [ SHAKE LISTENER ]
+
+    private void addShakeListener() {
+        ShakeDetector detector = DevTools.getShakeDetector();
+        if (detector!=null){
+            detector.registerSensorListener();
+        }
+    }
+
+    private void removeShakeListener() {
+        ShakeDetector detector = DevTools.getShakeDetector();
+        if (detector!=null){
+            detector.unRegisterSensorListener();
+        }
+    }
+
+    //endregion
+
+
+    //region [ BACKGROUND STATE ]
+
+    private boolean mInBackground = true;
+    private static final long BACKGROUND_DELAY = 500;
+    private final List<BackgroundStateListener> listeners = new ArrayList<>();
+    private final Handler mBackgroundDelayHandler = new Handler();
+    private Runnable mBackgroundTransition;
+
+    public interface BackgroundStateListener {
+        void onBecameForeground();
+
+        void onBecameBackground();
+    }
+
+    public void registerListener(BackgroundStateListener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregisterListener(BackgroundStateListener listener) {
+        listeners.remove(listener);
+    }
+
+    public boolean isInBackground() {
+        return mInBackground;
+    }
+
+    private void updateBackgroundStateOnActivityResumed() {
+        if (mBackgroundTransition != null) {
+            mBackgroundDelayHandler.removeCallbacks(mBackgroundTransition);
+            mBackgroundTransition = null;
+        }
+
+        if (mInBackground) {
+            mInBackground = false;
+            notifyOnBecameForeground();
+            Log.d(DevTools.TAG,  "Application went to foreground");
+        }
+    }
+
+    private void updateBackgroundStateOnActivityPaused() {
+        if (!mInBackground && mBackgroundTransition == null) {
+            mBackgroundTransition = new Runnable() {
+                @Override
+                public void run() {
+                    mInBackground = true;
+                    mBackgroundTransition = null;
+                    notifyOnBecameBackground();
+                    Log.d(DevTools.TAG, "Application went to background");
+                }
+            };
+            mBackgroundDelayHandler.postDelayed(mBackgroundTransition, BACKGROUND_DELAY);
+        }
+    }
+
+    private void notifyOnBecameForeground() {
+        for (BackgroundStateListener listener : listeners) {
+            try {
+                listener.onBecameForeground();
+            } catch (Exception e) {
+                Log.d(DevTools.TAG, "Listener threw exception!", e);
+            }
+        }
+    }
+
+    private void notifyOnBecameBackground() {
+        for (BackgroundStateListener listener : listeners) {
+            try {
+                listener.onBecameBackground();
+            } catch (Exception e) {
+                Log.d(DevTools.TAG, "Listener threw exception!", e);
+            }
+        }
+    }
+
+    //endregion
 }

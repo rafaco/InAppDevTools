@@ -145,7 +145,7 @@ public class NotificationUIService extends Service {
                 .setOnlyAlertOnce(true)
                 .setSmallIcon(R.drawable.ic_bug_report_rally_24dp)
                 .setLargeIcon(largeIconBitmap)
-                .setColorized(true)
+                .setColorized(false)
                 //.setFullScreenIntent(pendingIntent, true)
                 .setContentTitle(title) //Collapsed Main
                 .setContentText(subTitle)   //Collapsed Second

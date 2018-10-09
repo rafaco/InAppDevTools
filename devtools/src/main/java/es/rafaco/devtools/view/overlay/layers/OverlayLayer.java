@@ -47,7 +47,7 @@ public abstract class OverlayLayer {
         manager.getWindowManager().removeView(getView());
     }
 
-    protected int getLayoutType(){
+    public static int getLayoutType(){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return WindowManager.LayoutParams.TYPE_PHONE;
         }
