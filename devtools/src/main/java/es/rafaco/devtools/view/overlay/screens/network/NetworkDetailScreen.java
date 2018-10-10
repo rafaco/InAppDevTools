@@ -43,7 +43,7 @@ public class NetworkDetailScreen extends OverlayScreen {
 
     @Override
     public String getTitle() {
-        return "Anr detail";
+        return "Network detail";
     }
 
     @Override
@@ -71,22 +71,11 @@ public class NetworkDetailScreen extends OverlayScreen {
         viewPager = bodyView.findViewById(R.id.viewpager);
         tabLayout = bodyView.findViewById(R.id.sliding_tabs);
 
-
-        populateUI();
-
         if (!TextUtils.isEmpty(getParam())){
             final long transactionId = Long.parseLong(getParam());
-
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //TODO
-
-                    //Cursor cursor = getContext().getContentResolver().query(ContentUris.withAppendedId(ChuckContentProvider.TRANSACTION_URI, transactionId), null, null, null, null);
-                    //transaction = LocalCupboard.getInstance().withCursor(cursor).get(HttpTransaction.class);
-
-                }
-            });
+            Cursor cursor = getContext().getContentResolver().query(ContentUris.withAppendedId(ChuckContentProvider.TRANSACTION_URI, transactionId), null, null, null, null);
+            transaction = LocalCupboard.getInstance().withCursor(cursor).get(HttpTransaction.class);
+            populateUI();
         }
     }
 

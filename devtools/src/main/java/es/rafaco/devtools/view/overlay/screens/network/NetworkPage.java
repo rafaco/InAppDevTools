@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
@@ -13,9 +14,9 @@ import es.rafaco.devtools.R;
 
 public enum NetworkPage {
 
-    DETAIL("OVERVIEW", R.layout.chuck_fragment_transaction_overview),
-    REQUEST("REQUEST", R.layout.chuck_fragment_transaction_payload),
-    RESPONSE("RESPONSE", R.layout.chuck_fragment_transaction_payload);
+    DETAIL("OVERVIEW", R.layout.tool_network_detail_overview),
+    REQUEST("REQUEST", R.layout.tool_network_detail_payload),
+    RESPONSE("RESPONSE", R.layout.tool_network_detail_payload);
 
     private String mTitle;
     private int mLayoutResId;
@@ -47,7 +48,8 @@ public enum NetworkPage {
     }
 
     public interface TransactionViewHolder{
-        View onCreatedView(View view);
+        View getContentView();
+        View onCreatedView(ViewGroup view);
         void populateUI(HttpTransaction transaction);
     }
 
@@ -64,10 +66,17 @@ public enum NetworkPage {
         TextView requestSize;
         TextView responseSize;
         TextView totalSize;
+        private View contentView;
+
+        @Override
+        public View getContentView() {
+            return contentView;
+        }
 
         @SuppressLint("WrongViewCast")
         @Override
-        public View onCreatedView(View view){
+        public View onCreatedView(ViewGroup view){
+            contentView = view.findViewById(R.id.content);
             url = (TextView) view.findViewById(com.readystatesoftware.chuck.R.id.url);
             method = (TextView) view.findViewById(com.readystatesoftware.chuck.R.id.method);
             protocol = (TextView) view.findViewById(com.readystatesoftware.chuck.R.id.protocol);
@@ -108,9 +117,9 @@ public enum NetworkPage {
 
         private static final String ARG_TYPE = "type";
 
+        private View contentView;
         TextView headers;
         TextView body;
-
         private int type;
 
         public TransactionPayloadViewHolder(int type) {
@@ -118,7 +127,12 @@ public enum NetworkPage {
         }
 
         @Override
-        public View onCreatedView(View view) {
+        public View getContentView() {
+            return contentView;
+        }
+        @Override
+        public View onCreatedView(ViewGroup view) {
+            contentView = view.findViewById(R.id.content);
             headers = (TextView) view.findViewById(com.readystatesoftware.chuck.R.id.headers);
             body = (TextView) view.findViewById(com.readystatesoftware.chuck.R.id.body);
             return view;        }
