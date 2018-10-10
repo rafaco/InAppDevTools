@@ -1,4 +1,4 @@
-package es.rafaco.devtools.view.overlay.screens.network;
+package es.rafaco.devtools.view.overlay.screens.network.detail;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

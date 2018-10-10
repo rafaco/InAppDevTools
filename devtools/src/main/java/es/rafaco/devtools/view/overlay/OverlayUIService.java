@@ -21,7 +21,7 @@ import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
-import es.rafaco.devtools.view.overlay.screens.network.NetworkDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;

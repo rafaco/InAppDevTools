@@ -16,6 +16,7 @@ import com.readystatesoftware.chuck.internal.data.LocalCupboard;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
+import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
 
 /**
  * Created by skyfishjy on 10/31/14.
