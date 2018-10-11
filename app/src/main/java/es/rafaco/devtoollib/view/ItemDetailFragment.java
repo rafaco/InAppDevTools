@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.dummy.DummyContent;
+import es.rafaco.devtools.DevTools;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -63,8 +64,11 @@ public class ItemDetailFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
+            DevTools.breackpoint(mItem);
         }
 
         return rootView;
     }
+
+
 }

@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         controller.start(getApplicationContext());
 
         Log.d(SampleApp.TAG, "MainActivity onCreate() performed");
+        DevTools.breackpoint(this);
     }
 
     @Override

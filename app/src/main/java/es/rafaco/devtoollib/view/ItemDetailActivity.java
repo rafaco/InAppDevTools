@@ -12,6 +12,8 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import es.rafaco.devtoollib.R;
+import es.rafaco.devtoollib.dummy.DummyContent;
+import es.rafaco.devtools.DevTools;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -34,6 +36,8 @@ public class ItemDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
+                DevTools.breackpoint(mItem);
             }
         });
 

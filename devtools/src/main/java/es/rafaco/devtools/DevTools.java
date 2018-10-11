@@ -4,7 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.readystatesoftware.chuck.ChuckInterceptor;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
@@ -317,4 +323,10 @@ public class DevTools {
     }
 
     //endregion
+
+    public static void breackpoint(Object caller){
+        String result = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
+        //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
+        showMessage("Breackpoint: " + result);
+    }
 }
