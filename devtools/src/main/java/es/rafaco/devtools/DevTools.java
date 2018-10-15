@@ -54,8 +54,14 @@ public class DevTools {
     }
 
     public static void install(Context context, DevToolsConfig config) {
+
         if (config == null || !config.enabled){
             Log.w(DevTools.TAG, "DevTools initialization skipped.");
+            return;
+        }
+
+        if (appContext != null){
+            Log.w(DevTools.TAG, "DevTools already initialize.");
             return;
         }
 

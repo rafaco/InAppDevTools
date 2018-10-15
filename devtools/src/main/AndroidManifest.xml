@@ -7,6 +7,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application>
+
+        <provider
+            android:authorities="${applicationId}.devtoolsinitprovider"
+            android:exported="false"
+            android:enabled="true"
+            android:name=".DevToolsInitProvider" />
+
         <activity
             android:name=".view.activities.PermissionActivity"
             android:theme="@style/LibTheme.Dialog" />
