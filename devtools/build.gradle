@@ -44,6 +44,11 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.2'
     implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
 
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    debugImplementation 'com.github.whataa:pandora:v1.2.0'
+    releaseImplementation 'com.github.whataa:pandora-no-op:v1.2.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

@@ -16,6 +16,7 @@ import es.rafaco.devtools.tools.InfoTool;
 import es.rafaco.devtools.tools.LogTool;
 import es.rafaco.devtools.tools.ReportTool;
 import es.rafaco.devtools.tools.ScreenTool;
+import es.rafaco.devtools.tools.StorageTool;
 import es.rafaco.devtools.tools.ToolManager;
 import es.rafaco.devtools.logic.utils.FirstStartUtil;
 import es.rafaco.devtools.view.activities.PermissionActivity;
@@ -72,6 +73,7 @@ public class DevTools {
         toolManager.registerTool(CommandsTool.class);
         toolManager.registerTool(ScreenTool.class);
         toolManager.registerTool(ReportTool.class);
+        toolManager.registerTool(StorageTool.class);
 
 
         if (config.crashHandlerEnabled) startCrashHandler(context);

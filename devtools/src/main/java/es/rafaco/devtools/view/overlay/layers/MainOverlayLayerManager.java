@@ -218,6 +218,10 @@ public class MainOverlayLayerManager {
         updateToolbarTitle();
     }
 
+    public void setTitle(String title){
+        getMainLayer().setToolbarTitle(title);
+    }
+
     private void updateToolbarTitle() {
         getMainLayer().setToolbarTitle(loadedScreen.getTitle());
     }

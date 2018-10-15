@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/db_list_item_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:background="@color/rally_bg_solid"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:background="@color/rally_bg_solid">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@color/rally_bg_solid">
+
+        <TextView
+            android:id="@+id/common_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/rally_white"
+            android:textSize="14dp"
+            tools:text="123123123123123123123123123123123123" />
+
+        <TextView
+            android:layout_marginTop="2dp"
+            android:id="@+id/common_item_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/rally_white"
+            android:textSize="11dp"
+            tools:text="123" />
+    </LinearLayout>
+
+    <TextView
+        android:textColor="@color/rally_white"
+        tools:text="123"
+        android:textSize="14dp"
+        android:drawablePadding="4dp"
+        android:id="@+id/common_item_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:drawableRight="@drawable/pd_right" />
+</LinearLayout>

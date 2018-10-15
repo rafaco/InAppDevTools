@@ -23,6 +23,12 @@ import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.DatabaseScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.FileScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.FolderScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.SharedPrefsScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.StorageScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.TableScreen;
 
 
 public class OverlayUIService extends Service {
@@ -192,6 +198,13 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(ReportScreen.class);
         mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);
         mainOverlayLayerManager.registerScreen(AnrDetailScreen.class);
+
+        mainOverlayLayerManager.registerScreen(StorageScreen.class);
+        mainOverlayLayerManager.registerScreen(DatabaseScreen.class);
+        mainOverlayLayerManager.registerScreen(TableScreen.class);
+        mainOverlayLayerManager.registerScreen(SharedPrefsScreen.class);
+        mainOverlayLayerManager.registerScreen(FolderScreen.class);
+        mainOverlayLayerManager.registerScreen(FileScreen.class);
 
         //navigateTo("Home");
     }
