@@ -20,4 +20,5 @@
     <dimen name="card_overflow_margin_top">10dp</dimen>
 
     <dimen name="overlay_dialog_margin">7dp</dimen>
+    <dimen name="toast_y_offset">24dp</dimen>
 </resources>

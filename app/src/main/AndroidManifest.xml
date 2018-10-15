@@ -12,17 +12,32 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.ItemListActivity"
+            android:label="@string/title_item_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".view.ItemDetailActivity"
+            android:label="@string/title_item_detail"
+            android:parentActivityName=".view.ItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.rafaco.devtoollib.view.ItemListActivity" />
         </activity>
 
         <meta-data android:name="devtools_auto_init_enabled" android:value="false" />
 
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

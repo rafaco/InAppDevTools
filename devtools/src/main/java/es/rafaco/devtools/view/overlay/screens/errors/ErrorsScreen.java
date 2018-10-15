@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +52,6 @@ public class ErrorsScreen extends OverlayScreen {
     private InvalidationTracker.Observer anrObserver;
     private InvalidationTracker.Observer crashObserver;
     private InvalidationTracker tracker;
-    private Toolbar toolbar;
     private TextView emptyView;
 
     public ErrorsScreen(MainOverlayLayerManager manager) {
@@ -259,6 +259,8 @@ public class ErrorsScreen extends OverlayScreen {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         emptyView = getView().findViewById(R.id.empty_errors_list);

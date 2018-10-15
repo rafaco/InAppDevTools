@@ -21,6 +21,8 @@ import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
+import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 import es.rafaco.devtools.view.overlay.screens.storage.DatabaseScreen;
@@ -107,7 +109,7 @@ public class OverlayUIService extends Service {
 
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
-
+        
         if (!isInitialised(action, property))
             return;
 
@@ -191,6 +193,7 @@ public class OverlayUIService extends Service {
         //TODO: delegate to ToolManager or delete
         mainOverlayLayerManager.registerScreen(HomeScreen.class);
         mainOverlayLayerManager.registerScreen(InfoScreen.class);
+        mainOverlayLayerManager.registerScreen(NetworkScreen.class);
         mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
         mainOverlayLayerManager.registerScreen(LogScreen.class);
         mainOverlayLayerManager.registerScreen(CommandsScreen.class);
@@ -198,6 +201,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(ReportScreen.class);
         mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);
         mainOverlayLayerManager.registerScreen(AnrDetailScreen.class);
+        mainOverlayLayerManager.registerScreen(NetworkDetailScreen.class);
 
         mainOverlayLayerManager.registerScreen(StorageScreen.class);
         mainOverlayLayerManager.registerScreen(DatabaseScreen.class);

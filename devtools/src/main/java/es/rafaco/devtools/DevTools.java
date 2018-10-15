@@ -2,9 +2,18 @@ package es.rafaco.devtools;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.readystatesoftware.chuck.ChuckInterceptor;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import es.rafaco.devtools.logic.shake.OnShakeListener;
+import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
@@ -14,6 +23,7 @@ import es.rafaco.devtools.tools.ErrorsTool;
 import es.rafaco.devtools.tools.HomeTool;
 import es.rafaco.devtools.tools.InfoTool;
 import es.rafaco.devtools.tools.LogTool;
+import es.rafaco.devtools.tools.NetworkTool;
 import es.rafaco.devtools.tools.ReportTool;
 import es.rafaco.devtools.tools.ScreenTool;
 import es.rafaco.devtools.tools.StorageTool;
@@ -34,6 +44,9 @@ import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import es.rafaco.devtools.view.utils.CustomToast;
 
 public class DevTools {
 
@@ -45,6 +58,7 @@ public class DevTools {
     private static ActivityLogManager activityLogManager;
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
+    private static ShakeDetector shakeDetector;
 
 
     //region [ PUBLIC INITIALIZATION ]
@@ -74,6 +88,7 @@ public class DevTools {
         //TODO: adapt with config Profiles
         toolManager.registerTool(HomeTool.class);
         toolManager.registerTool(InfoTool.class);
+        toolManager.registerTool(NetworkTool.class);
         toolManager.registerTool(ErrorsTool.class);
         toolManager.registerTool(LogTool.class);
         toolManager.registerTool(CommandsTool.class);
@@ -86,6 +101,8 @@ public class DevTools {
         if (config.anrLoggerEnabled) startAnrLogger();
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger(context);
+        //if (config.invocationByShake)
+            startShakeDetector(context);
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
@@ -132,6 +149,16 @@ public class DevTools {
         }
     }
 
+    private static void startShakeDetector(Context context) {
+        shakeDetector = new ShakeDetector(getAppContext(),
+                new OnShakeListener() {
+                    @Override
+                    public void onShake() {
+                        openTools(false);
+                    }
+                });
+    }
+
     private static void startActivityLogger(Context context) {
         activityLogManager = new ActivityLogManager(context);
     }
@@ -172,6 +199,19 @@ public class DevTools {
         return DevToolsDatabase.getInstance();
     }
 
+    @NonNull
+    public static OkHttpClient getOkHttpClient() {
+        //TODO: relocate an create a unique interceptor, and a method to return it
+        ChuckInterceptor httpGrabberInterceptor = new ChuckInterceptor(getAppContext());
+        httpGrabberInterceptor.showNotification(false);
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(httpGrabberInterceptor)
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
+        return client;
+    }
     //endregion
 
     //region [ PUBLIC ACTIONS ]
@@ -180,25 +220,17 @@ public class DevTools {
         showMessage(getAppContext().getResources().getString(stringId));
     }
 
-    private static void showError(final String text) {
-        Log.e(DevTools.TAG, "ERROR: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "ERROR: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public static void showMessage(final String text) {
         Log.i(DevTools.TAG, "INFO: " + text);
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getAppContext(), "INFO: " + text, Toast.LENGTH_LONG).show();
-            }
-        });
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_INFO);
     }
+
+    private static void showError(final String text) {
+        Log.e(DevTools.TAG, "ERROR: " + text);
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_ERROR);
+    }
+
+
 
     public static void takeScreenshot() {
 
@@ -294,5 +326,15 @@ public class DevTools {
         getAppContext().startService(intent);
     }
 
+    public static ShakeDetector getShakeDetector() {
+        return shakeDetector;
+    }
+
     //endregion
+
+    public static void breackpoint(Object caller){
+        String result = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
+        //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
+        showMessage("Breackpoint: " + result);
+    }
 }
