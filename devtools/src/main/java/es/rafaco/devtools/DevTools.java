@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.readystatesoftware.chuck.ChuckInterceptor;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -88,13 +86,13 @@ public class DevTools {
         //TODO: adapt with config Profiles
         toolManager.registerTool(HomeTool.class);
         toolManager.registerTool(InfoTool.class);
-        toolManager.registerTool(NetworkTool.class);
-        toolManager.registerTool(ErrorsTool.class);
-        toolManager.registerTool(LogTool.class);
         toolManager.registerTool(CommandsTool.class);
+        toolManager.registerTool(NetworkTool.class);
+        toolManager.registerTool(StorageTool.class);
+        toolManager.registerTool(LogTool.class);
+        toolManager.registerTool(ErrorsTool.class);
         toolManager.registerTool(ScreenTool.class);
         toolManager.registerTool(ReportTool.class);
-        toolManager.registerTool(StorageTool.class);
 
 
         if (config.crashHandlerEnabled) startCrashHandler(context);

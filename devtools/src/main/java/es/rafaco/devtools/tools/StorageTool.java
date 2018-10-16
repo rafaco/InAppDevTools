@@ -29,7 +29,7 @@ public class StorageTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(StorageScreen.class, null);
         DecoratedToolInfo info = new DecoratedToolInfo(
-                "Inspect Storage",
+                "Inspect Local Storage",
                 "Databases, SharedPrefs and filesystem.",
                 R.color.rally_blue_med,
                 4,

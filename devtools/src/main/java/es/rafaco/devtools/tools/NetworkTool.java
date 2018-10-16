@@ -36,8 +36,8 @@ public class NetworkTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(NetworkScreen.class, null);
         DecoratedToolInfo info = new DecoratedToolInfo(
-                "Network log",
-                "Intercepting Retrofit traffic",
+                "Inspect Network",
+                "Retrofit interceptor enabled",
                 R.color.rally_purple,
                 4,
                 step);

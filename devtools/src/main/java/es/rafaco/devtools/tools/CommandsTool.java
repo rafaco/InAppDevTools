@@ -26,7 +26,7 @@ public class CommandsTool extends Tool {
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(CommandsScreen.class, null);
         DecoratedToolInfo info = new DecoratedToolInfo(
-                "Commands",
+                "Run Commands",
                 "Type shell commands, run a predefined ones or configure your owns.",
                 R.color.rally_white,
                 4,
