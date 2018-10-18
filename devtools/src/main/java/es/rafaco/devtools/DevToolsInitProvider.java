@@ -9,6 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
+
+import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
+
 
 public class DevToolsInitProvider extends ContentProvider {
 
@@ -19,8 +24,9 @@ public class DevToolsInitProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        boolean enabled = getMetadata().getBoolean(META_DATA_KEY, true);
+        FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "Application started");
 
+        boolean enabled = getMetadata().getBoolean(META_DATA_KEY, true);
         if(enabled){
             DevTools.install(getContext());
         }

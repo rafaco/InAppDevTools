@@ -16,6 +16,7 @@ import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
@@ -195,6 +196,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(InfoScreen.class);
         mainOverlayLayerManager.registerScreen(NetworkScreen.class);
         mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
+        mainOverlayLayerManager.registerScreen(FriendlyLogScreen.class);
         mainOverlayLayerManager.registerScreen(LogScreen.class);
         mainOverlayLayerManager.registerScreen(CommandsScreen.class);
         mainOverlayLayerManager.registerScreen(ScreensScreen.class);

@@ -10,16 +10,20 @@ import es.rafaco.devtools.storage.db.entities.Anr;
 import es.rafaco.devtools.storage.db.entities.AnrDao;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.CrashDao;
+import es.rafaco.devtools.storage.db.entities.Friendly;
+import es.rafaco.devtools.storage.db.entities.FriendlyDao;
 import es.rafaco.devtools.storage.db.entities.Logcat;
 import es.rafaco.devtools.storage.db.entities.LogcatDao;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.storage.db.entities.ScreenDao;
 
-@Database(version = 13, exportSchema = true,
+@Database(version = 15, exportSchema = true,
         entities = {Crash.class,
                     Anr.class,
                     Screen.class,
-                    Logcat.class})
+                    Logcat.class,
+                    Friendly.class,
+        })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "DevToolsDB";
@@ -47,6 +51,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract AnrDao anrDao();
     public abstract ScreenDao screenDao();
     public abstract LogcatDao logcatDao();
+    public abstract FriendlyDao friendlyDao();
     //endregion
 
     public void printOverview(){
@@ -57,10 +62,12 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         String overview = "";
         String jump = "\n\t";
         overview +="DevTools DB overview: " + jump;
-        overview +="  Crash: " + crashDao().count() + jump;
-        overview +="  Anr: " + anrDao().count() + jump;
-        overview +="  Screen: " + screenDao().count() + jump;
+        overview +="  FriendlyLog: " + friendlyDao().count() + jump;
         overview +="  Logcat: " + logcatDao().count() + jump;
+        overview +="  Screen: " + screenDao().count() + jump;
+        overview +="  Anr: " + anrDao().count() + jump;
+        overview +="  Crash: " + crashDao().count() + jump;
+
         return overview;
     }
 }

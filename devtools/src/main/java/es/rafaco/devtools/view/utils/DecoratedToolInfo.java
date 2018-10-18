@@ -6,6 +6,7 @@ public class DecoratedToolInfo {
     String title;
     String message;
     int color;
+    int icon;
     Long order;
     private final NavigationStep navigationStep;
     private final Runnable runnable;
@@ -18,6 +19,7 @@ public class DecoratedToolInfo {
         this.order = order;
         this.navigationStep = navigationStep;
         this.runnable = null;
+        this.icon = -1;
     }
 
     public DecoratedToolInfo(String title, String message, int color, long order, Runnable runnable) {
@@ -27,6 +29,12 @@ public class DecoratedToolInfo {
         this.order = order;
         this.navigationStep = null;
         this.runnable = runnable;
+        this.icon = -1;
+    }
+
+    public DecoratedToolInfo(String title, String message, int color, int icon, long order, NavigationStep navigationStep) {
+        this(title, message, color, order, navigationStep);
+        this.icon = icon;
     }
 
     public String getTitle() {

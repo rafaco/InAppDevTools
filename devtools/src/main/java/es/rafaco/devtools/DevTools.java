@@ -18,6 +18,7 @@ import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.storage.files.FileProviderUtils;
 import es.rafaco.devtools.tools.CommandsTool;
 import es.rafaco.devtools.tools.ErrorsTool;
+import es.rafaco.devtools.tools.FriendlyLogTool;
 import es.rafaco.devtools.tools.HomeTool;
 import es.rafaco.devtools.tools.InfoTool;
 import es.rafaco.devtools.tools.LogTool;
@@ -82,18 +83,17 @@ public class DevTools {
         DevTools.config = config;
 
         toolManager = new ToolManager(appContext);
-
-        //TODO: adapt with config Profiles
+        //TODO: remove this!
         toolManager.registerTool(HomeTool.class);
         toolManager.registerTool(InfoTool.class);
+        toolManager.registerTool(FriendlyLogTool.class);
+        toolManager.registerTool(LogTool.class);
         toolManager.registerTool(CommandsTool.class);
         toolManager.registerTool(NetworkTool.class);
         toolManager.registerTool(StorageTool.class);
-        toolManager.registerTool(LogTool.class);
         toolManager.registerTool(ErrorsTool.class);
         toolManager.registerTool(ScreenTool.class);
         toolManager.registerTool(ReportTool.class);
-
 
         if (config.crashHandlerEnabled) startCrashHandler(context);
         if (config.anrLoggerEnabled) startAnrLogger();

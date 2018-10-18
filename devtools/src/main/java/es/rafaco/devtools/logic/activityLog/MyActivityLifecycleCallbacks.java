@@ -20,6 +20,8 @@ import java.util.Locale;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
@@ -33,6 +35,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        friendlyLog("I","Created", activity);
+
         //TODO: Crash Handler
         if (false){ //activity.getClass() != config.getErrorActivityClass()) {
             // Copied from ACRA:
@@ -42,11 +46,12 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             manager.lastActivityCreated = new WeakReference<>(activity);
         }
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " created\n");
-        Log.d(DevTools.TAG, "Activity created: " + activity.getClass().getSimpleName());
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
+        friendlyLog("V","Started", activity);
+
         manager.currentlyStartedActivities++;
         manager.isInBackground = (manager.currentlyStartedActivities == 0);
         //Do nothing
@@ -54,6 +59,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityResumed(final Activity activity) {
+        friendlyLog("V","Resumed", activity);
+
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " resumed\n");
         manager.setLastActivityResumed(activity.getClass().getSimpleName());
 
@@ -74,6 +81,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityPaused(Activity activity) {
+        friendlyLog("V","Paused", activity);
+
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
 
         updateBackgroundStateOnActivityPaused();
@@ -83,6 +92,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityStopped(Activity activity) {
+        friendlyLog("D","Stopped", activity);
+
         //Do nothing
         manager.currentlyStartedActivities--;
         manager.isInBackground = (manager.currentlyStartedActivities == 0);
@@ -95,6 +106,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+        friendlyLog("D","Destroy", activity);
+
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " destroyed\n");
     }
 
@@ -181,8 +194,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
         if (mInBackground) {
             mInBackground = false;
+            FriendlyLog.log("I","App", "Foreground", "Application went to foreground");
             notifyOnBecameForeground();
-            Log.d(DevTools.TAG,  "Application went to foreground");
         }
     }
 
@@ -193,8 +206,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
                 public void run() {
                     mInBackground = true;
                     mBackgroundTransition = null;
+                    FriendlyLog.log("I","App", "Background", "Application went to background");
                     notifyOnBecameBackground();
-                    Log.d(DevTools.TAG, "Application went to background");
                 }
             };
             mBackgroundDelayHandler.postDelayed(mBackgroundTransition, BACKGROUND_DELAY);
@@ -222,4 +235,9 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     }
 
     //endregion
+
+    public static void friendlyLog(String severity, String type, Activity activity) {
+        String message = "Activity " + type.toLowerCase() + ": " + activity.getClass().getSimpleName();
+        FriendlyLog.log(severity, "Activity", type, message);
+    }
 }

@@ -113,13 +113,13 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
 
-    private void initView(View toolView) {
-        welcome = toolView.findViewById(R.id.welcome);
+    private void initView(View view) {
+        welcome = view.findViewById(R.id.welcome);
         welcome.setText(getWelcomeMessage());
 
         initAdapter();
 
-        anrButton = toolView.findViewById(R.id.anr_button);
+        anrButton = view.findViewById(R.id.anr_button);
         anrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +127,7 @@ public class ErrorsScreen extends OverlayScreen {
             }
         });
 
-        crashUiButton = toolView.findViewById(R.id.crash_ui_button);
+        crashUiButton = view.findViewById(R.id.crash_ui_button);
         crashUiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +135,7 @@ public class ErrorsScreen extends OverlayScreen {
             }
         });
 
-        crashBackButton = toolView.findViewById(R.id.crash_back_button);
+        crashBackButton = view.findViewById(R.id.crash_back_button);
         crashBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
