@@ -28,8 +28,8 @@ public class Friendly {
     @ColumnInfo(name = "extra")
     private String extra;
 
-    @ColumnInfo(name = "linkedid")
-    private String linkedid;
+    @ColumnInfo(name = "linkedId")
+    private long linkedId;
 
     public long getUid() {
         return uid;
@@ -87,11 +87,11 @@ public class Friendly {
         this.extra = extra;
     }
 
-    public String getLinkedid() {
-        return linkedid;
+    public long getLinkedId() {
+        return linkedId;
     }
 
-    public void setLinkedid(String linkedid) {
-        this.linkedid = linkedid;
+    public void setLinkedId(long linkedId) {
+        this.linkedId = linkedId;
     }
 }

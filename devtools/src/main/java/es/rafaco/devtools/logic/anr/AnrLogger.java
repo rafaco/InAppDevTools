@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Anr;
 
@@ -60,8 +61,8 @@ public class AnrLogger {
             @Override
             public void run() {
                 DevToolsDatabase db = DevTools.getDatabase();
-                db.anrDao().insertAll(anr);
-                Log.d(DevTools.TAG, "AnrLogger - error stored");
+                long anrId = db.anrDao().insert(anr);
+                FriendlyLog.logAnr(anrId, anr);
             }
         });
     }

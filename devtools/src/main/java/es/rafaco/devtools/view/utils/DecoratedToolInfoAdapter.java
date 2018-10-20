@@ -93,6 +93,7 @@ public class DecoratedToolInfoAdapter
         if (data.icon != -1){
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 holder.headIcon.setImageDrawable(context.getApplicationContext().getDrawable(data.icon));
+                holder.headIcon.setColorFilter(contextualizedColor);
             } else {
                 holder.headIcon.setImageDrawable(context.getResources().getDrawable(data.icon));
             }
@@ -111,6 +112,11 @@ public class DecoratedToolInfoAdapter
         }else{
             holder.icon.setVisibility(View.GONE);
             holder.switchButton.setVisibility(View.VISIBLE);
+        }
+
+        //TODO: temp
+        if (data.icon != -1){
+            holder.icon.setVisibility(View.GONE);
         }
     }
 

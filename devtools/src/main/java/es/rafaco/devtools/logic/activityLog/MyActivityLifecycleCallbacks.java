@@ -194,7 +194,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
         if (mInBackground) {
             mInBackground = false;
-            FriendlyLog.log("I","App", "Foreground", "Application went to foreground");
+            FriendlyLog.log("I","App", "Foreground", "App to foreground");
             notifyOnBecameForeground();
         }
     }
@@ -206,7 +206,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
                 public void run() {
                     mInBackground = true;
                     mBackgroundTransition = null;
-                    FriendlyLog.log("I","App", "Background", "Application went to background");
+                    FriendlyLog.log("I","App", "Background", "App to background");
                     notifyOnBecameBackground();
                 }
             };

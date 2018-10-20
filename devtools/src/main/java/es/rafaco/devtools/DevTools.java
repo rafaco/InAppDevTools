@@ -1,5 +1,7 @@
 package es.rafaco.devtools;
 
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,8 +12,12 @@ import com.readystatesoftware.chuck.ChuckInterceptor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.Date;
+
+import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
@@ -73,7 +79,7 @@ public class DevTools {
             return;
         }
 
-        if (appContext != null){
+        if (DevTools.config != null){
             Log.w(DevTools.TAG, "DevTools already initialize.");
             return;
         }
@@ -99,6 +105,8 @@ public class DevTools {
         if (config.anrLoggerEnabled) startAnrLogger();
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger(context);
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
+
         //if (config.invocationByShake)
             startShakeDetector(context);
         if (config.notificationUiEnabled) startForegroundService(context);
@@ -219,13 +227,18 @@ public class DevTools {
     }
 
     public static void showMessage(final String text) {
-        Log.i(DevTools.TAG, "INFO: " + text);
         CustomToast.show(getAppContext(), text, CustomToast.TYPE_INFO);
+        FriendlyLog.log("I", "Message", "Info", text);
+    }
+
+    private static void showWarning(final String text) {
+        CustomToast.show(getAppContext(), text, CustomToast.TYPE_WARNING);
+        FriendlyLog.log("W", "Message", "Warning", text);
     }
 
     private static void showError(final String text) {
-        Log.e(DevTools.TAG, "ERROR: " + text);
         CustomToast.show(getAppContext(), text, CustomToast.TYPE_ERROR);
+        FriendlyLog.log("E", "Message", "Error", text);
     }
 
 
@@ -330,9 +343,21 @@ public class DevTools {
 
     //endregion
 
-    public static void breackpoint(Object caller){
-        String result = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
+    public static void breakpoint(Object caller){
+        String objectToString = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
         //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
-        showMessage("Breackpoint: " + result);
+        String message = "Breakpoint from " + caller.getClass().getSimpleName() + ": " + objectToString;
+        CustomToast.show(getAppContext(), message, CustomToast.TYPE_INFO);
+        FriendlyLog.log("D", "Debug", "Breakpoint", message);
+    }
+
+    public static void logCreatedInitProvider(Context context) {
+        appContext = context.getApplicationContext();
+        if (PendingCrashUtil.isPending())
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Restarted", "Application restarted from crash");
+        else if (FirstStartUtil.isFirstStart())
+            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStartup", "Application started for first time");
+        else
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "Application started");
     }
 }

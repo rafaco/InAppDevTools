@@ -1,6 +1,5 @@
 package es.rafaco.devtoollib.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,12 +15,7 @@ import android.view.MenuItem;
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.SampleApp;
 import es.rafaco.devtoollib.api.Controller;
-import es.rafaco.devtoollib.api.SampleApiService;
 import es.rafaco.devtools.DevTools;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         controller.start(getApplicationContext());
 
         Log.d(SampleApp.TAG, "MainActivity onCreate() performed");
-        DevTools.breackpoint(this);
+        DevTools.breakpoint(this);
     }
 
     @Override

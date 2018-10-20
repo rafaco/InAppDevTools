@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -125,4 +126,39 @@ public class FriendlyLogScreen extends OverlayScreen {
     protected void onDestroy() {
 
     }
+
+    //region [ TOOL BAR ]
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int selected = item.getItemId();
+        if (selected == R.id.action_delete)
+        {
+            onClearAll();
+        }
+        else if (selected == R.id.action_simulate)
+        {
+            DevTools.showMessage("Not already implemented");
+        }
+        else if (selected == R.id.action_send)
+        {
+            //TODO: send all errors
+            DevTools.showMessage("Not already implemented");
+        }
+        return super.onMenuItemClick(item);
+    }
+
+    private void onClearAll() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DevToolsDatabase db = DevTools.getDatabase();
+                db.friendlyDao().deleteAll();
+
+                ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+                updateList(array);
+            }
+        });
+    }
+    //endregion
 }

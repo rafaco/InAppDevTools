@@ -37,7 +37,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-                DevTools.breackpoint(mItem);
+                DevTools.breakpoint(mItem);
             }
         });
 
