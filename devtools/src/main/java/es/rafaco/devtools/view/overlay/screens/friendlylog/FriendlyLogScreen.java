@@ -1,5 +1,10 @@
 package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -7,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -15,10 +21,12 @@ import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Friendly;
+import es.rafaco.devtools.storage.db.entities.FriendlyDao;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
@@ -33,6 +41,9 @@ public class FriendlyLogScreen extends OverlayScreen {
     private RecyclerView recyclerView;
     private TextView welcome;
     private TextView emptyView;
+
+    public LiveData<PagedList<Friendly>> logList;
+    private final int pageSize = 20;
 
     public FriendlyLogScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -58,15 +69,32 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     @Override
     protected void onStart(ViewGroup toolHead) {
+
+        recyclerView = getView().findViewById(R.id.errors_list);
+        emptyView = getView().findViewById(R.id.empty_errors_list);
+
+        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        logList = new LivePagedListBuilder<>(dao.getAllProvider(), pageSize).build();
+        //ConcertViewModel viewModel = ViewModelProviders.of(this).get(ConcertViewModel.class);
+        FriendlyLogAdapter adapter = new FriendlyLogAdapter();
+        LifecycleOwner lifecycleOwner = ProcessLifecycleOwner.get();
+        //ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
+        logList.observe(lifecycleOwner, adapter::submitList);
+        recyclerView.setAdapter(adapter);
+
         initView(bodyView);
-        getData();
+        adapter.notifyDataSetChanged();
+        //getData();
     }
 
     private void initView(ViewGroup view) {
         welcome = view.findViewById(R.id.welcome);
         welcome.setText("Awesome Friendly Log!");
 
-        initAdapter();
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+
+        //initAdapter();
     }
 
     private void getData() {

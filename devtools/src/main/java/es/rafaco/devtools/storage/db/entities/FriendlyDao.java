@@ -1,17 +1,24 @@
 package es.rafaco.devtools.storage.db.entities;
 
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
+
 import java.util.List;
+
+
 
 @Dao
 public interface FriendlyDao {
 
     @Query("SELECT * FROM friendly ORDER BY date ASC")
     List<Friendly> getAll();
+
+    @Query("SELECT * FROM friendly ORDER BY date ASC")
+    DataSource.Factory<Integer, Friendly> getAllProvider();
 
     @Query("SELECT * FROM friendly where uid LIKE :uid")
     Friendly findById(long uid);

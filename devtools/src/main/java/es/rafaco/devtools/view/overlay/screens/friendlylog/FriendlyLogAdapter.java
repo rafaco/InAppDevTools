@@ -1,0 +1,94 @@
+package es.rafaco.devtools.view.overlay.screens.friendlylog;
+
+import android.arch.paging.PagedListAdapter;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import es.rafaco.devtools.R;
+import es.rafaco.devtools.storage.db.entities.Friendly;
+
+public class FriendlyLogAdapter
+        extends PagedListAdapter<Friendly, FriendlyLogAdapter.FriendlyLogViewHolder> {
+
+    protected FriendlyLogAdapter() {
+        super(DIFF_CALLBACK);
+    }
+
+    @NonNull
+    @Override
+    public FriendlyLogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.decorated_tool_info_item, viewGroup, false);
+
+        return new FriendlyLogViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FriendlyLogViewHolder holder,
+                                 int position) {
+        Friendly concert = getItem(position);
+        if (concert != null) {
+            holder.bindTo(concert);
+        } else {
+            // Null defines a placeholder item - PagedListAdapter automatically
+            // invalidates this row when the actual object is loaded from the
+            // database.
+            holder.clear();
+        }
+    }
+
+    private static DiffUtil.ItemCallback<Friendly> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Friendly>() {
+                // Concert details may have changed if reloaded from the database,
+                // but ID is fixed.
+                @Override
+                public boolean areItemsTheSame(Friendly oldConcert, Friendly newConcert) {
+                    return oldConcert.getUid() == newConcert.getUid();
+                }
+
+                @Override
+                public boolean areContentsTheSame(Friendly oldConcert,
+                                                  Friendly newConcert) {
+                    return oldConcert.equals(newConcert);
+                }
+            };
+
+    public static class FriendlyLogViewHolder extends RecyclerView.ViewHolder {
+        ImageView headIcon;
+        View decorator;
+        TextView title, message;
+        ImageView icon;
+        Switch switchButton;
+
+        public FriendlyLogViewHolder(View view) {
+            super(view);
+            decorator = view.findViewById(R.id.decorator);
+            title = view.findViewById(R.id.title);
+            message = view.findViewById(R.id.message);
+            headIcon = view.findViewById(R.id.head_icon);
+            icon = view.findViewById(R.id.icon);
+            switchButton = view.findViewById(R.id.switch_button);
+        }
+
+        public void bindTo(Friendly data) {
+            title.setVisibility(View.GONE);
+
+            message.setVisibility(View.VISIBLE);
+            message.setText(data.getMessage());
+
+            headIcon.setVisibility(View.GONE);
+            icon.setVisibility(View.VISIBLE);
+        }
+
+        public void clear() {
+
+        }
+    }
+}
