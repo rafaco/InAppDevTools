@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,15 @@ public class FriendlyLogAdapter
     @Override
     public void onBindViewHolder(@NonNull FriendlyLogViewHolder holder,
                                  int position) {
-        Friendly concert = getItem(position);
-        if (concert != null) {
-            holder.bindTo(concert);
+        Friendly item = getItem(position);
+        if (item != null) {
+            Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
+            holder.bindTo(item);
         } else {
             // Null defines a placeholder item - PagedListAdapter automatically
             // invalidates this row when the actual object is loaded from the
             // database.
+            Log.d("Friendly", "clear()" + position);
             holder.clear();
         }
     }
@@ -86,7 +89,7 @@ public class FriendlyLogAdapter
             title.setVisibility(View.GONE);
 
             message.setVisibility(View.VISIBLE);
-            message.setText(data.getMessage());
+            message.setText(data.getUid() + ":" + data.getMessage());
 
             int contextualizedColor = ContextCompat.getColor(itemView.getContext(), color);
             title.setTextColor(contextualizedColor);
