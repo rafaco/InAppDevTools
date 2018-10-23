@@ -31,6 +31,7 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
+import es.rafaco.devtools.view.overlay.screens.friendlylog.ToolBarHelper;
 
 public class LogScreen extends OverlayScreen {
 
@@ -44,6 +45,7 @@ public class LogScreen extends OverlayScreen {
     private RelativeLayout outputContainer;
     private Handler removeToastHandler;
     private int selectedLogLevel;
+    private ToolBarHelper toolbarHelper;
 
 
     public LogScreen(MainOverlayLayerManager manager) {
@@ -70,10 +72,7 @@ public class LogScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
 
-        initSearchButtons();
-        selectedLogLevel = 0;
-        showAllMenuItem(getToolbar().getMenu());
-
+        initToolbar();
         initLogLineAdapter();
         initOutputView();
         startLogReader();
@@ -85,6 +84,27 @@ public class LogScreen extends OverlayScreen {
                 showFilterOutputToast();
             }
         }, 1000);
+    }
+
+    private void initToolbar() {
+        toolbarHelper = new ToolBarHelper(getToolbar());
+        toolbarHelper.initSearchButtons(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                textFilter = newText;
+                updateFilter();
+                return false;
+            }
+        });
+
+
+        selectedLogLevel = 0;
+        toolbarHelper.showAllMenuItem();
     }
 
     @Override
@@ -103,67 +123,6 @@ public class LogScreen extends OverlayScreen {
 
     //region [ TOOL BAR ]
 
-    private void initSearchButtons() {
-        final MenuItem searchItem = getToolbar().getMenu().findItem(R.id.action_search);
-        final MenuItem filterItem = getToolbar().getMenu().findItem(R.id.action_filter);
-        if (searchItem != null && filterItem != null) {
-            MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
-                @Override
-                public boolean onMenuItemActionExpand(MenuItem item) {
-                    hideOthersMenuItem(getToolbar().getMenu(), item);
-                    return true;
-                }
-
-                @Override
-                public boolean onMenuItemActionCollapse(MenuItem item) {
-                    showAllMenuItem(getToolbar().getMenu());
-                    return true;
-                }
-            };
-            searchItem.setOnActionExpandListener(onActionExpandListener);
-            filterItem.setOnActionExpandListener(onActionExpandListener);
-
-            final SearchView searchView = (SearchView) searchItem.getActionView();
-            final SearchView filterView = (SearchView) filterItem.getActionView();
-            if (searchView != null && filterView != null) {
-
-                searchView.setQueryHint("Search...");
-                filterView.setQueryHint("Filter...");
-                int searchImgId = android.support.v7.appcompat.R.id.search_button; // I used the explicit layout ID of searchview's ImageView
-                ImageView v = filterView.findViewById(searchImgId);
-                v.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_filter_list_rally_24dp));
-                filterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        textFilter = newText;
-                        updateFilter();
-                        return false;
-                    }
-                });
-            }
-        }
-    }
-
-    private void showAllMenuItem(Menu menu) {
-        for(int i = 0; i<menu.size(); i++ ){
-            MenuItem current = menu.getItem(i);
-            current.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS|MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        }
-    }
-
-    private void hideOthersMenuItem(Menu menu, MenuItem filterItem) {
-        for(int i = 0; i<menu.size(); i++ ){
-            MenuItem current = menu.getItem(i);
-            if(current.getItemId() != filterItem.getItemId()){
-                current.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            }
-        }
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -229,8 +188,7 @@ public class LogScreen extends OverlayScreen {
     //region [ OUTPUT LIST ]
 
     private void initLogLineAdapter() {
-        adapter = new LogLineAdapter(this,
-                new ArrayList<LogLine>(), getSelectedConfig());
+        adapter = new LogLineAdapter(this, new ArrayList<LogLine>(), getSelectedConfig());
 
         recyclerView = getView().findViewById(R.id.output_list);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);

@@ -9,8 +9,6 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-
-
 @Dao
 public interface FriendlyDao {
 
@@ -19,6 +17,13 @@ public interface FriendlyDao {
 
     @Query("SELECT * FROM friendly ORDER BY date ASC")
     DataSource.Factory<Integer, Friendly> getAllProvider();
+
+    @Query("SELECT * FROM friendly WHERE message LIKE :filter "
+            + "OR category LIKE :filter "
+            + "OR type LIKE :filter "
+            + "OR extra LIKE :filter "
+            + "AND severity IN (:acceptedLevels)")
+    DataSource.Factory<Integer, Friendly> filter(List<String> acceptedLevels, String filter);
 
     @Query("SELECT * FROM friendly where uid LIKE :uid")
     Friendly findById(long uid);
