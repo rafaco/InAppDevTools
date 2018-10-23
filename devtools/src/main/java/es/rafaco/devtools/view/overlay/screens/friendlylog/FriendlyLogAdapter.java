@@ -2,6 +2,7 @@ package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.storage.db.entities.Friendly;
 
 public class FriendlyLogAdapter
@@ -78,13 +80,30 @@ public class FriendlyLogAdapter
         }
 
         public void bindTo(Friendly data) {
+            int icon = FriendlyLog.getIcon(data);
+            int color = FriendlyLog.getColor(data);
+
             title.setVisibility(View.GONE);
 
             message.setVisibility(View.VISIBLE);
             message.setText(data.getMessage());
 
-            headIcon.setVisibility(View.GONE);
-            icon.setVisibility(View.VISIBLE);
+            int contextualizedColor = ContextCompat.getColor(itemView.getContext(), color);
+            title.setTextColor(contextualizedColor);
+            decorator.setBackgroundColor(contextualizedColor);
+
+
+            if (icon != -1){
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    headIcon.setImageDrawable(itemView.getContext().getDrawable(icon));
+                    headIcon.setColorFilter(contextualizedColor);
+                } else {
+                    headIcon.setImageDrawable(itemView.getContext().getResources().getDrawable(icon));
+                }
+                headIcon.setVisibility(View.VISIBLE);
+            }else{
+                headIcon.setVisibility(View.GONE);
+            }
         }
 
         public void clear() {

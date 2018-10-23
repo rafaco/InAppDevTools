@@ -74,12 +74,23 @@ public class FriendlyLogScreen extends OverlayScreen {
         emptyView = getView().findViewById(R.id.empty_errors_list);
 
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
-        logList = new LivePagedListBuilder<>(dao.getAllProvider(), pageSize).build();
+        PagedList.Config myPagingConfig = new PagedList.Config.Builder()
+                .setPageSize(50)
+                .setPrefetchDistance(150)
+                .build();
+
+        logList = new LivePagedListBuilder<>(dao.getAllProvider(), myPagingConfig).build();
         //ConcertViewModel viewModel = ViewModelProviders.of(this).get(ConcertViewModel.class);
         FriendlyLogAdapter adapter = new FriendlyLogAdapter();
         LifecycleOwner lifecycleOwner = ProcessLifecycleOwner.get();
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
         logList.observe(lifecycleOwner, adapter::submitList);
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         initView(bodyView);
@@ -89,7 +100,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void initView(ViewGroup view) {
         welcome = view.findViewById(R.id.welcome);
-        welcome.setText("Awesome Friendly Log!");
+        //welcome.setText("Awesome Friendly Log!");
 
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
