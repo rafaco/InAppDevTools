@@ -111,8 +111,20 @@ public class FriendlyLog {
             else if (log.getType().equals("FirstStartup")){
                 return R.drawable.ic_fiber_new_white_24dp;
             }
+            else if (log.getType().equals("Navigation")){
+                return R.drawable.ic_view_carousel_white_24dp;
+            }
+            else if (log.getType().equals("TaskRemoved")){
+                return R.drawable.ic_close_white_24dp;
+            }
+            else if (log.getType().equals("Portrait")){
+                return R.drawable.ic_portrait_white_24dp;
+            }
+            else if (log.getType().equals("Landscape")){
+                return R.drawable.ic_landscape_white_24dp;
+            }
         }
-        else if (log.getCategory().equals("Lifecycle")){
+        else if (log.getCategory().equals("Process")){
             return R.drawable.ic_application_white_24dp;
         }
         else if (log.getCategory().equals("Activity")){
@@ -129,6 +141,9 @@ public class FriendlyLog {
             }
         }else if (log.getType().equals("Breakpoint")){
             return R.drawable.ic_pan_tool_white_24dp;
+        }
+        else if (log.getType().equals("Touch")){
+            return R.drawable.ic_touch_app_white_24dp;
         }
         return -1;
     }

@@ -344,9 +344,9 @@ public class DevTools {
     //endregion
 
     public static void breakpoint(Object caller){
-        String objectToString = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
+        //String objectToString = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
         //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
-        String message = "Breakpoint from " + caller.getClass().getSimpleName() + ": " + objectToString;
+        String message = "Breakpoint from " + caller.getClass().getSimpleName(); // + ": " + objectToString;
         CustomToast.show(getAppContext(), message, CustomToast.TYPE_INFO);
         FriendlyLog.log("D", "Debug", "Breakpoint", message);
     }
@@ -354,10 +354,10 @@ public class DevTools {
     public static void logCreatedInitProvider(Context context) {
         appContext = context.getApplicationContext();
         if (PendingCrashUtil.isPending())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Restarted", "Application restarted from crash");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Restarted", "App restarted after a crash");
         else if (FirstStartUtil.isFirstStart())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStartup", "Application started for first time");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStartup", "App started for first time");
         else
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "Application started");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "App started");
     }
 }

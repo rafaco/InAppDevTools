@@ -16,6 +16,7 @@ import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.SampleApp;
 import es.rafaco.devtoollib.api.Controller;
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 throw new NullPointerException("A simulated exception from MainActivity fab button");
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         showTools.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on ShowDevTools");
                 DevTools.openTools(false);
             }
         });
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         browseDemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on Browse Demo");
                 Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
                 startActivity(intent);
             }

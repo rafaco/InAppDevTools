@@ -2,7 +2,12 @@ package es.rafaco.devtools.logic.activityLog;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,6 +28,8 @@ import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
     private final ActivityLogManager manager;
@@ -35,7 +42,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        friendlyLog("I","Created", activity);
+        friendlyLog("D","Created", activity);
 
         //TODO: Crash Handler
         if (false){ //activity.getClass() != config.getErrorActivityClass()) {
@@ -50,7 +57,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityStarted(Activity activity) {
-        friendlyLog("V","Started", activity);
+        friendlyLog("D","Started", activity);
 
         manager.currentlyStartedActivities++;
         manager.isInBackground = (manager.currentlyStartedActivities == 0);
@@ -59,13 +66,17 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityResumed(final Activity activity) {
-        friendlyLog("V","Resumed", activity);
+        friendlyLog("D","Resumed", activity);
 
+        if (!manager.getLastActivityResumed().equals(activity.getClass().getSimpleName())){
+            FriendlyLog.log("I", "App", "Navigation", "Showing " + activity.getClass().getSimpleName());
+        }
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " resumed\n");
         manager.setLastActivityResumed(activity.getClass().getSimpleName());
 
         updateBackgroundStateOnActivityResumed();
 
+        addRotationListener();
         addShakeListener();
         addTouchListener(activity);
     }
@@ -81,12 +92,13 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityPaused(Activity activity) {
-        friendlyLog("V","Paused", activity);
+        friendlyLog("D","Paused", activity);
 
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
 
         updateBackgroundStateOnActivityPaused();
         removeShakeListener();
+        removeRotationListener();
         removeTouchListener(activity);
     }
 
@@ -159,6 +171,36 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     //endregion
 
+    private int currentOrientation = -1;
+    private SensorEventListener  m_sensorEventListener =
+            new SensorEventListener() {
+                @Override
+                public void onSensorChanged(SensorEvent event) {
+                    int detectedOrientation = DevTools.getAppContext().getResources().getConfiguration().orientation;
+                    if (detectedOrientation == Configuration.ORIENTATION_PORTRAIT && currentOrientation != detectedOrientation) {
+                        currentOrientation = detectedOrientation;
+                        FriendlyLog.log("I", "App", "Portrait", "Orientation changed to portrait");
+                    }
+                    else if (detectedOrientation == Configuration.ORIENTATION_LANDSCAPE && currentOrientation != detectedOrientation) {
+                        currentOrientation = detectedOrientation;
+                        FriendlyLog.log("I", "App", "Landscape", "Orientation changed to landscape");
+                    }
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                }
+            };
+
+    private void addRotationListener() {
+        SensorManager sm = (SensorManager) DevTools.getAppContext().getSystemService(SENSOR_SERVICE);
+        sm.registerListener(m_sensorEventListener, sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private void removeRotationListener() {
+        SensorManager sm = (SensorManager) DevTools.getAppContext().getSystemService(SENSOR_SERVICE);
+        sm.unregisterListener(m_sensorEventListener, sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
+    }
 
     //region [ BACKGROUND STATE ]
 
@@ -196,6 +238,11 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             mInBackground = false;
             FriendlyLog.log("I","App", "Foreground", "App to foreground");
             notifyOnBecameForeground();
+            if (currentOrientation == -1){
+                currentOrientation = DevTools.getAppContext().getResources().getConfiguration().orientation;
+                String orientationType = (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) ? "Landscape" : "Portrait";
+                FriendlyLog.log("I", "App", orientationType, "Orientation is " + orientationType.toLowerCase());
+            }
         }
     }
 

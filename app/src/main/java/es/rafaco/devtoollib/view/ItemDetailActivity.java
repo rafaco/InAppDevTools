@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.dummy.DummyContent;
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -34,6 +35,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
@@ -74,6 +76,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            FriendlyLog.log("I", "User", "Touch", "User clicked on back");
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users
             // to navigate up one level in the application structure. For

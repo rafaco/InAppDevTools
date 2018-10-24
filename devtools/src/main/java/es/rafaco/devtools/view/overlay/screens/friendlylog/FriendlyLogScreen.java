@@ -6,8 +6,6 @@ import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +18,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
@@ -32,7 +26,6 @@ import es.rafaco.devtools.storage.db.entities.FriendlyDao;
 import es.rafaco.devtools.tools.ToolHelper;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-import es.rafaco.devtools.view.overlay.screens.log.LogFilterConfig;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 
 public class FriendlyLogScreen extends OverlayScreen {
@@ -41,13 +34,11 @@ public class FriendlyLogScreen extends OverlayScreen {
     private FriendlyLogAdapter adapter;
     private RecyclerView recyclerView;
     private TextView welcome;
-    private TextView emptyView;
 
 
     public LiveData<PagedList<Friendly>> logList;
     private final int pageSize = 20;
     private ToolBarHelper toolbarHelper;
-    private String textFilter = "";
     private int selectedLogLevel = 0;
 
     public FriendlyLogScreen(MainOverlayLayerManager manager) {
@@ -60,7 +51,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_errors_body; }
+    public int getBodyLayoutId() { return R.layout.tool_friendlylog_body; }
 
     @Override
     public int getToolbarLayoutId() {
@@ -83,12 +74,8 @@ public class FriendlyLogScreen extends OverlayScreen {
     private void initView(ViewGroup view) {
         welcome = view.findViewById(R.id.welcome);
         welcome.setVisibility(View.GONE);
-        //welcome.setText("Awesome Friendly Log!");
 
-        recyclerView = getView().findViewById(R.id.errors_list);
-        emptyView = getView().findViewById(R.id.empty_errors_list);
-        recyclerView.setVisibility(View.VISIBLE);
-        emptyView.setVisibility(View.GONE);
+        recyclerView = getView().findViewById(R.id.list);
     }
 
     private void initAdapter(){
@@ -98,7 +85,7 @@ public class FriendlyLogScreen extends OverlayScreen {
                 .setPrefetchDistance(60)
                 .build();
         dataSourceFactory = new FriendlyLogDataSourceFactory(dao);
-        dataSourceFactory.setText("Activity");
+        dataSourceFactory.setText("");
         dataSourceFactory.setLevelString("D");
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
 
@@ -110,7 +97,6 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        ((LinearLayoutManager) mLayoutManager).setReverseLayout(true);
         recyclerView.setLayoutManager(mLayoutManager);
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -141,7 +127,6 @@ public class FriendlyLogScreen extends OverlayScreen {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                textFilter = newText;
                 dataSourceFactory.setText(newText);
                 logList.getValue().getDataSource().invalidate();
                 return false;
@@ -200,14 +185,8 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onClearAll() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
-                db.friendlyDao().deleteAll();
-                adapter.notifyDataSetChanged();
-            }
-        });
+        DevTools.getDatabase().friendlyDao().deleteAll();
+        adapter.notifyDataSetChanged();
     }
 
     //endregion

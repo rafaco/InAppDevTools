@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.dummy.DummyContent;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class ItemListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -80,6 +82,7 @@ public class ItemListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                FriendlyLog.log("I", "User", "Touch", "User clicked on " + item.content);
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
