@@ -51,6 +51,11 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     @Override
+    public boolean needNestedScroll() {
+        return false;
+    }
+
+    @Override
     public int getBodyLayoutId() { return R.layout.tool_friendlylog_body; }
 
     @Override

@@ -12,15 +12,15 @@
         <TextView
             android:id="@+id/welcome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/content_margin"/>
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:transcriptMode="alwaysScroll"
-            style="@style/content_margin"/>
+            android:scrollbars="vertical"
+            android:layout_marginLeft="5dp"/>
     </LinearLayout>
 
 </LinearLayout>

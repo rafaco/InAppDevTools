@@ -38,7 +38,7 @@ public class FriendlyLogAdapter
     @Override
     public FriendlyLogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.decorated_tool_info_item, viewGroup, false);
+                .inflate(R.layout.tool_friendlylog_item, viewGroup, false);
 
         return new FriendlyLogViewHolder(itemView);
     }
@@ -54,8 +54,8 @@ public class FriendlyLogAdapter
             // Null defines a placeholder item - PagedListAdapter automatically
             // invalidates this row when the actual object is loaded from the
             // database.
-            Log.d("Friendly", "clear()" + position);
-            holder.clear();
+            Log.d("Friendly", "Placeholder for" + position);
+            holder.showPlaceholder();
         }
     }
 }

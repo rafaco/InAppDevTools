@@ -15,6 +15,7 @@ import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
 
     private final MainOverlayLayerManager manager;
+    private final ViewGroup bodyContainer2;
     public ViewGroup headView;
     public ViewGroup bodyView;
     private String param;
@@ -26,10 +27,14 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
     public boolean isMain() {
         return true;
     }
+    public boolean needNestedScroll() {
+        return true;
+    }
     public int getToolbarLayoutId() {
         return -1;
     }
     public int getHeadLayoutId() { return -1;}
+
     public abstract int getBodyLayoutId();
 
     //Abstract logic to define by implementation
@@ -42,6 +47,7 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         this.manager = manager;
         headContainer = getView().findViewById(R.id.tool_head_container);
         bodyContainer = getView().findViewById(R.id.tool_body_container);
+        bodyContainer2 = getView().findViewById(R.id.tool_body_container2);
         onCreate();
     }
 
@@ -57,19 +63,21 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
             headContainer.addView(headView);
         }
 
-        bodyView = (ViewGroup) getInflater().inflate(getBodyLayoutId(), bodyContainer, false);
+        ViewGroup container = needNestedScroll() ? bodyContainer : bodyContainer2;
+        bodyView = (ViewGroup) getInflater().inflate(getBodyLayoutId(), container, false);
         bodyView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         toggleBodyVisibility(false);
-        bodyContainer.addView(bodyView);
+        container.addView(bodyView);
 
         onStart(getView());
     }
 
     public void stop(){
-        if (headView !=null) headContainer.removeView(headView); //headView.removeAllViews();
-        if (bodyView !=null) bodyContainer.removeView(bodyView); //bodyView.removeAllViews();
+        if (headView !=null) headContainer.removeView(headView);
+        if (bodyView !=null) bodyContainer.removeView(bodyView);
+        if (bodyView !=null) bodyContainer2.removeView(bodyView);
         onStop();
     }
 

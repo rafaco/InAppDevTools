@@ -52,7 +52,7 @@ public class LogHelper extends ToolHelper{
                     .start();
             Log.i(DevTools.TAG, "LogcatBuffer cleared");
         } catch (IOException e) {
-            Log.e(DevTools.TAG, "LogcatBuffer clear has failed :(");
+            Log.e(DevTools.TAG, "LogcatBuffer showPlaceholder has failed :(");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String stackTraceString = sw.toString();

@@ -58,6 +58,11 @@ public class LogScreen extends OverlayScreen {
     }
 
     @Override
+    public boolean needNestedScroll() {
+        return false;
+    }
+
+    @Override
     public int getToolbarLayoutId() {
         return R.menu.logcat;
     }
@@ -84,6 +89,8 @@ public class LogScreen extends OverlayScreen {
                 showFilterOutputToast();
             }
         }, 1000);
+
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void initToolbar() {
@@ -171,7 +178,7 @@ public class LogScreen extends OverlayScreen {
     }
 
     public void onClearLog(){
-        Log.v(DevTools.TAG, "Logcat clear requested");
+        Log.v(DevTools.TAG, "Logcat showPlaceholder requested");
         logReaderTask.stopTask(new Runnable() {
             @Override
             public void run() {
@@ -191,7 +198,7 @@ public class LogScreen extends OverlayScreen {
         adapter = new LogLineAdapter(this, new ArrayList<LogLine>(), getSelectedConfig());
 
         recyclerView = getView().findViewById(R.id.output_list);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+        //ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
