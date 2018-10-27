@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
+import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
 import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
@@ -208,7 +209,7 @@ public class DevTools {
     @NonNull
     public static OkHttpClient getOkHttpClient() {
         //TODO: relocate an create a unique interceptor, and a method to return it
-        ChuckInterceptor httpGrabberInterceptor = new ChuckInterceptor(getAppContext());
+        CustomChuckInterceptor httpGrabberInterceptor = new CustomChuckInterceptor(getAppContext());
         httpGrabberInterceptor.showNotification(false);
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);

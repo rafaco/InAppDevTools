@@ -15,13 +15,13 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
+import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
-import es.rafaco.devtools.storage.db.entities.Crash;
-import es.rafaco.devtools.logic.utils.AppUtils;
-import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
 
@@ -92,7 +92,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (cause != null){
             crash.setCauseException(cause.getClass().getSimpleName());
             crash.setCauseMessage(cause.getMessage());
-            crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+            if (cause.getStackTrace() != null && cause.getStackTrace().length > 1){
+                crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+            }
         }
 
         //TODO: crash.setWhere(ex.getStackTrace()[0].toString());
@@ -125,7 +127,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void storeCrash(final Crash crash) {
         DevToolsDatabase db = DevTools.getDatabase();
         crashId = db.crashDao().insert(crash);
-        FriendlyLog.logCrash(crashId, crash);
+        //FriendlyLog.logCrash(crashId, crash);
         Log.d(DevTools.TAG, "Crash stored in db");
     }
 

@@ -69,6 +69,9 @@ public class FriendlyLogScreen extends OverlayScreen {
         initToolbar();
         initView(bodyView);
         initAdapter();
+
+
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void initView(ViewGroup view) {
@@ -97,6 +100,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

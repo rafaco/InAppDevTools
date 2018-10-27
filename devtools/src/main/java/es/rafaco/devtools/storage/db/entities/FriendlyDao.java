@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 
 import java.util.List;
@@ -25,6 +26,9 @@ public interface FriendlyDao {
     @Query("SELECT * FROM friendly where uid LIKE :uid")
     Friendly findById(long uid);
 
+    @Query("SELECT * FROM friendly where linkedId LIKE :linkedId")
+    Friendly findByLinkedId(long linkedId);
+
     @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
     Friendly getLast();
 
@@ -36,6 +40,9 @@ public interface FriendlyDao {
 
     @Insert
     long[] insertAll(Friendly... logs);
+
+    @Update
+    void update(Friendly log);
 
     @Delete
     void delete(Friendly anr);

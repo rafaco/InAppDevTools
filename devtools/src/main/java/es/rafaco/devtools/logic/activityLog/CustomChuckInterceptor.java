@@ -33,11 +33,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import es.rafaco.devtools.logic.utils.FriendlyLog;
-import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -227,11 +227,12 @@ public final class CustomChuckInterceptor implements Interceptor {
 
     private Uri create(HttpTransaction transaction) {
 
-        long logId = FriendlyLog.logNetworkRequest(transaction);
-
         ContentValues values = LocalCupboard.getInstance().withEntity(HttpTransaction.class).toContentValues(transaction);
         Uri uri = context.getContentResolver().insert(ChuckContentProvider.TRANSACTION_URI, values);
         transaction.setId(Long.valueOf(uri.getLastPathSegment()));
+
+        FriendlyLog.logNetworkRequest(transaction);
+
         if (showNotification) {
             notificationHelper.show(transaction);
         }
@@ -241,10 +242,11 @@ public final class CustomChuckInterceptor implements Interceptor {
 
     private int update(HttpTransaction transaction, Uri uri) {
 
-        FriendlyLog.logNetworkRequest(transaction);
-
         ContentValues values = LocalCupboard.getInstance().withEntity(HttpTransaction.class).toContentValues(transaction);
         int updated = context.getContentResolver().update(uri, values, null, null);
+
+        FriendlyLog.logNetworkUpdate(transaction);
+
         if (showNotification && updated > 0) {
             notificationHelper.show(transaction);
         }

@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.readystatesoftware.chuck.internal.data.HttpTransaction;
+
 import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
@@ -133,6 +135,17 @@ public class FriendlyLog {
         else if (log.getCategory().equals("Message")){
             return R.drawable.ic_message_white_24dp;
         }
+        else if (log.getCategory().equals("Network")){
+            if (log.getType().equals("Requested")){
+                return R.drawable.ic_cloud_queue_white_24dp;
+            }
+            else if (log.getType().equals("Complete")){
+                return R.drawable.ic_cloud_done_white_24dp;
+            }
+            else if (log.getType().equals("Failed")){
+                return R.drawable.ic_cloud_off_white_24dp;
+            }
+        }
         else if (log.getCategory().equals("Error")){
             if (log.getType().equals("Crash")){
                 return R.drawable.ic_error_white_24dp;
@@ -170,5 +183,43 @@ public class FriendlyLog {
         log.setLinkedId(anrId);
         logAtLogcat(log);
         insertOnBackground(log);
+    }
+
+    public static void logNetworkRequest(HttpTransaction transaction) {
+        final Friendly log = new Friendly();
+        log.setDate(transaction.getRequestDate().getTime());
+        log.setSeverity("D");
+        log.setCategory("Network");
+        log.setType(transaction.getStatus().name());
+        log.setMessage("Request to " + transaction.getPath());
+        log.setLinkedId(transaction.getId());
+
+        logAtLogcat(log);
+        insertOnBackground(log);
+    }
+
+    public static void logNetworkUpdate(HttpTransaction transaction) {
+        final Friendly log = DevTools.getDatabase().friendlyDao().findByLinkedId(transaction.getId());
+        if (log == null){
+            DevTools.showMessage("Unable to link the network request");
+            return;
+        }
+
+        log.setType(transaction.getStatus().name());
+        log.setMessage("Request to " + transaction.getPath());
+
+        if (log.getType().equals(HttpTransaction.Status.Failed.name())){
+            log.setSeverity("E");
+        }else if (log.getType().equals(HttpTransaction.Status.Complete.name())){
+            log.setSeverity("I");
+        }
+
+        logAtLogcat(log);
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                DevTools.getDatabase().friendlyDao().update(log);
+            }
+        });
     }
 }

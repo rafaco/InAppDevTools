@@ -81,7 +81,7 @@ public class MainOverlayLayer extends OverlayLayer {
     }
 
     public void scrollBottom(){
-        if (isScrollAtBottom()){
+        if (!isScrollAtBottom()){
             bodyScroll.post(new Runnable() {
                 @Override
                 public void run() {
