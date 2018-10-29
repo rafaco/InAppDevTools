@@ -10,16 +10,87 @@
         android:layout_height="wrap_content"
         style="@style/content_margin"/>
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/content_margin"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_list"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/home_icons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/content_margin"
+        android:layout_marginBottom="0dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/info_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/content_margin"/>
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Info"
+            android:drawableLeft="@drawable/ic_info_white_24dp"/>
 
-    </FrameLayout>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/friendly_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="HISTORY"
+            android:textColor="@color/rally_blue"
+            android:drawableLeft="@drawable/ic_history_white_24dp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/report_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Report"
+            android:textColor="@color/rally_green"
+            android:drawableLeft="@drawable/ic_send_rally_24dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_icons2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/content_margin"
+        android:layout_marginTop="0dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/run_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Run"
+            android:drawableLeft="@drawable/ic_run_white_24dp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/logcat_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="LogCat"
+            android:textColor="@color/rally_yellow"
+            android:drawableLeft="@drawable/ic_history_white_24dp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/storage_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Storage"
+            android:textColor="@color/rally_purple"
+            android:drawableLeft="@drawable/ic_storage_white_24dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

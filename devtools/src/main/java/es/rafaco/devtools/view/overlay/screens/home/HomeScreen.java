@@ -12,13 +12,23 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
+import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
+import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
+import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
+import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
+import es.rafaco.devtools.view.overlay.screens.storage.StorageScreen;
 import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
 import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
 public class HomeScreen extends OverlayScreen {
+
+    private final boolean ICON_STYLE = true;
 
     private DecoratedToolInfoAdapter adapter;
     private RecyclerView recyclerView;
@@ -44,10 +54,40 @@ public class HomeScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
         initView(view);
-        initAdapter(view);
-        updateList();
 
-        //adapter.update();
+        if (ICON_STYLE){
+            view.findViewById(R.id.home_list).setVisibility(View.GONE);
+            welcome.setVisibility(View.GONE);
+
+            view.findViewById(R.id.info_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(InfoScreen.class, null)));
+
+            view.findViewById(R.id.run_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(CommandsScreen.class, null)));
+
+            view.findViewById(R.id.report_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(ReportScreen.class, null)));
+
+            view.findViewById(R.id.friendly_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(FriendlyLogScreen.class, null)));
+
+            view.findViewById(R.id.logcat_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(LogScreen.class, null)));
+
+            view.findViewById(R.id.storage_button)
+                    .setOnClickListener(v ->
+                            OverlayUIService.performNavigationStep(new NavigationStep(StorageScreen.class, null)));
+        }else{
+            view.findViewById(R.id.home_icons).setVisibility(View.GONE);
+            view.findViewById(R.id.home_icons2).setVisibility(View.GONE);
+            initAdapter(view);
+            updateList();
+        }
     }
 
     @Override
