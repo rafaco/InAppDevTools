@@ -132,6 +132,9 @@ public class FriendlyLog {
         else if (log.getCategory().equals("Activity")){
             return R.drawable.ic_activity_white_24dp;
         }
+        else if (log.getCategory().equals("Fragment")){
+            return R.drawable.ic_extension_white_24dp;
+        }
         else if (log.getCategory().equals("Message")){
             return R.drawable.ic_message_white_24dp;
         }

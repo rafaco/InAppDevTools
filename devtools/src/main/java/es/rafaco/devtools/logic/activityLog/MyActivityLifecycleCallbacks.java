@@ -11,6 +11,9 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +30,6 @@ import java.util.Locale;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
-import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -35,6 +37,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     private final ActivityLogManager manager;
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    private SupportFragmentLifecycleCallbacks supportFragmentCallbacks;
+    private FragmentLifecycleCallbacks fragmentCallbacks;
 
 
     public MyActivityLifecycleCallbacks(ActivityLogManager manager) {
@@ -54,6 +58,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             manager.lastActivityCreated = new WeakReference<>(activity);
         }
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " created\n");
+        registerFragmentLifecycleCallbacks(activity);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityResumed(final Activity activity) {
-        friendlyLog("D","Resumed", activity);
+        friendlyLog("V","Resumed", activity);
 
         if (!manager.getLastActivityResumed().equals(activity.getClass().getSimpleName())){
             FriendlyLog.log("I", "App", "Navigation", "Showing " + activity.getClass().getSimpleName());
@@ -93,7 +98,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityPaused(Activity activity) {
-        friendlyLog("D","Paused", activity);
+        friendlyLog("V","Paused", activity);
 
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
 
@@ -114,7 +119,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        //Do nothing
+        friendlyLog("V","SaveInstanceState", activity);
     }
 
     @Override
@@ -122,6 +127,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
         friendlyLog("D","Destroy", activity);
 
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " destroyed\n");
+        unregisterFragmentLifecycleCallbacks(activity);
     }
 
 
@@ -172,6 +178,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     //endregion
 
+    //region [ ROTATION LISTENER ]
+
     private int currentOrientation = -1;
     private SensorEventListener  m_sensorEventListener =
             new SensorEventListener() {
@@ -202,6 +210,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
         SensorManager sm = (SensorManager) DevTools.getAppContext().getSystemService(SENSOR_SERVICE);
         sm.unregisterListener(m_sensorEventListener, sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
     }
+
+    //endregion
 
     //region [ BACKGROUND STATE ]
 
@@ -279,6 +289,48 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             } catch (Exception e) {
                 Log.d(DevTools.TAG, "Listener threw exception!", e);
             }
+        }
+    }
+
+    //endregion
+
+    //region [ FRAGMENT LOGGER ]
+
+    private void registerFragmentLifecycleCallbacks(Activity activity) {
+        if (activity instanceof AppCompatActivity){
+            if (supportFragmentCallbacks==null)
+                this.supportFragmentCallbacks = new SupportFragmentLifecycleCallbacks();
+
+            FragmentManager supportFragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+            supportFragmentManager.registerFragmentLifecycleCallbacks(supportFragmentCallbacks, true);
+
+            String message = "FragmentCallbacks registered: "
+                    + activity.getClass().getSimpleName()
+                    + " - " + supportFragmentManager.toString();
+            FriendlyLog.log("V", "Fragment", "CallbacksRegistered", message);
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            if (fragmentCallbacks==null)
+                this.fragmentCallbacks = new FragmentLifecycleCallbacks();
+
+            activity.getFragmentManager()
+                    .registerFragmentLifecycleCallbacks(fragmentCallbacks, true);
+        }
+    }
+
+    private void unregisterFragmentLifecycleCallbacks(Activity activity){
+        if (activity instanceof AppCompatActivity){
+            FragmentManager supportFragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+            supportFragmentManager.unregisterFragmentLifecycleCallbacks(supportFragmentCallbacks);
+
+            String message = "FragmentCallbacks unregistered: "
+                    + activity.getClass().getSimpleName()
+                    + " - " + supportFragmentManager.toString();
+            FriendlyLog.log("V", "Fragment", "CallbacksUnregistered", message);
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            activity.getFragmentManager()
+                    .unregisterFragmentLifecycleCallbacks(fragmentCallbacks);
         }
     }
 

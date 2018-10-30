@@ -54,13 +54,13 @@ public class FriendlyLogAdapter
                                  int position) {
         Friendly item = getItem(position);
         if (item != null) {
-            Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
+            //Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
             holder.bindTo(item, selectedItem == position);
         } else {
             // Null defines a placeholder item - PagedListAdapter automatically
             // invalidates this row when the actual object is loaded from the
             // database.
-            Log.d("Friendly", "Placeholder for" + position);
+            //Log.d("Friendly", "Placeholder for" + position);
             holder.showPlaceholder();
         }
     }
