@@ -1,5 +1,7 @@
 package es.rafaco.devtools.logic.utils;
 
+import android.content.Context;
+
 import java.text.SimpleDateFormat;
 
 public class DateUtils {
@@ -22,7 +24,21 @@ public class DateUtils {
 
 
     public static String format(long timeMillis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         return simpleDateFormat.format(timeMillis);
+    }
+
+    public static String localDateTimeCustomFormat(Context context, long timeMillis) {
+        java.text.DateFormat localDateFormatter = android.text.format.DateFormat.getMediumDateFormat(context);
+        java.text.DateFormat localTimeFormatter = android.text.format.DateFormat.getTimeFormat(context);
+
+        return localTimeFormatter.format(timeMillis)+ ", " + localDateFormatter.format(timeMillis);
+    }
+
+    public static String localDateTimeFormat(Context context, long timeMillis) {
+        return android.text.format.DateUtils.formatDateTime(context, timeMillis,
+                android.text.format.DateUtils.FORMAT_SHOW_DATE |
+                        android.text.format.DateUtils.FORMAT_NUMERIC_DATE |
+                        android.text.format.DateUtils.FORMAT_SHOW_TIME);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -18,30 +19,69 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/extra_over"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/extras_over"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="4dp"
+            android:layout_below="@id/extra_over"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="4dp"/>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
+            android:layout_below="@id/extra_over"
             android:layout_toRightOf="@id/icon"
-            android:layout_toLeftOf="@id/buttons_wrapper"
+            android:layout_alignParentRight="true"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/rally_white"
-            android:textAlignment="textStart"
-            android:gravity="start|center_vertical"
-            android:layout_centerVertical="true"/>
+            android:textColor="@color/rally_white"/>
+
+        <LinearLayout
+            android:id="@+id/extra_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/extras_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/extra_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/extra_details"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:minHeight="0dp"
+            android:text="Details"/>
 
     </RelativeLayout>
 

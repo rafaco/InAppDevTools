@@ -30,8 +30,14 @@ public class FriendlyLogAdapter
                 }
             };
 
+    private static int selectedItem = -1;
+
+    private FriendlyLogViewHolder.OnClickListener mClickListener;
+
     protected FriendlyLogAdapter() {
         super(DIFF_CALLBACK);
+
+        setClickListener();
     }
 
     @NonNull
@@ -40,7 +46,7 @@ public class FriendlyLogAdapter
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.tool_friendlylog_item, viewGroup, false);
 
-        return new FriendlyLogViewHolder(itemView);
+        return new FriendlyLogViewHolder(itemView, mClickListener);
     }
 
     @Override
@@ -49,7 +55,7 @@ public class FriendlyLogAdapter
         Friendly item = getItem(position);
         if (item != null) {
             Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
-            holder.bindTo(item);
+            holder.bindTo(item, selectedItem == position);
         } else {
             // Null defines a placeholder item - PagedListAdapter automatically
             // invalidates this row when the actual object is loaded from the
@@ -57,5 +63,26 @@ public class FriendlyLogAdapter
             Log.d("Friendly", "Placeholder for" + position);
             holder.showPlaceholder();
         }
+    }
+
+    public void setClickListener(){
+        setClickListener((itemView, position) -> {
+            if (selectedItem == -1) {
+                selectedItem = position;
+            }
+            else if (position == selectedItem){
+                selectedItem = -1;
+            }
+            else if (selectedItem != -1){
+                int previous = selectedItem;
+                selectedItem = position;
+                notifyItemChanged(previous);
+            }
+            notifyItemChanged(position);
+        });
+    }
+
+    public void setClickListener(FriendlyLogViewHolder.OnClickListener clickListener) {
+        mClickListener = clickListener;
     }
 }
