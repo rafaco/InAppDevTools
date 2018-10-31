@@ -65,7 +65,7 @@ public class HomeScreen extends OverlayScreen {
 
             view.findViewById(R.id.run_button)
                     .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(CommandsScreen.class, null)));
+                            OverlayUIService.performNavigationStep(new NavigationStep(RunScreen.class, null)));
 
             view.findViewById(R.id.report_button)
                     .setOnClickListener(v ->
@@ -75,14 +75,11 @@ public class HomeScreen extends OverlayScreen {
                     .setOnClickListener(v ->
                             OverlayUIService.performNavigationStep(new NavigationStep(FriendlyLogScreen.class, null)));
 
-            view.findViewById(R.id.logcat_button)
+            view.findViewById(R.id.advanced_button)
                     .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(LogScreen.class, null)));
-
-            view.findViewById(R.id.storage_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(StorageScreen.class, null)));
-        }else{
+                            OverlayUIService.performNavigationStep(new NavigationStep(AdvancedScreen.class, null)));
+        }
+        else{
             view.findViewById(R.id.home_icons).setVisibility(View.GONE);
             view.findViewById(R.id.home_icons2).setVisibility(View.GONE);
             initAdapter(view);

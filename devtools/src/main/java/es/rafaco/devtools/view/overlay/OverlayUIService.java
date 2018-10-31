@@ -18,9 +18,11 @@ import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
+import es.rafaco.devtools.view.overlay.screens.home.AdvancedScreen;
 import es.rafaco.devtools.view.overlay.screens.home.HomeScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.devtools.view.overlay.screens.home.RunScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
@@ -212,6 +214,8 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(SharedPrefsScreen.class);
         mainOverlayLayerManager.registerScreen(FolderScreen.class);
         mainOverlayLayerManager.registerScreen(FileScreen.class);
+        mainOverlayLayerManager.registerScreen(RunScreen.class);
+        mainOverlayLayerManager.registerScreen(AdvancedScreen.class);
 
         //navigateTo("Home");
     }
