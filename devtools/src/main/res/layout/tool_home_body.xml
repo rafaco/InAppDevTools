@@ -25,13 +25,13 @@
         android:layout_marginBottom="0dp">
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/info_button"
+            android:id="@+id/run_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/rally_bg_blur"
-            android:text="Info"
-            android:drawableLeft="@drawable/ic_info_white_24dp"/>
+            android:text="Run"
+            android:drawableLeft="@drawable/ic_run_white_24dp"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/friendly_button"
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/rally_bg_blur"
-            android:text="History"
+            android:text="Steps"
             android:textColor="@color/rally_blue"
             android:drawableLeft="@drawable/ic_history_white_24dp"
             android:drawableTint="@color/rally_blue"/>
@@ -66,6 +66,15 @@
         android:layout_marginTop="0dp">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/info_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Info"
+            android:drawableLeft="@drawable/ic_info_white_24dp"/>
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/config_button"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -73,15 +82,6 @@
             android:backgroundTint="@color/rally_bg_blur"
             android:text="Config"
             android:drawableLeft="@drawable/ic_settings_white_24dp"/>
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/run_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/rally_bg_blur"
-            android:text="Run"
-            android:drawableLeft="@drawable/ic_run_white_24dp"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/inspect_button"
