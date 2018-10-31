@@ -1,24 +1,25 @@
 package es.rafaco.devtools;
 
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.readystatesoftware.chuck.ChuckInterceptor;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.util.Date;
 
+import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
 import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
+import es.rafaco.devtools.logic.anr.AnrLogger;
+import es.rafaco.devtools.logic.crash.CrashHandler;
+import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
+import es.rafaco.devtools.logic.utils.AppUtils;
+import es.rafaco.devtools.logic.utils.FirstStartUtil;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
@@ -34,25 +35,18 @@ import es.rafaco.devtools.tools.ReportTool;
 import es.rafaco.devtools.tools.ScreenTool;
 import es.rafaco.devtools.tools.StorageTool;
 import es.rafaco.devtools.tools.ToolManager;
-import es.rafaco.devtools.logic.utils.FirstStartUtil;
 import es.rafaco.devtools.view.activities.PermissionActivity;
-import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
-import es.rafaco.devtools.logic.anr.AnrLogger;
-import es.rafaco.devtools.logic.crash.CrashHandler;
-import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.view.dialogs.CrashDialogActivity;
 import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
+import es.rafaco.devtools.view.notifications.NotificationUIService;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
-import es.rafaco.devtools.logic.utils.AppUtils;
-import es.rafaco.devtools.logic.utils.ThreadUtils;
-import es.rafaco.devtools.view.notifications.NotificationUIService;
-import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.utils.CustomToast;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import es.rafaco.devtools.view.utils.CustomToast;
 
 public class DevTools {
 
@@ -258,6 +252,8 @@ public class DevTools {
         }
 
         Screen screen = new ScreenHelper().takeAndSaveScreen();
+
+        FriendlyLog.log("I", "DevTools", "Screenshot","Screenshot taken");
 
         if(config.overlayUiEnabled && OverlayUIService.isInitialize()){
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);

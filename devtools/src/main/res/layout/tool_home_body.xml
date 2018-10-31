@@ -39,9 +39,10 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/rally_bg_blur"
-            android:text="HISTORY"
+            android:text="History"
             android:textColor="@color/rally_blue"
-            android:drawableLeft="@drawable/ic_history_white_24dp"/>
+            android:drawableLeft="@drawable/ic_history_white_24dp"
+            android:drawableTint="@color/rally_blue"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/report_button"
@@ -51,7 +52,9 @@
             android:backgroundTint="@color/rally_bg_blur"
             android:text="Report"
             android:textColor="@color/rally_green"
-            android:drawableLeft="@drawable/ic_send_rally_24dp"/>
+            android:drawableLeft="@drawable/ic_send_rally_24dp"
+            android:drawableTint="@color/rally_green"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -63,6 +66,15 @@
         android:layout_marginTop="0dp">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/config_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_bg_blur"
+            android:text="Config"
+            android:drawableLeft="@drawable/ic_settings_white_24dp"/>
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/run_button"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -72,24 +84,68 @@
             android:drawableLeft="@drawable/ic_run_white_24dp"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/logcat_button"
+            android:id="@+id/inspect_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/rally_bg_blur"
+            android:text="Inspect"
+            android:drawableLeft="@drawable/ic_bug_report_rally_24dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_icons3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/content_margin"
+        android:layout_marginTop="0dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/logcat_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_green"
             android:text="LogCat"
-            android:textColor="@color/rally_yellow"
-            android:drawableLeft="@drawable/ic_history_white_24dp"/>
+            android:textColor="@color/rally_bg_blur"
+            android:drawableLeft="@drawable/ic_android_white_24dp"
+            android:drawableTint="@color/rally_bg_blur"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/storage_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/rally_bg_blur"
+            android:backgroundTint="@color/rally_yellow"
             android:text="Storage"
-            android:textColor="@color/rally_purple"
-            android:drawableLeft="@drawable/ic_storage_white_24dp"/>
+            android:textColor="@color/rally_bg_blur"
+            android:drawableLeft="@drawable/ic_storage_white_24dp"
+            android:drawableTint="@color/rally_bg_blur"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/network_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_blue"
+            android:text="Network"
+            android:textColor="@color/rally_bg_blur"
+            android:drawableLeft="@drawable/ic_cloud_done_white_24dp"
+            android:drawableTint="@color/rally_bg_blur"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/errors_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rally_orange"
+            android:text="Errors"
+            android:textColor="@color/rally_bg_blur"
+            android:drawableLeft="@drawable/ic_bug_report_rally_24dp"
+            android:drawableTint="@color/rally_bg_blur"/>
 
     </LinearLayout>
 

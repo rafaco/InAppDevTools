@@ -9,7 +9,83 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="0dp">
-    <!--android:background="@color/grayLight"-->
+
+
+        <LinearLayout
+            android:id="@+id/home_icons2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/content_margin"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/config_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Select API"
+                android:drawableLeft="@drawable/ic_settings_white_24dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/run_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Take Screen"
+                android:drawableLeft="@drawable/ic_add_a_photo_rally_24dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/inspect_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Break Point"
+                android:drawableLeft="@drawable/ic_pan_tool_white_24dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/home_icons3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/content_margin"
+            android:layout_marginTop="0dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/network_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Simulate Traffic"
+                android:drawableLeft="@drawable/ic_cloud_queue_white_24dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/anr_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Simulate Anr"
+                android:drawableLeft="@drawable/ic_block_white_24dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/crash_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rally_bg_blur"
+                android:text="Simulate Crash"
+                android:drawableLeft="@drawable/ic_bug_report_rally_24dp"/>
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/welcome"
             android:layout_width="match_parent"

@@ -161,6 +161,12 @@ public class FriendlyLog {
         else if (log.getType().equals("Touch")){
             return R.drawable.ic_touch_app_white_24dp;
         }
+        else if (log.getCategory().equals("DevTools")){
+            if (log.getType().equals("Screenshot")){
+                return R.drawable.ic_add_a_photo_rally_24dp;
+            }
+            return R.drawable.ic_developer_mode_white_24dp;
+        }
         return -1;
     }
 

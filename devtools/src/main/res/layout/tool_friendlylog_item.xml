@@ -21,11 +21,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="4dp"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/icon"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:textColor="@color/rally_white"/>
+
         <LinearLayout
             android:id="@+id/extra_over"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/title"
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
@@ -37,30 +56,11 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_below="@id/extra_over"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="4dp"/>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/extra_over"
-            android:layout_toRightOf="@id/icon"
-            android:layout_alignParentRight="true"
-            android:ellipsize="end"
-            android:textColor="@color/rally_white"/>
-
         <LinearLayout
             android:id="@+id/extra_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
+            android:layout_below="@id/extra_over"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:paddingBottom="5dp">
