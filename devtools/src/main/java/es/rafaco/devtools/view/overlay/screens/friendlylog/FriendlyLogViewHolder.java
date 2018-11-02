@@ -25,6 +25,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
 
     private final OnClickListener clickListener;
 
+    long uid;
     ImageView icon;
     View decorator;
     TextView title;
@@ -55,6 +56,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     }
 
     public void bindTo(Friendly data, boolean isSelected) {
+        uid = data.getUid();
 
         int bgColorId = isSelected ? R.color.rally_bg_blur : R.color.rally_bg_solid;
         int contextualizedColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
@@ -131,10 +133,10 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
 
     @Override
     public void onClick(View v) {
-        clickListener.onClick(v, getAdapterPosition());
+        clickListener.onClick(v, getAdapterPosition(), uid);
     }
 
     public interface OnClickListener {
-        void onClick(View itemView, int position);
+        void onClick(View itemView, int position, long id);
     }
 }

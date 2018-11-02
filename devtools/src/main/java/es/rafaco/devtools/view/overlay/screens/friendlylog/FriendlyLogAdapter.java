@@ -3,7 +3,6 @@ package es.rafaco.devtools.view.overlay.screens.friendlylog;
 import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +15,19 @@ public class FriendlyLogAdapter
 
     private static DiffUtil.ItemCallback<Friendly> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Friendly>() {
-                // Concert details may have changed if reloaded from the database,
-                // but ID is fixed.
                 @Override
-                public boolean areItemsTheSame(Friendly oldConcert, Friendly newConcert) {
-                    return oldConcert.getUid() == newConcert.getUid();
+                public boolean areItemsTheSame(Friendly oldItem, Friendly newItem) {
+                    return oldItem.getUid() == newItem.getUid();
                 }
-
                 @Override
-                public boolean areContentsTheSame(Friendly oldConcert,
-                                                  Friendly newConcert) {
-                    return oldConcert.equals(newConcert);
+                public boolean areContentsTheSame(Friendly oldItem,
+                                                  Friendly newItem) {
+                    return oldItem.equals(newItem);
                 }
             };
 
-    private static int selectedItem = -1;
-
+    private static long selectedItemId = -1;
+    private static int selectedItemPosition = -1;
     private FriendlyLogViewHolder.OnClickListener mClickListener;
 
     protected FriendlyLogAdapter() {
@@ -55,28 +51,28 @@ public class FriendlyLogAdapter
         Friendly item = getItem(position);
         if (item != null) {
             //Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
-            holder.bindTo(item, selectedItem == position);
+            holder.bindTo(item, selectedItemId == item.getUid());
         } else {
-            // Null defines a placeholder item - PagedListAdapter automatically
-            // invalidates this row when the actual object is loaded from the
-            // database.
             //Log.d("Friendly", "Placeholder for" + position);
             holder.showPlaceholder();
         }
     }
 
     public void setClickListener(){
-        setClickListener((itemView, position) -> {
-            if (selectedItem == -1) {
-                selectedItem = position;
+        setClickListener((itemView, position, id) -> {
+            if (selectedItemId == -1) {
+                selectedItemId = id;
+                selectedItemPosition = position;
             }
-            else if (position == selectedItem){
-                selectedItem = -1;
+            else if (id == selectedItemId){
+                selectedItemId = -1;
+                selectedItemPosition = -1;
             }
-            else if (selectedItem != -1){
-                int previous = selectedItem;
-                selectedItem = position;
-                notifyItemChanged(previous);
+            else if (selectedItemId != -1){
+                int previousPosition = selectedItemPosition;
+                selectedItemId = id;
+                selectedItemPosition = position;
+                notifyItemChanged(previousPosition);
             }
             notifyItemChanged(position);
         });

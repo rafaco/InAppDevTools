@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "friendly")
 public class Friendly {
 
@@ -93,5 +95,25 @@ public class Friendly {
 
     public void setLinkedId(long linkedId) {
         this.linkedId = linkedId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Friendly)) return false;
+
+        Friendly friendly = (Friendly) o;
+
+        if (uid != friendly.uid) return false;
+        if (date != friendly.date) return false;
+        if (linkedId != friendly.linkedId) return false;
+        if (severity != null ? !severity.equals(friendly.severity) : friendly.severity != null)
+            return false;
+        if (category != null ? !category.equals(friendly.category) : friendly.category != null)
+            return false;
+        if (type != null ? !type.equals(friendly.type) : friendly.type != null) return false;
+        if (message != null ? !message.equals(friendly.message) : friendly.message != null)
+            return false;
+        return extra != null ? extra.equals(friendly.extra) : friendly.extra == null;
     }
 }

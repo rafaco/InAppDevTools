@@ -8,6 +8,8 @@ import android.arch.paging.PagedList;
 import android.content.DialogInterface;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -75,7 +77,6 @@ public class FriendlyLogScreen extends OverlayScreen {
         initView(bodyView);
         initAdapter();
 
-
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
@@ -87,6 +88,8 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void initAdapter(){
+        adapter = new FriendlyLogAdapter();
+
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setPageSize(20)
@@ -96,19 +99,11 @@ public class FriendlyLogScreen extends OverlayScreen {
         dataSourceFactory.setText("");
         dataSourceFactory.setLevelString("D");
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
+        logList.observe(ProcessLifecycleOwner.get(), adapter::submitList);
 
-        //ConcertViewModel viewModel = ViewModelProviders.of(this).get(ConcertViewModel.class);
-        adapter = new FriendlyLogAdapter();
-        LifecycleOwner lifecycleOwner = ProcessLifecycleOwner.get();
-        //ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
-        logList.observe(lifecycleOwner, adapter::submitList);
-
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
