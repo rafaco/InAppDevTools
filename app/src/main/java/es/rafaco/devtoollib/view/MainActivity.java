@@ -18,6 +18,7 @@ import es.rafaco.devtoollib.SampleApp;
 import es.rafaco.devtoollib.api.Controller;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.view.overlay.screens.home.RunnableConfig;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +68,16 @@ public class MainActivity extends AppCompatActivity {
         controller.start(getApplicationContext());
 
         Log.d(SampleApp.TAG, "MainActivity onCreate() performed");
-        DevTools.breakpoint(this);
+        //DevTools.breakpoint(this);
+
+        DevTools.addRunnable("show",
+                "Show message", R.drawable.ic_run_white_24dp,
+                () -> DevTools.showMessage("Mostrando mensaje"),
+                () -> DevTools.showMessage("Mensaje mostrado"));
+
+        DevTools.addRunnable(new RunnableConfig("env",
+                "Select API", es.rafaco.devtools.R.drawable.ic_settings_white_24dp,
+                () -> DevTools.showMessage("Not already implemented")));
     }
 
     @Override

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
@@ -41,6 +43,7 @@ import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.overlay.screens.home.RunnableConfig;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
@@ -59,7 +62,6 @@ public class DevTools {
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
     private static ShakeDetector shakeDetector;
-
 
     //region [ PUBLIC INITIALIZATION ]
 
@@ -107,12 +109,7 @@ public class DevTools {
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                getDatabase().printOverview();
-            }
-        });
+        ThreadUtils.runOnBackThread(() -> getDatabase().printOverview());
         Log.i(DevTools.TAG, "DevTools initialized");
 
 
@@ -152,12 +149,7 @@ public class DevTools {
 
     private static void startShakeDetector(Context context) {
         shakeDetector = new ShakeDetector(getAppContext(),
-                new OnShakeListener() {
-                    @Override
-                    public void onShake() {
-                        openTools(false);
-                    }
-                });
+                () -> openTools(false));
     }
 
     private static void startActivityLogger(Context context) {
@@ -242,12 +234,7 @@ public class DevTools {
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
             PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    new Runnable(){
-                        @Override
-                        public void run() {
-                            takeScreenshot();
-                        }
-                    }, null);
+                    () -> takeScreenshot(), null);
             return;
         }
 
@@ -266,43 +253,32 @@ public class DevTools {
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
             PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    new Runnable(){
-                        @Override
-                        public void run() {
-                            sendReport(type, param);
-                        }
-                    }, null);
+                    () -> sendReport(type, param), null);
             return;
         }
 
         switch (type){
             case CRASH:
-                ThreadUtils.runOnBackThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crash crash;
-                        if (param == null){
-                            crash = getDatabase().crashDao().getLast();
-                        }else{
-                            crash = getDatabase().crashDao().findById((long)param);
-                        }
-                        if (crash == null){
-                            showError("Unable to found it");
-                            return;
-                        }
-                        new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
+                ThreadUtils.runOnBackThread(() -> {
+                    Crash crash;
+                    if (param == null){
+                        crash = getDatabase().crashDao().getLast();
+                    }else{
+                        crash = getDatabase().crashDao().findById((long)param);
                     }
+                    if (crash == null){
+                        showError("Unable to found it");
+                        return;
+                    }
+                    new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
                 });
                 break;
 
             case SESSION:
-                ThreadUtils.runOnBackThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //ArrayList<Uri> files = (ArrayList<Uri>)params;
-                        //TODO: Session report
-                        new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
-                    }
+                ThreadUtils.runOnBackThread(() -> {
+                    //ArrayList<Uri> files = (ArrayList<Uri>)params;
+                    //TODO: Session report
+                    new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
                 });
                 break;
         }
@@ -321,12 +297,7 @@ public class DevTools {
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
-                    new Runnable(){
-                        @Override
-                        public void run() {
-                            openTools(false);
-                        }
-                    }, null);
+                    () -> openTools(false), null);
             return;
         }
 
@@ -357,4 +328,41 @@ public class DevTools {
         else
             FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "App started");
     }
+
+
+    //region [ RUNNABLES ]
+
+    private static Map<String, RunnableConfig> runnableCollection;
+
+    public static void addRunnable(String key, String title, int icon, Runnable run, Runnable callback) {
+        RunnableConfig runnableConfig = new RunnableConfig(key, title, run);
+        runnableConfig.setIcon(icon);
+        runnableConfig.setCallback(callback);
+        addRunnable(runnableConfig);
+    }
+
+    public static void addRunnable(RunnableConfig config){
+        if (runnableCollection == null)
+            runnableCollection = new HashMap<>();
+        runnableCollection.put(config.getKey(), config);
+    }
+
+    public static void run(String key){
+        RunnableConfig runnableConfig = runnableCollection.get(key);
+        if (runnableConfig!= null){
+            runnableConfig.getRun().run();
+            if (runnableConfig.getCallback()!= null)
+                runnableConfig.getCallback().run();
+        }
+    }
+
+    public static void removeRunnable(String key){
+        if (runnableCollection!=null)
+            runnableCollection.remove(key);
+    }
+
+    public static Map<String, RunnableConfig> getAllRunnable(){
+        return runnableCollection;
+    }
+    //endregion
 }
