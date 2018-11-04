@@ -16,7 +16,6 @@ import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.logic.shake.OnShakeListener;
 import es.rafaco.devtools.logic.shake.ShakeDetector;
 import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.FirstStartUtil;
@@ -350,7 +349,7 @@ public class DevTools {
     public static void run(String key){
         RunnableConfig runnableConfig = runnableCollection.get(key);
         if (runnableConfig!= null){
-            runnableConfig.getRun().run();
+            runnableConfig.getPerformer().run();
             if (runnableConfig.getCallback()!= null)
                 runnableConfig.getCallback().run();
         }

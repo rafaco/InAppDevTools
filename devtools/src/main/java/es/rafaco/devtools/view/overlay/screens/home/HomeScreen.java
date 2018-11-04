@@ -1,39 +1,25 @@
 package es.rafaco.devtools.view.overlay.screens.home;
 
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
-import es.rafaco.devtools.view.overlay.layers.NavigationStep;
-import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
+import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
-import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
-import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
-import es.rafaco.devtools.view.overlay.screens.storage.StorageScreen;
-import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
+import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
+import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
 
 public class HomeScreen extends OverlayScreen {
 
-    private final boolean ICON_STYLE = true;
-
-    private DecoratedToolInfoAdapter adapter;
+    private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
-    private TextView welcome;
-    private ArrayList<DecoratedToolInfo> dataList;
 
     public HomeScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -45,7 +31,7 @@ public class HomeScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_home_body; }
+    public int getBodyLayoutId() { return R.layout.tool_flexible; }
 
     @Override
     protected void onCreate() {
@@ -53,39 +39,57 @@ public class HomeScreen extends OverlayScreen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        initView(view);
-
-        if (ICON_STYLE){
-            view.findViewById(R.id.home_list).setVisibility(View.GONE);
-            welcome.setVisibility(View.GONE);
-
-            view.findViewById(R.id.info_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(InfoScreen.class, null)));
-
-            view.findViewById(R.id.run_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(RunScreen.class, null)));
-
-            view.findViewById(R.id.report_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(ReportScreen.class, null)));
-
-            view.findViewById(R.id.friendly_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(FriendlyLogScreen.class, null)));
-
-            view.findViewById(R.id.advanced_button)
-                    .setOnClickListener(v ->
-                            OverlayUIService.performNavigationStep(new NavigationStep(AdvancedScreen.class, null)));
-        }
-        else{
-            view.findViewById(R.id.home_icons).setVisibility(View.GONE);
-            view.findViewById(R.id.home_icons2).setVisibility(View.GONE);
-            initAdapter(view);
-            updateList();
-        }
+        List<Object> data = initData();
+        initAdapter(data);
     }
+
+    private List<Object> initData() {
+        List<Object> data = new ArrayList<>();
+
+        InfoHelper helper = new InfoHelper();
+        String welcome = helper.getFormattedAppLong() + "\n" + helper.getFormattedDeviceLong();
+        data.add(welcome);
+        //data.add(new TextConfig("Text", ))
+
+        data.add(new RunnableConfig("performer",
+                "Run",
+                R.drawable.ic_run_white_24dp,
+                () ->  OverlayUIService.performNavigation(RunScreen.class)));
+
+        data.add(new RunnableConfig("breakpoint",
+                "Steps",
+                R.drawable.ic_history_white_24dp,
+                () ->  OverlayUIService.performNavigation(FriendlyLogScreen.class)));
+
+        data.add(new RunnableConfig("sim_traffic",
+                "Report",
+                R.drawable.ic_send_rally_24dp,
+                () ->  OverlayUIService.performNavigation(ReportScreen.class)));
+
+        data.add(new RunnableConfig("sim_anr",
+                "Info",
+                R.drawable.ic_info_white_24dp,
+                () -> OverlayUIService.performNavigation(InfoScreen.class)));
+
+        data.add(new RunnableConfig("sim_crash",
+                "Config",
+                R.drawable.ic_settings_white_24dp,
+                () -> DevTools.showMessage("TODO")));
+
+        data.add(new RunnableConfig("sim_crash",
+                "Inspect",
+                R.drawable.ic_developer_mode_white_24dp,
+                () -> OverlayUIService.performNavigation(AdvancedScreen.class)));
+
+        return data;
+    }
+
+    private void initAdapter(List<Object> data) {
+        adapter = new FlexibleAdapter(3, data);
+        recyclerView = bodyView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(adapter);
+    }
+
 
     @Override
     protected void onStop() {
@@ -93,43 +97,5 @@ public class HomeScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
-    }
-
-    private void initView(View toolView) {
-        welcome = toolView.findViewById(R.id.home_welcome);
-        welcome.setText(getWelcomeMessage());
-    }
-
-    public String getWelcomeMessage(){
-        InfoHelper helper = new InfoHelper();
-        return "Welcome to " + helper.getAppName() + "'s DevTools";
-    }
-
-    private void initAdapter(View view) {
-        adapter = new DecoratedToolInfoAdapter(getContext(), new ArrayList<DecoratedToolInfo>());
-
-        recyclerView = view.findViewById(R.id.home_list);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void updateList() {
-        adapter.replaceAll(DevTools.getToolManager().getHomeInfos());
-        recyclerView.requestLayout();
-    }
-
-    //TODO: datalist not initialized any more!
-    public void updateContent(Class<?> toolClass, String content){
-        if (dataList!=null && dataList.size()>0){
-            for (DecoratedToolInfo info: dataList){
-                if (info.getClass().equals(toolClass)){
-                    info.setMessage(content);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }
     }
 }

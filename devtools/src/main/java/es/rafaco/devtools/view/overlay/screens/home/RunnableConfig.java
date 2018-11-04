@@ -3,18 +3,18 @@ package es.rafaco.devtools.view.overlay.screens.home;
 public class RunnableConfig {
     String key;
     String title;
-    Runnable run;
+    Runnable performer;
     Runnable callback;
     int icon;
 
-    public RunnableConfig(String key, String title, Runnable run) {
+    public RunnableConfig(String key, String title, Runnable performer) {
         this.key = key;
         this.title = title;
-        this.run = run;
+        this.performer = performer;
     }
 
-    public RunnableConfig(String key, String title, int icon, Runnable run) {
-        this(key, title, run);
+    public RunnableConfig(String key, String title, int icon, Runnable performer) {
+        this(key, title, performer);
         this.icon = icon;
     }
 
@@ -34,12 +34,12 @@ public class RunnableConfig {
         this.title = title;
     }
 
-    public Runnable getRun() {
-        return run;
+    public Runnable getPerformer() {
+        return performer;
     }
 
-    public void setRun(Runnable run) {
-        this.run = run;
+    public void setPerformer(Runnable performer) {
+        this.performer = performer;
     }
 
     public Runnable getCallback() {
@@ -56,5 +56,11 @@ public class RunnableConfig {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public void run(){
+        getPerformer().run();
+        if (getCallback()!= null)
+            getCallback().run();
     }
 }

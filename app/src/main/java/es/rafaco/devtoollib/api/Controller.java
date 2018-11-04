@@ -43,7 +43,7 @@ public class Controller implements Callback<List<Change>> {
             List<Change> changesList = response.body();
             //TODO: Only working below Android Nougat
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                changesList.forEach(change -> System.out.println(change.subject));
+                //changesList.forEach(change -> System.out.println(change.subject));
             }
         } else {
             System.out.println(response.errorBody());

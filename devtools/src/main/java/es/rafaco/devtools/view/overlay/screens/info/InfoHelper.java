@@ -377,9 +377,22 @@ public class InfoHelper extends ToolHelper {
         return String.format("%s version %s", mode, version);
     }
 
-    private String getFormattedDevice() {
+    public String getFormattedDevice() {
         return String.format("%s %s %s", Build.BRAND, Build.MODEL, isVirtual()? "Emulated!" : "");
     }
 
+    @NonNull
+    public String getFormattedDeviceLong() {
+        return String.format("%s %s with Android %s", capitalize(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionCodeName()
+    }
+
+    @NonNull
+    public String getFormattedAppLong() {
+        return getAppName() + " "  + getPackageInfo().versionName;// + " (" + getPackageInfo().versionCode + ")";
+    }
+
+    public String capitalize(String s){
+        return s.substring(0,1).toUpperCase() + s.substring(1);
+    }
     //endregion
 }

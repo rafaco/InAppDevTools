@@ -55,6 +55,9 @@ public class OverlayUIService extends Service {
     public OverlayUIService() {
     }
 
+    public static void performNavigation(Class<? extends OverlayScreen> target) {
+        performNavigationStep(new NavigationStep(target, null));
+    }
 
     public static void performNavigationStep(NavigationStep step) {
         if (step == null){

@@ -1,12 +1,11 @@
 package es.rafaco.devtools.tools;
 
-import android.os.Build;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
+import es.rafaco.devtools.view.utils.DecoratedToolInfo;
 
 public class InfoTool extends Tool {
 
@@ -30,10 +29,9 @@ public class InfoTool extends Tool {
 
         InfoHelper helper = new InfoHelper();
         String out = "";
-        out += helper.getAppName() + " "  + helper.getPackageInfo().versionName + " (" + helper.getPackageInfo().versionCode + ")";
+        out += helper.getFormattedAppLong();
         out += "\n";
-        out += Build.BRAND + " " + Build.MODEL + ". ";
-        out += "Android " + Build.VERSION.RELEASE + " (" + helper.getVersionCodeName() + ")";
+        out += helper.getFormattedDeviceLong();
 
         NavigationStep step = new NavigationStep(InfoScreen.class, null);
         return new DecoratedToolInfo(

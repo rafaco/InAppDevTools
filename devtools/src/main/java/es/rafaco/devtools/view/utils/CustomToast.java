@@ -32,7 +32,7 @@ public class CustomToast {
                 //toast.getView().getParent().getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                 toast.show();
 
-                List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(true);
+                List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
 
                 if(rootViews != null){
                     for (Pair<String, View> rootView : rootViews){

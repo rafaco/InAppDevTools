@@ -7,7 +7,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 
 public class RunnableViewHolder extends RecyclerView.ViewHolder {
@@ -27,6 +26,6 @@ public class RunnableViewHolder extends RecyclerView.ViewHolder {
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
         }
         button.setText(data.title);
-        button.setOnClickListener(v -> DevTools.run(data.key));
+        button.setOnClickListener(v -> data.run());
     }
 }

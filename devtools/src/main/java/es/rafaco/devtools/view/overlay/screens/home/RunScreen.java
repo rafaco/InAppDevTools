@@ -1,11 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.home;
 
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -24,7 +20,6 @@ import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.network.HttpBinService;
 
 public class RunScreen extends OverlayScreen {
-
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
@@ -51,14 +46,6 @@ public class RunScreen extends OverlayScreen {
         initAdapter(data);
     }
 
-    @Override
-    protected void onStop() {
-    }
-
-    @Override
-    protected void onDestroy() {
-    }
-
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
         addCustomItems(data);
@@ -70,7 +57,7 @@ public class RunScreen extends OverlayScreen {
 
     private void initAdapter(List<Object> data) {
         adapter = new FlexibleAdapter(2, data);
-        recyclerView = getView().findViewById(R.id.flexible);
+        recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
 
@@ -144,14 +131,11 @@ public class RunScreen extends OverlayScreen {
 
     public void onAnrButton() {
         Log.i(DevTools.TAG, "ANR requested, sleeping main thread for a while...");
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(10 * 1000);
-                } catch (InterruptedException e) {
-                    Log.e(DevTools.TAG, "Something wrong happen", e);
-                }
+        ThreadUtils.runOnUiThread(() -> {
+            try {
+                Thread.sleep(10 * 1000);
+            } catch (InterruptedException e) {
+                Log.e(DevTools.TAG, "Something wrong happen", e);
             }
         });
     }
@@ -159,11 +143,16 @@ public class RunScreen extends OverlayScreen {
     public void onCrashUiButton() {
         Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                throw new SimulatedException("Simulated crash on the UI thread", cause);
-            }
+        ThreadUtils.runOnUiThread(() -> {
+            throw new SimulatedException("Simulated crash on the UI thread", cause);
         });
+    }
+
+    @Override
+    protected void onStop() {
+    }
+
+    @Override
+    protected void onDestroy() {
     }
 }
