@@ -1,5 +1,6 @@
 package es.rafaco.devtools;
 
+import android.app.ActivityManager;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
@@ -63,6 +62,7 @@ public class DevTools {
     private static AnrLogger anrLogger;
     public static int readerCounter = 0;
     private static ShakeDetector shakeDetector;
+    private static Runnable onForceCloseRunnable;
 
     //region [ PUBLIC INITIALIZATION ]
 
@@ -348,6 +348,46 @@ public class DevTools {
 
     public static List<RunnableConfig> getCustomRunnables(){
         return customRunnables;
+    }
+
+    //endregion
+
+    //region [ RESTART AND FORCE CLOSE ]
+
+    public static void restartApp(){
+        //FriendlyLog.log( "I", "Run", "Restart", "Restart");
+        AppUtils.programRestart(getAppContext());
+        forceCloseApp();
+    }
+
+    public static void forceCloseApp(){
+        FriendlyLog.log( "I", "Run", "ForceClose", "Force Close");
+        if(onForceCloseRunnable != null)
+            onForceCloseRunnable.run();
+
+        forceClose();
+        ThreadUtils.runOnUiThread(() -> AppUtils.exit(), 1000);
+    }
+
+    public static void forceClose(){
+        /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+        ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
+        am.killBackgroundProcesses(getAppContext().getPackageName());*/
+
+        Intent closeForegroundIntent = new Intent(getAppContext(), NotificationUIService.class);
+        closeForegroundIntent.setAction(NotificationUIService.ACTION_STOP_FOREGROUND_SERVICE);
+        getAppContext().startService(closeForegroundIntent);
+
+        Intent closeOverlayIntent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FORCE_CLOSE, null);
+        getAppContext().startService(closeOverlayIntent);
+    }
+
+    public static void addOnForceCloseRunnnable(Runnable onForceClose){
+        onForceCloseRunnable = onForceClose;
+    }
+
+    public static Runnable getOnForceCloseRunnnable(){
+        return onForceCloseRunnable;
     }
     //endregion
 }

@@ -11,6 +11,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     private final ActivityLogManager manager;
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
     private SupportFragmentLifecycleCallbacks supportFragmentCallbacks;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private FragmentLifecycleCallbacks fragmentCallbacks;
 
 

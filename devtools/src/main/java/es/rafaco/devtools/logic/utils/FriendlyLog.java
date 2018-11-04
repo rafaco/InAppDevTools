@@ -129,6 +129,9 @@ public class FriendlyLog {
         else if (log.getCategory().equals("Process")){
             return R.drawable.ic_application_white_24dp;
         }
+        else if (log.getCategory().equals("Run")){
+            return R.drawable.ic_run_white_24dp;
+        }
         else if (log.getCategory().equals("Activity")){
             return R.drawable.ic_activity_white_24dp;
         }

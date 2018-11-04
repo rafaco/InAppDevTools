@@ -16,6 +16,7 @@ import java.util.Date;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.utils.AppUtils;
+import es.rafaco.devtools.logic.utils.DateUtils;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
@@ -42,29 +43,33 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
+        long startTime = new Date().getTime();
+        Log.d(DevTools.TAG, "CrashHandler: processing uncaughtException");
 
         try {
-            Log.d(DevTools.TAG, "CrashHandler.uncaughtException() called");
-
-            stopDevToolsServices();
+            //stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
+            Log.d(DevTools.TAG, "printLogcatError on " + String.valueOf(new Date().getTime() - startTime));
             printLogcatError(thread, crash);
+            Log.d(DevTools.TAG, "storeCrash on " + String.valueOf(new Date().getTime() - startTime));
             storeCrash(crash);
+            Log.d(DevTools.TAG, "savePending on " + String.valueOf(new Date().getTime() - startTime));
             PendingCrashUtil.savePending();
-
+            Log.d(DevTools.TAG, "saveLogcat on " + String.valueOf(new Date().getTime() - startTime));
             saveLogcat();
+            Log.d(DevTools.TAG, "saveScreenshot on " + String.valueOf(new Date().getTime() - startTime));
             saveScreenshot();
 
+            Log.d(DevTools.TAG, "CrashHandler: process finished ok on " + String.valueOf(new Date().getTime() - startTime));
             onCrashStored( thread, ex, crash);
 
             //TODO: RESEARCH handleApplicationCrash
             /*// Bring up crash dialog, wait for it to be dismissed
             ActivityManagerNative.getDefault().handleApplicationCrash(
                     mApplicationObject, new ApplicationErrorReport.CrashInfo(e));*/
-
-            Log.d(DevTools.TAG, "CrashHandler.uncaughtException() finished ok");
-        } catch (Exception e) {
-            Log.e(DevTools.TAG, "CrashHandler got an exception");
+        }
+        catch (Exception e) {
+            Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
             Log.e(DevTools.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
             Log.e(DevTools.TAG, String.valueOf(e.getStackTrace()));
             e.printStackTrace();
@@ -127,6 +132,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void storeCrash(final Crash crash) {
         DevToolsDatabase db = DevTools.getDatabase();
         crashId = db.crashDao().insert(crash);
+        //TODO
         //FriendlyLog.logCrash(crashId, crash);
         Log.d(DevTools.TAG, "Crash stored in db");
     }
@@ -177,10 +183,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //startExceptionActivity(crash.getException(), crash.getMessage(), crash);
 
         if (DevTools.getConfig().crashHandlerCallDefaultHandler){
-            Log.i(DevTools.TAG, "onCrashStored - Let the exception propagate to default handler");
+            Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{
-            Log.e(DevTools.TAG, "onCrashStored - Destroy app");
+            Log.e(DevTools.TAG, "CrashHandler: Restarting app");
             AppUtils.programRestart(DevTools.getAppContext());
             AppUtils.killMyProcess();
         }

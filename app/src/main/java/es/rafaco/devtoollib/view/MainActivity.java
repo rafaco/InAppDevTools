@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 () -> DevTools.showMessage("Mostrando mensaje"),
                 () -> DevTools.showMessage("Mensaje mostrado")));
 
-        DevTools.addCustomRunnable(new RunnableConfig("Select API",
+        DevTools.addCustomRunnable(new RunnableConfig("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 () -> DevTools.showMessage("Not already implemented")));
     }
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+
     }
 
     @Override

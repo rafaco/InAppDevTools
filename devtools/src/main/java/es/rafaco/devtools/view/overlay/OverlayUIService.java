@@ -46,7 +46,7 @@ public class OverlayUIService extends Service {
     private String lastRequestParam;
 
     public enum IntentAction { PERMISSION_GRANTED, RESTART_APP, CLOSE_APP, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON,
-        NAVIGATE_TO, NAVIGATE_BACK, HIDE, NAVIGATE_HOME
+        NAVIGATE_TO, NAVIGATE_BACK, HIDE, NAVIGATE_HOME, FORCE_CLOSE;
     }
 
     private OverlayLayersManager overlayLayersManager;
@@ -116,7 +116,11 @@ public class OverlayUIService extends Service {
 
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
-        
+
+        if (action.equals(IntentAction.FORCE_CLOSE)) {
+            onForceClose();
+        }
+
         if (!isInitialised(action, property))
             return;
 
@@ -155,11 +159,10 @@ public class OverlayUIService extends Service {
             hide();
         }
         else if (action.equals(IntentAction.CLOSE_APP)){
-            killProcess();
+            DevTools.forceCloseApp();
         }
         else if (action.equals(IntentAction.RESTART_APP)){
-            AppUtils.programRestart(getApplicationContext());
-            killProcess();
+            DevTools.restartApp();
         }
     }
 
@@ -239,6 +242,11 @@ public class OverlayUIService extends Service {
 
     //region [ STOP ]
 
+    private void onForceClose() {
+        Log.d(DevTools.TAG, "Stopping OverlayUIService");
+        stopSelf();
+    }
+
     @Override
     public void onTaskRemoved(Intent rootIntent){
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
@@ -253,12 +261,6 @@ public class OverlayUIService extends Service {
         if (overlayLayersManager != null) overlayLayersManager.destroy();
 
         super.onDestroy();
-    }
-
-    private void killProcess(){
-        Log.d(DevTools.TAG, "OverlayUIService - Stopping service");
-        stopSelf();
-        AppUtils.exit();
     }
 
     //region

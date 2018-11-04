@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="log_levels">
         <item>VERBOSE</item>
         <item>DEBUG</item>
@@ -7,4 +8,12 @@
         <item>WARNING</item>
         <item>ERROR</item>
     </string-array>
+
+    <string-array name="simulations">
+        <item>Network Traffic</item>
+        <item>ANR error</item>
+        <item>Crash UI thread</item>
+        <item>Crash Background thread</item>
+    </string-array>
+
 </resources>

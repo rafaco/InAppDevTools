@@ -33,6 +33,10 @@ public class ThreadUtils {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
 
+    public static void runOnUiThread(Runnable runnable, long delay){
+        new Handler(Looper.getMainLooper()).postDelayed(runnable, delay);
+    }
+
     public static void runOnBackThread(Runnable runnable){
         AsyncTask.execute(runnable);
     }

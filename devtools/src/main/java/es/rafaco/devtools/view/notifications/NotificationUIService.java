@@ -25,7 +25,6 @@ import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
 public class NotificationUIService extends Service {
 
-    private static final String TAG = "FOREGROUND_SERVICE";
     private static final int NOTIFICATION_ID = 3456;
     private static final String CHANNEL_ID = "es.rafaco.devtools";
     private static final String GROUP_ID = "es.rafaco.devtools.foreground_service";
@@ -54,7 +53,7 @@ public class NotificationUIService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "My foreground service onCreate().");
+        Log.d(DevTools.TAG, "My foreground service onCreate().");
     }
 
     @Override
@@ -101,7 +100,7 @@ public class NotificationUIService extends Service {
     /* Used to build and start foreground service. */
     private void startForegroundService()
     {
-        Log.d(TAG, "Start foreground service.");
+        Log.d(DevTools.TAG, "Start foreground service.");
 
         createNotificationChannel();
 
@@ -249,14 +248,9 @@ public class NotificationUIService extends Service {
         return new NotificationCompat.Action(icon, title, pendingPrevIntent);
     }
 
-    private void stopForegroundService()
-    {
-        Log.d(TAG, "Stop foreground service.");
-
-        // Stop foreground service and remove the notification.
+    private void stopForegroundService() {
+        Log.d(DevTools.TAG, "Stopping NotificationUIService");
         stopForeground(true);
-
-        // Stop the foreground service.
         stopSelf();
     }
 

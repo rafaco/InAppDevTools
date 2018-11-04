@@ -17,10 +17,6 @@
         <activity
             android:name=".view.activities.PermissionActivity"
             android:theme="@style/LibTheme.Dialog" />
-        <activity
-            android:name=".view.activities.CrashActivity"
-            android:label="@string/lib_name"
-            android:theme="@style/LibTheme.Dialog" />
 
         <activity android:name=".view.dialogs.WelcomeDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>

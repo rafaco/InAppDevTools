@@ -1,8 +1,11 @@
 package es.rafaco.devtools.view.overlay.screens.home;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,17 +78,9 @@ public class RunScreen extends OverlayScreen {
                 R.drawable.ic_pan_tool_white_24dp,
                 () -> DevTools.breakpoint(RunScreen.this)));
 
-        data.add(new RunnableConfig("Simulate Traffic",
-                R.drawable.ic_cloud_queue_white_24dp,
-                () -> HttpBinService.simulation(DevTools.getOkHttpClient())));
-
-        data.add(new RunnableConfig("Simulate ANR",
-                R.drawable.ic_block_white_24dp,
-                () ->  onAnrButton()));
-
-        data.add(new RunnableConfig("Simulate Crash",
-                R.drawable.ic_bug_report_rally_24dp,
-                () -> onCrashUiButton()));
+        data.add(new RunnableConfig("Simulate...",
+                R.drawable.ic_input_white_24dp,
+                () -> onSimulateButton()));
     }
 
 
@@ -106,16 +101,41 @@ public class RunScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Force close",
                 R.drawable.ic_close_white_24dp,
-                () -> {
-                    OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
-                    AppUtils.killMyProcess();
-                }));
+                () -> DevTools.forceCloseApp()));
         data.add(new RunnableConfig("Restart app",
                 R.drawable.ic_replay_white_24dp,
-                () -> {
-                    OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
-                    AppUtils.fullRestart(getContext());
-                }));
+                () -> DevTools.restartApp()));
+    }
+
+    private void onSimulateButton() {
+        String[] optionsArray = getContext().getResources().getStringArray(R.array.simulations);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Simulations")
+                .setCancelable(true)
+                .setSingleChoiceItems(optionsArray, 0, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        switch (which){
+                            case 0: //Traffic
+                                HttpBinService.simulation(DevTools.getOkHttpClient());
+                                break;
+                            case 1: //Anr
+                                onAnrButton();
+                                break;
+                            case 2: //Crash UI
+                                onCrashUiButton();
+                                break;
+                            case 3: //Crash BG
+                                onCrashBackButton();
+                                break;
+                        }
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.show();
     }
 
     public void onAnrButton() {
@@ -134,6 +154,14 @@ public class RunScreen extends OverlayScreen {
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnUiThread(() -> {
             throw new SimulatedException("Simulated crash on the UI thread", cause);
+        });
+    }
+
+    public void onCrashBackButton() {
+        Log.i(DevTools.TAG, "Simulated crash on a background thread...");
+        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
+        ThreadUtils.runOnBackThread(() -> {
+            throw new SimulatedException("Simulated crash on a background thread", cause);
         });
     }
 
