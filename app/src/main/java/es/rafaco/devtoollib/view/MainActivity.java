@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(SampleApp.TAG, "MainActivity onCreate() performed");
         //DevTools.breakpoint(this);
 
-        DevTools.addRunnable("show",
-                "Show message", R.drawable.ic_run_white_24dp,
+        DevTools.addCustomRunnable(new RunnableConfig("Show message",
+                R.drawable.ic_run_white_24dp,
                 () -> DevTools.showMessage("Mostrando mensaje"),
-                () -> DevTools.showMessage("Mensaje mostrado"));
+                () -> DevTools.showMessage("Mensaje mostrado")));
 
-        DevTools.addRunnable(new RunnableConfig("env",
-                "Select API", es.rafaco.devtools.R.drawable.ic_settings_white_24dp,
+        DevTools.addCustomRunnable(new RunnableConfig("Select API",
+                R.drawable.ic_settings_white_24dp,
                 () -> DevTools.showMessage("Not already implemented")));
     }
 

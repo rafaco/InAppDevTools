@@ -1,29 +1,24 @@
 package es.rafaco.devtools.view.overlay.screens.home;
 
 public class RunnableConfig {
-    String key;
     String title;
     Runnable performer;
     Runnable callback;
     int icon;
 
-    public RunnableConfig(String key, String title, Runnable performer) {
-        this.key = key;
+    public RunnableConfig(String title, Runnable performer) {
         this.title = title;
         this.performer = performer;
     }
 
-    public RunnableConfig(String key, String title, int icon, Runnable performer) {
-        this(key, title, performer);
+    public RunnableConfig(String title, int icon, Runnable performer) {
+        this(title, performer);
         this.icon = icon;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
+    public RunnableConfig(String title, int icon, Runnable performer, Runnable callback) {
+        this(title, icon, performer);
+        this.callback = callback;
     }
 
     public String getTitle() {

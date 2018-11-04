@@ -51,35 +51,29 @@ public class HomeScreen extends OverlayScreen {
         data.add(welcome);
         //data.add(new TextConfig("Text", ))
 
-        data.add(new RunnableConfig("performer",
-                "Run",
+        data.add(new RunnableConfig("Run",
                 R.drawable.ic_run_white_24dp,
                 () ->  OverlayUIService.performNavigation(RunScreen.class)));
 
-        data.add(new RunnableConfig("breakpoint",
-                "Steps",
+        data.add(new RunnableConfig("Steps",
                 R.drawable.ic_history_white_24dp,
                 () ->  OverlayUIService.performNavigation(FriendlyLogScreen.class)));
 
-        data.add(new RunnableConfig("sim_traffic",
-                "Report",
+        data.add(new RunnableConfig("Report",
                 R.drawable.ic_send_rally_24dp,
                 () ->  OverlayUIService.performNavigation(ReportScreen.class)));
 
-        data.add(new RunnableConfig("sim_anr",
-                "Info",
+        data.add(new RunnableConfig("Info",
                 R.drawable.ic_info_white_24dp,
                 () -> OverlayUIService.performNavigation(InfoScreen.class)));
 
-        data.add(new RunnableConfig("sim_crash",
-                "Config",
+        data.add(new RunnableConfig("Config",
                 R.drawable.ic_settings_white_24dp,
                 () -> DevTools.showMessage("TODO")));
 
-        data.add(new RunnableConfig("sim_crash",
-                "Inspect",
+        data.add(new RunnableConfig("Inspect",
                 R.drawable.ic_developer_mode_white_24dp,
-                () -> OverlayUIService.performNavigation(AdvancedScreen.class)));
+                () -> OverlayUIService.performNavigation(InspectScreen.class)));
 
         return data;
     }

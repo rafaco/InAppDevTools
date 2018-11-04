@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TooManyListenersException;
 
 import es.rafaco.devtools.DevTools;
@@ -63,65 +62,55 @@ public class RunScreen extends OverlayScreen {
 
     private void addCustomItems(List<Object> data) {
         data.add("Sample App");
-        Map<String, RunnableConfig> allRunnable = DevTools.getAllRunnable();
-        data.addAll(allRunnable.values());
+        data.addAll(DevTools.getCustomRunnables());
     }
 
     private void addDevToolsItems(List<Object> data) {
         data.add("DevTools");
-        data.add(new RunnableConfig("screen",
-                "Take Screen",
+        data.add(new RunnableConfig( "Take Screen",
                 R.drawable.ic_add_a_photo_rally_24dp,
                 () -> DevTools.takeScreenshot()));
 
-        data.add(new RunnableConfig("breakpoint",
-                "Breakpoint",
+        data.add(new RunnableConfig("Breakpoint",
                 R.drawable.ic_pan_tool_white_24dp,
                 () -> DevTools.breakpoint(RunScreen.this)));
 
-        data.add(new RunnableConfig("sim_traffic",
-                "Simulate Traffic",
+        data.add(new RunnableConfig("Simulate Traffic",
                 R.drawable.ic_cloud_queue_white_24dp,
                 () -> HttpBinService.simulation(DevTools.getOkHttpClient())));
 
-        data.add(new RunnableConfig("sim_anr",
-                "Simulate ANR",
+        data.add(new RunnableConfig("Simulate ANR",
                 R.drawable.ic_block_white_24dp,
                 () ->  onAnrButton()));
 
-        data.add(new RunnableConfig("sim_crash",
-                "Simulate Crash",
+        data.add(new RunnableConfig("Simulate Crash",
                 R.drawable.ic_bug_report_rally_24dp,
                 () -> onCrashUiButton()));
     }
 
 
     private void addAndroidItems(List<Object> data) {
-        data.add("DevTools");
-        data.add(new RunnableConfig("app_info",
-                "App Info",
+        data.add("Android");
+        data.add(new RunnableConfig("App Info",
                 R.drawable.ic_info_white_24dp,
                 () -> {
                     OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
                     AppUtils.openAppSettings(getContext());
                 }));
-        data.add(new RunnableConfig("dev_options",
-                "Dev Options",
+        data.add(new RunnableConfig("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
                 () -> {
                     OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
                     AppUtils.openDeveloperOptions(getContext());
                 }));
 
-        data.add(new RunnableConfig("close",
-                "Force close",
+        data.add(new RunnableConfig("Force close",
                 R.drawable.ic_close_white_24dp,
                 () -> {
                     OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
                     AppUtils.killMyProcess();
                 }));
-        data.add(new RunnableConfig("restart",
-                "Restart app",
+        data.add(new RunnableConfig("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 () -> {
                     OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);

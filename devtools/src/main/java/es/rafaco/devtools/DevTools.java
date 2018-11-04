@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
@@ -331,37 +333,21 @@ public class DevTools {
 
     //region [ RUNNABLES ]
 
-    private static Map<String, RunnableConfig> runnableCollection;
+    private static List<RunnableConfig> customRunnables;
 
-    public static void addRunnable(String key, String title, int icon, Runnable run, Runnable callback) {
-        RunnableConfig runnableConfig = new RunnableConfig(key, title, run);
-        runnableConfig.setIcon(icon);
-        runnableConfig.setCallback(callback);
-        addRunnable(runnableConfig);
+    public static void addCustomRunnable(RunnableConfig config){
+        if (customRunnables == null)
+            customRunnables = new ArrayList<>();
+        customRunnables.add(config);
     }
 
-    public static void addRunnable(RunnableConfig config){
-        if (runnableCollection == null)
-            runnableCollection = new HashMap<>();
-        runnableCollection.put(config.getKey(), config);
+    public static void removeCustomRunnable(RunnableConfig target){
+        if (customRunnables !=null && customRunnables.contains(target))
+            customRunnables.remove(target);
     }
 
-    public static void run(String key){
-        RunnableConfig runnableConfig = runnableCollection.get(key);
-        if (runnableConfig!= null){
-            runnableConfig.getPerformer().run();
-            if (runnableConfig.getCallback()!= null)
-                runnableConfig.getCallback().run();
-        }
-    }
-
-    public static void removeRunnable(String key){
-        if (runnableCollection!=null)
-            runnableCollection.remove(key);
-    }
-
-    public static Map<String, RunnableConfig> getAllRunnable(){
-        return runnableCollection;
+    public static List<RunnableConfig> getCustomRunnables(){
+        return customRunnables;
     }
     //endregion
 }
