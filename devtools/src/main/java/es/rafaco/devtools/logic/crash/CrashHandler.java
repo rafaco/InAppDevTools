@@ -53,7 +53,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
-            if (!ThreadUtils.isTheUiThread(thread)) DevTools.forceClose();
+            //if (!ThreadUtils.isTheUiThread(thread))
+                DevTools.forceClose();
             storeCrash(crash);
             PendingCrashUtil.savePending();
             saveLogcat();

@@ -20,6 +20,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.utils.UiUtils;
 import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
 
@@ -54,6 +55,7 @@ public class NotificationUIService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(DevTools.TAG, "My foreground service onCreate().");
+        instance = this;
     }
 
     @Override
@@ -97,34 +99,48 @@ public class NotificationUIService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    /* Used to build and start foreground service. */
-    private void startForegroundService()
-    {
+    private void startForegroundService() {
         Log.d(DevTools.TAG, "Start foreground service.");
 
         createNotificationChannel();
 
-        // Create notification default intent.
         Intent intent = new Intent();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
         Notification notification = buildMainNotification(pendingIntent,
                 PendingCrashUtil.isPending() ? new Crash() : null);
 
         //createNotificationGroup();
         //createNotificationSummary();
+        /*if (PendingCrashUtil.isPending()){
+            Notification crashNotification = buildCrashNotification(pendingIntent);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify((int)new Date().getTime(), crashNotification);
 
-        // Start foreground service.
+            PendingCrashUtil.clearPending();
+        }*/
+
         startForeground(NOTIFICATION_ID, notification);
-
-        if (PendingCrashUtil.isPending()){
-            //Notification crashNotification = buildCrashNotification(pendingIntent);
-            //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            //notificationManager.notify((int)new Date().getTime(), crashNotification);
-
-            //PendingCrashUtil.clearPending();
-        }
     }
+
+    //region [ STATIC STOP ]
+
+    //TODO: [LOW:Arch] Replace by bounded service
+    private static NotificationUIService instance;
+
+    public static void close(){
+        instance.stopForegroundService();
+    }
+    //endregion
+
+    private void stopForegroundService() {
+        Log.d(DevTools.TAG, "Stopping NotificationUIService");
+        stopForeground(true);
+        stopSelf();
+        instance = null;
+    }
+
+
+    //region [ NOTIFICATION ]
 
     private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
 
@@ -248,12 +264,6 @@ public class NotificationUIService extends Service {
         return new NotificationCompat.Action(icon, title, pendingPrevIntent);
     }
 
-    private void stopForegroundService() {
-        Log.d(DevTools.TAG, "Stopping NotificationUIService");
-        stopForeground(true);
-        stopSelf();
-    }
-
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -306,4 +316,6 @@ public class NotificationUIService extends Service {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(SUMMARY_ID, summaryNotification);
     }
+
+    //endregion
 }

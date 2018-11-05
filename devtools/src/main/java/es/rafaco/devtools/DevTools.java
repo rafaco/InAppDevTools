@@ -378,13 +378,15 @@ public class DevTools {
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
         Log.w(DevTools.TAG, "Stopping Foreground");
-        Intent closeForegroundIntent = new Intent(getAppContext(), NotificationUIService.class);
+        NotificationUIService.close();
+        /*Intent closeForegroundIntent = new Intent(getAppContext(), NotificationUIService.class);
         closeForegroundIntent.setAction(NotificationUIService.ACTION_STOP_FOREGROUND_SERVICE);
-        getAppContext().startService(closeForegroundIntent);
+        getAppContext().startService(closeForegroundIntent);*/
 
         Log.w(DevTools.TAG, "Stopping Overlay");
-        Intent closeOverlayIntent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FORCE_CLOSE, null);
-        getAppContext().startService(closeOverlayIntent);
+        OverlayUIService.close();
+        /*Intent closeOverlayIntent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FORCE_CLOSE, null);
+        getAppContext().startService(closeOverlayIntent);*/
     }
 
     public static void addOnForceCloseRunnnable(Runnable onForceClose){
@@ -394,5 +396,6 @@ public class DevTools {
     public static Runnable getOnForceCloseRunnnable(){
         return onForceCloseRunnable;
     }
+
     //endregion
 }
