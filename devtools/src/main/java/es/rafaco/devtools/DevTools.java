@@ -43,6 +43,7 @@ import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
+import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.devtools.view.overlay.screens.home.RunnableConfig;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
@@ -115,9 +116,11 @@ public class DevTools {
 
 
         if (PendingCrashUtil.isPending()){
-            Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getAppContext().startActivity(intent);
+            Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
+            DevTools.getAppContext().startService(intent);
+            //Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //getAppContext().startActivity(intent);
             PendingCrashUtil.clearPending();
         }
         else if (FirstStartUtil.isFirstStart()){
@@ -366,18 +369,22 @@ public class DevTools {
             onForceCloseRunnable.run();
 
         forceClose();
-        ThreadUtils.runOnUiThread(() -> AppUtils.exit(), 1000);
+        ThreadUtils.runOnBackThread(() -> AppUtils.exit(), 100);
     }
 
     public static void forceClose(){
+        Log.w(DevTools.TAG, "Stopping Anr");
+        anrLogger.destroy();
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
+        Log.w(DevTools.TAG, "Stopping Foreground");
         Intent closeForegroundIntent = new Intent(getAppContext(), NotificationUIService.class);
         closeForegroundIntent.setAction(NotificationUIService.ACTION_STOP_FOREGROUND_SERVICE);
         getAppContext().startService(closeForegroundIntent);
 
+        Log.w(DevTools.TAG, "Stopping Overlay");
         Intent closeOverlayIntent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FORCE_CLOSE, null);
         getAppContext().startService(closeOverlayIntent);
     }
