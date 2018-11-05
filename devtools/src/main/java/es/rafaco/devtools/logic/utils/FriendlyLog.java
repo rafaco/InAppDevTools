@@ -189,7 +189,6 @@ public class FriendlyLog {
         log.setDate(crash.getDate());
         log.setMessage(crash.getMessage());
         log.setLinkedId(crashId);
-        logAtLogcat(log);
         DevTools.getDatabase().friendlyDao().update(log);
     }
 
@@ -225,8 +224,19 @@ public class FriendlyLog {
             return;
         }
 
+        String overview;
+        switch (transaction.getStatus()) {
+            case Failed:
+                overview = transaction.getError();
+                break;
+            case Requested:
+                overview = "...";
+                break;
+            default:
+                overview = transaction.getResponseMessage() + "(" + String.valueOf(transaction.getResponseCode()) + ")";
+        }
+        log.setMessage(overview + " from " + transaction.getPath());
         log.setType(transaction.getStatus().name());
-        log.setMessage("Request to " + transaction.getPath());
 
         if (log.getType().equals(HttpTransaction.Status.Failed.name())){
             log.setSeverity("E");
@@ -235,11 +245,6 @@ public class FriendlyLog {
         }
 
         logAtLogcat(log);
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                DevTools.getDatabase().friendlyDao().update(log);
-            }
-        });
+        ThreadUtils.runOnBackThread(() -> DevTools.getDatabase().friendlyDao().update(log));
     }
 }
