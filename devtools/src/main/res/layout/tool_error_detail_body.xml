@@ -80,7 +80,7 @@
         android:orientation="horizontal"
         android:layout_marginTop="5dp">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stacktrace_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             android:backgroundTint="@color/black"
             android:textColor="@color/rally_white"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logcat_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reveal_details_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
             android:backgroundTint="@color/rally_white"
             android:textColor="@color/rally_bg_solid"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

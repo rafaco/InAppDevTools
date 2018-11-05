@@ -2,7 +2,7 @@ package es.rafaco.devtools.view.overlay.layers;
 
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;

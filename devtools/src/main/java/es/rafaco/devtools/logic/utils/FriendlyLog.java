@@ -1,7 +1,7 @@
 package es.rafaco.devtools.logic.utils;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;

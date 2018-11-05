@@ -20,7 +20,7 @@ package es.rafaco.devtools.view.overlay.screens.network;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by skyfishjy on 10/31/14.

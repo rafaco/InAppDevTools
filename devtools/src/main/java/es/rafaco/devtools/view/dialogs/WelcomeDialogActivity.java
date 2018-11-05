@@ -3,9 +3,9 @@ package es.rafaco.devtools.view.dialogs;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 
 import es.rafaco.devtools.DevTools;

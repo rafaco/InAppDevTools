@@ -3,7 +3,7 @@ package es.rafaco.devtools.view.overlay.layers;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

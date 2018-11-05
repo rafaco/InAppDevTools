@@ -2,11 +2,11 @@ package es.rafaco.devtools.view.dialogs;
 
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.AppCompatButton;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;

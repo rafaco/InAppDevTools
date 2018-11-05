@@ -2,9 +2,9 @@ package es.rafaco.devtools.view.overlay.screens.home;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import es.rafaco.devtools.R;

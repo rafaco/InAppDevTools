@@ -1,10 +1,9 @@
 package es.rafaco.devtools;
 
-import android.app.ActivityManager;
-import android.arch.lifecycle.ProcessLifecycleOwner;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import es.rafaco.devtools.tools.ScreenTool;
 import es.rafaco.devtools.tools.StorageTool;
 import es.rafaco.devtools.tools.ToolManager;
 import es.rafaco.devtools.view.activities.PermissionActivity;
-import es.rafaco.devtools.view.dialogs.CrashDialogActivity;
 import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
 import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
 import es.rafaco.devtools.view.notifications.NotificationUIService;

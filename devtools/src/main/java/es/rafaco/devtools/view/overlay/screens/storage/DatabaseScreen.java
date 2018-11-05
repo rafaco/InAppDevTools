@@ -1,7 +1,5 @@
 package es.rafaco.devtools.view.overlay.screens.storage;
 
-import android.support.design.widget.TabLayout;
-
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import tech.linjiang.pandora.Pandora;
-import tech.linjiang.pandora.ui.item.DBItem;
 import tech.linjiang.pandora.ui.item.NameItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;

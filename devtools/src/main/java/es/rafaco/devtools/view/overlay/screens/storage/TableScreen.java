@@ -1,9 +1,8 @@
 package es.rafaco.devtools.view.overlay.screens.storage;
 
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import java.util.List;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.database.DatabaseResult;
-import tech.linjiang.pandora.ui.fragment.EditFragment;
-import tech.linjiang.pandora.ui.fragment.TableFragment;
 import tech.linjiang.pandora.ui.item.GridItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.GridDividerDecoration;

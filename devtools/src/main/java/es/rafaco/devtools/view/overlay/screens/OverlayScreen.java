@@ -2,7 +2,7 @@ package es.rafaco.devtools.view.overlay.screens;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;

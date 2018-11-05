@@ -1,7 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.home;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -11,15 +11,10 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
-import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.devtools.view.overlay.screens.info.InfoHelper;
-import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.network.NetworkScreen;
-import es.rafaco.devtools.view.overlay.screens.report.ReportScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 import es.rafaco.devtools.view.overlay.screens.storage.StorageScreen;
 

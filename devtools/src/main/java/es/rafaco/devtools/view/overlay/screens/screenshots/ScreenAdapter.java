@@ -1,10 +1,10 @@
 package es.rafaco.devtools.view.overlay.screens.screenshots;
 
 import android.content.Context;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,9 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.List;
 
@@ -22,7 +19,6 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
-import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.utils.CustomToast;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {

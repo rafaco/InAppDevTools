@@ -4,12 +4,12 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +17,8 @@ import android.widget.TextView;
 
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
 
-import java.util.TooManyListenersException;
-
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.logic.crash.SimulatedException;
-import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 

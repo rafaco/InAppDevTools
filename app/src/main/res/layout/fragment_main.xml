@@ -8,14 +8,14 @@
     es.rafaco.devtools.tools:showIn="@layout/activity_main"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/show_tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:text="Show DevTools"/>
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

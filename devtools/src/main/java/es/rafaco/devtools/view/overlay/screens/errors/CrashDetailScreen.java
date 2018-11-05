@@ -1,7 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +16,6 @@ import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
-import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;

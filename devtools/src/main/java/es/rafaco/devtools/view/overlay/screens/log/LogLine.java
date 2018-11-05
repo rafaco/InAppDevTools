@@ -2,14 +2,13 @@ package es.rafaco.devtools.view.overlay.screens.log;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 
 

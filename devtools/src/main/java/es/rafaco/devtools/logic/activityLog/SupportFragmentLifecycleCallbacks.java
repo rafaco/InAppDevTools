@@ -2,8 +2,8 @@ package es.rafaco.devtools.logic.activityLog;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.view.View;
 
 import es.rafaco.devtools.logic.utils.FriendlyLog;

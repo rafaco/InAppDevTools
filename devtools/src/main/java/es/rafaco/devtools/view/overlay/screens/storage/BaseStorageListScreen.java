@@ -1,14 +1,11 @@
 package es.rafaco.devtools.view.overlay.screens.storage;
 
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
-import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.ui.view.MenuRecyclerView;
 import tech.linjiang.pandora.util.ViewKnife;

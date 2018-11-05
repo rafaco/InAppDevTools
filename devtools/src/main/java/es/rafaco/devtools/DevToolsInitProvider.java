@@ -7,13 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-
-import java.util.Date;
-
-import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
-import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
+import androidx.annotation.Nullable;
 
 
 public class DevToolsInitProvider extends ContentProvider {

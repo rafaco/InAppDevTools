@@ -3,8 +3,8 @@ package es.rafaco.devtools.logic.crash;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
 

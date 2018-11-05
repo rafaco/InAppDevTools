@@ -4,12 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
