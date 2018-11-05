@@ -164,23 +164,17 @@ public class CrashDetailScreen extends OverlayScreen {
     private void requestData() {
         if (!TextUtils.isEmpty(getParam())){
             final long crashId = Long.parseLong(getParam());
-
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    crash = DevTools.getDatabase().crashDao().findById(crashId);
-                    helper.solvePendingData(crash, new Runnable() {
-                        @Override
-                        public void run() {
-                            crash = DevTools.getDatabase().crashDao().findById(crashId);
-                            updateView();
-                        }
-                    });
-                }
-            });
-        }else{
-            getScreenManager().goBack();
+            crash = DevTools.getDatabase().crashDao().findById(crashId);
         }
+        else{
+            crash = DevTools.getDatabase().crashDao().getLast();
+        }
+        updateView();
+
+        helper.solvePendingData(crash, () -> {
+            crash = DevTools.getDatabase().crashDao().findById(crash.getUid());
+            updateView();
+        });
     }
 
     @Override

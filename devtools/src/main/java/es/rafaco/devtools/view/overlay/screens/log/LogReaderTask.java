@@ -31,7 +31,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
         this.adaptor = adaptor;
         this.commandScript = commandScript;
         this.id = DevTools.readerCounter++;
-        Log.d(DevTools.TAG, "LogReaderTask " + id + " created:" + commandScript);
+        Log.v(DevTools.TAG, "LogReaderTask " + id + " created:" + commandScript);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
             isRunning = false;
         }
 
-        Log.d(DevTools.TAG, "LogReaderTask " + id + " finished doInBackground");
+        Log.v(DevTools.TAG, "LogReaderTask " + id + " finished doInBackground");
         return null;
     }
 
@@ -81,8 +81,8 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     protected void onCancelled() {
         isRunning = false;
         if (logprocess != null) logprocess.destroy();
-        Log.d(DevTools.TAG, "LogReaderTask " + id + " onCancelled");
-        Log.d(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
+        Log.v(DevTools.TAG, "LogReaderTask " + id + " onCancelled");
+        Log.v(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
                 adaptor.getItemCount(), readCounter, processedCounter, nullCounter, sameCounter));
 
         if(onCancelledCallback !=null){
@@ -101,8 +101,8 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        Log.d(DevTools.TAG, "LogReaderTask " + id + " onPostExecute");
-        Log.d(DevTools.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
+        Log.v(DevTools.TAG, "LogReaderTask " + id + " onPostExecute");
+        Log.v(DevTools.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
     }
 
     @Override

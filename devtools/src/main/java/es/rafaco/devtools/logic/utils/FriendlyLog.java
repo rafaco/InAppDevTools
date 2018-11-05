@@ -173,16 +173,24 @@ public class FriendlyLog {
         return -1;
     }
 
-    public static void logCrash(long crashId, Crash crash) {
+    public static long logCrash(String message) {
         final Friendly log = new Friendly();
-        log.setDate(crash.getDate());
-        log.setSeverity("F");
+        log.setDate(new Date().getTime());
+        log.setSeverity("E");
         log.setCategory("Error");
         log.setType("Crash");
+        log.setMessage(message);
+        logAtLogcat(log);
+        return DevTools.getDatabase().friendlyDao().insert(log);
+    }
+
+    public static void logCrashDetails(long friendlyLogId, long crashId, Crash crash) {
+        final Friendly log = DevTools.getDatabase().friendlyDao().findById(friendlyLogId);
+        log.setDate(crash.getDate());
         log.setMessage(crash.getMessage());
         log.setLinkedId(crashId);
         logAtLogcat(log);
-        DevTools.getDatabase().friendlyDao().insert(log);
+        DevTools.getDatabase().friendlyDao().update(log);
     }
 
     public static void logAnr(long anrId, Anr anr) {

@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.utils.FriendlyLog;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Logcat;
 import es.rafaco.devtools.storage.files.DevToolsFiles;
@@ -50,6 +51,7 @@ public class LogHelper extends ToolHelper{
                     .command(fullCommand)
                     .redirectErrorStream(true)
                     .start();
+            FriendlyLog.log("D", "LogCat", "clear", "Logcat buffer cleared");
             Log.i(DevTools.TAG, "LogcatBuffer cleared");
         } catch (IOException e) {
             Log.e(DevTools.TAG, "LogcatBuffer showPlaceholder has failed :(");

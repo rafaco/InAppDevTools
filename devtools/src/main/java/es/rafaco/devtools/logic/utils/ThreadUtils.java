@@ -3,6 +3,7 @@ package es.rafaco.devtools.logic.utils;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 
 import es.rafaco.devtools.DevTools;
@@ -39,5 +40,13 @@ public class ThreadUtils {
 
     public static void runOnBackThread(Runnable runnable){
         AsyncTask.execute(runnable);
+    }
+
+    public static void runOnBackThread(Runnable runnable, long delay){
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+
+        handler.postDelayed(runnable, delay);
     }
 }

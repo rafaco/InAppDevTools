@@ -106,7 +106,7 @@ public class DevTools {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
 
         //if (config.invocationByShake)
-            startShakeDetector(context);
+        startShakeDetector(context);
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 

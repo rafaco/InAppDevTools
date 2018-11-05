@@ -99,13 +99,12 @@ public class AppUtils {
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, pendingIntent);
     }
 
     public static void exit() {
-        //Log.e("DevTools", "Killing process...");
-        //android.os.Process.killProcess(android.os.Process.myPid());
         Log.d("DevTools", "Killing application");
+        android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);
     }
 
