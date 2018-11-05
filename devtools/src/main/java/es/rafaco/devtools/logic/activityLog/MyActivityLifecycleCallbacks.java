@@ -11,8 +11,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,8 +38,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
     private SupportFragmentLifecycleCallbacks supportFragmentCallbacks;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private FragmentLifecycleCallbacks fragmentCallbacks;
+    //private FragmentLifecycleCallbacks fragmentCallbacks;
 
 
     public MyActivityLifecycleCallbacks(ActivityLogManager manager) {
@@ -313,11 +310,12 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             FriendlyLog.log("V", "Fragment", "CallbacksRegistered", message);
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if (fragmentCallbacks==null)
+            //TODO
+            /*if (fragmentCallbacks==null)
                 this.fragmentCallbacks = new FragmentLifecycleCallbacks();
 
             activity.getFragmentManager()
-                    .registerFragmentLifecycleCallbacks(fragmentCallbacks, true);
+                    .registerFragmentLifecycleCallbacks(fragmentCallbacks, true);*/
         }
     }
 
@@ -332,8 +330,9 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             FriendlyLog.log("V", "Fragment", "CallbacksUnregistered", message);
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            activity.getFragmentManager()
-                    .unregisterFragmentLifecycleCallbacks(fragmentCallbacks);
+            //TODO
+            /*activity.getFragmentManager()
+                    .unregisterFragmentLifecycleCallbacks(fragmentCallbacks);*/
         }
     }
 
