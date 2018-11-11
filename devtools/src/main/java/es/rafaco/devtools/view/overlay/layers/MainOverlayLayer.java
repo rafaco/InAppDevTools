@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -192,29 +193,36 @@ public class MainOverlayLayer extends OverlayLayer {
 
     public void toogleSizePosition(MenuItem item) {
 
-        WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
+        WindowManager.LayoutParams viewLayoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
+        LinearLayout child = view.findViewById(R.id.main_container);
+        FrameLayout.LayoutParams childLayoutParams = (FrameLayout.LayoutParams) child.getLayoutParams();
+
         if (currentSizePosition.equals(SizePosition.FULL)) {
             currentSizePosition = SizePosition.HALF_FIRST;
             item.setIcon(R.drawable.ic_arrow_up_rally_24dp);
 
-            int halfHeight = UiUtils.getDisplaySize(view.getContext()).y / 2;
-            layoutParams.height = halfHeight;
-            layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
+            int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+            viewLayoutParams.height = halfHeight;
+            viewLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
+            childLayoutParams.gravity = Gravity.BOTTOM;
         }
         else if (currentSizePosition.equals(SizePosition.HALF_FIRST)) {
             currentSizePosition = SizePosition.HALF_SECOND;
             item.setIcon(R.drawable.ic_unfold_more_rally_24dp);
 
-            layoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+            childLayoutParams.gravity = Gravity.TOP;
         }
         else {
             currentSizePosition = SizePosition.FULL;
             item.setIcon(R.drawable.ic_arrow_down_rally_24dp);
 
-            layoutParams.height = MATCH_PARENT;
-            layoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+            viewLayoutParams.height = MATCH_PARENT;
+            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+            childLayoutParams.gravity = Gravity.TOP;
         }
-        manager.getWindowManager().updateViewLayout(getView(), layoutParams);
+        child.setLayoutParams(childLayoutParams);
+        manager.getWindowManager().updateViewLayout(view, viewLayoutParams);
     }
 
     //endregion
