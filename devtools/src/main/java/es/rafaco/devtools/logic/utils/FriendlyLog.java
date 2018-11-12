@@ -97,33 +97,56 @@ public class FriendlyLog {
     }
 
     public static int getIcon(Friendly log) {
-        if (log.getCategory().equals("App")){
-            if (log.getType().equals("Foreground")){
+        if (log.getCategory().equals("App")) {
+            if (log.getType().equals("Foreground")) {
                 return R.drawable.ic_flip_to_front_white_24dp;
-            }
-            else if (log.getType().equals("Background")){
+            } else if (log.getType().equals("Background")) {
                 return R.drawable.ic_flip_to_back_white_24dp;
-            }
-            else if (log.getType().equals("Restarted")){
+            } else if (log.getType().equals("Restarted")) {
                 return R.drawable.ic_replay_white_24dp;
-            }
-            else if (log.getType().equals("Startup")){
+            } else if (log.getType().equals("Startup")) {
                 return R.drawable.ic_flag_white_24dp;
-            }
-            else if (log.getType().equals("FirstStartup")){
+            } else if (log.getType().equals("FirstStartup")) {
                 return R.drawable.ic_fiber_new_white_24dp;
-            }
-            else if (log.getType().equals("Navigation")){
+            } else if (log.getType().equals("Navigation")) {
                 return R.drawable.ic_view_carousel_white_24dp;
             }
-            else if (log.getType().equals("TaskRemoved")){
+            else if (log.getType().equals("TaskRemoved")) {
                 return R.drawable.ic_close_white_24dp;
             }
-            else if (log.getType().equals("Portrait")){
+        }
+        else if (log.getCategory().equals("Device")) {
+            if (log.getType().equals("Portrait")) {
                 return R.drawable.ic_portrait_white_24dp;
             }
-            else if (log.getType().equals("Landscape")){
+            else if (log.getType().equals("Landscape")) {
                 return R.drawable.ic_landscape_white_24dp;
+            }
+            else if (log.getType().equals("ScreenOn")) {
+                return R.drawable.ic_phonelink_ring_black_24dp;
+            }
+            else if (log.getType().equals("ScreenOff")) {
+                return R.drawable.ic_phonelink_erase_black_24dp;
+            }
+            else if (log.getType().equals("UserPresent")) {
+                return R.drawable.ic_person_pin_black_24dp;
+            }
+        }
+        else if (log.getCategory().equals("User")){
+            if (log.getType().equals("Touch")){
+                return R.drawable.ic_touch_app_white_24dp;
+            }
+            else if (log.getType().equals("BackKey")){
+                return R.drawable.ic_arrow_back_rally_24dp;
+            }
+            else if (log.getType().equals("HomeKey")){
+                return R.drawable.ic_circle_white_24dp;
+            }
+            else if (log.getType().equals("RecentKey")){
+                return R.drawable.ic_square_white_24dp;
+            }
+            else if (log.getType().equals("DreamKey")){
+                return R.drawable.ic_power_white_24dp;
             }
         }
         else if (log.getCategory().equals("Process")){
@@ -161,9 +184,7 @@ public class FriendlyLog {
         }else if (log.getType().equals("Breakpoint")){
             return R.drawable.ic_pan_tool_white_24dp;
         }
-        else if (log.getType().equals("Touch")){
-            return R.drawable.ic_touch_app_white_24dp;
-        }
+
         else if (log.getCategory().equals("DevTools")){
             if (log.getType().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_rally_24dp;

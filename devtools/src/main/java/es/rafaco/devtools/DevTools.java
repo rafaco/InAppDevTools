@@ -12,7 +12,9 @@ import java.util.List;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
+import es.rafaco.devtools.logic.activityLog.DeviceButtonsWatcher;
 import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
+import es.rafaco.devtools.logic.activityLog.ScreenChangeWatcher;
 import es.rafaco.devtools.logic.anr.AnrLogger;
 import es.rafaco.devtools.logic.crash.CrashHandler;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
@@ -62,6 +64,8 @@ public class DevTools {
     public static int readerCounter = 0;
     private static ShakeDetector shakeDetector;
     private static Runnable onForceCloseRunnable;
+    private static DeviceButtonsWatcher deviceButtonsWatcher;
+    private static ScreenChangeWatcher screenChangeWatcher;
 
     //region [ PUBLIC INITIALIZATION ]
 
@@ -103,6 +107,8 @@ public class DevTools {
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger(context);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
+        startDeviceButtonsWatcher();
+        startScreenChangeWatcher();
 
         //if (config.invocationByShake)
         startShakeDetector(context);
@@ -160,6 +166,52 @@ public class DevTools {
 
     private static void startAnrLogger(){
         anrLogger = new AnrLogger();
+    }
+
+    private static void startDeviceButtonsWatcher() {
+        deviceButtonsWatcher = new DeviceButtonsWatcher(getAppContext());
+        deviceButtonsWatcher.setOnButtonPressedListener(new DeviceButtonsWatcher.OnButtonPressedListener() {
+            @Override
+            public void onHomePressed() {
+                FriendlyLog.log("D", "User", "HomeKey", "Pressed home button");
+            }
+            @Override
+            public void onRecentPressed() {
+                FriendlyLog.log("D", "User", "RecentKey", "Pressed recent button");
+            }
+
+            @Override
+            public void onDreamPressed() {
+                FriendlyLog.log("D", "User", "DreamKey", "Pressed off button");
+            }
+
+            @Override
+            public void onUnknownPressed(String info) {
+                FriendlyLog.log("D", "User", "UnknownKey", "Pressed Unknown button: " + info);
+            }
+        });
+        deviceButtonsWatcher.startWatch();
+    }
+
+    private static void startScreenChangeWatcher() {
+        screenChangeWatcher = new ScreenChangeWatcher(getAppContext());
+        screenChangeWatcher.setOnButtonPressedListener(new ScreenChangeWatcher.OnChangeListener() {
+            @Override
+            public void onScreenOff() {
+                FriendlyLog.log("D", "Device", "ScreenOn", "Screen went ON");
+            }
+
+            @Override
+            public void onScreenOn() {
+                FriendlyLog.log("D", "Device", "ScreenOff", "Screen went OFF");
+            }
+
+            @Override
+            public void onUserPresent() {
+                FriendlyLog.log("D", "Device", "UserPresent", "User is now present");
+            }
+        });
+        screenChangeWatcher.startWatch();
     }
 
     private static void startForegroundService(Context context) {
@@ -373,6 +425,9 @@ public class DevTools {
     public static void forceClose(){
         Log.w(DevTools.TAG, "Stopping Anr");
         anrLogger.destroy();
+        deviceButtonsWatcher.stopWatch();
+        screenChangeWatcher.stopWatch();
+
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getAppContext().getPackageName());*/

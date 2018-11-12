@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +46,7 @@ public class ErrorsScreen extends OverlayScreen {
     private TextView welcome;
 
     private Button crashUiButton;
-    private Button crashBackButton;
+    private Button crashBackgroundButton;
     private Button anrButton;
 
     private InvalidationTracker.Observer anrObserver;
@@ -135,11 +135,11 @@ public class ErrorsScreen extends OverlayScreen {
             }
         });
 
-        crashBackButton = view.findViewById(R.id.crash_back_button);
-        crashBackButton.setOnClickListener(new View.OnClickListener() {
+        crashBackgroundButton = view.findViewById(R.id.crash_back_button);
+        crashBackgroundButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCrashBackButton();
+                onCrashBackgroundButton();
             }
         });
     }
@@ -187,7 +187,7 @@ public class ErrorsScreen extends OverlayScreen {
         });
     }
 
-    public void onCrashBackButton() {
+    public void onCrashBackgroundButton() {
         Log.i(DevTools.TAG, "Simulated crash on a background thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnBackThread(new Runnable() {

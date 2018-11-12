@@ -188,11 +188,11 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
                     int detectedOrientation = DevTools.getAppContext().getResources().getConfiguration().orientation;
                     if (detectedOrientation == Configuration.ORIENTATION_PORTRAIT && currentOrientation != detectedOrientation) {
                         currentOrientation = detectedOrientation;
-                        FriendlyLog.log("I", "App", "Portrait", "Orientation changed to portrait");
+                        FriendlyLog.log("I", "Device", "Portrait", "Orientation changed to portrait");
                     }
                     else if (detectedOrientation == Configuration.ORIENTATION_LANDSCAPE && currentOrientation != detectedOrientation) {
                         currentOrientation = detectedOrientation;
-                        FriendlyLog.log("I", "App", "Landscape", "Orientation changed to landscape");
+                        FriendlyLog.log("I", "Device", "Landscape", "Orientation changed to landscape");
                     }
                 }
 
@@ -252,7 +252,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
             if (currentOrientation == -1){
                 currentOrientation = DevTools.getAppContext().getResources().getConfiguration().orientation;
                 String orientationType = (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) ? "Landscape" : "Portrait";
-                FriendlyLog.log("I", "App", orientationType, "Orientation is " + orientationType.toLowerCase());
+                FriendlyLog.log("I", "Device", orientationType, "Orientation is " + orientationType.toLowerCase());
             }
         }
     }
