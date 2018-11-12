@@ -1,6 +1,8 @@
 package es.rafaco.devtools.view.overlay.screens.report;
 
 import android.content.DialogInterface;
+
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.view.ViewCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.utils.IconUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
@@ -67,6 +70,15 @@ public class ReportScreen extends OverlayScreen {
 
 
     private void initView() {
+
+        TextView icon = getView().findViewById(R.id.test_icon);
+        IconUtils.markAsIconContainer(icon);
+        icon.setText(R.string.fa_icon_linechart);
+
+        AppCompatButton icon2 = getView().findViewById(R.id.test_icon2);
+        IconUtils.markAsIconContainer(icon);
+
+
         out = getView().findViewById(R.id.out);
         header = getView().findViewById(R.id.report_welcome);
         sendButton = getView().findViewById(R.id.report_button);
