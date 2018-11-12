@@ -174,6 +174,18 @@ public class FriendlyLog {
             else if (log.getType().equals("Failed")){
                 return R.drawable.ic_cloud_off_white_24dp;
             }
+            else if (log.getType().equals("Connected")){
+                return R.drawable.ic_wifi_tethering_white_24dp;
+            }
+            else if (log.getType().equals("Disconnected")){
+                return R.drawable.ic_portable_wifi_off_white_24dp;
+            }
+            else if (log.getType().equals("AirplaneOn")){
+                return R.drawable.ic_airplanemode_active_white_24dp;
+            }
+            else if (log.getType().equals("AirplaneOff")){
+                return R.drawable.ic_airplanemode_inactive_white_24dp;
+            }
         }
         else if (log.getCategory().equals("Error")){
             if (log.getType().equals("Crash")){

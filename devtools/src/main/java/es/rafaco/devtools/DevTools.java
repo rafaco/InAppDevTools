@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
+import es.rafaco.devtools.logic.activityLog.AirplaneModeChangeWatcher;
+import es.rafaco.devtools.logic.activityLog.ConnectivityChangeWatcher;
 import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
 import es.rafaco.devtools.logic.activityLog.DeviceButtonsWatcher;
 import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
@@ -66,6 +68,8 @@ public class DevTools {
     private static Runnable onForceCloseRunnable;
     private static DeviceButtonsWatcher deviceButtonsWatcher;
     private static ScreenChangeWatcher screenChangeWatcher;
+    private static ConnectivityChangeWatcher connectivityChangeWatcher;
+    private static AirplaneModeChangeWatcher airplaneModeChangeWatcher;
 
     //region [ PUBLIC INITIALIZATION ]
 
@@ -109,6 +113,8 @@ public class DevTools {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
         startDeviceButtonsWatcher();
         startScreenChangeWatcher();
+        startNetworkChangeWatcher();
+        startAirplaneModeChangeWatcher();
 
         //if (config.invocationByShake)
         startShakeDetector(context);
@@ -212,6 +218,38 @@ public class DevTools {
             }
         });
         screenChangeWatcher.startWatch();
+    }
+
+    private static void startNetworkChangeWatcher() {
+        connectivityChangeWatcher = new ConnectivityChangeWatcher(getAppContext());
+        connectivityChangeWatcher.setOnChangeListener(new ConnectivityChangeWatcher.OnChangeListener() {
+            @Override
+            public void onNetworkAvailable(String networkType) {
+                FriendlyLog.log("D", "Network", "Connected", "Connected to a " + networkType + " network");
+            }
+
+            @Override
+            public void onNetworkLost(String networkType) {
+                FriendlyLog.log("D", "Network", "Disconnected", "Disconnected from " + networkType + " network");
+            }
+        });
+        connectivityChangeWatcher.startWatch();
+    }
+
+    private static void startAirplaneModeChangeWatcher() {
+        airplaneModeChangeWatcher = new AirplaneModeChangeWatcher(getAppContext());
+        airplaneModeChangeWatcher.setOnChangeListener(new AirplaneModeChangeWatcher.OnChangeListener() {
+            @Override
+            public void onAirplaneModeOn() {
+                FriendlyLog.log("D", "Network", "AirplaneOn", "Airplane mode connected");
+            }
+
+            @Override
+            public void onAirplaneModeOff() {
+                FriendlyLog.log("D", "Network", "AirplaneOff", "Airplane mode disconnected");
+            }
+        });
+        airplaneModeChangeWatcher.startWatch();
     }
 
     private static void startForegroundService(Context context) {
@@ -427,6 +465,8 @@ public class DevTools {
         anrLogger.destroy();
         deviceButtonsWatcher.stopWatch();
         screenChangeWatcher.stopWatch();
+        connectivityChangeWatcher.stopWatch();
+        airplaneModeChangeWatcher.stopWatch();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
