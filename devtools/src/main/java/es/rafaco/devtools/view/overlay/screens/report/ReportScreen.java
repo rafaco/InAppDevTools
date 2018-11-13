@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,7 +20,8 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.logic.utils.IconUtils;
+import es.rafaco.devtools.logic.icons.IconDrawable;
+import es.rafaco.devtools.logic.icons.IconUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
@@ -72,11 +74,13 @@ public class ReportScreen extends OverlayScreen {
     private void initView() {
 
         TextView icon = getView().findViewById(R.id.test_icon);
-        IconUtils.markAsIconContainer(icon);
-        icon.setText(R.string.fa_icon_linechart);
+        IconUtils.markAsIconContainer(icon, IconUtils.MATERIAL);
+        icon.setText(R.string.gmd_3d_rotation);
 
         AppCompatButton icon2 = getView().findViewById(R.id.test_icon2);
-        IconUtils.markAsIconContainer(icon);
+        Drawable drawable = new IconDrawable(getContext(), R.string.gmd_access_alarms,
+                IconUtils.MATERIAL).sizeDp(24);
+        icon2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
 
         out = getView().findViewById(R.id.out);
