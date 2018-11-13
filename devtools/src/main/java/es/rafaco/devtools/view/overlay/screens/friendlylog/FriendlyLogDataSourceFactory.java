@@ -1,10 +1,13 @@
 package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
+import android.util.Log;
+
 import androidx.paging.DataSource;
 
 import java.util.Arrays;
 import java.util.List;
 
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.storage.db.entities.Friendly;
 import es.rafaco.devtools.storage.db.entities.FriendlyDao;
 
@@ -29,6 +32,7 @@ public class FriendlyLogDataSourceFactory extends DataSource.Factory {
 
     public void setLevelString(String level) {
         this.level = level;
+        Log.v(DevTools.TAG, "Verbosity level changed to: " + level);
     }
 
     private List<String> getAcceptedLevels() {

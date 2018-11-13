@@ -1,23 +1,20 @@
 package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
 import android.content.DialogInterface;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
@@ -35,11 +32,13 @@ public class FriendlyLogScreen extends OverlayScreen {
     private RecyclerView recyclerView;
     private TextView welcome;
 
-
     public LiveData<PagedList<Friendly>> logList;
     private final int pageSize = 20;
     private ToolBarHelper toolbarHelper;
-    private int selectedLogLevel = 0;
+    private int selectedLogLevel = 2;
+
+    private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
+    private ScrollStatus currentScrollStatus;
 
     public FriendlyLogScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -75,7 +74,7 @@ public class FriendlyLogScreen extends OverlayScreen {
         initView(bodyView);
         initAdapter();
 
-        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        initScroll();
     }
 
     private void initView(ViewGroup view) {
@@ -95,7 +94,7 @@ public class FriendlyLogScreen extends OverlayScreen {
                 .build();
         dataSourceFactory = new FriendlyLogDataSourceFactory(dao);
         dataSourceFactory.setText("");
-        dataSourceFactory.setLevelString("D");
+        dataSourceFactory.setLevelString(getSelectedVerbosity());
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
         logList.observe(ProcessLifecycleOwner.get(), adapter::submitList);
 
@@ -165,9 +164,7 @@ public class FriendlyLogScreen extends OverlayScreen {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which!=selectedLogLevel) {
                             selectedLogLevel = which;
-                            String stringLevel = getSelectedVerbosity();
-                            Log.d(DevTools.TAG, "Verbosity level changed to: " + stringLevel);
-                            dataSourceFactory.setLevelString(stringLevel);
+                            dataSourceFactory.setLevelString(getSelectedVerbosity());
                             logList.getValue().getDataSource().invalidate();
                         }
                         dialog.dismiss();
@@ -189,6 +186,38 @@ public class FriendlyLogScreen extends OverlayScreen {
     private void onClearAll() {
         DevTools.getDatabase().friendlyDao().deleteAll();
         adapter.notifyDataSetChanged();
+    }
+
+    //endregion
+
+    //region [ SCROLL ]
+
+    private void initScroll() {
+        recyclerView.addOnScrollListener(scrollListener);
+        currentScrollStatus = ScrollStatus.BOTTOM;
+        //scrollToBottom();
+    }
+
+    private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            if (currentScrollStatus != ScrollStatus.BOTTOM && !recyclerView.canScrollVertically(1)) {
+                currentScrollStatus = ScrollStatus.BOTTOM;
+                DevTools.showMessage("Scroll reached bottom");
+            }
+            else if (currentScrollStatus != ScrollStatus.TOP && !recyclerView.canScrollVertically(-1)) {
+                currentScrollStatus = ScrollStatus.TOP;
+                DevTools.showMessage("Scroll reached top");
+            }else{
+                currentScrollStatus = ScrollStatus.MIDDLE;
+            }
+        }
+    };
+
+    private void scrollToBottom() {
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     //endregion
