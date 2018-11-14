@@ -8,6 +8,8 @@ import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import androidx.annotation.NonNull;
+
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -25,6 +27,7 @@ import java.util.List;
 import es.rafaco.devtools.BuildConfig;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.utils.AppInfoUtils;
 import es.rafaco.devtools.storage.files.DevToolsFiles;
 import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
 import es.rafaco.devtools.tools.ToolHelper;
@@ -63,7 +66,9 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += getLinuxInfo();
         result += "\n";
-        getPackageInfoInfo().toString();
+        result += AppInfoUtils.getSigningInfo(context);
+        result += "\n";
+        result += getPackageInfoInfo().toString();
         result += "\n";
         return result;
     }
@@ -179,9 +184,7 @@ public class InfoHelper extends ToolHelper {
 
     public String getAppName() {
         PackageInfo pInfo = getPackageInfo();
-        return pInfo.applicationInfo.labelRes == 0
-                ? pInfo.applicationInfo.nonLocalizedLabel.toString()
-                : context.getString(pInfo.applicationInfo.labelRes);
+        return pInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
     }
 
     public String getPackageName(){
