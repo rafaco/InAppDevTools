@@ -20,7 +20,7 @@ public interface FriendlyDao {
     DataSource.Factory<Integer, Friendly> getAllProvider();
 
     @Query("SELECT * FROM friendly WHERE severity IN (:acceptedLevels) "
-            + "AND ( message LIKE :filter OR category LIKE :filter OR type LIKE :filter OR extra LIKE :filter )")
+            + "AND ( message LIKE :filter OR category LIKE :filter OR type LIKE :filter OR extra LIKE :filter ) ORDER BY date ASC")
     DataSource.Factory<Integer, Friendly> filter(List<String> acceptedLevels, String filter);
 
     @Query("SELECT * FROM friendly where uid LIKE :uid")

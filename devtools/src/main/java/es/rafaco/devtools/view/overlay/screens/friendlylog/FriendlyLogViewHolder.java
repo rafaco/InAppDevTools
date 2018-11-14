@@ -23,7 +23,7 @@ import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScree
 
 public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private final OnClickListener clickListener;
+    private final FriendlyLogAdapter.OnClickListener clickListener;
 
     long uid;
     ImageView icon;
@@ -37,7 +37,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     TextView extras_details;
     AppCompatButton extra_button;
 
-    public FriendlyLogViewHolder(View view, final OnClickListener clickListener) {
+    public FriendlyLogViewHolder(View view, final FriendlyLogAdapter.OnClickListener clickListener) {
         super(view);
 
         this.clickListener = clickListener;
@@ -134,9 +134,5 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     @Override
     public void onClick(View v) {
         clickListener.onClick(v, getAdapterPosition(), uid);
-    }
-
-    public interface OnClickListener {
-        void onClick(View itemView, int position, long id);
     }
 }

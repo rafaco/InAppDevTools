@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +88,18 @@ public class FriendlyLogScreen extends OverlayScreen {
     private void initAdapter(){
         adapter = new FriendlyLogAdapter();
 
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+
+                if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
+                    Log.v(DevTools.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart+" itemCount="+itemCount+" size="+adapter.getItemCount()+" isBottom="+!recyclerView.canScrollVertically(1));
+                    scrollToBottom();
+                }
+            }
+        });
+
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setPageSize(20)
@@ -100,6 +113,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
+        //((LinearLayoutManager) mLayoutManager).setReverseLayout(true);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -176,6 +190,10 @@ public class FriendlyLogScreen extends OverlayScreen {
         alertDialog.show();
     }
 
+    public String getSelectedVerbosity() {
+        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
+        return levelsArray[selectedLogLevel].substring(0, 1).toUpperCase();
+    }
 
     private void onSaveButton() {
         ToolHelper helper = new LogHelper();
@@ -193,9 +211,8 @@ public class FriendlyLogScreen extends OverlayScreen {
     //region [ SCROLL ]
 
     private void initScroll() {
-        recyclerView.addOnScrollListener(scrollListener);
-        currentScrollStatus = ScrollStatus.BOTTOM;
-        //scrollToBottom();
+        //recyclerView.addOnScrollListener(scrollListener);
+        //currentScrollStatus = ScrollStatus.BOTTOM;
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
@@ -205,27 +222,22 @@ public class FriendlyLogScreen extends OverlayScreen {
 
             if (currentScrollStatus != ScrollStatus.BOTTOM && !recyclerView.canScrollVertically(1)) {
                 currentScrollStatus = ScrollStatus.BOTTOM;
-                DevTools.showMessage("Scroll reached bottom");
+                Log.v(DevTools.TAG, "Scroll reached bottom ("+dx+","+dy+")");
             }
             else if (currentScrollStatus != ScrollStatus.TOP && !recyclerView.canScrollVertically(-1)) {
                 currentScrollStatus = ScrollStatus.TOP;
-                DevTools.showMessage("Scroll reached top");
+                Log.v(DevTools.TAG, "Scroll reached top ("+dx+","+dy+")");
             }else{
+                Log.v(DevTools.TAG, "Scroll at middle ("+dx+","+dy+")");
                 currentScrollStatus = ScrollStatus.MIDDLE;
             }
         }
     };
 
     private void scrollToBottom() {
-        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
     }
 
     //endregion
-
-    public String getSelectedVerbosity() {
-        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
-        return levelsArray[selectedLogLevel].substring(0, 1).toUpperCase();
-    }
-
 
 }

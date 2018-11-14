@@ -1,12 +1,12 @@
 package es.rafaco.devtools.view.overlay.screens.friendlylog;
 
-import androidx.paging.PagedListAdapter;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.entities.Friendly;
 
@@ -28,7 +28,7 @@ public class FriendlyLogAdapter
 
     private static long selectedItemId = -1;
     private static int selectedItemPosition = -1;
-    private FriendlyLogViewHolder.OnClickListener mClickListener;
+    private OnClickListener mClickListener;
 
     protected FriendlyLogAdapter() {
         super(DIFF_CALLBACK);
@@ -41,8 +41,9 @@ public class FriendlyLogAdapter
     public FriendlyLogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.tool_friendlylog_item, viewGroup, false);
+        FriendlyLogViewHolder friendlyLogViewHolder = new FriendlyLogViewHolder(itemView, mClickListener);
 
-        return new FriendlyLogViewHolder(itemView, mClickListener);
+        return friendlyLogViewHolder;
     }
 
     @Override
@@ -78,7 +79,11 @@ public class FriendlyLogAdapter
         });
     }
 
-    public void setClickListener(FriendlyLogViewHolder.OnClickListener clickListener) {
+    public void setClickListener(OnClickListener clickListener) {
         mClickListener = clickListener;
+    }
+
+    public interface OnClickListener {
+        void onClick(View itemView, int position, long id);
     }
 }
