@@ -1,10 +1,12 @@
 package es.rafaco.devtools.view.notifications;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,8 +18,11 @@ import androidx.core.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.List;
+
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.logic.crash.PendingCrashUtil;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
@@ -75,23 +80,20 @@ public class NotificationUIService extends Service {
                     //Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
                     break;
                 case ACTION_SCREEN:
-                    UiUtils.closeAllSystemWindows(getApplicationContext());
+                    bringAppToFront();
                     DevTools.takeScreenshot();
                     break;
                 case ACTION_REPORT:
-                    UiUtils.closeAllSystemWindows(getApplicationContext());
+                    bringAppToFront();
                     DevTools.startReportDialog();
                     break;
                 case ACTION_CLEAN:
-                    UiUtils.closeAllSystemWindows(getApplicationContext());
+                    bringAppToFront();
                     Toast.makeText(getApplicationContext(), "You click CLEAN button.", Toast.LENGTH_LONG).show();
                     DevTools.cleanSession();
                     break;
                 case ACTION_TOOLS:
-                    UiUtils.closeAllSystemWindows(getApplicationContext());
-                    //TODO: research a better way to close the headup notification
-                    //Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
-                    //getApplicationContext().startActivity(app);
+                    bringAppToFront();
                     DevTools.openTools(false);
                     break;
             }
@@ -99,12 +101,19 @@ public class NotificationUIService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private void bringAppToFront() {
+        //TODO: research a better way to close the headup notification
+        UiUtils.closeAllSystemWindows(getApplicationContext());
+        Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
+        getApplicationContext().startActivity(app);
+    }
+
     private void startForegroundService() {
         Log.d(DevTools.TAG, "Start foreground service.");
 
         createNotificationChannel();
 
-        Intent intent = new Intent();
+        Intent intent = AppUtils.getAppLauncherIntent(getApplicationContext());
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Notification notification = buildMainNotification(pendingIntent,
                 PendingCrashUtil.isPending() ? new Crash() : null);
@@ -164,7 +173,7 @@ public class NotificationUIService extends Service {
                 .setSmallIcon(R.drawable.ic_bug_report_rally_24dp)
                 .setLargeIcon(largeIconBitmap)
                 .setColorized(false)
-                //.setFullScreenIntent(pendingIntent, true)
+                .setContentIntent(pendingIntent)
                 .setContentTitle(title) //Collapsed Main
                 .setContentText(subTitle)   //Collapsed Second
                 //.setSubText("setSubText")           //Group second
@@ -258,9 +267,9 @@ public class NotificationUIService extends Service {
                 break;
         }
 
-        Intent pauseIntent = new Intent(this, NotificationUIService.class);
-        pauseIntent.setAction(action);
-        PendingIntent pendingPrevIntent = PendingIntent.getService(this, 0, pauseIntent, 0);
+        Intent intent = new Intent(this, NotificationUIService.class);
+        intent.setAction(action);
+        PendingIntent pendingPrevIntent = PendingIntent.getService(this, 0, intent, 0);
         return new NotificationCompat.Action(icon, title, pendingPrevIntent);
     }
 

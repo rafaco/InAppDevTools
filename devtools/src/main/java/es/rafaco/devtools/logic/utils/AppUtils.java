@@ -13,6 +13,8 @@ import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 
+import java.util.List;
+
 import es.rafaco.devtools.DevTools;
 
 public class AppUtils {
@@ -120,10 +122,30 @@ public class AppUtils {
         }
 
         Intent intent = new Intent(context, mainActivityClass);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
+        return intent;
+    }
+
+    public static Intent getLastTaskIntent(Context context) {
+        Intent intent = new Intent();
+        final ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RecentTaskInfo> recentTaskInfos = am.getRecentTasks(1024,0);
+        String myPkgNm = context.getPackageName();
+
+        if (!recentTaskInfos.isEmpty()) {
+            ActivityManager.RecentTaskInfo recentTaskInfo;
+            final int size = recentTaskInfos.size();
+            for (int i=0;i<size;i++) {
+                recentTaskInfo = recentTaskInfos.get(i);
+                if (recentTaskInfo.baseIntent.getComponent().getPackageName().equals(myPkgNm)) {
+                    intent = recentTaskInfo.baseIntent;
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+            }
+        }
         return intent;
     }
 
