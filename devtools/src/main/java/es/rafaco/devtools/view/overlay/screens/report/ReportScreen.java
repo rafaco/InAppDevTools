@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.logic.icons.IconDrawable;
-import es.rafaco.devtools.logic.icons.IconUtils;
+import es.rafaco.devtools.view.icons.IconDrawable;
+import es.rafaco.devtools.view.icons.IconUtils;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;

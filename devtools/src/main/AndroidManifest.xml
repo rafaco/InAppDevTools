@@ -12,7 +12,7 @@
             android:authorities="${applicationId}.devtoolsinitprovider"
             android:exported="false"
             android:enabled="true"
-            android:name=".logic.initialization.DevToolsInitProvider" />
+            android:name=".logic.initialization.InitializationContentProvider" />
 
         <activity
             android:name=".view.activities.PermissionActivity"

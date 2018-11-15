@@ -11,7 +11,7 @@
  * Extracted from https://stackoverflow.com/a/40692513/10209414
  */
 
-package es.rafaco.devtools.logic.icons;
+package es.rafaco.devtools.view.icons;
 
 import android.content.Context;
 import android.content.res.Resources;

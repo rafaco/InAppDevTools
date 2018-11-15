@@ -1,4 +1,4 @@
-package es.rafaco.devtools.logic.icons;
+package es.rafaco.devtools.view.icons;
 
 import android.content.Context;
 import android.content.res.Resources;

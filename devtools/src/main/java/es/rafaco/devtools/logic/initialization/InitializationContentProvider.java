@@ -11,11 +11,11 @@ import androidx.annotation.Nullable;
 import es.rafaco.devtools.DevTools;
 
 
-public class DevToolsInitProvider extends ContentProvider {
+public class InitializationContentProvider extends ContentProvider {
 
     private static final String META_DATA_KEY = "devtools_auto_init_enabled";
 
-    public DevToolsInitProvider() {
+    public InitializationContentProvider() {
     }
 
     @Override
@@ -46,7 +46,8 @@ public class DevToolsInitProvider extends ContentProvider {
         return appInfo.metaData;
     }
 
-    //region [ NOT USED LEGACY METHODS ]
+
+    //region [ LEGACY METHODS ]
 
     @Nullable
     @Override
