@@ -1,39 +1,46 @@
-package es.rafaco.devtools.logic.watcher.activityLog;
+package es.rafaco.devtools.logic.watcher;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
-public class DeviceButtonsWatcher {
+import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.watcher.Watcher;
 
-    static final String TAG = "hg";
-    private Context mContext;
+public class DeviceButtonsWatcher extends Watcher {
+
     private IntentFilter mFilter;
-    private OnButtonPressedListener mListener;
+    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
     public DeviceButtonsWatcher(Context context) {
-        mContext = context;
-        mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-    }
+        super(context);
 
-    public void setOnButtonPressedListener(OnButtonPressedListener listener) {
-        mListener = listener;
+        mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         mReceiver = new InnerReceiver();
     }
 
-    public void startWatch() {
+    @Override
+    public void setListener(Object listener) {
+        mListener = (InnerListener) listener;
+    }
+
+    @Override
+    public void start() {
         if (mReceiver != null) {
             mContext.registerReceiver(mReceiver, mFilter);
         }
     }
 
-    public void stopWatch() {
+    @Override
+    public void stop() {
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
     }
+
+
 
     class InnerReceiver extends BroadcastReceiver {
         final String SYSTEM_DIALOG_REASON_KEY = "reason";
@@ -48,7 +55,7 @@ public class DeviceButtonsWatcher {
             if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
                 if (reason != null) {
-                    Log.e(TAG, "action:" + action + ",reason:" + reason);
+                    Log.v(DevTools.TAG, "DeviceButtonsWatcher - action:" + action + ", reason:" + reason);
                     if (mListener != null) {
                         if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
                             mListener.onHomePressed();
@@ -68,7 +75,7 @@ public class DeviceButtonsWatcher {
         }
     }
 
-    public interface OnButtonPressedListener {
+    public interface InnerListener {
         void onHomePressed();
         void onRecentPressed();
         void onDreamPressed();

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import es.rafaco.devtools.DevTools;
+import es.rafaco.devtools.logic.watcher.ShakeWatcher;
 import es.rafaco.devtools.logic.watcher.shake.ShakeDetector;
 import es.rafaco.devtools.logic.steps.FriendlyLog;
 
@@ -163,17 +164,13 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     //region [ SHAKE LISTENER ]
 
     private void addShakeListener() {
-        ShakeDetector detector = DevTools.getWatcherManager().getShakeDetector();
-        if (detector!=null){
-            detector.registerSensorListener();
-        }
+        ShakeWatcher watcher = DevTools.getWatcherManager().getShakeWatcher();
+        if (watcher!=null) watcher.start();
     }
 
     private void removeShakeListener() {
-        ShakeDetector detector = DevTools.getWatcherManager().getShakeDetector();
-        if (detector!=null){
-            detector.unRegisterSensorListener();
-        }
+        ShakeWatcher watcher = DevTools.getWatcherManager().getShakeWatcher();
+        if (watcher!=null) watcher.stop();
     }
 
     //endregion

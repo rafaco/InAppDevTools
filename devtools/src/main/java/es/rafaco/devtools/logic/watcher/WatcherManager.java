@@ -7,17 +7,12 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsConfig;
 import es.rafaco.devtools.logic.watcher.activityLog.ActivityLogManager;
-import es.rafaco.devtools.logic.watcher.activityLog.AirplaneModeChangeWatcher;
-import es.rafaco.devtools.logic.watcher.activityLog.ConnectivityChangeWatcher;
-import es.rafaco.devtools.logic.watcher.activityLog.DeviceButtonsWatcher;
 import es.rafaco.devtools.logic.watcher.activityLog.ProcessLifecycleCallbacks;
-import es.rafaco.devtools.logic.watcher.activityLog.ScreenChangeWatcher;
 import es.rafaco.devtools.logic.watcher.anr.AnrLogger;
 import es.rafaco.devtools.logic.watcher.crash.CrashHandler;
-import es.rafaco.devtools.logic.watcher.shake.ShakeDetector;
 import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.steps.FriendlyLog;
-import tech.linjiang.pandora.util.Config;
+import tech.linjiang.pandora.Pandora;
 
 public class WatcherManager {
 
@@ -25,7 +20,7 @@ public class WatcherManager {
 
     private ActivityLogManager activityLogManager;
     private AnrLogger anrLogger;
-    private ShakeDetector shakeDetector;
+    private ShakeWatcher shakeWatcher;
     private DeviceButtonsWatcher deviceButtonsWatcher;
     private ScreenChangeWatcher screenChangeWatcher;
     private ConnectivityChangeWatcher connectivityChangeWatcher;
@@ -47,17 +42,44 @@ public class WatcherManager {
         startAirplaneModeChangeWatcher();
 
         //if (config.invocationByShake)
-        startShakeDetector();
-        Config.setSHAKE_SWITCH(false);
+        startShakeWatcher();
+        //Config.setSHAKE_SWITCH(false);
+        Pandora.get().open();
     }
 
     public void destroy() {
         anrLogger.destroy();
-        deviceButtonsWatcher.stopWatch();
-        screenChangeWatcher.stopWatch();
-        connectivityChangeWatcher.stopWatch();
-        airplaneModeChangeWatcher.stopWatch();
+        deviceButtonsWatcher.stop();
+        screenChangeWatcher.stop();
+        connectivityChangeWatcher.stop();
+        airplaneModeChangeWatcher.stop();
+        shakeWatcher.stop();
     }
+
+
+
+    public void start(String target){
+        //TODO:
+        Watcher watcher = getWatcher(target);
+        watcher.start();
+    }
+
+
+    public void stop(String target){
+        //TODO:
+        Watcher watcher = getWatcher(target);
+        watcher.stop();
+    }
+
+    private Watcher getWatcher(String target) {
+        //TODO: store watchers at collection and retrieve them?
+        return null;
+    }
+
+
+
+
+
 
     private void startCrashHandler() {
         Thread.UncaughtExceptionHandler currentHanler = Thread.getDefaultUncaughtExceptionHandler();
@@ -73,9 +95,14 @@ public class WatcherManager {
         AppUtils.startStrictMode();
     }
 
-    private void startShakeDetector() {
-        shakeDetector = new ShakeDetector(context,
-                () -> DevTools.openTools(false));
+    private void startShakeWatcher() {
+        shakeWatcher = new ShakeWatcher(context);
+        shakeWatcher.setListener(new ShakeWatcher.InnerListener() {
+            @Override
+            public void onShake() {
+                DevTools.openTools(false);
+            }
+        });
     }
 
     private void startActivityLogger() {
@@ -88,7 +115,7 @@ public class WatcherManager {
 
     private void startDeviceButtonsWatcher() {
         deviceButtonsWatcher = new DeviceButtonsWatcher(context);
-        deviceButtonsWatcher.setOnButtonPressedListener(new DeviceButtonsWatcher.OnButtonPressedListener() {
+        deviceButtonsWatcher.setListener(new DeviceButtonsWatcher.InnerListener() {
             @Override
             public void onHomePressed() {
                 FriendlyLog.log("D", "User", "HomeKey", "Pressed home button");
@@ -108,12 +135,12 @@ public class WatcherManager {
                 FriendlyLog.log("D", "User", "UnknownKey", "Pressed Unknown button: " + info);
             }
         });
-        deviceButtonsWatcher.startWatch();
+        deviceButtonsWatcher.start();
     }
 
     private void startScreenChangeWatcher() {
         screenChangeWatcher = new ScreenChangeWatcher(context);
-        screenChangeWatcher.setOnButtonPressedListener(new ScreenChangeWatcher.OnChangeListener() {
+        screenChangeWatcher.setListener(new ScreenChangeWatcher.InnerListener() {
             @Override
             public void onScreenOff() {
                 FriendlyLog.log("D", "Device", "ScreenOn", "Screen went ON");
@@ -129,12 +156,12 @@ public class WatcherManager {
                 FriendlyLog.log("D", "Device", "UserPresent", "User is now present");
             }
         });
-        screenChangeWatcher.startWatch();
+        screenChangeWatcher.start();
     }
 
     private void startNetworkChangeWatcher() {
         connectivityChangeWatcher = new ConnectivityChangeWatcher(context);
-        connectivityChangeWatcher.setOnChangeListener(new ConnectivityChangeWatcher.OnChangeListener() {
+        connectivityChangeWatcher.setListener(new ConnectivityChangeWatcher.InnerListener() {
             @Override
             public void onNetworkAvailable(String networkType) {
                 FriendlyLog.log("D", "Network", "Connected", "Connected to a " + networkType + " network");
@@ -145,12 +172,12 @@ public class WatcherManager {
                 FriendlyLog.log("D", "Network", "Disconnected", "Disconnected from " + networkType + " network");
             }
         });
-        connectivityChangeWatcher.startWatch();
+        connectivityChangeWatcher.start();
     }
 
     private void startAirplaneModeChangeWatcher() {
         airplaneModeChangeWatcher = new AirplaneModeChangeWatcher(context);
-        airplaneModeChangeWatcher.setOnChangeListener(new AirplaneModeChangeWatcher.OnChangeListener() {
+        airplaneModeChangeWatcher.setListener(new AirplaneModeChangeWatcher.InnerListener() {
             @Override
             public void onAirplaneModeOn() {
                 FriendlyLog.log("D", "Network", "AirplaneOn", "Airplane mode connected");
@@ -161,13 +188,13 @@ public class WatcherManager {
                 FriendlyLog.log("D", "Network", "AirplaneOff", "Airplane mode disconnected");
             }
         });
-        airplaneModeChangeWatcher.startWatch();
+        airplaneModeChangeWatcher.start();
     }
 
     public ActivityLogManager getActivityLogManager() {
         return activityLogManager;
     }
-    public ShakeDetector getShakeDetector() {
-        return shakeDetector;
+    public ShakeWatcher getShakeWatcher() {
+        return shakeWatcher;
     }
 }

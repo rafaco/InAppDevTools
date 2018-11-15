@@ -1,38 +1,43 @@
-package es.rafaco.devtools.logic.watcher.activityLog;
+package es.rafaco.devtools.logic.watcher;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-public class ScreenChangeWatcher {
+import es.rafaco.devtools.logic.watcher.Watcher;
 
-    private Context mContext;
+public class ScreenChangeWatcher extends Watcher {
+
     private IntentFilter mFilter;
-    private OnChangeListener mListener;
+    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
     public boolean isScreenOn = true;
 
     public ScreenChangeWatcher(Context context) {
-        mContext = context;
+        super(context);
 
         mFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         mFilter.addAction(Intent.ACTION_SCREEN_OFF);
         mFilter.addAction(Intent.ACTION_USER_PRESENT);
-    }
-
-    public void setOnButtonPressedListener(OnChangeListener listener) {
-        mListener = listener;
         mReceiver = new InnerReceiver();
     }
 
-    public void startWatch() {
+    @Override
+    public void setListener(Object listener) {
+        mListener = (InnerListener) listener;
+    }
+
+    @Override
+    public void start() {
         if (mReceiver != null) {
             mContext.registerReceiver(mReceiver, mFilter);
         }
     }
 
-    public void stopWatch() {
+    @Override
+    public void stop() {
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
@@ -43,17 +48,17 @@ public class ScreenChangeWatcher {
         public void onReceive(final Context context, final Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 isScreenOn = false;
-                mListener.onScreenOff();
+                if (mListener!=null) mListener.onScreenOff();
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 isScreenOn = true;
-                mListener.onScreenOn();
+                if (mListener!=null) mListener.onScreenOn();
             }else if(intent.getAction().equals(Intent.ACTION_USER_PRESENT)){
-                mListener.onUserPresent();
+                if (mListener!=null) mListener.onUserPresent();
             }
         }
     }
 
-    public interface OnChangeListener {
+    public interface InnerListener {
         void onScreenOff();
         void onScreenOn();
         void onUserPresent();

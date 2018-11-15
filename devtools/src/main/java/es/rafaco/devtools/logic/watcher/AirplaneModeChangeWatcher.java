@@ -1,35 +1,39 @@
-package es.rafaco.devtools.logic.watcher.activityLog;
+package es.rafaco.devtools.logic.watcher;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-public class AirplaneModeChangeWatcher {
+import es.rafaco.devtools.logic.watcher.Watcher;
 
-    private Context mContext;
+public class AirplaneModeChangeWatcher extends Watcher {
+
     private IntentFilter mFilter;
-    private OnChangeListener mListener;
+    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
 
     public AirplaneModeChangeWatcher(Context context) {
-        mContext = context;
-
+        super(context);
         mFilter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-    }
-
-    public void setOnChangeListener(OnChangeListener listener) {
-        mListener = listener;
         mReceiver = new InnerReceiver();
     }
 
-    public void startWatch() {
+    @Override
+    public void setListener(Object listener) {
+        mListener = (InnerListener) listener;
+    }
+
+    @Override
+    public void start() {
         if (mReceiver != null) {
             mContext.registerReceiver(mReceiver, mFilter);
         }
     }
 
-    public void stopWatch() {
+    @Override
+    public void stop() {
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
@@ -41,15 +45,15 @@ public class AirplaneModeChangeWatcher {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
                 boolean isAirplaneModeOn = intent.getBooleanExtra("state", false);
                 if(isAirplaneModeOn){
-                    mListener.onAirplaneModeOn();
+                    if (mListener!=null) mListener.onAirplaneModeOn();
                 } else {
-                    mListener.onAirplaneModeOff();
+                    if (mListener!=null) mListener.onAirplaneModeOff();
                 }
             }
         }
     }
 
-    public interface OnChangeListener {
+    public interface InnerListener {
         void onAirplaneModeOn();
         void onAirplaneModeOff();
     }

@@ -1,4 +1,4 @@
-package es.rafaco.devtools.logic.watcher.activityLog;
+package es.rafaco.devtools.logic.watcher;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,33 +7,38 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
-public class ConnectivityChangeWatcher {
+import es.rafaco.devtools.logic.watcher.Watcher;
+
+public class ConnectivityChangeWatcher extends Watcher {
 
     public static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
-    private Context mContext;
+
     private IntentFilter mFilter;
-    private OnChangeListener mListener;
+    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
     public ConnectivityChangeWatcher(Context context) {
-        mContext = context;
+        super(context);
 
         mFilter = new IntentFilter(ACTION_CONNECTIVITY_CHANGE);
         mFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-    }
-
-    public void setOnChangeListener(OnChangeListener listener) {
-        mListener = listener;
         mReceiver = new InnerReceiver();
     }
 
-    public void startWatch() {
+    @Override
+    public void setListener(Object listener) {
+        mListener = (InnerListener) listener;
+    }
+
+    @Override
+    public void start() {
         if (mReceiver != null) {
             mContext.registerReceiver(mReceiver, mFilter);
         }
     }
 
-    public void stopWatch() {
+    @Override
+    public void stop() {
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
@@ -47,10 +52,10 @@ public class ConnectivityChangeWatcher {
                 NetworkInfo networkInfo = (NetworkInfo)intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
                 if (networkInfo.isConnectedOrConnecting()) {
-                    mListener.onNetworkAvailable(getNetworkTypeString(networkInfo));
+                    if (mListener!=null) mListener.onNetworkAvailable(getNetworkTypeString(networkInfo));
                 }
                 else {
-                    mListener.onNetworkLost(getNetworkTypeString(networkInfo));
+                    if (mListener!=null) mListener.onNetworkLost(getNetworkTypeString(networkInfo));
                 }
             }
             else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
@@ -103,7 +108,7 @@ public class ConnectivityChangeWatcher {
        }*/
     }
 
-    public interface OnChangeListener {
+    public interface InnerListener {
         void onNetworkLost(String networkType);
         void onNetworkAvailable(String networkType);
     }
