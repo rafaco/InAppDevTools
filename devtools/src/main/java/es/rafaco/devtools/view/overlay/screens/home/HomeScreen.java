@@ -51,7 +51,7 @@ public class HomeScreen extends OverlayScreen {
         InfoHelper helper = new InfoHelper();
         String welcome = helper.getFormattedAppLong() + "\n" + helper.getFormattedDeviceLong();
         data.add(welcome);
-        //data.add(new TextConfig("Text", ))
+
 
         data.add(new RunnableConfig("Run",
                 R.drawable.ic_run_white_24dp,

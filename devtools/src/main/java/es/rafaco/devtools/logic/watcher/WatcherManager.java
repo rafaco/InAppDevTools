@@ -6,13 +6,13 @@ import android.util.Log;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.DevToolsConfig;
+import es.rafaco.devtools.logic.integrations.PandoraBridge;
 import es.rafaco.devtools.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.watcher.activityLog.ProcessLifecycleCallbacks;
 import es.rafaco.devtools.logic.watcher.anr.AnrLogger;
 import es.rafaco.devtools.logic.watcher.crash.CrashHandler;
 import es.rafaco.devtools.logic.utils.AppUtils;
 import es.rafaco.devtools.logic.steps.FriendlyLog;
-import tech.linjiang.pandora.Pandora;
 
 public class WatcherManager {
 
@@ -43,8 +43,7 @@ public class WatcherManager {
 
         //if (config.invocationByShake)
         startShakeWatcher();
-        //Config.setSHAKE_SWITCH(false);
-        Pandora.get().open();
+        PandoraBridge.init();
     }
 
     public void destroy() {

@@ -299,8 +299,7 @@ public class MainOverlayLayerManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE,null);
-        DevTools.getAppContext().startService(intent);
+        OverlayUIService.runAction(OverlayUIService.IntentAction.HIDE,null);
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {

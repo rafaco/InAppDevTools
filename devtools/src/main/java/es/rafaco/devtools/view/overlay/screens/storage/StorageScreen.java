@@ -68,9 +68,7 @@ public class StorageScreen extends BaseStorageListScreen {
                         step = new NavigationStep(FileScreen.class, file.getAbsolutePath());
                     }
                     OverlayUIService.performNavigationStep(step);
-
                 }
-
             }
         });
     }
