@@ -5,9 +5,6 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
-import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
-
 public class ToolManager {
 
     protected Context context;
@@ -17,6 +14,18 @@ public class ToolManager {
 
     public ToolManager(Context context) {
         this.context = context;
+
+        //TODO: remove this!
+        registerTool(HomeTool.class);
+        registerTool(InfoTool.class);
+        registerTool(FriendlyLogTool.class);
+        registerTool(LogTool.class);
+        registerTool(CommandsTool.class);
+        registerTool(NetworkTool.class);
+        registerTool(StorageTool.class);
+        registerTool(ErrorsTool.class);
+        registerTool(ScreenTool.class);
+        registerTool(ReportTool.class);
     }
 
     public void registerTool(Class<? extends Tool> toolClass){
@@ -58,38 +67,5 @@ public class ToolManager {
             }
         }
         return null;
-    }
-
-    public List<Class<? extends OverlayScreen>> getMainScreens(){
-        List<Class<? extends OverlayScreen>> mainScreens = new ArrayList<>();
-        for (Tool tool : tools) {
-            Class<? extends OverlayScreen> screen = tool.getMainScreen();
-            if (screen != null){
-                mainScreens.add(screen);
-            }
-        }
-        return mainScreens;
-    }
-
-    public List<DecoratedToolInfo> getHomeInfos() {
-        List<DecoratedToolInfo> result = new ArrayList<>();
-        for (Tool tool : tools) {
-            DecoratedToolInfo info = tool.getHomeInfo();
-            if (info != null){
-                result.add(info);
-            }
-        }
-        return result;
-    }
-
-    public List<DecoratedToolInfo> getReportInfos() {
-        List<DecoratedToolInfo> result = new ArrayList<>();
-        for (Tool tool : tools) {
-            DecoratedToolInfo info = tool.getReportInfo();
-            if (info != null){
-                result.add(info);
-            }
-        }
-        return result;
     }
 }

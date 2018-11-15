@@ -26,8 +26,8 @@ import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
-import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
+import es.rafaco.devtools.view.components.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.components.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
 
 public class ReportScreen extends OverlayScreen {

@@ -19,7 +19,8 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
-import es.rafaco.devtools.view.utils.CustomToast;
+import es.rafaco.devtools.logic.integrations.CustomToast;
+import es.rafaco.devtools.view.utils.ImageLoaderAsyncTask;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
 

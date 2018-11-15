@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.dummy.DummyContent;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 
 import java.util.List;
 

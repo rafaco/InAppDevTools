@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import androidx.annotation.NonNull;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -29,7 +28,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.utils.AppInfoUtils;
 import es.rafaco.devtools.storage.files.DevToolsFiles;
-import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
+import es.rafaco.devtools.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.devtools.tools.ToolHelper;
 
 public class InfoHelper extends ToolHelper {

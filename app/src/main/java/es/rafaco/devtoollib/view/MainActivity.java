@@ -17,8 +17,8 @@ import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.SampleApp;
 import es.rafaco.devtoollib.api.Controller;
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
-import es.rafaco.devtools.view.overlay.screens.home.RunnableConfig;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
+import es.rafaco.devtools.logic.integrations.RunnableConfig;
 
 public class MainActivity extends AppCompatActivity {
 

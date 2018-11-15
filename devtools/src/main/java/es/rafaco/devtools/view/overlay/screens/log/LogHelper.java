@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Logcat;
 import es.rafaco.devtools.storage.files.DevToolsFiles;

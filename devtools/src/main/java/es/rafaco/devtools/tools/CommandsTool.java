@@ -1,7 +1,7 @@
 package es.rafaco.devtools.tools;
 
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
+import es.rafaco.devtools.view.components.DecoratedToolInfo;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;

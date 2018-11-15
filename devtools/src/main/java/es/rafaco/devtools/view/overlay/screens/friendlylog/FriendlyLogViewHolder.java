@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.utils.DateUtils;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 import es.rafaco.devtools.storage.db.entities.Friendly;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;

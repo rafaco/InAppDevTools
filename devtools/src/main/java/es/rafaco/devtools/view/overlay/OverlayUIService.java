@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 import es.rafaco.devtools.view.activities.PermissionActivity;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;

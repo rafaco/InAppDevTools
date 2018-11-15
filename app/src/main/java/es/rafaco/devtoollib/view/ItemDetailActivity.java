@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import es.rafaco.devtoollib.R;
 import es.rafaco.devtoollib.dummy.DummyContent;
 import es.rafaco.devtools.DevTools;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 
 /**
  * An activity representing a single Item detail screen. This

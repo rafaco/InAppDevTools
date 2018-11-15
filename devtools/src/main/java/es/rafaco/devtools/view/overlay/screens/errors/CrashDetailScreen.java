@@ -20,7 +20,7 @@ import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
-import es.rafaco.devtools.view.overlay.screens.screenshots.ImageLoaderAsyncTask;
+import es.rafaco.devtools.view.utils.ImageLoaderAsyncTask;
 
 public class CrashDetailScreen extends OverlayScreen {
 

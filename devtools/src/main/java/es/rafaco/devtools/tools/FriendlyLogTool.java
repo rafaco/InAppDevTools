@@ -5,8 +5,8 @@ import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogHelper;
 import es.rafaco.devtools.view.overlay.layers.NavigationStep;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.devtools.view.utils.DecoratedToolInfo;
-import es.rafaco.devtools.view.utils.DecoratedToolInfoAdapter;
+import es.rafaco.devtools.view.components.DecoratedToolInfo;
+import es.rafaco.devtools.view.components.DecoratedToolInfoAdapter;
 
 public class FriendlyLogTool extends Tool {
 

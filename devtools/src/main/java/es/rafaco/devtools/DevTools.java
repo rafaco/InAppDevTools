@@ -1,56 +1,38 @@
 package es.rafaco.devtools;
 
-import androidx.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import es.rafaco.devtools.logic.activityLog.ActivityLogManager;
-import es.rafaco.devtools.logic.activityLog.AirplaneModeChangeWatcher;
-import es.rafaco.devtools.logic.activityLog.ConnectivityChangeWatcher;
-import es.rafaco.devtools.logic.activityLog.CustomChuckInterceptor;
-import es.rafaco.devtools.logic.activityLog.DeviceButtonsWatcher;
-import es.rafaco.devtools.logic.activityLog.ProcessLifecycleCallbacks;
-import es.rafaco.devtools.logic.activityLog.ScreenChangeWatcher;
-import es.rafaco.devtools.logic.anr.AnrLogger;
-import es.rafaco.devtools.logic.crash.CrashHandler;
-import es.rafaco.devtools.logic.crash.PendingCrashUtil;
-import es.rafaco.devtools.logic.shake.ShakeDetector;
+import androidx.annotation.NonNull;
+import es.rafaco.devtools.logic.watcher.WatcherManager;
+import es.rafaco.devtools.logic.watcher.activityLog.ActivityLogManager;
+import es.rafaco.devtools.logic.watcher.activityLog.CustomChuckInterceptor;
+import es.rafaco.devtools.logic.initialization.PendingCrashUtil;
 import es.rafaco.devtools.logic.utils.AppUtils;
-import es.rafaco.devtools.logic.utils.FirstStartUtil;
-import es.rafaco.devtools.logic.utils.FriendlyLog;
+import es.rafaco.devtools.logic.initialization.FirstStartUtil;
+import es.rafaco.devtools.logic.steps.FriendlyLog;
 import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.storage.files.FileProviderUtils;
-import es.rafaco.devtools.tools.CommandsTool;
-import es.rafaco.devtools.tools.ErrorsTool;
-import es.rafaco.devtools.tools.FriendlyLogTool;
-import es.rafaco.devtools.tools.HomeTool;
-import es.rafaco.devtools.tools.InfoTool;
-import es.rafaco.devtools.tools.LogTool;
-import es.rafaco.devtools.tools.NetworkTool;
-import es.rafaco.devtools.tools.ReportTool;
-import es.rafaco.devtools.tools.ScreenTool;
-import es.rafaco.devtools.tools.StorageTool;
 import es.rafaco.devtools.tools.ToolManager;
 import es.rafaco.devtools.view.activities.PermissionActivity;
-import es.rafaco.devtools.view.dialogs.ReportDialogActivity;
-import es.rafaco.devtools.view.dialogs.WelcomeDialogActivity;
+import es.rafaco.devtools.view.activities.ReportDialogActivity;
+import es.rafaco.devtools.view.activities.WelcomeDialogActivity;
 import es.rafaco.devtools.view.notifications.NotificationUIService;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.devtools.view.overlay.screens.home.RunnableConfig;
+import es.rafaco.devtools.logic.integrations.RunnableConfig;
 import es.rafaco.devtools.view.overlay.screens.log.LogHelper;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreenHelper;
-import es.rafaco.devtools.view.utils.CustomToast;
+import es.rafaco.devtools.logic.integrations.CustomToast;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -61,15 +43,11 @@ public class DevTools {
     private static Context appContext;
     private static DevToolsConfig config;
     private static ToolManager toolManager;
-    private static ActivityLogManager activityLogManager;
-    private static AnrLogger anrLogger;
+    private static WatcherManager watcherManager;
+
     public static int readerCounter = 0;
-    private static ShakeDetector shakeDetector;
     private static Runnable onForceCloseRunnable;
-    private static DeviceButtonsWatcher deviceButtonsWatcher;
-    private static ScreenChangeWatcher screenChangeWatcher;
-    private static ConnectivityChangeWatcher connectivityChangeWatcher;
-    private static AirplaneModeChangeWatcher airplaneModeChangeWatcher;
+
 
     //region [ PUBLIC INITIALIZATION ]
 
@@ -80,44 +58,25 @@ public class DevTools {
     public static void install(Context context, DevToolsConfig config) {
 
         if (config == null || !config.enabled){
-            Log.w(DevTools.TAG, "DevTools initialization skipped.");
+            Log.w(DevTools.TAG, "DevTools initialization skipped");
             return;
         }
 
         if (DevTools.config != null){
-            Log.w(DevTools.TAG, "DevTools already initialize.");
+            Log.w(DevTools.TAG, "DevTools already initialize");
             return;
         }
 
         Log.d(DevTools.TAG, "Initializing DevTools...");
-        appContext = context.getApplicationContext();
         DevTools.config = config;
 
+        appContext = context.getApplicationContext();
         toolManager = new ToolManager(appContext);
-        //TODO: remove this!
-        toolManager.registerTool(HomeTool.class);
-        toolManager.registerTool(InfoTool.class);
-        toolManager.registerTool(FriendlyLogTool.class);
-        toolManager.registerTool(LogTool.class);
-        toolManager.registerTool(CommandsTool.class);
-        toolManager.registerTool(NetworkTool.class);
-        toolManager.registerTool(StorageTool.class);
-        toolManager.registerTool(ErrorsTool.class);
-        toolManager.registerTool(ScreenTool.class);
-        toolManager.registerTool(ReportTool.class);
+        watcherManager = new WatcherManager(appContext);
+        watcherManager.init(config);
 
-        if (config.crashHandlerEnabled) startCrashHandler(context);
-        if (config.anrLoggerEnabled) startAnrLogger();
-        if (config.strictModeEnabled) startStrictMode();
-        if (config.activityLoggerEnabled) startActivityLogger(context);
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
-        startDeviceButtonsWatcher();
-        startScreenChangeWatcher();
-        startNetworkChangeWatcher();
-        startAirplaneModeChangeWatcher();
 
-        //if (config.invocationByShake)
-        startShakeDetector(context);
+
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
@@ -128,9 +87,6 @@ public class DevTools {
         if (PendingCrashUtil.isPending()){
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
             DevTools.getAppContext().startService(intent);
-            //Intent intent = new Intent(getAppContext(), CrashDialogActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //getAppContext().startActivity(intent);
             PendingCrashUtil.clearPending();
         }
         else if (FirstStartUtil.isFirstStart()){
@@ -144,113 +100,6 @@ public class DevTools {
     //endregion
 
     //region [ PRIVATE INITIALIZATION ]
-
-    private static void startCrashHandler(Context context) {
-        Thread.UncaughtExceptionHandler currentHanler = Thread.getDefaultUncaughtExceptionHandler();
-        if (currentHanler != null || !currentHanler.getClass().isInstance(CrashHandler.class)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context.getApplicationContext(), context, currentHanler));
-            Log.d(DevTools.TAG, "Exception handler added");
-        }else{
-            Log.d(DevTools.TAG, "Exception handler already attach on thread");
-        }
-    }
-
-    private static void startStrictMode() {
-        if (config.strictModeEnabled && BuildConfig.DEBUG) {
-            AppUtils.startStrictMode();
-        }
-    }
-
-    private static void startShakeDetector(Context context) {
-        shakeDetector = new ShakeDetector(getAppContext(),
-                () -> openTools(false));
-    }
-
-    private static void startActivityLogger(Context context) {
-        activityLogManager = new ActivityLogManager(context);
-    }
-
-    private static void startAnrLogger(){
-        anrLogger = new AnrLogger();
-    }
-
-    private static void startDeviceButtonsWatcher() {
-        deviceButtonsWatcher = new DeviceButtonsWatcher(getAppContext());
-        deviceButtonsWatcher.setOnButtonPressedListener(new DeviceButtonsWatcher.OnButtonPressedListener() {
-            @Override
-            public void onHomePressed() {
-                FriendlyLog.log("D", "User", "HomeKey", "Pressed home button");
-            }
-            @Override
-            public void onRecentPressed() {
-                FriendlyLog.log("D", "User", "RecentKey", "Pressed recent button");
-            }
-
-            @Override
-            public void onDreamPressed() {
-                FriendlyLog.log("D", "User", "DreamKey", "Pressed off button");
-            }
-
-            @Override
-            public void onUnknownPressed(String info) {
-                FriendlyLog.log("D", "User", "UnknownKey", "Pressed Unknown button: " + info);
-            }
-        });
-        deviceButtonsWatcher.startWatch();
-    }
-
-    private static void startScreenChangeWatcher() {
-        screenChangeWatcher = new ScreenChangeWatcher(getAppContext());
-        screenChangeWatcher.setOnButtonPressedListener(new ScreenChangeWatcher.OnChangeListener() {
-            @Override
-            public void onScreenOff() {
-                FriendlyLog.log("D", "Device", "ScreenOn", "Screen went ON");
-            }
-
-            @Override
-            public void onScreenOn() {
-                FriendlyLog.log("D", "Device", "ScreenOff", "Screen went OFF");
-            }
-
-            @Override
-            public void onUserPresent() {
-                FriendlyLog.log("D", "Device", "UserPresent", "User is now present");
-            }
-        });
-        screenChangeWatcher.startWatch();
-    }
-
-    private static void startNetworkChangeWatcher() {
-        connectivityChangeWatcher = new ConnectivityChangeWatcher(getAppContext());
-        connectivityChangeWatcher.setOnChangeListener(new ConnectivityChangeWatcher.OnChangeListener() {
-            @Override
-            public void onNetworkAvailable(String networkType) {
-                FriendlyLog.log("D", "Network", "Connected", "Connected to a " + networkType + " network");
-            }
-
-            @Override
-            public void onNetworkLost(String networkType) {
-                FriendlyLog.log("D", "Network", "Disconnected", "Disconnected from " + networkType + " network");
-            }
-        });
-        connectivityChangeWatcher.startWatch();
-    }
-
-    private static void startAirplaneModeChangeWatcher() {
-        airplaneModeChangeWatcher = new AirplaneModeChangeWatcher(getAppContext());
-        airplaneModeChangeWatcher.setOnChangeListener(new AirplaneModeChangeWatcher.OnChangeListener() {
-            @Override
-            public void onAirplaneModeOn() {
-                FriendlyLog.log("D", "Network", "AirplaneOn", "Airplane mode connected");
-            }
-
-            @Override
-            public void onAirplaneModeOff() {
-                FriendlyLog.log("D", "Network", "AirplaneOff", "Airplane mode disconnected");
-            }
-        });
-        airplaneModeChangeWatcher.startWatch();
-    }
 
     private static void startForegroundService(Context context) {
         Intent intent = new Intent(context, NotificationUIService.class);
@@ -277,9 +126,13 @@ public class DevTools {
     public static ToolManager getToolManager() {
         return toolManager;
     }
-    public static ActivityLogManager getActivityLogManager() {
-        return activityLogManager;
+    public static WatcherManager getWatcherManager() {
+        return watcherManager;
     }
+    public static ActivityLogManager getActivityLogManager() {
+        return watcherManager.getActivityLogManager();
+    }
+
     public static DevToolsDatabase getDatabase() {
         return DevToolsDatabase.getInstance();
     }
@@ -397,10 +250,6 @@ public class DevTools {
         getAppContext().startService(intent);
     }
 
-    public static ShakeDetector getShakeDetector() {
-        return shakeDetector;
-    }
-
     //endregion
 
     public static void breakpoint(Object caller){
@@ -462,11 +311,7 @@ public class DevTools {
 
     public static void forceClose(){
         Log.w(DevTools.TAG, "Stopping Anr");
-        anrLogger.destroy();
-        deviceButtonsWatcher.stopWatch();
-        screenChangeWatcher.stopWatch();
-        connectivityChangeWatcher.stopWatch();
-        airplaneModeChangeWatcher.stopWatch();
+        watcherManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
@@ -474,14 +319,9 @@ public class DevTools {
 
         Log.w(DevTools.TAG, "Stopping Foreground");
         NotificationUIService.close();
-        /*Intent closeForegroundIntent = new Intent(getAppContext(), NotificationUIService.class);
-        closeForegroundIntent.setAction(NotificationUIService.ACTION_STOP_FOREGROUND_SERVICE);
-        getAppContext().startService(closeForegroundIntent);*/
 
         Log.w(DevTools.TAG, "Stopping Overlay");
         OverlayUIService.close();
-        /*Intent closeOverlayIntent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.FORCE_CLOSE, null);
-        getAppContext().startService(closeOverlayIntent);*/
     }
 
     public static void addOnForceCloseRunnnable(Runnable onForceClose){

@@ -28,6 +28,11 @@ public class DateUtils {
         return simpleDateFormat.format(timeMillis);
     }
 
+    public static String formatPrecisionTime(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+        return simpleDateFormat.format(timeMillis);
+    }
+
     public static String localDateTimeCustomFormat(Context context, long timeMillis) {
         java.text.DateFormat localDateFormatter = android.text.format.DateFormat.getMediumDateFormat(context);
         java.text.DateFormat localTimeFormatter = android.text.format.DateFormat.getTimeFormat(context);

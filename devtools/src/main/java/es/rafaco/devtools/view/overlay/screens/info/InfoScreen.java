@@ -15,7 +15,6 @@ import es.rafaco.devtools.R;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.commands.ShellExecuter;
-import es.rafaco.devtools.view.utils.OnTouchSelectedListener;
 
 
 public class InfoScreen extends OverlayScreen {

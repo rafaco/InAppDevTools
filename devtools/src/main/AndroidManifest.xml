@@ -12,19 +12,19 @@
             android:authorities="${applicationId}.devtoolsinitprovider"
             android:exported="false"
             android:enabled="true"
-            android:name=".DevToolsInitProvider" />
+            android:name=".logic.initialization.DevToolsInitProvider" />
 
         <activity
             android:name=".view.activities.PermissionActivity"
             android:theme="@style/LibTheme.Dialog" />
 
-        <activity android:name=".view.dialogs.WelcomeDialogActivity"
+        <activity android:name=".view.activities.WelcomeDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
-        <activity android:name=".view.dialogs.CrashDialogActivity"
+        <activity android:name=".view.activities.CrashDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
-        <activity android:name=".view.dialogs.ReportDialogActivity"
+        <activity android:name=".view.activities.ReportDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
         <service android:name=".view.overlay.OverlayUIService" />
