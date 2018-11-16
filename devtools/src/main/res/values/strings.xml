@@ -1,5 +1,5 @@
 <resources>
-    <string name="lib_name">DevTools</string>
+    <string name="lib_name">In-App DevTools (IADT)</string>
 
     <string name="floating_widget">DevTool: Floating Widget</string>
     <string name="create_floating_widget">Create Floating Widget</string>

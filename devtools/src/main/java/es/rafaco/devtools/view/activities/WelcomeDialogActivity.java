@@ -34,7 +34,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         //builder.setView(dialogView)
         builder.setTitle("Test version")
                 .setMessage(helper.getFormattedAppName() + "\n" + "Build "  + elapsedTimeLowered + "\n\n" +
-                        "This app contains a tool to help you communicate with the development team and to gather useful information about what is happening underneath.\n\nYou can send them bugs, screenshot, logs, reproduction steps or just your feedback. To start reporting you can:\n - Shake your device\n - Use the notification\n - Slide up from bottom of screen")
+                        "This app contains a tool to inspect your running app. It's also auto-logging what is happening underneath and it allow you to report straight to the developer team.\n\nYou can send them bugs, screenshot, logs, reproduction steps or just your feedback. To start reporting you can:\n - Shake your device\n - Use the notification\n - Slide up from bottom of screen")
                 .setIcon(R.drawable.ic_warning_yellow_24dp)
                 .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
                     @Override
