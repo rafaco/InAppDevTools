@@ -4,6 +4,20 @@ import java.lang.reflect.Field;
 
 public class ReflexionUtils {
 
+    private <T> T castObject(Class<T> clazz, Object object) {
+        return (T) object;
+    }
+
+    public <T> T castFromString(String className, Object object) {
+        try {
+            Class<T> theClass = (Class<T>) Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        //Object obj = theClass.cast(object);
+        return (T) object;
+    }
+
     /**
      * Use to set the value of a field you don't have access to, using reflection, for unit testing.
      *
