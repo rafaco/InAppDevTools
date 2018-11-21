@@ -35,6 +35,11 @@ public class PandoraBridge {
         Dispatcher.start(getContext().getApplicationContext(), Type.HIERARCHY);
     }
 
+    public static void storage() {
+        ReflexionUtils.setPrivateField(Pandora.get(), "preventFree", true);
+        Dispatcher.start(getContext().getApplicationContext(), Type.FILE);
+    }
+
     public static void grid() {
         GridLineView.toggle();
     }

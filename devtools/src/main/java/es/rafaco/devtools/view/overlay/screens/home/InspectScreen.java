@@ -7,6 +7,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.integrations.PandoraBridge;
 import es.rafaco.devtools.logic.integrations.RunnableConfig;
 import es.rafaco.devtools.view.components.FlexibleAdapter;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
@@ -57,7 +58,11 @@ public class InspectScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Storage",
                 R.drawable.ic_storage_white_24dp,
-                () ->  OverlayUIService.performNavigation(StorageScreen.class)));
+                () ->  {
+                    //OverlayUIService.performNavigation(StorageScreen.class);
+                    getScreenManager().hide();
+                    PandoraBridge.storage();
+                }));
 
         data.add(new RunnableConfig("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
