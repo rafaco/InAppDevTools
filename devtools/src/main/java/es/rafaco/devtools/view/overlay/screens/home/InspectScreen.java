@@ -76,6 +76,10 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_bug_report_rally_24dp,
                 () -> OverlayUIService.performNavigation(ErrorsScreen.class)));
 
+        data.add(new RunnableConfig("Errors",
+                R.drawable.ic_code_white_24dp,
+                () -> OverlayUIService.performNavigation(SourcesScreen.class)));
+
         return data;
     }
 

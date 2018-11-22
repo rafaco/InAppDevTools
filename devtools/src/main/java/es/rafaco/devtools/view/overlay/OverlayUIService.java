@@ -23,6 +23,7 @@ import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.devtools.view.overlay.screens.home.RunScreen;
+import es.rafaco.devtools.view.overlay.screens.home.SourcesScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
@@ -142,6 +143,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(RunScreen.class);
         mainOverlayLayerManager.registerScreen(InspectScreen.class);
         mainOverlayLayerManager.registerScreen(InspectViewScreen.class);
+        mainOverlayLayerManager.registerScreen(SourcesScreen.class);
     }
 
     //endregion

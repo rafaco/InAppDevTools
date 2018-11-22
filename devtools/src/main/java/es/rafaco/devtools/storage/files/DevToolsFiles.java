@@ -36,6 +36,15 @@ public class DevToolsFiles {
                 report);
     }
 
+    public static File prepareSources() {
+        return FileCreator.prepare(
+                "sources",
+                "app_sources.jar");
+    }
+
+
+
+
     public static File prepareLogcat(long timeMillis) {
         return FileCreator.prepare(
                 "logcat",

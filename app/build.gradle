@@ -23,7 +23,38 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion '28.0.3'
+
+    /*sourceSets {
+        main {
+            resources.includes = [ '...app-sources.jar' ]
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.mergeResources.doLast {
+            copy {
+                from (["build/lib/app-sources.jar"])
+                into ("src/main/res/raw")
+            }
+        }
+    }*/
 }
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveName = 'app_sources.jar'
+}
+
+
+task copySourcesJarToRaw(type: Copy) {
+    from files(["build/libs/app_sources.jar"])
+    into 'src/main/res/raw'
+}
+
+tasks.assemble.dependsOn copySourcesJarToRaw
+copySourcesJarToRaw.dependsOn generateSourcesJar
+
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
