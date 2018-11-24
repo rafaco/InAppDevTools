@@ -3,7 +3,6 @@ package es.rafaco.devtools.view.components;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.integrations.RunnableConfig;
+import es.rafaco.devtools.logic.integrations.LinkConfig;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
@@ -20,8 +20,9 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_BUTTON = 1;
-    private final int spanCount;
+    public static final int TYPE_LINK = 2;
 
+    private final int spanCount;
     private List<Object> items;
 
     public FlexibleAdapter(int spanCount, List<Object> data) {
@@ -32,7 +33,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        GridLayoutManager manager = new GridLayoutManager(getContext(), spanCount, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), spanCount, RecyclerView.VERTICAL, false);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -55,6 +56,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return TYPE_HEADER;
         else if (item instanceof RunnableConfig)
             return TYPE_BUTTON;
+        else if (item instanceof LinkConfig)
+            return TYPE_LINK;
         else
             return super.getItemViewType(position);
     }
@@ -70,6 +73,9 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_BUTTON:
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.flexible_button, viewGroup, false);
                 return new RunnableViewHolder(view);
+            case TYPE_LINK:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.flexible_link, viewGroup, false);
+                return new LinkViewHolder(view);
             default:
                 return null;
         }
@@ -84,6 +90,9 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case TYPE_BUTTON:
                 ((RunnableViewHolder) viewHolder).bindTo((RunnableConfig) viewData);
+                break;
+            case TYPE_LINK:
+                ((LinkViewHolder) viewHolder).bindTo((LinkConfig) viewData);
                 break;
             default:
                 break;

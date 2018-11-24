@@ -17,7 +17,7 @@ import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.devtools.view.overlay.screens.screenshots.ScreensScreen;
-import es.rafaco.devtools.view.overlay.screens.storage.StorageScreen;
+import es.rafaco.devtools.view.overlay.screens.sources.SourcesScreen;
 
 public class InspectScreen extends OverlayScreen {
 
@@ -48,13 +48,13 @@ public class InspectScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
+        data.add(new RunnableConfig("Sources",
+                R.drawable.ic_code_white_24dp,
+                () -> OverlayUIService.performNavigation(SourcesScreen.class)));
+
         data.add(new RunnableConfig("View",
                 R.drawable.ic_layers_white_24dp,
                 () ->  OverlayUIService.performNavigation(InspectViewScreen.class)));
-
-        data.add(new RunnableConfig("Logcat",
-                R.drawable.ic_android_white_24dp,
-                () ->  OverlayUIService.performNavigation(LogScreen.class)));
 
         data.add(new RunnableConfig("Storage",
                 R.drawable.ic_storage_white_24dp,
@@ -63,6 +63,10 @@ public class InspectScreen extends OverlayScreen {
                     getScreenManager().hide();
                     PandoraBridge.storage();
                 }));
+
+        data.add(new RunnableConfig("Logcat",
+                R.drawable.ic_android_white_24dp,
+                () ->  OverlayUIService.performNavigation(LogScreen.class)));
 
         data.add(new RunnableConfig("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
@@ -75,10 +79,6 @@ public class InspectScreen extends OverlayScreen {
         data.add(new RunnableConfig("Errors",
                 R.drawable.ic_bug_report_rally_24dp,
                 () -> OverlayUIService.performNavigation(ErrorsScreen.class)));
-
-        data.add(new RunnableConfig("Errors",
-                R.drawable.ic_code_white_24dp,
-                () -> OverlayUIService.performNavigation(SourcesScreen.class)));
 
         return data;
     }

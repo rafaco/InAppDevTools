@@ -71,4 +71,9 @@ public class DevToolsFiles {
         String fileName = String.format(first + "_" + second + "_" + mImageTime + "_" + ".jpg");
         return new File(folder, fileName);
     }
+
+    public static boolean existsSources() {
+        File sourcesFile = new File(FileCreator.getCategoryFolder("sources"), "app_sources.jar");
+        return sourcesFile.exists();
+    }
 }

@@ -23,7 +23,8 @@ import es.rafaco.devtools.view.overlay.screens.commands.CommandsScreen;
 import es.rafaco.devtools.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.devtools.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.devtools.view.overlay.screens.home.RunScreen;
-import es.rafaco.devtools.view.overlay.screens.home.SourcesScreen;
+import es.rafaco.devtools.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.devtools.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoScreen;
 import es.rafaco.devtools.view.overlay.screens.log.LogScreen;
 import es.rafaco.devtools.view.overlay.screens.network.detail.NetworkDetailScreen;
@@ -144,6 +145,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(InspectScreen.class);
         mainOverlayLayerManager.registerScreen(InspectViewScreen.class);
         mainOverlayLayerManager.registerScreen(SourcesScreen.class);
+        mainOverlayLayerManager.registerScreen(SourceDetailScreen.class);
     }
 
     //endregion
@@ -266,6 +268,10 @@ public class OverlayUIService extends Service {
 
     public static void performNavigation(Class<? extends OverlayScreen> target) {
         performNavigationStep(new NavigationStep(target, null));
+    }
+
+    public static void performNavigation(Class<? extends OverlayScreen> target, String param) {
+        performNavigationStep(new NavigationStep(target, param));
     }
 
     public static void performNavigationStep(NavigationStep step) {

@@ -64,7 +64,7 @@ public class FileCreator {
         return null;
     }
 
-    private static File getCategoryFolder(String category){
+    public static File getCategoryFolder(String category){
         File libDirectory = createDirIfNotExist(getLibDir());
         File categoryFolder = createDirIfNotExist(libDirectory + "/" + category);
         return categoryFolder;

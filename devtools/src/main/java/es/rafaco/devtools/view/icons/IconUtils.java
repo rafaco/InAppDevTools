@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import es.rafaco.devtools.R;
+
 public class IconUtils {
 
     public static final String ROOT = "fonts/";
@@ -43,5 +45,10 @@ public class IconUtils {
         } else if (v instanceof TextView) {
             ((TextView) v).setTypeface(typeface);
         }
+    }
+
+    public static void set(TextView textView, int stringIcon){
+        markAsIconContainer(textView, IconUtils.MATERIAL);
+        textView.setText(stringIcon);
     }
 }
