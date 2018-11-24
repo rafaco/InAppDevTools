@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.sources;
 
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.sources.SourcesManager;
@@ -13,6 +14,7 @@ import io.github.kbiakov.codeview.highlight.ColorTheme;
 
 public class SourceDetailScreen extends OverlayScreen {
 
+    private TextView codeHeader;
     private CodeView codeViewer;
 
     public SourceDetailScreen(MainOverlayLayerManager manager) {
@@ -41,12 +43,15 @@ public class SourceDetailScreen extends OverlayScreen {
 
         SourcesManager manager = new SourcesManager(getContext());
 
+        codeHeader = view.findViewById(R.id.code_header);
         codeViewer = view.findViewById(R.id.code_view);
+
+        codeHeader.setText(getParam());
         codeViewer.setOptions(Options.Default.get(getContext())
                 .withLanguage("java")
                 .withCode(manager.getContent(getParam()))
                 .withTheme(ColorTheme.MONOKAI)
-                .withFormat(Format.Default.getExtraCompact()));
+                .withFormat(Format.Default.getCompact()));
     }
 
     @Override
