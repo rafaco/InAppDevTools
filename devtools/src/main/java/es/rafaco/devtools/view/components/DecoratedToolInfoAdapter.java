@@ -20,7 +20,7 @@ import es.rafaco.devtools.logic.utils.ThreadUtils;
 import es.rafaco.devtools.view.overlay.OverlayUIService;
 
 public class DecoratedToolInfoAdapter
-        extends RecyclerView.Adapter<DecoratedToolInfoAdapter.DecoratedViewHolder> {
+        extends RecyclerView.Adapter<DecoratedViewHolder> {
 
     private Context context;
     private List<DecoratedToolInfo> originalData;
@@ -39,92 +39,17 @@ public class DecoratedToolInfoAdapter
     @NonNull
     @Override
     public DecoratedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.decorated_tool_info_item, parent, false);
-
-        return new DecoratedViewHolder(itemView);
+        return new DecoratedViewHolder(parent, switchMode);
     }
 
     public void update(final int i, Class<ErrorsTool> errorsToolClass) {
         new ErrorsTool().updateHomeInfo(this);
     }
 
-    static class DecoratedViewHolder extends RecyclerView.ViewHolder {
-        ImageView headIcon;
-        View decorator;
-        TextView title, message;
-        ImageView icon;
-        Switch switchButton;
-
-        public DecoratedViewHolder(View view) {
-            super(view);
-            decorator = view.findViewById(R.id.decorator);
-            title = view.findViewById(R.id.title);
-            message = view.findViewById(R.id.message);
-            headIcon = view.findViewById(R.id.head_icon);
-            icon = view.findViewById(R.id.icon);
-            switchButton = view.findViewById(R.id.switch_button);
-        }
-    }
-
     @Override
     public void onBindViewHolder(@NonNull DecoratedViewHolder holder, int position) {
-
         final DecoratedToolInfo data = originalData.get(position);
-
-        if (TextUtils.isEmpty(data.title))
-            holder.title.setVisibility(View.GONE);
-        else{
-            holder.title.setVisibility(View.VISIBLE);
-            holder.title.setText(data.title);
-        }
-
-        if (TextUtils.isEmpty(data.message))
-            holder.title.setVisibility(View.GONE);
-        else{
-            holder.message.setVisibility(View.VISIBLE);
-            holder.message.setText(data.message);
-        }
-
-        int contextualizedColor = ContextCompat.getColor(holder.itemView.getContext(),data.color);
-        holder.title.setTextColor(contextualizedColor);
-        holder.decorator.setBackgroundColor(contextualizedColor);
-
-        if (data.icon != -1){
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                holder.headIcon.setImageDrawable(context.getApplicationContext().getDrawable(data.icon));
-                holder.headIcon.setColorFilter(contextualizedColor);
-            } else {
-                holder.headIcon.setImageDrawable(context.getResources().getDrawable(data.icon));
-            }
-            holder.headIcon.setVisibility(View.VISIBLE);
-        }else{
-            holder.headIcon.setVisibility(View.GONE);
-        }
-
-        if(!switchMode){
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClick(data);
-                }
-            });
-        }else{
-            holder.icon.setVisibility(View.GONE);
-            holder.switchButton.setVisibility(View.VISIBLE);
-        }
-
-        //TODO: temp
-        if (data.icon != -1){
-            holder.icon.setVisibility(View.GONE);
-        }
-    }
-
-    protected void onItemClick(DecoratedToolInfo data) {
-        if (data.getNavigationStep() != null)
-            OverlayUIService.performNavigationStep(data.getNavigationStep());
-        else
-            data.getRunnable().run();
+        holder.bindTo(data);
     }
 
 
