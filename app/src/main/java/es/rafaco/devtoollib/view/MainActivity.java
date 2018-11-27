@@ -1,6 +1,7 @@
 package es.rafaco.devtoollib.view;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +20,7 @@ import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.logic.steps.FriendlyLog;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +75,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    //TODO: refactor to BaseActivity or MyActivityLifecycleCallbacks
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return DevTools.getWatcherManager().getGestureDetector().onGenericMotionEvent(event);
+        }
+        return super.onGenericMotionEvent(event);
+    }
+
+    //TODO: refactor to BaseActivity or MyActivityLifecycleCallbacks
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        FriendlyLog.log("W", "User", "Touch", "User touch:" + ev.toString());
+        DevTools.getWatcherManager().getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
 }

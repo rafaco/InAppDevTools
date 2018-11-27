@@ -136,6 +136,9 @@ public class FriendlyLog {
                 return R.drawable.ic_person_pin_black_24dp;
             }
         }
+        else if (log.getCategory().equals("UserTouch")) {
+            return R.drawable.ic_touch_app_white_24dp;
+        }
         else if (log.getCategory().equals("User")){
             if (log.getType().equals("Touch")){
                 return R.drawable.ic_touch_app_white_24dp;
