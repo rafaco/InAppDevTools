@@ -2,6 +2,7 @@ package es.rafaco.devtools.logic.watcher;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.GestureDetector;
 
 import androidx.lifecycle.ProcessLifecycleOwner;
 import es.rafaco.devtools.DevTools;
@@ -25,6 +26,7 @@ public class WatcherManager {
     private ScreenChangeWatcher screenChangeWatcher;
     private ConnectivityChangeWatcher connectivityChangeWatcher;
     private AirplaneModeChangeWatcher airplaneModeChangeWatcher;
+    private GestureWatcher gestureWatcher;
 
     public WatcherManager(Context context) {
         this.context = context;
@@ -36,6 +38,7 @@ public class WatcherManager {
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
+        startGestureWatcher();
         startDeviceButtonsWatcher();
         startScreenChangeWatcher();
         startNetworkChangeWatcher();
@@ -195,5 +198,15 @@ public class WatcherManager {
     }
     public ShakeWatcher getShakeWatcher() {
         return shakeWatcher;
+    }
+
+    private void startGestureWatcher() {
+        if (gestureWatcher == null){
+            gestureWatcher = new GestureWatcher(context);
+        }
+    }
+
+    public GestureDetector getGestureDetector() {
+        return gestureWatcher.getDetector();
     }
 }
