@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!--<item type="layout" name="pd_item_common" tools:override="true">@layout/dt_pd_item_common</item>
+
+    <!-- Overrides for CodeView -->
+    <item type="layout" name="layout_code_view" tools:override="true">@layout/override_cv_layout_code_view</item>
+
+    <!-- Overrides for Pandora
+    <item type="layout" name="pd_item_common" tools:override="true">@layout/dt_pd_item_common</item>
     <item type="layout" name="pd_item_title" tools:override="true">@layout/dt_pd_item_title</item>
     <item type="layout" name="pd_item_table_cell" tools:override="true">@layout/dt_pd_item_table_cell</item>
     <item type="color" name="pd_item_focus" tools:override="true">@color/rally_bg_blur</item>-->

@@ -45,7 +45,7 @@ public class SourcesScreen extends OverlayScreen {
 
         SourcesManager manager = new SourcesManager(getContext());
 
-        List<SourceEntry> filteredItems = manager.getFilteredItems(getParam());
+        List<SourceEntry> filteredItems = manager.getFilteredItems(SourcesManager.DEVTOOLS, getParam());
         List<Object> data = new ArrayList<>();
 
         for (SourceEntry entry : filteredItems) {
@@ -54,7 +54,9 @@ public class SourcesScreen extends OverlayScreen {
                     entry.isDirectory() ? R.string.gmd_folder : R.string.gmd_subdirectory_arrow_right,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
                     entry.isDirectory() ? SourcesScreen.class : SourceDetailScreen.class,
-                    entry.getName()));
+                    entry.isDirectory() ? entry.getName() :
+                            SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS,
+                                    entry.getName(), -1)));
         }
 
         return data;

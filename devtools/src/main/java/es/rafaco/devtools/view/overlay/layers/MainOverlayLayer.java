@@ -81,6 +81,15 @@ public class MainOverlayLayer extends OverlayLayer {
         fullContainer = getView().findViewById(R.id.full_container);
     }
 
+    public void scrollTop(){
+        bodyScroll.post(new Runnable() {
+                @Override
+                public void run() {
+                    bodyScroll.scrollTo(0, 0);
+                }
+            });
+    }
+
     public void scrollBottom(){
         if (!isScrollAtBottom()){
             bodyScroll.post(new Runnable() {

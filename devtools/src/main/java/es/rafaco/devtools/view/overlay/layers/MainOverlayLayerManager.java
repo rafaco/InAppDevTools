@@ -197,12 +197,15 @@ public class MainOverlayLayerManager {
                 MainOverlayLayerManager.class, this);
 
         if (loadedScreen != null){
+            mainLayer.scrollTop();
             loadScreenToolbar(loadedScreen);
             loadedScreen.start(param);
             NavigationStep newStep = new NavigationStep(screenClass, param);
             addNavigationStep(newStep);
+
+            return loadedScreen.getView();
         }
-        return loadedScreen.getView();
+        return null;
     }
 
     private void addNavigationStep(NavigationStep newStep) {

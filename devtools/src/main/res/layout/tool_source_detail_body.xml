@@ -10,9 +10,15 @@
         android:layout_height="wrap_content"
         style="@style/content_margin" />
 
-    <io.github.kbiakov.codeview.CodeView
-        android:id="@+id/code_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <io.github.kbiakov.codeview.CodeView
+            android:id="@+id/code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

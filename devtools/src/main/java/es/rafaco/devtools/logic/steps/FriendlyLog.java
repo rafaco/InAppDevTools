@@ -21,6 +21,10 @@ public class FriendlyLog {
 
     public enum LEVEL { V, D, I, W, E, F, WTF }
 
+    public static void log(String message){
+        log("I", "Log", "Quick", message);
+    }
+
     public static void log(String severity, String category, String type, String message) {
         log(new Date().getTime(), severity, category, type, message);
     }

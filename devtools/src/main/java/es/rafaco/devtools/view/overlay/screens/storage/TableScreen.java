@@ -136,6 +136,6 @@ public class TableScreen extends BaseStorageScreen {
 
                 TableScreen.this.hideLoading();
             }
-        })).execute(new Void[0]);
+        })).execute((Object)new Void[0]);
     }
 }

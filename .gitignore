@@ -87,3 +87,4 @@ Temporary Items
 app/libs/
 devtools/libs/
 .idea
+*/res/raw/*_sources.jar

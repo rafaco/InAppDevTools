@@ -1,134 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/content_padding">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/content_padding">
+
         <TextView
-            android:id="@+id/detail_when"
+            android:id="@+id/detail_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/rally_orange"
+            style="@style/TextCondensedMedium" />
+
+        <TextView
+            android:id="@+id/detail_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextCondensedMedium" />
+
+        <TextView
+            android:id="@+id/detail_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextCondensedSmall" />
+
+
+        <TextView
+            android:id="@+id/detail_title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/rally_orange"
             android:layout_marginTop="10dp"
             style="@style/TextCondensedMedium" />
 
         <TextView
-            android:id="@+id/detail_foreground"
+            android:id="@+id/detail_subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/detail_when"
             style="@style/TextCondensedMedium" />
+
         <TextView
-            android:id="@+id/detail_last_activity"
+            android:id="@+id/detail_body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/detail_foreground"
-            style="@style/TextCondensedMedium" />
+            style="@style/TextCondensedSmall" />
 
-        <ImageView
-            android:id="@+id/thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:scaleType="fitCenter" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/detail_when"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_foreground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_when"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_last_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_foreground"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_thread"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_last_activity"
+                style="@style/TextCondensedMedium" />
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                tools:ignore="NewApi" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_orange"
+                android:text="Stacktrace:"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap highlighted for sources"
+                android:textAlignment="textEnd"
+                android:layout_gravity="end"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                style="@style/TextCondensedSmall" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <io.github.kbiakov.codeview.CodeView
+            android:id="@+id/code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/detail_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/rally_orange"
-        android:layout_marginTop="10dp"
-        style="@style/TextCondensedBig" />
-
-    <TextView
-        android:id="@+id/detail_subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextCondensedMedium" />
-
-    <TextView
-        android:id="@+id/detail_thread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextCondensedMedium" />
-
-    <TextView
-        android:id="@+id/detail_title2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/rally_orange"
-        android:layout_marginTop="10dp"
-        style="@style/TextCondensedBig" />
-
-    <TextView
-        android:id="@+id/detail_subtitle2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextCondensedMedium" />
 
     <LinearLayout
         android:id="@+id/details_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/stacktrace_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Stacktrace"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/rally_white"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/logcat_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="LogCat"
-            android:backgroundTint="@color/rally_yellow"
-            android:textColor="@color/charcoal"/>
-
-    </LinearLayout>
-
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Full stacktrace:"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="3dp"
-        style="@style/TextCondensedBig" />-->
-
-    <HorizontalScrollView
-        android:id="@+id/stacktrace_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/detail_console"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            style="@style/TextMonospace" />
-
-    </HorizontalScrollView>
-
-    <LinearLayout
-        android:id="@+id/secondary_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reveal_details_button"
@@ -140,12 +154,17 @@
             android:textColor="@color/rally_bg_solid"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/logcat_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="invisible"/>
+            android:text="View LogCat"
+            android:drawableLeft="@drawable/ic_android_white_24dp"
+            android:backgroundTint="@color/rally_yellow"
+            android:textColor="@color/charcoal"/>
 
     </LinearLayout>
+
 
     <TextView
         android:id="@+id/out"

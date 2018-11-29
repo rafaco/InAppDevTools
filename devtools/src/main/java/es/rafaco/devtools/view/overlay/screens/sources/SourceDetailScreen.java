@@ -1,16 +1,18 @@
 package es.rafaco.devtools.view.overlay.screens.sources;
 
+import android.os.AsyncTask;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.sources.SourceAdapter;
 import es.rafaco.devtools.logic.sources.SourcesManager;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import io.github.kbiakov.codeview.CodeView;
-import io.github.kbiakov.codeview.adapters.Format;
-import io.github.kbiakov.codeview.adapters.Options;
-import io.github.kbiakov.codeview.highlight.ColorTheme;
 
 public class SourceDetailScreen extends OverlayScreen {
 
@@ -31,7 +33,7 @@ public class SourceDetailScreen extends OverlayScreen {
 
     @Override
     public boolean needNestedScroll() {
-        return false;
+        return true;
     }
 
     @Override
@@ -41,17 +43,33 @@ public class SourceDetailScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
 
-        SourcesManager manager = new SourcesManager(getContext());
+        codeHeader = bodyView.findViewById(R.id.code_header);
+        codeViewer = bodyView.findViewById(R.id.code_view);
+        codeViewer.setCode("");
 
-        codeHeader = view.findViewById(R.id.code_header);
-        codeViewer = view.findViewById(R.id.code_view);
+        new AsyncTask<String, String, String>(){
 
-        codeHeader.setText(getParam());
-        codeViewer.setOptions(Options.Default.get(getContext())
-                .withLanguage("java")
-                .withCode(manager.getContent(getParam()))
-                .withTheme(ColorTheme.MONOKAI)
-                .withFormat(Format.Default.getCompact()));
+            @Override
+            protected String doInBackground(String... strings) {
+                SourcesManager manager = new SourcesManager(getContext());
+                String content = manager.getContent(getParams().type, getParams().path);
+                return content;
+            }
+
+            @Override
+            protected void onPostExecute(String content) {
+                super.onPostExecute(content);
+                codeHeader.setText(getParams().path);
+
+                final SourceAdapter codeAdapter = new SourceAdapter(getContext(), content, "java");
+                codeViewer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        codeViewer.setAdapter(codeAdapter);
+                    }
+                });
+            }
+        }.execute();
     }
 
     @Override
@@ -60,5 +78,28 @@ public class SourceDetailScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
+    }
+
+    public static String buildParams(String type, String path, int lineNumber){
+        InnerParams paramObject = new InnerParams(type, path, lineNumber);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
+    }
+
+    public InnerParams getParams(){
+        Gson gson = new Gson();
+        return gson.fromJson(getParam(), InnerParams.class);
+    }
+
+    public static class InnerParams {
+        public String type;
+        public String path;
+        public int lineNumber;
+
+        public InnerParams(String type, String path, int lineNumber) {
+            this.type = type;
+            this.path = path;
+            this.lineNumber = lineNumber;
+        }
     }
 }

@@ -16,7 +16,8 @@
     <color name="rally_purple">#B15DFF</color>
     <color name="rally_blue">#72DEFF</color>
     <color name="rally_blue_med">#007BE1</color>
-    <color name="rally_blue_med_dark">#0050ae</color>
+    <color name="rally_blue_dark">#0050ae</color>
+    <color name="rally_blue_darker">#00297e</color>
     <color name="rally_white">#E7E7E7</color>
 
 
@@ -29,4 +30,7 @@
     <color name="chuck_status_default">#212121</color>
     <color name="chuck_status_error">#F44336</color>
     <color name="chuck_status_requested">#9E9E9E</color>
+
+    <color name="cv_monokai_alpha">#aa272822</color>
+    <color name="cv_default_alpha">#aaE9EDF4</color>
 </resources>

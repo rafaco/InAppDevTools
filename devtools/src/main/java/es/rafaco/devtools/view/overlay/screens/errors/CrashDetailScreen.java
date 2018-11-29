@@ -6,21 +6,25 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
+import es.rafaco.devtools.logic.sources.SourcesManager;
+import es.rafaco.devtools.logic.sources.StacktraceAdapter;
 import es.rafaco.devtools.storage.db.DevToolsDatabase;
 import es.rafaco.devtools.storage.db.entities.Crash;
 import es.rafaco.devtools.storage.db.entities.Screen;
 import es.rafaco.devtools.logic.utils.DateUtils;
+import es.rafaco.devtools.view.overlay.OverlayUIService;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import es.rafaco.devtools.view.overlay.screens.info.InfoCollection;
 import es.rafaco.devtools.view.overlay.screens.report.ReportHelper;
+import es.rafaco.devtools.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.devtools.view.utils.ImageLoaderAsyncTask;
+import io.github.kbiakov.codeview.CodeView;
 
 public class CrashDetailScreen extends OverlayScreen {
 
@@ -29,18 +33,18 @@ public class CrashDetailScreen extends OverlayScreen {
     private CrashHelper helper;
     private TextView title;
     private TextView subtitle;
-    private TextView console;
+    private TextView body;
     private TextView title2;
     private TextView subtitle2;
+    private TextView body2;
     private TextView when;
     private TextView foreground;
     private TextView lastActivity;
     private ImageView thumbnail;
     private TextView thread;
-    private HorizontalScrollView stacktraceContainer;
     private AppCompatButton logcatButton;
-    private AppCompatButton stacktraceButton;
     private AppCompatButton revealDetailsButton;
+    private CodeView stacktraceView;
 
     public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -82,9 +86,13 @@ public class CrashDetailScreen extends OverlayScreen {
 
         title = view.findViewById(R.id.detail_title);
         subtitle = view.findViewById(R.id.detail_subtitle);
+        body = view.findViewById(R.id.detail_body);
         title2 = view.findViewById(R.id.detail_title2);
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
+        body2 = view.findViewById(R.id.detail_body2);
         thread = view.findViewById(R.id.detail_thread);
+
+        stacktraceView = view.findViewById(R.id.code_view);
 
         logcatButton = view.findViewById(R.id.logcat_button);
         logcatButton.setOnClickListener(new View.OnClickListener() {
@@ -93,17 +101,6 @@ public class CrashDetailScreen extends OverlayScreen {
                 DevTools.showMessage("Not already implemented");
             }
         });
-        stacktraceButton = view.findViewById(R.id.stacktrace_button);
-        stacktraceContainer = view.findViewById(R.id.stacktrace_container);
-        stacktraceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int newVisibility = (stacktraceContainer.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
-                stacktraceContainer.setVisibility(newVisibility);
-                getScreenManager().getMainLayer().scrollToView(console);
-            }
-        });
-        console = view.findViewById(R.id.detail_console);
 
         revealDetailsButton = view.findViewById(R.id.reveal_details_button);
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +116,10 @@ public class CrashDetailScreen extends OverlayScreen {
 
     private void updateView() {
 
-        when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
-        foreground.setText("State: " + (crash.isForeground() ? "Foreground" : "Background"));
+        String threadString = (crash.isMainThread()) ? "the main" : "a background";
+        thread.setText("Thread: " + crash.getThreadName());
+        when.setText("When: " + DateUtils.getElapsedTimeLowered(crash.getDate()));
+        foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());
 
         AsyncTask.execute(new Runnable() {
@@ -140,24 +139,36 @@ public class CrashDetailScreen extends OverlayScreen {
             message.replace(cause, "(...)");
         }
 
-        title.setText(crash.getException() + ": " + message);
-        subtitle.setText(helper.getFormattedAt(crash));
+        title.setText(crash.getException());
+        subtitle.setText(message);
+        body.setText(helper.getFormattedAt(crash));
 
         if (cause!=null){
-            title2.setText(cause);
-            subtitle2.setText(helper.getCausedAt(crash));
+            title2.setText("Caused by: " + crash.getCauseException());
+            subtitle2.setText(crash.getCauseMessage());
+            body2.setText(helper.getCausedAt(crash));
         }else{
             title2.setVisibility(View.GONE);
             subtitle2.setVisibility(View.GONE);
+            body2.setVisibility(View.GONE);
         }
-        String threadString = (crash.isMainThread()) ? "the main" : "a background";
-        thread.setText("running on " + threadString + " thread: " + crash.getThreadName());
 
         InfoCollection report = helper.parseToInfoGroup(crash);
         //report.removeGroupEntries(3);
         out.setText(report.toString());
 
-        console.setText(crash.getStacktrace());
+        final StacktraceAdapter myAdapter = new StacktraceAdapter(getContext(), crash.getStacktrace());
+        stacktraceView.setAdapter(myAdapter);
+        stacktraceView.getOptions()
+                .addCodeLineClickListener((n, line) -> {
+                    if (myAdapter.canOpenSource(n)){
+                        String path = myAdapter.extractPath(n);
+                        int lineNumber = myAdapter.extractLineNumber(n);
+
+                        OverlayUIService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS, path, lineNumber));
+                    }
+                });
     }
 
     private void requestData() {

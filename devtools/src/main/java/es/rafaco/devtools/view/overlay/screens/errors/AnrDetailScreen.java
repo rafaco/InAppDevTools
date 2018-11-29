@@ -1,6 +1,7 @@
 package es.rafaco.devtools.view.overlay.screens.errors;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -64,6 +65,9 @@ public class AnrDetailScreen extends OverlayScreen {
                 }
             });
         }
+
+        View codeViewer = toolHead.findViewById(R.id.code_view);
+        codeViewer.setVisibility(View.GONE);
     }
 
     private void updateOutput() {
