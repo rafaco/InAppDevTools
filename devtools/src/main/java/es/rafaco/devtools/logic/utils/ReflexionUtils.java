@@ -1,6 +1,10 @@
 package es.rafaco.devtools.logic.utils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.rafaco.devtools.R;
 
 public class ReflexionUtils {
 
@@ -59,5 +63,76 @@ public class ReflexionUtils {
         }
 
         return result;
+    }
+
+    /**
+     * Finds the resource ID for the current application's resources.
+     * @param Rclass Resource class to find resource in.
+     * Example: R.string.class, R.layout.class, R.drawable.class
+     * @param name Name of the resource to search for.
+     * @return The id of the resource or -1 if not found.
+     */
+    public static int getResourceByName(Class<?> Rclass, String name) {
+        int id = -1;
+        try {
+            if (Rclass != null) {
+                final Field field = Rclass.getField(name);
+                if (field != null)
+                    id = field.getInt(null);
+            }
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static Field[] getResources(Class<?> Rclass) {
+        Field[] fields = new Field[0];
+        try {
+            if (Rclass != null) {
+                fields = Rclass.getFields();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fields;
+    }
+
+    public static List<String> getResourceNames(Class<?> Rclass) {
+        List<String> result = new ArrayList<>();
+        final Field[] fields = getResources(Rclass);
+        try {
+            if (fields != null && fields.length>0){
+                for (Field field : fields) {
+                    result.add(field.getName());
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static List<String> getFewResourceNames() {
+        List<String> result = new ArrayList<>();
+        result.addAll(getResourceNames(R.string.class));
+        result.addAll(getResourceNames(R.layout.class));
+        result.addAll(getResourceNames(R.drawable.class));
+        return result;
+    }
+
+    public static void getAllDeclaredClasses(Class<?> Rclass) {
+        Class[] nested = Rclass.getDeclaredClasses();
+
+        for (int i=0; i < nested.length; i++) {
+            System.out.print(nested[i]);
+            if(java.lang.reflect.Modifier.isStatic(nested[i].getModifiers())) {
+                System.out.println(" is nested");
+            }
+            else {
+                System.out.println(" is nested inner");
+            }
+        }
     }
 }
