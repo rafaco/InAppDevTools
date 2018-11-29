@@ -56,6 +56,7 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
 ### macOS template
 # General
 .DS_Store
@@ -84,7 +85,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+
+# Custom fields
 app/libs/
 devtools/libs/
+
 .idea
-*/res/raw/*_sources.jar
+*_sources.jar
