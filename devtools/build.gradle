@@ -30,22 +30,12 @@ android {
 }
 
 
-task generateSourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveName = 'devtools_sources.jar'
-}
+apply from: 'devtools-plugin.gradle'
 
-task copySourcesJarToRaw(type: Copy) {
-    from files(["build/libs/devtools_sources.jar"])
-    into 'src/main/res/raw'
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
 }
-
-tasks.whenTaskAdded { theTask ->
-    if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
-        theTask.dependsOn copySourcesJarToRaw
-    }
-}
-copySourcesJarToRaw.dependsOn generateSourcesJar
 
 
 dependencies {

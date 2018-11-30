@@ -23,41 +23,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion '28.0.3'
-
-    /*sourceSets {
-        main {
-            resources.includes = [ '...app-sources.jar' ]
-        }
-    }
-
-    applicationVariants.all { variant ->
-        variant.mergeResources.doLast {
-            copy {
-                from (["build/lib/app-sources.jar"])
-                into ("src/main/res/raw")
-            }
-        }
-    }*/
-}
-
-task generateSourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveName = 'app_sources.jar'
 }
 
 
-task copySourcesJarToRaw(type: Copy) {
-    from files(["build/libs/app_sources.jar"])
-    into 'src/main/res/raw'
-}
+apply from: '../devtools/devtools-plugin.gradle'
 
-tasks.whenTaskAdded { theTask ->
-    if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
-        theTask.dependsOn copySourcesJarToRaw
-    }
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
 }
-copySourcesJarToRaw.dependsOn generateSourcesJar
-
 
 
 dependencies {
