@@ -2,14 +2,22 @@ package es.rafaco.devtools.logic.sources;
 
 public class SourceEntry {
 
+    String origin;
     String name;
-    int position;
     boolean isDirectory;
 
-    public SourceEntry(String name, int position, boolean isDirectory) {
+    public SourceEntry(String origin, String name, boolean isDirectory) {
+        this.origin = origin;
         this.name = name;
-        this.position = position;
         this.isDirectory = isDirectory;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     public String getName() {
@@ -18,14 +26,6 @@ public class SourceEntry {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public boolean isDirectory() {

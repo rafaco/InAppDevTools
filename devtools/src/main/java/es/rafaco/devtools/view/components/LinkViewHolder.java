@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.devtools.R;
-import es.rafaco.devtools.logic.integrations.LinkConfig;
+import es.rafaco.devtools.logic.integrations.ThinItem;
 import es.rafaco.devtools.view.icons.IconUtils;
 
 public class LinkViewHolder extends RecyclerView.ViewHolder {
@@ -20,7 +20,7 @@ public class LinkViewHolder extends RecyclerView.ViewHolder {
         title = view.findViewById(R.id.title);
     }
 
-    public void bindTo(LinkConfig data) {
+    public void bindTo(ThinItem data) {
 
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
@@ -30,6 +30,6 @@ public class LinkViewHolder extends RecyclerView.ViewHolder {
         title.setText(data.getTitle());
 
         itemView.setClickable(true);
-        itemView.setOnClickListener(v -> data.run());
+        itemView.setOnClickListener(v -> data.onClick());
     }
 }

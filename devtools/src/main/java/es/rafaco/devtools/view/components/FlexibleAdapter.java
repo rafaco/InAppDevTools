@@ -12,7 +12,8 @@ import java.util.List;
 
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.integrations.RunnableConfig;
-import es.rafaco.devtools.logic.integrations.LinkConfig;
+import es.rafaco.devtools.logic.integrations.ThinItem;
+import es.rafaco.devtools.logic.utils.ThreadUtils;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
@@ -51,12 +52,15 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
+        if (position <0 || position > items.size()){
+            return 2;
+        }
         Object item = items.get(position);
         if (item instanceof String)
             return TYPE_HEADER;
         else if (item instanceof RunnableConfig)
             return TYPE_BUTTON;
-        else if (item instanceof LinkConfig)
+        else if (item instanceof ThinItem)
             return TYPE_LINK;
         else
             return super.getItemViewType(position);
@@ -92,7 +96,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ((RunnableViewHolder) viewHolder).bindTo((RunnableConfig) viewData);
                 break;
             case TYPE_LINK:
-                ((LinkViewHolder) viewHolder).bindTo((LinkConfig) viewData);
+                ((LinkViewHolder) viewHolder).bindTo((ThinItem) viewData);
                 break;
             default:
                 break;
@@ -102,5 +106,16 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void replaceItems(List<Object> data){
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                items.clear();
+                items.addAll(data);
+                notifyDataSetChanged();
+            }
+        });
     }
 }

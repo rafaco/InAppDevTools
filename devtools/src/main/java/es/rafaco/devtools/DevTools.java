@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import es.rafaco.devtools.logic.sources.SourcesManager;
 import es.rafaco.devtools.logic.watcher.WatcherManager;
 import es.rafaco.devtools.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.devtools.logic.watcher.activityLog.CustomChuckInterceptor;
@@ -44,6 +45,7 @@ public class DevTools {
     private static DevToolsConfig config;
     private static ToolManager toolManager;
     private static WatcherManager watcherManager;
+    private static SourcesManager surcesManager;
 
     public static int readerCounter = 0;
     private static Runnable onForceCloseRunnable;
@@ -75,7 +77,7 @@ public class DevTools {
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
 
-
+        surcesManager = new SourcesManager(appContext);
 
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
@@ -107,8 +109,6 @@ public class DevTools {
         context.startService(intent);
     }
 
-
-
     private static void startUiService(Context context) {
         context.startService(new Intent(context, OverlayUIService.class));
     }
@@ -128,6 +128,9 @@ public class DevTools {
     }
     public static WatcherManager getWatcherManager() {
         return watcherManager;
+    }
+    public static SourcesManager getSourcesManager() {
+        return surcesManager;
     }
     public static ActivityLogManager getActivityLogManager() {
         return watcherManager.getActivityLogManager();

@@ -36,14 +36,11 @@ public class DevToolsFiles {
                 report);
     }
 
-    public static File prepareSources() {
+    public static File prepareSource(String target) {
         return FileCreator.prepare(
                 "sources",
-                "app_sources.jar");
+                target + ".jar");
     }
-
-
-
 
     public static File prepareLogcat(long timeMillis) {
         return FileCreator.prepare(
@@ -70,10 +67,5 @@ public class DevToolsFiles {
         String second = "screen" ;
         String fileName = String.format(first + "_" + second + "_" + mImageTime + "_" + ".jpg");
         return new File(folder, fileName);
-    }
-
-    public static boolean existsSources() {
-        File sourcesFile = new File(FileCreator.getCategoryFolder("sources"), "app_sources.jar");
-        return sourcesFile.exists();
     }
 }

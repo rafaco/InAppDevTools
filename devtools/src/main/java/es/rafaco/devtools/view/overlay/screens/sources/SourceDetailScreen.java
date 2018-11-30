@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import es.rafaco.devtools.DevTools;
 import es.rafaco.devtools.R;
 import es.rafaco.devtools.logic.sources.SourceAdapter;
-import es.rafaco.devtools.logic.sources.SourcesManager;
 import es.rafaco.devtools.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.devtools.view.overlay.screens.OverlayScreen;
 import io.github.kbiakov.codeview.CodeView;
@@ -51,8 +50,7 @@ public class SourceDetailScreen extends OverlayScreen {
 
             @Override
             protected String doInBackground(String... strings) {
-                SourcesManager manager = new SourcesManager(getContext());
-                String content = manager.getContent(getParams().type, getParams().path);
+                String content = DevTools.getSourcesManager().getContent(getParams().type, getParams().path);
                 return content;
             }
 
