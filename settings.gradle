@@ -1,1 +1,1 @@
-include ':app', ':devtools'
+include ':app', ':library', ':library_noop', ':plugin'

@@ -1,0 +1,77 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '28.0.3'
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    def androidx_version = "1.0.0"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.recyclerview:recyclerview:$androidx_version"
+    implementation "androidx.cardview:cardview:$androidx_version"
+    implementation "androidx.media:media:$androidx_version"
+    implementation "androidx.annotation:annotation:$androidx_version"
+
+    def room_version = "2.0.0" //"2.1.0-alpha02"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    def lifecycle_version = "2.0.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    def paging_version = "2.1.0-beta01"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
+    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.opencsv:opencsv:4.2'
+    implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
+    implementation 'com.readystatesoftware.chuck:library:1.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
+    debugImplementation 'com.github.whataa:pandora:v1.2.0'
+    releaseImplementation 'com.github.whataa:pandora-no-op:v1.2.0'
+    implementation 'com.github.kbiakov:CodeView-android:1.3.1'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+}
+
+apply from: '../plugin/devtools-plugin.gradle'
+
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
+}

@@ -26,14 +26,6 @@ android {
 }
 
 
-apply from: '../devtools/devtools-plugin.gradle'
-
-devtools {
-    enabled = true
-    email = 'rafaco@gmail.com'
-}
-
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.android.material:material:1.1.0-alpha01'
@@ -43,9 +35,17 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    implementation project(path: ':devtools')
+    implementation project(path: ':library')
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+}
+
+
+apply from: '../plugin/devtools-plugin.gradle'
+
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
 }

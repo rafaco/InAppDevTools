@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:es.rafaco.devtools.tools="http://schemas.android.com/es.rafaco.devtools.tools"
-    es.rafaco.devtools.tools:context="es.rafaco.devtoollib.view.MainActivity">
+    es.rafaco.devtools.tools:context="es.rafaco.inappdevtools.app.view.MainActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

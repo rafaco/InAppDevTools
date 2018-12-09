@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.rafaco.devtoollib">
+    package="es.rafaco.inappdevtools.app">
 
     <application
-        android:name=".SampleApp"
+        android:name="es.rafaco.inappdevtools.app.SampleApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".view.MainActivity"
+            android:name="es.rafaco.inappdevtools.app.view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,17 +22,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.ItemListActivity"
+            android:name="es.rafaco.inappdevtools.app.view.ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".view.ItemDetailActivity"
+            android:name="es.rafaco.inappdevtools.app.view.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".view.ItemListActivity"
+            android:parentActivityName="es.rafaco.inappdevtools.app.view.ItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.rafaco.devtoollib.view.ItemListActivity" />
+                android:value="es.rafaco.inappdevtools.app.view.ItemListActivity" />
         </activity>
 
         <meta-data android:name="devtools_auto_init_enabled" android:value="false" />
