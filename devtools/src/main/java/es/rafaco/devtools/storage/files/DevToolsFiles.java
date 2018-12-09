@@ -36,10 +36,10 @@ public class DevToolsFiles {
                 report);
     }
 
-    public static File prepareSource(String target) {
+    public static File prepareSource(String target, String extension) {
         return FileCreator.prepare(
                 "sources",
-                target + ".jar");
+                target + "." + extension);
     }
 
     public static File prepareLogcat(long timeMillis) {

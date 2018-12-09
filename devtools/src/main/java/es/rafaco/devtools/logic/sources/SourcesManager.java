@@ -1,16 +1,14 @@
 package es.rafaco.devtools.logic.sources;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.text.TextUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SourcesManager {
 
+    public static final String APP_RES = "app_resources";
     public static final String APP = "app_sources";
     public static final String DEVTOOLS = "devtools_sources";
     public static final String ASSETS = "assets";
@@ -25,6 +23,7 @@ public class SourcesManager {
 
     protected void init() {        
         origins = new ArrayList<>();
+        populateZipOrigin(APP_RES);
         populateJarOrigin(APP);
         populateJarOrigin(DEVTOOLS);
         populateAssetOrigin(ASSETS);
@@ -35,7 +34,7 @@ public class SourcesManager {
 
         SourceOrigin newPackage = new SourceOrigin();
         newPackage.name = originName;
-        newPackage.localJar = null;
+        newPackage.localZip = null;
         newPackage.items = reader.populateItems(originName);
         origins.add(newPackage);
     }
@@ -45,10 +44,22 @@ public class SourcesManager {
 
         SourceOrigin newPackage = new SourceOrigin();
         newPackage.name = originName;
-        newPackage.localJar = jarReader.populateLocalJar(originName);
-        newPackage.items = jarReader.populateItemsFromJar(originName, newPackage.localJar);
+        newPackage.localZip = jarReader.populateLocalJar(originName);
+        newPackage.items = jarReader.populateItemsFromJar(originName, newPackage.localZip);
         origins.add(newPackage);
     }
+
+    private void populateZipOrigin(String originName) {
+        ZipSourcesReader zipReader = new ZipSourcesReader(context);
+
+        SourceOrigin newPackage = new SourceOrigin();
+        newPackage.name = originName;
+        newPackage.localZip = zipReader.populateLocal(originName);
+        newPackage.items = zipReader.populateItems(originName, newPackage.localZip);
+        origins.add(newPackage);
+    }
+
+
 
 
     public List<SourceEntry> getFilteredItems(SourceEntry filter){

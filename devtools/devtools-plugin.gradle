@@ -1,3 +1,4 @@
+import java.time.*
 
 class DevtoolsConfigExtension {
     boolean enabled
@@ -7,16 +8,18 @@ class DevtoolsConfigExtension {
 class DevToolsPlugin implements Plugin<Project> {
     void apply(Project project) {
         def extension = project.extensions.create('devtools', DevtoolsConfigExtension)
+        def startTime
 
-        project.task('dt_printConfig') {
-            doLast {
+        project.task('dt_start') {
+            doFirst {
+                startTime = Instant.now()
                 println " DevToolsPlugin for module ${project.name}"
                 println "  Enabled: ${extension.enabled}, email ${extension.email}"
             }
         }
 
-        project.task('dt_generateJar',
-                dependsOn: project.tasks.dt_printConfig,
+        project.task('dt_packSrc',
+                dependsOn: project.tasks.dt_start,
                 type: Jar){
             from project.android.sourceSets.main.java.srcDirs
             from("${project.buildDir}/generated/")
@@ -24,17 +27,31 @@ class DevToolsPlugin implements Plugin<Project> {
             archiveName = "${project.name}_sources.jar"
         }
 
-        project.task('dt_copyJarToRaw',
-                dependsOn: project.tasks.dt_generateJar,
+        project.task('dt_packRes',
+                dependsOn: project.tasks.dt_start,
+                type: Zip){
+            from project.android.sourceSets.main.res.srcDirs
+            archiveName = "${project.name}_resources.zip"
+        }
+
+        project.task('dt_copyToRaw',
+                dependsOn: [ project.tasks.dt_packSrc, project.tasks.dt_packRes],
                 type: Copy) {
-            from project.files(["build/libs/${project.name}_sources.jar"])
+            from project.files(["build/libs/${project.name}_sources.jar", "build/distributions/${project.name}_resources.zip"])
             into 'src/main/res/raw'
+        }
+
+        project.task('dt_finish',
+                dependsOn: project.tasks.dt_copyToRaw ) {
+            doLast {
+                println " DevToolsPlugin took " + Duration.between(startTime, Instant.now()).toSeconds() + " seconds"
+            }
         }
 
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
                 println theTask.name
-                theTask.dependsOn project.tasks.dt_copyJarToRaw
+                theTask.dependsOn project.tasks.dt_finish
             }
         }
     }

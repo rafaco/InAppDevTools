@@ -1,19 +1,17 @@
 package es.rafaco.devtools.logic.sources;
 
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
 
 
 public class SourceOrigin {
     public String name;
-    public JarFile localJar;
+    public ZipFile localZip;
     public List<SourceEntry> items;
 
     public String getContent(String entryName){
-        if (localJar != null){
-            JarEntry jarEntry = localJar.getJarEntry(entryName);
-            return JarSourcesReader.extractContent(localJar, jarEntry);
+        if (localZip != null){
+            return ZipSourcesReader.extractContent(localZip, localZip.getEntry(entryName));
         }else{
             return AssetSourcesReader.extractContent(entryName);
         }
