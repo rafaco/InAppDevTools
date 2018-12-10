@@ -45,7 +45,7 @@ public class DevTools {
     private static DevToolsConfig config;
     private static ToolManager toolManager;
     private static WatcherManager watcherManager;
-    private static SourcesManager surcesManager;
+    private static SourcesManager sourcesManager;
 
     public static int readerCounter = 0;
     private static Runnable onForceCloseRunnable;
@@ -77,7 +77,7 @@ public class DevTools {
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
 
-        surcesManager = new SourcesManager(appContext);
+        //sourcesManager = new SourcesManager(appContext);
 
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
@@ -130,7 +130,11 @@ public class DevTools {
         return watcherManager;
     }
     public static SourcesManager getSourcesManager() {
-        return surcesManager;
+        //Delayed initialisation
+        if (sourcesManager == null){
+            sourcesManager = new SourcesManager(getAppContext());
+        }
+        return sourcesManager;
     }
     public static ActivityLogManager getActivityLogManager() {
         return watcherManager.getActivityLogManager();
