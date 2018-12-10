@@ -11,10 +11,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.core.app.NavUtils;
 import android.view.MenuItem;
 
-import es.rafaco.inappdevtools.R;
+import es.rafaco.inappdevtools.app.R;
 import es.rafaco.inappdevtools.app.dummy.DummyContent;
-import es.rafaco.inappdevtools.DevTools;
-import es.rafaco.inappdevtools.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 /**
  * An activity representing a single Item detail screen. This

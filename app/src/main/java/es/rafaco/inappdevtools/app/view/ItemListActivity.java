@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import es.rafaco.inappdevtools.R;
+import es.rafaco.inappdevtools.app.R;
 import es.rafaco.inappdevtools.app.dummy.DummyContent;
-import es.rafaco.inappdevtools.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 import java.util.List;
 

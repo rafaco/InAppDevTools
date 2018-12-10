@@ -2,10 +2,10 @@ package es.rafaco.inappdevtools.app;
 
 import android.app.Application;
 
-import es.rafaco.inappdevtools.R;
-import es.rafaco.inappdevtools.DevTools;
-import es.rafaco.inappdevtools.DevToolsConfig;
-import es.rafaco.inappdevtools.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.app.R;
+import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.DevToolsConfig;
+import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 
 
 public class SampleApp extends Application {

@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import es.rafaco.inappdevtools.DevTools;
+import es.rafaco.inappdevtools.library.DevTools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

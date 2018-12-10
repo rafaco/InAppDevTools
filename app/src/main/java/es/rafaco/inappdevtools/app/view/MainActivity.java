@@ -13,11 +13,11 @@ import android.view.MotionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import es.rafaco.inappdevtools.R;
+import es.rafaco.inappdevtools.app.R;
 import es.rafaco.inappdevtools.app.SampleApp;
 import es.rafaco.inappdevtools.app.api.Controller;
-import es.rafaco.inappdevtools.DevTools;
-import es.rafaco.inappdevtools.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class MainActivity extends AppCompatActivity {
 

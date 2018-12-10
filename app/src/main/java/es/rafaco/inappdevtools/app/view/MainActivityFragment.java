@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import es.rafaco.inappdevtools.R;
+import es.rafaco.inappdevtools.app.R;
 
 /**
  * A placeholder fragment containing a simple view.
