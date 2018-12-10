@@ -8,17 +8,16 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:backgroundTint="@color/rally_yellow"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/widget_icon_shape">
+        android:background="@drawable/widget_icon_shape"
+        android:backgroundTint="@color/rally_yellow">
 
         <TextView
             android:layout_width="match_parent"
@@ -37,7 +36,6 @@
 
     </LinearLayout>
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,14 +47,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="An Android library with a collection of useful tools for debugging and reporting from within your own application. It automatically logs everything happening underneath and allow you inspect it at any time using an overlay layer."
+        android:text="Android library with a collection of tools for debugging, inspecting and reporting from within your own application. It automatically logs everything happening underneath and allow you inspect it at any time using an overlay layer."
         android:justificationMode="inter_word"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/show_documentation"
@@ -74,46 +71,49 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Simulate a crash"
-            android:textStyle="italic"
-            android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/crash_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:drawableTint="@color/rally_orange"
             android:text="Crash"
             android:layout_gravity="right"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Browse our demo to generate some data to inspect:"
-            android:textStyle="italic"
-            android:layout_marginTop="30dp"/>
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/crash_button"
+            android:text="Simulate a crash"
+            android:textStyle="italic" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/browse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:text="Browse"
             android:layout_gravity="right" />
-    </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/browse"
+            android:text="Browse our demo to generate some data to inspect:"
+            android:textStyle="italic" />
+    </RelativeLayout>
 
 </LinearLayout>
