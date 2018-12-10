@@ -1,26 +1,14 @@
 # In-App DevTools
 
-(work in progress)
+*An Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
 
-~~*A bunch of tools to speed up your development from within your own app. Build as a companion for each stage of the development lifecycle*~~
+It auto-logs everything happening underneath and pop up on crash. You can invoke the overlay view to inspect your app as you use it.
 
-*A library that provide your apk with a bunch of useful tools carefully preconfigured for each step of your app lifecycle (development, test and production).*
-
-An Android library to auto-log, inspect and report what is happening in your apk
-
--
-
-
-
-
-
-An Android library with a collection of useful tools for debugging and reporting from within your own application. It automatically logs everything happening underneath and allow you inspect it anywhere using an overlay layer.
-
-- Reproduction steps: navigation, user interaction, device events
-- Advanced loggers: lifecycle events (application, activities and fragments), Network requests, Errors (crash and anr)...
-- Inspector: All in previous one plus Logcat, Layout, Storage (Db, SharedPrefs and Files) and System Info
-- Report by gmail or sharing
-- Run your own runnables
+- Auto-logs repro steps: navigation, user interaction, device events
+- Advanced Auto-loggers: lifecycle events (application, activities and fragments), Network requests, Errors (crash and anr)...
+- Inspector: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and get info
+- Customize your reports selecting a content or packing everything
+- Define your runnables to easily run your special "piece of codes"
 
 # Table of contents
 1. [Introduction](#introduction)
