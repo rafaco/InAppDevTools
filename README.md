@@ -12,7 +12,7 @@ It auto-logs everything happening underneath and pop up on crash. You can invoke
 
 # Table of contents
 1. [Introduction](#introduction)
-2. [Installation](#installation)
+2. [Usage](#usage)
     1. [Configuration](#configuration)
 3. [Integration](#integration)
 3. [Customization](#customization)
@@ -73,7 +73,7 @@ It have few preconfigured modes based on how aggressively the library integrate 
 
 ***
 
-## Installation
+## Usage
 
 As simple as include 2 lines of code in your project:
 1. Add this library as a gradle dependency (at build.gradle in your app module)
@@ -148,3 +148,6 @@ Special properties to include in tools and their reports.
 A sample app is available to download at [Google Play](https://play.google.com). It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+## Downloads
+<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
