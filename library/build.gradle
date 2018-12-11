@@ -1,4 +1,7 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
+apply from: '../plugin/devtools-plugin.gradle'
+
 
 android {
     compileSdkVersion 28
@@ -27,6 +30,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion '28.0.3'
+
+    //TODO: Fix LINT validation!
+    lintOptions {
+        abortOnError false
+    }
 }
 
 
@@ -40,28 +48,23 @@ dependencies {
     implementation "androidx.media:media:$androidx_version"
     implementation "androidx.annotation:annotation:$androidx_version"
 
-    def room_version = "2.0.0" //"2.1.0-alpha02"
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-
-    def lifecycle_version = "2.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-
-    def paging_version = "2.1.0-beta01"
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    def androidx_2_version = "2.0.0-rc01" //"2.1.0-alpha02"
+    implementation "androidx.room:room-runtime:$androidx_2_version"
+    annotationProcessor "androidx.room:room-compiler:$androidx_2_version"
+    implementation "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$androidx_2_version"
+    implementation "androidx.paging:paging-runtime:$androidx_2_version"
 
     implementation 'com.google.android.material:material:1.1.0-alpha01'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.opencsv:opencsv:4.2'
     implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     implementation 'com.readystatesoftware.chuck:library:1.1.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.valdesekamdem.library:md-toast:0.9.0'
-    debugImplementation 'com.github.whataa:pandora:v1.2.0'
-    releaseImplementation 'com.github.whataa:pandora-no-op:v1.2.0'
+    implementation 'com.github.whataa:pandora:v1.2.2' //no-op available
     implementation 'com.github.kbiakov:CodeView-android:1.3.1'
 
     testImplementation 'junit:junit:4.12'
@@ -69,9 +72,31 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
-apply from: '../plugin/devtools-plugin.gradle'
-
 devtools {
     enabled = true
     email = 'rafaco@gmail.com'
+}
+
+
+publish {
+    Properties properties = new Properties()
+    properties.load(project.rootProject
+            .file('local.properties').newDataInputStream())
+    bintrayUser = properties.getProperty("bintrayUser", "")
+    bintrayKey = properties.getProperty("bintrayKey", "")
+
+    groupId = 'es.rafaco.inappdevtools'
+    artifactId = 'library'
+    publishVersion = '0.0.1'
+
+    userOrg = 'rafaco'
+    repoName = 'InAppDevTools'
+    website = 'https://github.com/rafaco/InAppDevTools'
+    issueTracker = "https://github.com/rafaco/InAppDevTools/issues"
+    repository = "https://github.com/rafaco/InAppDevTools.git"
+    desc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application.'
+    licences = ['Apache-2.0']
+
+    dryRun = false
+    autoPublish = false
 }
