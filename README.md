@@ -1,4 +1,4 @@
-# In-App DevTools
+# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Last release](https://img.shields.io/badge/last%20release-none-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/releases) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 *An Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
 
@@ -146,3 +146,5 @@ Special properties to include in tools and their reports.
 
 ## Sample App available
 A sample app is available to download at [Google Play](https://play.google.com). It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
+
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
