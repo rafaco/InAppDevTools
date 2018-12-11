@@ -3,22 +3,21 @@ package es.rafaco.inappdevtools.library.logic.watcher.crash;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -168,7 +167,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Log.d(DevTools.TAG, "Extracting logcat");
         String logcat = helper.buildRawReport();
         Log.d(DevTools.TAG, "Raw logcat extracted");
-        if (!StringUtils.isEmpty(logcat)){
+        if (!TextUtils.isEmpty(logcat)){
             CrashDao dao = DevTools.getDatabase().crashDao();
             Crash current = dao.getLast();
             Log.d(DevTools.TAG, "Current retrieve");

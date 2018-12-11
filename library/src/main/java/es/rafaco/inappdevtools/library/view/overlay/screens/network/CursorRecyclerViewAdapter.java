@@ -100,7 +100,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     /**
      * Swap in a new Cursor, returning the old Cursor.  Unlike
-     * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
+     * changeCursor(Cursor), the returned old Cursor is <em>not</em>
      * closed.
      */
     public Cursor swapCursor(Cursor newCursor) {

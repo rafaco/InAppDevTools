@@ -183,7 +183,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/out"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:layout_gravity="start" />
 
         </ScrollView>
 
