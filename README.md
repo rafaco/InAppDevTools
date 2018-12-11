@@ -1,6 +1,6 @@
 # In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/library/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/library/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
-*An Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
+*Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
 
 It auto-logs everything happening underneath and pop up on crash. You can invoke the overlay view to inspect your app as you use it.
 
@@ -9,6 +9,43 @@ It auto-logs everything happening underneath and pop up on crash. You can invoke
 - Inspector: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and get info
 - Customize your reports selecting a content or packing everything
 - Define your runnables to easily run your special "piece of codes"
+
+
+## Usage
+
+Basic setup only requiere you to modify gradle files for your project.
+
+- Step 1: Add my bintray repository to allprojects repositories at your project's build.gradle. Temporary, it will be not needed when migrated to jCenter
+```gradle
+allprojects {
+    repositories {
+        //...
+        maven { url "https://dl.bintray.com/rafaco/InAppDevTools"}
+    }
+}
+```
+
+- Step 2: Add our library as dependency and apply our plugin at your app module's build.gradle)
+```gradle
+apply plugin: 'com.android.application'
+apply from: '../plugin/devtools-plugin.gradle'
+
+dependencies {
+    //...
+    implementation 'es.rafaco.inappdevtools:library:0.0.1'
+}
+
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
+}
+```
+<br/>
+<br/>
+<br/>
+
+# //TODO: UPDATE! Following documentation is outdated
+<br/>
 
 # Table of contents
 1. [Introduction](#introduction)
@@ -72,29 +109,6 @@ It have few preconfigured modes based on how aggressively the library integrate 
 
 
 ***
-
-## Usage
-
-As simple as include 2 lines of code in your project:
-1. Add this library as a gradle dependency (at build.gradle in your app module)
-2. Call DevTools.install(this) at the onCreate() method of your extension from Application 
-
-```
-dependencies {
-    implementation 'es.rafaco.devtools:devtools'
-}
-```
-
-```java
-public class YourApp extends Application {
-
-    public void onCreate() {
-        super.onCreate();
-        DevTools.install(this);
-        //...
-    }
-}
-```
 
 **Configuration:**
 
