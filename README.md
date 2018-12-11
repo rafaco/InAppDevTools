@@ -1,4 +1,4 @@
-# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Last release](https://img.shields.io/badge/last%20release-none-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/releases) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/library/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/library/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 *An Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
 
