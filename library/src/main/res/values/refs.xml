@@ -3,10 +3,31 @@
 
     <!-- Overrides for CodeView -->
     <item type="layout" name="layout_code_view" tools:override="true">@layout/override_cv_layout_code_view</item>
+    <dimen name="shadow_height">16dp</dimen>
+    <dimen name="shadow_width">24dp</dimen>
+
 
     <!-- Overrides for Pandora
     <item type="layout" name="pd_item_common" tools:override="true">@layout/dt_pd_item_common</item>
     <item type="layout" name="pd_item_title" tools:override="true">@layout/dt_pd_item_title</item>
     <item type="layout" name="pd_item_table_cell" tools:override="true">@layout/dt_pd_item_table_cell</item>
     <item type="color" name="pd_item_focus" tools:override="true">@color/rally_bg_blur</item>-->
+
+
+    <!-- Overrides for Chuck -->
+    <string name="chuck_method">Method</string>
+    <string name="chuck_response">Response</string>
+    <string name="chuck_protocol">Protocol</string>
+    <string name="chuck_status">Status</string>
+    <string name="chuck_url">URL</string>
+
+    <style name="Chuck.TextAppearance.Label" parent="android:TextAppearance.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Chuck.TextAppearance.Value" parent="android:TextAppearance.Small">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
 </resources>

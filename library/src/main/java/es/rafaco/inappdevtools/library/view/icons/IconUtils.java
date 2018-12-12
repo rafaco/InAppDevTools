@@ -14,7 +14,7 @@ public class IconUtils {
     public static final String MATERIAL = ROOT + "MaterialIcons-Regular.ttf";
 
     public static Typeface getTypeface(Context context) {
-        return Typeface.createFromAsset(context.getAssets(), FONTAWESOME);
+        return Typeface.createFromAsset(context.getAssets(), MATERIAL);
     }
 
     public static Typeface getTypeface(Context context, String font) {
