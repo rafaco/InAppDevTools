@@ -28,13 +28,13 @@ allprojects {
 - Step 2: Add our library as dependency and apply our plugin at your app module's build.gradle)
 ```gradle
 apply plugin: 'com.android.application'
-apply from: '../plugin/devtools-plugin.gradle'
 
 dependencies {
     //...
     implementation 'es.rafaco.inappdevtools:library:0.0.1'
 }
 
+apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/devtools-plugin.gradle'
 devtools {
     enabled = true
     email = 'rafaco@gmail.com'
