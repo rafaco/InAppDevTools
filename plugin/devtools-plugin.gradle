@@ -16,6 +16,8 @@ class DevToolsPlugin implements Plugin<Project> {
 
             doFirst {
                 startTime = Instant.now()
+                def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
+                println path1
             }
         }
 
@@ -25,10 +27,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 dependsOn: project.tasks.onStart,
                 type: Jar){
             from project.android.sourceSets.main.java.srcDirs
-            from("${project.buildDir}/generated/")
-            into "${project.buildDir}/devtools"
+            from ("${project.buildDir}/generated/"){
+                excludes = ["**/res/pngs/**"]
+            }
             archiveName = "${project.name}_sources.jar"
-            excludes = ["${project.buildDir}/generated/res/pngs/**"]
+            eachFile { println it.path }
+            includeEmptyDirs = false
         }
 
         project.task('packResources',
@@ -36,10 +40,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: project.tasks.onStart,
                 type: Zip){
-            from project.android.sourceSets.main.res.srcDirs
-            into "${project.buildDir}/devtools"
+            from project.android.sourceSets.main.res.srcDirs {
+                excludes = ["raw/**"] //TODO: exclude more specifically
+            }
             archiveName = "${project.name}_resources.zip"
-            excludes = ["**/res/raw/**"] //TODO: exclude more specifically
+            eachFile { println it.path }
+            includeEmptyDirs = false
         }
 
         project.task('copyToRawResources',
@@ -47,9 +53,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
-            from project.files(["${project.buildDir}/devtools/${project.name}_sources.jar",
-                                "${project.buildDir}/devtools/${project.name}_resources.zip"])
-            into 'src/main/res/raw'
+            def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
+            def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
+            println path2
+            from project.files([path1, path2])
+            into project.files("src/main/res/raw")
+            eachFile { println it.path }
         }
 
         project.task('run',
