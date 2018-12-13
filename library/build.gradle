@@ -1,9 +1,4 @@
-//apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
-//apply from: '../plugin/devtools-plugin.gradle'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
 
 android {
     compileSdkVersion 28
@@ -23,7 +18,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -77,67 +72,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
-//devtools {
-//    enabled = true
-//    email = 'rafaco@gmail.com'
-//}
+apply from: 'publish.gradle'
+apply from: '../plugin/devtools-plugin.gradle'
 
-
-/*publish {
-    Properties rootProperties = new Properties()
-    rootProperties.load(project.rootProject
-            .file('local.properties').newDataInputStream())
-    bintrayUser = rootProperties.getProperty("bintrayUser", "")
-    bintrayKey = rootProperties.getProperty("bintrayKey", "")
-    userOrg = 'rafaco'
-
-    groupId = 'es.rafaco.inappdevtools'
-    artifactId = 'library'
-    publishVersion = '0.0.2'
-
-    repoName = 'InAppDevTools'
-    website = 'https://github.com/rafaco/InAppDevTools'
-    issueTracker = "https://github.com/rafaco/InAppDevTools/issues"
-    repository = "https://github.com/rafaco/InAppDevTools.git"
-    desc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application.'
-    licences = ['Apache-2.0']
-
-    dryRun = true
-    autoPublish = false
-}*/
-
-
-
-
-ext {
-
-    bintrayRepo = "InAppDevTools"
-    bintrayName = "library"
-
-    publishedGroupId = 'es.rafaco.inappdevtools'
-    libraryName = 'library'
-    artifact = 'library'
-
-    libraryDescription = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
-
-    siteUrl = 'https://github.com/rafaco/InAppDevTools'
-    gitUrl = 'https://github.com/rafaco/InAppDevTools.git'
-
-    libraryVersion = '0.0.3'
-
-    developerId = 'rafaco'
-    developerName = 'Rafa Acosta'
-    developerEmail = 'rafaco@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
-
-//Add these lines to publish library to bintray. This is the readymade scripts made by github user nuuneoi to make uploading to bintray easy.
-//Place it at the end of the file
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
+devtools {
+    enabled = true
+    email = 'rafaco@gmail.com'
 }

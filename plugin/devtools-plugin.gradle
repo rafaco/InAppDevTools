@@ -10,48 +10,64 @@ class DevToolsPlugin implements Plugin<Project> {
         def extension = project.extensions.create('devtools', DevtoolsConfigExtension)
         def startTime
 
-        project.task('dt_start') {
+        project.task('onStart',
+                description: 'First task for initializations',
+                group: 'devtools') {
+
             doFirst {
                 startTime = Instant.now()
-                println " DevToolsPlugin for module ${project.name}"
-                println "  Enabled: ${extension.enabled}, email ${extension.email}"
             }
         }
 
-        project.task('dt_packSrc',
-                dependsOn: project.tasks.dt_start,
+        project.task('packSources',
+                description: 'Generate a Jar file with all java sources, including generated ones',
+                group: 'devtools',
+                dependsOn: project.tasks.onStart,
                 type: Jar){
             from project.android.sourceSets.main.java.srcDirs
             from("${project.buildDir}/generated/")
-
+            into "${project.buildDir}/devtools"
             archiveName = "${project.name}_sources.jar"
+            excludes = ["${project.buildDir}/generated/res/pngs/**"]
         }
 
-        project.task('dt_packRes',
-                dependsOn: project.tasks.dt_start,
+        project.task('packResources',
+                description: 'Generate a Zip file with the resources',
+                group: 'devtools',
+                dependsOn: project.tasks.onStart,
                 type: Zip){
             from project.android.sourceSets.main.res.srcDirs
+            into "${project.buildDir}/devtools"
             archiveName = "${project.name}_resources.zip"
+            excludes = ["**/res/raw/**"] //TODO: exclude more specifically
         }
 
-        project.task('dt_copyToRaw',
-                dependsOn: [ project.tasks.dt_packSrc, project.tasks.dt_packRes],
+        project.task('copyToRawResources',
+                description: 'Copy the generated files into raw resources folder',
+                group: 'devtools',
+                dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
-            from project.files(["build/libs/${project.name}_sources.jar", "build/distributions/${project.name}_resources.zip"])
+            from project.files(["${project.buildDir}/devtools/${project.name}_sources.jar",
+                                "${project.buildDir}/devtools/${project.name}_resources.zip"])
             into 'src/main/res/raw'
         }
 
-        project.task('dt_finish',
-                dependsOn: project.tasks.dt_copyToRaw ) {
+        project.task('run',
+                description: 'Last plugin task',
+                group: 'devtools',
+                dependsOn: project.tasks.copyToRawResources ) {
+
             doLast {
-                println " DevToolsPlugin took " + Duration.between(startTime, Instant.now()).toSeconds() + " seconds"
+                def duration = Duration.between(startTime, Instant.now()).toSeconds()
+                println "   InAppDevTools plugin for ${project.name} took " + duration + " seconds"
+                println "   Config: enabled=${extension.enabled}, email=${extension.email}"
             }
         }
 
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
                 println theTask.name
-                theTask.dependsOn project.tasks.dt_finish
+                theTask.dependsOn project.tasks.run
             }
         }
     }
