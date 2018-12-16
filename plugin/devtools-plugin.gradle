@@ -16,8 +16,6 @@ class DevToolsPlugin implements Plugin<Project> {
 
             doFirst {
                 startTime = Instant.now()
-                def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
-                println path1
             }
         }
 
@@ -40,9 +38,8 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: project.tasks.onStart,
                 type: Zip){
-            from project.android.sourceSets.main.res.srcDirs {
-                excludes = ["raw/**"] //TODO: exclude more specifically
-            }
+            from 'src/main/res'
+            excludes = ["raw/**"]
             archiveName = "${project.name}_resources.zip"
             eachFile { println it.path }
             includeEmptyDirs = false
@@ -53,12 +50,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
+
             def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
             def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
-            println path2
             from project.files([path1, path2])
-            into project.files("src/main/res/raw")
-            eachFile { println it.path }
+            into 'src/main/res/raw'
+            eachFile {println it.path}
         }
 
         project.task('run',
@@ -78,6 +75,11 @@ class DevToolsPlugin implements Plugin<Project> {
                 println theTask.name
                 theTask.dependsOn project.tasks.run
             }
+        }
+
+        project.tasks.clean {
+            delete "src/main/res/raw/${project.name}_sources.jar"
+            delete "src/main/res/raw/${project.name}_resources.zip"
         }
     }
 }
