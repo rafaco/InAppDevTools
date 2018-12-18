@@ -4,13 +4,25 @@
 
 It auto-logs everything happening underneath and pop up on crash. You can invoke the overlay view to inspect your app as you use it.
 
-- Auto-logs repro steps: navigation, user interaction, device events
-- Advanced Auto-loggers: lifecycle events (application, activities and fragments), Network requests, Errors (crash and anr)...
+- Auto generate a friendly log with reproduction steps as well as advanced entries: lifecycle events, network requests, errors, device events,...
 - Inspector: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and get info
 - Customize your reports selecting a content or packing everything
 - Define your runnables to easily run your special "piece of codes"
 
 
+##### Table of Contents
+
+- [Usage](#usage)  
+- [Features](#features)  
+  - [Overlay](#overlay)  
+  - [Friendly logger](#friendly)
+  - [Crash handler](#crash)
+  - [Inspectors](#inspector)
+  - [Report](#report)
+- [Configuration](#configuration) 
+- [Customization](#customization) 
+
+<a name="usage"/>
 ## Usage
 
 Basic setup only requiere you to modify gradle files for your project.
@@ -40,92 +52,89 @@ devtools {
     email = 'rafaco@gmail.com'
 }
 ```
+//TODO Config
+
+## Features <a name="features"/>
+
+### Overlay system <a name="overlay"/>
+We use overlays to show informations over your app instead of activities
+- Adjust any of our views over your app while you still using it
+- Non intrusive with your views their focus or your activity stack
+- Few invocation methods availables: Notification, floating icon, shake or from your sources (see integrations)
+
+### Friendly Log <a name="friendly"/>
+- User interactions:
+  - Gestures: Tap, double tap, long press and fling
+  - Buttons clicked: back, home, recent, power, volume
+  - Device shake
+- Application events:
+  - App to Foreground and to background
+  - Navigation base on activity or fragments
+  - Errors: Crash and ANRs
+- Lifecycle events:
+  - Application: create, start, stop, resume, paused, destroy 
+  - Activities: created, started, resumed, paused, stop, save and destroy.
+  - Fragments: preAttached, attached, created, activityCreated, viewCreated, started, resumed, paused, stop, save, viewDestroy, destroy and detached.
+- Device events
+  - Connectivity: connected/disconnected with network type and speed, airplane mode switch.
+  - Screen rotation
+
+### Crash handler <a name="crash"/>
+- Store detailed info with stacktrace, screenshot and recent logcat
+- Restart your app and show all details and allow to report
+- Restart without details can be configured
+
+
+### Inspector <a name="inspector"/>
+- Inspect Sources:
+  - See your sources included in this apk, with your comments.
+  - Java sources, generated sources and resource folder
+  - Extremely useful to go to the crash line!
+- Inspect Logs:
+  - View standard Logcat with our Friendly Log 
+  - Select verbosity, filter results or search by keywords
+  - Powered ups with links to sources, crash details, screenshots....
+- Inspect View
+  - Navigate thru the layout hierarchy and edit his properties
+  - Select an element directly on your view to view his properties
+  - Show a grid to check alignments
+  - Get distances between elements on the screen just by touching them
+- Inspect Storage 
+  - Databases: all in your app
+  - SharedPrefs
+  - Files
+- Get infos
+  - Application status
+  - Apk compilation info
+  - OS, device, hardware, memory
+
+### Reports <a name="Reports"/>
+- Report bugs by email or share them with your favourite app
+- Attach logs, info, description, crashes, db dumps…
+- Take screenshots and attach them
+- //TODO
+
+
+## Configuration <a name="Configuration"/>
+
+## Customization <a name="Customization"/>
+
+
+## Sample App available
+A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com). 
+
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+## Downloads
+<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+
+
+
 <br/>
 <br/>
-<br/>
+# //TODO: Following documentation is outdated... working on it
 
-# //TODO: UPDATE! Following documentation is outdated
-<br/>
-
-# Table of contents
-1. [Introduction](#introduction)
-2. [Usage](#usage)
-    1. [Configuration](#configuration)
-3. [Integration](#integration)
-3. [Customization](#customization)
-3. [Sample app](#sample)
-
-
-## Introduction <a name="introduction"></a>
-(For testers) Just installing it, your apk will nicely treat any crash. It prompt the error and allow the user to report the bug by email. Additional information could be typed and the report will auto include the exception, the full logcat since the app started, a custom activity log and more info like versions, device, os, hardware, memory, storage...
-
-(For developer) Your app also get an overlay icon with tools to inspect on runtime and on the go. 
-
-It have few preconfigured modes based on how aggressively the library integrate with your apk and their users.
-
-- Develop
-    - Overlay: Always accessible via overlay icon
-    - OnCrash: see full info (exception, stacktrace, log, inspect, report...)
-    - Tools: all enabled and accessible 
-
-- Test: 
-   - OnCrash: small error message and a button to report it by email
-   - Tools: manual bug report, environment selector, info 
-
-- Production: 
-   - A low profile with all disabled and a minimum library get included to avoid code references problems
-   - On crash: Restart app and silent report on background?
-   
-   
-**Tools:**
-
-- Crash handler (detect, show on screen, allow to report it and/or restart the app)
-- LogCat reader everywhere
-- Info summary (App, compilation, os, device, hardware, memory...)
-- Shell command executor
-- Report bugs by email and attach logs, info, description... 
-- Inspector of Storage (filesystem, db, shared preferences)
-- Inspector of activities stack, running services, processes and tasks 
-
-
-**Features:**
-
-- Easy to install
-- Accessible everywhere (Overlay icon)
-- Non intrusive with your views, stack or focus (system overlay layer)
-- Only on release mode 
-
-**Invocation methods:**
-- Notification
-- Icon
-- Shake
-- Custom (see integrations)
-
-**Screenshots:**
-
--
-
-
-
-
-***
-
-**Configuration:**
-
-You can redefine how this library works by passing a DevToolsConfig object to the initial DevTools.install method. It has been coded following the builder pattern:
-```
-DevTools.install(this, DevToolsConfig.newBuilder()
-    .addEmail("rafaco@gmail.com")
-    .build()
-);
-```
-
-- //TODO: Reference of configuration properties
-- //TODO: Predefined configurations (default and userMode)
-
-
-
-## Integrations
+### Integrations <a name="integrations"/>
 This library attempt to extend your app with minimal modification of your source code. Only install is required and you will get...
 Although, you can do a direct integration to get:... 
 
@@ -153,15 +162,3 @@ Special properties to include in tools and their reports.
 - Show debug messages (showInfo, showError,...)
 - Annotations to Debug classes/methods
 - Annotations to improve tracking lifecycle (services, fragments...)
-
-##Customization
-- Create a tool
-- Replace IconWidget by your own trigger
-
-## Sample App available
-A sample app is available to download at [Google Play](https://play.google.com). It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
-
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
-
-## Downloads
-<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
