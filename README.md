@@ -1,7 +1,7 @@
 # In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/library/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/library/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 
-**Android library with a complete set of tools for developers which allow to inspect and debug a running app from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, dev helpers and much more.**
+**Android library with a set of tools which allow developers to inspect and debug their apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, dev helpers and much more.**
 
 - Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with reproduction steps and advanced entries(lifecycle events, network requests, errors, device events,...
