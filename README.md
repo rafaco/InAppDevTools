@@ -1,20 +1,21 @@
 # In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/library/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/library/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
-*Android library with a collection of useful tools for debugging, inspecting and reporting from within your own application* 
 
-It auto-logs everything happening underneath and pop up on crash. You can invoke the overlay view to inspect your app as you use it.
+**Android library with a complete set of tools for developers which allow to inspect and debug a running app from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, dev helpers and much more.**
 
-- Auto generate a friendly log with reproduction steps as well as advanced entries: lifecycle events, network requests, errors, device events,...
-- Inspector: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and get info
-- Customize your reports selecting a content or packing everything
-- Define your runnables to easily run your special "piece of codes"
+- Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
+- Auto generate a FriendlyLog with reproduction steps and advanced entries(lifecycle events, network requests, errors, device events,...
+- See a crash detail inmediately and navigate to causing source lines
+- Send flexible reports by email or other apps
+- Customize your own tools, easily run your task and use our dev helpers.
+- Easy to install and configurable
 
 
 ##### Table of Contents
 
 - [Usage](#usage)  
 - [Features](#features)  
-  - [Overlay](#overlay)  
+  - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
   - [Inspectors](#inspector)
@@ -22,8 +23,8 @@ It auto-logs everything happening underneath and pop up on crash. You can invoke
 - [Configuration](#configuration) 
 - [Customization](#customization) 
 
-<a name="usage"/>
-## Usage
+
+## Usage <a name="usage"/>
 
 Basic setup only requiere you to modify gradle files for your project.
 
@@ -132,7 +133,8 @@ A sample app is available in this repo. It allow you to play with Devtools prein
 
 <br/>
 <br/>
-# //TODO: Following documentation is outdated... working on it
+
+# OUT-DATED: Following documentation is outdated... working on it
 
 ### Integrations <a name="integrations"/>
 This library attempt to extend your app with minimal modification of your source code. Only install is required and you will get...
