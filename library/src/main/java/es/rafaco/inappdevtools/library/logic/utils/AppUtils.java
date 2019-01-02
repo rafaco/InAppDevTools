@@ -19,7 +19,6 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class AppUtils {
 
-
     public static void startStrictMode() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -85,20 +84,17 @@ public class AppUtils {
         }
     }
 
-    public static void killMyProcess(){
-        Log.e("DevTools", "Killing process...");
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
-
-    public static void programRestart(Context context) {
+    public static void programRestart(Context context, boolean isCrash) {
         Log.e("DevTools", "Programming restart after 100ms");
         PackageManager pm = context.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
 
-        intent.putExtra("crash", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (isCrash) intent.putExtra("crash", true);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, pendingIntent);
@@ -177,11 +173,5 @@ public class AppUtils {
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         context.startActivity(i);
-    }
-
-
-    public static void fullRestart(Context context) {
-        programRestart(context);
-        exit();
     }
 }

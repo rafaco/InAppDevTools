@@ -53,8 +53,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
+
             //if (!ThreadUtils.isTheUiThread(thread))
-                DevTools.forceClose();
+            DevTools.beforeClose();
+
             storeCrash(crash);
             PendingCrashUtil.savePending();
             saveLogcat();
@@ -188,10 +190,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             previousHandle.uncaughtException(thread, ex);
         }else{
             Log.e(DevTools.TAG, "CrashHandler: Restarting app");
-            //DevTools.restartApp();
-            AppUtils.programRestart(DevTools.getAppContext());
-            //AppUtils.exit();
-            ThreadUtils.runOnBackThread(() -> AppUtils.exit(), 1000);
+            DevTools.restartApp(true);
         }
     }
 
@@ -230,8 +229,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 .setNegativeButton("RESTART_APP",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        AppUtils.programRestart(appContext);
-                        AppUtils.exit();
+                        DevTools.restartApp(true);
                     }
                 })
                 .setNeutralButton("CLOSE", new DialogInterface.OnClickListener() {

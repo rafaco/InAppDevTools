@@ -301,23 +301,28 @@ public class DevTools {
 
     //region [ RESTART AND FORCE CLOSE ]
 
-    public static void restartApp(){
+    public static void restartApp(boolean isCrash){
         //FriendlyLog.log( "I", "Run", "Restart", "Restart");
-        AppUtils.programRestart(getAppContext());
-        forceCloseApp();
+        AppUtils.programRestart(getAppContext(), isCrash);
+
+        forceCloseApp(isCrash);
     }
 
-    public static void forceCloseApp(){
+    public static void forceCloseApp(boolean isCrash){
         FriendlyLog.log( "I", "Run", "ForceClose", "Force Close");
-        if(onForceCloseRunnable != null)
-            onForceCloseRunnable.run();
 
-        forceClose();
+        if (!isCrash)
+            beforeClose(); //on crash is performed by CrashHandler
+
         ThreadUtils.runOnBackThread(() -> AppUtils.exit(), 100);
     }
 
-    public static void forceClose(){
-        Log.w(DevTools.TAG, "Stopping Anr");
+    public static void beforeClose(){
+
+        if(onForceCloseRunnable != null)
+            onForceCloseRunnable.run();
+
+        Log.w(DevTools.TAG, "Stopping watchers");
         watcherManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
