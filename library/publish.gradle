@@ -1,8 +1,4 @@
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
 ext {
-
     bintrayRepo = "InAppDevTools"
     bintrayName = "library"
 
@@ -27,8 +23,7 @@ ext {
 }
 
 
-//Add these lines to publish library to bintray. This is the readymade scripts made by github user nuuneoi to make uploading to bintray easy.
-//Place it at the end of the file
+//Scripts made by github user nuuneoi to make uploading to bintray easy.
 if (project.rootProject.file('local.properties').exists()) {
     apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
     apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
@@ -37,7 +32,6 @@ if (project.rootProject.file('local.properties').exists()) {
 
 
 //apply plugin: 'com.novoda.bintray-release'
-
 /*publish {
     Properties rootProperties = new Properties()
     rootProperties.load(project.rootProject

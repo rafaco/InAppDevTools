@@ -71,7 +71,7 @@ class DevToolsPlugin implements Plugin<Project> {
         }
 
         project.tasks.whenTaskAdded { theTask ->
-            if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
+            if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
                 println theTask.name
                 theTask.dependsOn project.tasks.run
             }
