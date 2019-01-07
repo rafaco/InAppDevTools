@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:es.rafaco.devtools.tools="http://schemas.android.com/es.rafaco.devtools.tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    es.rafaco.devtools.tools:context=".MainActivityFragment"
-    es.rafaco.devtools.tools:showIn="@layout/activity_main"
     android:orientation="vertical"
     android:padding="10dp">
 

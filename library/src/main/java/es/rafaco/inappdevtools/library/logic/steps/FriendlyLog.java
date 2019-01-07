@@ -212,6 +212,9 @@ public class FriendlyLog {
             if (log.getType().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_rally_24dp;
             }
+            else if (log.getType().equals("Delete")){
+                return R.drawable.ic_delete_forever_rally_24dp;
+            }
             return R.drawable.ic_developer_mode_white_24dp;
         }
         return -1;
