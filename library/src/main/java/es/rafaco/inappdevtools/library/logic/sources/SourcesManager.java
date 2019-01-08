@@ -6,14 +6,14 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.content.PermissionChecker;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 
 public class SourcesManager {
 
     public static final String APP_RES = "app_resources";
-    public static final String APP = "app_sources";
-    public static final String DEVTOOLS = "devtools_sources";
+    public static final String APP_SRC = "app_sources";
+    public static final String DEVTOOLS_RES = "library_resources";
+    public static final String DEVTOOLS_SRC = "library_sources";
     public static final String ASSETS = "assets";
 
     Context context;
@@ -33,8 +33,9 @@ public class SourcesManager {
     protected void init() {        
         origins = new ArrayList<>();
         populateZipOrigin(APP_RES);
-        populateJarOrigin(APP);
-        populateJarOrigin(DEVTOOLS);
+        populateJarOrigin(APP_SRC);
+        populateJarOrigin(DEVTOOLS_SRC);
+        populateZipOrigin(DEVTOOLS_RES);
         populateAssetOrigin(ASSETS);
     }
 
@@ -93,8 +94,10 @@ public class SourcesManager {
 
     private List<SourceEntry> getOriginIndexItems() {
         ArrayList<SourceEntry> indexItems = new ArrayList<>();
-        for (SourceOrigin entry : origins) {
-            indexItems.add(new SourceEntry(entry.name, "", true));
+        if (origins.size()>0){
+            for (SourceOrigin entry : origins) {
+                indexItems.add(new SourceEntry(entry.name, "", true));
+            }
         }
         return indexItems;
     }

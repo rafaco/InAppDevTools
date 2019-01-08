@@ -130,7 +130,7 @@ public class DevTools {
         return watcherManager;
     }
     public static SourcesManager getSourcesManager() {
-        //Delayed initialisation
+        //TODO: Delayed initialisation (not working if need permission)
         if (sourcesManager == null){
             sourcesManager = new SourcesManager(getAppContext());
         }

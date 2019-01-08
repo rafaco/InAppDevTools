@@ -166,7 +166,7 @@ public class CrashDetailScreen extends OverlayScreen {
                         int lineNumber = myAdapter.extractLineNumber(n);
 
                         OverlayUIService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS, path, lineNumber));
+                                SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS_SRC, path, lineNumber));
                     }
                 });
     }
