@@ -39,6 +39,11 @@ public class GestureWatcher extends Watcher {
 
     class InnerReceiver extends GestureDetector.SimpleOnGestureListener {
 
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+        private static final int FLING_THRESHOLD = 200;
+        private static final int FLING_VELOCITY_THRESHOLD = 200;
+
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             FriendlyLog.log("W", "UserTouch", "SingleTap", "User touch - onSingleTapConfirmed: " + e.toString());
@@ -68,14 +73,65 @@ public class GestureWatcher extends Watcher {
         }
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            FriendlyLog.log("W", "UserTouch", "Fling", "User touch - onFling");
-            if (mListener!=null) mListener.onFling("");
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+            float diffY = e2.getY() - e1.getY();
+            float diffX = e2.getX() - e1.getX();
+
+            String extra = String.format("From %s,%s to %s,%s at %s,%s -> %s,%s",
+                        e1.getX(), e1.getY(),
+                        e2.getX(), e2.getY(),
+                        velocityX, velocityY,
+                        diffX, diffY);
+
+            String message = "";
+
+            try {
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    message = "Horizontal ";
+                    if (Math.abs(diffX) > FLING_THRESHOLD && Math.abs(velocityX) > FLING_VELOCITY_THRESHOLD) {
+                        message += "fling ";
+                    } else if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        message += "swipe ";
+                    }else{
+                        message += "drag ";
+                    }
+
+                    if (diffX > 0) {
+                        message += "to right";
+                    } else {
+                        message += "to left";
+                    }
+                }
+                else{
+                    message = "Vertical ";
+                    if (Math.abs(diffY) > FLING_THRESHOLD && Math.abs(velocityY) > FLING_VELOCITY_THRESHOLD) {
+                        message += "fling ";
+                    } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                        message += "swipe ";
+                    }else{
+                        message += "drag ";
+                    }
+
+                    if (diffY > 0) {
+                        message += "to bottom";
+                    } else {
+                        message += "to top";
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
+            message = "User touch: " + message;
+            FriendlyLog.log("W", "UserTouch", "Fling", message, extra);
+            if (mListener!=null) mListener.onFling(message);
+
             return false;
         }
 
 
-        //region [ NOT USED ]
+        //region [ NOT CURRENTLY USED ]
 
         @Override
         public boolean onDown(MotionEvent event) {
