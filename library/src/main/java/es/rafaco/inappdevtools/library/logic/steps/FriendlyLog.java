@@ -41,6 +41,23 @@ public class FriendlyLog {
         insertOnBackground(log);
     }
 
+    public static void log(String severity, String category, String type, String message, String extra) {
+        log(new Date().getTime(), severity, category, type, message, extra);
+    }
+
+    public static void log(long date, String severity, String category, String type, String message, String extra) {
+        final Friendly log = new Friendly();
+        log.setDate(date);
+        log.setSeverity(severity);
+        log.setCategory(category);
+        log.setType(type);
+        log.setMessage(message);
+        log.setExtra(extra);
+
+        logAtLogcat(log);
+        insertOnBackground(log);
+    }
+
     private static void logAtLogcat(Friendly log) {
         String text = getFormatted(log);
         switch (log.getSeverity()){
