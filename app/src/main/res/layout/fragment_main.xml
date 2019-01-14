@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     es.rafaco.devtools.tools:context=".MainActivityFragment"
-    es.rafaco.devtools.tools:showIn="@layout/activity_main"
     android:orientation="vertical"
     android:padding="10dp">
 
