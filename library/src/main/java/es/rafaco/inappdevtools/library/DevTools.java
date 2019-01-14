@@ -183,13 +183,6 @@ public class DevTools {
 
 
     public static void takeScreenshot() {
-
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
-            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    () -> takeScreenshot(), null);
-            return;
-        }
-
         Screen screen = new ScreenHelper().takeAndSaveScreen();
 
         FriendlyLog.log("I", "DevTools", "Screenshot","Screenshot taken");
@@ -202,12 +195,6 @@ public class DevTools {
     }
 
     public static void sendReport(final ReportHelper.ReportType type, final Object param) {
-
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
-            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    () -> sendReport(type, param), null);
-            return;
-        }
 
         switch (type){
             case CRASH:

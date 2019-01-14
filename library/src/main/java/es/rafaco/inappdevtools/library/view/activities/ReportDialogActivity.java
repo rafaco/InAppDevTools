@@ -35,6 +35,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
@@ -169,7 +170,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         Uri screenFolderUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = getApplicationContext().getPackageName() + ".devtools.provider";
+            String authority = FileProviderUtils.getAuthority(DevTools.getAppContext());
             screenFolderUri = FileProvider.getUriForFile(getApplicationContext(), authority, screensFolder);
         } else {
             screenFolderUri = Uri.fromFile(screensFolder);

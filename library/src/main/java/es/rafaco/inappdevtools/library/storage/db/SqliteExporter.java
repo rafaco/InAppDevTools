@@ -43,10 +43,6 @@ public class SqliteExporter {
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{
 
-        if( !PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
-            throw new IOException("Cannot write to external storage");
-        }
-
         File backupFile = DevToolsFiles.prepareDatabase(dbName, new Date().getTime());
 
         List<String> tables = getTablesOnDataBase(db);

@@ -22,12 +22,7 @@ public class SourcesManager {
     public SourcesManager(Context context) {
         this.context = context;
 
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)){
-            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    () -> init(), null);
-        }else{
-            init();
-        }
+        init();
     }
 
     protected void init() {        

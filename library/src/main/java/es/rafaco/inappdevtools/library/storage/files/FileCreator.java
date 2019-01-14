@@ -1,7 +1,5 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
-import android.os.Environment;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.io.File;
@@ -9,36 +7,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import androidx.annotation.NonNull;
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 
 public class FileCreator {
 
     @NonNull
-    public static File prepare(String subfolder, String filename) {
-        File file = new File(getCategoryFolder(subfolder), filename);
-        try {
-            file.createNewFile();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @NonNull
     public static String withContent(final String subfolder, final String filename, final String content) {
 
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)) {
+        /*if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)) {
             PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            withContent(subfolder, filename, content);
-                        }
-                    },
+                    () -> withContent(subfolder, filename, content),
                     null); //TODO: handle failure
-        }
+        }*/
 
         File file = prepare(subfolder, filename);
         if (file == null){
@@ -64,6 +45,19 @@ public class FileCreator {
         return null;
     }
 
+    @NonNull
+    public static File prepare(String subfolder, String filename) {
+        File file = new File(getCategoryFolder(subfolder), filename);
+        //TODO: check if file exists and skip recreation
+        try {
+            file.createNewFile();
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static File getCategoryFolder(String category){
         File libDirectory = createDirIfNotExist(getLibDir());
         File categoryFolder = createDirIfNotExist(libDirectory + "/" + category);
@@ -71,7 +65,7 @@ public class FileCreator {
     }
 
     private static String getLibDir(){
-        return Environment.getExternalStorageDirectory() + "/" + DevTools.TAG;
+        return DevTools.getAppContext().getFilesDir() + "/" + DevTools.TAG;
     }
 
     private static File createDirIfNotExist(String path){

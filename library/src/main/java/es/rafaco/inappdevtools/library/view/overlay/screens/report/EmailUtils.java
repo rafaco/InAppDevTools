@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 
 public class EmailUtils {
 
@@ -47,7 +48,7 @@ public class EmailUtils {
                 Uri contentUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    String authority = context.getApplicationContext().getPackageName() + ".devtools.provider";
+                    String authority = FileProviderUtils.getAuthority(context);
                     contentUri = FileProvider.getUriForFile(context, authority, file);
                 } else {
                     contentUri = Uri.fromFile(file);

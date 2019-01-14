@@ -11,6 +11,10 @@ import java.io.File;
 
 public class FileProviderUtils {
 
+    public static String getAuthority(Context context) {
+        return context.getApplicationContext().getPackageName() + ".devtools.provider";
+    }
+
     public static void openFileExternally(Context context, String filePath) {
         File file = new File(filePath);
         String type = getMimeType(file);
@@ -19,7 +23,7 @@ public class FileProviderUtils {
         intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            String authority = context.getApplicationContext().getPackageName() + ".devtools.provider";
+            String authority = getAuthority(context);
             Uri contentUri = FileProvider.getUriForFile(context, authority, file);
             intent.setDataAndType(contentUri, type);
         } else {

@@ -57,15 +57,12 @@ public class DevToolsFiles {
     }
 
     public static File prepareScreen(long mImageTime, boolean fromCrash) {
+        String first = "screen";
+        String second = fromCrash ? "crash" : "user";
+        String fileName = String.format(first + "_" + second + "_" + mImageTime);
 
-        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "DevTools");
-        if (!folder.exists())
-            folder.mkdir();
-
-        String first = fromCrash ? "crash" : "DevTools";
-        String second = "screen" ;
-        String fileName = String.format(first + "_" + second + "_" + mImageTime + "_" + ".jpg");
-        return new File(folder, fileName);
+        return FileCreator.prepare(
+                "screen",
+                fileName + ".jpg");
     }
 }
