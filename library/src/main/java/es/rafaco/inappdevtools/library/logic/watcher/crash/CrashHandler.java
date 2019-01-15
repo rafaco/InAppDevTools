@@ -1,22 +1,16 @@
 package es.rafaco.inappdevtools.library.logic.watcher.crash;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.WindowManager;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -65,10 +59,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Log.v(DevTools.TAG, "CrashHandler: process finished on " + String.valueOf(new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex, crash);
 
-            //TODO: RESEARCH handleApplicationCrash
-            /*// Bring up crash dialog, wait for it to be dismissed
-            ActivityManagerNative.getDefault().handleApplicationCrash(
-                    mApplicationObject, new ApplicationErrorReport.CrashInfo(e));*/
         }
         catch (Exception e) {
             Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
@@ -104,12 +94,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
 
-        //TODO: crash.setWhere(ex.getStackTrace()[0].toString());
-        //ex.getStackTrace()[0].getLineNumber()
-        StringWriter sw = new StringWriter();
-        ex.printStackTrace(new PrintWriter(sw));
-        String stackTraceString = sw.toString();
-        crash.setStacktrace(stackTraceString);
+        crash.setStacktrace(Log.getStackTraceString(ex));
 
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isTheUiThread(thread));
@@ -182,9 +167,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
-        //showDialog(exClass, exMessage);
-        //startExceptionActivity(crash.getException(), crash.getMessage(), crash);
-
         if (DevTools.getConfig().crashHandlerCallDefaultHandler){
             Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
@@ -193,82 +175,4 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             DevTools.restartApp(true);
         }
     }
-
-
-
-    //TODO: REMOVE AFTER REVIEW
-    //region [ OLD STUFF TO REMOVE ]
-
-    private void startExceptionActivity(String exClass, String exMessage, Crash crash) {
-        Log.e(DevTools.TAG, "Requesting Exception Dialog...");
-        Intent intent = new Intent(appContext, CrashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("TITLE", "DevTools caught a crash");
-        intent.putExtra("MESSAGE", exClass + ": " + exMessage);
-        intent.putExtra("CRASH", crash);
-        appContext.startActivity(intent);
-    }
-
-    private void callService() {
-        Intent intent = new Intent(appContext, OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, OverlayUIService.IntentAction.EXCEPTION);
-        appContext.startService(intent);
-    }
-
-    private void showDialog(String title, String message){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(appContext)
-                .setTitle(title)
-                //.setTitle("Ups, I did it again")
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("REPORT",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO: report
-                    }
-                })
-                .setNegativeButton("RESTART_APP",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        DevTools.restartApp(true);
-                    }
-                })
-                .setNeutralButton("CLOSE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        AppUtils.exit();
-                    }
-                });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
-        alertDialog.show();
-    }
-
-    private String getErrorMessgae(Throwable e) {
-        StackTraceElement[] stackTrackElementArray = e.getStackTrace();
-        String crashLog = e.toString() + "\n\n";
-        crashLog += "--------- Stack trace ---------\n\n";
-        for (int i = 0; i < stackTrackElementArray.length; i++) {
-            crashLog += "    " + stackTrackElementArray[i].toString() + "\n";
-        }
-        crashLog += "-------------------------------\n\n";
-
-        // If the exception was thrown in a background thread inside
-        // AsyncTask, then the actual exception can be found with getCause
-        crashLog += "--------- Cause ---------\n\n";
-        Throwable cause = e.getCause();
-        if (cause != null) {
-            crashLog += cause.toString() + "\n\n";
-            stackTrackElementArray = cause.getStackTrace();
-            for (int i = 0; i < stackTrackElementArray.length; i++) {
-                crashLog += "    " + stackTrackElementArray[i].toString()
-                        + "\n";
-            }
-        }
-        crashLog += "-------------------------------\n\n";
-        return crashLog;
-    }
-
-    //endregion
 }
