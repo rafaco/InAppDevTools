@@ -13,7 +13,8 @@ public class SourcesManager {
 
     public static final String APP_RES = "app_resources";
     public static final String APP = "app_sources";
-    public static final String DEVTOOLS = "devtools_sources";
+    public static final String DEVTOOLS = "library_sources";
+    public static final String DEVTOOLS_SRC = "library_sources";
     public static final String ASSETS = "assets";
 
     Context context;
@@ -21,7 +22,6 @@ public class SourcesManager {
 
     public SourcesManager(Context context) {
         this.context = context;
-
         init();
     }
 
@@ -29,8 +29,8 @@ public class SourcesManager {
         origins = new ArrayList<>();
         populateZipOrigin(APP_RES);
         populateJarOrigin(APP);
-        populateJarOrigin(DEVTOOLS);
-        populateAssetOrigin(ASSETS);
+        //populateJarOrigin(DEVTOOLS);
+        //populateAssetOrigin(ASSETS);
     }
 
     private void populateAssetOrigin(String originName) {
