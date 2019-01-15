@@ -197,10 +197,10 @@ public class OverlayUIService extends Service {
             hide();
         }
         else if (action.equals(IntentAction.CLOSE_APP)){
-            DevTools.forceCloseApp();
+            DevTools.forceCloseApp(false);
         }
         else if (action.equals(IntentAction.RESTART_APP)){
-            DevTools.restartApp();
+            DevTools.restartApp(false);
         }
     }
 

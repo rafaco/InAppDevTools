@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: '../plugin/devtools-plugin.gradle'
 
 android {
     compileSdkVersion 28
@@ -72,10 +73,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
-apply from: 'publish.gradle'
-apply from: '../plugin/devtools-plugin.gradle'
-
-devtools {
-    enabled = true
-    email = 'rafaco@gmail.com'
+//TODO: improvement needed
+if (project.rootProject.file('local.properties').exists()
+        && !(project.getGradle().startParameter.isOffline())) {
+    apply from: 'publish.gradle'
 }

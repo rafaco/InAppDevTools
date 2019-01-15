@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -160,7 +161,7 @@ public class FriendlyLogScreen extends OverlayScreen {
             //onSaveButton();
         }
         else if (selected == R.id.action_delete) {
-            onClearAll();
+            onClearButton();
         }
         else{
             DevTools.showMessage("Not already implemented");
@@ -201,8 +202,32 @@ public class FriendlyLogScreen extends OverlayScreen {
         DevTools.showMessage("Log stored to " + path);
     }
 
-    private void onClearAll() {
+    private void onClearButton() {
+        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Clean log history")
+                .setMessage("Do you want to wipe out all log history? You can not undo a wipe out. (")
+                .setCancelable(true)
+                .setSingleChoiceItems(levelsArray, selectedLogLevel, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which!=selectedLogLevel) {
+                            selectedLogLevel = which;
+                            dataSourceFactory.setLevelString(getSelectedVerbosity());
+                            logList.getValue().getDataSource().invalidate();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.show();
+    }
+
+    private void clearAll() {
         DevTools.getDatabase().friendlyDao().deleteAll();
+        FriendlyLog.log("D", "DevTools", "Delete","Friendly log history deleted by user");
         adapter.notifyDataSetChanged();
     }
 

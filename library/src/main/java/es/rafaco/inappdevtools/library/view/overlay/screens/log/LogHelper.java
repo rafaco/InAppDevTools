@@ -51,8 +51,7 @@ public class LogHelper extends ToolHelper{
                     .command(fullCommand)
                     .redirectErrorStream(true)
                     .start();
-            FriendlyLog.log("D", "LogCat", "clear", "Logcat buffer cleared");
-            Log.i(DevTools.TAG, "LogcatBuffer cleared");
+            FriendlyLog.log("D", "DevTools", "Delete","Logcat buffer deleted by user");
         } catch (IOException e) {
             Log.e(DevTools.TAG, "LogcatBuffer showPlaceholder has failed :(");
             StringWriter sw = new StringWriter();

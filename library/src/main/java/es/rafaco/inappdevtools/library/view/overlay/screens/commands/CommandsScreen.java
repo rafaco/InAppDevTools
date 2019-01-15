@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -80,7 +81,7 @@ public class CommandsScreen extends OverlayScreen {
         fullRestartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUtils.fullRestart(getContext());
+                DevTools.restartApp(false);
             }
         });
 

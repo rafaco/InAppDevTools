@@ -47,8 +47,9 @@ public class JarSourcesReader {
                 target,
                 "raw",
                 context.getPackageName());
-        InputStream input = context.getResources().openRawResource(resId);
+        InputStream input = null;
         try {
+            input = context.getResources().openRawResource(resId);
             OutputStream output = new FileOutputStream(file);
             try {
                 byte[] buffer = new byte[4 * 1024]; // or other buffer size
@@ -66,7 +67,7 @@ public class JarSourcesReader {
             e.printStackTrace();
         } finally {
             try {
-                input.close();
+                if (input!=null) input.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

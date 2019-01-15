@@ -103,10 +103,10 @@ public class RunScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Force close",
                 R.drawable.ic_close_white_24dp,
-                () -> DevTools.forceCloseApp()));
+                () -> DevTools.forceCloseApp(false)));
         data.add(new RunnableConfig("Restart app",
                 R.drawable.ic_replay_white_24dp,
-                () -> DevTools.restartApp()));
+                () -> DevTools.restartApp(false)));
     }
 
     private void onSimulateButton() {
