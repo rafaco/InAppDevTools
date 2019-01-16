@@ -52,7 +52,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position <0 || position > items.size()){
+        if (position < 0 || position >= items.size()){
             return 2;
         }
         Object item = items.get(position);
