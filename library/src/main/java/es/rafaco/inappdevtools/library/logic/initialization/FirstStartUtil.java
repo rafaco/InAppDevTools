@@ -7,7 +7,7 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class FirstStartUtil {
 
-    public static final String SHARED_PREFS_KEY = "es.rafaco.devtools";
+    public static final String SHARED_PREFS_KEY = "inappdevtools";
     public static final String PREF_KEY = "IS_FIRST_START";
 
     public static boolean isFirstStart(){

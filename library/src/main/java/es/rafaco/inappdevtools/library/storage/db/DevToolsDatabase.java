@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
-    public static final String DB_NAME = "DevToolsDB";
+    public static final String DB_NAME = "inappdevtools.db";
     private static DevToolsDatabase INSTANCE;
 
     public static DevToolsDatabase getInstance() {
