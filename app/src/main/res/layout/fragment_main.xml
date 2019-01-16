@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:es.rafaco.devtools.tools="http://schemas.android.com/es.rafaco.devtools.tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    es.rafaco.devtools.tools:context=".MainActivityFragment"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -25,7 +23,7 @@
             android:textStyle="italic"
             android:textColor="@color/rally_bg_solid"
             android:padding="5dp"
-            android:drawableLeft="@drawable/ic_warning_white_24dp"
+            android:drawableLeft="@drawable/ic_warning_yellow_24dp"
             android:drawableTint="@color/rally_bg_solid"
             android:drawablePadding="5dp"
             android:layout_gravity="top"

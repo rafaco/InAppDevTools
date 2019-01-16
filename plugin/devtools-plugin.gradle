@@ -25,10 +25,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 dependsOn: project.tasks.onStart,
                 type: Jar){
             from project.android.sourceSets.main.java.srcDirs
-            from("${project.buildDir}/generated/")
-            into "${project.buildDir}/libs"
+            from ("${project.buildDir}/generated/"){
+                excludes = ["**/res/pngs/**"]
+            }
             archiveName = "${project.name}_sources.jar"
-            excludes = ["${project.buildDir}/generated/res/pngs/**"]
+            eachFile { println it.path }
+            includeEmptyDirs = false
         }
 
         project.task('packResources',
@@ -36,10 +38,11 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: project.tasks.onStart,
                 type: Zip){
-            from project.android.sourceSets.main.res.srcDirs
-            into "${project.buildDir}/distributions"
+            from 'src/main/res'
+            excludes = ["raw/**"]
             archiveName = "${project.name}_resources.zip"
-            excludes = ["**/res/raw/**"] //TODO: exclude more specifically
+            eachFile { println it.path }
+            includeEmptyDirs = false
         }
 
         project.task('copyToRawResources',
@@ -47,9 +50,12 @@ class DevToolsPlugin implements Plugin<Project> {
                 group: 'devtools',
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
-            from project.files(["${project.buildDir}/libs/${project.name}_sources.jar",
-                                "${project.buildDir}/distributions/${project.name}_resources.zip"])
+
+            def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
+            def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
+            from project.files([path1, path2])
             into 'src/main/res/raw'
+            eachFile {println it.path}
         }
 
         project.task('run',
@@ -65,10 +71,15 @@ class DevToolsPlugin implements Plugin<Project> {
         }
 
         project.tasks.whenTaskAdded { theTask ->
-            if (theTask.name.contains("package") & theTask.name.contains("Resources")) {
+            if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
                 println theTask.name
                 theTask.dependsOn project.tasks.run
             }
+        }
+
+        project.tasks.clean {
+            delete "src/main/res/raw/${project.name}_sources.jar"
+            delete "src/main/res/raw/${project.name}_resources.zip"
         }
     }
 }
