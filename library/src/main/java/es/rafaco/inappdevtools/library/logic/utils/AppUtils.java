@@ -97,7 +97,7 @@ public class AppUtils {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, pendingIntent);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
     }
 
     public static void exit() {

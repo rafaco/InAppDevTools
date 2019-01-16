@@ -48,12 +48,6 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
 
-    @ColumnInfo(name = "rawScreen")
-    private byte[] rawScreen;
-
-    @ColumnInfo(name = "rawLogcat")
-    private String rawLogcat;
-
     @ColumnInfo(name = "threadId")
     private long threadId;
 
@@ -150,22 +144,6 @@ public class Crash implements Serializable {
 
     public void setStacktrace(String stacktrace) {
         this.stacktrace = stacktrace;
-    }
-
-    public byte[] getRawScreen() {
-        return rawScreen;
-    }
-
-    public void setRawScreen(byte[] rawScreen) {
-        this.rawScreen = rawScreen;
-    }
-
-    public String getRawLogcat() {
-        return rawLogcat;
-    }
-
-    public void setRawLogcat(String rawLogcat) {
-        this.rawLogcat = rawLogcat;
     }
 
     public long getScreenId() {

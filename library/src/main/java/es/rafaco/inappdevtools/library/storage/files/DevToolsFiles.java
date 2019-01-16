@@ -1,7 +1,5 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
-import android.os.Environment;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,26 +11,21 @@ public class DevToolsFiles {
     public static String storeCrashDetail(Crash crash, String report) {
         return FileCreator.withContent(
                 "crash",
-                "crash_detail_" + crash.getDate() + ".txt",
+                "crash_"+crash.getUid()+"_detail.txt",
                 report);
     }
 
-    public static String storeCrashLog(Crash crash) {
+    public static String storeCrashLog(long crashId, String report) {
         return FileCreator.withContent(
                 "crash",
-                "crash_logcat_" + crash.getDate() + ".txt",
-                crash.getRawLogcat());
-
-        /*TODO: validate rawLog.getBytes() is not needed
-        FileOutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(rawLog.getBytes());
-        outputStream.close();*/
+                "crash_" + crashId + "_logcat.txt",
+                report);
     }
 
     public static String storeInfo(String report, long timeMillis) {
         return FileCreator.withContent(
                 "info",
-                "system_info_" + timeMillis + ".txt",
+                "info_" + timeMillis + ".txt",
                 report);
     }
 

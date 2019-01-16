@@ -48,7 +48,7 @@ public class ScreenHelper extends ToolHelper{
 
     public Screen takeAndSaveScreen(){
 
-        final Screen screen = takeScreenIntoFile();
+        final Screen screen = takeScreenIntoFile(false);
         if (screen != null){
             Toast.makeText(context.getApplicationContext(), "Screen saved", Toast.LENGTH_LONG).show();
             ThreadUtils.runOnBackThread(new Runnable() {
@@ -61,7 +61,7 @@ public class ScreenHelper extends ToolHelper{
         return screen;
     }
 
-    private Screen takeScreenIntoFile() {
+    public Screen takeScreenIntoFile(boolean isFromCrash) {
 
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
         Pair<String, View> selectedRootView = rootViews.get(0);
@@ -78,7 +78,7 @@ public class ScreenHelper extends ToolHelper{
             selectedView.setDrawingCacheEnabled(false);
 
             long mImageTime = System.currentTimeMillis();
-            File imageFile = DevToolsFiles.prepareScreen(mImageTime, false);
+            File imageFile = DevToolsFiles.prepareScreen(mImageTime, isFromCrash);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 80;
@@ -104,73 +104,9 @@ public class ScreenHelper extends ToolHelper{
         return null;
     }
 
-
-    public byte[] buildPendingData() {
-        //takeScreenAsByteArray
-        List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
-        Pair<String, View> selectedRootView = rootViews.get(0);
-        View selectedView = selectedRootView.second;
-
-        try {
-            selectedView.setDrawingCacheEnabled(true);
-            selectedView.buildDrawingCache();
-            Bitmap bitmap = Bitmap.createBitmap(selectedView.getDrawingCache());
-            selectedView.setDrawingCacheEnabled(false);
-
-            return getByteArray(bitmap);
-
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private byte[] getByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         return stream.toByteArray();
-    }
-
-    public String solvePendingData(Crash crash){
-        //storeByteArray
-        long mImageTime = crash.getDate();
-        byte[] imageByteArray = crash.getRawScreen();
-
-        if (imageByteArray == null){
-            return "";
-        }
-
-        try {
-            File imageFile = DevToolsFiles.prepareScreen(mImageTime, true);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            outputStream.write(imageByteArray);
-            outputStream.close();
-
-            MediaScannerUtils.scan(imageFile);
-            String filePath = imageFile.getAbsolutePath();
-
-            Screen screen = new Screen();
-            screen.setSession(0);
-            screen.setDate(crash.getDate());
-            screen.setPath(filePath);
-            //TODO: interesting for crash
-            //screen.setRootViewName(selectedName);
-            //screen.setActivityName(activityName);
-
-            long screenId = DevTools.getDatabase().screenDao().insert(screen);
-            if (!TextUtils.isEmpty(filePath)){
-                crash.setScreenId(screenId);
-                crash.setRawScreen(null);
-                DevTools.getDatabase().crashDao().update(crash);
-            }
-            return filePath;
-
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-            return "";
-        }
     }
 }

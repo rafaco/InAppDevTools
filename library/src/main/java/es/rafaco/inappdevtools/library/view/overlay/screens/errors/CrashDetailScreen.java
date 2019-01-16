@@ -180,11 +180,6 @@ public class CrashDetailScreen extends OverlayScreen {
             crash = DevTools.getDatabase().crashDao().getLast();
         }
         updateView();
-
-        helper.solvePendingData(crash, () -> {
-            crash = DevTools.getDatabase().crashDao().findById(crash.getUid());
-            updateView();
-        });
     }
 
     @Override

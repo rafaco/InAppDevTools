@@ -66,39 +66,21 @@ public class LogHelper extends ToolHelper{
         }
     }
 
-    public String buildRawReport(){
+    public Logcat buildCrashReport(Crash crash){
+        String raw = getCrashReport();
+        String filePath = DevToolsFiles.storeCrashLog(crash.getUid(), raw);
+
+        Logcat logcat = new Logcat();
+        logcat.setDate(crash.getDate());
+        logcat.setPath(filePath);
+        logcat.setCrash(true);
+        return logcat;
+    }
+
+    public String getCrashReport(){
         ShellExecuter exe = new ShellExecuter();
         String command = "logcat -d -t 1000 *:V";
         String output = exe.Executer(command);
         return  output;
-    }
-
-    public String solvePendingData(Crash crash){
-        String rawLog = crash.getRawLogcat();
-
-        if (rawLog == null){
-            return "";
-        }
-
-        try {
-            String filePath = DevToolsFiles.storeCrashLog(crash);
-
-            Logcat logcat = new Logcat();
-            logcat.setDate(crash.getDate());
-            logcat.setPath(filePath);
-            logcat.setCrash(true);
-            long logcatId = DevTools.getDatabase().logcatDao().insert(logcat);
-
-            crash.setLogcatId(logcatId);
-            crash.setRawLogcat(null);
-            DevTools.getDatabase().crashDao().update(crash);
-
-            return filePath;
-
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-            return "";
-        }
     }
 }

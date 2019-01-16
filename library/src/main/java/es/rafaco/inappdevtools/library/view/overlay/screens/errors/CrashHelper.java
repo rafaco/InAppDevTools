@@ -78,10 +78,6 @@ public class CrashHelper extends ToolHelper{
     }
 
     public List<String> getReportPaths(final Crash crash) {
-        //TODO: Reports exclude crash if not consolidated
-        if (havePendingData(crash)) {
-            solvePendingData(crash, null);
-        }
         List<String> filePaths = new ArrayList<>();
         addCrashDetailFile(crash, filePaths);
         addLogcatFile(crash, filePaths);
@@ -113,49 +109,6 @@ public class CrashHelper extends ToolHelper{
             filePaths.add(filePath);
         }
     }
-
-    //region [ DATA CONSOLIDATION ]
-
-    public boolean havePendingData(Crash crash){
-        return crash.getRawLogcat() != null || crash.getRawScreen() != null;
-    }
-
-    public void solvePendingData(final Crash crash, final Runnable callback){
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                if (crash.getRawLogcat() != null){
-                    new LogHelper().solvePendingData(crash);
-                }
-                if (crash.getRawScreen() != null){
-                    new ScreenHelper().solvePendingData(crash);
-                }
-
-                if (crash.getReportPath() == null){
-                    buildDetailReport(crash);
-                }
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.run();
-                    }
-                });
-            }
-        });
-    }
-
-    private String buildDetailReport(Crash crash) {
-
-        String report = parseToInfoGroup(crash).toString();
-        String filePath = DevToolsFiles.storeCrashDetail(crash, report);
-        crash.setReportPath(filePath);
-        DevTools.getDatabase().crashDao().update(crash);
-
-        return filePath;
-    }
-
-    //endregion
-
 
     //region [ TEXT FORMATTERS ]
 

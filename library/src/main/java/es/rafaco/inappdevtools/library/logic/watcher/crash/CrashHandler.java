@@ -16,8 +16,12 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
 
@@ -30,6 +34,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Context baseContext;
     private long crashId;
     private long friendlyLogId;
+    private DevToolsDatabase db;
 
     public CrashHandler(Context appContext, Context baseContext, Thread.UncaughtExceptionHandler previousHandler) {
         this.appContext = appContext;
@@ -40,6 +45,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         long startTime = new Date().getTime();
+        db = DevTools.getDatabase();
         Log.v(DevTools.TAG, "CrashHandler: processing uncaughtException");
 
         try {
@@ -47,24 +53,32 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
-
-            //if (!ThreadUtils.isTheUiThread(thread))
-            DevTools.beforeClose();
-
             storeCrash(crash);
             PendingCrashUtil.savePending();
-            saveLogcat();
+
+            DevTools.beforeClose();
+            saveLogcat(crash);
             saveScreenshot();
+            saveDetailReport();
 
             Log.v(DevTools.TAG, "CrashHandler: process finished on " + String.valueOf(new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex, crash);
-
         }
         catch (Exception e) {
             Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
             Log.e(DevTools.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
             Log.e(DevTools.TAG, String.valueOf(e.getStackTrace()));
             e.printStackTrace();
+        }
+    }
+
+    private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
+        if (DevTools.getConfig().crashHandlerCallDefaultHandler){
+            Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
+            previousHandle.uncaughtException(thread, ex);
+        }else{
+            Log.e(DevTools.TAG, "CrashHandler: Restarting app");
+            DevTools.restartApp(true);
         }
     }
 
@@ -95,12 +109,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
 
         crash.setStacktrace(Log.getStackTraceString(ex));
-
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isTheUiThread(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
-
         crash.setForeground(!DevTools.getActivityLogManager().isInBackground());
         crash.setLastActivity(DevTools.getActivityLogManager().getLastActivityResumed());
         return crash;
@@ -117,62 +129,51 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void storeCrash(final Crash crash) {
-        DevToolsDatabase db = DevTools.getDatabase();
         crashId = db.crashDao().insert(crash);
-        //Log.d(DevTools.TAG, "Crash stored in db");
         FriendlyLog.logCrashDetails(friendlyLogId, crashId, crash);
     }
 
     private Boolean saveScreenshot(){
         ScreenHelper helper = new ScreenHelper();
-        byte[] screen = helper.buildPendingData();
+        Screen screen = helper.takeScreenIntoFile(true);
         if (screen != null){
-            DevToolsDatabase db = DevTools.getDatabase();
-            Crash current = db.crashDao().getLast();
-            current.setRawScreen(screen);
-            db.crashDao().update(current);
-            return true;
-        }
-
-        /*Screen screen = helper.takeScreen();
-        if (screen != null){
-            DevToolsDatabase db = DevTools.getDatabase();
             long screenId = db.screenDao().insert(screen);
             if (screenId > 0){
                 Crash current = db.crashDao().getLast();
                 current.setScreenId(screenId);
                 db.crashDao().update(current);
-                Log.d(DevTools.TAG, "Crash screen stored in db");
                 return true;
             }
-        }*/
+        }
         return false;
     }
 
-    private Boolean saveLogcat(){
+    private Boolean saveLogcat(Crash crash){
         LogHelper helper = new LogHelper();
         Log.d(DevTools.TAG, "Extracting logcat");
-        String logcat = helper.buildRawReport();
-        Log.d(DevTools.TAG, "Raw logcat extracted");
-        if (!TextUtils.isEmpty(logcat)){
-            CrashDao dao = DevTools.getDatabase().crashDao();
-            Crash current = dao.getLast();
-            Log.d(DevTools.TAG, "Current retrieve");
-            current.setRawLogcat(logcat);
-            dao.update(current);
-            Log.d(DevTools.TAG, "Raw logcat stored in crash");
-            return true;
+
+        Logcat logcat = helper.buildCrashReport(crash);
+        if (logcat != null){
+            long logcatId = db.logcatDao().insert(logcat);
+            if (logcatId > 0){
+                Crash current = db.crashDao().getLast();
+                current.setLogcatId(logcatId);
+                db.crashDao().update(current);
+                return true;
+            }
         }
         return false;
     }
 
-    private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
-        if (DevTools.getConfig().crashHandlerCallDefaultHandler){
-            Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
-            previousHandle.uncaughtException(thread, ex);
-        }else{
-            Log.e(DevTools.TAG, "CrashHandler: Restarting app");
-            DevTools.restartApp(true);
-        }
+    private boolean saveDetailReport() {
+        CrashHelper helper = new CrashHelper();
+        Crash current = db.crashDao().getLast();
+
+        String report = helper.parseToInfoGroup(current).toString();
+        String filePath = DevToolsFiles.storeCrashDetail(current, report);
+        current.setReportPath(filePath);
+        DevTools.getDatabase().crashDao().update(current);
+
+        return true;
     }
 }

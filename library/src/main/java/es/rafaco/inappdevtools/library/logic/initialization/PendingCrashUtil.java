@@ -8,7 +8,7 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class PendingCrashUtil {
 
-    public static final String PREF_KEY = "es.rafaco.devtools";
+    public static final String PREF_KEY = "inappdevtools";
     public static final String PENDING_CRASH_KEY = "PENDING_CRASH";
 
     public static boolean isPending(){
