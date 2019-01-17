@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
@@ -77,8 +78,10 @@ public class ScreenHelper extends ToolHelper{
             Bitmap bitmap = Bitmap.createBitmap(selectedView.getDrawingCache());
             selectedView.setDrawingCacheEnabled(false);
 
-            long mImageTime = System.currentTimeMillis();
-            File imageFile = DevToolsFiles.prepareScreen(mImageTime, isFromCrash);
+            long fileId = isFromCrash ?
+                    DevToolsDatabase.getInstance().crashDao().count() :
+                    DevToolsDatabase.getInstance().screenDao().count() + 1 ;
+            File imageFile = DevToolsFiles.prepareScreen(fileId, isFromCrash);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 80;
@@ -92,7 +95,7 @@ public class ScreenHelper extends ToolHelper{
             screen.setSession(0);
             screen.setRootViewName(selectedName);
             screen.setActivityName(activityName);
-            screen.setDate(mImageTime);
+            screen.setDate(new Date().getTime());
             screen.setPath(imageFile.getAbsolutePath());
 
             return screen;

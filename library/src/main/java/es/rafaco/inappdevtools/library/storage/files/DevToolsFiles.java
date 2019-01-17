@@ -8,10 +8,10 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 
 public class DevToolsFiles {
 
-    public static String storeCrashDetail(Crash crash, String report) {
+    public static String storeCrashDetail(long crashId, String report) {
         return FileCreator.withContent(
                 "crash",
-                "crash_"+crash.getUid()+"_detail.txt",
+                "crash_" + crashId + "_detail.txt",
                 report);
     }
 
@@ -49,13 +49,14 @@ public class DevToolsFiles {
                 "db_" + dbName + "_" + formattedTime + ".csv");
     }
 
-    public static File prepareScreen(long mImageTime, boolean fromCrash) {
-        String first = "screen";
-        String second = fromCrash ? "crash" : "user";
-        String fileName = String.format(first + "_" + second + "_" + mImageTime);
+    public static File prepareScreen(long id, boolean fromCrash) {
+        String subfolder = fromCrash ? "crash" : "screen";
+        String filename = fromCrash ?
+                "crash_" + id + "_screen" :
+                "screen" + id;
 
         return FileCreator.prepare(
-                "screen",
-                fileName + ".jpg");
+                subfolder,
+                filename + ".jpg");
     }
 }

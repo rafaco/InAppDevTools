@@ -39,7 +39,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class DevTools {
 
-    public static final String TAG = "DevTools";
+    public static final String TAG = "InAppDevTools";
 
     private static Context appContext;
     private static DevToolsConfig config;

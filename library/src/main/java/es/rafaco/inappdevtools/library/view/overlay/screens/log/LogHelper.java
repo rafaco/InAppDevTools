@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
@@ -66,12 +67,12 @@ public class LogHelper extends ToolHelper{
         }
     }
 
-    public Logcat buildCrashReport(Crash crash){
+    public Logcat buildCrashReport(long crashId){
         String raw = getCrashReport();
-        String filePath = DevToolsFiles.storeCrashLog(crash.getUid(), raw);
+        String filePath = DevToolsFiles.storeCrashLog(crashId, raw);
 
         Logcat logcat = new Logcat();
-        logcat.setDate(crash.getDate());
+        logcat.setDate(new Date().getTime());
         logcat.setPath(filePath);
         logcat.setCrash(true);
         return logcat;

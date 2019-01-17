@@ -53,11 +53,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //stopDevToolsServices();
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
-            storeCrash(crash);
+            long crashId = storeCrash(crash);
             PendingCrashUtil.savePending();
 
             DevTools.beforeClose();
-            saveLogcat(crash);
+            saveLogcat(crashId);
             saveScreenshot();
             saveDetailReport();
 
@@ -128,9 +128,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 String.valueOf(ThreadUtils.isTheUiThread(thread))));
     }
 
-    private void storeCrash(final Crash crash) {
+    private long storeCrash(final Crash crash) {
         crashId = db.crashDao().insert(crash);
         FriendlyLog.logCrashDetails(friendlyLogId, crashId, crash);
+        return crashId;
     }
 
     private Boolean saveScreenshot(){
@@ -148,11 +149,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return false;
     }
 
-    private Boolean saveLogcat(Crash crash){
+    private Boolean saveLogcat(long crashId){
         LogHelper helper = new LogHelper();
         Log.d(DevTools.TAG, "Extracting logcat");
 
-        Logcat logcat = helper.buildCrashReport(crash);
+        Logcat logcat = helper.buildCrashReport(crashId);
         if (logcat != null){
             long logcatId = db.logcatDao().insert(logcat);
             if (logcatId > 0){
@@ -170,7 +171,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Crash current = db.crashDao().getLast();
 
         String report = helper.parseToInfoGroup(current).toString();
-        String filePath = DevToolsFiles.storeCrashDetail(current, report);
+        String filePath = DevToolsFiles.storeCrashDetail(current.getUid(), report);
         current.setReportPath(filePath);
         DevTools.getDatabase().crashDao().update(current);
 

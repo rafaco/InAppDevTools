@@ -65,7 +65,7 @@ public class FileCreator {
     }
 
     private static String getLibDir(){
-        return DevTools.getAppContext().getFilesDir() + "/" + DevTools.TAG;
+        return DevTools.getAppContext().getFilesDir() + "/" + DevTools.TAG.toLowerCase();
     }
 
     private static File createDirIfNotExist(String path){
