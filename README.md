@@ -44,10 +44,10 @@ apply plugin: 'com.android.application'
 
 dependencies {
     //...
-    implementation 'es.rafaco.inappdevtools:library:0.0.1'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.31'
 }
 
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/devtools-plugin.gradle'
+apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
 devtools {
     enabled = true
     email = 'rafaco@gmail.com'
