@@ -6,7 +6,7 @@ ext {
     bintrayRepo = "InAppDevTools"
     bintrayName = "inappdevtools"
 
-    libraryName = 'library'                   // ArtifactName
+    libraryName = 'inappdevtools'                   // ArtifactName
     libraryDescription = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
 
     siteUrl = 'https://github.com/rafaco/InAppDevTools'
