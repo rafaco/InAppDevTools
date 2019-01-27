@@ -48,7 +48,7 @@ dependencies {
 }
 
 apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
-devtools {
+inappdevtools {
     enabled = true
     email = 'rafaco@gmail.com'
 }
