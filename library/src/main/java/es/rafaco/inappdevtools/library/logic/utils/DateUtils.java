@@ -13,6 +13,10 @@ public class DateUtils {
     }
 
     public static String getElapsedTime(long oldTimeMillis){
+        if (System.currentTimeMillis() - oldTimeMillis < 60*1000){
+            return "Just now";
+        }
+
         CharSequence relativeDate =
                 android.text.format.DateUtils.getRelativeTimeSpanString(
                         oldTimeMillis,

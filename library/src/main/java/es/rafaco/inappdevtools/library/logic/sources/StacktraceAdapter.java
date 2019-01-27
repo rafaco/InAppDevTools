@@ -43,7 +43,7 @@ public class StacktraceAdapter extends AbstractCodeAdapter<String> {
     }
 
     /*stacktraceView.setOptions(globalCodeOptions
-                .withCode(crash.getStacktrace()));
+                .withCode(crash.getSourcetrace()));
                 .shortcut(8, "Show more"));
                 .addCodeLineClickListener(new OnCodeLineClickListener() {
                     @Override
@@ -116,14 +116,14 @@ public class StacktraceAdapter extends AbstractCodeAdapter<String> {
     }
 
     public boolean canOpenSource(String line){
-        return line.startsWith("\t") && line.contains("es.rafaco.devtool");
+        return line.startsWith("\t") && line.contains("es.rafaco.inappdevtools");
     }
 
     public String extractPath(int n){
         String line = getCodeLine(n);
         String fileName = extractFileName(n);
 
-        int pathFrom = line.indexOf("es.rafaco.devtool");
+        int pathFrom = line.indexOf("es.rafaco.inappdevtools");
         int pathTo = line.indexOf(fileName) + fileName.length();
 
         String path = line.substring(pathFrom, pathTo);

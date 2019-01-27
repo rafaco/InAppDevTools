@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.LiveData;
@@ -26,6 +28,7 @@ import es.rafaco.inappdevtools.library.tools.ToolHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
 public class FriendlyLogScreen extends OverlayScreen {
 
@@ -265,4 +268,30 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     //endregion
 
+    //region [ PARAMS ]
+
+    //TODO: usage with crashID
+    public static String buildParams(String type, String path, int lineNumber){
+        SourceDetailScreen.InnerParams paramObject = new SourceDetailScreen.InnerParams(type, path, lineNumber);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
+    }
+
+    public SourceDetailScreen.InnerParams getParams(){
+        Gson gson = new Gson();
+        return gson.fromJson(getParam(), SourceDetailScreen.InnerParams.class);
+    }
+
+    public static class InnerParams {
+        public String type;
+        public String path;
+        public int lineNumber;
+
+        public InnerParams(String type, String path, int lineNumber) {
+            this.type = type;
+            this.path = path;
+            this.lineNumber = lineNumber;
+        }
+    }
+    //endregion
 }

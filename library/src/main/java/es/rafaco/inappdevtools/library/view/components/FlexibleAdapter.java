@@ -22,6 +22,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_BUTTON = 1;
     public static final int TYPE_LINK = 2;
+    public static final int TYPE_TRACE = 3;
+    public static final int TYPE_TRACE_GROUP = 4;
 
     private final int spanCount;
     private List<Object> items;
@@ -62,6 +64,10 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return TYPE_BUTTON;
         else if (item instanceof ThinItem)
             return TYPE_LINK;
+        else if (item instanceof TraceItem)
+            return TYPE_TRACE;
+        else if (item instanceof TraceGroupItem)
+            return TYPE_TRACE_GROUP;
         else
             return super.getItemViewType(position);
     }
@@ -80,6 +86,12 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_LINK:
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.flexible_link, viewGroup, false);
                 return new LinkViewHolder(view);
+            case TYPE_TRACE:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.flexible_trace, viewGroup, false);
+                return new TraceViewHolder(view);
+            case TYPE_TRACE_GROUP:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.flexible_trace_group, viewGroup, false);
+                return new TraceGroupViewHolder(view);
             default:
                 return null;
         }
@@ -97,6 +109,12 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case TYPE_LINK:
                 ((LinkViewHolder) viewHolder).bindTo((ThinItem) viewData);
+                break;
+            case TYPE_TRACE:
+                ((TraceViewHolder) viewHolder).bindTo((TraceItem) viewData);
+                break;
+            case TYPE_TRACE_GROUP:
+                ((TraceGroupViewHolder) viewHolder).bindTo((TraceGroupItem) viewData);
                 break;
             default:
                 break;

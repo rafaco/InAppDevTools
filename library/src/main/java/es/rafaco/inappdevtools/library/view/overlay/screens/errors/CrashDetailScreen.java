@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 import android.os.AsyncTask;
-import androidx.appcompat.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,22 +8,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.logic.sources.StacktraceAdapter;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.TraceGroupItem;
+import es.rafaco.inappdevtools.library.view.components.TraceItem;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoCollection;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
-import io.github.kbiakov.codeview.CodeView;
 
 public class CrashDetailScreen extends OverlayScreen {
 
@@ -33,18 +38,23 @@ public class CrashDetailScreen extends OverlayScreen {
     private CrashHelper helper;
     private TextView title;
     private TextView subtitle;
-    private TextView body;
     private TextView title2;
     private TextView subtitle2;
-    private TextView body2;
     private TextView when;
     private TextView foreground;
     private TextView lastActivity;
     private ImageView thumbnail;
     private TextView thread;
     private AppCompatButton logcatButton;
+    private AppCompatButton autologButton;
     private AppCompatButton revealDetailsButton;
-    private CodeView stacktraceView;
+
+    //private CodeView stacktraceView;
+
+    private FlexibleAdapter adapter1;
+    private FlexibleAdapter adapter2;
+    private RecyclerView recyclerView1;
+    private RecyclerView recyclerView2;
 
     public CrashDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -86,23 +96,30 @@ public class CrashDetailScreen extends OverlayScreen {
 
         title = view.findViewById(R.id.detail_title);
         subtitle = view.findViewById(R.id.detail_subtitle);
-        body = view.findViewById(R.id.detail_body);
         title2 = view.findViewById(R.id.detail_title2);
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
-        body2 = view.findViewById(R.id.detail_body2);
         thread = view.findViewById(R.id.detail_thread);
 
-        stacktraceView = view.findViewById(R.id.code_view);
-
+        //stacktraceView = view.findViewById(R.id.code_view);
+        autologButton = view.findViewById(R.id.autolog_button);
         logcatButton = view.findViewById(R.id.logcat_button);
+        revealDetailsButton = view.findViewById(R.id.reveal_details_button);
+        out = view.findViewById(R.id.out);
+
+        autologButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DevTools.showMessage("Not already implemented");
+                //OverlayUIService.performNavigation(FriendlyLogScreen.class, ...);
+            }
+        });
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DevTools.showMessage("Not already implemented");
+                //OverlayUIService.performNavigation(LogcatScreen.class, ...);
             }
         });
-
-        revealDetailsButton = view.findViewById(R.id.reveal_details_button);
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,14 +128,24 @@ public class CrashDetailScreen extends OverlayScreen {
                 getScreenManager().getMainLayer().scrollToView(out);
             }
         });
-        out = view.findViewById(R.id.out);
+    }
+
+    private void requestData() {
+        if (!TextUtils.isEmpty(getParam())){
+            final long crashId = Long.parseLong(getParam());
+            crash = DevTools.getDatabase().crashDao().findById(crashId);
+        }
+        else{
+            crash = DevTools.getDatabase().crashDao().getLast();
+        }
+        updateView();
     }
 
     private void updateView() {
+        when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
 
         String threadString = (crash.isMainThread()) ? "the main" : "a background";
         thread.setText("Thread: " + crash.getThreadName());
-        when.setText("When: " + DateUtils.getElapsedTimeLowered(crash.getDate()));
         foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());
 
@@ -133,6 +160,8 @@ public class CrashDetailScreen extends OverlayScreen {
             }
         });
 
+        initSourcetraceAdapters();
+
         String message = crash.getMessage();
         String cause = helper.getCaused(crash);
         if (cause!=null && message.contains(cause)){
@@ -141,22 +170,20 @@ public class CrashDetailScreen extends OverlayScreen {
 
         title.setText(crash.getException());
         subtitle.setText(message);
-        body.setText(helper.getFormattedAt(crash));
 
         if (cause!=null){
             title2.setText("Caused by: " + crash.getCauseException());
             subtitle2.setText(crash.getCauseMessage());
-            body2.setText(helper.getCausedAt(crash));
         }else{
             title2.setVisibility(View.GONE);
             subtitle2.setVisibility(View.GONE);
-            body2.setVisibility(View.GONE);
         }
 
         InfoCollection report = helper.parseToInfoGroup(crash);
         //report.removeGroupEntries(3);
         out.setText(report.toString());
 
+        /*
         final StacktraceAdapter myAdapter = new StacktraceAdapter(getContext(), crash.getStacktrace());
         stacktraceView.setAdapter(myAdapter);
         stacktraceView.getOptions()
@@ -169,27 +196,7 @@ public class CrashDetailScreen extends OverlayScreen {
                                 SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS_SRC, path, lineNumber));
                     }
                 });
-    }
-
-    private void requestData() {
-        if (!TextUtils.isEmpty(getParam())){
-            final long crashId = Long.parseLong(getParam());
-            crash = DevTools.getDatabase().crashDao().findById(crashId);
-        }
-        else{
-            crash = DevTools.getDatabase().crashDao().getLast();
-        }
-        updateView();
-    }
-
-    @Override
-    protected void onStop() {
-
-    }
-
-    @Override
-    protected void onDestroy() {
-
+        */
     }
 
     //region [ TOOL BAR ]
@@ -214,8 +221,6 @@ public class CrashDetailScreen extends OverlayScreen {
         return super.onMenuItemClick(item);
     }
 
-    //endregion
-
     private void onDelete() {
         AsyncTask.execute(new Runnable() {
             @Override
@@ -226,4 +231,85 @@ public class CrashDetailScreen extends OverlayScreen {
         });
         getScreenManager().goBack();
     }
+
+    //endregion
+
+    //region [ SOURCE TRACE ]
+
+    private void initSourcetraceAdapters() {
+
+        List<Sourcetrace> traces = DevToolsDatabase.getInstance().sourcetraceDao().filterCrash(crash.getUid());
+
+        List<Object> traceData1 = new ArrayList<>();
+        List<Object> traceData2 = new ArrayList<>();
+
+        boolean causeFound = false;
+        for(int i=0;i<traces.size();i++){
+            TraceItem item = new TraceItem(traces.get(i));
+            if (i==0){
+                item.setPosition(TraceItem.Position.START);
+            }
+            else if (item.getSourcetrace().getExtra()!=null
+                    && item.getSourcetrace().getExtra().equals("cause")){
+                causeFound = true;
+                item.setPosition(TraceItem.Position.START);
+            }
+
+            if (!causeFound) traceData1.add(item);
+            else traceData2.add(item);
+        }
+
+        //TODO: Collapse Sourcetraces (TraceGroupItem not working)
+        //traceData1.add(new TraceGroupItem(false, 2, "Title", "Subtitle", null));
+        //traceData1.add(2, new TraceGroupItem(false, 2, "Title", "Subtitle", null));
+        //addGroup(traceData1, 2, 3, adapter1);
+
+
+        initTraceAdapter(traceData1, adapter1, recyclerView1, R.id.flexible1);
+        if (causeFound) {
+            initTraceAdapter(traceData2, adapter2, recyclerView2, R.id.flexible2);
+        }
+    }
+
+    private void addGroup(List<Object> traceData, int index, int count, FlexibleAdapter adapter) {
+        traceData.add(index, new TraceGroupItem(false, count, "Title", "Subtitle",
+                () ->{
+                    setExpandedToItems(true, traceData, index, count);
+                    adapter.notifyDataSetChanged();
+                } ));
+
+        setExpandedToItems(false, traceData, index, count);
+    }
+
+    private void setExpandedToItems(boolean value, List<Object> data, int start, int count) {
+        for(int i = start; i < start + count + 1 ; i++){
+            Object item = data.get(i);
+            if (i == start){
+                ((TraceGroupItem)item).setExpanded(value);
+            }else{
+                ((TraceItem)item).setExpanded(value);
+            }
+        }
+    }
+
+    private void initTraceAdapter(List<Object> traceData, FlexibleAdapter adapterP, RecyclerView recyclerViewP, int layoutId) {
+        ((TraceItem)traceData.get(traceData.size()-1)).setPosition(TraceItem.Position.END);
+        adapterP = new FlexibleAdapter(1, traceData);
+        recyclerViewP = bodyView.findViewById(layoutId);
+        recyclerViewP.setAdapter(adapterP);
+    }
+
+    //endregion
+
+    @Override
+    protected void onStop() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+    }
+
+
 }

@@ -7,6 +7,12 @@ import android.widget.RelativeLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import androidx.core.content.ContextCompat;
+import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import io.github.kbiakov.codeview.adapters.AbstractCodeAdapter;
 import io.github.kbiakov.codeview.adapters.Options;
 import io.github.kbiakov.codeview.highlight.ColorTheme;
@@ -14,14 +20,19 @@ import io.github.kbiakov.codeview.highlight.Font;
 
 public class SourceAdapter extends AbstractCodeAdapter<String> {
 
-    public SourceAdapter(@NotNull Context context, @NotNull String code, String language) {
-        super(context, Options.Default.get(context)
+    private final SourceDetailScreen.InnerParams params;
+    private final OverlayScreen screen;
+
+    public SourceAdapter(@NotNull OverlayScreen screen, @NotNull String code, String language, SourceDetailScreen.InnerParams params) {
+        super(screen.getContext(), Options.Default.get(screen.getContext())
                 .withCode(code)
                 .withShadows()
                 .withLanguage(language)
                 //.withFormat(Format.Default.getExtraCompact())
                 .withFont(Font.Inconsolata)
                 .withTheme(ColorTheme.MONOKAI));
+        this.params = params;
+        this.screen = screen;
     }
 
     @NotNull
@@ -36,6 +47,14 @@ public class SourceAdapter extends AbstractCodeAdapter<String> {
     public void onBindViewHolder(@NotNull ViewHolder holder, int pos) {
         super.onBindViewHolder(holder, pos);
 
+        int contextualizedColor;
+        if (params != null && params.lineNumber > 0
+                && params.lineNumber == pos){
+            contextualizedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.rally_orange_alpha);
+            holder.itemView.setBackgroundColor(contextualizedColor);
+            //TODO: scrolling
+            screen.getScreenManager().getMainLayer().scrollToView(holder.itemView);
+        }
         /*String text = holder.getTvLineContent().getText().toString();
         if (TextUtils.isEmpty(text) || text.contains("//")){
             int contextualizedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.cv_default_alpha);

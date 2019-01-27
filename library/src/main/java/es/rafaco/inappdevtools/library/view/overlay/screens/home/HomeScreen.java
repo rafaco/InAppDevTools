@@ -52,7 +52,6 @@ public class HomeScreen extends OverlayScreen {
         String welcome = helper.getFormattedAppLong() + "\n" + helper.getFormattedDeviceLong();
         data.add(welcome);
 
-
         data.add(new RunnableConfig("Run",
                 R.drawable.ic_run_white_24dp,
                 () ->  OverlayUIService.performNavigation(RunScreen.class)));
@@ -85,7 +84,6 @@ public class HomeScreen extends OverlayScreen {
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
-
 
     @Override
     protected void onStop() {

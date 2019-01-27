@@ -71,6 +71,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    implementation 'com.github.alorma:timelineview:2.3.0'
 }
 
 //TODO: improvement needed

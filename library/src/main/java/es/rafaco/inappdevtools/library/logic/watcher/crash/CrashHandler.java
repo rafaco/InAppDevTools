@@ -2,10 +2,11 @@ package es.rafaco.inappdevtools.library.logic.watcher.crash;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import es.rafaco.inappdevtools.library.DevTools;
@@ -15,9 +16,10 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
@@ -60,6 +62,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             saveLogcat(crashId);
             saveScreenshot();
             saveDetailReport();
+            saveStacktrace(crashId, ex);
 
             Log.v(DevTools.TAG, "CrashHandler: process finished on " + String.valueOf(new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex, crash);
@@ -175,6 +178,48 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         current.setReportPath(filePath);
         DevTools.getDatabase().crashDao().update(current);
 
+        return true;
+    }
+
+    private Boolean saveStacktrace(long crashId, Throwable ex){
+        Log.d(DevTools.TAG, "Storing stacktrace");
+        SourcetraceDao stacktraceDao = db.sourcetraceDao();
+        List<Sourcetrace> traces = new ArrayList<>();
+        StackTraceElement[] stackTrace = ex.getStackTrace();
+        int i=0;
+        for (; i<stackTrace.length; i++){
+            StackTraceElement current = stackTrace[i];
+            Sourcetrace trace = new Sourcetrace();
+            trace.setMethodName(current.getMethodName());
+            trace.setClassName(current.getClassName());
+            trace.setFileName(current.getFileName());
+            trace.setLineNumber(current.getLineNumber());
+            trace.setLinkedId(crashId);
+            trace.setLinkedType("crash");
+            trace.setLinkedIndex(i);
+            if (i==0) trace.setExtra("crash");
+            traces.add(trace);
+        }
+
+        if (ex.getCause()!=null){
+            StackTraceElement[] causeTrace = ex.getCause().getStackTrace();
+            for (int j=0; j<causeTrace.length; j++){
+                StackTraceElement current = causeTrace[j];
+                Sourcetrace trace = new Sourcetrace();
+                trace.setMethodName(current.getMethodName());
+                trace.setClassName(current.getClassName());
+                trace.setFileName(current.getFileName());
+                trace.setLineNumber(current.getLineNumber());
+                trace.setLinkedId(crashId);
+                trace.setLinkedType("crash");
+                trace.setLinkedIndex(i+j);
+                if (j==0) trace.setExtra("cause");
+                traces.add(trace);
+            }
+        }
+
+        stacktraceDao.insertAll(traces);
+        Log.d(DevTools.TAG, "Stored " + traces.size() + " traces");
         return true;
     }
 }

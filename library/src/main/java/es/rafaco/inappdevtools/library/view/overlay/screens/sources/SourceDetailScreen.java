@@ -59,7 +59,7 @@ public class SourceDetailScreen extends OverlayScreen {
                 super.onPostExecute(content);
                 codeHeader.setText(getParams().path);
 
-                final SourceAdapter codeAdapter = new SourceAdapter(getContext(), content, "java");
+                final SourceAdapter codeAdapter = new SourceAdapter(SourceDetailScreen.this, content, "java", getParams());
                 codeViewer.post(new Runnable() {
                     @Override
                     public void run() {

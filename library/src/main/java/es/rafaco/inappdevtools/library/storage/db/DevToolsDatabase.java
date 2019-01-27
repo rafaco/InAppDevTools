@@ -16,13 +16,16 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.LogcatDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
-@Database(version = 17, exportSchema = true,
+@Database(version = 19, exportSchema = true,
         entities = {Crash.class,
                     Anr.class,
                     Screen.class,
                     Logcat.class,
                     Friendly.class,
+                    Sourcetrace.class,
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
@@ -52,6 +55,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract ScreenDao screenDao();
     public abstract LogcatDao logcatDao();
     public abstract FriendlyDao friendlyDao();
+    public abstract SourcetraceDao sourcetraceDao();
     //endregion
 
     public void printOverview(){
@@ -67,6 +71,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  Screen: " + screenDao().count() + jump;
         overview +="  Anr: " + anrDao().count() + jump;
         overview +="  Crash: " + crashDao().count() + jump;
+        overview +="  Sourcetrace: " + sourcetraceDao().count() + jump;
 
         return overview;
     }
