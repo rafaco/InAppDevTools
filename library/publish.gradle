@@ -1,17 +1,16 @@
 ext {
+    publishedGroupId = 'es.rafaco.inappdevtools'    // GroupId
+    artifact = 'inappdevtools'                      // ArtifactId
+    libraryVersion = '0.0.31'                       // VersionId
+
     bintrayRepo = "InAppDevTools"
-    bintrayName = "library"
+    bintrayName = "inappdevtools"
 
-    publishedGroupId = 'es.rafaco.inappdevtools'
-    libraryName = 'library'
-    artifact = 'library'
-
+    libraryName = 'library'                   // ArtifactName
     libraryDescription = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
 
     siteUrl = 'https://github.com/rafaco/InAppDevTools'
     gitUrl = 'https://github.com/rafaco/InAppDevTools.git'
-
-    libraryVersion = '0.0.3'
 
     developerId = 'rafaco'
     developerName = 'Rafa Acosta'
@@ -23,10 +22,16 @@ ext {
 }
 
 
-//Scripts made by github user nuuneoi to make uploading to bintray easy.
 if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
+    //TODO: add to references
+    // Scripts from https://github.com/wajahatkarim3/JCenter-Gradle-Scripts
+    //apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
+    //apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
+    //
+    // Copied locally to solve offline issues
+    // Last change from Oct 14, 2018
+    apply from: '../plugin/install.gradle'
+    apply from: '../plugin/bintray.gradle'
 }
 
 

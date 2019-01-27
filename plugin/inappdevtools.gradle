@@ -1,18 +1,18 @@
 import java.time.*
 
-class DevtoolsConfigExtension {
+class InAppDevToolsExtension {
     boolean enabled
     String email
 }
 
-class DevToolsPlugin implements Plugin<Project> {
+class InAppDevToolsPlugin implements Plugin<Project> {
     void apply(Project project) {
-        def extension = project.extensions.create('devtools', DevtoolsConfigExtension)
+        def extension = project.extensions.create('inappdevtools', InAppDevToolsExtension)
         def startTime
 
         project.task('onStart',
                 description: 'First task for initializations',
-                group: 'devtools') {
+                group: 'inappdevtools') {
 
             doFirst {
                 startTime = Instant.now()
@@ -21,7 +21,7 @@ class DevToolsPlugin implements Plugin<Project> {
 
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
-                group: 'devtools',
+                group: 'inappdevtools',
                 dependsOn: project.tasks.onStart,
                 type: Jar){
             from project.android.sourceSets.main.java.srcDirs
@@ -35,7 +35,7 @@ class DevToolsPlugin implements Plugin<Project> {
 
         project.task('packResources',
                 description: 'Generate a Zip file with the resources',
-                group: 'devtools',
+                group: 'inappdevtools',
                 dependsOn: project.tasks.onStart,
                 type: Zip){
             from 'src/main/res'
@@ -47,7 +47,7 @@ class DevToolsPlugin implements Plugin<Project> {
 
         project.task('copyToRawResources',
                 description: 'Copy the generated files into raw resources folder',
-                group: 'devtools',
+                group: 'inappdevtools',
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
 
@@ -60,7 +60,7 @@ class DevToolsPlugin implements Plugin<Project> {
 
         project.task('run',
                 description: 'Last plugin task',
-                group: 'devtools',
+                group: 'inappdevtools',
                 dependsOn: project.tasks.copyToRawResources ) {
 
             doLast {
@@ -84,4 +84,4 @@ class DevToolsPlugin implements Plugin<Project> {
     }
 }
 
-apply plugin: DevToolsPlugin
+apply plugin: InAppDevToolsPlugin

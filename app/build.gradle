@@ -43,9 +43,9 @@ dependencies {
 }
 
 
-apply from: '../plugin/devtools-plugin.gradle'
+apply from: '../plugin/inappdevtools.gradle'
 
-devtools {
+inappdevtools {
     enabled = true
     email = 'rafaco@gmail.com'
 }
