@@ -1,7 +1,7 @@
 ext {
     publishedGroupId = 'es.rafaco.inappdevtools'    // GroupId
     artifact = 'inappdevtools'                      // ArtifactId
-    libraryVersion = '0.0.33'                       // VersionId
+    libraryVersion = '0.0.34'                       // VersionId
 
     bintrayRepo = "InAppDevTools"
     bintrayName = "inappdevtools"
