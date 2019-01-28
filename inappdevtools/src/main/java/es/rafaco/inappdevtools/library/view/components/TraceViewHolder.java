@@ -38,6 +38,9 @@ class TraceViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(TraceItem data) {
         if (data!=null){
 
+            timeline.setIndicatorSize(8); //"8dp"?
+            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
+
             if (data.getPosition().equals(TraceItem.Position.START)){
                 whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));
                 timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));

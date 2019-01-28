@@ -49,6 +49,7 @@ public class NetworkDetailScreen extends OverlayScreen {
 
         viewPager = getView().findViewById(R.id.viewpager);
         tabLayout = getView().findViewById(R.id.sliding_tabs);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         if (!TextUtils.isEmpty(getParam())){
             final long transactionId = Long.parseLong(getParam());

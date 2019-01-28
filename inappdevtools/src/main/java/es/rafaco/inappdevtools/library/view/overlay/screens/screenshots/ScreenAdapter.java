@@ -1,6 +1,8 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
 import android.content.Context;
+
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
@@ -50,6 +52,8 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
     @Override
     public void onBindViewHolder(final ScreenViewHolder holder, int position) {
+        holder.cardView.setRadius(R.dimen.card_radius);
+
         Screen screen = screenList.get(position);
         holder.title.setText(screen.getActivityName());
         holder.count.setText(DateUtils.getElapsedTime(screen.getDate()));
@@ -68,11 +72,13 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
     }
 
     public class ScreenViewHolder extends RecyclerView.ViewHolder {
+        public CardView cardView;
         public TextView title, count;
         public ImageView thumbnail, overflow;
 
         public ScreenViewHolder(View view) {
             super(view);
+            cardView = view.findViewById(R.id.card_view);
             title = view.findViewById(R.id.title);
             count = view.findViewById(R.id.subtitle);
             thumbnail = view.findViewById(R.id.thumbnail);

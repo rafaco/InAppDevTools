@@ -22,4 +22,13 @@
     <string name="host">HOST</string>
     <string name="fingerprint">FINGERPRINT</string>
     <string name="versioncode">VERSION CODE</string>
+
+    <string name="chuck_ssl">SSL</string>
+    <string name="chuck_duration">Duration</string>
+    <string name="chuck_request_size">Request size</string>
+    <string name="chuck_request_time">Request time</string>
+    <string name="chuck_response_size">Response size</string>
+    <string name="chuck_response_time">Response time</string>
+    <string name="chuck_total_size">Total size</string>
+
 </resources>

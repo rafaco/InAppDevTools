@@ -37,6 +37,7 @@ class TraceGroupViewHolder extends RecyclerView.ViewHolder {
 
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_blue));
             subtitle.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_blue));
+            timeline.setIndicatorSize(8); //"8dp"?
             timeline.setIndicatorColor(Color.GRAY);
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_START);
             timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
