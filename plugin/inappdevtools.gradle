@@ -1,4 +1,6 @@
 import java.time.*
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 class InAppDevToolsExtension {
     boolean enabled
