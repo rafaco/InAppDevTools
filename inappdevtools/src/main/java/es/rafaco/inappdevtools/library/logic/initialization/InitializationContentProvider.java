@@ -23,8 +23,9 @@ public class InitializationContentProvider extends ContentProvider {
 
         DevTools.logCreatedInitProvider(getContext());
 
-        boolean enabled = getMetadata().getBoolean(META_DATA_KEY, true);
-        if(enabled){
+        //TODO: conditional intialization
+        //boolean enabled = getMetadata().getBoolean(META_DATA_KEY, true);
+        if(true){
             DevTools.install(getContext());
         }
 
