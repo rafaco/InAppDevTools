@@ -70,7 +70,7 @@ dependencies {
     implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
 }
 
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools-plugin.gradle'
+apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
 
 inappdevtools {
     enabled = true
