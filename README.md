@@ -4,8 +4,8 @@
 **Android library with a set of tools for developers. It allow to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
-- Auto generate a FriendlyLog with reproduction steps and advanced entries(lifecycle events, network requests, errors, device events,...
-- See a crash detail inmediately and navigate to causing source lines
+- Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
+- See a crash detail immediately and navigate to causing source lines
 - Send flexible reports by email or other apps
 - Customize your own tools, easily run your task and use our dev helpers.
 - Easy to install and configurable
@@ -13,8 +13,10 @@
 
 ##### Table of Contents
 
-- [Usage](#usage)  
-- [Features](#features)  
+- [Requirements](#req)
+- [Set-up](#setup)
+- [Usage](#usage)
+- [Features](#features)
   - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
@@ -24,44 +26,70 @@
 - [Customization](#customization) 
 
 
-## Usage <a name="usage"/>
 
-Basic setup only requiere you to modify gradle files for your project.
+## Requirements <a name="req"/>
+- Project minSdkVersion >= 16
+- Project support Java 8
+- Dependencies migrated to androidX
 
-- Step 1: Add my bintray repository to allprojects repositories at your project's build.gradle. Temporary, it will be not needed when migrated to jCenter
+## Set-up <a name="setup"/>
+Basic set-up only require you to modify gradle files for your project. You don't need to extend Application extension needed
+
+- Step 1: On your project's build.gradle file, add JitPack to allprojects repositories (TEMP).
 ```gradle
 allprojects {
     repositories {
         //...
-        maven { url "https://dl.bintray.com/rafaco/InAppDevTools"}
+        maven { url "https://jitpack.io"}
     }
 }
 ```
 
-- Step 2: Add our library as dependency and apply our plugin at your app module's build.gradle)
+- Step 2: On your app module's build.gradle, add our library as dependency and apply our plugin
+  - Ensure minSdkVersion >= 16 (TEMP)
+  - Make your project compatible with Java 8 (TEMP)
+  - Add our library as dependency
+  - Apply our gradle plugin
+  - You can also include configurations using our Gradle extension
+
 ```gradle
 apply plugin: 'com.android.application'
 
-dependencies {
-    //...
-    implementation 'es.rafaco.inappdevtools:library:0.0.1'
+android {
+    defaultConfig {
+        minSdkVersion 16
+    }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/devtools-plugin.gradle'
-devtools {
+dependencies {
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
+}
+
+apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools-plugin.gradle'
+
+inappdevtools {
     enabled = true
-    email = 'rafaco@gmail.com'
+    email = 'mail@domain.com'
 }
 ```
-//TODO Config
+
+## Usage <a name="usage"/>
+ - Gradle plugin
+ - Configuration //TODO
+ - Retrofit interceptor
 
 ## Features <a name="features"/>
 
 ### Overlay system <a name="overlay"/>
-We use overlays to show informations over your app instead of activities
+We use overlays to show information over your app instead of activities
 - Adjust any of our views over your app while you still using it
 - Non intrusive with your views their focus or your activity stack
-- Few invocation methods availables: Notification, floating icon, shake or from your sources (see integrations)
+- Few invocation methods available: Notification, floating icon, shake or from your sources (see integrations)
 
 ### Friendly Log <a name="friendly"/>
 - User interactions:
@@ -121,14 +149,17 @@ We use overlays to show informations over your app instead of activities
 ## Customization <a name="Customization"/>
 
 
-## Sample App available
-A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com). 
-
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 ## Downloads
 <a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com).
 
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+## Thanks <a name="thanks"/>
+
+## License <a name="license"/>
+Apache-2.0
 
 
 <br/>
