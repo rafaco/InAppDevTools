@@ -8,10 +8,13 @@ import java.util.List;
 
 public class SourcesManager {
 
-    public static final String APP_RES = "app_resources";
+    //TODO: Make strings dynamically
+    //Detect source files
+    //Add flag from gradle
     public static final String APP_SRC = "app_sources";
-    public static final String DEVTOOLS_RES = "library_resources";
-    public static final String DEVTOOLS_SRC = "library_sources";
+    public static final String APP_RES = "app_resources";
+    public static final String DEVTOOLS_SRC = "inappdevtools_sources";
+    public static final String DEVTOOLS_RES = "inappdevtools_resources";
     public static final String ASSETS = "assets";
 
     Context context;
@@ -24,16 +27,16 @@ public class SourcesManager {
 
     protected void init() {        
         origins = new ArrayList<>();
-        populateZipOrigin(APP_RES);
         populateJarOrigin(APP_SRC);
+        populateZipOrigin(APP_RES);
         populateJarOrigin(DEVTOOLS_SRC);
         populateZipOrigin(DEVTOOLS_RES);
         populateAssetOrigin(ASSETS);
     }
 
+    
     private void populateAssetOrigin(String originName) {
         AssetSourcesReader reader = new AssetSourcesReader(context);
-
         SourceOrigin newPackage = new SourceOrigin();
         newPackage.name = originName;
         newPackage.localZip = null;
@@ -47,6 +50,9 @@ public class SourcesManager {
         SourceOrigin newPackage = new SourceOrigin();
         newPackage.name = originName;
         newPackage.localZip = jarReader.populateLocalJar(originName);
+        if (newPackage.localZip == null){
+            return; //Cancel adding item to origin
+        }
         newPackage.items = jarReader.populateItemsFromJar(originName, newPackage.localZip);
         origins.add(newPackage);
     }
@@ -57,6 +63,9 @@ public class SourcesManager {
         SourceOrigin newPackage = new SourceOrigin();
         newPackage.name = originName;
         newPackage.localZip = zipReader.populateLocal(originName);
+        if (newPackage.localZip == null){
+            return; //Cancel adding item to origin
+        }
         newPackage.items = zipReader.populateItems(originName, newPackage.localZip);
         origins.add(newPackage);
     }
