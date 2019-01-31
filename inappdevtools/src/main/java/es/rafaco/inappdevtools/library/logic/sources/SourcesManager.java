@@ -34,7 +34,7 @@ public class SourcesManager {
         populateAssetOrigin(ASSETS);
     }
 
-    
+
     private void populateAssetOrigin(String originName) {
         AssetSourcesReader reader = new AssetSourcesReader(context);
         SourceOrigin newPackage = new SourceOrigin();

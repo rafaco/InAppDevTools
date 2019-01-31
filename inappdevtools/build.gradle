@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-apply from: '../plugin/inappdevtools.gradle'
+
+apply plugin: 'es.rafaco.inappdevtools'
+//apply from: '../plugin/inappdevtools.gradle'
 
 android {
     compileSdkVersion 28
