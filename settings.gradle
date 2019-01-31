@@ -1,1 +1,7 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
 include ':app', ':inappdevtools', ':inappdevtools_noop', ':plugin'

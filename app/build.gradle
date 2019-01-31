@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'es.rafaco.inappdevtools'
-//apply from: '../plugin/inappdevtools.gradle'
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -40,13 +37,18 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
-    // Importing InAppDevTools from jCenter (use this way in your projects!)
+    // Import our library from repository (jCenter or localMaven). Standard usage.
     //implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.31'
 
-    // Importing InAppDevTools from local gradle module (for development)
+    // Import our library from local subproject, for development.
     implementation project(path: ':inappdevtools')
 }
 
+// Import our plugin from repository (jCenter or localMaven). Standard usage.
+apply plugin: 'es.rafaco.inappdevtools'
+
+// Import our plugin from local subproject, for development.
+//apply from: '../plugin/inappdevtools.gradle'
 
 inappdevtools {
     enabled = true

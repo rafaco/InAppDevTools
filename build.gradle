@@ -16,6 +16,7 @@ buildscript {
 }
 
 plugins {
+    // Declare our plugin (make it available at subprojects)
     id "es.rafaco.inappdevtools" version "0.0.01" apply false
 }
 
@@ -34,5 +35,5 @@ task clean(type: Delete) {
 
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
-    rootProject.clean.dependsOn tasks.matching { it.name == “clean” }
+    rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
 }
