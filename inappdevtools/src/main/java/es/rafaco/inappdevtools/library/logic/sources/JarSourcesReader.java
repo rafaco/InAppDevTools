@@ -1,6 +1,8 @@
 package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +17,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 
 
@@ -47,9 +50,18 @@ public class JarSourcesReader {
                 target,
                 "raw",
                 context.getPackageName());
-        InputStream input = null;
+
+        InputStream input;
         try {
             input = context.getResources().openRawResource(resId);
+        }catch (Resources.NotFoundException e){
+            FriendlyLog.log("W", "DevTools", "Plugin",
+                    "Unable to found generated " + target,
+                    Log.getStackTraceString(e));
+            return file;
+        }
+
+        try {
             OutputStream output = new FileOutputStream(file);
             try {
                 byte[] buffer = new byte[4 * 1024]; // or other buffer size
@@ -61,11 +73,13 @@ public class JarSourcesReader {
             } finally {
                 output.close();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        }
+        catch (Exception e) {
+            FriendlyLog.log("W", "DevTools", "Plugin",
+                    "Unable to read generated " + target,
+                    Log.getStackTraceString(e));
+        }
+        finally {
             try {
                 if (input!=null) input.close();
             } catch (IOException e) {

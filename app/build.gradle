@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'es.rafaco.inappdevtools'
+//apply from: '../plugin/inappdevtools.gradle'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -44,8 +47,6 @@ dependencies {
     implementation project(path: ':inappdevtools')
 }
 
-
-apply from: '../plugin/inappdevtools.gradle'
 
 inappdevtools {
     enabled = true

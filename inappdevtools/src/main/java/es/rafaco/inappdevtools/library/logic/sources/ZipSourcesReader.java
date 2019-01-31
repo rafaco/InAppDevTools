@@ -1,6 +1,8 @@
 package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +19,8 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 
 
@@ -49,7 +53,16 @@ public class ZipSourcesReader {
                 target,
                 "raw",
                 context.getPackageName());
-        InputStream input = context.getResources().openRawResource(resId);
+
+        InputStream input;
+        try {
+            input = context.getResources().openRawResource(resId);
+        }catch (Resources.NotFoundException e){
+            FriendlyLog.log("W", "DevTools", "Plugin",
+                    "Unable to found generated " + target,
+                    Log.getStackTraceString(e));
+            return file;
+        }
 
         try {
             OutputStream output = new FileOutputStream(file);
@@ -60,16 +73,17 @@ public class ZipSourcesReader {
                 while ((read = input.read(buffer)) != -1) {
                     output.write(buffer, 0, read);
                 }
-
                 output.flush();
             } finally {
                 output.close();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        }
+        catch (Exception e) {
+            FriendlyLog.log("W", "DevTools", "Plugin",
+                    "Unable to read generated " + target,
+                    Log.getStackTraceString(e));
+        }
+        finally {
             try {
                 input.close();
             } catch (IOException e) {
