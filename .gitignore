@@ -90,6 +90,6 @@ Temporary Items
 app/libs/
 devtools/libs/
 
-.idea
+//.idea
 *_sources.jar
 *_resources.zip

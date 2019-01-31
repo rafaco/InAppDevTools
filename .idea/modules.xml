@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/InAppDevTools.iml" filepath="$PROJECT_DIR$/InAppDevTools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inappdevtools/inappdevtools.iml" filepath="$PROJECT_DIR$/inappdevtools/inappdevtools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inappdevtools_noop/inappdevtools_noop.iml" filepath="$PROJECT_DIR$/inappdevtools_noop/inappdevtools_noop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
+    </modules>
+  </component>
+</project>
