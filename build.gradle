@@ -27,4 +27,5 @@ task clean(type: Delete) {
 
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
+    rootProject.clean.dependsOn tasks.matching { it.name == “clean” }
 }
