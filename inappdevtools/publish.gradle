@@ -30,8 +30,8 @@ if (project.rootProject.file('local.properties').exists()) {
     //
     // Copied locally to solve offline issues
     // Last change from Oct 14, 2018
-    apply from: '../plugin/install.gradle'
-    apply from: '../plugin/bintray.gradle'
+    apply from: '../gradle/bintray/install.gradle'
+    apply from: '../gradle/bintray/bintray.gradle'
 
     //Research if dryRun=true or autoPublish=false like novoda
 }

@@ -1,8 +1,55 @@
-apply plugin: 'java-library'
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+plugins {
+    id 'java-gradle-plugin'
+    id 'groovy'
+    id 'maven'
+    id 'maven-publish'
+    id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+//PLUGIN DEFINITION
+group 'es.rafaco.inappdevtools'
+version '0.0.04'
+
+gradlePlugin {
+    plugins {
+        inappdevtools {
+            id = 'es.rafaco.inappdevtools'
+            displayName = 'InAppDevtools Plugin'
+            description = 'Companion plugin for InAppDevTools, an Android library for debugging, inspecting and reporting from within your own apps'
+            implementationClass = 'es.rafaco.inappdevtools.InAppDevToolsPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/rafaco/InAppDevTools'
+    vcsUrl =  'https://github.com/rafaco/InAppDevTools.git'
+    tags = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
+}
+
+
+
+// PUBLICATION
+// pushPlugins: Production publication into Gradle Plugin Portal
+// publishToMavenLocal: Development publication into mavenLocal
+// uploadArchives: Development publication into local 'repo'
+
+repositories {
+    mavenCentral()
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('repo'))
+        }
+    }
+}

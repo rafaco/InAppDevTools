@@ -34,6 +34,8 @@ captures/
 .idea/dictionaries
 .idea/libraries
 .idea/caches
+.idea/modules.xml
+.idea/navEditor.xml
 
 # Keystore files
 # Uncomment the following line if you do not want to check your keystore files in.
@@ -87,9 +89,7 @@ Temporary Items
 
 
 # Custom fields
-app/libs/
-devtools/libs/
-
-//.idea
+.idea/markdown-navigator*
 *_sources.jar
 *_resources.zip
+

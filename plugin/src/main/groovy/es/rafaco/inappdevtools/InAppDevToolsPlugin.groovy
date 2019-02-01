@@ -1,31 +1,35 @@
-import java.time.*
+package es.rafaco.inappdevtools
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.bundling.Zip
 
-class InAppDevToolsExtension {
-    boolean enabled
-    String email
-}
+import java.time.Duration
+import java.time.Instant
 
 class InAppDevToolsPlugin implements Plugin<Project> {
+
+    final INAPPDEVTOOLS = 'inappdevtools'
+
     void apply(Project project) {
-        def extension = project.extensions.create('inappdevtools', InAppDevToolsExtension)
+        def extension = project.extensions.create(INAPPDEVTOOLS, InAppDevToolsExtension)
         def startTime
 
         project.task('onStart',
                 description: 'First task for initializations',
-                group: 'inappdevtools') {
+                group: INAPPDEVTOOLS){
 
-            doFirst {
-                startTime = Instant.now()
-            }
+            doFirst { startTime = Instant.now()}
         }
 
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
-                group: 'inappdevtools',
+                group: INAPPDEVTOOLS,
                 dependsOn: project.tasks.onStart,
                 type: Jar){
+
             from project.android.sourceSets.main.java.srcDirs
             from ("${project.buildDir}/generated/"){
                 excludes = ["**/res/pngs/**"]
@@ -37,9 +41,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('packResources',
                 description: 'Generate a Zip file with the resources',
-                group: 'inappdevtools',
+                group: INAPPDEVTOOLS,
                 dependsOn: project.tasks.onStart,
                 type: Zip){
+
             from 'src/main/res'
             excludes = ["raw/**"]
             archiveName = "${project.name}_resources.zip"
@@ -49,7 +54,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('copyToRawResources',
                 description: 'Copy the generated files into raw resources folder',
-                group: 'inappdevtools',
+                group: INAPPDEVTOOLS,
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
 
@@ -62,7 +67,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('run',
                 description: 'Last plugin task',
-                group: 'inappdevtools',
+                group: INAPPDEVTOOLS,
                 dependsOn: project.tasks.copyToRawResources ) {
 
             doLast {
@@ -85,5 +90,3 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 }
-
-apply plugin: InAppDevToolsPlugin
