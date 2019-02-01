@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'es.rafaco.inappdevtools'
-//apply from: '../plugin/inappdevtools.gradle'
 
 android {
     compileSdkVersion 28
@@ -31,7 +29,7 @@ android {
     }
     buildToolsVersion '28.0.3'
 
-    //TODO: Re-enable LINT!
+
     //Error: commons-logging defines classes that conflict with classes now provided by Android.
     lintOptions {
         abortOnError false

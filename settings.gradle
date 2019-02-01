@@ -4,4 +4,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+enableFeaturePreview('STABLE_PUBLISHING')
+
 include ':app', ':inappdevtools', ':inappdevtools_noop', ':plugin'

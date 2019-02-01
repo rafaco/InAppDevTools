@@ -17,7 +17,7 @@ buildscript {
 
 plugins {
     // Declare our plugin (make it available at subprojects)
-    id "es.rafaco.inappdevtools" version "0.0.04" apply false
+    id "es.rafaco.inappdevtools" version "0.0.03" apply false
 }
 
 allprojects {
@@ -34,6 +34,8 @@ task clean(type: Delete) {
 }
 
 subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
+
+    //TODO: Re-enable JavaDoc generation
+    tasks.withType(Javadoc).all { enabled = false }
 }
