@@ -6,4 +6,12 @@ pluginManagement {
 }
 enableFeaturePreview('STABLE_PUBLISHING')
 
-include ':app', ':inappdevtools', ':inappdevtools_noop', ':plugin'
+include ':app', ':library', ':library-noop', ':plugin'
+
+rootProject.name = 'inappdevtools-project'
+rootProject.children.each {
+    it.name = ('plugin' == it.name ? 'inappdevtools-plugin' :
+               'library' == it.name ? 'inappdevtools' :
+               'library-noop' == it.name ? 'inappdevtools-noop' :
+               it.name)
+}

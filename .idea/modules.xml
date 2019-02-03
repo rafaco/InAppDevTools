@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Sources-inappdevtools.iml" filepath="$PROJECT_DIR$/Sources-inappdevtools.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/inappdevtools/inappdevtools-inappdevtools.iml" filepath="$PROJECT_DIR$/inappdevtools/inappdevtools-inappdevtools.iml" />
-      <module fileurl="file://$PROJECT_DIR$/inappdevtools_noop/inappdevtools_noop.iml" filepath="$PROJECT_DIR$/inappdevtools_noop/inappdevtools_noop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/inappdevtools.iml" filepath="$PROJECT_DIR$/library/inappdevtools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/inappdevtools.iml" filepath="$PROJECT_DIR$/library/inappdevtools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-noop/inappdevtools-noop.iml" filepath="$PROJECT_DIR$/library-noop/inappdevtools-noop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inappdevtools-project.iml" filepath="$PROJECT_DIR$/inappdevtools-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_noop/inappdevtools_noop.iml" filepath="$PROJECT_DIR$/library_noop/inappdevtools_noop.iml" />
     </modules>
   </component>
 </project>
