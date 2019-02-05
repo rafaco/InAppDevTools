@@ -18,13 +18,14 @@
   - [Basic setup](#basic)
   - [Network interceptor](#network)
 - [Usage](#usage)
-- [Configuration](#configuration) 
+  - [Invocation](#invocation) 
+  - [Configuration](#configuration) 
 - [Features](#features)
   - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
   - [Inspectors](#inspector)
-  - [Report](#report)
+  - [Reports](#reports)
 - [Customization](#customization) 
 
 
@@ -63,6 +64,8 @@ You are only require you to modify gradle files for a quick start.
   - Declare our plugin
   - Add JitPack repository (TEMP)
 ```gradle
+buildscript {...}
+
 plugins {
     id "es.rafaco.inappdevtools" version "0.0.04" apply false
 }
@@ -75,20 +78,16 @@ allprojects {
 ```
 
 - Step 2: On your app module's build.gradle:
-  - Add our library to dependencies
   - Apply our gradle plugin
-  - You can also include configurations using our Gradle extension
-
+  - Add our library to dependencies
 ```gradle
-dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
-}
-
+apply plugin: 'com.android.application'
 apply plugin: 'es.rafaco.inappdevtools'
 
-inappdevtools {
-    enabled = true
-    email = 'yourmail@yourdomain.com'
+android {...}
+
+dependencies {
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
 }
 ```
 
@@ -102,10 +101,15 @@ Retrofit retrofit = new Retrofit.Builder()
 ```
 
 ## Usage <a name="usage"/>
- - Gradle plugin ??
- - Configuration //TODO
- 
-## Configuration <a name="Configuration"/>
+### Invocation <a name="invocation"/>
+### Configuration <a name="configuration"/>
+//TODO: You can configure our library behaviour via our gradle plugin. On your app module's build.gradle:
+```gradle
+inappdevtools {
+    enabled = true
+    email = 'yourmail@yourdomain.com'
+}
+```
 
 ## Features <a name="features"/>
 
@@ -161,19 +165,28 @@ We use overlays to show information over your app instead of activities
   - Apk compilation info
   - OS, device, hardware, memory
 
-### Reports <a name="Reports"/>
+### Reports <a name="reports"/>
 - Report bugs by email or share them with your favourite app
 - Attach logs, info, description, crashes, db dumps…
 - Take screenshots and attach them
 - //TODO
 
-## Customization <a name="Customization"/>
+## Customization <a name="customization"/>
 
+## Sample App <a name="sample"/>
+A sample app is available in this repo. It allows to play with our libray preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
 
+## Downloads  <a name="download"/>
+Our sample app will be available to download from [Google Play](https://play.google.com).
 
-## Downloads
+You dont normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project. 
+
+- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
+- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
+- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and we track our versions with tags
+
 <a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
-A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com).
+
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
