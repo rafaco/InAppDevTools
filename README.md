@@ -13,27 +13,51 @@
 
 ##### Table of Contents
 
-- [Requirements](#req)
-- [Set-up](#setup)
+- [Installation](#setup)
+  - [Limitations](#req)
+  - [Basic setup](#basic)
+  - [Network interceptor](#network)
 - [Usage](#usage)
+- [Configuration](#configuration) 
 - [Features](#features)
   - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
   - [Inspectors](#inspector)
   - [Report](#report)
-- [Configuration](#configuration) 
 - [Customization](#customization) 
 
 
 
-## Requirements <a name="req"/>
+## Installation <a name="setup"/>
+
+### Limitations <a name="req"/>
+Check that your project have the following requeriments:
 - Project minSdkVersion >= 16
 - Project support Java 8
 - Dependencies migrated to androidX
+They are normally declared on your root module's build.gradle file. A valid example could look like:
+```gradle
+apply plugin: 'com.android.application'
 
-## Set-up <a name="setup"/>
-Basic set-up only require you to modify gradle files for your project. You don't need to extend Application extension needed
+android {
+    defaultConfig {
+        minSdkVersion 16
+    }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'androidx...'
+}
+```
+
+### Basic set-up <a name="basic"/>
+You are only require you to modify gradle files for a quick start.
 
 - Step 1: On your root module's build.gradle file, after buidscript:
   - Declare our plugin
@@ -51,26 +75,11 @@ allprojects {
 ```
 
 - Step 2: On your app module's build.gradle:
-  - Ensure minSdkVersion >= 16 (TEMP)
-  - Make your project compatible with Java 8 (TEMP)
   - Add our library to dependencies
   - Apply our gradle plugin
   - You can also include configurations using our Gradle extension
 
 ```gradle
-apply plugin: 'com.android.application'
-
-android {
-    defaultConfig {
-        minSdkVersion 16
-    }
-
-    compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
-    }
-}
-
 dependencies {
     implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
 }
@@ -83,10 +92,20 @@ inappdevtools {
 }
 ```
 
+### Network Interceptor <a name="network"/>
+You can inspect network communications make by your app if you use Retrofit. To enable it, add our OkHttpClient to your api initialization class: 
+```java
+Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(DevTools.getOkHttpClient())
+                .build();
+```
+
 ## Usage <a name="usage"/>
- - Gradle plugin
+ - Gradle plugin ??
  - Configuration //TODO
- - Retrofit interceptor
+ 
+## Configuration <a name="Configuration"/>
 
 ## Features <a name="features"/>
 
@@ -147,9 +166,6 @@ We use overlays to show information over your app instead of activities
 - Attach logs, info, description, crashes, db dumps…
 - Take screenshots and attach them
 - //TODO
-
-
-## Configuration <a name="Configuration"/>
 
 ## Customization <a name="Customization"/>
 
