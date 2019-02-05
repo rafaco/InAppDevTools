@@ -1,7 +1,7 @@
-# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/library/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/library/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [ ![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/inappdevtools/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 
-**Android library with a set of tools for developers. It allow to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
+**Android library with a set of tools for developers. It allows to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
@@ -13,45 +13,32 @@
 
 ##### Table of Contents
 
-- [Requirements](#req)
-- [Set-up](#setup)
+- [Installation](#setup)
+  - [Limitations](#req)
+  - [Basic setup](#basic)
+  - [Add network interceptor](#network)
 - [Usage](#usage)
+  - [Invocation](#invocation) 
+  - [Configuration](#configuration) 
 - [Features](#features)
   - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
   - [Inspectors](#inspector)
-  - [Report](#report)
-- [Configuration](#configuration) 
+  - [Reports](#reports)
 - [Customization](#customization) 
 
 
 
-## Requirements <a name="req"/>
-- Project minSdkVersion >= 16
-- Project support Java 8
-- Dependencies migrated to androidX
+## Installation <a name="setup"/>
 
-## Set-up <a name="setup"/>
-Basic set-up only require you to modify gradle files for your project. You don't need to extend Application extension needed
+### Limitations <a name="req"/>
+Current version have some limitations. Check that your project meet the following requirements:
+- minSdkVersion >= 16
+- Support for Java 8 is enabled
+- Android Support libraries has been migrated to androidX
 
-- Step 1: On your project's build.gradle file, add JitPack to allprojects repositories (TEMP).
-```gradle
-allprojects {
-    repositories {
-        //...
-        maven { url "https://jitpack.io"}
-    }
-}
-```
-
-- Step 2: On your app module's build.gradle, add our library as dependency and apply our plugin
-  - Ensure minSdkVersion >= 16 (TEMP)
-  - Make your project compatible with Java 8 (TEMP)
-  - Add our library as dependency
-  - Apply our gradle plugin
-  - You can also include configurations using our Gradle extension
-
+All of them are tipically declared on your root module's build.gradle file. A valid example could look like:
 ```gradle
 apply plugin: 'com.android.application'
 
@@ -67,21 +54,64 @@ android {
 }
 
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
-}
-
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
-
-inappdevtools {
-    enabled = true
-    email = 'mail@domain.com'
+    implementation 'androidx...'
 }
 ```
 
+### Basic set-up <a name="basic"/>
+To start using our library, you only need to modify 2 gradle files and rebuild your app. Let's do it!
+
+- Step 1: On your root module's build.gradle file, after buidscript:
+  - Declare our plugin
+  - Add JitPack repository (TEMP)
+```gradle
+buildscript {...}
+
+plugins {
+    id "es.rafaco.inappdevtools" version "0.0.04" apply false
+}
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io"}
+    }
+}
+```
+
+- Step 2: On your app module's build.gradle:
+  - Apply our gradle plugin
+  - Add our library to dependencies
+```gradle
+apply plugin: 'com.android.application'
+apply plugin: 'es.rafaco.inappdevtools'
+
+android {...}
+
+dependencies {
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
+}
+```
+
+### Add network interceptor <a name="network"/>
+If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class: 
+```java
+Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(DevTools.getOkHttpClient())
+                .build();
+```
+
 ## Usage <a name="usage"/>
- - Gradle plugin
- - Configuration //TODO
- - Retrofit interceptor
+
+### Invocation <a name="invocation"/>
+### Configuration <a name="configuration"/>
+//TODO: You can configure our library behaviour via our gradle plugin. On your app module's build.gradle:
+```gradle
+inappdevtools {
+    enabled = true
+    email = 'yourmail@yourdomain.com'
+}
+```
 
 ## Features <a name="features"/>
 
@@ -137,26 +167,31 @@ We use overlays to show information over your app instead of activities
   - Apk compilation info
   - OS, device, hardware, memory
 
-### Reports <a name="Reports"/>
+### Reports <a name="reports"/>
 - Report bugs by email or share them with your favourite app
 - Attach logs, info, description, crashes, db dumps…
 - Take screenshots and attach them
 - //TODO
 
+## Customization <a name="customization"/>
 
-## Configuration <a name="Configuration"/>
+## Sample App <a name="sample"/>
+A sample app is available in this repo. It allows to play with our library preinstalled on an app and it's source code contain examples of installation, configuration and integrations.
 
-## Customization <a name="Customization"/>
+## Downloads  <a name="download"/>
+Our sample app will be available to download from [Google Play](https://play.google.com).
 
+You dont normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project. 
 
+- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
+- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
+- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
 
-## Downloads
-<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
-A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com).
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 ## Thanks <a name="thanks"/>
+//TODO: add dependencies and used sources
 
 ## License <a name="license"/>
 Apache-2.0
