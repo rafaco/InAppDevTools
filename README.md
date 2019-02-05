@@ -1,7 +1,7 @@
 # In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [ ![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/inappdevtools/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 
-**Android library with a set of tools for developers. It allow to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
+**Android library with a set of tools for developers. It allows to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
@@ -16,7 +16,7 @@
 - [Installation](#setup)
   - [Limitations](#req)
   - [Basic setup](#basic)
-  - [Network interceptor](#network)
+  - [Add network interceptor](#network)
 - [Usage](#usage)
   - [Invocation](#invocation) 
   - [Configuration](#configuration) 
@@ -33,11 +33,12 @@
 ## Installation <a name="setup"/>
 
 ### Limitations <a name="req"/>
-Check that your project have the following requeriments:
-- Project minSdkVersion >= 16
-- Project support Java 8
-- Dependencies migrated to androidX
-They are normally declared on your root module's build.gradle file. A valid example could look like:
+Current version have some limitations. Check that your project meet the following requirements:
+- minSdkVersion >= 16
+- Support for Java 8 is enabled
+- Android Support libraries has been migrated to androidX
+
+All of them are tipically declared on your root module's build.gradle file. A valid example could look like:
 ```gradle
 apply plugin: 'com.android.application'
 
@@ -58,7 +59,7 @@ dependencies {
 ```
 
 ### Basic set-up <a name="basic"/>
-You are only require you to modify gradle files for a quick start.
+To start using our library, you only need to modify 2 gradle files and rebuild your app. Let's do it!
 
 - Step 1: On your root module's build.gradle file, after buidscript:
   - Declare our plugin
@@ -91,7 +92,7 @@ dependencies {
 }
 ```
 
-### Network Interceptor <a name="network"/>
+### Add network interceptor <a name="network"/>
 If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class: 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
@@ -101,6 +102,7 @@ Retrofit retrofit = new Retrofit.Builder()
 ```
 
 ## Usage <a name="usage"/>
+
 ### Invocation <a name="invocation"/>
 ### Configuration <a name="configuration"/>
 //TODO: You can configure our library behaviour via our gradle plugin. On your app module's build.gradle:
@@ -183,12 +185,13 @@ You dont normally need to manually download our library or our plugin as they ar
 
 - Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
 - Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
-- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and we track our versions with tags
+- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
 
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 ## Thanks <a name="thanks"/>
+//TODO: add dependencies and used sources
 
 ## License <a name="license"/>
 Apache-2.0
