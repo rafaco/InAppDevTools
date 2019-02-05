@@ -35,20 +35,25 @@
 ## Set-up <a name="setup"/>
 Basic set-up only require you to modify gradle files for your project. You don't need to extend Application extension needed
 
-- Step 1: On your project's build.gradle file, add JitPack to allprojects repositories (TEMP).
+- Step 1: On your root module's build.gradle file, after buidscript:
+  - Declare our plugin
+  - Add JitPack repository (TEMP)
 ```gradle
+plugins {
+    id "es.rafaco.inappdevtools" version "0.0.04" apply false
+}
+
 allprojects {
     repositories {
-        //...
         maven { url "https://jitpack.io"}
     }
 }
 ```
 
-- Step 2: On your app module's build.gradle, add our library as dependency and apply our plugin
+- Step 2: On your app module's build.gradle:
   - Ensure minSdkVersion >= 16 (TEMP)
   - Make your project compatible with Java 8 (TEMP)
-  - Add our library as dependency
+  - Add our library to dependencies
   - Apply our gradle plugin
   - You can also include configurations using our Gradle extension
 
@@ -70,11 +75,11 @@ dependencies {
     implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
 }
 
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
+apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
-    email = 'mail@domain.com'
+    email = 'yourmail@yourdomain.com'
 }
 ```
 
