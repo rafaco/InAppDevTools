@@ -92,7 +92,7 @@ dependencies {
 ```
 
 ### Network Interceptor <a name="network"/>
-You can inspect network communications make by your app if you use Retrofit. To enable it, add our OkHttpClient to your api initialization class: 
+If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class: 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -174,7 +174,7 @@ We use overlays to show information over your app instead of activities
 ## Customization <a name="customization"/>
 
 ## Sample App <a name="sample"/>
-A sample app is available in this repo. It allows to play with our libray preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations.
+A sample app is available in this repo. It allows to play with our library preinstalled on an app and it's source code contain examples of installation, configuration and integrations.
 
 ## Downloads  <a name="download"/>
 Our sample app will be available to download from [Google Play](https://play.google.com).
@@ -184,8 +184,6 @@ You dont normally need to manually download our library or our plugin as they ar
 - Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
 - Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
 - Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and we track our versions with tags
-
-<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
