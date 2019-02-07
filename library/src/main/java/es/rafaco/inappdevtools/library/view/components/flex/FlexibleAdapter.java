@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +64,6 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position < 0 || position >= items.size()){
-            return 2;
-        }
         Object item = items.get(position);
         for (int i=0; i<descriptors.size(); i++){
             FlexibleItemDescriptor descriptor = descriptors.get(i);
@@ -75,27 +71,20 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return i;
             }
         }
-
         return super.getItemViewType(position);
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        FlexibleItemDescriptor desc = descriptors.get(getItemViewType(i));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        FlexibleItemDescriptor desc = descriptors.get(viewType);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(desc.layoutResourceId, viewGroup, false);
 
         RecyclerView.ViewHolder holder = null;
         try {
             Constructor<? extends RecyclerView.ViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class);
             holder = ctor.newInstance(new Object[] { view });
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return holder;
@@ -105,7 +94,6 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         Object viewData = items.get(i);
         FlexibleItemDescriptor desc = descriptors.get(getItemViewType(i));
-
         desc.viewHolderClass.cast(viewHolder).bindTo(desc.dataClass.cast(viewData));
     }
 

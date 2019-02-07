@@ -291,7 +291,15 @@ public class CrashDetailScreen extends OverlayScreen {
     }
 
     private void initTraceAdapter(List<Object> traceData, FlexibleAdapter adapterP, RecyclerView recyclerViewP, int layoutId) {
-        ((TraceItem)traceData.get(traceData.size()-1)).setPosition(TraceItem.Position.END);
+        TraceItem lastItem = null;
+        try{
+            lastItem = (TraceItem)traceData.get(traceData.size()-1);
+        }catch (Exception e){
+            FriendlyLog.log("W", "Flex", "initTraceAdapter", "Unable to parse last item");
+        }
+        if(lastItem!=null)
+            lastItem.setPosition(TraceItem.Position.END);
+
         adapterP = new FlexibleAdapter(1, traceData);
         recyclerViewP = bodyView.findViewById(layoutId);
         recyclerViewP.setAdapter(adapterP);
