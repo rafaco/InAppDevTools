@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.deco;
 
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 

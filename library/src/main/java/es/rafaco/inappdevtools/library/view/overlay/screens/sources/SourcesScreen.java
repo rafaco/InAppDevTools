@@ -13,7 +13,7 @@ import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;

@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -8,14 +8,14 @@ import com.alorma.timeline.TimelineView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
-class TraceViewHolder extends RecyclerView.ViewHolder {
+public class TraceViewHolder extends FlexibleViewHolder {
+
     private final TimelineView timeline;
     private final AppCompatButton button;
     TextView exceptionView;
@@ -34,8 +34,9 @@ class TraceViewHolder extends RecyclerView.ViewHolder {
         this.where3View = view.findViewById(R.id.where3);
         this.button = view.findViewById(R.id.button);
     }
-
-    public void bindTo(TraceItem data) {
+    @Override
+    public void bindTo(Object abstractData) {
+        TraceItem data = (TraceItem) abstractData;
         if (data!=null){
 
             timeline.setIndicatorSize(8); //"8dp"?

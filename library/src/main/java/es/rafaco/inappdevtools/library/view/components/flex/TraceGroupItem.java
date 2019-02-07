@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
 public class TraceGroupItem {
 

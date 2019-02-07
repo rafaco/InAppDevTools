@@ -5,8 +5,8 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.storage.StorageHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.storage.StorageScreen;
-import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfo;
-import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfoAdapter;
+import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
+import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 
 public class StorageTool extends Tool {
 

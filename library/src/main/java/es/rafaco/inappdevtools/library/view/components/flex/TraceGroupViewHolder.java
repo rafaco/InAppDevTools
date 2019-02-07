@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.graphics.Color;
 import android.view.View;
@@ -7,10 +7,10 @@ import android.widget.TextView;
 import com.alorma.timeline.TimelineView;
 
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 
-class TraceGroupViewHolder extends RecyclerView.ViewHolder {
+public class TraceGroupViewHolder extends FlexibleViewHolder {
+
     TimelineView timeline;
     TextView title;
     TextView subtitle;
@@ -23,7 +23,9 @@ class TraceGroupViewHolder extends RecyclerView.ViewHolder {
         //this.count = view.findViewById(R.id.count);
     }
 
-    public void bindTo(TraceGroupItem data) {
+    @Override
+    public void bindTo(Object abstractData) {
+        TraceGroupItem data = (TraceGroupItem) abstractData;
         if (data!=null){
 
             if (data.isExpanded()){

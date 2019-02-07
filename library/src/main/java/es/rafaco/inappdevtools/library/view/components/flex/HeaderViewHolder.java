@@ -1,13 +1,12 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 
-class HeaderViewHolder extends RecyclerView.ViewHolder {
+public class HeaderViewHolder extends FlexibleViewHolder {
 
     TextView titleView;
 
@@ -16,7 +15,9 @@ class HeaderViewHolder extends RecyclerView.ViewHolder {
         this.titleView = view.findViewById(R.id.title);
     }
 
-    public void bindTo(String data) {
+    @Override
+    public void bindTo(Object abstractData) {
+        String data = (String) abstractData;
         titleView.setVisibility(TextUtils.isEmpty(data) ? View.GONE : View.VISIBLE);
         if (data != null) titleView.setText(data);
     }

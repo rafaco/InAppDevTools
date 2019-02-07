@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.deco;
 
 import android.content.Context;
 import android.text.TextUtils;

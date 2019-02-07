@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 

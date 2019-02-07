@@ -17,7 +17,7 @@ import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 import es.rafaco.inappdevtools.library.logic.watcher.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;

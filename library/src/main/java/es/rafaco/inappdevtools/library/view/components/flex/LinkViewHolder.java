@@ -1,15 +1,14 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
-public class LinkViewHolder extends RecyclerView.ViewHolder {
+public class LinkViewHolder extends FlexibleViewHolder {
 
     TextView icon;
     TextView title;
@@ -20,8 +19,9 @@ public class LinkViewHolder extends RecyclerView.ViewHolder {
         title = view.findViewById(R.id.title);
     }
 
-    public void bindTo(ThinItem data) {
-
+    @Override
+    public void bindTo(Object abstractData) {
+        ThinItem data = (ThinItem) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
             int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());

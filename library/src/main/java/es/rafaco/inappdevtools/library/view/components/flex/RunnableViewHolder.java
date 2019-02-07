@@ -1,16 +1,15 @@
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 
-public class RunnableViewHolder extends RecyclerView.ViewHolder {
+public class RunnableViewHolder extends FlexibleViewHolder {
 
     AppCompatButton button;
 
@@ -19,7 +18,9 @@ public class RunnableViewHolder extends RecyclerView.ViewHolder {
         button = view.findViewById(R.id.button);
     }
 
-    public void bindTo(RunnableConfig data) {
+    @Override
+    public void bindTo(Object abstractData) {
+        RunnableConfig data = (RunnableConfig) abstractData;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
         if (data.getIcon()>0){

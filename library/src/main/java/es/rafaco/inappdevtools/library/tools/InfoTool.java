@@ -5,7 +5,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfo;
+import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 
 public class InfoTool extends Tool {
 

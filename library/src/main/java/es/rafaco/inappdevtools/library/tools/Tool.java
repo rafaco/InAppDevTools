@@ -2,8 +2,8 @@ package es.rafaco.inappdevtools.library.tools;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfo;
-import es.rafaco.inappdevtools.library.view.components.DecoratedToolInfoAdapter;
+import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
+import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 
 public abstract class Tool {
