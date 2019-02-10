@@ -6,7 +6,7 @@ pluginManagement {
 }
 enableFeaturePreview('STABLE_PUBLISHING')
 
-include ':app', ':library', ':library-noop', ':plugin'
+include ':sample', ':library', ':library-noop', ':plugin'
 
 rootProject.name = 'inappdevtools-project'
 rootProject.children.each {
