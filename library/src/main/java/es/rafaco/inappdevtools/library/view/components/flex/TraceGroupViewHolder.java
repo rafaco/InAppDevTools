@@ -1,14 +1,13 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.graphics.Color;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alorma.timeline.TimelineView;
-
-import java.util.List;
 
 import androidx.core.content.ContextCompat;
 import es.rafaco.inappdevtools.library.R;
@@ -19,16 +18,19 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
 
     private final LinearLayout details;
     TimelineView timeline;
-    TextView title;
-    TextView subtitle;
+    TextView tag;
+    TextView afterTag;
+    TextView iconLabel;
+    ImageView icon;
 
     public TraceGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         this.timeline = view.findViewById(R.id.timeline);
         this.details = view.findViewById(R.id.details);
-        this.title = view.findViewById(R.id.title);
-        this.subtitle = view.findViewById(R.id.subtitle);
-        //this.count = view.findViewById(R.id.count);
+        this.tag = view.findViewById(R.id.tag);
+        this.afterTag = view.findViewById(R.id.after_tag);
+        this.iconLabel = view.findViewById(R.id.icon_label);
+        this.icon = view.findViewById(R.id.icon);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
                 timeline.setIndicatorSize(0);
             }
 
-            timeline.setIndicatorColor(Color.GRAY);
+            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
 
             if (!data.isExpanded() && data.getLastOnCollapsed()){
@@ -66,15 +68,25 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
 
-            title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
-            subtitle.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
+
+            tag.setText(data.getTag());
+            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
+            UiUtils.setStrokeToDrawable(tag.getContext(), 1, R.color.rally_gray, tag.getBackground());
+
+            tag.setVisibility(!data.isExpanded() ? View.VISIBLE : View.GONE);
+            afterTag.setVisibility(View.GONE);
+            iconLabel.setVisibility(View.VISIBLE);
             if (!data.isExpanded()){
-                title.setText(data.getCount() + " more from: " + data.getGroupKey());
-                subtitle.setVisibility(View.GONE);
+                iconLabel.setText(data.getCount() + " more ");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    icon.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_down_rally_24dp));
+                }
             }
             else {
-                title.setVisibility(View.GONE);
-                subtitle.setText("Hide " + data.getGroupKey());
+                iconLabel.setText("Hide " + data.getCount() + " ");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    icon.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_up_rally_24dp));
+                }
             }
         }
     }

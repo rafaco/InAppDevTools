@@ -2,25 +2,25 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 public class TraceGroupItem {
 
-    private String groupKey;
+    private String tag;
     private int index;
     private int count;
     private boolean expanded;
     private boolean lastOnCollapsed = false;
 
-    public TraceGroupItem(String groupKey, int index, int count, boolean expanded) {
-        this.groupKey = groupKey;
+    public TraceGroupItem(String tag, int index, int count, boolean expanded) {
+        this.tag = tag;
         this.index = index;
         this.count = count;
         this.expanded = expanded;
     }
 
-    public String getGroupKey() {
-        return groupKey;
+    public String getTag() {
+        return tag;
     }
 
-    public void setGroupKey(String groupKey) {
-        this.groupKey = groupKey;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getIndex() {

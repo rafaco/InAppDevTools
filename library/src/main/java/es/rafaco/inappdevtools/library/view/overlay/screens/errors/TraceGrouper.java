@@ -1,52 +1,37 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-import android.text.TextUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.BuildConfig;
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
-import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceItem;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 
 public class TraceGrouper {
 
+    HashMap<String, String> matcher;
     List<Object> traceData1;
     List<Object> traceData2;
 
     public TraceGrouper() {
     }
 
-
     public void process(List<Sourcetrace> traces) {
-        traceData1 = new ArrayList<>();
-        traceData2 = new ArrayList<>();
-
-        boolean causeFound = false;
-        for(int i=0;i<traces.size();i++){
-            TraceItem item = new TraceItem(traces.get(i));
-            if (i==0){
-                item.setPosition(TraceItem.Position.START);
-            }
-            else if (item.getSourcetrace().getExtra()!=null
-                    && item.getSourcetrace().getExtra().equals("cause")){
-                causeFound = true;
-                item.setPosition(TraceItem.Position.START);
-            }
-
-            if (!causeFound) traceData1.add(item);
-            else traceData2.add(item);
-        }
+        fillTraceItems(traces);
 
         injectGroups(traceData1, 1); //Never group the first item
-        finishTimeline(traceData1);
+        adjustTimeline(traceData1);
 
-        if (causeFound) {
+        if (traceData2.size()>0) {
             injectGroups(traceData2, 1); //Never group the first item
-            finishTimeline(traceData2);
+            adjustTimeline(traceData2);
         }
     }
 
@@ -62,6 +47,73 @@ public class TraceGrouper {
             return null;
         }
         return new FlexibleAdapter(1, traceData2);
+    }
+
+
+
+    private void fillTraceItems(List<Sourcetrace> traces) {
+        traceData1 = new ArrayList<>();
+        traceData2 = new ArrayList<>();
+
+        boolean causeFound = false;
+        for(int i=0;i<traces.size();i++){
+            TraceItem item = new TraceItem(traces.get(i));
+            fillClassifier(item);
+
+            if (item.getSourcetrace().getExtra()!=null &&
+                    item.getSourcetrace().getExtra().equals("cause")){
+                causeFound = true;
+            }
+
+            if (!causeFound) traceData1.add(item);
+            else traceData2.add(item);
+        }
+    }
+
+    private void fillClassifier(TraceItem item) {
+        if (matcher == null)
+            initMatcher();
+
+        String classifier = null;
+        String className = item.getSourcetrace().getClassName();
+        for (HashMap.Entry<String, String> entry : matcher.entrySet()) {
+            if (className.startsWith(entry.getKey())) {
+                classifier = entry.getValue();
+                break;
+            }
+        }
+
+        item.setTag( (classifier!=null) ? classifier : "Other");
+        item.setOpenable(canOpen(item));
+        item.setColor(getColor(item));
+    }
+
+    @NotNull
+    private void initMatcher() {
+        matcher = new HashMap<>();
+        InfoHelper helper = new InfoHelper();
+
+        matcher.put(BuildConfig.APPLICATION_ID, "InAppDevTools"); //Our library
+        matcher.put(helper.getPackageName(), "Your App"); //Host app
+        matcher.put("androidx.", "AndroidX library");
+        matcher.put("com.android.support", "Android Support library");
+        matcher.put("com.android", "Android");
+        matcher.put("android.", "Android");
+        matcher.put("java.", "Java");
+    }
+
+    private boolean canOpen(TraceItem item) {
+        return item.getTag().equals("Your App") ||
+                item.getTag().equals("InAppDevTools");
+    }
+
+    private int getColor(TraceItem item) {
+        if (item.getTag().equals("Your App"))
+            return R.color.rally_green;
+        else if (item.getTag().equals("InAppDevTools"))
+            return R.color.rally_blue;
+        else
+            return R.color.rally_gray;
     }
 
     public static void propagateExpandedState(TraceGroupItem group, List<Object> data) {
@@ -84,13 +136,13 @@ public class TraceGrouper {
             TraceItem current;
             if (traceData.get(i) instanceof TraceItem) {
                 current = (TraceItem) traceData.get(i);
-                String currentGroupKey = getGroupKey(current.getSourcetrace().getClassName());
+                String currentGroupKey = current.getTag();
 
-                if (!TextUtils.isEmpty(currentGroupKey)) {
+                if (!current.isOpenable()) {
                     if (group == null){
                         group = new TraceGroupItem(currentGroupKey, i, 1, false);
                     }
-                    else if (group.getGroupKey().equals(currentGroupKey)){
+                    else if (group.getTag().equals(currentGroupKey)){
                         group.setCount(group.getCount()+1);
                     }
                     else{
@@ -115,30 +167,21 @@ public class TraceGrouper {
         }
     }
 
-    private String getGroupKey(String className) {
-
-        HashMap<String, String> matcher = new HashMap<>();
-        matcher.put("android.", "Android Internal");
-        matcher.put("com.android", "Android Internal");
-        matcher.put("java.", "Java");
-        matcher.put("androidx.", "AndroidX Library");
-
-        for (HashMap.Entry<String, String> entry : matcher.entrySet()) {
-            if (className.startsWith(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
     private void addGroup(List<Object> traceData, TraceGroupItem group) {
         traceData.add(group.getIndex(), group);
         propagateExpandedState(group, traceData);
     }
 
-    private void finishTimeline(List<Object> traceData) {
-        Object lastItem = traceData.get(traceData.size()-1);
+    private void adjustTimeline(List<Object> traceData) {
+        for (int i = 0; i < traceData.size(); i++){
+            Object firstItem = traceData.get(i);
+            if (firstItem instanceof TraceItem){
+                ((TraceItem)firstItem).setPosition(TraceItem.Position.START);
+                break;
+            }
+        }
 
+        Object lastItem = traceData.get(traceData.size()-1);
         if (lastItem instanceof TraceItem){
             ((TraceItem)lastItem).setPosition(TraceItem.Position.END);
         }

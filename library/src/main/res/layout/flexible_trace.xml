@@ -18,53 +18,84 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:backgroundTint="@color/rally_bg_new"
         android:elevation="3dp">
 
-        <LinearLayout
-            android:id="@+id/details"
-            android:layout_height="wrap_content"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_margin="@dimen/card_margin"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/exception"
+            <ImageView
+                android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextCondensedMedium"/>
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_arrow_right_white_24dp"
+                android:layout_centerVertical="true" />
 
-            <TextView
-                android:id="@+id/message"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/details"
                 android:layout_height="wrap_content"
-                style="@style/TextCondensedMedium" />
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/card_margin"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/icon"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/where"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/rally_yellow"
-                style="@style/TextCondensedMedium" />
+                <TextView
+                    android:id="@+id/exception"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextCondensedMedium"/>
 
-            <TextView
-                android:id="@+id/where2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/rally_blue"
-                style="@style/TextCondensedSmall"/>
+                <TextView
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextCondensedMedium" />
 
-            <TextView
-                android:id="@+id/where3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:layout_marginBottom="4dp"
-                android:textColor="@color/rally_gray"
-                style="@style/TextCondensedMedium" />
+                <TextView
+                    android:id="@+id/where"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/rally_yellow"
+                    style="@style/TextCondensedMedium" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/where2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/rally_blue"
+                    style="@style/TextCondensedSmall"/>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_corner"
+                        android:textColor="@color/rally_gray"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="10dp"
+                        style="@style/TextCondensedSmall" />
+
+                    <TextView
+                        android:id="@+id/where3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:gravity="end"
+                        android:textColor="@color/rally_gray"
+                        style="@style/TextCondensedMedium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

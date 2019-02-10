@@ -1,7 +1,9 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,11 +25,13 @@ public class TraceViewHolder extends FlexibleViewHolder {
     private final CardView cardView;
     private final TimelineView timeline;
     private final AppCompatButton button;
+    private final ImageView navIcon;
     TextView exceptionView;
     private final TextView messageView;
     private final TextView whereView;
     private final TextView where2View;
     private final TextView where3View;
+    private final TextView tag;
 
     public TraceViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
@@ -40,6 +44,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
         this.where2View = view.findViewById(R.id.where2);
         this.where3View = view.findViewById(R.id.where3);
         this.button = view.findViewById(R.id.button);
+        this.navIcon = view.findViewById(R.id.icon);
+        this.tag = view.findViewById(R.id.tag);
     }
 
     @Override
@@ -54,23 +60,21 @@ public class TraceViewHolder extends FlexibleViewHolder {
             if (!data.isExpanded())
                 return;
 
-            int indicatorColor = data.isGrouped() ? R.color.rally_gray : R.color.rally_yellow;
-            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), indicatorColor));
+
+            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
-
-            int cardColor = data.isGrouped() ? R.color.rally_gray : R.color.rally_bg_new;
-            cardView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), cardColor));
-
 
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
             if (data.getPosition().equals(TraceItem.Position.START)){
                 whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));
-                //timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));
+                timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
                 timeline.setTimelineType(TimelineView.TYPE_START);
             }
             else if (data.getPosition().equals(TraceItem.Position.END)){
+                whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_END);
             }else{
+                whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
             exceptionView.setVisibility(TextUtils.isEmpty(data.getException()) ? View.GONE : View.VISIBLE);
@@ -81,24 +85,39 @@ public class TraceViewHolder extends FlexibleViewHolder {
             Sourcetrace traces = data.getSourcetrace();
             whereView.setText(traces.getShortClassName() + "." + traces.getMethodName() + "()");
             where2View.setText(traces.getPackageName());
+            where2View.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+
+            tag.setText(data.getTag());
+            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+            UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
+
             where3View.setText(traces.getFileName() + ":" + traces.getLineNumber());
 
-            if (canOpen(traces)){
+            if (data.isOpenable()){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new));
+                cardView.setClickable(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
+                }
+                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 itemView.setOnClickListener(v -> OverlayUIService.performNavigation(SourceDetailScreen.class,
                         SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS_SRC,
                                 extractPath(traces),
                                 traces.getLineNumber())));
                 itemView.setClickable(true);
-                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
+                navIcon.setVisibility(View.VISIBLE);
             }else{
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new_alpha));
+                cardView.setClickable(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.setElevation(0);
+                }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
+                itemView.setOnClickListener(null);
+                itemView.setClickable(false);
+                navIcon.setVisibility(View.GONE);
             }
         }
-    }
-
-    public Boolean canOpen(Sourcetrace stacktrace){
-        return stacktrace.getLineNumber()>0
-                && stacktrace.getClassName().startsWith("es.rafaco.inappdevtools");
     }
 
     public String extractPath(Sourcetrace stacktrace){

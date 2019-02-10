@@ -9,8 +9,11 @@ public class TraceItem {
     private String exception;
     private String message;
     private Position position = Position.MIDDLE;
+    private String tag;
     private boolean expanded = true;
     private boolean isGrouped = false;
+    private boolean openable = false;
+    private int color;
 
     public TraceItem(Sourcetrace sourcetrace) {
         this.sourcetrace = sourcetrace;
@@ -48,6 +51,14 @@ public class TraceItem {
         this.position = position;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public boolean isExpanded() {
         return expanded;
     }
@@ -62,5 +73,21 @@ public class TraceItem {
 
     public void setGrouped(boolean grouped) {
         isGrouped = grouped;
+    }
+
+    public boolean isOpenable() {
+        return openable;
+    }
+
+    public void setOpenable(boolean openable) {
+        this.openable = openable;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

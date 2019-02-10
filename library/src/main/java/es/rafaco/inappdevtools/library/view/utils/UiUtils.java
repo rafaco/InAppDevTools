@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import androidx.core.content.ContextCompat;
 import es.rafaco.inappdevtools.library.DevTools;
 
 
@@ -31,6 +35,11 @@ public class UiUtils {
         Context context = DevTools.getAppContext();
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         return applicationInfo.icon;
+    }
+
+    public static void setStrokeToDrawable(Context context, int i, int color, Drawable background) {
+        GradientDrawable drawable = (GradientDrawable)background;
+        drawable.setStroke((int)getPixelsFromDp(context, (float)i), ContextCompat.getColor(context, color));
     }
 
     private void showKeyboard(View target){
@@ -67,5 +76,18 @@ public class UiUtils {
 
     public static float getPixelsFromDp(Context context, float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
+    }
+
+    public static void setBackgroundColorToDrawable(Context context, int colorRes, Drawable drawable) {
+        if (drawable instanceof ShapeDrawable) {
+            ShapeDrawable shapeDrawable = (ShapeDrawable) drawable;
+            shapeDrawable.getPaint().setColor(ContextCompat.getColor(context, colorRes));
+        } else if (drawable instanceof GradientDrawable) {
+            GradientDrawable gradientDrawable = (GradientDrawable) drawable;
+            gradientDrawable.setColor(ContextCompat.getColor(context, colorRes));
+        } else if (drawable instanceof ColorDrawable) {
+            ColorDrawable colorDrawable = (ColorDrawable) drawable;
+            colorDrawable.setColor(ContextCompat.getColor(context, colorRes));
+        }
     }
 }

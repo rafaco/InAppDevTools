@@ -4,6 +4,7 @@
     <color name="black">#000000</color>
 
     <color name="rally_bg_new">#23272E</color>
+    <color name="rally_bg_new_alpha">#BF23272E</color>
     <color name="rally_bg_new_darker">#26262E</color>
     <color name="rally_bg_solid">#3C3D45</color>
     <color name="rally_bg_blur">#23272E</color><!--#32333C-->

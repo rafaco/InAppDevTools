@@ -10,27 +10,56 @@
         android:layout_width="16dp"
         android:layout_height="match_parent"/>
 
-    <LinearLayout
-        android:id="@+id/details"
-        android:layout_height="wrap_content"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="8dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/title"
+        <ImageView
+            android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextCondensedMedium"/>
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_arrow_down_rally_24dp"
+            android:backgroundTint="@color/rally_white"
+            android:layout_centerVertical="true" />
 
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/details"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:textAlignment="textEnd"
-            style="@style/TextCondensedMedium" />
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/icon"
+            android:layout_marginLeft="8dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:textColor="@color/rally_gray"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="10dp"
+                style="@style/TextCondensedSmall" />
+
+            <TextView
+                android:id="@+id/after_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_gray"
+                style="@style/TextCondensedSmall" />
+
+            <TextView
+                android:id="@+id/icon_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textColor="@color/rally_gray"
+                style="@style/TextCondensedMedium" />
+
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
