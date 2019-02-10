@@ -59,10 +59,10 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
                 timeline.setIndicatorSize(0);
             }
 
-            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
+            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
 
-            if (!data.isExpanded() && data.getLastOnCollapsed()){
+            if (!data.isExpanded() && data.isLastOnCollapsed()){
                 timeline.setTimelineType(TimelineView.TYPE_END);
             }else{
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
@@ -70,8 +70,8 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
 
 
             tag.setText(data.getTag());
-            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
-            UiUtils.setStrokeToDrawable(tag.getContext(), 1, R.color.rally_gray, tag.getBackground());
+            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+            UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
 
             tag.setVisibility(!data.isExpanded() ? View.VISIBLE : View.GONE);
             afterTag.setVisibility(View.GONE);

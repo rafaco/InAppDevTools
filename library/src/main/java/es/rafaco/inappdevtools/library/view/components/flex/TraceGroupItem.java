@@ -7,6 +7,7 @@ public class TraceGroupItem {
     private int count;
     private boolean expanded;
     private boolean lastOnCollapsed = false;
+    private int color;
 
     public TraceGroupItem(String tag, int index, int count, boolean expanded) {
         this.tag = tag;
@@ -47,11 +48,19 @@ public class TraceGroupItem {
         this.expanded = expanded;
     }
 
+    public boolean isLastOnCollapsed() {
+        return lastOnCollapsed;
+    }
+
     public void setLastOnCollapsed(boolean lastOnCollapsed) {
         this.lastOnCollapsed = lastOnCollapsed;
     }
 
-    public boolean getLastOnCollapsed() {
-        return lastOnCollapsed;
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

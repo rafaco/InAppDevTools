@@ -26,12 +26,36 @@ public class TraceGrouper {
     public void process(List<Sourcetrace> traces) {
         fillTraceItems(traces);
 
-        injectGroups(traceData1, 1); //Never group the first item
+        markAlwaysExpanded(traceData1);
+        injectGroups(traceData1, 0);
         adjustTimeline(traceData1);
 
         if (traceData2.size()>0) {
-            injectGroups(traceData2, 1); //Never group the first item
+            markAlwaysExpanded(traceData2);
+            injectGroups(traceData2, 0);
             adjustTimeline(traceData2);
+        }
+    }
+
+    private void markAlwaysExpanded(List<Object> traceData) {
+        boolean firstTraceFound = false;
+        boolean firstOpenableFound = false;
+        for (int i = 0; i < traceData.size(); i++){
+            Object firstItem = traceData.get(i);
+            if (firstItem instanceof TraceItem){
+                TraceItem current = (TraceItem)firstItem;
+                if (!firstTraceFound){
+                    current.setAlwaysExpanded(true);
+                    firstTraceFound = true;
+                }
+                if (current.isOpenable()){
+                    current.setAlwaysExpanded(true);
+                    firstOpenableFound = true;
+                }
+                if (firstTraceFound && firstOpenableFound){
+                    break;
+                }
+            }
         }
     }
 
@@ -138,9 +162,10 @@ public class TraceGrouper {
                 current = (TraceItem) traceData.get(i);
                 String currentGroupKey = current.getTag();
 
-                if (!current.isOpenable()) {
+                if (!current.isAlwaysExpanded()) {
                     if (group == null){
                         group = new TraceGroupItem(currentGroupKey, i, 1, false);
+                        group.setColor(current.getColor());
                     }
                     else if (group.getTag().equals(currentGroupKey)){
                         group.setCount(group.getCount()+1);
@@ -186,7 +211,7 @@ public class TraceGrouper {
             ((TraceItem)lastItem).setPosition(TraceItem.Position.END);
         }
 
-        for (int i = traceData.size()-2; i < 0; i--){
+        for (int i = traceData.size()-1; i >= 0; i--){
             Object currentItem = traceData.get(i);
             if (currentItem instanceof TraceGroupItem){
                 TraceGroupItem lastGroup = (TraceGroupItem) currentItem;

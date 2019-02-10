@@ -11,6 +11,7 @@ public class TraceItem {
     private Position position = Position.MIDDLE;
     private String tag;
     private boolean expanded = true;
+    private boolean alwaysExpanded = false;
     private boolean isGrouped = false;
     private boolean openable = false;
     private int color;
@@ -65,6 +66,14 @@ public class TraceItem {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+
+    public boolean isAlwaysExpanded() {
+        return alwaysExpanded;
+    }
+
+    public void setAlwaysExpanded(boolean alwaysExpanded) {
+        this.alwaysExpanded = alwaysExpanded;
     }
 
     public boolean isGrouped() {
