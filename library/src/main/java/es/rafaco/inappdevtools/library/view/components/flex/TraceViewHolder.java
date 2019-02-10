@@ -24,7 +24,6 @@ public class TraceViewHolder extends FlexibleViewHolder {
     private final LinearLayout itemContent;
     private final CardView cardView;
     private final TimelineView timeline;
-    private final AppCompatButton button;
     private final ImageView navIcon;
     TextView exceptionView;
     private final TextView messageView;
@@ -43,7 +42,6 @@ public class TraceViewHolder extends FlexibleViewHolder {
         this.whereView = view.findViewById(R.id.where);
         this.where2View = view.findViewById(R.id.where2);
         this.where3View = view.findViewById(R.id.where3);
-        this.button = view.findViewById(R.id.button);
         this.navIcon = view.findViewById(R.id.icon);
         this.tag = view.findViewById(R.id.tag);
     }
@@ -95,16 +93,16 @@ public class TraceViewHolder extends FlexibleViewHolder {
 
             if (data.isOpenable()){
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new));
-                cardView.setClickable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
-                itemView.setOnClickListener(v -> OverlayUIService.performNavigation(SourceDetailScreen.class,
+                UiUtils.setCardViewClickable(itemView.getContext(), cardView, true);
+                cardView.setOnClickListener(v -> OverlayUIService.performNavigation(SourceDetailScreen.class,
                         SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS_SRC,
                                 extractPath(traces),
                                 traces.getLineNumber())));
-                itemView.setClickable(true);
+                itemView.setClickable(false);
                 navIcon.setVisibility(View.VISIBLE);
             }else{
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new_alpha));
@@ -113,7 +111,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
                     cardView.setElevation(0);
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
-                itemView.setOnClickListener(null);
+                UiUtils.setCardViewClickable(itemView.getContext(), cardView, false);
+                cardView.setOnClickListener(null);
                 itemView.setClickable(false);
                 navIcon.setVisibility(View.GONE);
             }

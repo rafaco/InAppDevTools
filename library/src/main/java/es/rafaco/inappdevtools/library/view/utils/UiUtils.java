@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.view.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,8 +16,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.R;
 
 
 public class UiUtils {
@@ -88,6 +91,21 @@ public class UiUtils {
         } else if (drawable instanceof ColorDrawable) {
             ColorDrawable colorDrawable = (ColorDrawable) drawable;
             colorDrawable.setColor(ContextCompat.getColor(context, colorRes));
+        }
+    }
+
+    public static void setCardViewClickable(Context context, CardView cardView, boolean clickable){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (clickable){
+                int[] attrs = new int[]{R.attr.selectableItemBackground};
+                TypedArray typedArray = context.obtainStyledAttributes(attrs);
+                int selectableItemBackground = typedArray.getResourceId(0, 0);
+                typedArray.recycle();
+                cardView.setForeground(context.getDrawable(selectableItemBackground));
+            }else{
+                cardView.setForeground(null);
+            }
+            cardView.setClickable(clickable);
         }
     }
 }

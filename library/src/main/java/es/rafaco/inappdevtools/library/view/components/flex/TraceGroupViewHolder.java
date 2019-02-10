@@ -68,7 +68,6 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
 
-
             tag.setText(data.getTag());
             tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
