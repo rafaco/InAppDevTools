@@ -105,4 +105,14 @@ public class Sourcetrace {
     public void setExtra(String extra) {
         this.extra = extra;
     }
+
+    public String getPackageName() {
+        if(getClassName() == null) return null;
+        return getClassName().substring(0, getClassName().lastIndexOf("."));
+    }
+
+    public String getShortClassName() {
+        if(getClassName() == null) return null;
+        return getClassName().substring(getClassName().lastIndexOf(".")+1);
+    }
 }

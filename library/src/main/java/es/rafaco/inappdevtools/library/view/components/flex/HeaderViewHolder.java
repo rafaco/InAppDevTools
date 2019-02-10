@@ -10,13 +10,13 @@ public class HeaderViewHolder extends FlexibleViewHolder {
 
     TextView titleView;
 
-    public HeaderViewHolder(View view) {
-        super(view);
+    public HeaderViewHolder(View view, FlexibleAdapter adapter) {
+        super(view, adapter);
         this.titleView = view.findViewById(R.id.title);
     }
 
     @Override
-    public void bindTo(Object abstractData) {
+    public void bindTo(Object abstractData, int position) {
         String data = (String) abstractData;
         titleView.setVisibility(TextUtils.isEmpty(data) ? View.GONE : View.VISIBLE);
         if (data != null) titleView.setText(data);

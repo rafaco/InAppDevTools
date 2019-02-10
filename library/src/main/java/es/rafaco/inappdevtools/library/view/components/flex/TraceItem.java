@@ -10,6 +10,7 @@ public class TraceItem {
     private String message;
     private Position position = Position.MIDDLE;
     private boolean expanded = true;
+    private boolean isGrouped = false;
 
     public TraceItem(Sourcetrace sourcetrace) {
         this.sourcetrace = sourcetrace;
@@ -53,5 +54,13 @@ public class TraceItem {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+
+    public boolean isGrouped() {
+        return isGrouped;
+    }
+
+    public void setGrouped(boolean grouped) {
+        isGrouped = grouped;
     }
 }

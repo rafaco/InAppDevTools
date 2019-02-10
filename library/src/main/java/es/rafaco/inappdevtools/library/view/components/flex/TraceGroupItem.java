@@ -2,26 +2,33 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 public class TraceGroupItem {
 
-    private boolean expanded;
+    private String groupKey;
+    private int index;
     private int count;
-    private String title;
-    private String subtitle;
-    private Runnable runnable;
+    private boolean expanded;
+    private boolean lastOnCollapsed = false;
 
-    public TraceGroupItem(boolean expanded, int count, String title, String subtitle, Runnable runnable) {
-        this.expanded = expanded;
+    public TraceGroupItem(String groupKey, int index, int count, boolean expanded) {
+        this.groupKey = groupKey;
+        this.index = index;
         this.count = count;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.runnable = runnable;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+
+    public String getGroupKey() {
+        return groupKey;
+    }
+
+    public void setGroupKey(String groupKey) {
+        this.groupKey = groupKey;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getCount() {
@@ -32,27 +39,19 @@ public class TraceGroupItem {
         this.count = count;
     }
 
-    public String getTitle() {
-        return title;
+    public boolean isExpanded() {
+        return expanded;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 
-    public String getSubtitle() {
-        return subtitle;
+    public void setLastOnCollapsed(boolean lastOnCollapsed) {
+        this.lastOnCollapsed = lastOnCollapsed;
     }
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
-
-    public Runnable getRunnable() {
-        return runnable;
-    }
-
-    public void setRunnable(Runnable runnable) {
-        this.runnable = runnable;
+    public boolean getLastOnCollapsed() {
+        return lastOnCollapsed;
     }
 }

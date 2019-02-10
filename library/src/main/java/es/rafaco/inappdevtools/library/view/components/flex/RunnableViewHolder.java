@@ -13,13 +13,13 @@ public class RunnableViewHolder extends FlexibleViewHolder {
 
     AppCompatButton button;
 
-    public RunnableViewHolder(View view) {
-        super(view);
+    public RunnableViewHolder(View view, FlexibleAdapter adapter) {
+        super(view, adapter);
         button = view.findViewById(R.id.button);
     }
 
     @Override
-    public void bindTo(Object abstractData) {
+    public void bindTo(Object abstractData, int position) {
         RunnableConfig data = (RunnableConfig) abstractData;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);

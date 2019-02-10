@@ -13,14 +13,14 @@ public class LinkViewHolder extends FlexibleViewHolder {
     TextView icon;
     TextView title;
 
-    public LinkViewHolder(View view) {
-        super(view);
+    public LinkViewHolder(View view, FlexibleAdapter adapter) {
+        super(view, adapter);
         icon = view.findViewById(R.id.icon);
         title = view.findViewById(R.id.title);
     }
 
     @Override
-    public void bindTo(Object abstractData) {
+    public void bindTo(Object abstractData, int position) {
         ThinItem data = (ThinItem) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());

@@ -11,10 +11,11 @@
         android:layout_height="match_parent"/>
 
     <LinearLayout
+        android:id="@+id/details"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/title"
@@ -26,7 +27,10 @@
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextCondensedSmall" />
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            style="@style/TextCondensedMedium" />
 
     </LinearLayout>
 </LinearLayout>

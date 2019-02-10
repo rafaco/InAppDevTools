@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -62,5 +63,9 @@ public class UiUtils {
             sizes.set(w, h);
         }
         return sizes;
+    }
+
+    public static float getPixelsFromDp(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
     }
 }

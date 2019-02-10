@@ -19,13 +19,27 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
-public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
     public static final String TYPE_HEADER = "TYPE_HEADER";
     public static final String TYPE_BUTTON = "TYPE_BUTTON";
     public static final String TYPE_LINK = "TYPE_LINK";
     public static final String TYPE_TRACE = "TYPE_TRACE";
     public static final String TYPE_TRACE_GROUP = "TYPE_TRACE_GROUP";
+
+    public class FlexibleItemDescriptor {
+        public final String name;
+        public final Class<?> dataClass;
+        public final Class<? extends FlexibleViewHolder> viewHolderClass;
+        public final int layoutResourceId;
+
+        public FlexibleItemDescriptor(String name, Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
+            this.name = name;
+            this.dataClass = dataClass;
+            this.viewHolderClass = viewHolderClass;
+            this.layoutResourceId = layoutResourceId;
+        }
+    }
 
     private List<FlexibleItemDescriptor> descriptors;
     private final int spanCount;
@@ -76,25 +90,30 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public FlexibleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         FlexibleItemDescriptor desc = descriptors.get(viewType);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(desc.layoutResourceId, viewGroup, false);
 
-        RecyclerView.ViewHolder holder = null;
+        FlexibleViewHolder holder = null;
         try {
-            Constructor<? extends RecyclerView.ViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class);
-            holder = ctor.newInstance(new Object[] { view });
+            Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class, FlexibleAdapter.class);
+            holder = ctor.newInstance(new Object[] { view, this });
         } catch (Exception e) {
             e.printStackTrace();
         }
+        holder.onCreate(viewGroup, viewType);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        Object viewData = items.get(i);
-        FlexibleItemDescriptor desc = descriptors.get(getItemViewType(i));
-        desc.viewHolderClass.cast(viewHolder).bindTo(desc.dataClass.cast(viewData));
+    public void onBindViewHolder(@NonNull FlexibleViewHolder holder, int position) {
+        Object viewData = items.get(position);
+        FlexibleItemDescriptor desc = descriptors.get(getItemViewType(position));
+        desc.viewHolderClass.cast(holder).bindTo(desc.dataClass.cast(viewData), position);
+    }
+
+    public List<Object> getItems(){
+        return items;
     }
 
     @Override
@@ -111,19 +130,5 @@ public class FlexibleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 notifyDataSetChanged();
             }
         });
-    }
-
-    public class FlexibleItemDescriptor {
-        public final String name;
-        public final Class<?> dataClass;
-        public final Class<? extends FlexibleViewHolder> viewHolderClass;
-        public final int layoutResourceId;
-
-        public FlexibleItemDescriptor(String name, Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
-            this.name = name;
-            this.dataClass = dataClass;
-            this.viewHolderClass = viewHolderClass;
-            this.layoutResourceId = layoutResourceId;
-        }
     }
 }
