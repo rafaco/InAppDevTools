@@ -53,7 +53,7 @@ public class SourceAdapter extends AbstractCodeAdapter<String> {
             contextualizedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.rally_orange_alpha);
             holder.itemView.setBackgroundColor(contextualizedColor);
             //TODO: scrolling
-            screen.getScreenManager().getMainLayer().scrollToView(holder.itemView);
+            screen.getScreenManager().getMainLayer().focusOnView(holder.itemView);
         }
         /*String text = holder.getTvLineContent().getText().toString();
         if (TextUtils.isEmpty(text) || text.contains("//")){

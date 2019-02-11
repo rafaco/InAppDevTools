@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.alorma.timeline.TimelineView;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
@@ -25,7 +25,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
     private final CardView cardView;
     private final TimelineView timeline;
     private final ImageView navIcon;
-    TextView exceptionView;
+    private final TextView exceptionView;
     private final TextView messageView;
     private final TextView whereView;
     private final TextView where2View;
@@ -99,7 +99,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 UiUtils.setCardViewClickable(itemView.getContext(), cardView, true);
                 cardView.setOnClickListener(v -> OverlayUIService.performNavigation(SourceDetailScreen.class,
-                        SourceDetailScreen.buildParams(SourcesManager.DEVTOOLS_SRC,
+                        SourceDetailScreen.buildParams(extractOrigin(traces),
                                 extractPath(traces),
                                 traces.getLineNumber())));
                 itemView.setClickable(false);
@@ -125,5 +125,13 @@ public class TraceViewHolder extends FlexibleViewHolder {
         String path = stacktrace.getClassName().substring(0, pathEnd);
         path = path.replace(".", "/");
         return path + ".java";
+    }
+
+    public String extractOrigin(Sourcetrace stacktrace){
+        //TODO: should be detected on Source Details or SourcesManager
+        if (stacktrace.getClassName().startsWith(BuildConfig.APPLICATION_ID))
+            return SourcesManager.DEVTOOLS_SRC;
+        else
+            return SourcesManager.APP_SRC;
     }
 }

@@ -58,7 +58,7 @@ public class CrashDetailScreen extends OverlayScreen {
 
     @Override
     public int getBodyLayoutId() {
-        return R.layout.tool_error_detail_body;
+        return R.layout.tool_crash_detail_body;
     }
 
     @Override

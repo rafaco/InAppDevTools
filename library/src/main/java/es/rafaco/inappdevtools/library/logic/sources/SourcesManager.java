@@ -11,8 +11,8 @@ public class SourcesManager {
     //TODO: Make strings dynamically
     //Detect source files
     //Add flag from gradle
-    public static final String APP_SRC = "app_sources";
-    public static final String APP_RES = "app_resources";
+    public static final String APP_SRC = "sample_sources";
+    public static final String APP_RES = "sample_resources";
     public static final String DEVTOOLS_SRC = "inappdevtools_sources";
     public static final String DEVTOOLS_RES = "inappdevtools_resources";
     public static final String ASSETS = "assets";

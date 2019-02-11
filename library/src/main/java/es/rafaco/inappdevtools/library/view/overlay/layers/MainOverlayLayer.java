@@ -110,6 +110,15 @@ public class MainOverlayLayer extends OverlayLayer {
         });
     }
 
+    public final void focusOnView(final View view){
+        bodyScroll.post(new Runnable() {
+            @Override
+            public void run() {
+                bodyScroll.scrollTo(0, view.getBottom());
+            }
+        });
+    }
+
     public boolean isScrollAtBottom() {
         // Grab the last child placed in the ScrollView, we need it to determinate the bottom position.
         View lastItem = bodyScroll.getChildAt(bodyScroll.getChildCount()-1);
