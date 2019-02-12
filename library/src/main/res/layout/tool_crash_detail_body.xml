@@ -150,7 +150,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="View AutoLog"
+            android:text="Repro Steps"
             android:drawableLeft="@drawable/ic_history_white_24dp"
             android:backgroundTint="@color/rally_green"
             android:textColor="@color/charcoal"/>
@@ -160,7 +160,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="View LogCat"
+            android:text="LogCat"
             android:drawableLeft="@drawable/ic_android_white_24dp"
             android:backgroundTint="@color/rally_green"
             android:textColor="@color/charcoal"/>

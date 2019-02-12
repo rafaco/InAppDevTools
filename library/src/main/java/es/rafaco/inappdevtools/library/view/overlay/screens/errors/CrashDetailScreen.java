@@ -20,9 +20,12 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoCollection;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
@@ -183,15 +186,13 @@ public class CrashDetailScreen extends OverlayScreen {
         autologButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DevTools.showMessage("Not already implemented");
-                //OverlayUIService.performNavigation(FriendlyLogScreen.class, ...);
+                OverlayUIService.performNavigation(FriendlyLogScreen.class, null);
             }
         });
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DevTools.showMessage("Not already implemented");
-                //OverlayUIService.performNavigation(LogcatScreen.class, ...);
+                OverlayUIService.performNavigation(LogScreen.class, null);
             }
         });
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
