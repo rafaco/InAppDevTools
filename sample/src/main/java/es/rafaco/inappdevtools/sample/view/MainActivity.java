@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.sample.SampleApp;
@@ -31,24 +32,33 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            throw new NullPointerException("A simulated exception from MainActivity fab button");
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                throw new NullPointerException("A simulated exception from MainActivity fab button");
+            }
         });
 
         AppCompatButton showTools = findViewById(R.id.show_tools);
-        showTools.setOnClickListener(v -> {
-            FriendlyLog.log("I", "User", "Touch", "User clicked on ShowDevTools");
-            DevTools.openTools(false);
+        showTools.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on ShowDevTools");
+                DevTools.openTools(false);
+            }
         });
 
         AppCompatButton browseDemo = findViewById(R.id.browse);
-        browseDemo.setOnClickListener(v -> {
-            FriendlyLog.log("I", "User", "Touch", "User clicked on Browse Demo");
-            Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
-            startActivity(intent);
+        browseDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FriendlyLog.log("I", "User", "Touch", "User clicked on Browse Demo");
+                Intent intent = new Intent(MainActivity.this.getApplicationContext(), ItemListActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
         });
 
         Controller controller = new Controller();

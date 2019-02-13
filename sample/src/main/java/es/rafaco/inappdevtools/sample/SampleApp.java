@@ -25,11 +25,26 @@ public class SampleApp extends Application {
 
         DevTools.addCustomRunnable(new RunnableConfig("Show message",
                 R.drawable.ic_run_white_24dp,
-                () -> DevTools.showMessage("Mostrando mensaje"),
-                () -> DevTools.showMessage("Mensaje mostrado")));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.showMessage("Mostrando mensaje");
+                    }
+                },
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.showMessage("Mensaje mostrado");
+                    }
+                }));
 
         DevTools.addCustomRunnable(new RunnableConfig("Select API...",
                 R.drawable.ic_settings_white_24dp,
-                () -> DevTools.showMessage("Not already implemented")));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.showMessage("Not already implemented");
+                    }
+                }));
     }
 }

@@ -20,7 +20,7 @@ public class RunnableViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        RunnableConfig data = (RunnableConfig) abstractData;
+        final RunnableConfig data = (RunnableConfig) abstractData;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
         if (data.getIcon()>0){
@@ -28,6 +28,11 @@ public class RunnableViewHolder extends FlexibleViewHolder {
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
         }
         button.setText(data.getTitle());
-        button.setOnClickListener(v -> data.run());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.run();
+            }
+        });
     }
 }

@@ -21,7 +21,7 @@ public class LinkViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        ThinItem data = (ThinItem) abstractData;
+        final ThinItem data = (ThinItem) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
             int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
@@ -30,6 +30,11 @@ public class LinkViewHolder extends FlexibleViewHolder {
         title.setText(data.getTitle());
 
         itemView.setClickable(true);
-        itemView.setOnClickListener(v -> data.onClick());
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.onClick();
+            }
+        });
     }
 }

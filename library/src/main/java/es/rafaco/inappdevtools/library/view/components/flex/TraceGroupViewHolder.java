@@ -40,7 +40,7 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        TraceGroupItem data = (TraceGroupItem) abstractData;
+        final TraceGroupItem data = (TraceGroupItem) abstractData;
         if (data!=null){
 
             itemView.setActivated(true);

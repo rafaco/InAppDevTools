@@ -39,7 +39,7 @@ public class DecoratedViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void bindTo(DecoratedToolInfo data) {
+    public void bindTo(final DecoratedToolInfo data) {
 
         if (TextUtils.isEmpty(data.title))
             title.setVisibility(View.GONE);

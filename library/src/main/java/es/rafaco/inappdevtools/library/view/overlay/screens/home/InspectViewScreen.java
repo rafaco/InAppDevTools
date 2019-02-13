@@ -44,27 +44,41 @@ public class InspectViewScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Select element",
                 R.drawable.ic_touch_app_white_24dp,
-                () ->  {
-                    getScreenManager().hide();
-                    PandoraBridge.select();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        InspectViewScreen.this.getScreenManager().hide();
+                        PandoraBridge.select();
+                    }
                 }));
 
         data.add(new RunnableConfig("Browse hierarchy",
-                R.drawable.ic_layers_white_24dp, () -> {
-                    getScreenManager().hide();
-                    PandoraBridge.hierarchy();
-                }));
+                R.drawable.ic_layers_white_24dp, new Runnable() {
+            @Override
+            public void run() {
+                InspectViewScreen.this.getScreenManager().hide();
+                PandoraBridge.hierarchy();
+            }
+        }));
 
         data.add(new RunnableConfig("Take Measure",
                 R.drawable.ic_format_line_spacing_white_24dp,
-                () -> {
-                    getScreenManager().hide();
-                    PandoraBridge.measure();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        InspectViewScreen.this.getScreenManager().hide();
+                        PandoraBridge.measure();
+                    }
                 }));
 
         data.add(new RunnableConfig("Show gridline",
                 R.drawable.ic_grid_on_white_24dp,
-                () ->  PandoraBridge.grid()));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        PandoraBridge.grid();
+                    }
+                }));
 
         return data;
     }

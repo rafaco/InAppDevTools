@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
@@ -113,7 +114,12 @@ public class FriendlyLogScreen extends OverlayScreen {
         dataSourceFactory.setText("");
         dataSourceFactory.setLevelString(getSelectedVerbosity());
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
-        logList.observe(ProcessLifecycleOwner.get(), adapter::submitList);
+        logList.observe(ProcessLifecycleOwner.get(), new Observer<PagedList<Friendly>>() {
+            @Override
+            public void onChanged(PagedList<Friendly> pagedList) {
+                adapter.submitList(pagedList);
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
@@ -263,7 +269,12 @@ public class FriendlyLogScreen extends OverlayScreen {
     };
 
     private void scrollToBottom() {
-        recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            }
+        });
     }
 
     //endregion

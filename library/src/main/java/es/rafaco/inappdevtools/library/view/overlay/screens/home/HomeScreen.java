@@ -54,27 +54,57 @@ public class HomeScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Run",
                 R.drawable.ic_run_white_24dp,
-                () ->  OverlayUIService.performNavigation(RunScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(RunScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Steps",
                 R.drawable.ic_history_white_24dp,
-                () ->  OverlayUIService.performNavigation(FriendlyLogScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(FriendlyLogScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Report",
                 R.drawable.ic_send_rally_24dp,
-                () ->  OverlayUIService.performNavigation(ReportScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(ReportScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Info",
                 R.drawable.ic_info_white_24dp,
-                () -> OverlayUIService.performNavigation(InfoScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(InfoScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Config",
                 R.drawable.ic_settings_white_24dp,
-                () -> DevTools.showMessage("TODO")));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.showMessage("TODO");
+                    }
+                }));
 
         data.add(new RunnableConfig("Inspect",
                 R.drawable.ic_developer_mode_white_24dp,
-                () -> OverlayUIService.performNavigation(InspectScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(InspectScreen.class);
+                    }
+                }));
 
         return data;
     }

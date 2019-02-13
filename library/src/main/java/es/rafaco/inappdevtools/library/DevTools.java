@@ -82,7 +82,12 @@ public class DevTools {
         if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
 
-        ThreadUtils.runOnBackThread(() -> getDatabase().printOverview());
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                getDatabase().printOverview();
+            }
+        });
         Log.i(DevTools.TAG, "DevTools initialized");
 
 
@@ -198,26 +203,32 @@ public class DevTools {
 
         switch (type){
             case CRASH:
-                ThreadUtils.runOnBackThread(() -> {
-                    Crash crash;
-                    if (param == null){
-                        crash = getDatabase().crashDao().getLast();
-                    }else{
-                        crash = getDatabase().crashDao().findById((long)param);
+                ThreadUtils.runOnBackThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Crash crash;
+                        if (param == null) {
+                            crash = getDatabase().crashDao().getLast();
+                        } else {
+                            crash = getDatabase().crashDao().findById((long) param);
+                        }
+                        if (crash == null) {
+                            showError("Unable to found it");
+                            return;
+                        }
+                        new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
                     }
-                    if (crash == null){
-                        showError("Unable to found it");
-                        return;
-                    }
-                    new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
                 });
                 break;
 
             case SESSION:
-                ThreadUtils.runOnBackThread(() -> {
-                    //ArrayList<Uri> files = (ArrayList<Uri>)params;
-                    //TODO: Session report
-                    new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
+                ThreadUtils.runOnBackThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //ArrayList<Uri> files = (ArrayList<Uri>)params;
+                        //TODO: Session report
+                        new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
+                    }
                 });
                 break;
         }
@@ -236,7 +247,12 @@ public class DevTools {
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
-                    () -> openTools(false), null);
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            openTools(false);
+                        }
+                    }, null);
             return;
         }
 
@@ -301,7 +317,12 @@ public class DevTools {
         if (!isCrash)
             beforeClose(); //on crash is performed by CrashHandler
 
-        ThreadUtils.runOnBackThread(() -> AppUtils.exit(), 100);
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                AppUtils.exit();
+            }
+        }, 100);
     }
 
     public static void beforeClose(){

@@ -61,16 +61,31 @@ public class SourcesScreen extends OverlayScreen {
                     "..",
                     R.string.gmd_folder,
                     R.color.rally_yellow,
-                    () -> goUp()
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            SourcesScreen.this.goUp();
+                        }
+                    }
             ));
         }
 
-        for (SourceEntry entry : filteredItems) {
+        for (final SourceEntry entry : filteredItems) {
             data.add(new ThinItem(
                     getLinkName(entry),
                     entry.isDirectory() ? R.string.gmd_folder : R.string.gmd_subdirectory_arrow_right,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
-                    entry.isDirectory() ? () -> updateFilter(entry) : () -> openSource(entry)));
+                    entry.isDirectory() ? new Runnable() {
+                        @Override
+                        public void run() {
+                            SourcesScreen.this.updateFilter(entry);
+                        }
+                    } : new Runnable() {
+                        @Override
+                        public void run() {
+                            SourcesScreen.this.openSource(entry);
+                        }
+                    }));
         }
 
         return data;

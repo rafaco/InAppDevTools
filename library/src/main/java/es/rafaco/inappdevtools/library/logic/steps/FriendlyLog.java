@@ -309,6 +309,11 @@ public class FriendlyLog {
         }
 
         logAtLogcat(log);
-        ThreadUtils.runOnBackThread(() -> DevTools.getDatabase().friendlyDao().update(log));
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                DevTools.getDatabase().friendlyDao().update(log);
+            }
+        });
     }
 }

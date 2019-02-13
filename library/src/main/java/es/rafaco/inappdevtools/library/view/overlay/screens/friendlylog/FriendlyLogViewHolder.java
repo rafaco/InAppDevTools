@@ -55,7 +55,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         extra_button = view.findViewById(R.id.extra_button);
     }
 
-    public void bindTo(Friendly data, boolean isSelected) {
+    public void bindTo(final Friendly data, boolean isSelected) {
         uid = data.getUid();
 
         int bgColorId = isSelected ? R.color.rally_bg_blur : R.color.rally_bg_solid;
@@ -95,7 +95,12 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
                 String.format("%s [%s] %s-%s", DateUtils.format(data.getDate()), data.getSeverity(), data.getCategory(), data.getType()));
 
         if(isSelected && getLink(data)!=null){
-            extra_button.setOnClickListener(v -> OverlayUIService.performNavigationStep(getLink(data)));
+            extra_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OverlayUIService.performNavigationStep(FriendlyLogViewHolder.this.getLink(data));
+                }
+            });
             extra_button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
             extra_button.setVisibility(View.VISIBLE);
         }else{

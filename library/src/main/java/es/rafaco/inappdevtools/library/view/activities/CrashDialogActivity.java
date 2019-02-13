@@ -29,9 +29,12 @@ public class CrashDialogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ThreadUtils.runOnBackThread(() -> {
-            crash = DevTools.getDatabase().crashDao().getLast();
-            buildDialog(crash);
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                crash = DevTools.getDatabase().crashDao().getLast();
+                CrashDialogActivity.this.buildDialog(crash);
+            }
         });
     }
 

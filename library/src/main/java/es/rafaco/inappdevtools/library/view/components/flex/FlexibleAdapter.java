@@ -60,7 +60,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        GridLayoutManager manager = new GridLayoutManager(getContext(), spanCount, RecyclerView.VERTICAL, false);
+        final GridLayoutManager manager = new GridLayoutManager(getContext(), spanCount, RecyclerView.VERTICAL, false);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -121,7 +121,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         return items.size();
     }
 
-    public void replaceItems(List<Object> data){
+    public void replaceItems(final List<Object> data){
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {

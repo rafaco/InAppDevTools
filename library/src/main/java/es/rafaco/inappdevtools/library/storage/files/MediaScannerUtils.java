@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.util.Log;
 import java.io.File;
 
@@ -19,6 +20,11 @@ public class MediaScannerUtils {
                 DevTools.getAppContext(),
                 paths,
                 null,
-                (path, uri) -> Log.i("ExternalStorage", "Scanned " + path + " -> uri=" + uri));
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + " -> uri=" + uri);
+                    }
+                });
     }
 }

@@ -80,7 +80,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
             messageView.setVisibility(TextUtils.isEmpty(data.getMessage()) ? View.GONE : View.VISIBLE);
             messageView.setText(data.getMessage());
 
-            Sourcetrace traces = data.getSourcetrace();
+            final Sourcetrace traces = data.getSourcetrace();
             whereView.setText(traces.getShortClassName() + "." + traces.getMethodName() + "()");
             where2View.setText(traces.getPackageName());
             where2View.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
@@ -98,10 +98,15 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 UiUtils.setCardViewClickable(itemView.getContext(), cardView, true);
-                cardView.setOnClickListener(v -> OverlayUIService.performNavigation(SourceDetailScreen.class,
-                        SourceDetailScreen.buildParams(extractOrigin(traces),
-                                extractPath(traces),
-                                traces.getLineNumber())));
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OverlayUIService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams(TraceViewHolder.this.extractOrigin(traces),
+                                        TraceViewHolder.this.extractPath(traces),
+                                        traces.getLineNumber()));
+                    }
+                });
                 itemView.setClickable(false);
                 navIcon.setVisibility(View.VISIBLE);
             }else{

@@ -3,6 +3,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
@@ -23,16 +24,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    buildToolsVersion '28.0.3'
-
 
     //Error: commons-logging defines classes that conflict with classes now provided by Android.
     lintOptions {
         abortOnError false
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_7
     }
 }
 
@@ -52,7 +52,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$androidx_2_version"
     implementation "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$androidx_2_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
     implementation "androidx.paging:paging-runtime:$androidx_2_version"
 
     implementation 'com.google.android.material:material:1.1.0-alpha02'

@@ -74,15 +74,30 @@ public class RunScreen extends OverlayScreen {
         data.add("DevTools");
         data.add(new RunnableConfig( "Take Screen",
                 R.drawable.ic_add_a_photo_rally_24dp,
-                () -> DevTools.takeScreenshot()));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.takeScreenshot();
+                    }
+                }));
 
         data.add(new RunnableConfig("Breakpoint",
                 R.drawable.ic_pan_tool_white_24dp,
-                () -> DevTools.breakpoint(RunScreen.this)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.breakpoint(RunScreen.this);
+                    }
+                }));
 
         data.add(new RunnableConfig("Simulate...",
                 R.drawable.ic_input_white_24dp,
-                () -> onSimulateButton()));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        RunScreen.this.onSimulateButton();
+                    }
+                }));
     }
 
 
@@ -90,23 +105,39 @@ public class RunScreen extends OverlayScreen {
         data.add("Android");
         data.add(new RunnableConfig("App Info",
                 R.drawable.ic_info_white_24dp,
-                () -> {
-                    OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
-                    AppUtils.openAppSettings(getContext());
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
+                        AppUtils.openAppSettings(RunScreen.this.getContext());
+                    }
                 }));
         data.add(new RunnableConfig("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
-                () -> {
-                    OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
-                    AppUtils.openDeveloperOptions(getContext());
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
+                        AppUtils.openDeveloperOptions(RunScreen.this.getContext());
+                    }
                 }));
 
         data.add(new RunnableConfig("Force close",
                 R.drawable.ic_close_white_24dp,
-                () -> DevTools.forceCloseApp(false)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.forceCloseApp(false);
+                    }
+                }));
         data.add(new RunnableConfig("Restart app",
                 R.drawable.ic_replay_white_24dp,
-                () -> DevTools.restartApp(false)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.restartApp(false);
+                    }
+                }));
     }
 
     private void onSimulateButton() {
@@ -142,11 +173,14 @@ public class RunScreen extends OverlayScreen {
 
     public void onAnrButton() {
         Log.i(DevTools.TAG, "ANR requested, sleeping main thread for a while...");
-        ThreadUtils.runOnUiThread(() -> {
-            try {
-                Thread.sleep(10 * 1000);
-            } catch (InterruptedException e) {
-                Log.e(DevTools.TAG, "Something wrong happen", e);
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10 * 1000);
+                } catch (InterruptedException e) {
+                    Log.e(DevTools.TAG, "Something wrong happen", e);
+                }
             }
         });
     }
@@ -154,16 +188,22 @@ public class RunScreen extends OverlayScreen {
     public void onCrashUiButton() {
         Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnUiThread(() -> {
-            throw new SimulatedException("Simulated crash on the UI thread", cause);
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                throw new SimulatedException("Simulated crash on the UI thread", cause);
+            }
         });
     }
 
     public void onCrashBackButton() {
         Log.i(DevTools.TAG, "Simulated crash on a background thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnBackThread(() -> {
-            throw new SimulatedException("Simulated crash on a background thread", cause);
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                throw new SimulatedException("Simulated crash on a background thread", cause);
+            }
         });
     }
 

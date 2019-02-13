@@ -50,35 +50,68 @@ public class InspectScreen extends OverlayScreen {
 
         data.add(new RunnableConfig("Sources",
                 R.drawable.ic_code_white_24dp,
-                () -> OverlayUIService.performNavigation(SourcesScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(SourcesScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("View",
                 R.drawable.ic_layers_white_24dp,
-                () ->  OverlayUIService.performNavigation(InspectViewScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(InspectViewScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Storage",
                 R.drawable.ic_storage_white_24dp,
-                () ->  {
-                    //OverlayUIService.performNavigation(StorageScreen.class);
-                    getScreenManager().hide();
-                    PandoraBridge.storage();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        //OverlayUIService.performNavigation(StorageScreen.class);
+                        InspectScreen.this.getScreenManager().hide();
+                        PandoraBridge.storage();
+                    }
                 }));
 
         data.add(new RunnableConfig("Logcat",
                 R.drawable.ic_android_white_24dp,
-                () ->  OverlayUIService.performNavigation(LogScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(LogScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
-                () -> OverlayUIService.performNavigation(NetworkScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(NetworkScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Screens",
                 R.drawable.ic_photo_library_white_24dp,
-                () -> OverlayUIService.performNavigation(ScreensScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(ScreensScreen.class);
+                    }
+                }));
 
         data.add(new RunnableConfig("Errors",
                 R.drawable.ic_bug_report_rally_24dp,
-                () -> OverlayUIService.performNavigation(ErrorsScreen.class)));
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.performNavigation(ErrorsScreen.class);
+                    }
+                }));
 
         return data;
     }

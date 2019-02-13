@@ -60,22 +60,23 @@ public class FriendlyLogAdapter
     }
 
     public void setClickListener(){
-        setClickListener((itemView, position, id) -> {
-            if (selectedItemId == -1) {
-                selectedItemId = id;
-                selectedItemPosition = position;
+        setClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View itemView, int position, long id) {
+                if (selectedItemId == -1) {
+                    selectedItemId = id;
+                    selectedItemPosition = position;
+                } else if (id == selectedItemId) {
+                    selectedItemId = -1;
+                    selectedItemPosition = -1;
+                } else if (selectedItemId != -1) {
+                    int previousPosition = selectedItemPosition;
+                    selectedItemId = id;
+                    selectedItemPosition = position;
+                    FriendlyLogAdapter.this.notifyItemChanged(previousPosition);
+                }
+                FriendlyLogAdapter.this.notifyItemChanged(position);
             }
-            else if (id == selectedItemId){
-                selectedItemId = -1;
-                selectedItemPosition = -1;
-            }
-            else if (selectedItemId != -1){
-                int previousPosition = selectedItemPosition;
-                selectedItemId = id;
-                selectedItemPosition = position;
-                notifyItemChanged(previousPosition);
-            }
-            notifyItemChanged(position);
         });
     }
 
