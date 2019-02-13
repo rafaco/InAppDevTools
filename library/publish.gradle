@@ -1,7 +1,7 @@
 ext {
     publishedGroupId = 'es.rafaco.inappdevtools'    // GroupId
     artifact = 'inappdevtools'                      // ArtifactId
-    libraryVersion = '0.0.37'                       // VersionId
+    //libraryVersion = '0.0.37'                       // Relocated to module script
 
     bintrayRepo = "InAppDevTools"
     bintrayName = "inappdevtools"
@@ -22,14 +22,14 @@ ext {
 }
 
 
+//Publish to bintray
 if (project.rootProject.file('local.properties').exists()) {
     //TODO: add to references
     // Scripts from https://github.com/wajahatkarim3/JCenter-Gradle-Scripts
     //apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
     //apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
     //
-    // Copied locally to solve offline issues
-    // Last change from Oct 14, 2018
+    // Copied locally to solve offline issues (Last change from Oct 14, 2018)
     apply from: '../gradle/bintray/install.gradle'
     apply from: '../gradle/bintray/bintray.gradle'
 
