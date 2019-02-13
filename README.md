@@ -35,21 +35,15 @@
 ### Limitations <a name="req"/>
 Current version have some limitations. Check that your project meet the following requirements:
 - minSdkVersion >= 16
-- Support for Java 8 is enabled
 - Android Support libraries has been migrated to androidX
 
-All of them are tipically declared on your root module's build.gradle file. A valid example could look like:
+All of them are typically declared on your root module's build.gradle file. A valid example could look like:
 ```gradle
 apply plugin: 'com.android.application'
 
 android {
     defaultConfig {
         minSdkVersion 16
-    }
-
-    compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
     }
 }
 
@@ -154,7 +148,7 @@ We use overlays to show information over your app instead of activities
   - Select verbosity, filter results or search by keywords
   - Powered ups with links to sources, crash details, screenshots....
 - Inspect View
-  - Navigate thru the layout hierarchy and edit his properties
+  - Navigate through the layout hierarchy and edit his properties
   - Select an element directly on your view to view his properties
   - Show a grid to check alignments
   - Get distances between elements on the screen just by touching them
@@ -181,7 +175,7 @@ A sample app is available in this repo. It allows to play with our library prein
 ## Downloads  <a name="download"/>
 Our sample app will be available to download from [Google Play](https://play.google.com).
 
-You dont normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project. 
+You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
 
 - Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
 - Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
