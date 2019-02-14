@@ -297,6 +297,8 @@ public class DevTools {
     }
 
     public static List<RunnableConfig> getCustomRunnables(){
+        if (customRunnables == null)
+            customRunnables = new ArrayList<>();
         return customRunnables;
     }
 
