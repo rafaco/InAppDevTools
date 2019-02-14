@@ -33,31 +33,18 @@
 ## Installation <a name="setup"/>
 
 ### Limitations <a name="req"/>
-Current version have some limitations. Check that your project meet the following requirements:
-- minSdkVersion >= 16
-- Android Support libraries has been migrated to androidX
+Current version have some limitations that would be removed soon. Your Android project must have:
+- Application minSdkVersion >= 16
+- Support libraries migrated to androidX
 
-All of them are typically declared on your root module's build.gradle file. A valid example could look like:
-```gradle
-apply plugin: 'com.android.application'
-
-android {
-    defaultConfig {
-        minSdkVersion 16
-    }
-}
-
-dependencies {
-    implementation 'androidx...'
-}
-```
+Check them at the build.gradle file of your root module.
 
 ### Basic set-up <a name="basic"/>
-To start using our library, you only need to modify 2 gradle files and rebuild your app. Let's do it!
+You only need to modify 2 gradle files and rebuild your app.
 
-- Step 1: On your root module's build.gradle file, after buidscript:
-  - Declare our plugin
-  - Add JitPack repository (TEMP)
+- Step 1: On the build.gradle file of your root module folder:
+  - Declare our plugin (just after buidscript)
+  - Add JitPack repository (TEMP, transitive dependency)
 ```gradle
 buildscript {...}
 
@@ -72,7 +59,7 @@ allprojects {
 }
 ```
 
-- Step 2: On your app module's build.gradle:
+- Step 2: On the build.gradle file of your app module folder:
   - Apply our gradle plugin
   - Add our library to dependencies
 ```gradle
@@ -82,7 +69,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 android {...}
 
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.37'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.38'
 }
 ```
 

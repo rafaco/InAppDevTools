@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
 
 ext {
-    libraryVersion = '0.0.37'
+    libraryVersion = '0.0.38'
 }
 
 android {
@@ -65,18 +65,17 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
 
-    implementation 'com.opencsv:opencsv:4.2'
-    implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     implementation 'com.readystatesoftware.chuck:library:1.1.0'
-    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
     implementation 'com.github.whataa:pandora:v1.2.2' //no-op available
     implementation 'com.github.kbiakov:CodeView-android:1.3.1'
+    implementation 'com.github.alorma:timelineview:2.3.0'
+    implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
+    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
+    implementation 'com.opencsv:opencsv:4.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-
-    implementation 'com.github.alorma:timelineview:2.3.0'
 }
 
 //TODO: improvement needed

@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 45
-        versionName "0.1.34"
+        versionName "0.0.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,7 +17,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -47,7 +46,7 @@ dependencies {
 // Import our plugin from repository (jCenter or localMaven). Standard usage.
 apply plugin: 'es.rafaco.inappdevtools'
 
-// Import our plugin from local subproject, for development.
+// Import our plugin from local module, for development.
 //apply from: '../plugin/inappdevtools.gradle'
 
 inappdevtools {
