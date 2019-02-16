@@ -3,9 +3,10 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
+
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

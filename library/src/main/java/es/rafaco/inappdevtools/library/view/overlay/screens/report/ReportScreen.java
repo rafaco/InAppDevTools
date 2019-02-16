@@ -2,12 +2,12 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.report;
 
 import android.content.DialogInterface;
 
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;

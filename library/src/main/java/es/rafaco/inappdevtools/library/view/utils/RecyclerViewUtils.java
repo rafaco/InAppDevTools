@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import java.util.List;
 

@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.core.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 

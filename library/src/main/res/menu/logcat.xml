@@ -13,14 +13,14 @@
         android:title="Filter"
         android:icon="@drawable/ic_filter_list_white_24dp"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
         android:id="@+id/action_search"
         android:title="Search"
         android:icon="@drawable/ic_search_rally_24dp"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 
 
 

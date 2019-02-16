@@ -72,7 +72,7 @@
             android:layout_marginBottom="5dp"
             style="@style/TextCondensedMedium" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/flexible1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -93,7 +93,7 @@
             android:layout_marginBottom="5dp"
             style="@style/TextCondensedMedium" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/flexible2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -145,7 +145,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/autolog_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
             android:backgroundTint="@color/rally_green"
             android:textColor="@color/charcoal"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/logcat_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/reveal_details_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.watcher.WatcherManager;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;

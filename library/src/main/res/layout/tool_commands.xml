@@ -20,7 +20,7 @@
             android:layout_marginTop="0dp"
             android:layout_marginBottom="0dp">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/config_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -29,7 +29,7 @@
                 android:text="Select API"
                 android:drawableLeft="@drawable/ic_settings_white_24dp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/run_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -38,7 +38,7 @@
                 android:text="Take Screen"
                 android:drawableLeft="@drawable/ic_add_a_photo_rally_24dp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/inspect_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -57,7 +57,7 @@
             style="@style/content_margin"
             android:layout_marginTop="0dp">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/network_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -66,7 +66,7 @@
                 android:text="Simulate Traffic"
                 android:drawableLeft="@drawable/ic_cloud_queue_white_24dp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/anr_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -75,7 +75,7 @@
                 android:text="Simulate Anr"
                 android:drawableLeft="@drawable/ic_block_white_24dp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/crash_button"
                 android:layout_width="0dp"
                 android:layout_weight="1"

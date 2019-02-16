@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-import androidx.sqlite.db.SupportSQLiteDatabase;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.database.Cursor;
 import android.util.Log;
 

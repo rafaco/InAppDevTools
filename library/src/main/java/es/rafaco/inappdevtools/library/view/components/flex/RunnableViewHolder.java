@@ -2,8 +2,8 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.R;

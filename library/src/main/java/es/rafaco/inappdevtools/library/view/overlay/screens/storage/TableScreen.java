@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.storage;
 
-
-import androidx.recyclerview.widget.GridLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;

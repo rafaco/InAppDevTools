@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.alorma.timeline.TimelineView;
 
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;

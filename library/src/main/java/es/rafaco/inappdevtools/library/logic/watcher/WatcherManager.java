@@ -4,7 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.GestureDetector;
 
-import androidx.lifecycle.ProcessLifecycleOwner;
+import android.arch.lifecycle.ProcessLifecycleOwner;
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.DevToolsConfig;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;

@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;

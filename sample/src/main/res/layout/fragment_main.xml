@@ -52,14 +52,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/show_documentation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Read more"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/show_tools"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/crash_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/browse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

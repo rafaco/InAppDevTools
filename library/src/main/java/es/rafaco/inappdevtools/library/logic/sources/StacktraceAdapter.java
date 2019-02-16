@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import io.github.kbiakov.codeview.adapters.AbstractCodeAdapter;

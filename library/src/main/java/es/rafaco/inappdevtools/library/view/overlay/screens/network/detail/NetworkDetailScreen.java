@@ -2,8 +2,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.network.detail;
 
 import android.content.ContentUris;
 import android.database.Cursor;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
+
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 

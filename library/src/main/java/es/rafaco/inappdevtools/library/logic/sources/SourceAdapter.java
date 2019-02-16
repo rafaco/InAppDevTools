@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-import androidx.core.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;

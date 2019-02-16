@@ -16,7 +16,7 @@
             android:textSize="24dp"
             style="@style/content_margin"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/test_icon2"
             android:layout_width="match_parent"
             android:textSize="24dp"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             style="@style/content_margin"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/report_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

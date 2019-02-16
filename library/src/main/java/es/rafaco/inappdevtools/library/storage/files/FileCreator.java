@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.DevTools;
 
 public class FileCreator {

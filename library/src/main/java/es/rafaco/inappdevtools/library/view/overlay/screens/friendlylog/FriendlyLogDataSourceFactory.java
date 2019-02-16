@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.util.Log;
 
-import androidx.paging.DataSource;
+import android.arch.paging.DataSource;
 
 import java.util.Arrays;
 import java.util.List;

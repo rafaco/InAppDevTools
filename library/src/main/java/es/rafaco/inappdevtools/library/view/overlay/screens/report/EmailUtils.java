@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import androidx.core.content.FileProvider;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 
 import java.io.File;

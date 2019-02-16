@@ -22,7 +22,7 @@ package nevet.me.wcviewpager; /**
  * THE SOFTWARE.
  */
 
-import androidx.viewpager.widget.PagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 

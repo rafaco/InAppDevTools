@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;

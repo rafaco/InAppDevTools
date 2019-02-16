@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             style="@style/content_margin"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -39,7 +39,7 @@
             android:orientation="horizontal"
             style="@style/content_margin">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/traffic_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:text="Create traffic"
                 android:backgroundTint="@color/rally_purple"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/traffic_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

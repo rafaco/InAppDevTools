@@ -16,7 +16,7 @@
         android:orientation="vertical"
         style="@style/elevated">
 
-            <androidx.appcompat.widget.Toolbar
+            <android.support.v7.widget.Toolbar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -32,9 +32,9 @@
                 app:contentInsetRight="0dp"
                 app:contentInsetEnd="0dp"
                 style="@style/elevated" >
-            </androidx.appcompat.widget.Toolbar>
+            </android.support.v7.widget.Toolbar>
 
-            <androidx.appcompat.widget.Toolbar
+            <android.support.v7.widget.Toolbar
                 android:id="@+id/tool_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -43,7 +43,7 @@
                 app:popupTheme="@style/popupMenuStyle"
                 app:collapseIcon="@drawable/ic_close_rally_24dp"
                 style="@style/elevated" >
-            </androidx.appcompat.widget.Toolbar>
+            </android.support.v7.widget.Toolbar>
 
             <LinearLayout
                 android:id="@+id/full_container"
@@ -63,7 +63,7 @@
             </LinearLayout>
 
 
-            <androidx.core.widget.NestedScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -75,7 +75,7 @@
                     android:orientation="vertical">
                 </FrameLayout>
 
-            </androidx.core.widget.NestedScrollView>
+            </android.support.v4.widget.NestedScrollView>
 
             <FrameLayout
                 android:id="@+id/tool_body_container2"

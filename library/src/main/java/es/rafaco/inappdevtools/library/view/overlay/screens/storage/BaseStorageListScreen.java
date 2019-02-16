@@ -1,8 +1,8 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.storage;
 
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;

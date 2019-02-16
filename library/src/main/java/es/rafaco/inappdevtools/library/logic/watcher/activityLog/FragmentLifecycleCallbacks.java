@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;

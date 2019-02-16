@@ -1,8 +1,8 @@
 package es.rafaco.inappdevtools.library.logic.watcher.activityLog;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
