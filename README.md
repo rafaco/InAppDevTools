@@ -33,11 +33,9 @@
 ## Installation <a name="setup"/>
 
 ### Limitations <a name="req"/>
-Current version have some limitations that would be removed soon. Your Android project must have:
-- Application minSdkVersion >= 16
-- Support libraries migrated to androidX
+Current version need a minSdkVersion greater or equal 16 (Jelly Bean). Check it at the build.gradle file of your root module.
 
-Check them at the build.gradle file of your root module.
+If your project use AndroidX you should have Jetifier enabled at your gradle.properties.
 
 ### Basic set-up <a name="basic"/>
 You only need to modify 2 gradle files and rebuild your app.
@@ -49,7 +47,7 @@ You only need to modify 2 gradle files and rebuild your app.
 buildscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.04" apply false
+    id "es.rafaco.inappdevtools" version "0.0.05" apply false
 }
 
 allprojects {
