@@ -28,21 +28,21 @@ public class AppBuildConfig {
         return null;
     }
 
-    public static boolean getBooleanValue(Context context, String fieldName) {
+    public static Boolean getBooleanValue(Context context, String fieldName) {
         Object o = getObjectValue(context, fieldName);
         if (o != null && o instanceof Boolean) {
             return (Boolean) o;
         } else {
-            return false;
+            return null;
         }
     }
 
-    public static int getIntValue(Context context, String fieldName) {
+    public static Integer getIntValue(Context context, String fieldName) {
         Object o = getObjectValue(context, fieldName);
         if (o != null && o instanceof Integer) {
             return (Integer) o;
         } else {
-            return Integer.MIN_VALUE;
+            return null;
         }
     }
 

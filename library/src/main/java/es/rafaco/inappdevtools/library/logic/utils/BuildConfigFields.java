@@ -12,6 +12,7 @@ public class BuildConfigFields {
 
     //Custom fields
     public static final String PROJECT_NAME = "PROJECT_NAME";
+    public static final String BUILD_TIME = "BUILD_TIME";
     public static final String EXT_ENABLED = "EXT_ENABLED";
-    public static final String EXT_EMAIL = "EXT_EMAL";
+    public static final String EXT_EMAIL = "EXT_EMAIL";
 }

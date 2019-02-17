@@ -15,19 +15,43 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         def extension = project.extensions.create(TAG, InAppDevToolsExtension)
-        def startTime = Instant.now()
+        def startTime
 
         project.task('onStart',
                 description: 'First task for initializations',
                 group: TAG){
 
-            doFirst { startTime = Instant.now()}
+            doFirst { startTime = Instant.now() }
+        }
+
+        project.task('injectBuildConfig',
+                description: 'Inject custom values into BuildConfig',
+                group: TAG,
+                dependsOn: project.tasks.onStart,){
+            doFirst {
+                project.android.defaultConfig.buildConfigField "String", "PROJECT_NAME", "\"${project.name}\""
+                println "PROJECT_NAME" + " = " + "\"${project.name}\""
+
+                def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
+                project.android.defaultConfig.buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+                println "BUILD_TIME" + " = " + "\"${buildTime}\""
+
+                //def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+                //project.android.defaultConfig.buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+                //println "GIT_SHA" + " = " + "\"${gitSha}\""
+
+                project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
+                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
+
+                println "EXT_EMAIL" + " = " + "\"${extension.email}\""
+                println "EXT_ENABLED" + " = " + "${extension.enabled}"
+            }
         }
 
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
                 group: TAG,
-                dependsOn: project.tasks.onStart,
+                dependsOn: project.tasks.injectBuildConfig,
                 type: Jar){
 
             from project.android.sourceSets.main.java.srcDirs
@@ -65,21 +89,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             eachFile {println it.path}
         }
 
-        project.task('injectBuildConfig',
-                description: 'Inject custom values into BuildConfig',
-                group: TAG){
-            doLast {
-                project.android.defaultConfig.buildConfigField "String", "PROJECT_NAME", "\"${project.name}\""
-                project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
-                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
-                println "Injected BuildConfig!"
-            }
-        }
-
         project.task('run',
                 description: 'Last plugin task',
                 group: TAG,
-                dependsOn: project.tasks.injectBuildConfig ) {
+                dependsOn: project.tasks.copyToRawResources ) {
 
             doLast {
                 def duration = Duration.between(startTime, Instant.now()).toSeconds()

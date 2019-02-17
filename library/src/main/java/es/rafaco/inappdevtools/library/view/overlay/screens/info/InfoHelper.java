@@ -26,7 +26,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
+import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
@@ -78,9 +80,12 @@ public class InfoHelper extends ToolHelper {
         InfoGroup group = new InfoGroup.Builder("Host app")
                 .add("App name", getAppName())
                 .add("Package name", getPackageName())
+                //.add("ApplicationID", AppBuildConfig.getStringValue(context, "APPLICATION_ID"))
                 .add("App Version", pInfo.versionName + " (" + pInfo.versionCode + ")")
-                .add("Build type", BuildConfig.BUILD_TYPE)
-                .add("Flavor", BuildConfig.FLAVOR)
+                .add("Build time", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TIME))
+                .add("Build type", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE))
+                .add("isDebug", AppBuildConfig.getBooleanValue(context, BuildConfigFields.DEBUG))
+                .add("Flavor", AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR))
                 .add("Min SDK version", getMinSdkVersion(pInfo))
                 .add("Target SDK version", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
                 .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
@@ -92,8 +97,10 @@ public class InfoHelper extends ToolHelper {
     public InfoGroup getDevToolsInfo() {
         InfoGroup group = new InfoGroup.Builder("DevTools library")
                 .add("DevTools version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
-                .add("Status", "enabled")
-                .add("Profile", "developer")
+                .add("Build type", BuildConfig.BUILD_TYPE)
+                .add("Flavor", BuildConfig.FLAVOR)
+                .add(BuildConfigFields.EXT_ENABLED, AppBuildConfig.getBooleanValue(context, BuildConfigFields.EXT_ENABLED))
+                .add(BuildConfigFields.EXT_EMAIL, AppBuildConfig.getStringValue(context, BuildConfigFields.EXT_EMAIL))
                 .build();
         return group;
     }
