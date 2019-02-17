@@ -43,12 +43,14 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 //project.android.defaultConfig.buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
                 //println "GIT_SHA" + " = " + "\"${gitSha}\""
 
-                project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
-                println "EXT_EMAIL" + " = " + "\"${extension.email}\""
-                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
-                println "EXT_ENABLED" + " = " + "${extension.enabled}"
-                project.android.defaultConfig.buildConfigField "boolean", "EXT_DEBUG", "${extension.debug}"
-                println "EXT_DEBUG" + " = " + "${extension.debug}"
+                if (project.plugins.findPlugin('com.android.application')){
+                    project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
+                    println "EXT_EMAIL" + " = " + "\"${extension.email}\""
+                    project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
+                    println "EXT_ENABLED" + " = " + "${extension.enabled}"
+                    project.android.defaultConfig.buildConfigField "boolean", "EXT_DEBUG", "${extension.debug}"
+                    println "EXT_DEBUG" + " = " + "${extension.debug}"
+                }
             }
         }
 
@@ -58,13 +60,22 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 dependsOn: project.tasks.injectBuildConfig,
                 type: Jar){
 
+            def outputName = "${project.name}_sources.jar"
             from project.android.sourceSets.main.java.srcDirs
             from ("${project.buildDir}/generated/"){
                 excludes = ["**/res/pngs/**"]
             }
-            archiveName = "${project.name}_sources.jar"
+            archiveName = outputName
             includeEmptyDirs = false
-            //if (extension.debug){ eachFile { println it.path } }
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (extension.debug){  println it.path }
+            }
+            doLast{
+                println "Packed ${counter} files into ${outputName}"
+            }
         }
 
         project.task('packResources',
@@ -73,11 +84,20 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 dependsOn: project.tasks.onStart,
                 type: Zip){
 
+            def outputName = "${project.name}_resources.zip"
             from 'src/main/res'
             excludes = ["raw/**"]
-            archiveName = "${project.name}_resources.zip"
+            archiveName = outputName
             includeEmptyDirs = false
-            //if (extension.debug){ eachFile { println it.path } }
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (extension.debug){  println it.path }
+            }
+            doLast{
+                println "Packed ${counter} files into ${outputName}"
+            }
         }
 
         project.task('copyToRawResources',
@@ -86,11 +106,20 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
 
+            def outputName = 'src/main/res/raw'
             def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
             def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
             from project.files([path1, path2])
-            into 'src/main/res/raw'
-            //if (extension.debug){ eachFile { println it.path } }
+            into outputName
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (extension.debug){  println it.path }
+            }
+            doLast{
+                println "Copied ${counter} files into ${outputName}"
+            }
         }
 
         project.task('run',
@@ -101,7 +130,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             doLast {
                 def duration = Duration.between(startTime, Instant.now()).toSeconds()
                 println "   InAppDevTools plugin for ${project.name} took " + duration + " seconds"
-                println "   Config: enabled=${extension.enabled}, email=${extension.email}"
             }
         }
 
