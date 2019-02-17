@@ -14,7 +14,7 @@ buildscript {
 
 plugins {
     // Declare our plugin (make it available at subprojects)
-    id "es.rafaco.inappdevtools" version "0.0.05" apply false
+    id "es.rafaco.inappdevtools" version "0.0.06" apply false
 }
 
 allprojects {

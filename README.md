@@ -47,7 +47,7 @@ You only need to modify 2 gradle files and rebuild your app.
 buildscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.05" apply false
+    id "es.rafaco.inappdevtools" version "0.0.06" apply false
 }
 
 allprojects {
@@ -84,13 +84,22 @@ Retrofit retrofit = new Retrofit.Builder()
 
 ### Invocation <a name="invocation"/>
 ### Configuration <a name="configuration"/>
-//TODO: You can configure our library behaviour via our gradle plugin. On your app module's build.gradle:
+You can configure our library behaviour using our gradle extension on your app module's build.gradle.
 ```gradle
 inappdevtools {
     enabled = true
     email = 'yourmail@yourdomain.com'
 }
 ```
+
+Available properties:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | boolean | true | Disable all if set false |
+| `debug` | boolean | false | Additional logs from our library and our plugin  |
+| `email` | String | null | Default email to use for reports |
+
 
 ## Features <a name="features"/>
 
