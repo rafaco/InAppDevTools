@@ -6,16 +6,15 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
+import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
+
 public class SourcesManager {
 
-    //TODO: Make strings dynamically
-    //Detect source files
-    //Add flag from gradle
-    public static final String APP_SRC = "sample_sources";
-    public static final String APP_RES = "sample_resources";
-    public static final String DEVTOOLS_SRC = "inappdevtools_sources";
-    public static final String DEVTOOLS_RES = "inappdevtools_resources";
     public static final String ASSETS = "assets";
+    private static final String SRC_TAIL = "_sources";
+    private static final String RES_TAIL = "_resources";
 
     Context context;
     private List<SourceOrigin> origins;
@@ -27,13 +26,14 @@ public class SourcesManager {
 
     protected void init() {        
         origins = new ArrayList<>();
-        populateJarOrigin(APP_SRC);
-        populateZipOrigin(APP_RES);
-        populateJarOrigin(DEVTOOLS_SRC);
-        populateZipOrigin(DEVTOOLS_RES);
+        populateJarOrigin(getAppSrcOrigin());
+        populateZipOrigin(getAppName() + RES_TAIL);
+        populateJarOrigin(getLibrarySrcOrigin());
+        populateZipOrigin(getLibraryName() + RES_TAIL);
         populateAssetOrigin(ASSETS);
-    }
 
+        //TODO: Allow to add Sources from another modules (plugin work)
+    }
 
     private void populateAssetOrigin(String originName) {
         AssetSourcesReader reader = new AssetSourcesReader(context);
@@ -121,5 +121,22 @@ public class SourcesManager {
 
     public String getContent(String originName, String entryName){
         return getOrigin(originName).getContent(entryName);
+    }
+
+
+    private String getAppName(){
+        return AppBuildConfig.getStringValue(context, BuildConfigFields.PROJECT_NAME);
+    }
+
+    private String getLibraryName(){
+        return context.getString(R.string.library_name);
+    }
+
+    public String getLibrarySrcOrigin() {
+        return getLibraryName() + SRC_TAIL;
+    }
+
+    public String getAppSrcOrigin() {
+        return getAppName() + SRC_TAIL;
     }
 }

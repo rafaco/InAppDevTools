@@ -12,6 +12,7 @@ import com.alorma.timeline.TimelineView;
 import android.support.v7.widget.CardView;
 import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.BuildConfig;
+import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
@@ -135,8 +136,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
     public String extractOrigin(Sourcetrace stacktrace){
         //TODO: should be detected on Source Details or SourcesManager
         if (stacktrace.getClassName().startsWith(BuildConfig.APPLICATION_ID))
-            return SourcesManager.DEVTOOLS_SRC;
+            return DevTools.getSourcesManager().getLibrarySrcOrigin();
         else
-            return SourcesManager.APP_SRC;
+            return DevTools.getSourcesManager().getAppSrcOrigin();
     }
 }

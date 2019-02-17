@@ -36,7 +36,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/lib_name"
+        android:text="@string/library_name"
         android:textSize="20dp"
         android:textColor="@color/rally_blue_med"
         android:textStyle="bold" />

@@ -11,22 +11,22 @@ import java.time.Instant
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
-    final INAPPDEVTOOLS = 'inappdevtools'
+    final TAG = 'inappdevtools'
 
     void apply(Project project) {
-        def extension = project.extensions.create(INAPPDEVTOOLS, InAppDevToolsExtension)
-        def startTime
+        def extension = project.extensions.create(TAG, InAppDevToolsExtension)
+        def startTime = Instant.now()
 
         project.task('onStart',
                 description: 'First task for initializations',
-                group: INAPPDEVTOOLS){
+                group: TAG){
 
             doFirst { startTime = Instant.now()}
         }
 
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
-                group: INAPPDEVTOOLS,
+                group: TAG,
                 dependsOn: project.tasks.onStart,
                 type: Jar){
 
@@ -41,7 +41,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('packResources',
                 description: 'Generate a Zip file with the resources',
-                group: INAPPDEVTOOLS,
+                group: TAG,
                 dependsOn: project.tasks.onStart,
                 type: Zip){
 
@@ -54,7 +54,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('copyToRawResources',
                 description: 'Copy the generated files into raw resources folder',
-                group: INAPPDEVTOOLS,
+                group: TAG,
                 dependsOn: [ project.tasks.packSources, project.tasks.packResources],
                 type: Copy) {
 
@@ -65,10 +65,21 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             eachFile {println it.path}
         }
 
+        project.task('injectBuildConfig',
+                description: 'Inject custom values into BuildConfig',
+                group: TAG){
+            doLast {
+                project.android.defaultConfig.buildConfigField "String", "PROJECT_NAME", "\"${project.name}\""
+                project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
+                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
+                println "Injected BuildConfig!"
+            }
+        }
+
         project.task('run',
                 description: 'Last plugin task',
-                group: INAPPDEVTOOLS,
-                dependsOn: project.tasks.copyToRawResources ) {
+                group: TAG,
+                dependsOn: project.tasks.injectBuildConfig ) {
 
             doLast {
                 def duration = Duration.between(startTime, Instant.now()).toSeconds()
