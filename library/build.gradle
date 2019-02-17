@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
 
 ext {
-    libraryVersion = '0.0.38'
+    libraryVersion = '0.0.39'
 }
 
 android {

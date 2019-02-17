@@ -67,7 +67,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 android {...}
 
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.38'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.39'
 }
 ```
 
