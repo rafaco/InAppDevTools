@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // Import our library from repository (jCenter or localMaven). Standard usage.
-    //implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.31'
+    //implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.39'
 
     // Import our library from local subproject, for development.
     implementation project(path: ':inappdevtools')
@@ -55,5 +55,5 @@ apply plugin: 'es.rafaco.inappdevtools'
 inappdevtools {
     enabled = true
     debug = false
-    email = 'rafaco@gmail.com'
+    email = 'inappdevtools@gmail.com'
 }
