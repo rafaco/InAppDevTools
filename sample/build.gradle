@@ -54,5 +54,6 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
+    debug = true
     email = 'rafaco@gmail.com'
 }

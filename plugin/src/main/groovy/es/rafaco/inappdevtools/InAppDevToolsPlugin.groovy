@@ -15,7 +15,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         def extension = project.extensions.create(TAG, InAppDevToolsExtension)
+        //def debug = ${extension.debug}
+        //println "debug initial: " + debug
         def startTime
+
 
         project.task('onStart',
                 description: 'First task for initializations',
@@ -41,10 +44,11 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 //println "GIT_SHA" + " = " + "\"${gitSha}\""
 
                 project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
-                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
-
                 println "EXT_EMAIL" + " = " + "\"${extension.email}\""
+                project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
                 println "EXT_ENABLED" + " = " + "${extension.enabled}"
+                project.android.defaultConfig.buildConfigField "boolean", "EXT_DEBUG", "${extension.debug}"
+                println "EXT_DEBUG" + " = " + "${extension.debug}"
             }
         }
 
@@ -59,8 +63,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 excludes = ["**/res/pngs/**"]
             }
             archiveName = "${project.name}_sources.jar"
-            eachFile { println it.path }
             includeEmptyDirs = false
+            //if (extension.debug){ eachFile { println it.path } }
         }
 
         project.task('packResources',
@@ -72,8 +76,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             from 'src/main/res'
             excludes = ["raw/**"]
             archiveName = "${project.name}_resources.zip"
-            eachFile { println it.path }
             includeEmptyDirs = false
+            //if (extension.debug){ eachFile { println it.path } }
         }
 
         project.task('copyToRawResources',
@@ -86,7 +90,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
             from project.files([path1, path2])
             into 'src/main/res/raw'
-            eachFile {println it.path}
+            //if (extension.debug){ eachFile { println it.path } }
         }
 
         project.task('run',
