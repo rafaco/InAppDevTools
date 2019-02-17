@@ -129,7 +129,7 @@ public class SourcesManager {
     }
 
     private String getLibraryName(){
-        return context.getString(R.string.library_name);
+        return context.getString(R.string.library_name).toLowerCase();
     }
 
     public String getLibrarySrcOrigin() {
