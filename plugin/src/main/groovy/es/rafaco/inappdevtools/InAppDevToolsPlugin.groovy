@@ -29,8 +29,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.task('injectBuildConfig',
                 description: 'Inject custom values into BuildConfig',
-                group: TAG,
-                dependsOn: project.tasks.onStart,){
+                group: TAG){
             doFirst {
                 project.android.defaultConfig.buildConfigField "String", "PROJECT_NAME", "\"${project.name}\""
                 println "PROJECT_NAME" + " = " + "\"${project.name}\""
@@ -57,7 +56,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
                 group: TAG,
-                dependsOn: project.tasks.injectBuildConfig,
+                dependsOn: project.tasks.onStart,
                 type: Jar){
 
             def outputName = "${project.name}_sources.jar"
@@ -135,8 +134,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                println theTask.name
+                println "InAppDevTools: Added task run before " + theTask.name
                 theTask.dependsOn project.tasks.run
+            }
+
+            if (theTask.name.contains("generate") & theTask.name.contains("BuildConfig")) {
+                println "InAppDevTools: Added task injectBuildConfig before " + theTask.name
+                theTask.dependsOn project.tasks.injectBuildConfig
             }
         }
 
