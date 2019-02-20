@@ -9,23 +9,39 @@ import org.gradle.api.tasks.bundling.Zip
 import java.time.Duration
 import java.time.Instant
 
+import groovy.json.JsonOutput
+
 class InAppDevToolsPlugin implements Plugin<Project> {
 
     final TAG = 'inappdevtools'
 
     void apply(Project project) {
-        def extension = project.extensions.create(TAG, InAppDevToolsExtension)
-        //def debug = ${extension.debug}
-        //println "debug initial: " + debug
         def startTime
 
+        def extension = project.extensions.create(TAG, InAppDevToolsExtension)
 
-        project.task('onStart',
-                description: 'First task for initializations',
-                group: TAG){
+        def outputPath = "${project.buildDir}/generated/assets/inappdevtools"
+        def outputFolder = project.file(outputPath)
+        outputFolder.parentFile.mkdirs()
+        project.android.sourceSets.main.assets.srcDirs += "${project.buildDir}/generated/assets"
 
-            doFirst { startTime = Instant.now() }
-        }
+        project.afterEvaluate({
+            Map configMap = [
+                    BUILD_TIME:  new Date().getTime(),
+                    BUILD_TIME_UTC:  new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
+                    EXT_EMAIL : extension.email,
+                    EXT_ENABLED : extension.enabled,
+                    EXT_DEBUG : extension.debug
+            ]
+
+            File file = getFile(project, "${outputPath}/config.json")
+            def extensionJson = JsonOutput.toJson(configMap)
+            file.write extensionJson
+            if (extension.debug){
+                println "Extension values stored: " + file.getPath()
+                println JsonOutput.prettyPrint(extensionJson)
+            }
+        })
 
         project.task('injectBuildConfig',
                 description: 'Inject custom values into BuildConfig',
@@ -53,6 +69,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
         }
 
+        project.task('onStart',
+                description: 'First task for initializations',
+                group: TAG){
+
+            doFirst { startTime = Instant.now() }
+        }
+
         project.task('packSources',
                 description: 'Generate a Jar file with all java sources, including generated ones',
                 group: TAG,
@@ -62,8 +85,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def outputName = "${project.name}_sources.jar"
             from project.android.sourceSets.main.java.srcDirs
             from ("${project.buildDir}/generated/"){
-                excludes = ["**/res/pngs/**"]
+                excludes = ["assets/**", "**/res/pngs/**"]
             }
+            destinationDir outputFolder
             archiveName = outputName
             includeEmptyDirs = false
 
@@ -86,6 +110,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def outputName = "${project.name}_resources.zip"
             from 'src/main/res'
             excludes = ["raw/**"]
+            destinationDir outputFolder
             archiveName = outputName
             includeEmptyDirs = false
 
@@ -148,5 +173,11 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             delete "src/main/res/raw/${project.name}_sources.jar"
             delete "src/main/res/raw/${project.name}_resources.zip"
         }
+    }
+
+    private File getFile(Project project, String path) {
+        def file = project.file(path)
+        file.parentFile.mkdirs()
+        file
     }
 }
