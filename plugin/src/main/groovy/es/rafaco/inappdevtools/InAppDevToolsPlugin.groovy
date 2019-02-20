@@ -34,40 +34,21 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     EXT_DEBUG : extension.debug
             ]
 
-            File file = getFile(project, "${outputPath}/config.json")
-            def extensionJson = JsonOutput.toJson(configMap)
+            //def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+            //project.android.defaultConfig.buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+            //println "GIT_SHA" + " = " + "\"${gitSha}\""
+
+            File file = getFile(project, "${outputPath}/compile_config.json")
+            String extensionJson
+            if (!extension.debug) {
+                extensionJson = JsonOutput.toJson(configMap)
+            }else{
+                extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(configMap))
+                println "CompileConfig: " + file.getPath()
+                println extensionJson
+            }
             file.write extensionJson
-            if (extension.debug){
-                println "Extension values stored: " + file.getPath()
-                println JsonOutput.prettyPrint(extensionJson)
-            }
         })
-
-        project.task('injectBuildConfig',
-                description: 'Inject custom values into BuildConfig',
-                group: TAG){
-            doFirst {
-                project.android.defaultConfig.buildConfigField "String", "PROJECT_NAME", "\"${project.name}\""
-                println "PROJECT_NAME" + " = " + "\"${project.name}\""
-
-                def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
-                project.android.defaultConfig.buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
-                println "BUILD_TIME" + " = " + "\"${buildTime}\""
-
-                //def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-                //project.android.defaultConfig.buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-                //println "GIT_SHA" + " = " + "\"${gitSha}\""
-
-                if (project.plugins.findPlugin('com.android.application')){
-                    project.android.defaultConfig.buildConfigField "String", "EXT_EMAIL", "\"${extension.email}\""
-                    println "EXT_EMAIL" + " = " + "\"${extension.email}\""
-                    project.android.defaultConfig.buildConfigField "boolean", "EXT_ENABLED", "${extension.enabled}"
-                    println "EXT_ENABLED" + " = " + "${extension.enabled}"
-                    project.android.defaultConfig.buildConfigField "boolean", "EXT_DEBUG", "${extension.debug}"
-                    println "EXT_DEBUG" + " = " + "${extension.debug}"
-                }
-            }
-        }
 
         project.task('onStart',
                 description: 'First task for initializations',
@@ -161,11 +142,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
                 println "InAppDevTools: Added task run before " + theTask.name
                 theTask.dependsOn project.tasks.run
-            }
-
-            if (theTask.name.contains("generate") & theTask.name.contains("BuildConfig")) {
-                println "InAppDevTools: Added task injectBuildConfig before " + theTask.name
-                theTask.dependsOn project.tasks.injectBuildConfig
             }
         }
 

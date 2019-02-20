@@ -29,6 +29,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
+import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
@@ -77,12 +79,14 @@ public class InfoHelper extends ToolHelper {
     public InfoGroup getAppInfo() {
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        CompileConfig buildConfig = new CompileConfig(context);
         InfoGroup group = new InfoGroup.Builder("Host app")
                 .add("App name", getAppName())
                 .add("Package name", getPackageName())
                 //.add("ApplicationID", AppBuildConfig.getStringValue(context, "APPLICATION_ID"))
                 .add("App Version", pInfo.versionName + " (" + pInfo.versionCode + ")")
-                .add("Build time", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TIME))
+                .add("Build time", buildConfig.getString(CompileConfigFields.BUILD_TIME))
+                .add("Build time", buildConfig.getString(CompileConfigFields.BUILD_TIME_UTC))
                 .add("Build type", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE))
                 .add("isDebug", AppBuildConfig.getBooleanValue(context, BuildConfigFields.DEBUG))
                 .add("Flavor", AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR))
@@ -95,12 +99,13 @@ public class InfoHelper extends ToolHelper {
     }
 
     public InfoGroup getDevToolsInfo() {
+        CompileConfig buildConfig = new CompileConfig(context);
         InfoGroup group = new InfoGroup.Builder("DevTools library")
                 .add("DevTools version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
-                .add(BuildConfigFields.EXT_ENABLED, AppBuildConfig.getBooleanValue(context, BuildConfigFields.EXT_ENABLED))
-                .add(BuildConfigFields.EXT_EMAIL, AppBuildConfig.getStringValue(context, BuildConfigFields.EXT_EMAIL))
+                .add(CompileConfigFields.EXT_ENABLED, buildConfig.getString(CompileConfigFields.EXT_ENABLED))
+                .add(CompileConfigFields.EXT_EMAIL, buildConfig.getString(CompileConfigFields.EXT_EMAIL))
                 .build();
         return group;
     }

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
-import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
+import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
 
 public class SourcesManager {
 
@@ -125,7 +125,7 @@ public class SourcesManager {
 
 
     private String getAppName(){
-        return AppBuildConfig.getStringValue(context, BuildConfigFields.PROJECT_NAME);
+        return new CompileConfig(context).getString(CompileConfigFields.PROJECT_NAME);
     }
 
     private String getLibraryName(){

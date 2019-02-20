@@ -1,7 +1,7 @@
 package es.rafaco.inappdevtools
 
 class InAppDevToolsExtension {
-    boolean enabled
-    boolean debug
-    String email
+    boolean enabled = true
+    boolean debug = false
+    String email = null
 }
