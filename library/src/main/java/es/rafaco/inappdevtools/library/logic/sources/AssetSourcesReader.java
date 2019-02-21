@@ -7,18 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 
-public class AssetSourcesReader {
-
-    private final Context context;
+public class AssetSourcesReader extends SourcesReader{
 
     public AssetSourcesReader(Context context) {
-        this.context = context;
+        super(context);
     }
 
+    @Override
+    public ZipFile getFile(String target) {
+        return null;
+    }
 
-    public List<SourceEntry> populateItems(String origin) {
+    @Override
+    public List<SourceEntry> getSourceEntries(String origin, ZipFile localZip) {
         AssetManager aMan = context.getApplicationContext().getAssets();
 
         List<String> categories = new ArrayList<>();

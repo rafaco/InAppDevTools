@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.logic.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +43,8 @@ public class CompileConfig {
             try {
                 json = new JSONObject(getFileContents());
             } catch (JSONException e) {
-                FriendlyLog.log("E", "DevTools", "CompileConfig","Invalid data at '" + ASSETS_PATH + "'");
+                FriendlyLog.log("E", "DevTools", "CompileConfig",
+                        "Invalid data at '" + ASSETS_PATH + "'", Log.getStackTraceString(e));
             }
         }
     }
@@ -63,7 +65,8 @@ public class CompileConfig {
             in.close();
 
         } catch (IOException e) {
-            FriendlyLog.log("E", "DevTools", "Config","Unable to read '" + ASSETS_PATH + "'");
+            FriendlyLog.log("E", "DevTools", "Config",
+                    "Unable to read '" + ASSETS_PATH + "'", Log.getStackTraceString(e));
         }
 
         return builder.toString();
