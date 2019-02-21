@@ -115,4 +115,14 @@ public class Sourcetrace {
         if(getClassName() == null) return null;
         return getClassName().substring(getClassName().lastIndexOf(".")+1);
     }
+
+    public String extractPath() {
+        String name = getFileName().substring(0, getFileName().indexOf("."));
+        int pathEnd = getClassName().indexOf(name) + name.length();
+        String path = getClassName().substring(0, pathEnd);
+        path = path.replace(".", "/");
+
+        //TODO: only works wth java and rename kotlin!!!!
+        return path + ".java";
+    }
 }

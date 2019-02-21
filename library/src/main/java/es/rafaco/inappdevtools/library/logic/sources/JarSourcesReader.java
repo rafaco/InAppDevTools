@@ -54,8 +54,8 @@ public class JarSourcesReader extends SourcesReader {
         return false;
     }
 
-    public List<String> getNamespaces(ZipFile localZip) {
-        List<String> namespaces = new ArrayList<>();
+    public List<String> getFirstFolders(ZipFile localZip) {
+        List<String> firstFolders = new ArrayList<>();
 
         String firstFolder = null;
         Enumeration<? extends ZipEntry> enumeration = localZip.entries();
@@ -68,11 +68,11 @@ public class JarSourcesReader extends SourcesReader {
                 }
             }else{
                 if (firstFolder!=null){
-                    namespaces.add(firstFolder);
+                    firstFolders.add(firstFolder);
                     firstFolder = null;
                 }
             }
         }
-        return namespaces;
+        return firstFolders;
     }
 }

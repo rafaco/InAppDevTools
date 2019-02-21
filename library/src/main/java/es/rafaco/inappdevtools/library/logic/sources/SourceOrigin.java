@@ -6,7 +6,7 @@ import java.util.zip.ZipFile;
 
 public class SourceOrigin {
     public String name;
-    public List<String> namespaces;
+    public List<String> firstFolders;
     public ZipFile localZip;
     public List<SourceEntry> items;
 

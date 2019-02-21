@@ -1,6 +1,8 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,12 +11,7 @@ import android.widget.TextView;
 
 import com.alorma.timeline.TimelineView;
 
-import android.support.v7.widget.CardView;
-import android.support.v4.content.ContextCompat;
-import es.rafaco.inappdevtools.library.BuildConfig;
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
@@ -103,8 +100,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
                     @Override
                     public void onClick(View v) {
                         OverlayUIService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(TraceViewHolder.this.extractOrigin(traces),
-                                        TraceViewHolder.this.extractPath(traces),
+                                SourceDetailScreen.buildParams(null,
+                                        traces.extractPath(),
                                         traces.getLineNumber()));
                     }
                 });
@@ -123,21 +120,5 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 navIcon.setVisibility(View.GONE);
             }
         }
-    }
-
-    public String extractPath(Sourcetrace stacktrace){
-        String name = stacktrace.getFileName().substring(0, stacktrace.getFileName().indexOf("."));
-        int pathEnd = stacktrace.getClassName().indexOf(name) + name.length();
-        String path = stacktrace.getClassName().substring(0, pathEnd);
-        path = path.replace(".", "/");
-        return path + ".java";
-    }
-
-    public String extractOrigin(Sourcetrace stacktrace){
-        //TODO: should be detected on Source Details or SourcesManager
-        if (stacktrace.getClassName().startsWith(BuildConfig.APPLICATION_ID))
-            return DevTools.getSourcesManager().getLibrarySrcOrigin();
-        else
-            return DevTools.getSourcesManager().getAppSrcOrigin();
     }
 }

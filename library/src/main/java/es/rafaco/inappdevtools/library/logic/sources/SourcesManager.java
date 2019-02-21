@@ -6,9 +6,7 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
+import es.rafaco.inappdevtools.library.DevTools;
 
 public class SourcesManager {
 
@@ -66,7 +64,7 @@ public class SourcesManager {
 
         newPackage.items = reader.getSourceEntries(origin, newPackage.localZip);
         if(reader instanceof JarSourcesReader){
-            newPackage.namespaces = ((JarSourcesReader)reader).getNamespaces(newPackage.localZip);
+            newPackage.firstFolders = ((JarSourcesReader)reader).getFirstFolders(newPackage.localZip);
         }
 
         origins.add(newPackage);
@@ -90,10 +88,44 @@ public class SourcesManager {
     }
 
 
+    public boolean canOpen(String path) {
+        String origin = DevTools.getSourcesManager().findOriginByClassName(path);
+        return !TextUtils.isEmpty(origin);
+    }
+    
+    public String findOriginByClassName(String namespace) {
+        String path = namespace.replace(".", "/");
+        return findOriginByPath(path);
+    }
 
+    public String findOriginByPath(String sourcePath) {
+        for (SourceOrigin entry : origins) {
+            if (entry.firstFolders != null && entry.firstFolders.size()>0){
+                for (String folder : entry.firstFolders) {
+                    if(sourcePath.contains(folder)){
+                        return entry.name;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+
+    public String getContent(String path){
+        String origin = findOriginByPath(path);
+        if (TextUtils.isEmpty(origin)){
+            return "";
+        }
+        return getOrigin(origin).getContent(path);
+    }
 
     public String getContent(String originName, String entryName){
-        return getOrigin(originName).getContent(entryName);
+        if (!TextUtils.isEmpty(originName)){
+            return getOrigin(originName).getContent(entryName);
+        }else{
+            return getContent(entryName);
+        }
     }
 
     public List<SourceEntry> getFilteredItems(SourceEntry filter){
@@ -122,27 +154,5 @@ public class SourcesManager {
             indexItems.add(entry.name);
         }
         return indexItems;
-    }
-
-
-
-
-
-
-    //TODO: REFACTOR/REMOVE
-    private String getAppName(){
-        return new CompileConfig(context).getString(CompileConfigFields.PROJECT_NAME);
-    }
-
-    private String getLibraryName(){
-        return context.getString(R.string.library_name).toLowerCase();
-    }
-
-    public String getLibrarySrcOrigin() {
-        return getLibraryName() + SRC_TAIL;
-    }
-
-    public String getAppSrcOrigin() {
-        return getAppName() + SRC_TAIL;
     }
 }

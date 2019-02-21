@@ -1,5 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
+import android.text.TextUtils;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
+import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -108,8 +111,8 @@ public class TraceGrouper {
         }
 
         item.setTag( (classifier!=null) ? classifier : "Other");
-        item.setOpenable(canOpen(item));
         item.setColor(getColor(item));
+        item.setOpenable(DevTools.getSourcesManager().canOpen(item.getSourcetrace().extractPath()));
     }
 
     @NotNull
@@ -119,16 +122,11 @@ public class TraceGrouper {
 
         matcher.put(BuildConfig.APPLICATION_ID, "InAppDevTools"); //Our library
         matcher.put(helper.getPackageName(), "Your App"); //Host app
-        matcher.put("androidx.", "AndroidX library");
-        matcher.put("com.android.support", "Android Support library");
+        matcher.put("androidx.", "AndroidX");
+        matcher.put("com.android.support", "Android Support");
         matcher.put("com.android", "Android");
         matcher.put("android.", "Android");
         matcher.put("java.", "Java");
-    }
-
-    private boolean canOpen(TraceItem item) {
-        return item.getTag().equals("Your App") ||
-                item.getTag().equals("InAppDevTools");
     }
 
     private int getColor(TraceItem item) {
