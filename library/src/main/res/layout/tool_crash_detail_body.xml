@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_padding">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/detail_when"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/rally_orange"
+                style="@style/TextCondensedBig" />
+
+            <TextView
+                android:id="@+id/detail_last_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_when"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_foreground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_last_activity"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_thread"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_foreground"
+                style="@style/TextCondensedMedium" />
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                tools:ignore="NewApi" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/rally_orange"
+            style="@style/TextCondensedBig" />
+
+        <TextView
+            android:id="@+id/detail_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            style="@style/TextCondensedMedium" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/flexible1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/detail_title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/rally_orange"
+            android:layout_marginTop="10dp"
+            style="@style/TextCondensedBig" />
+
+        <TextView
+            android:id="@+id/detail_subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            style="@style/TextCondensedMedium" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/flexible2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_orange"
+                android:text="Stacktrace:"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap highlighted for sources"
+                android:textAlignment="textEnd"
+                android:layout_gravity="end"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                style="@style/TextCondensedSmall" />
+
+        </RelativeLayout>-->
+
+    </LinearLayout>
+
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <io.github.kbiakov.codeview.CodeView
+            android:id="@+id/code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/autolog_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Repro Steps"
+            android:drawableLeft="@drawable/ic_history_white_24dp"
+            android:backgroundTint="@color/rally_green"
+            android:textColor="@color/charcoal"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/logcat_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="LogCat"
+            android:drawableLeft="@drawable/ic_android_white_24dp"
+            android:backgroundTint="@color/rally_green"
+            android:textColor="@color/charcoal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/reveal_details_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reveal report"
+            android:backgroundTint="@color/rally_white"
+            android:textColor="@color/rally_bg_solid"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:layout_gravity="start"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -1,0 +1,34 @@
+<resources>
+    <string name="library_name">InAppDevTools</string>
+
+    <string name="floating_widget">DevTool: Floating Widget</string>
+    <string name="create_floating_widget">Create Floating Widget</string>
+    <string name="floating_widget_label">DevTool</string>
+    <string name="floating_widget_details">Just login by now</string>
+    <string name="draw_other_app_permission_denied">Draw over other app permission not available. App won\'t work without permission. Please try again.</string>
+
+    <string name="hard_soft_info">Hardware and Software Information</string>
+    <string name="serial">SERIAL</string>
+    <string name="model">MODEL</string>
+    <string name="id">ID</string>
+    <string name="manufacturer">MANUFACTURER</string>
+    <string name="brand">BRAND</string>
+    <string name="type">TYPE</string>
+    <string name="user">USER</string>
+    <string name="base">BASE</string>
+    <string name="incremental">INCREMENTAL</string>
+    <string name="sdk">SDK</string>
+    <string name="board">BOARD</string>
+    <string name="host">HOST</string>
+    <string name="fingerprint">FINGERPRINT</string>
+    <string name="versioncode">VERSION CODE</string>
+
+    <string name="chuck_ssl">SSL</string>
+    <string name="chuck_duration">Duration</string>
+    <string name="chuck_request_size">Request size</string>
+    <string name="chuck_request_time">Request time</string>
+    <string name="chuck_response_size">Response size</string>
+    <string name="chuck_response_time">Response time</string>
+    <string name="chuck_total_size">Total size</string>
+
+</resources>

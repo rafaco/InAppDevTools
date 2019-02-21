@@ -1,24 +1,28 @@
 
 buildscript {
-    
+
     repositories {
         google()
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
-        //classpath 'com.novoda:bintray-release:0.9'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
+plugins {
+    // Declare our plugin (make it available at subprojects)
+    id "es.rafaco.inappdevtools" version "0.0.07" apply false
+}
+
 allprojects {
+
     repositories {
+        maven { url "https://jitpack.io"}
         google()
         jcenter()
-        maven { url "https://jitpack.io"}
-        maven { url "https://dl.bintray.com/rafaco/InAppDevTools"}
     }
 }
 
@@ -27,5 +31,15 @@ task clean(type: Delete) {
 }
 
 subprojects {
+    rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
+
+    //TODO: Re-enable JavaDoc generation
     tasks.withType(Javadoc).all { enabled = false }
+}
+
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
 }

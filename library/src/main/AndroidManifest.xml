@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="es.rafaco.inappdevtools.library">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application>
+
+        <provider
+            android:authorities="${applicationId}.devtoolsinitprovider"
+            android:exported="false"
+            android:enabled="true"
+            android:name=".logic.initialization.InitializationContentProvider" />
+
+        <activity
+            android:name=".view.activities.PermissionActivity"
+            android:theme="@style/LibTheme.Dialog" />
+
+        <activity android:name=".view.activities.WelcomeDialogActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
+        <activity android:name=".view.activities.CrashDialogActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
+        <activity android:name=".view.activities.ReportDialogActivity"
+            android:theme="@style/LibTheme.Translucent"/>
+
+        <service android:name=".view.overlay.OverlayUIService" />
+
+        <service
+            android:name=".view.notifications.NotificationUIService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.devtools.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

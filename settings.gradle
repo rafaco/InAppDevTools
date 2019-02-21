@@ -1,1 +1,17 @@
-include ':app', ':inappdevtools', ':inappdevtools_noop', ':plugin'
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+enableFeaturePreview('STABLE_PUBLISHING')
+
+include ':sample', ':library', ':library-noop', ':plugin'
+
+rootProject.name = 'inappdevtools-project'
+rootProject.children.each {
+    it.name = ('plugin' == it.name ? 'inappdevtools-plugin' :
+               'library' == it.name ? 'inappdevtools' :
+               'library-noop' == it.name ? 'inappdevtools-noop' :
+               it.name)
+}

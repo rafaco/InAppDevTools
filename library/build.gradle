@@ -1,0 +1,87 @@
+apply plugin: 'com.android.library'
+apply plugin: 'es.rafaco.inappdevtools'
+
+ext {
+    libraryVersion = '0.0.40'
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName libraryVersion
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //Error: commons-logging defines classes that conflict with classes now provided by Android.
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    def support_version = "28.0.0"
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation "com.android.support:cardview-v7:$support_version"
+    implementation "com.android.support:support-annotations:$support_version"
+    def arch_version = "1.1.1"
+    implementation "android.arch.persistence.room:runtime:$arch_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
+    implementation "android.arch.lifecycle:extensions:$arch_version"
+    implementation "android.arch.lifecycle:runtime:$arch_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    def paging_version = "1.0.0"
+    implementation "android.arch.paging:runtime:$paging_version"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+
+    implementation 'com.readystatesoftware.chuck:library:1.1.0'
+    implementation 'com.github.whataa:pandora:v1.2.2' //no-op available
+    implementation 'com.github.kbiakov:CodeView-android:1.3.1'
+    implementation 'com.github.alorma:timelineview:2.3.0'
+    implementation 'com.github.anrwatchdog:anrwatchdog:1.3.0'
+    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
+    implementation 'com.opencsv:opencsv:4.2'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //testImplementation "android.arch.persistence.room:testing:$arch_version"
+    //testImplementation "android.arch.core:core-testing:$arch_version"
+    // testImplementation "android.arch.paging:common:$arch_version"
+}
+
+//TODO: improvement needed
+if (project.rootProject.file('local.properties').exists()
+        && !(project.getGradle().startParameter.isOffline())) {
+    apply from: 'publish.gradle'
+}

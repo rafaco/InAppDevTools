@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="charcoal">#1A2732</color>
+    <color name="black">#000000</color>
+
+    <color name="rally_bg_new">#23272E</color>
+    <color name="rally_bg_new_alpha">#BF23272E</color>
+    <color name="rally_bg_new_darker">#26262E</color>
+    <color name="rally_bg_solid">#3C3D45</color>
+    <color name="rally_bg_blur">#23272E</color><!--#32333C-->
+    <color name="rally_bg_blur_alpha">#cc32333c</color>
+
+    <color name="rally_green">#1EB980</color>
+    <color name="rally_dark_green">#045D56</color>
+    <color name="rally_yellow">#FFCF44</color>
+    <color name="rally_orange">#FF665B</color>
+    <color name="rally_orange_alpha">#CB6D2A28</color>
+    <color name="rally_purple">#B15DFF</color>
+    <color name="rally_blue">#72DEFF</color>
+    <color name="rally_blue_med">#007BE1</color>
+    <color name="rally_blue_dark">#0050ae</color>
+    <color name="rally_blue_darker">#00297e</color>
+    <color name="rally_white">#E7E7E7</color>
+    <color name="rally_gray">#5E5F65</color>
+
+
+    <color name="chuck_colorAccent">#FF9800</color>
+    <color name="chuck_colorPrimary">#00BCD4</color>
+    <color name="chuck_colorPrimaryDark">#0097A7</color>
+    <color name="chuck_status_300">#0D47A1</color>
+    <color name="chuck_status_400">#FF9800</color>
+    <color name="chuck_status_500">#B71C1C</color>
+    <color name="chuck_status_default">#212121</color>
+    <color name="chuck_status_error">#F44336</color>
+    <color name="chuck_status_requested">#9E9E9E</color>
+
+    <color name="cv_monokai_alpha">#aa272822</color>
+    <color name="cv_default_alpha">#aaE9EDF4</color>
+</resources>

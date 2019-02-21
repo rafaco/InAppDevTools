@@ -1,11 +1,10 @@
-# In-App DevTools [![Maturity](https://img.shields.io/badge/maturity-experimental-blue.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits) [![Download from Bintray](https://api.bintray.com/packages/rafaco/InAppDevTools/inappdevtools/images/download.svg) ](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+# In-App DevTools [![CircleCI](https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=svg)](https://circleci.com/gh/rafaco/InAppDevTools/tree/master) [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=flat)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=flat)](https://github.com/rafaco/InAppDevTools/commits)
 
-
-**Android library with a set of tools for developers. It allow to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
+**Android library with a set of tools for developers. It allows to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
-- Auto generate a FriendlyLog with reproduction steps and advanced entries(lifecycle events, network requests, errors, device events,...
-- See a crash detail inmediately and navigate to causing source lines
+- Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
+- See a crash detail immediately and navigate to causing source lines
 - Send flexible reports by email or other apps
 - Customize your own tools, easily run your task and use our dev helpers.
 - Easy to install and configurable
@@ -13,55 +12,101 @@
 
 ##### Table of Contents
 
-- [Usage](#usage)  
-- [Features](#features)  
+- [Installation](#setup)
+  - [Limitations](#req)
+  - [Basic setup](#basic)
+  - [Add network interceptor](#network)
+- [Usage](#usage)
+  - [Invocation](#invocation)
+  - [Configuration](#configuration)
+- [Features](#features)
   - [Overlay system](#overlay)  
   - [Friendly logger](#friendly)
   - [Crash handler](#crash)
   - [Inspectors](#inspector)
-  - [Report](#report)
-- [Configuration](#configuration) 
+  - [Reports](#reports)
 - [Customization](#customization) 
 
 
-## Usage <a name="usage"/>
 
-Basic setup only requiere you to modify gradle files for your project.
+## Installation <a name="setup"/>
 
-- Step 1: Add my bintray repository to allprojects repositories at your project's build.gradle. Temporary, it will be not needed when migrated to jCenter
+### Limitations <a name="req"/>
+Current version need a minSdkVersion greater or equal 16 (Jelly Bean). Check it at the build.gradle file of your root module.
+
+If your project use AndroidX you should have Jetifier enabled at your gradle.properties.
+
+### Basic set-up <a name="basic"/>
+You only need to modify 2 gradle files and rebuild your app.
+
+- Step 1: On the build.gradle file of your root module folder:
+  - Declare our plugin (just after buidscript)
+  - Add JitPack repository (TEMP, transitive dependency)
 ```gradle
+buildscript {...}
+
+plugins {
+    id "es.rafaco.inappdevtools" version "0.0.07" apply false
+}
+
 allprojects {
     repositories {
-        //...
-        maven { url "https://dl.bintray.com/rafaco/InAppDevTools"}
+        maven { url "https://jitpack.io"}
     }
 }
 ```
 
-- Step 2: Add our library as dependency and apply our plugin at your app module's build.gradle)
+- Step 2: On the build.gradle file of your app module folder:
+  - Apply our gradle plugin
+  - Add our library to dependencies
 ```gradle
 apply plugin: 'com.android.application'
+apply plugin: 'es.rafaco.inappdevtools'
+
+android {...}
 
 dependencies {
-    //...
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.31'
-}
-
-apply from: 'https://raw.githubusercontent.com/rafaco/InAppDevTools/master/plugin/inappdevtools.gradle'
-inappdevtools {
-    enabled = true
-    email = 'rafaco@gmail.com'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.40'
 }
 ```
-//TODO Config
+
+### Add network interceptor <a name="network"/>
+If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class:
+```java
+Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(DevTools.getOkHttpClient())
+                .build();
+```
+
+## Usage <a name="usage"/>
+
+### Invocation <a name="invocation"/>
+### Configuration <a name="configuration"/>
+You can configure our library behaviour using our gradle extension on your app module's build.gradle.
+```gradle
+inappdevtools {
+    enabled = true
+    email = 'yourmail@yourdomain.com'
+}
+```
+
+Available properties:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | boolean | true | Disable all if set false |
+| `debug` | boolean | false | Additional logs from our library and our plugin  |
+| `email` | String | null | Default email to use for reports |
+
 
 ## Features <a name="features"/>
 
 ### Overlay system <a name="overlay"/>
-We use overlays to show informations over your app instead of activities
+We use overlays to show information over your app instead of activities
 - Adjust any of our views over your app while you still using it
 - Non intrusive with your views their focus or your activity stack
-- Few invocation methods availables: Notification, floating icon, shake or from your sources (see integrations)
+- Few invocation methods available: Notification, floating icon, shake or from your sources (see integrations)
 
 ### Friendly Log <a name="friendly"/>
 - User interactions:
@@ -96,7 +141,7 @@ We use overlays to show informations over your app instead of activities
   - Select verbosity, filter results or search by keywords
   - Powered ups with links to sources, crash details, screenshots....
 - Inspect View
-  - Navigate thru the layout hierarchy and edit his properties
+  - Navigate through the layout hierarchy and edit his properties
   - Select an element directly on your view to view his properties
   - Show a grid to check alignments
   - Get distances between elements on the screen just by touching them
@@ -109,26 +154,34 @@ We use overlays to show informations over your app instead of activities
   - Apk compilation info
   - OS, device, hardware, memory
 
-### Reports <a name="Reports"/>
+### Reports <a name="reports"/>
 - Report bugs by email or share them with your favourite app
 - Attach logs, info, description, crashes, db dumps…
 - Take screenshots and attach them
 - //TODO
 
+## Customization <a name="customization"/>
 
-## Configuration <a name="Configuration"/>
+## Sample App <a name="sample"/>
+A sample app is available in this repo. It allows to play with our library preinstalled on an app and it's source code contain examples of installation, configuration and integrations.
 
-## Customization <a name="Customization"/>
+## Downloads  <a name="download"/>
+Our sample app will be available to download from [Google Play](https://play.google.com).
 
+You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
 
-## Sample App available
-A sample app is available in this repo. It allow you to play with Devtools preinstalled on a demo app and it's source code contain examples of installation, configuration and integrations. It will be available to download at [Google Play](https://play.google.com). 
+- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
+- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
+- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
+
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
-## Downloads
-<a href='https://bintray.com/rafaco/InAppDevTools/library?source=watch' alt='Get automatic notifications about new "library" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+## Thanks <a name="thanks"/>
+//TODO: add dependencies and used sources
 
+## License <a name="license"/>
+Apache-2.0
 
 
 <br/>
