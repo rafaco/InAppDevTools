@@ -12,6 +12,7 @@
 
 ##### Table of Contents
 
+- [Demo](#sample)
 - [Installation](#setup)
   - [Limitations](#req)
   - [Basic setup](#basic)
@@ -28,13 +29,16 @@
 - [Customization](#customization) 
 
 
+## Demo App <a name="sample"/>
+A demostration app is available to download from GooglePlay (comming soon). It's allow you to play staight away with our library installed on an app.
+
+His source code is in this repository ("sample" folder) and it's contains implementation examples. Clone the project and run the sample app module to install it into a real device or an emulator.
 
 ## Installation <a name="setup"/>
 
 ### Limitations <a name="req"/>
-Current version need a minSdkVersion greater or equal 16 (Jelly Bean). Check it at the build.gradle file of your root module.
-
-If your project use AndroidX you should have Jetifier enabled at your gradle.properties.
+- minSdkVersion >= 16 (Jelly Bean). Check it at your app/build.gradle
+- If AndroidX is enabled: Jetifier should also be enabled. Check it at your gradle.properties
 
 ### Basic set-up <a name="basic"/>
 You only need to modify 2 gradle files and rebuild your app.
@@ -179,11 +183,6 @@ We use overlays to show information over your app instead of activities
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
-
-
-## Sample App <a name="sample"/>
-A sample app is available in this repo. It allows to play with our library preinstalled on an app and it's source code contain examples of installation, configuration and integrations.
-
 ## Downloads  <a name="download"/>
 Our sample app will be available to download from [Google Play](https://play.google.com).
 
@@ -193,11 +192,22 @@ You don't normally need to manually download our library or our plugin as they a
 - Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
 - Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
 
+## Apps using this library <a name="usages"/>
+- Your app linked here! Just ask me for it
+- Our sample app
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 ## Thanks <a name="thanks"/>
-//TODO: add dependencies and used sources
+- To [whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
+- To [jgilfelt](https://github.com/jgilfelt) for [chuck](https://github.com/jgilfelt/chuck): library used for network inspector.
+- To [alorma](https://github.com/alorma) for [timelineview](https://github.com/alorma/timelineview): library used at stacktrace.
+- To [kbiakov](https://github.com/kbiakov) for [CodeView-Android](https://github.com/kbiakov/CodeView-Android): library used to view source codes.
+- To [Zsolt Kocsi](https://github.com/zsoltk) for [paperwork](https://github.com/zsoltk/paperwork): inspiration for CompileConfig.
+- To [valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast): inspiration for our CustomToast.
+- To [Wajahat Karim](https://github.com/wajahatkarim3) for [JCenter-Gradle-Scripts](https://github.com/wajahatkarim3/JCenter-Gradle-Scripts): used to publish into Bintray.
+- //TODO: add com.github.anrwatchdog:anrwatchdog?
+- //TODO: add replacement for com.opencsv:opencsvallo
 
 ## License <a name="license"/>
 Apache-2.0
