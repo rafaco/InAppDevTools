@@ -26,15 +26,15 @@ jobs:
           command: ./gradlew :inappdevtools:lint
       - store_artifacts:
           name: Save Lint report on library
-          path: /library/build/reports
-          destination: reports
+          path: library/build/reports
+          destination: library/reports
 
       - run:
           name: Run Lint report on sample
           command: ./gradlew :sample:lint
       - store_artifacts:
           name: Save Lint report on sample
-          path: /sample/build/reports
-          destination: reports
+          path: sample/build/reports
+          destination: sample/reports
 
 # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
