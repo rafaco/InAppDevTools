@@ -3,26 +3,38 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-    - image: circleci/android:api-28-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
-    - checkout
-    - restore_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
-    #      - run:
-    #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-    #         command: sudo chmod +x ./gradlew
-    - run:
-        name: Download Dependencies
-        command: ./gradlew androidDependencies
-    - save_cache:
-        paths:
-        - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
-    - run:
-        name: Run Lint report
-        command: ./gradlew lint
-    - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-        path: sample/build/reports
-        destination: reports
+      - checkout
+      - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "plugin/build.gradle" }}
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+          - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "plugin/build.gradle" }}
+
+      - run:
+          name: Run Lint report on library
+          command: ./gradlew :library:lint
+      - store_artifacts:
+          name: Save Lint report on library
+          path: library/build/reports
+          destination: reports
+
+      - run:
+          name: Run Lint report on sample
+          command: ./gradlew :sample:lint
+      - store_artifacts:
+          name: Save Lint report on sample
+          path: sample/build/reports
+          destination: reports
+
+# for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
