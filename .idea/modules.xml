@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/inappdevtools-project.iml" filepath="$PROJECT_DIR$/inappdevtools-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/inappdevtools.iml" filepath="$PROJECT_DIR$/library/inappdevtools.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library-noop/inappdevtools-noop.iml" filepath="$PROJECT_DIR$/library-noop/inappdevtools-noop.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inappdevtools-project.iml" filepath="$PROJECT_DIR$/inappdevtools-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>
   </component>

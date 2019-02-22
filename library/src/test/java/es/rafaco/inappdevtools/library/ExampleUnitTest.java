@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools;
+package es.rafaco.inappdevtools.library;
 
 import org.junit.Test;
 

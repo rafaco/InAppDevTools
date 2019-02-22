@@ -9,7 +9,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName libraryVersion
@@ -29,7 +29,7 @@ android {
         }
     }
 
-    //Error: commons-logging defines classes that conflict with classes now provided by Android.
+    //TODO: Re-enable lint abortOnError after common-logging removed.
     lintOptions {
         abortOnError false
     }
@@ -57,7 +57,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$arch_version"
     implementation "android.arch.lifecycle:runtime:$arch_version"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
-    def paging_version = "1.0.0"
+    def paging_version = "1.0.1"
     implementation "android.arch.paging:runtime:$paging_version"
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
