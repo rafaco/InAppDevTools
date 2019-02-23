@@ -1,25 +1,27 @@
+defaults: &defaults
+  docker:
+    - image: circleci/android:api-28-alpha
+  working_directory: ~/code
+  environment:
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb
+
 version: 2
 jobs:
   build:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-28-alpha
-    environment:
-      JVM_OPTS: -Xmx3200m
+    <<: *defaults
     steps:
       - checkout
+
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}-{{ checksum "library/build.gradle" }}
-      #      - run:
-      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-      #         command: sudo chmod +x ./gradlew
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "plugin/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
       - run:
           name: Run Lint report on library
@@ -37,4 +39,41 @@ jobs:
           path: sample/build/reports
           destination: sample/reports
 
-# for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+      - run: ./gradlew build
+      - run: echo "Build job called"
+
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+
+      - run: echo "Release job called"
+      #- run: ./gradlew -Prelease.useLastTag=true final
+
+
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+    - build:
+        filters:
+          tags:
+            only: /.*/
+    - release:
+        requires:
+        - build
+        filters:
+          tags:
+            only: /^v.*/
+          branches:
+            ignore: /.*/
