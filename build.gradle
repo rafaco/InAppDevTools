@@ -15,6 +15,17 @@ buildscript {
 plugins {
     // Declare our plugin (make it available at subprojects)
     id "es.rafaco.inappdevtools" version "0.0.07" apply false
+
+    id "org.sonarqube" version "2.7"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "rafaco_InAppDevTools"
+        property "sonar.organization", "rafaco-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login", System.getenv('SONAR_TOKEN')
+    }
 }
 
 allprojects {
