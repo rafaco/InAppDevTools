@@ -8,7 +8,27 @@ defaults: &defaults
 
 version: 2
 jobs:
+
   build:
+    <<: *defaults
+    steps:
+    - checkout
+
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+    - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
+    - save_cache:
+        paths:
+        - ~/.gradle
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+
+    - run: ./gradlew build
+    - run: echo "Build job called"
+
+
+  analize:
     <<: *defaults
     steps:
       - checkout
@@ -39,8 +59,8 @@ jobs:
           path: sample/build/reports
           destination: sample/reports
 
-      - run: ./gradlew build
-      - run: echo "Build job called"
+      - run: ./gradlew sonarqube
+      - run: echo "Analize job called"
 
   release:
     <<: *defaults
@@ -69,9 +89,17 @@ workflows:
         filters:
           tags:
             only: /.*/
-    - release:
+
+    - analize:
         requires:
         - build
+        filters:
+          tags:
+            only: /.*/
+
+    - release:
+        requires:
+          - analize
         filters:
           tags:
             only: /^v.*/
