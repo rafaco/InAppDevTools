@@ -117,13 +117,14 @@ public class ReportHelper extends ToolHelper{
                 Log.e(DevTools.TAG, "Exception parsing screens for report");
             }
 
+            /* TODO: Re-enable db dump
             try {
                 SupportSQLiteDatabase db = DevTools.getDatabase().getOpenHelper().getReadableDatabase();
                 String name = DevTools.getDatabase().getOpenHelper().getDatabaseName();
                 filePaths.add(SqliteExporter.export(name, db));
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         else if (type.equals(ReportType.CRASH)){
             Crash crash = (Crash) target;

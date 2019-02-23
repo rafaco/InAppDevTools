@@ -4,7 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.opencsv.CSVWriter;
+//import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -48,7 +48,9 @@ public class SqliteExporter {
         List<String> tables = getTablesOnDataBase(db);
         Log.d(TAG, "Started to fill the backup file in " + backupFile.getAbsolutePath());
         long starTime = System.currentTimeMillis();
-        writeCsv(backupFile, dbName, db, tables);
+
+        //writeCsv(backupFile, dbName, db, tables);
+
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "Creating backup took " + (endTime - starTime) + "ms.");
 
@@ -85,6 +87,7 @@ public class SqliteExporter {
         return tables;
     }
 
+    /*
     private static void writeCsv(File backupFile, String dbName, SupportSQLiteDatabase db, List<String> tables){
         CSVWriter csvWrite = null;
         Cursor curCSV = null;
@@ -125,5 +128,5 @@ public class SqliteExporter {
 
     private static void writeSingleValue(CSVWriter writer, String value){
         writer.writeNext(new String[]{value});
-    }
+    }*/
 }
