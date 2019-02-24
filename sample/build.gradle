@@ -57,3 +57,38 @@ inappdevtools {
     debug = true
     email = 'inappdevtools@gmail.com'
 }
+
+afterEvaluate(){
+    try {
+        def gitInfo = 'git describe --tags --always --dirty'.execute([], project.rootDir).text.trim()
+        println "GIT_INFO" + " = " + "\"${gitInfo}\""
+
+        def gitBranch = ('git branch'.execute([], project.rootDir).text.trim() =~ /(?m)\* (.*)$/)[0][1]
+        println "GIT_BRANCH" + " = " + "\"${gitBranch}\""
+        def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+        println "GIT_SHA" + " = " + "\"${gitSha}\""
+        def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir).text.trim()
+        println "GIT_TAG" + " = " + "\"${gitTag}\""
+
+        def gitCommit = 'git log -1'.execute([], project.rootDir).text.trim()
+        println "GIT_COMMIT" + " = " + "\"${gitCommit}\""
+        def gitCommitShort = 'git log --oneline -1'.execute([], project.rootDir).text.trim()
+        println "GIT_COMMIT_SHORT" + " = " + "\"${gitCommitShort}\""
+        def gitCommitMessage = 'git log -1 --pretty=%B'.execute([], project.rootDir).text.trim()
+        println "GIT_COMMIT_MESSAGE" + " = " + "\"${gitCommitMessage}\""
+
+        def gitStatus = 'git status --short'.execute([], project.rootDir).text.trim()
+        def gitDiff = 'git diff HEAD'.execute([], project.rootDir).text.trim()
+        def gitDirty = gitDiff != ''
+        println "GIT_DIRTY" + " = " + "\"${gitDirty}\""
+        println "GIT_STATUS" + " = " + "\"${gitStatus}\""
+        println "GIT_DIFF" + " = " + "\"${gitDiff}\""
+
+    } catch (java.io.IOException e) {
+        logger.warn ("Unable to call git command, is git in your PATH?")
+        //if (debug) { e.printStackTrace() }
+    }catch (Exception e) {
+        logger.warn ("Unable to get git info")
+        //if (debug) { e.printStackTrace() }
+    }
+}
