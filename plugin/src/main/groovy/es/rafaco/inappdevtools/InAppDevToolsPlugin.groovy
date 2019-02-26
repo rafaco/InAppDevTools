@@ -2,223 +2,113 @@ package es.rafaco.inappdevtools
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
+import org.gradle.api.Task
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.bundling.Zip
 
-import java.time.Duration
-import java.time.Instant
-
-import groovy.json.JsonOutput
-
 class InAppDevToolsPlugin implements Plugin<Project> {
 
-    final TAG = 'inappdevtools'
-    def project
-    def extension
-    def outputPath
-    def outputFolder
+    static final TAG = 'inappdevtools'
+    static final ASSETS_PATH = '/generated/assets'
+    static final OUTPUT_PATH = ASSETS_PATH + '/' + TAG
+
+    final CONFIG_TASK = 'generateConfigs'
+    final SOURCES_TASK = 'packSources'
+    final RESOURCES_TASK = 'packResources'
 
     void apply(Project project) {
-        def startTime
-        this.project = project
-        this.extension = project.extensions.create(TAG, InAppDevToolsExtension)
-        this.outputPath = "${project.buildDir}/generated/assets/inappdevtools"
-        this.outputFolder = project.file(outputPath)
+        //Init extension
+        project.extensions.create(TAG, InAppDevToolsExtension)
 
-        outputFolder.parentFile.mkdirs()
-        project.android.sourceSets.main.assets.srcDirs += "${project.buildDir}/generated/assets"
+        //Init output
+        def outputFolder = project.file(getOutputPath(project))
+        outputFolder.mkdirs()
+        project.android.sourceSets.main.assets.srcDirs += "${project.buildDir}${ASSETS_PATH}"
 
-        project.afterEvaluate({
-            def configStartTime = Instant.now()
-            generateCompileConfig(project)
-            generateGitConfig(project)
-            def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
-            println "   InAppDevToolsPlugin:generateConfigs for ${project.name} took " + duration + " seconds"
-        })
+        //Add tasks
+        project.task(CONFIG_TASK, type:GenerateConfigsTask)
+        addPackSourcesTask(project, outputFolder)
+        addPackResourcesTask(project, outputFolder)
 
-        project.task('onStart',
-                description: 'First task for initializations',
-                group: TAG){
-
-            doFirst { startTime = Instant.now() }
-        }
-
-        project.task('packSources',
-                description: 'Generate a Jar file with all java sources, including generated ones',
-                group: TAG,
-                dependsOn: project.tasks.onStart,
-                type: Jar){
-
-            def outputName = "${project.name}_sources.jar"
-            from project.android.sourceSets.main.java.srcDirs
-            from ("${project.buildDir}/generated/"){
-                excludes = ["assets/**", "**/res/pngs/**"]
-            }
-            destinationDir outputFolder
-            archiveName = outputName
-            includeEmptyDirs = false
-
-            def counter = 0
-            eachFile {
-                counter++
-                if (extension.debug){  println it.path }
-            }
-            doLast{
-                println "Packed ${counter} files into ${outputName}"
+        // Link tasks on project
+        project.tasks.whenTaskAdded { theTask ->
+            if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
+                if (isDebug(project)){ println "InAppDevTools: Added tasks before " + theTask.name }
+                theTask.dependsOn += [
+                        project.tasks.getByName(SOURCES_TASK),
+                        project.tasks.getByName(RESOURCES_TASK),
+                        project.tasks.getByName(CONFIG_TASK)]
             }
         }
 
+        //Extend current project's Clean task
+        project.tasks.clean {
+            delete getOutputPath(project)
+        }
+    }
+
+    private Task addPackResourcesTask(Project project, outputFolder) {
         project.task('packResources',
                 description: 'Generate a Zip file with the resources',
                 group: TAG,
-                dependsOn: project.tasks.onStart,
-                type: Zip){
+                type: Zip) {
 
             def outputName = "${project.name}_resources.zip"
             from 'src/main/res'
             excludes = ["raw/**"]
-            destinationDir outputFolder
+            destinationDir project.file(outputFolder)
             archiveName = outputName
             includeEmptyDirs = false
 
             def counter = 0
             eachFile {
                 counter++
-                if (extension.debug){  println it.path }
+                if (isDebug(project)) { println it.path }
             }
-            doLast{
+            doLast {
                 println "Packed ${counter} files into ${outputName}"
             }
         }
+    }
 
-        project.task('copyToRawResources',
-                description: 'Copy the generated files into raw resources folder',
+    private Task addPackSourcesTask(Project project, outputFolder) {
+        project.task('packSources',
+                description: 'Generate a Jar file with all java sources, including generated ones',
                 group: TAG,
-                dependsOn: [ project.tasks.packSources, project.tasks.packResources],
-                type: Copy) {
+                type: Jar) {
 
-            def outputName = 'src/main/res/raw'
-            def path1 = "${project.buildDir}/libs/${project.name}_sources.jar"
-            def path2 = "${project.buildDir}/distributions/${project.name}_resources.zip"
-            from project.files([path1, path2])
-            into outputName
+            def outputName = "${project.name}_sources.jar"
+            from project.android.sourceSets.main.java.srcDirs
+            from("${project.buildDir}/generated/") {
+                excludes = ["assets/**", "**/res/pngs/**"]
+            }
+            destinationDir project.file(outputFolder)
+            archiveName = outputName
+            includeEmptyDirs = false
 
             def counter = 0
             eachFile {
                 counter++
-                if (extension.debug){ println it.path }
+                if (isDebug(project)) { println it.path }
             }
-            doLast{
-                println "Copied ${counter} files into ${outputName}"
-            }
-        }
-
-        project.task('run',
-                description: 'Last plugin task',
-                group: TAG,
-                dependsOn: project.tasks.copyToRawResources ) {
-
             doLast {
-                def duration = Duration.between(startTime, Instant.now()).toSeconds()
-                println "   InAppDevTools plugin for ${project.name} took " + duration + " seconds"
+                println "Packed ${counter} files into ${outputName}"
             }
         }
-
-        project.tasks.whenTaskAdded { theTask ->
-            if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                if (extension.debug){ println "InAppDevTools: Added task run before " + theTask.name }
-                theTask.dependsOn project.tasks.run
-            }
-        }
-
-        project.tasks.clean {
-            delete outputPath
-        }
     }
 
-    private File getFile(Project project, String path) {
-        def file = project.file(path)
-        file.parentFile.mkdirs()
-        file
+    static String getOutputPath(Project project){
+        return "${project.buildDir}${OUTPUT_PATH}"
     }
 
-    private void generateCompileConfig(Project project) {
-        Map propertiesMap = [
-                BUILD_TIME:  new Date().getTime(),
-                BUILD_TIME_UTC:  new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
-                EXT_EMAIL : extension.email,
-                EXT_ENABLED : extension.enabled,
-                EXT_DEBUG : extension.debug
-        ]
-
-        File file = getFile(project, "${outputPath}/compile_config.json")
-        saveConfigMap(propertiesMap, file)
+    static InAppDevToolsExtension getExtension(Project project) {
+        project.extensions.getByName(TAG)
     }
 
-    private void generateGitConfig(Project project) {
-
-        Map propertiesMap
-        def gitDiff = shell('git diff HEAD')
-
-        if (gitDiff == null){
-            println TAG + ": " + "Unable to reach git command, check your PATH!"
-            propertiesMap = [
-                    ENABLED:  false
-            ]
-        }else{
-            propertiesMap = [
-                    ENABLED:  true,
-                    INFO: shell('git describe --tags --always --dirty'),
-                    BRANCH: (shell('git branch') =~ /(?m)\* (.*)$/)[0][1],
-                    SHA: shell('git rev-parse --short HEAD'),
-                    TAG : shell('git describe --tags --abbrev=0'),
-                    LAST_COMMIT : [
-                            ISCLEAN: gitDiff == '',
-                            MESSAGE: shell('git log -1 --pretty=%B'),
-                            SHORT: shell('git log --oneline -1'),
-                            LONG: shell('git log -1')
-                    ],
-                    LOCAL_CHANGES: [
-                            ISDIRTY: gitDiff != '',
-                            STATUS: shell('git status --short'),
-                    ]
-            ]
+    static boolean isDebug(Project project){
+        if (getExtension(project)!=null){
+            return getExtension(project).debug
         }
-
-        File file = getFile(project, "${outputPath}/git_config.json")
-        saveConfigMap(propertiesMap, file)
-
-        if (gitDiff != null && gitDiff != ''){
-            new File("${outputPath}/git.diff").text = gitDiff
-        }
-    }
-
-    private void saveConfigMap(Map map, File file) {
-        String extensionJson
-        if (!extension.debug) {
-            extensionJson = JsonOutput.toJson(map)
-        } else {
-            extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
-            println "Generated config: " + file.getPath()
-            println extensionJson
-        }
-        file.write extensionJson
-    }
-
-    private String shell(String cmd) {
-        String result = null
-        try {
-            result = cmd.execute([], project.rootDir).text.trim()
-        }
-        catch (java.io.IOException e) {
-            println TAG + "[WARNING]: " + "Unable to reach git command, check your PATH!"
-            if (extension.debug) { e.printStackTrace() }
-        }
-        catch (Exception e) {
-            println TAG + "[WARNING]: " + "Unable to get git info"
-            if (extension.debug) { e.printStackTrace() }
-        }
-        result
+        return false
     }
 }
