@@ -252,7 +252,6 @@ public class InfoHelper extends ToolHelper {
         try {
             pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
                     PackageManager.GET_ACTIVITIES |
-                    PackageManager.GET_ACTIVITIES |
                     PackageManager.GET_SERVICES |
                     PackageManager.GET_INSTRUMENTATION);
         } catch (PackageManager.NameNotFoundException e) {

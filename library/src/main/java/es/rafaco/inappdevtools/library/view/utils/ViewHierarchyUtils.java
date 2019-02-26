@@ -65,9 +65,8 @@ public class ViewHierarchyUtils {
     }
 
     private static void dumpViewHierarchyWithProperties(ViewGroup group, int level) {
-        if (!dumpViewWithProperties(group, level)) {
-            return;
-        }
+        //TODO: Is this needed? (it was a pointless bugout highlighted by sonar)
+        dumpViewWithProperties(group, level);
 
         final int count = group.getChildCount();
         for (int i = 0; i < count; i++) {

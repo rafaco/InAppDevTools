@@ -143,7 +143,7 @@ public class CrashDetailScreen extends OverlayScreen {
         String message = crash.getMessage();
         String cause = helper.getCaused(crash);
         if (cause!=null && message.contains(cause)){
-            message.replace(cause, "(...)");
+            message = message.replace(cause, "(...)");
         }
 
         title.setText(crash.getException());
