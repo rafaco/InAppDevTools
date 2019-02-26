@@ -1,3 +1,4 @@
+// Script from https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/insbintraytall.gradle
 apply plugin: 'com.jfrog.bintray'
 
 version = libraryVersion
@@ -29,13 +30,9 @@ artifacts {
     archives sourcesJar
 }
 
-// Bintray
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
 
     configurations = ['archives']
     pkg {
@@ -51,8 +48,7 @@ bintray {
             desc = libraryDescription
             gpg {
                 sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password")
-                //Optional. The passphrase for GPG signing'
+                passphrase = System.getenv('BINTRAY_GPG') //Optional. The passphrase for GPG signing'
             }
         }
     }

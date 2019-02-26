@@ -57,3 +57,14 @@ inappdevtools {
     debug = true
     email = 'inappdevtools@gmail.com'
 }
+
+println "RAFA ENV_MISTERY: " + System.getenv('ENV_MISTERY')
+println "RAFA BINTRAY_USER: " + System.getenv('BINTRAY_USER')
+
+//setx BINTRAY_USER "rafaco"
+afterEvaluate(){
+    println "RAFA ENV_MISTERY: " + System.getenv('ENV_MISTERY')
+    println "RAFA BINTRAY_USER: " + System.getenv('BINTRAY_USER')
+    println "RAFA BINTRAY_USER2: " + System.getenv('BINTRAY_USER2')
+    println "RAFA BINTRAY_USER: " + "$System.env.BINTRAY_USER"
+}
