@@ -76,6 +76,10 @@ dependencies {
     // testImplementation "android.arch.paging:common:$arch_version"
 }
 
+inappdevtools{
+    debug = true
+}
+
 //TODO: improvement needed
 if (project.rootProject.file('local.properties').exists()
         && !(project.getGradle().startParameter.isOffline())) {

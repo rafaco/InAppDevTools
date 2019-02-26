@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 
@@ -55,9 +57,7 @@ public class AssetSourcesReader extends SourcesReader{
         return false;
     }
 
-    public static String extractContent(String entry){
-
-        //TODO
-        return "commming sooooon!";
+    protected InputStream getInputStream(ZipFile zip, String entryName) throws IOException {
+        return context.getAssets().open(entryName);
     }
 }

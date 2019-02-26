@@ -36,6 +36,9 @@ public class CompileConfig {
         return json.optInt(key);
     }
 
+    public String getAll(){
+        return json.toString();
+    }
 
 
     private void init() {

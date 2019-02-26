@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourceAdapter;
@@ -59,7 +61,7 @@ public class SourceDetailScreen extends OverlayScreen {
                 super.onPostExecute(content);
                 codeHeader.setText(getParams().path);
 
-                final SourceAdapter codeAdapter = new SourceAdapter(SourceDetailScreen.this, content, "java", getParams());
+                final SourceAdapter codeAdapter = new SourceAdapter(SourceDetailScreen.this, content, getLanguage(), getParams());
                 codeViewer.post(new Runnable() {
                     @Override
                     public void run() {
@@ -68,6 +70,15 @@ public class SourceDetailScreen extends OverlayScreen {
                 });
             }
         }.execute();
+    }
+
+    @NotNull
+    private String getLanguage() {
+        if (getParams().path.contains(".")){
+            int lastFound = getParams().path.lastIndexOf(".");
+            return getParams().path.substring(lastFound + 1);
+        }
+        return "";
     }
 
     @Override

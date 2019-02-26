@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.logic.sources;
 import android.content.Context;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -25,6 +26,10 @@ public class JarSourcesReader extends SourcesReader {
             e.printStackTrace();
         }
         return jar;
+    }
+
+    protected InputStream getInputStream(ZipFile zip, String entryName) throws IOException {
+        return zip.getInputStream(zip.getEntry(entryName));
     }
 
     public List<SourceEntry> getSourceEntries(String originName, ZipFile localZip) {

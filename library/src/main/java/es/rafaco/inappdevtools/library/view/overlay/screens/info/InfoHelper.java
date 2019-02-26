@@ -189,6 +189,22 @@ public class InfoHelper extends ToolHelper {
         return group;
     }
 
+    public String getConfig() {
+        String result = "";
+        result += "Compile config";
+        result += "\n";
+        result += new CompileConfig(context).getAll();
+        result += "\n";
+        result += "\n";
+        result += "Git config";
+        result += DevTools.getSourcesManager().getContent("inappdevtools/git_config.json");
+        result += "\n";
+        result += "\n";
+        result += "Git diff";
+        result += DevTools.getSourcesManager().getContent("inappdevtools/git_diff.json");
+        return result;
+    }
+
     //endregion
 
     //region [ PROPERTY EXTRACTORS ]

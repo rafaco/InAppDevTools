@@ -67,8 +67,9 @@ public class InfoScreen extends OverlayScreen {
 
     private void initMainSelector() {
         ArrayList<String> list = new ArrayList<>();
-        list.add("Static info");
-        list.add("App Status");
+        list.add("App");
+        list.add("Status");
+        list.add("Config");
         list.add("/proc/meminfo");
         list.add("/proc/stat");
         list.add("dumpsys");
@@ -83,11 +84,14 @@ public class InfoScreen extends OverlayScreen {
                 String title = spinnerAdapter.getItem(pos);
                 Log.d(DevTools.TAG, "Info - Main selector changed to: " + title);
 
-                if (title.equals("Static info")) {
+                if (title.equals("App")) {
                     setReport(helper.getStaticInfo());
                 }
-                else if (title.equals("App Status")) {
+                else if (title.equals("Status")) {
                     setReport(helper.getAppStatus());
+                }
+                else if (title.equals("Config")) {
+                    setReport(helper.getConfig());
                 }
                 else if (title.equals("/proc/stat")) {
                     setReport(helper.getProcStat());

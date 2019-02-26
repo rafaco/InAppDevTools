@@ -2,6 +2,8 @@ package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,18 +48,31 @@ public abstract class SourcesReader {
         return f;
     }
 
-    public static String extractContent(ZipFile zip, ZipEntry entry){
-        StringBuilder codeStringBuilder = new StringBuilder();
+    public String extractContent(ZipFile zip, String entryName){
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = zip.getInputStream(entry);
+            inputStream = getInputStream(zip, entryName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Unable to read the file";
+        }
+        return readInputStream(inputStream);
+    }
+
+    protected abstract InputStream getInputStream(ZipFile zip, String entryName) throws IOException;
+
+    @NotNull
+    protected String readInputStream(InputStream inputStream) {
+        StringBuilder builder = new StringBuilder();
+        try {
             BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
             for (String line; (line = r.readLine()) != null; ) {
-                codeStringBuilder.append(line).append('\n');
+                builder.append(line).append('\n');
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return codeStringBuilder.toString();
+        return builder.toString();
     }
 }

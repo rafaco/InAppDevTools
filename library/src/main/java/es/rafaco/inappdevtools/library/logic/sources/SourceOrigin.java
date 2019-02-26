@@ -3,6 +3,8 @@ package es.rafaco.inappdevtools.library.logic.sources;
 import java.util.List;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.DevTools;
+
 
 public class SourceOrigin {
     public String name;
@@ -11,10 +13,12 @@ public class SourceOrigin {
     public List<SourceEntry> items;
 
     public String getContent(String entryName){
-        if (localZip != null){
-            return SourcesReader.extractContent(localZip, localZip.getEntry(entryName));
+        SourcesReader reader;
+        if (localZip!=null){
+            reader = new JarSourcesReader(DevTools.getAppContext());
         }else{
-            return AssetSourcesReader.extractContent(entryName);
+            reader = new AssetSourcesReader(DevTools.getAppContext());
         }
+        return reader.extractContent(localZip, entryName);
     }
 }
