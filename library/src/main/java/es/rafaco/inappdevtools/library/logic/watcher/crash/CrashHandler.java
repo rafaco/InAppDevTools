@@ -29,18 +29,14 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHe
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
-    private static final int MAX_STACK_TRACE_SIZE = 131071; //128 KB - 1
-
     private final Thread.UncaughtExceptionHandler previousHandle;
-    private Context appContext;
-    private Context baseContext;
-    private long crashId;
+    private final Context context;
+    private long currentCrashId;
     private long friendlyLogId;
     private DevToolsDatabase db;
 
-    public CrashHandler(Context appContext, Context baseContext, Thread.UncaughtExceptionHandler previousHandler) {
-        this.appContext = appContext;
-        this.baseContext = baseContext;
+    public CrashHandler(Context context, Thread.UncaughtExceptionHandler previousHandler) {
+        this.context = context;
         this.previousHandle = previousHandler;
     }
 
@@ -64,8 +60,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             saveDetailReport();
             saveStacktrace(crashId, ex);
 
-            Log.v(DevTools.TAG, "CrashHandler: process finished on " + String.valueOf(new Date().getTime() - startTime) + " ms");
-            onCrashStored( thread, ex, crash);
+            Log.v(DevTools.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
+            onCrashStored( thread, ex);
         }
         catch (Exception e) {
             Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
@@ -75,7 +71,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private void onCrashStored(Thread thread, Throwable ex, final Crash crash) {
+    private void onCrashStored(Thread thread, Throwable ex) {
         if (DevTools.getConfig().crashHandlerCallDefaultHandler){
             Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
@@ -87,7 +83,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     //TODO: Close our services before to prevent "Schedule restart"
     private void stopDevToolsServices() {
-        Context context = DevTools.getAppContext();
         Intent in = new Intent(context, OverlayUIService.class);
         context.stopService(in);
         in = new Intent(context, NotificationUIService.class);
@@ -131,10 +126,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 String.valueOf(ThreadUtils.isTheUiThread(thread))));
     }
 
+    //TODO: currentCrashId never get used, why?
     private long storeCrash(final Crash crash) {
-        crashId = db.crashDao().insert(crash);
-        FriendlyLog.logCrashDetails(friendlyLogId, crashId, crash);
-        return crashId;
+        currentCrashId = db.crashDao().insert(crash);
+        FriendlyLog.logCrashDetails(friendlyLogId, currentCrashId, crash);
+        return currentCrashId;
     }
 
     private Boolean saveScreenshot(){

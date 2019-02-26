@@ -19,6 +19,8 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class AppUtils {
 
+    private AppUtils() { throw new IllegalStateException("Utility class"); }
+
     public static void startStrictMode() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -32,16 +34,6 @@ public class AppUtils {
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-    }
-
-    public static void throwExceptionWithDelay(final String title, int delayMillis) {
-        Handler handler = new Handler();
-        final Runnable r = new Runnable() {
-            public void run() {
-                throw new RuntimeException(title);
-            }
-        };
-        handler.postDelayed(r, delayMillis);
     }
 
     public static boolean isEmulator() {

@@ -8,6 +8,9 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 public class RecyclerViewUtils {
 
+    private RecyclerViewUtils() { throw new IllegalStateException("Utility class"); }
+
+
     public static void updateEmptyState(final RecyclerView recyclerView, final View emptyView, final List<?> data) {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
@@ -20,8 +23,6 @@ public class RecyclerViewUtils {
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
                 }
-
-                //recyclerView.requestLayout();
             }
         });
     }

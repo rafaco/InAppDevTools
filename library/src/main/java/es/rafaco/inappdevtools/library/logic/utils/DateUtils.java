@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 
 public class DateUtils {
 
+    private DateUtils() { throw new IllegalStateException("Utility class"); }
+
     public static String getElapsedTimeLowered(long oldTimeMillis){
         String elapsed = getElapsedTime(oldTimeMillis);
         elapsed = Character.toLowerCase(elapsed.charAt(0)) + elapsed.substring(1);

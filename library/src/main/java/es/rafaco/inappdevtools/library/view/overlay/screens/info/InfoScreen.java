@@ -56,10 +56,12 @@ public class InfoScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
 
@@ -144,7 +146,7 @@ public class InfoScreen extends OverlayScreen {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //Nothing needed
             }
         });
         secondSpinner.setVisibility(View.VISIBLE);

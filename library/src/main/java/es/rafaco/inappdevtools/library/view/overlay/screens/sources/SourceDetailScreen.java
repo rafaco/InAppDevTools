@@ -37,6 +37,7 @@ public class SourceDetailScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -50,8 +51,7 @@ public class SourceDetailScreen extends OverlayScreen {
 
             @Override
             protected String doInBackground(String... strings) {
-                String content = DevTools.getSourcesManager().getContent(getParams().type, getParams().path);
-                return content;
+                return DevTools.getSourcesManager().getContent(getParams().type, getParams().path);
             }
 
             @Override
@@ -72,10 +72,12 @@ public class SourceDetailScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
     public static String buildParams(String type, String path, int lineNumber){

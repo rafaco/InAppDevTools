@@ -122,7 +122,6 @@ public class CrashDetailScreen extends OverlayScreen {
 
     private void initOverview() {
         when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
-        String threadString = (crash.isMainThread()) ? "the main" : "a background";
         thread.setText("Thread: " + crash.getThreadName());
         foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());
@@ -180,7 +179,6 @@ public class CrashDetailScreen extends OverlayScreen {
 
     private void initFooter() {
         InfoCollection report = helper.parseToInfoGroup(crash);
-        //report.removeGroupEntries(3);
         out.setText(report.toString());
 
         autologButton.setOnClickListener(new View.OnClickListener() {
@@ -242,11 +240,11 @@ public class CrashDetailScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
-
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
-
+        //Nothing needed
     }
 }

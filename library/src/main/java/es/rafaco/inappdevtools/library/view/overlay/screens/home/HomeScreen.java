@@ -20,9 +20,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 
 public class HomeScreen extends OverlayScreen {
 
-    private FlexibleAdapter adapter;
-    private RecyclerView recyclerView;
-
     public HomeScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
@@ -37,6 +34,7 @@ public class HomeScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -110,16 +108,18 @@ public class HomeScreen extends OverlayScreen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(3, data);
-        recyclerView = bodyView.findViewById(R.id.flexible);
+        FlexibleAdapter adapter = new FlexibleAdapter(3, data);
+        RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 }

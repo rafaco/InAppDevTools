@@ -8,9 +8,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 
 public class ReportTool extends Tool {
+
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override

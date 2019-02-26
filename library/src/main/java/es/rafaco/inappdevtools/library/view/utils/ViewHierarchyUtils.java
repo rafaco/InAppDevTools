@@ -15,6 +15,8 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class ViewHierarchyUtils {
 
+    private ViewHierarchyUtils() { throw new IllegalStateException("Utility class"); }
+
     public static void logRootViews() {
         List<Pair<String, View>> rootViews = getRootViews(true);
 
@@ -44,7 +46,7 @@ public class ViewHierarchyUtils {
                 if(print)
                     printViewHierarchy(rootView);
             }
-            if (rootViews.size()==0)
+            if (rootViews.isEmpty())
                 rootViews = null;
         } catch (Exception e) {
             e.printStackTrace();

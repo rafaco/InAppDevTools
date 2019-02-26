@@ -24,6 +24,8 @@ import es.rafaco.inappdevtools.library.R;
 
 public class UiUtils {
 
+    private UiUtils() { throw new IllegalStateException("Utility class"); }
+
     public static void setAppIconAsBackground(ImageView imageView){
         Drawable d = getAppIconDrawable();
         imageView.setImageDrawable(d);

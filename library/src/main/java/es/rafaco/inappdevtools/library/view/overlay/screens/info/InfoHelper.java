@@ -158,12 +158,11 @@ public class InfoHelper extends ToolHelper {
     }
 
     public InfoGroup getRunningInfo() {
-        InfoGroup group = new InfoGroup.Builder("Currently running")
+        return new InfoGroup.Builder("Currently running")
                 .add("Services", getRunningServices())
                 .add("Services 2", getRunningServices2())
                 .add("Tasks", getRunningTasks())
                 .build();
-        return group;
     }
 
     public InfoGroup getPackageInfoInfo() {
@@ -270,8 +269,6 @@ public class InfoHelper extends ToolHelper {
             for (PackageItemInfo info: infos) {
                 result += info.name + "\n";
             }
-            //result = result.substring(0, result.length() - 2);
-            //result += ".";
         }
         return result;
     }
@@ -401,7 +398,7 @@ public class InfoHelper extends ToolHelper {
 
     @NonNull
     public String getFormattedAppLong() {
-        return getAppName() + " "  + getPackageInfo().versionName;// + " (" + getPackageInfo().versionCode + ")";
+        return getAppName() + " "  + getPackageInfo().versionName;
     }
 
     public String capitalize(String s){

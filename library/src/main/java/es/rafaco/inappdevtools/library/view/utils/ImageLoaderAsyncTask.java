@@ -25,37 +25,29 @@ public class ImageLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
             Point screenDimensions = UiUtils.getDisplaySize(imageView.getContext());
             int sizeX = (screenDimensions.x /2) - 54;
-            Bitmap scaled = getProportionalBitmap(bitmap, sizeX, "X");
 
-            /*Log.d("RAFA", "Original size: " + bitmap.getWidth() + " x " + bitmap.getHeight());
-            Log.d("RAFA", "Screen size: " + screenDimensions.x + " x " + screenDimensions.y);
-            Log.d("RAFA", "Scaled size: " + scaled.getWidth() + " x " + scaled.getHeight());*/
-
-            /*int scaleToUse = 20; // this will be our percentage
-            int sizeY = screenResolution.y * scaleToUse / 100;
-            int sizeX = bitmap.getWidth() * sizeY / bitmap.getHeight();
-            Bitmap scaled = Bitmap.createScaledBitmap(bmp, sizeX, sizeY, false);*/
-
-            return scaled;
+            return getProportionalBitmap(bitmap, sizeX, "X");
         }
         return null;
     }
 
     public Bitmap getProportionalBitmap(Bitmap bitmap,
                                         int newDimensionXorY,
-                                        String XorY) {
+                                        String xory) {
         if (bitmap == null)
             return null;
 
         float xyRatio;
-        int newWidth, newHeight;
+        int newWidth;
+        int newHeight;
 
-        if (XorY.toLowerCase().equals("x")) {
+        if (xory.equalsIgnoreCase("x")) {
             xyRatio = (float) newDimensionXorY / bitmap.getWidth();
             newHeight = (int) (bitmap.getHeight() * xyRatio);
             bitmap = Bitmap.createScaledBitmap(
                     bitmap, newDimensionXorY, newHeight, true);
-        } else if (XorY.toLowerCase().equals("y")) {
+        }
+        else if (xory.equalsIgnoreCase("y")) {
             xyRatio = (float) newDimensionXorY / bitmap.getHeight();
             newWidth = (int) (bitmap.getWidth() * xyRatio);
             bitmap = Bitmap.createScaledBitmap(

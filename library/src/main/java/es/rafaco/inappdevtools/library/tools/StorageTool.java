@@ -12,7 +12,7 @@ public class StorageTool extends Tool {
 
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override

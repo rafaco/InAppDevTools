@@ -73,7 +73,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-
+        //Nothing needed
     }
 
 
@@ -110,6 +110,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
 
