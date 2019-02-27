@@ -69,12 +69,12 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         File file = getFile(project, "${outputPath}/git_config.json")
         saveConfigMap(propertiesMap, file)
 
+        File diffFile = new File("${outputPath}/git.diff")
         if (gitDiff != null && gitDiff != '') {
-            File diffFile = new File("${outputPath}/git.diff")
-            if (isDebug()) {
-                println "Generated config: " + diffFile.getPath()
-            }
+            if (isDebug()) {  println "Generated config: " + diffFile.getPath() }
             diffFile.text = gitDiff
+        }else{
+            if (diffFile.exists()) { diffFile.delete() }
         }
     }
 
