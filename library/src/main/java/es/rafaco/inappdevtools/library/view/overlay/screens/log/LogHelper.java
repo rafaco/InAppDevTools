@@ -64,9 +64,6 @@ public class LogHelper extends ToolHelper{
             e.printStackTrace(new PrintWriter(sw));
             String stackTraceString = sw.toString();
             Log.e(DevTools.TAG, stackTraceString);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && process.isAlive()) {
-                process.destroy();
-            }
         }
     }
 

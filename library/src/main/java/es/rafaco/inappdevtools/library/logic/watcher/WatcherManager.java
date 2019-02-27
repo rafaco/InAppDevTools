@@ -86,7 +86,7 @@ public class WatcherManager {
 
     private void startCrashHandler() {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
-        if (currentHandler != null || !currentHandler.getClass().isInstance(CrashHandler.class)) {
+        if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
             Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
             Log.d(DevTools.TAG, "Exception handler added");
         }else{
