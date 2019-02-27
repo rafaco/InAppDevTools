@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SonarQube All (:root:sonarqube)" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="SonarQube All" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -15,7 +15,6 @@
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <method />
+    <method v="2" />
   </configuration>
 </component>

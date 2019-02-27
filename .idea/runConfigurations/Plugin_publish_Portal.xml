@@ -1,21 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Plugin publish local (:plugin:publishToMavenLocal)" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Plugin publish Portal" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/plugin" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="--stacktrace --scan" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="publishToMavenLocal" />
+          <option value="publishPlugins" />
         </list>
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <method />
+    <method v="2" />
   </configuration>
 </component>

@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Plugin publish Portal (:plugin:publishPlugins)" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Lint All" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/plugin" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
@@ -10,12 +10,11 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="publishPlugins" />
+          <option value="lint" />
         </list>
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <method />
+    <method v="2" />
   </configuration>
 </component>

@@ -1,21 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Clean All (:root:clean)" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Plugin publish local w/scan" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/plugin" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="" />
+      <option name="scriptParameters" value="--stacktrace --scan" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="clean" />
+          <option value="publishToMavenLocal" />
         </list>
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <method />
+    <method v="2" />
   </configuration>
 </component>
