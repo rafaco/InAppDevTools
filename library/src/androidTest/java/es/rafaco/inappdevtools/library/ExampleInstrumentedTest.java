@@ -1,6 +1,7 @@
-package es.rafaco.inappdevtools;
+package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
+
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("es.rafaco.devtoollib", appContext.getPackageName());
+        assertEquals("es.rafaco.inappdevtools.library", BuildConfig.APPLICATION_ID);
     }
 }

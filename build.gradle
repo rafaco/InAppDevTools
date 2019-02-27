@@ -1,6 +1,5 @@
 
 buildscript {
-
     repositories {
         google()
         jcenter()
@@ -28,7 +27,6 @@ sonarqube {
 }
 
 allprojects {
-
     repositories {
         maven { url "https://jitpack.io"}
         google()
@@ -36,20 +34,27 @@ allprojects {
     }
 }
 
+
+// Clean All task
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
 subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
-
-    //TODO: Re-enable JavaDoc generation
-    tasks.withType(Javadoc).all { enabled = false }
 }
 
+
+//Enable Gradle report using param --scan
 if (hasProperty('buildScan')) {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
         termsOfServiceAgree = 'yes'
     }
+}
+
+
+//TODO: Re-enable JavaDoc generation after common-logging removed.
+subprojects {
+    tasks.withType(Javadoc).all { enabled = false }
 }
