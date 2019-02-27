@@ -67,7 +67,7 @@ public class SourceAdapter extends AbstractCodeAdapter<String> {
     @NotNull
     @Override
     public View createFooter(@NotNull Context context, String entity, boolean isFirst) {
-        return null;
+        return new View(context);
     }
 
     private void adjustMargins(ViewHolder holder) {

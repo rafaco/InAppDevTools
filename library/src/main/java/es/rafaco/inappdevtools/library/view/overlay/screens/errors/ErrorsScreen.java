@@ -73,7 +73,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-
+        //Nothing needed
     }
 
 
@@ -110,6 +110,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
 
@@ -168,9 +169,10 @@ public class ErrorsScreen extends OverlayScreen {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(10 * 1000);
+                    Thread.sleep((long)10 * 1000);
                 } catch (InterruptedException e) {
                     Log.e(DevTools.TAG, "Something wrong happen", e);
+                    Thread.currentThread().interrupt();
                 }
             }
         });

@@ -69,6 +69,7 @@ public class LogScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -170,7 +171,7 @@ public class LogScreen extends OverlayScreen {
 
     private void onSaveButton() {
         ToolHelper helper = new LogHelper();
-        String path = (String) helper.getReportPath();
+        String path = helper.getReportPath();
         DevTools.showMessage("Log stored to " + path);
     }
 
@@ -195,7 +196,6 @@ public class LogScreen extends OverlayScreen {
         adapter = new LogLineAdapter(this, new ArrayList<LogLine>(), getSelectedConfig());
 
         recyclerView = getView().findViewById(R.id.output_list);
-        //ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -210,6 +210,7 @@ public class LogScreen extends OverlayScreen {
     private void startLogReader() {
         stopLogReader();
 
+        //TODO!
         //String command = presetFilters.get(presetSpinner.getSelectedItemPosition()).second;
         //command = String.format(command, selectedLogLevel);
         String command = "logcat -v time";

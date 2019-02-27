@@ -38,6 +38,7 @@ public class SourcesScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -97,7 +98,6 @@ public class SourcesScreen extends OverlayScreen {
     }
 
     private void goUp() {
-        SourceEntry current = history.remove(history.size() - 1);
         SourceEntry previous = history.remove(history.size() - 1);
         updateFilter(previous);
     }
@@ -131,10 +131,12 @@ public class SourcesScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
     public static String buildParams(String origin, String path){

@@ -17,6 +17,8 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class AppInfoUtils {
 
+    private AppInfoUtils() { throw new IllegalStateException("Utility class"); }
+
     public static String getUUID(Context context){
         String uuid = Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         return uuid;

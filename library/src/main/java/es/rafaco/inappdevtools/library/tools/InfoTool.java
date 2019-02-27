@@ -11,7 +11,7 @@ public class InfoTool extends Tool {
 
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override

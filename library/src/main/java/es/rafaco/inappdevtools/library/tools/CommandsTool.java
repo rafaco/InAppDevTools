@@ -9,7 +9,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.commands.CommandsScr
 public class CommandsTool extends Tool {
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override
@@ -25,13 +25,12 @@ public class CommandsTool extends Tool {
     @Override
     public DecoratedToolInfo getHomeInfo() {
         NavigationStep step = new NavigationStep(CommandsScreen.class, null);
-        DecoratedToolInfo info = new DecoratedToolInfo(
+        return new DecoratedToolInfo(
                 "Run Commands",
                 "Type shell commands, run a predefined ones or configure your owns.",
                 R.color.rally_white,
                 4,
                 step);
-        return  info;
     }
 
     @Override

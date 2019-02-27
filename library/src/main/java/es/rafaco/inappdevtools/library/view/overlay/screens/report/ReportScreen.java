@@ -23,9 +23,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
@@ -53,7 +51,7 @@ public class ReportScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-
+        //Nothing needed
     }
 
     @Override
@@ -64,10 +62,12 @@ public class ReportScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
 
@@ -118,7 +118,6 @@ public class ReportScreen extends OverlayScreen {
 
     private ArrayList<DecoratedToolInfo> getReportSelectors(){
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
-        NavigationStep step = new NavigationStep(InfoScreen.class, null);
 
         array.add(new DecoratedToolInfo(
                 "Current session",
@@ -194,7 +193,7 @@ public class ReportScreen extends OverlayScreen {
                 .setMultiChoiceItems(levelsArray, null, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
+                        //TODO?
                     }
                 })
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {

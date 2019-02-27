@@ -8,6 +8,8 @@ import java.io.File;
 
 public class ImageLoader {
 
+    private ImageLoader() { throw new IllegalStateException("Utility class"); }
+
     public static void loadInto(String path, ImageView imageView ){
         File imgFile = new  File(path);
         if(imgFile.exists()){

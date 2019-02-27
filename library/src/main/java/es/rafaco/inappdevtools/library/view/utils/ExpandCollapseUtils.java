@@ -10,6 +10,9 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class ExpandCollapseUtils {
 
+    private ExpandCollapseUtils() { throw new IllegalStateException("Utility class"); }
+
+
     public static void start(final View view, final Runnable midCallback, final Runnable endCallback){
 
         final Animation.AnimationListener expandListener = new Animation.AnimationListener() {

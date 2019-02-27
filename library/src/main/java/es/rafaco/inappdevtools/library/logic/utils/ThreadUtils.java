@@ -10,6 +10,8 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class ThreadUtils {
 
+    private ThreadUtils() { throw new IllegalStateException("Utility class"); }
+
     public static void logCurrentThread(String fromText){
         String thread = (amIOnUiThread()) ? "MAIN" : "a background";
         DevTools.showMessage(fromText + " is running on " + thread + " thread");

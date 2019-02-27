@@ -88,10 +88,6 @@ public class MainOverlayLayerManager {
             return;
         }*/
 
-        if (screenClass == null){
-            return;
-        }
-
         loadScreen(screenClass, param);
 
         if (getCurrentScreen() == null)

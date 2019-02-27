@@ -40,6 +40,7 @@ public class CommandsScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -90,9 +91,11 @@ public class CommandsScreen extends OverlayScreen {
     @Override
     protected void onStop() {
         //TODO!! exe.Executer(cancel previous commmand)
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 }

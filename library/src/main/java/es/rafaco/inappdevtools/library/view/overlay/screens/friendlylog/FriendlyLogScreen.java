@@ -70,7 +70,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-
+        //Nothing needed
     }
 
     @Override
@@ -123,7 +123,6 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
-        //((LinearLayoutManager) mLayoutManager).setReverseLayout(true);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -132,12 +131,12 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
-
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
-
+        //Nothing needed
     }
 
     //region [ TOOL BAR ]

@@ -6,6 +6,8 @@ import java.lang.reflect.Field;
 
 public class AppBuildConfig {
 
+    private AppBuildConfig() { throw new IllegalStateException("Utility class"); }
+
     /**
      * Gets a field from the project's BuildConfig. This is useful when, for example, flavors
      * are used at the project level to set custom fields.

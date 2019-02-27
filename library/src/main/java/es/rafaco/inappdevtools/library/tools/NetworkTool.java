@@ -19,7 +19,7 @@ public class NetworkTool extends Tool {
 
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override

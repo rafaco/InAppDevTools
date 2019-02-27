@@ -49,7 +49,7 @@ public class NetworkScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
-
+        //Nothing needed
     }
 
 
@@ -65,10 +65,12 @@ public class NetworkScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
+        //Nothing needed
     }
 
 
@@ -78,8 +80,8 @@ public class NetworkScreen extends OverlayScreen {
     }
 
     private Cursor getCursor() {
-        Uri TRANSACTION_URI = Uri.parse("content://es.rafaco.devtoollib.chuck.provider/transaction");
-        String[] PARTIAL_PROJECTION = new String[] {
+        Uri transactionUri = Uri.parse("content://es.rafaco.devtoollib.chuck.provider/transaction");
+        String[] partialProjection = new String[] {
                 "_id",
                 "requestDate",
                 "tookMs",
@@ -92,10 +94,10 @@ public class NetworkScreen extends OverlayScreen {
                 "error",
                 "responseContentLength"
         };
-        String SORT_ORDER = "requestDate DESC";
+        String sortOrder = "requestDate DESC";
 
         contentResolver = getContext().getContentResolver();
-        return contentResolver.query(TRANSACTION_URI, PARTIAL_PROJECTION, null, null, SORT_ORDER);
+        return contentResolver.query(transactionUri, partialProjection, null, null, sortOrder);
     }
 
     private void initAdapter(Cursor cursor){
@@ -114,7 +116,7 @@ public class NetworkScreen extends OverlayScreen {
         traffic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO
             }
         });
     }

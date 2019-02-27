@@ -25,8 +25,9 @@ public class LogHelper extends ToolHelper{
         if (file == null)
             return null;
 
+        Process process = null;
         try {
-            Process process = Runtime.getRuntime().exec("logcat -d -f " + file);
+            process = Runtime.getRuntime().exec("logcat -d -f " + file);
             process.waitFor();
             return file.getPath();
 
@@ -34,6 +35,10 @@ public class LogHelper extends ToolHelper{
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            if (process!=null){
+                process.destroy();
+            }
+            Thread.currentThread().interrupt();
         }
 
         return null;
@@ -59,9 +64,7 @@ public class LogHelper extends ToolHelper{
             e.printStackTrace(new PrintWriter(sw));
             String stackTraceString = sw.toString();
             Log.e(DevTools.TAG, stackTraceString);
-            if (process != null &&
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                    process.isAlive()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && process.isAlive()) {
                 process.destroy();
             }
         }

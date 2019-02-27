@@ -15,6 +15,8 @@ import es.rafaco.inappdevtools.library.DevTools;
 
 public class ViewHierarchyUtils {
 
+    private ViewHierarchyUtils() { throw new IllegalStateException("Utility class"); }
+
     public static void logRootViews() {
         List<Pair<String, View>> rootViews = getRootViews(true);
 
@@ -44,7 +46,7 @@ public class ViewHierarchyUtils {
                 if(print)
                     printViewHierarchy(rootView);
             }
-            if (rootViews.size()==0)
+            if (rootViews.isEmpty())
                 rootViews = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,9 +67,8 @@ public class ViewHierarchyUtils {
     }
 
     private static void dumpViewHierarchyWithProperties(ViewGroup group, int level) {
-        if (!dumpViewWithProperties(group, level)) {
-            return;
-        }
+        //TODO: Is this needed? (it was a pointless bugout highlighted by sonar)
+        dumpViewWithProperties(group, level);
 
         final int count = group.getChildCount();
         for (int i = 0; i < count; i++) {

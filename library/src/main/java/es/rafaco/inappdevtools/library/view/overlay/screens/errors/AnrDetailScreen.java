@@ -44,6 +44,7 @@ public class AnrDetailScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -83,11 +84,11 @@ public class AnrDetailScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
-
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
-
+        //Nothing needed
     }
 }

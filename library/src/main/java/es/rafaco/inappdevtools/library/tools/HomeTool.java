@@ -8,7 +8,7 @@ public class HomeTool extends Tool {
 
     @Override
     protected void onRegister() {
-
+        //Nothing needed
     }
 
     @Override

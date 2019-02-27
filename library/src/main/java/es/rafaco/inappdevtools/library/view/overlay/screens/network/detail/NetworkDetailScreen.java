@@ -43,6 +43,7 @@ public class NetworkDetailScreen extends OverlayScreen {
 
     @Override
     protected void onCreate() {
+        //Nothing needed
     }
 
     @Override
@@ -69,11 +70,11 @@ public class NetworkDetailScreen extends OverlayScreen {
 
     @Override
     protected void onStop() {
-
+        //Nothing needed
     }
 
     @Override
     protected void onDestroy() {
-
+        //Nothing needed
     }
 }
