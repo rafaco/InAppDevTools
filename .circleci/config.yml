@@ -59,7 +59,9 @@ jobs:
           path: sample/build/reports
           destination: sample/reports
 
-      - run: ./gradlew sonarqube
+      - run: 
+          name: Run Sonar report and upload to SonarCloud
+          command: ./gradlew sonarqube -Dsonar.branch.name=$CIRCLE_BRANCH
       - run: echo "Analize job called"
 
   release:
@@ -83,21 +85,21 @@ jobs:
 
 workflows:
   version: 2
-  build-and-release:
+  my-workflow:
     jobs:
-    - build:
+    - build:        # Fired by commit on any branch (default) plus any tag
         filters:
           tags:
             only: /.*/
 
-    - analize:
+    - analize:      # Fired by commit on any branch (default) plus any tag
         requires:
         - build
         filters:
           tags:
             only: /.*/
 
-    - release:
+    - release:      # Fired by tags only
         requires:
           - analize
         filters:
