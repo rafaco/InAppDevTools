@@ -61,8 +61,9 @@ jobs:
 
       - run: 
           name: Run Sonar report and upload to SonarCloud
-          command: ./gradlew sonarqube -Dsonar.branch.name=$CIRCLE_BRANCH
-      - run: echo "Analize job called"
+          command: ./gradlew sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
+      
+      - run: echo "Analized branch " + ${CIRCLE_BRANCH}
 
   release:
     <<: *defaults
