@@ -12,4 +12,11 @@
         android:layout_gravity="start"
         style="@style/content_margin"/>
 
+    <android.support.v7.widget.AppCompatButton
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/diff_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_margin"/>
+
 </LinearLayout>

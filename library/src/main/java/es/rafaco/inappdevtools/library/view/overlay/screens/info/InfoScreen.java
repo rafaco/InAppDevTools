@@ -1,5 +1,9 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +16,18 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.commands.ShellExecuter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
 
 public class InfoScreen extends OverlayScreen {
 
     private TextView out;
+    private AppCompatButton button;
     private Spinner mainSpinner;
     private ShellExecuter exe;
     private Spinner secondSpinner;
@@ -48,6 +56,7 @@ public class InfoScreen extends OverlayScreen {
     @Override
     protected void onStart(ViewGroup view) {
         out = getView().findViewById(R.id.out);
+        button = getView().findViewById(R.id.diff_button);
         mainSpinner =  getView().findViewById(R.id.info_main_spinner);
         secondSpinner = getView().findViewById(R.id.info_second_spinner);
 
@@ -88,6 +97,7 @@ public class InfoScreen extends OverlayScreen {
 
                 if (title.equals("App")) {
                     setReport(helper.getStaticInfo());
+                    setDiffButton(false);
                 }
                 else if (title.equals("Status")) {
                     setReport(helper.getAppStatus());
@@ -104,12 +114,36 @@ public class InfoScreen extends OverlayScreen {
                 else if (title.equals("dumpsys")) {
                     onDumpSys();
                 }
+
+                setDiffButton(title.equals("Config"));
             }
         };
         mainSpinner.setOnItemSelectedListener(listener);
         mainSpinner.setOnTouchListener(listener);
 
         setReport(helper.getStaticInfo());
+        setDiffButton(false);
+    }
+
+    private void setDiffButton(boolean isConfigPage) {
+        boolean show = isConfigPage; //TODO
+        button.setVisibility(isConfigPage ? View.VISIBLE : View.GONE);
+        if (!show){
+            button.setOnClickListener(null);
+        }else{
+            button.setText("View Diff file");
+            int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
+            button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+            Drawable icon = button.getContext().getResources().getDrawable(R.drawable.ic_code_white_24dp);
+            button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OverlayUIService.performNavigation(SourceDetailScreen.class,
+                            SourceDetailScreen.buildParams(SourcesManager.ASSETS, "inappdevtools/git.diff", -1));
+                }
+            });
+        }
     }
 
     private void setReport(String report) {

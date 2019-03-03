@@ -26,6 +26,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
@@ -190,17 +191,18 @@ public class InfoHelper extends ToolHelper {
 
     public String getConfig() {
         String result = "";
-        result += "Compile config";
+        result += "Compile config:";
         result += "\n";
         result += new CompileConfig(context).getAll();
         result += "\n";
         result += "\n";
-        result += "Git config";
-        result += DevTools.getSourcesManager().getContent("inappdevtools/git_config.json");
+        result += "Git config:";
         result += "\n";
+        result += DevTools.getSourcesManager().getContent(SourcesManager.ASSETS, "inappdevtools/git_config.json");
         result += "\n";
-        result += "Git diff";
-        result += DevTools.getSourcesManager().getContent("inappdevtools/git_diff.json");
+        //result += "Git diff:";
+        //result += "\n";
+        //result += DevTools.getSourcesManager().getContent(SourcesManager.ASSETS, "inappdevtools/git.diff");
         return result;
     }
 

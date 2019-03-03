@@ -37,9 +37,12 @@ public class CompileConfig {
     }
 
     public String getAll(){
-        return json.toString();
+        try {
+            return json.toString(2);
+        } catch (JSONException e) {
+            return json.toString();
+        }
     }
-
 
     private void init() {
         if (json == null) {
