@@ -94,7 +94,6 @@ public class CrashDetailScreen extends OverlayScreen {
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
         thread = view.findViewById(R.id.detail_thread);
 
-        //stacktraceView = view.findViewById(R.id.code_view);
         autologButton = view.findViewById(R.id.autolog_button);
         logcatButton = view.findViewById(R.id.logcat_button);
         revealDetailsButton = view.findViewById(R.id.reveal_details_button);

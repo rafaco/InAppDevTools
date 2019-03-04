@@ -18,7 +18,6 @@ public class AnrDetailScreen extends OverlayScreen {
 
     private Anr anr;
     private TextView out;
-    private AnrHelper helper;
     private TextView title;
     private TextView subtitle;
     private TextView console;
@@ -72,7 +71,7 @@ public class AnrDetailScreen extends OverlayScreen {
     }
 
     private void updateOutput() {
-        helper = new AnrHelper();
+        AnrHelper helper = new AnrHelper();
         InfoCollection report = helper.parseToInfoGroup(anr);
         report.removeGroupEntries(1);
 

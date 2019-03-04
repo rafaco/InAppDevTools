@@ -75,6 +75,6 @@ public class CompileConfig {
                     "Unable to read '" + ASSETS_PATH + "'", Log.getStackTraceString(e));
         }
 
-        return builder.toString();
+        return (builder != null) ? builder.toString() : null;
     }
 }

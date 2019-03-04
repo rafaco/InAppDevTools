@@ -42,9 +42,6 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "causeExceptionAt")
     private String causeExceptionAt;
 
-    //@ColumnInfo(name = "where")
-    //private String where;
-
     @ColumnInfo(name = "stacktrace")
     private String stacktrace;
 

@@ -7,4 +7,8 @@ public class BuildConfigFields {
     public static final String FLAVOR = "FLAVOR";
     public static final String VERSION_CODE = "VERSION_CODE";
     public static final String VERSION_NAME = "VERSION_NAME";
+
+    private BuildConfigFields() {
+        throw new IllegalStateException("Utility class");
+    }
 }

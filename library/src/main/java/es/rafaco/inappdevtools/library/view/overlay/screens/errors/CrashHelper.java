@@ -20,6 +20,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHe
 
 public class CrashHelper extends ToolHelper{
 
+    public static final String CAUSED_BY = "Caused by:";
+
     @Override
     public String getReportPath() {
         return null;
@@ -121,8 +123,8 @@ public class CrashHelper extends ToolHelper{
         String[] split = data.getStacktrace().split("\n\t");
         for (int i=0; i<split.length; i++){
             String line = split[i];
-            if (line.contains("Caused by:")){
-                return line.substring(line.indexOf("Caused by:"), line.length());
+            if (line.contains(CAUSED_BY)){
+                return line.substring(line.indexOf(CAUSED_BY));
             }
         }
         return null;
@@ -132,7 +134,7 @@ public class CrashHelper extends ToolHelper{
         String[] split = data.getStacktrace().split("\n\t");
         for (int i=0; i<split.length; i++){
             String line = split[i];
-            if (line.contains("Caused by:")){
+            if (line.contains(CAUSED_BY)){
                 return formatAt(split[i+1]);
             }
         }

@@ -54,6 +54,7 @@ public class AssetSourcesReader extends SourcesReader{
     }
 
     private boolean isExcluded(String resource) {
+        //TODO: detect binary files
         return false;
     }
 

@@ -24,7 +24,6 @@ public class CommandsScreen extends OverlayScreen {
     private Button devOptionsButton;
     private Button forceCloseButton;
     private Button fullRestartButton;
-    private Button installedButton;
 
     public CommandsScreen(MainOverlayLayerManager manager) {
         super(manager);

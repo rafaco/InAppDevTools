@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 public class ConnectivityChangeWatcher extends Watcher {
 
     public static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
@@ -57,7 +59,8 @@ public class ConnectivityChangeWatcher extends Watcher {
                 }
             }
             else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
-
+                //TODO: airplane mode
+                FriendlyLog.log("I", "Connectivity", "Airplane", "ACTION_AIRPLANE_MODE_CHANGED");
 
             }
         }
@@ -98,12 +101,6 @@ public class ConnectivityChangeWatcher extends Watcher {
            }
            return "?";
        }
-
-       /*public NetworkInfo getActiveNetwork(Context context){
-           ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-           NetworkInfo info = cm.getActiveNetworkInfo();
-           return info;
-       }*/
     }
 
     public interface InnerListener {

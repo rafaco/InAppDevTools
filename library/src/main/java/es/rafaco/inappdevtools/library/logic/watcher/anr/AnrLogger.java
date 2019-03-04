@@ -24,7 +24,7 @@ public class AnrLogger {
                 .setANRListener(new ANRWatchDog.ANRListener() {
                     @Override
                     public void onAppNotResponding(ANRError error) {
-                        onAnrDetected(error, false);
+                        onAnrDetected(error);
                     }
                 })
                 .setIgnoreDebugger(true);
@@ -36,16 +36,15 @@ public class AnrLogger {
         watcher.interrupt();
     }
 
-    private void onAnrDetected(ANRError error, boolean isWarning) {
+    private void onAnrDetected(ANRError error) {
         String errorString;
-        //if(isWarning) errorString = String.format("ANR WARNING: %s - %s", error.getMessage(), error.getCause());
         errorString = String.format("ANR ERROR: %s - %s", error.getMessage(), error.getCause());
         DevTools.showMessage(errorString);
         Log.e(DevTools.TAG, errorString);
 
         Anr anr = new Anr();
         anr.setDate(new Date().getTime());
-        anr.setMessage(error.getMessage().toString());
+        anr.setMessage(error.getMessage());
         anr.setCause(error.getCause().toString());
 
         StringWriter sw = new StringWriter();
