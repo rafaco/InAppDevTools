@@ -67,7 +67,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
             Log.e(DevTools.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
             Log.e(DevTools.TAG, String.valueOf(e.getStackTrace()));
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
     }
 

@@ -45,7 +45,6 @@ public class WatcherManager {
         startNetworkChangeWatcher();
         startAirplaneModeChangeWatcher();
 
-        //if (config.invocationByShake)
         startShakeWatcher();
         PandoraBridge.init();
     }
@@ -64,14 +63,14 @@ public class WatcherManager {
     public void start(String target){
         //TODO:
         Watcher watcher = getWatcher(target);
-        watcher.start();
+        if (watcher!=null) watcher.start();
     }
 
 
     public void stop(String target){
         //TODO:
         Watcher watcher = getWatcher(target);
-        watcher.stop();
+        if (watcher!=null) watcher.stop();
     }
 
     private Watcher getWatcher(String target) {

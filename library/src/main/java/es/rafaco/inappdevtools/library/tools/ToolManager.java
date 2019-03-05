@@ -5,6 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 public class ToolManager {
 
     protected Context context;
@@ -36,9 +38,9 @@ public class ToolManager {
                 toolObject.onRegister();
             }
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
     }
 

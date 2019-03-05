@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 
 public class AssetSourcesReader extends SourcesReader{
 
@@ -31,7 +33,7 @@ public class AssetSourcesReader extends SourcesReader{
         try {
             categories =  Arrays.asList(aMan.list(""));
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         List<SourceEntry> result = new ArrayList<>();
@@ -42,7 +44,7 @@ public class AssetSourcesReader extends SourcesReader{
             try {
                 resources =  Arrays.asList(aMan.list(category));
             } catch (IOException e) {
-                e.printStackTrace();
+                FriendlyLog.logException("Exception", e);
             }
 
             for (String resource: resources) {

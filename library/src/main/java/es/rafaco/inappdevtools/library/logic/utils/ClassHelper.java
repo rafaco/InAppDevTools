@@ -2,6 +2,8 @@ package es.rafaco.inappdevtools.library.logic.utils;
 
 import java.lang.reflect.InvocationTargetException;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 public class ClassHelper<T> {
 
     public T createClass(Class<? extends T> targetClass, Class fromClass, Object ... initargs) {
@@ -11,13 +13,13 @@ public class ClassHelper<T> {
                     .newInstance(initargs);
             return screenObject;
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return null;
     }

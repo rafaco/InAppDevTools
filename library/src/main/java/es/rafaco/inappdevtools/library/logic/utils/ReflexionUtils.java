@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class ReflexionUtils {
 
@@ -16,7 +17,7 @@ public class ReflexionUtils {
         try {
             Class<T> theClass = (Class<T>) Class.forName(className);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         //Object obj = theClass.cast(object);
         return (T) object;
@@ -50,16 +51,16 @@ public class ReflexionUtils {
 
         } catch (SecurityException e) {
             result = false;
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (NoSuchFieldException e) {
             result = false;
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (IllegalArgumentException e) {
             result = false;
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (IllegalAccessException e) {
             result = false;
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         return result;
@@ -81,7 +82,7 @@ public class ReflexionUtils {
                     id = field.getInt(null);
             }
         } catch (final Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return id;
     }
@@ -93,7 +94,7 @@ public class ReflexionUtils {
                 fields = Rclass.getFields();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return fields;
     }
@@ -109,7 +110,7 @@ public class ReflexionUtils {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return result;
     }

@@ -32,9 +32,9 @@ public class LogHelper extends ToolHelper{
             return file.getPath();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
             if (process!=null){
                 process.destroy();
             }

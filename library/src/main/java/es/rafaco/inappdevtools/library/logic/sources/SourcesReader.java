@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 
 public abstract class SourcesReader {
 
@@ -29,6 +31,7 @@ public abstract class SourcesReader {
     public File getLocalFile(String target ){
         File f = new File(context.getCacheDir()+"/"+ target);
         if (!f.exists()){
+            FileOutputStream fos = null;
             try {
                 f.getParentFile().mkdirs();
                 InputStream is = context.getAssets().open(target);
@@ -37,11 +40,18 @@ public abstract class SourcesReader {
                 is.read(buffer);
                 is.close();
 
-                FileOutputStream fos = new FileOutputStream(f);
+                fos = new FileOutputStream(f);
                 fos.write(buffer);
-                fos.close();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                FriendlyLog.logException("SourceReader exception", e);
+            }finally {
+                if (fos!=null){
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        FriendlyLog.logException("Exception", e);
+                    }
+                }
             }
         }
 
@@ -53,7 +63,7 @@ public abstract class SourcesReader {
         try {
             inputStream = getInputStream(zip, entryName);
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
             return "Unable to read the file";
         }
         return readInputStream(inputStream);
@@ -70,7 +80,7 @@ public abstract class SourcesReader {
                 builder.append(line).append('\n');
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         return builder.toString();

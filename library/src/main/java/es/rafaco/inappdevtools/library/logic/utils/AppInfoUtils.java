@@ -14,6 +14,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class AppInfoUtils {
 
@@ -33,7 +34,7 @@ public class AppInfoUtils {
         try {
             p = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         if (p!= null){
@@ -58,7 +59,7 @@ public class AppInfoUtils {
                 }
                 catch (CertificateException e) {
                     Log.e(DevTools.TAG, "Error retrieving certificate" + newLine);
-                    e.printStackTrace();
+                    FriendlyLog.logException("Exception", e);
                 }
             }
         }

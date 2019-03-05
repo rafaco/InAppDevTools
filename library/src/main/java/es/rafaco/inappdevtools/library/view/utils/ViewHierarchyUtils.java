@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class ViewHierarchyUtils {
 
@@ -49,7 +50,7 @@ public class ViewHierarchyUtils {
             if (rootViews.isEmpty())
                 rootViews = null;
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception at  getRootViews", e);
             rootViews = null;
         }
         return rootViews;

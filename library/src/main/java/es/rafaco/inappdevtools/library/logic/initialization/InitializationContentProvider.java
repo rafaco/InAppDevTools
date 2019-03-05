@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 
 public class InitializationContentProvider extends ContentProvider {
@@ -37,7 +38,7 @@ public class InitializationContentProvider extends ContentProvider {
         try {
             appInfo = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception at getMetadata", e);
         }
 
         if (appInfo == null){

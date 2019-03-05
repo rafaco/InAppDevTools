@@ -9,17 +9,12 @@ import java.io.OutputStreamWriter;
 
 import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class FileCreator {
 
     @NonNull
     public static String withContent(final String subfolder, final String filename, final String content) {
-
-        /*if (!PermissionActivity.check(PermissionActivity.IntentAction.STORAGE)) {
-            PermissionActivity.request(PermissionActivity.IntentAction.STORAGE,
-                    () -> withContent(subfolder, filename, content),
-                    null); //TODO: handle failure
-        }*/
 
         File file = prepare(subfolder, filename);
         if (file == null){
@@ -45,7 +40,6 @@ public class FileCreator {
         return null;
     }
 
-    @NonNull
     public static File prepare(String subfolder, String filename) {
         File file = new File(getCategoryFolder(subfolder), filename);
         //TODO: check if file exists and skip recreation
@@ -53,7 +47,8 @@ public class FileCreator {
             file.createNewFile();
             return file;
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Error preparing file " + subfolder + ":" + filename, e);
+            FriendlyLog.logException("Exception", e);
             return null;
         }
     }

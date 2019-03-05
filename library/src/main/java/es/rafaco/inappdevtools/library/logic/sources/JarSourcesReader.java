@@ -11,6 +11,8 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 
 public class JarSourcesReader extends SourcesReader {
 
@@ -23,7 +25,7 @@ public class JarSourcesReader extends SourcesReader {
         try {
             jar = new JarFile(getLocalFile(target));
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return jar;
     }

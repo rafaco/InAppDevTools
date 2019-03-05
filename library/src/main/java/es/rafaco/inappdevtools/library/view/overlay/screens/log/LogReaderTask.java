@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class LogReaderTask extends AsyncTask<Void, String, Void>
 {
@@ -41,7 +42,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
             logprocess = Runtime.getRuntime().exec(fullCommand);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
             isRunning = false;
         }
 
@@ -50,7 +51,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
                     logprocess.getInputStream()),BUFFER_SIZE);
         }
         catch(IllegalArgumentException e){
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
             isRunning = false;
         }
 
@@ -69,7 +70,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
             }*/
         }
         catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
             isRunning = false;
         }
 

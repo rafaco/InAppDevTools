@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.lang.reflect.Field;
 
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 public class AppBuildConfig {
 
     private AppBuildConfig() { throw new IllegalStateException("Utility class"); }
@@ -21,11 +23,11 @@ public class AppBuildConfig {
             Field field = clazz.getField(fieldName);
             return field.get(null);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return null;
     }

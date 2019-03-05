@@ -16,6 +16,7 @@ import android.util.Log;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class AppUtils {
 
@@ -60,7 +61,7 @@ public class AppUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
     }
 
@@ -106,7 +107,7 @@ public class AppUtils {
         try {
             mainActivityClass = Class.forName(launchIntent.getComponent().getClassName());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         Intent intent = new Intent(context, mainActivityClass);

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class ShellExecuter {
 
@@ -31,7 +32,7 @@ public class ShellExecuter {
             Log.v(DevTools.TAG, "ShellExecuter result: " + output.length() + " lines.");
             response = output.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
 
         return response;

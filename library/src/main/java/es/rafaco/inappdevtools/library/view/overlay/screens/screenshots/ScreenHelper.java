@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
@@ -102,7 +103,7 @@ public class ScreenHelper extends ToolHelper{
 
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return null;
     }

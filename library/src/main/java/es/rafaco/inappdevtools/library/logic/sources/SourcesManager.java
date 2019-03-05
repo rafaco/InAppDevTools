@@ -74,7 +74,7 @@ public class SourcesManager {
 
     private List<SourceEntry> getOriginIndexItems() {
         ArrayList<SourceEntry> indexItems = new ArrayList<>();
-        if (origins.size()>0){
+        if (!origins.isEmpty()){
             for (SourceOrigin entry : origins) {
                 indexItems.add(new SourceEntry(entry.name, "", true));
             }
@@ -102,7 +102,7 @@ public class SourcesManager {
 
     public String findOriginByPath(String sourcePath) {
         for (SourceOrigin entry : origins) {
-            if (entry.firstFolders != null && entry.firstFolders.size()>0){
+            if (entry.firstFolders != null && !entry.firstFolders.isEmpty()){
                 for (String folder : entry.firstFolders) {
                     if(sourcePath.contains(folder)){
                         return entry.name;
@@ -119,12 +119,21 @@ public class SourcesManager {
         if (TextUtils.isEmpty(origin)){
             return "";
         }
-        return getOrigin(origin).getContent(path);
+
+        SourceOrigin sourceOrigin = getOrigin(origin);
+        if (sourceOrigin==null)
+            return null;
+
+        return sourceOrigin.getContent(path);
     }
 
     public String getContent(String originName, String entryName){
         if (!TextUtils.isEmpty(originName)){
-            return getOrigin(originName).getContent(entryName);
+            SourceOrigin sourceOrigin = getOrigin(originName);
+            if (sourceOrigin==null)
+                return null;
+
+            return sourceOrigin.getContent(entryName);
         }else{
             return getContent(entryName);
         }
@@ -136,7 +145,12 @@ public class SourcesManager {
             return getOriginIndexItems();
         }
 
-        List<SourceEntry> items = getOrigin(filter.getOrigin()).items;
+
+        SourceOrigin sourceOrigin = getOrigin(filter.getOrigin());
+        if (sourceOrigin==null)
+            return new ArrayList<>();
+
+        List<SourceEntry> items = sourceOrigin.items;
         if (TextUtils.isEmpty(filter.getName()))
             return items;
 

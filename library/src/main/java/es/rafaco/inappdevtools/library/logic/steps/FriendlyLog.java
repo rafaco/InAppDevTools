@@ -17,7 +17,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
 public class FriendlyLog {
-    public static String TAG = "FriendlyLog";
+    public static final String TAG = "FriendlyLog";
 
     public enum LEVEL { V, D, I, W, E, F, WTF }
 
@@ -61,9 +61,6 @@ public class FriendlyLog {
     private static void logAtLogcat(Friendly log) {
         String text = getFormatted(log);
         switch (log.getSeverity()){
-            case "V":
-                Log.v(TAG, text);
-                break;
             case "D":
                 Log.d(TAG, text);
                 break;
@@ -78,6 +75,11 @@ public class FriendlyLog {
                 break;
             case "F":
                 Log.wtf(TAG, text);
+                break;
+
+            case "V":
+            default:
+                Log.v(TAG, text);
                 break;
         }
 
@@ -94,8 +96,6 @@ public class FriendlyLog {
 
     @NonNull
     private static String getFormatted(Friendly log) {
-        Date date = new Date(log.getDate());
-
         return String.format("[%s:%s-%s] %s", DateUtils.formatPrecisionTime(log.getDate()), log.getCategory(), log.getType(), log.getMessage());
     }
 
@@ -103,19 +103,19 @@ public class FriendlyLog {
         String type = log.getSeverity();
         int color = Color.WHITE;
         if(type.equals("V")){
-            color = R.color.rally_blue; //Color.rgb(0, 0, 200);
+            color = R.color.rally_blue;
         }
         if(type.equals("D")){
-            color = R.color.rally_blue_med; //Color.rgb(0, 0, 200);
+            color = R.color.rally_blue_med;
         }
         else if(type.equals("I")){
-            color = R.color.rally_green; //Color.rgb(0, 128, 0);
+            color = R.color.rally_green;
         }
         else if(type.equals("W")){
-            color = R.color.rally_yellow; //Color.parseColor("#827717");//rgb(255, 234, 0);
+            color = R.color.rally_yellow;
         }
         else if(type.equals("E") || type.equals("F")){
-            color = R.color.rally_orange; //Color.rgb(255, 0, 0);
+            color = R.color.rally_orange;
         }
 
         return color;
@@ -229,6 +229,9 @@ public class FriendlyLog {
             if (log.getType().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_rally_24dp;
             }
+            else if (log.getType().equals("Exception")){
+                return R.drawable.ic_bug_report_rally_24dp;
+            }
             else if (log.getType().equals("Delete")){
                 return R.drawable.ic_delete_forever_rally_24dp;
             }
@@ -297,7 +300,7 @@ public class FriendlyLog {
                 overview = "...";
                 break;
             default:
-                overview = transaction.getResponseMessage() + "(" + String.valueOf(transaction.getResponseCode()) + ")";
+                overview = transaction.getResponseMessage() + "(" + transaction.getResponseCode() + ")";
         }
         log.setMessage(overview + " from " + transaction.getPath());
         log.setType(transaction.getStatus().name());
@@ -315,5 +318,11 @@ public class FriendlyLog {
                 DevTools.getDatabase().friendlyDao().update(log);
             }
         });
+    }
+
+    public static void logException(String message, Throwable e) {
+        log("W", "DevTools", "Exception",
+                message + " -> " + e.getMessage(),
+                Log.getStackTraceString(e));
     }
 }

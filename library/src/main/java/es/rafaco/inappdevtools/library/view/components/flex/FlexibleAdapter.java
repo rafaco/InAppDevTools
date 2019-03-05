@@ -15,6 +15,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
@@ -99,7 +100,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
             Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class, FlexibleAdapter.class);
             holder = ctor.newInstance(new Object[] { view, this });
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         holder.onCreate(viewGroup, viewType);
         return holder;

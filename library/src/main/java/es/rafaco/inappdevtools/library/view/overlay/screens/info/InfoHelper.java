@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
@@ -251,8 +252,8 @@ public class InfoHelper extends ToolHelper {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
             String appFile = appInfo.sourceDir;
             time = new File(appFile).lastModified();
-        } catch (PackageManager.NameNotFoundException e1) {
-            e1.printStackTrace();
+        } catch (PackageManager.NameNotFoundException e) {
+            FriendlyLog.logException("Exception", e);
             time = -1;
         }
 
@@ -272,7 +273,7 @@ public class InfoHelper extends ToolHelper {
                     PackageManager.GET_SERVICES |
                     PackageManager.GET_INSTRUMENTATION);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Exception", e);
         }
         return pInfo;
     }
