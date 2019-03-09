@@ -64,7 +64,7 @@ public class SourcesManager {
 
         newPackage.items = reader.getSourceEntries(origin, newPackage.localZip);
 
-        //TODO implement simimarly for other types
+        //TODO implement similarly for other types
         if(reader instanceof JarSourcesReader){
             newPackage.firstFolders = ((JarSourcesReader)reader).getFirstFolders(newPackage.localZip);
         }

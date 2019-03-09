@@ -14,7 +14,7 @@ import java.util.zip.ZipFile;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 
-public class JarSourcesReader extends SourcesReader {
+public class JarSourcesReader extends ZipSourcesReader {
 
     public JarSourcesReader(Context context) {
         super(context);
@@ -30,34 +30,19 @@ public class JarSourcesReader extends SourcesReader {
         return jar;
     }
 
-    protected InputStream getInputStream(ZipFile zip, String entryName) throws IOException {
-        return zip.getInputStream(zip.getEntry(entryName));
-    }
+    protected boolean isExcluded(ZipEntry entry) {
+        if (super.isExcluded(entry))
+            return true;
 
-    public List<SourceEntry> getSourceEntries(String originName, ZipFile localZip) {
-        List<SourceEntry> items = new ArrayList<>();
-        Enumeration<? extends ZipEntry> enumeration = localZip.entries();
-        while (enumeration.hasMoreElements()) {
-            ZipEntry entry = enumeration.nextElement();
-            if(!isExcluded(entry)){
-                items.add(new SourceEntry(originName, entry.getName(), entry.isDirectory()));
-            }
-        }
-        return  items;
-    }
-
-    private boolean isExcluded(ZipEntry entry) {
+        /*
+        //TODO: exclude other variants at plugin
+        //TODO: remove head from generated folder paths to match namespace!? at plugin?
         String name = entry.getName();
-        if (name.startsWith("META-INF/"))
-            return true;
-
         String packagePath = context.getPackageName().replace(".", "/");
-        if ( (name.startsWith("source/") || name.startsWith("not_namespaced_r_class_sources")) && !name.contains(packagePath))
+        if ((name.startsWith("source/") || name.startsWith("not_namespaced_r_class_sources"))
+                && !name.contains(packagePath))
             return true;
-
-        if (name.startsWith("res/"))
-            return true;
-
+        */
         return false;
     }
 

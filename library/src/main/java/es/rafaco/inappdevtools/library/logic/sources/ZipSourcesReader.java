@@ -21,10 +21,9 @@ public class ZipSourcesReader extends SourcesReader{
     }
 
     public ZipFile getFile(String target) {
-
         ZipFile zip = null;
         try {
-            zip = new JarFile(getLocalFile(target));
+            zip = new ZipFile(getLocalFile(target));
         } catch (IOException e) {
             FriendlyLog.logException("Exception", e);
         }
@@ -47,16 +46,9 @@ public class ZipSourcesReader extends SourcesReader{
         return  items;
     }
 
-    private boolean isExcluded(ZipEntry entry) {
+    protected boolean isExcluded(ZipEntry entry) {
         String name = entry.getName();
         if (name.startsWith("META-INF/"))
-            return true;
-
-        String packagePath = context.getPackageName().replace(".", "/");
-        if ( (name.startsWith("source/") || name.startsWith("not_namespaced_r_class_sources")) && !name.contains(packagePath))
-            return true;
-
-        if (name.startsWith("res/"))
             return true;
 
         return false;
