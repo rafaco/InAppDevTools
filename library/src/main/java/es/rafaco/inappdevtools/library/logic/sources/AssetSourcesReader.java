@@ -38,7 +38,7 @@ public class AssetSourcesReader extends SourcesReader{
 
         List<SourceEntry> result = new ArrayList<>();
         for (String category: categories) {
-            result.add(new SourceEntry(origin, category, true));
+            result.add(new SourceEntry(origin, category + "/" , true));
 
             List<String> resources = new ArrayList<>();
             try {
@@ -53,6 +53,11 @@ public class AssetSourcesReader extends SourcesReader{
             }
         }
         return result;
+    }
+
+    @Override
+    public List<SourceEntry> getFirstEntries(String originName, ZipFile localZip) {
+        return null;
     }
 
     private boolean isExcluded(String resource) {

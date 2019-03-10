@@ -57,11 +57,17 @@ public class SourcesScreen extends OverlayScreen {
         List<SourceEntry> filteredItems = DevTools.getSourcesManager().getFilteredItems(filter);
         List<Object> data = new ArrayList<>();
 
-        if (filter != null && !TextUtils.isEmpty(filter.getOrigin())){
+        if (filter != null){
+            String label = filter.getName();
+            if (TextUtils.isEmpty(label)){
+                label = filter.getOrigin();
+            }
+            label = ".. (" + label + ")";
+
             data.add(new ThinItem(
-                    "..",
-                    R.string.gmd_folder,
-                    R.color.rally_yellow,
+                    label,
+                    R.string.gmd_arrow_upward,
+                    R.color.rally_green,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -72,9 +78,13 @@ public class SourcesScreen extends OverlayScreen {
         }
 
         for (final SourceEntry entry : filteredItems) {
-            data.add(new ThinItem(
-                    getLinkName(entry),
-                    entry.isDirectory() ? R.string.gmd_folder : R.string.gmd_subdirectory_arrow_right,
+            String label = getLinkName(entry);
+            if (filter!=null){
+                label = label.replace(filter.getName(), "");
+            }
+
+            data.add(new ThinItem(label,
+                    entry.isDirectory() ? R.string.gmd_folder : R.string.gmd_insert_drive_file,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
                     entry.isDirectory() ? new Runnable() {
                         @Override
@@ -98,14 +108,15 @@ public class SourcesScreen extends OverlayScreen {
     }
 
     private void goUp() {
-        SourceEntry previous = history.remove(history.size() - 1);
-        updateFilter(previous);
+        history.remove(history.size() - 1);
+        SourceEntry secondLast = history.remove(history.size() - 1);
+        updateFilter(secondLast);
     }
 
-    private String updateFilter(SourceEntry entry) {
-        List<Object> filteredItems = getData(entry);
+    private String updateFilter(SourceEntry filter) {
+        List<Object> filteredItems = getData(filter);
         adapter.replaceItems(filteredItems);
-        storeHistory(entry);
+        storeHistory(filter);
         return null;
     }
 

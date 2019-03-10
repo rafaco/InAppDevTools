@@ -11,6 +11,7 @@ public class SourceOrigin {
     public List<String> firstFolders;
     public ZipFile localZip;
     public List<SourceEntry> items;
+    public List<SourceEntry> firstLevel;
 
     public String getContent(String entryName){
         SourcesReader reader;

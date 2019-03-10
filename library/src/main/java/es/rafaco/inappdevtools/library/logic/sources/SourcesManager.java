@@ -2,11 +2,14 @@ package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class SourcesManager {
 
@@ -63,16 +66,24 @@ public class SourcesManager {
         }
 
         newPackage.items = reader.getSourceEntries(origin, newPackage.localZip);
+        newPackage.firstLevel = reader.getFirstEntries(origin, newPackage.localZip);
 
         //TODO implement similarly for other types
         if(reader instanceof JarSourcesReader){
             newPackage.firstFolders = ((JarSourcesReader)reader).getFirstFolders(newPackage.localZip);
         }
 
+        //TODO: research if needed, it brokes next requests
+        /*try {
+            newPackage.localZip.close();
+        } catch (IOException e) {
+            FriendlyLog.logException("Closing localzip: ", e);
+        }*/
+
         origins.add(newPackage);
     }
 
-    private List<SourceEntry> getOriginIndexItems() {
+    private ArrayList<SourceEntry> getOriginIndexItems() {
         ArrayList<SourceEntry> indexItems = new ArrayList<>();
         if (!origins.isEmpty()){
             for (SourceOrigin entry : origins) {
@@ -140,28 +151,46 @@ public class SourcesManager {
     }
 
     public List<SourceEntry> getFilteredItems(SourceEntry filter){
+        ArrayList<SourceEntry> filteredItems = new ArrayList<>();
 
         if (filter == null || TextUtils.isEmpty(filter.getOrigin())){
-            return getOriginIndexItems();
+            //Starting list with origin selector
+            filteredItems = getOriginIndexItems();
+            return filterDeep(filteredItems, 0);
         }
-
 
         SourceOrigin sourceOrigin = getOrigin(filter.getOrigin());
         if (sourceOrigin==null)
             return new ArrayList<>();
 
-        List<SourceEntry> items = sourceOrigin.items;
-        if (TextUtils.isEmpty(filter.getName()))
-            return items;
-
-        ArrayList<SourceEntry> filteredItems = new ArrayList<>();
-        for (SourceEntry entry : items) {
-            if (entry.getName().contains(filter.getName())
+        //TODO: remove this!
+        // 1. make next loop compatible with root level
+        // 2. generalize empty folder simplification
+        if (TextUtils.isEmpty(filter.getName()) && filter.getOrigin()!=ASSETS){
+            return sourceOrigin.firstLevel;
+        }
+        for (SourceEntry entry : sourceOrigin.items) {
+            if (entry.getName().startsWith(filter.getName())
                     && !entry.getName().equals(filter.getName())) {
                 filteredItems.add(entry);
             }
         }
-        return filteredItems;
+        return filterDeep(filteredItems, filter.getDeepLevel());
+    }
+
+    private List<SourceEntry> filterDeep(List<SourceEntry> items, int deepLevel) {
+        if (deepLevel < 0)
+            return items;
+
+        List<SourceEntry> result = new ArrayList<>();
+        for (SourceEntry entry : items) {
+            if (entry.getDeepLevel() <= deepLevel+1){
+                result.add(entry);
+            }else{
+                Log.w("TAG","isExcludedDeep " + entry.getName());
+            }
+        }
+        return result;
     }
 
     public List<String> getOriginNames() {

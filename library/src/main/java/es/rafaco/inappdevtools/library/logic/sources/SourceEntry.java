@@ -40,4 +40,12 @@ public class SourceEntry {
         int lastFound = name.lastIndexOf("/");
         return name.substring(lastFound + 1);
     }
+
+    public int getDeepLevel(){
+        int slashCount = name.length() - name.replace("/", "").length();
+        if (slashCount>0 && isDirectory){
+            return slashCount - 1;
+        }
+        return slashCount;
+    }
 }

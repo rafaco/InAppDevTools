@@ -27,6 +27,7 @@ public abstract class SourcesReader {
 
     public abstract ZipFile getFile(String target);
     public abstract List<SourceEntry> getSourceEntries(String originName, ZipFile localZip);
+    public abstract List<SourceEntry> getFirstEntries(String originName, ZipFile localZip);
 
     public File getLocalFile(String target ){
         File f = new File(context.getCacheDir()+"/"+ target);

@@ -3,7 +3,6 @@ package es.rafaco.inappdevtools.library.logic.sources;
 import android.content.Context;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,8 +29,8 @@ public class JarSourcesReader extends ZipSourcesReader {
         return jar;
     }
 
-    protected boolean isExcluded(ZipEntry entry) {
-        if (super.isExcluded(entry))
+    protected boolean isExcludedEntry(ZipEntry entry) {
+        if (super.isExcludedEntry(entry))
             return true;
 
         /*
@@ -53,7 +52,7 @@ public class JarSourcesReader extends ZipSourcesReader {
         Enumeration<? extends ZipEntry> enumeration = localZip.entries();
         while (enumeration.hasMoreElements()) {
             ZipEntry entry = enumeration.nextElement();
-            if(entry.isDirectory() && !isExcluded(entry)){
+            if(entry.isDirectory() && !isExcludedEntry(entry)){
                 String current = entry.getName();
                 if (firstFolder == null || current.contains(firstFolder)){
                     firstFolder = current;
