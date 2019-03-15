@@ -1,0 +1,121 @@
+package es.rafaco.inappdevtools.library.logic.sources.nodes;
+
+import java.io.*;
+import java.util.zip.*;
+
+/**
+ * A immutable wrapper around {@link ZipEntry} allowing
+ * simple access of the childs of directory entries.
+ *
+ * Extracted from: https://stackoverflow.com/questions/5158961/unzip-into-treemap-in-java
+ */
+public class ZipNode extends AbstractNode{
+
+    /**
+     * the corresponding Zip entry. If null, this is the root entry.
+     */
+    private ZipEntry entry;
+
+    /** the ZipFile from where the nodes came. */
+    private ZipFile file;
+
+
+    protected ZipNode(ZipFile f, ZipEntry entry) {
+        super(entry == null || entry.isDirectory());
+        this.file = f;
+        this.entry = entry;
+    }
+
+    /**
+     * returns the last component of the name of
+     * the entry, i.e. the file name. If this is a directory node,
+     * the name ends with '/'. If this is the root node, the name
+     * is simply "/".
+     */
+    public String getName() {
+        if(entry == null)
+            return "/";
+        String longName = entry.getName();
+        return longName.substring(longName.lastIndexOf(FOLDER_SEP,
+                longName.length()-2)+1);
+    }
+
+    /**
+     * gets the corresponding ZipEntry to this node.
+     * @return {@code null} if this is the root node (which has no
+     *    corresponding entry), else the corresponding ZipEntry.
+     */
+    public ZipEntry getEntry() {
+        return entry;
+    }
+
+    /**
+     * Gets the ZipFile, from where this ZipNode came.
+     */
+    public ZipFile getZipFile() {
+        return file;
+    }
+
+
+    /**
+     * opens an InputStream on this ZipNode. This only works when
+     * this is not a directory node, and only before the corresponding
+     * ZipFile is closed.
+     */
+    public InputStream openStream()
+            throws IOException
+    {
+        return file.getInputStream(entry);
+    }
+
+    /**
+     * a string representation of this ZipNode.
+     */
+    public String toString() {
+        String entryName = "root";
+        if (entry != null){
+            entryName = entry.getName();
+        }
+        return "ZipNode [" + entryName + "] in [" + file.getName() + "]";
+    }
+
+    public String getPath(){
+        if (entry == null) {
+            return FOLDER_SEP + "";
+        }
+       return entry.getName();
+    }
+
+
+
+    /**
+     * creates a ZipNode tree from a ZipFile
+     * and returns the root node.
+     *
+     * The nodes' {@link #openStream()} methods are only usable until the
+     * ZipFile is closed, but the structure information remains valid.
+     */
+    public static ZipNode fromZipFile(ZipFile zf) {
+        return new ZipNodeReader(zf).populate();
+    }
+
+
+
+
+    /**
+     * test method. Give name of zip file as command line argument.
+     */
+    public static void main(String[] params)
+            throws IOException
+    {
+        if(params.length < 1) {
+            System.err.println("Invocation:  java ZipNode zipFile.zip");
+            return;
+        }
+        ZipFile file = new ZipFile(params[0]);
+        ZipNode root = ZipNode.fromZipFile(file);
+        file.close();
+        root.printTree("", " ", "");
+    }
+
+}

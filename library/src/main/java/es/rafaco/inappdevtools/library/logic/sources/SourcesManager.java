@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetNode;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class SourcesManager {
@@ -20,6 +22,8 @@ public class SourcesManager {
     Context context;
     private List<SourceOrigin> origins;
 
+    AbstractNode root;
+
     public SourcesManager(Context context) {
         this.context = context;
         init();
@@ -28,6 +32,8 @@ public class SourcesManager {
     private void init() {
         origins = new ArrayList<>();
         populateAsset();
+
+        root = AssetNode.fromAssets(context);
 
         List<SourceEntry> ourAssets = getFilteredItems(new SourceEntry(ASSETS, "inappdevtools/", true));
 

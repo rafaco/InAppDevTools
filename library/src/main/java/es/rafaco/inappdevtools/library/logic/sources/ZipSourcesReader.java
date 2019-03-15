@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 
@@ -41,7 +42,7 @@ public class ZipSourcesReader extends SourcesReader{
         ZipNode root = null;
         try {
             root = ZipNode.fromZipFile(localZip);
-            root.printTree("", " ", "");
+            root.printTree();
         } catch (Exception e) {
             FriendlyLog.logException("Generating ZipNode: ", e);
         }
@@ -62,12 +63,12 @@ public class ZipSourcesReader extends SourcesReader{
         ZipNode root = null;
         try {
             root = ZipNode.fromZipFile(localZip);
-            root.printTree("", " ", "");
+            root.printTree();
         } catch (Exception e) {
             FriendlyLog.logException("Generating ZipNode: ", e);
         }
 
-        Map<String, ZipNode> currentNodes = root.getChildren();
+        Map<String, AbstractNode> currentNodes = root.getChildren();
         int currentLevel = 0;
         while (currentNodes.size()==1){
             currentNodes = currentNodes.get(0).getChildren();
@@ -75,8 +76,8 @@ public class ZipSourcesReader extends SourcesReader{
         }
 
         List<SourceEntry> result = new ArrayList<>();
-        for (Map.Entry<String, ZipNode> mapEntry : currentNodes.entrySet()) {
-            ZipNode current = mapEntry.getValue();
+        for (Map.Entry<String, AbstractNode> mapEntry : currentNodes.entrySet()) {
+            AbstractNode current = mapEntry.getValue();
             while (current.getChildren() != null && isExcludedNode(current)){
                 String firstKey = current.getChildren().keySet().iterator().next();
                 current = current.getChildren().get(firstKey);
@@ -86,15 +87,15 @@ public class ZipSourcesReader extends SourcesReader{
         return result;
     }
 
-    private ZipNode geNodeEntry(ZipEntry entry, ZipNode root) {
+    private AbstractNode geNodeEntry(ZipEntry entry, ZipNode root) {
         String path = entry.getName();
         String[] splits = path.split("/");
-        ZipNode parentNode = root;
+        AbstractNode parentNode = root;
         for (String currentSplit : splits) {
             String currentName = currentSplit;
             if (currentSplit.contains(".")){
             }
-            ZipNode currentNode = parentNode.getChildren().get(currentName+"/");
+            AbstractNode currentNode = parentNode.getChildren().get(currentName+"/");
             if (currentNode == null){
                 currentNode = parentNode.getChildren().get(currentName);
             }
@@ -109,15 +110,15 @@ public class ZipSourcesReader extends SourcesReader{
         return parentNode;
     }
 
-    protected boolean isExcludedNode(ZipNode node) {
-        Map<String, ZipNode> childrens = node.getChildren();
+    protected boolean isExcludedNode(AbstractNode node) {
+        Map<String, AbstractNode> childrens = node.getChildren();
         if (childrens==null){
             return false;
         }
         int folderCount = 0;
         int fileCount = 0;
-        for (Map.Entry<String, ZipNode> mapEntry : childrens.entrySet()) {
-            ZipNode current = mapEntry.getValue();
+        for (Map.Entry<String, AbstractNode> mapEntry : childrens.entrySet()) {
+            AbstractNode current = mapEntry.getValue();
             if (current.isDirectory())
                 folderCount++;
             else
