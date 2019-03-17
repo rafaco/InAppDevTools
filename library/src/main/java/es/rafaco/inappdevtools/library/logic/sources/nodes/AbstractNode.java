@@ -1,8 +1,10 @@
 package es.rafaco.inappdevtools.library.logic.sources.nodes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractNode {
@@ -12,8 +14,8 @@ public abstract class AbstractNode {
     protected Map<String, AbstractNode> children;
     protected boolean directory;
 
-    private String entryName;
-    private String entryPath;
+    protected String name;
+    protected String path;
 
 
     protected AbstractNode(boolean isDirectory) {
@@ -27,29 +29,32 @@ public abstract class AbstractNode {
         }
     }
 
+    public abstract String getName();
+    public abstract String getPath();
+
     public boolean isDirectory() {
         return directory;
     }
-
     public AbstractNode getParent() {
         return parent;
     }
-
     public Map<String, AbstractNode> getChildren() {
         return Collections.unmodifiableMap(children);
     }
 
-
-
-    public abstract String getName();
-    public abstract String getPath();
-    public abstract String toString();
-
-
-
+    /**
+     * a string representation of this ZipNode.
+     */
+    public String toString() {
+        return String.format("%s [%s] isDir [%s] at [%s]",
+                this.getClass().getSimpleName(),
+                getName(),
+                String.valueOf(isDirectory()),
+                getPath());
+    }
 
     /**
-     * prints a simple tree view of this ZipNode. Without params.
+     * Easily prints a simple tree view of this ZipNode, without params.
      */
     public void printTree(){
         printTree("", " ", "");
@@ -77,5 +82,22 @@ public abstract class AbstractNode {
             }
             child.printTree(subPrefix, nextSelf, nextSub);
         }
+    }
+
+    public List<AbstractNode> filter(String keyword) {
+        List<AbstractNode> result = new ArrayList<>();
+        if (getName().contains(keyword) || getPath().contains(keyword)){
+            result.add(this);
+        }
+
+        if (isDirectory() && !children.isEmpty()){
+            for (AbstractNode child : children.values() ) {
+                List<AbstractNode> filter = child.filter(keyword);
+                if (!filter.isEmpty()){
+                    result.addAll(filter);
+                }
+            }
+        }
+        return result;
     }
 }

@@ -1,8 +1,13 @@
 package es.rafaco.inappdevtools.library.logic.sources.nodes;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode.FOLDER_SEP;
 
 
 /**
@@ -24,16 +29,21 @@ public class ZipNodeReader extends AbstractNodeReader {
         root = new ZipNode(f, null);
     }
 
+    ZipNodeReader(ZipFile f, AbstractNodeReader previousReader, String prefix) {
+        super(previousReader, prefix);
+        this.file = f;
+    }
+
     /**
      * reads all entries, creates the corresponding Nodes and
      * returns the root node.
      */
-    public ZipNode populate() {
+    public AbstractNode populate() {
         for(Enumeration<? extends ZipEntry> entries = file.entries();
             entries.hasMoreElements(); ) {
             addEntry(entries.nextElement());
         }
-        return (ZipNode) root;
+        return root;
     }
 
     /**
@@ -43,9 +53,9 @@ public class ZipNodeReader extends AbstractNodeReader {
      * it to its parent node.
      * @returns the ZipNode corresponding to the entry.
      */
-    private ZipNode addEntry(ZipEntry entry) {
+    private AbstractNode addEntry(ZipEntry entry) {
         String name = entry.getName();
-        ZipNode node = (ZipNode) collected.get(name);
+        AbstractNode node = collected.get(name);
         if(node != null) {
             // already in the map
             return node;
@@ -56,16 +66,21 @@ public class ZipNodeReader extends AbstractNodeReader {
         return node;
     }
 
-    protected ZipNode createParentNode(String parentName) {
-        return addEntry(file.getEntry(parentName));
-    }
+    protected AbstractNode createParentNode(String parentName) {
+        if (parentName.indexOf(FOLDER_SEP)==parentName.lastIndexOf(FOLDER_SEP)){
+            AbstractNode node = collected.get(parentName);
+            if(node != null) {
+                return node;
+            }
+        }
 
-    /**
-     * connects a parent node with its child node.
-     */
-    private void connectParent(ZipNode parent, ZipNode child,
-                               String childName) {
-        child.parent = parent;
-        parent.children.put(childName, child);
+        if (!TextUtils.isEmpty(prefix) && parentName.startsWith(prefix)){
+            parentName = parentName.substring(parentName.indexOf(FOLDER_SEP)+1);
+        }
+        ZipEntry entry = file.getEntry(parentName);
+        if (entry==null){
+            Log.e("TAG", "no entry for " + parentName);
+        }
+        return addEntry(entry);
     }
 }

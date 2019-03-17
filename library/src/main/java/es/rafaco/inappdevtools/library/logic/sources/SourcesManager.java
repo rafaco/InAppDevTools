@@ -4,14 +4,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
-import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetNode;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
 
 public class SourcesManager {
 
@@ -33,7 +31,7 @@ public class SourcesManager {
         origins = new ArrayList<>();
         populateAsset();
 
-        root = AssetNode.fromAssets(context);
+        root = NodesHelper.populate(context);
 
         List<SourceEntry> ourAssets = getFilteredItems(new SourceEntry(ASSETS, "inappdevtools/", true));
 

@@ -41,7 +41,7 @@ public class ZipSourcesReader extends SourcesReader{
 
         ZipNode root = null;
         try {
-            root = ZipNode.fromZipFile(localZip);
+            root = (ZipNode) ZipNode.fromZipFile(localZip);
             root.printTree();
         } catch (Exception e) {
             FriendlyLog.logException("Generating ZipNode: ", e);
@@ -62,7 +62,7 @@ public class ZipSourcesReader extends SourcesReader{
 
         ZipNode root = null;
         try {
-            root = ZipNode.fromZipFile(localZip);
+            root = (ZipNode) ZipNode.fromZipFile(localZip);
             root.printTree();
         } catch (Exception e) {
             FriendlyLog.logException("Generating ZipNode: ", e);

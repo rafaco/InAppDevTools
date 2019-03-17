@@ -14,10 +14,17 @@ class AssetsReader extends AbstractNodeReader{
 
     private final Context context;
 
-    AssetsReader(Context context) {
+    AssetsReader(Context context, String prefix) {
         super();
         this.context = context;
-        root = new AssetNode("assets", "assets/", true);
+        this.prefix = prefix;
+        root = new StandardNode("root", "/", true);
+        addEntry(prefix, prefix + "/", true);
+    }
+
+    AssetsReader(Context context, AbstractNodeReader previousReader, String prefix) {
+        super(previousReader, prefix);
+        this.context = context;
     }
 
     @Override
@@ -32,7 +39,7 @@ class AssetsReader extends AbstractNodeReader{
         }
 
         for (String category: categories) {
-            String categoryPath = "assets/" + category + "/";
+            String categoryPath = prefix + "/" + category + "/";
             addEntry(category, categoryPath, true);
 
             List<String> resources = new ArrayList<>();
@@ -50,13 +57,13 @@ class AssetsReader extends AbstractNodeReader{
     }
 
 
-    private AssetNode addEntry(String entryName, String entryPath, boolean isDirectory) {
-        AssetNode node = (AssetNode) collected.get(entryPath);
+    protected AbstractNode addEntry(String entryName, String entryPath, boolean isDirectory) {
+        AbstractNode node = collected.get(entryPath);
         if(node != null) {
             // already in the map
             return node;
         }
-        node = new AssetNode(entryName, entryPath, isDirectory);
+        node = new StandardNode(entryName, entryPath, isDirectory);
         collected.put(entryPath, node);
         findParent(node);
         return node;

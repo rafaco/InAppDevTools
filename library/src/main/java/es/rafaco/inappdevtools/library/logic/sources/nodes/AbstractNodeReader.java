@@ -1,10 +1,9 @@
 package es.rafaco.inappdevtools.library.logic.sources.nodes;
 
-import java.util.Enumeration;
+import android.text.TextUtils;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode.FOLDER_SEP;
 
@@ -25,11 +24,25 @@ public abstract class AbstractNodeReader {
     protected AbstractNode root;
 
     /**
+     * category node name
+     */
+    protected String prefix;
+
+    /**
      * creates a new NodeReader.
      */
     public AbstractNodeReader() {
         this.collected = new HashMap<String, AbstractNode>();
         collected.put("", root);
+    }
+
+    /**
+     * creates a new NodeReader reusing collected map from another NodeReader
+     */
+    public AbstractNodeReader(AbstractNodeReader previousReader, String prefix) {
+        this.collected = previousReader.collected;
+        this.root = previousReader.root;
+        this.prefix = prefix;
     }
 
     /**
@@ -48,14 +61,19 @@ public abstract class AbstractNodeReader {
      */
     protected void findParent(AbstractNode node) {
         String nodeName = node.getPath();
+        if (!TextUtils.isEmpty(prefix) && !nodeName.startsWith(prefix)){
+            nodeName = prefix+ "/" + nodeName;
+        }
+
         int slashIndex = nodeName.lastIndexOf(FOLDER_SEP, nodeName.length()-2);
         if(slashIndex < 0) {
             // top-level-node
             connectParent(root, node, nodeName);
             return;
         }
-        String parentName = nodeName.substring(0, slashIndex+1);
-        AbstractNode parent = createParentNode(parentName);
+
+        String parentName = nodeName.substring(0, slashIndex);
+        AbstractNode parent = createParentNode(parentName + FOLDER_SEP);
         connectParent(parent, node, nodeName.substring(slashIndex+1));
     }
 

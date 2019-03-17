@@ -68,17 +68,6 @@ public class ZipNode extends AbstractNode{
         return file.getInputStream(entry);
     }
 
-    /**
-     * a string representation of this ZipNode.
-     */
-    public String toString() {
-        String entryName = "root";
-        if (entry != null){
-            entryName = entry.getName();
-        }
-        return "ZipNode [" + entryName + "] in [" + file.getName() + "]";
-    }
-
     public String getPath(){
         if (entry == null) {
             return FOLDER_SEP + "";
@@ -95,7 +84,7 @@ public class ZipNode extends AbstractNode{
      * The nodes' {@link #openStream()} methods are only usable until the
      * ZipFile is closed, but the structure information remains valid.
      */
-    public static ZipNode fromZipFile(ZipFile zf) {
+    public static AbstractNode fromZipFile(ZipFile zf) {
         return new ZipNodeReader(zf).populate();
     }
 
@@ -113,7 +102,7 @@ public class ZipNode extends AbstractNode{
             return;
         }
         ZipFile file = new ZipFile(params[0]);
-        ZipNode root = ZipNode.fromZipFile(file);
+        ZipNode root = (ZipNode) ZipNode.fromZipFile(file);
         file.close();
         root.printTree("", " ", "");
     }
