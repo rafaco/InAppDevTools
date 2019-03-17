@@ -71,9 +71,9 @@ public class OverlayUIService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
+        String property = intent.getStringExtra(EXTRA_INTENT_PROPERTY);
         try {
-            IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
-            String property = intent.getStringExtra(EXTRA_INTENT_PROPERTY);
             //TODO: cleanUp
             lastRequestParam = intent.getStringExtra(EXTRA_INTENT_PARAM);
             if (action != null){
@@ -82,7 +82,7 @@ public class OverlayUIService extends Service {
                 Log.v(DevTools.TAG, "OverlayUIService - onStartCommand without action");
             }
         } catch (Exception e) {
-            FriendlyLog.logException("OverlayUiServiceSticky unable to start", e);
+            FriendlyLog.logException("OverlayUiService unable to start " + action + " " + property, e);
             e.printStackTrace();
             stopSelf();
         }
