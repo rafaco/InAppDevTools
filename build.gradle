@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
     // Declare our plugin (make it available at subprojects)
-    id "es.rafaco.inappdevtools" version "0.0.08" apply false
+    id "es.rafaco.inappdevtools" version "0.0.09" apply false
     id "org.sonarqube" version "2.7"
 }
 
