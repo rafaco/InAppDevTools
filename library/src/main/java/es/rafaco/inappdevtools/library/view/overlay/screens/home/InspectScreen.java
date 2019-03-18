@@ -52,8 +52,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(SourcesScreen.class);
+                    public void run() { OverlayUIService.performNavigation(SourcesScreen.class);
                     }
                 }));
 
@@ -61,8 +60,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_layers_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(InspectViewScreen.class);
+                    public void run() { OverlayUIService.performNavigation(InspectViewScreen.class);
                     }
                 }));
 
@@ -81,8 +79,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(LogScreen.class);
+                    public void run() { OverlayUIService.performNavigation(LogScreen.class);
                     }
                 }));
 
@@ -90,8 +87,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(NetworkScreen.class);
+                    public void run() { OverlayUIService.performNavigation(NetworkScreen.class);
                     }
                 }));
 
@@ -99,8 +95,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(ScreensScreen.class);
+                    public void run() { OverlayUIService.performNavigation(ScreensScreen.class);
                     }
                 }));
 
@@ -108,8 +103,7 @@ public class InspectScreen extends OverlayScreen {
                 R.drawable.ic_bug_report_rally_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        OverlayUIService.performNavigation(ErrorsScreen.class);
+                    public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);
                     }
                 }));
 
