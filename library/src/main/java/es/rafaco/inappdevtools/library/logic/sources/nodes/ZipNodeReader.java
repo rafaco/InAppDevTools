@@ -26,7 +26,7 @@ public class ZipNodeReader extends AbstractNodeReader {
     ZipNodeReader(ZipFile f) {
         super();
         this.file = f;
-        root = new ZipNode(f, null);
+        root = new StandardNode("root", "/", true);
     }
 
     ZipNodeReader(ZipFile f, AbstractNodeReader previousReader, String prefix) {
@@ -60,7 +60,7 @@ public class ZipNodeReader extends AbstractNodeReader {
             // already in the map
             return node;
         }
-        node = new ZipNode(file, entry);
+        node = new ZipNode(file, entry, prefix);
         collected.put(name, node);
         findParent(node);
         return node;

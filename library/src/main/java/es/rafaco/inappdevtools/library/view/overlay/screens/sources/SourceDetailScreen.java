@@ -47,19 +47,24 @@ public class SourceDetailScreen extends OverlayScreen {
 
         codeHeader = bodyView.findViewById(R.id.code_header);
         codeViewer = bodyView.findViewById(R.id.code_view);
+
         codeViewer.setCode("");
 
         new AsyncTask<String, String, String>(){
-
             @Override
             protected String doInBackground(String... strings) {
-                return DevTools.getSourcesManager().getContent(getParams().type, getParams().path);
+                return DevTools.getSourcesManager().getContent(getParams().path);
             }
 
             @Override
             protected void onPostExecute(String content) {
                 super.onPostExecute(content);
                 codeHeader.setText(getParams().path);
+
+                if (content == null){
+                    codeViewer.setCode("Unable to get content");
+                    return;
+                }
 
                 final SourceAdapter codeAdapter = new SourceAdapter(SourceDetailScreen.this, content, getLanguage(), getParams());
                 codeViewer.post(new Runnable() {

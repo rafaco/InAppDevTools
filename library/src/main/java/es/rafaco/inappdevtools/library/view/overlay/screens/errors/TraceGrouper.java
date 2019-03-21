@@ -1,7 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-import android.text.TextUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -112,7 +110,7 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : "Other");
         item.setColor(getColor(item));
-        item.setOpenable(DevTools.getSourcesManager().canOpen(item.getSourcetrace().extractPath()));
+        item.setOpenable(DevTools.getSourcesManager().canOpenClassName(item.getSourcetrace().extractPath()));
     }
 
     @NotNull

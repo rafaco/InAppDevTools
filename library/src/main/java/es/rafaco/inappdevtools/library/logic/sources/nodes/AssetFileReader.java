@@ -18,7 +18,7 @@ public class AssetFileReader {
         this.context = context;
     }
 
-    public ZipFile getFile(String target) {
+    public ZipFile getZipFile(String target) {
         ZipFile zip = null;
         try {
             zip = new ZipFile(getLocalFile(target));

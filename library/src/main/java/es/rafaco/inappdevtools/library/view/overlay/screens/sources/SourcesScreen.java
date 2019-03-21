@@ -54,7 +54,8 @@ public class SourcesScreen extends OverlayScreen {
     }
 
     private List<Object> getData(SourceEntry filter) {
-        List<SourceEntry> filteredItems = DevTools.getSourcesManager().getFilteredItems(filter);
+        String path = (filter!=null) ? filter.getName() : null;
+        List<SourceEntry> filteredItems = DevTools.getSourcesManager().getFilteredItems(path);
         List<Object> data = new ArrayList<>();
 
         if (filter != null){

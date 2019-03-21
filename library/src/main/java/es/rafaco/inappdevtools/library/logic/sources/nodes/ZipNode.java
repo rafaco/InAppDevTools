@@ -4,13 +4,11 @@ import java.io.*;
 import java.util.zip.*;
 
 /**
- * A immutable wrapper around {@link ZipEntry} allowing
- * simple access of the childs of directory entries.
- *
- * Extracted from: https://stackoverflow.com/questions/5158961/unzip-into-treemap-in-java
+ * Original ideas extracted from: https://stackoverflow.com/questions/5158961/unzip-into-treemap-in-java
  */
 public class ZipNode extends AbstractNode{
 
+    private final String prefix;
     /**
      * the corresponding Zip entry. If null, this is the root entry.
      */
@@ -20,10 +18,11 @@ public class ZipNode extends AbstractNode{
     private ZipFile file;
 
 
-    protected ZipNode(ZipFile f, ZipEntry entry) {
+    protected ZipNode(ZipFile f, ZipEntry entry, String prefix) {
         super(entry == null || entry.isDirectory());
         this.file = f;
         this.entry = entry;
+        this.prefix = prefix;
     }
 
     /**
@@ -32,12 +31,21 @@ public class ZipNode extends AbstractNode{
      * the name ends with '/'. If this is the root node, the name
      * is simply "/".
      */
+    @Override
     public String getName() {
         if(entry == null)
             return "/";
-        String longName = entry.getName();
+        String longName = getPath();
         return longName.substring(longName.lastIndexOf(FOLDER_SEP,
                 longName.length()-2)+1);
+    }
+
+    @Override
+    public String getPath(){
+        if (entry == null) {
+            return FOLDER_SEP + "";
+        }
+        return prefix + "/" + entry.getName();
     }
 
     /**
@@ -62,17 +70,8 @@ public class ZipNode extends AbstractNode{
      * this is not a directory node, and only before the corresponding
      * ZipFile is closed.
      */
-    public InputStream openStream()
-            throws IOException
-    {
+    public InputStream openStream() throws IOException {
         return file.getInputStream(entry);
-    }
-
-    public String getPath(){
-        if (entry == null) {
-            return FOLDER_SEP + "";
-        }
-       return entry.getName();
     }
 
 

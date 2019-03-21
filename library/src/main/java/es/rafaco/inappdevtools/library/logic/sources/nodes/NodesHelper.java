@@ -3,7 +3,13 @@ package es.rafaco.inappdevtools.library.logic.sources.nodes;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipFile;
+
+import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 
 public class NodesHelper {
 
@@ -41,7 +47,7 @@ public class NodesHelper {
             }
 
             if (!TextUtils.isEmpty(prefix)){
-                ZipFile file = fileReader.getFile(node.getPath());
+                ZipFile file = fileReader.getZipFile(node.getPath());
                 nodeReader = new ZipNodeReader(file, nodeReader, prefix);
                 root = nodeReader.populate();
             }
@@ -51,13 +57,36 @@ public class NodesHelper {
     }
 
     public static AbstractNode getNodeByFullPath(AbstractNode root, String fullPath){
-        String[] parts = fullPath.split("[/]");
+        if (TextUtils.isEmpty(fullPath)){
+            return root;
+        }
+
         AbstractNode current = root;
+        String[] parts = fullPath.split("[/]");
+        boolean isFile = !fullPath.endsWith("/");
+        String fileName = isFile ? (parts[parts.length-1]) : "";
+
         if (parts.length>0){
             for (String part: parts){
-                current = current.getChildren().get(part + "/");
+                if (isFile && part.equals(fileName)){
+                    return current;
+                }
+
+                Map<String, AbstractNode> children = current.getChildren();
+                if (children == null || children.isEmpty()) return null;
+
+                current = children.get(part + "/");
+                if (current == null) return null;
             }
         }
         return current;
+    }
+
+    public static List<SourceEntry> castToSourceEntry(Collection<AbstractNode> nodes) {
+        List<SourceEntry> entries = new ArrayList<>();
+        for (AbstractNode node : nodes){
+            entries.add(new SourceEntry("TODO", node.getPath(), node.isDirectory()));
+        }
+        return entries;
     }
 }

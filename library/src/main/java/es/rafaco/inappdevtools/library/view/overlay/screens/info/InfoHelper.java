@@ -199,7 +199,7 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += "Git config:";
         result += "\n";
-        result += DevTools.getSourcesManager().getContent(SourcesManager.ASSETS, "inappdevtools/git_config.json");
+        result += DevTools.getSourcesManager().getContent("assets/inappdevtools/git_config.json");
         result += "\n";
         //result += "Git diff:";
         //result += "\n";

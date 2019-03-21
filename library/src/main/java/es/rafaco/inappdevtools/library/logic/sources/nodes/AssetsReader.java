@@ -50,7 +50,8 @@ class AssetsReader extends AbstractNodeReader{
             }
 
             for (String resource: resources) {
-                addEntry(resource, categoryPath + resource, true);
+                boolean isDirectory = resource.endsWith("/");
+                addEntry(resource, categoryPath + resource, isDirectory);
             }
         }
         return root;

@@ -4,22 +4,32 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetFileReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.StandardNode;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class SourcesManager {
 
     public static final String ASSETS = "assets";
-    private static final String SRC_TAIL = "_sources.jar";
-    private static final String RES_TAIL = "_resources.zip";
 
     Context context;
-    private List<SourceOrigin> origins;
-
     AbstractNode root;
 
     public SourcesManager(Context context) {
@@ -28,180 +38,65 @@ public class SourcesManager {
     }
 
     private void init() {
-        origins = new ArrayList<>();
-        populateAsset();
-
         root = NodesHelper.populate(context);
-
-        List<SourceEntry> ourAssets = getFilteredItems(new SourceEntry(ASSETS, "inappdevtools/", true));
-
-        for (SourceEntry entry: ourAssets) {
-            SourcesReader reader = null;
-            if (entry.getFileName().endsWith(RES_TAIL)){
-                reader = new ZipSourcesReader(context);
-            }
-            else if (entry.getFileName().endsWith(SRC_TAIL)){
-                reader = new JarSourcesReader(context);
-            }
-
-            if (reader != null){
-                populate(entry, reader);
-            }
-        }
     }
 
-    private void populateAsset() {
-        AssetSourcesReader reader = new AssetSourcesReader(context);
-        SourceOrigin newPackage = new SourceOrigin();
-        newPackage.name = ASSETS;
-        newPackage.localZip = null;
-        newPackage.items = reader.getSourceEntries(ASSETS, null);
-        origins.add(newPackage);
-    }
-
-    private void populate(SourceEntry entry, SourcesReader reader) {
-        String origin = entry.getFileName();
-        SourceOrigin newPackage = new SourceOrigin();
-        newPackage.name = origin;
-
-        newPackage.localZip = reader.getFile(entry.getName());
-        if (newPackage.localZip == null){
-            return; //Unable to get file, skip
+    public List<SourceEntry> getFilteredItems(String filter){
+        AbstractNode parent = NodesHelper.getNodeByFullPath(root, filter);
+        if (parent == null){
+            return new ArrayList<>();
         }
 
-        newPackage.items = reader.getSourceEntries(origin, newPackage.localZip);
-        newPackage.firstLevel = reader.getFirstEntries(origin, newPackage.localZip);
-
-        //TODO implement similarly for other types
-        if(reader instanceof JarSourcesReader){
-            newPackage.firstFolders = ((JarSourcesReader)reader).getFirstFolders(newPackage.localZip);
-        }
-
-        //TODO: research if needed, it brokes next requests
-        /*try {
-            newPackage.localZip.close();
-        } catch (IOException e) {
-            FriendlyLog.logException("Closing localzip: ", e);
-        }*/
-
-        origins.add(newPackage);
+        Collection<AbstractNode> children = parent.getChildren().values();
+        return NodesHelper.castToSourceEntry(children);
     }
-
-    private ArrayList<SourceEntry> getOriginIndexItems() {
-        ArrayList<SourceEntry> indexItems = new ArrayList<>();
-        if (!origins.isEmpty()){
-            for (SourceOrigin entry : origins) {
-                indexItems.add(new SourceEntry(entry.name, "", true));
-            }
-        }
-        return indexItems;
-    }
-
-    private SourceOrigin getOrigin(String originName) {
-        for (SourceOrigin entry : origins) {
-            if (entry.name.equals(originName)) return entry;
-        }
-        return null;
-    }
-
-
-    public boolean canOpen(String path) {
-        String origin = DevTools.getSourcesManager().findOriginByClassName(path);
-        return !TextUtils.isEmpty(origin);
-    }
-    
-    public String findOriginByClassName(String namespace) {
-        String path = namespace.replace(".", "/");
-        return findOriginByPath(path);
-    }
-
-    public String findOriginByPath(String sourcePath) {
-        for (SourceOrigin entry : origins) {
-            if (entry.firstFolders != null && !entry.firstFolders.isEmpty()){
-                for (String folder : entry.firstFolders) {
-                    if(sourcePath.contains(folder)){
-                        return entry.name;
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
 
     public String getContent(String path){
-        String origin = findOriginByPath(path);
-        if (TextUtils.isEmpty(origin)){
-            return "";
-        }
-
-        SourceOrigin sourceOrigin = getOrigin(origin);
-        if (sourceOrigin==null)
+        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
+        if (!target.isDirectory()){
             return null;
-
-        return sourceOrigin.getContent(path);
-    }
-
-    public String getContent(String originName, String entryName){
-        if (!TextUtils.isEmpty(originName)){
-            SourceOrigin sourceOrigin = getOrigin(originName);
-            if (sourceOrigin==null)
-                return null;
-
-            return sourceOrigin.getContent(entryName);
-        }else{
-            return getContent(entryName);
-        }
-    }
-
-    public List<SourceEntry> getFilteredItems(SourceEntry filter){
-        ArrayList<SourceEntry> filteredItems = new ArrayList<>();
-
-        if (filter == null || TextUtils.isEmpty(filter.getOrigin())){
-            //Starting list with origin selector
-            filteredItems = getOriginIndexItems();
-            return filterDeep(filteredItems, 0);
         }
 
-        SourceOrigin sourceOrigin = getOrigin(filter.getOrigin());
-        if (sourceOrigin==null)
-            return new ArrayList<>();
-
-        //TODO: remove this!
-        // 1. make next loop compatible with root level
-        // 2. generalize empty folder simplification
-        if (TextUtils.isEmpty(filter.getName()) && filter.getOrigin()!=ASSETS){
-            return sourceOrigin.firstLevel;
-        }
-        for (SourceEntry entry : sourceOrigin.items) {
-            if (entry.getName().startsWith(filter.getName())
-                    && !entry.getName().equals(filter.getName())) {
-                filteredItems.add(entry);
+        InputStream inputStream;
+        try {
+            if (target instanceof ZipNode) {
+                ZipFile zipfile = ((ZipNode)target).getZipFile();
+                ZipEntry zipentry = ((ZipNode)target).getEntry();
+                inputStream = zipfile.getInputStream(zipentry);
+            }
+            else{
+                inputStream = context.getAssets().open(target.getPath());
             }
         }
-        return filterDeep(filteredItems, filter.getDeepLevel());
+        catch (IOException e) {
+            FriendlyLog.logException("Exception", e);
+            return null;
+        }
+        return readInputStream(inputStream);
     }
 
-    private List<SourceEntry> filterDeep(List<SourceEntry> items, int deepLevel) {
-        if (deepLevel < 0)
-            return items;
-
-        List<SourceEntry> result = new ArrayList<>();
-        for (SourceEntry entry : items) {
-            if (entry.getDeepLevel() <= deepLevel+1){
-                result.add(entry);
-            }else{
-                Log.w("TAG","isExcludedDeep " + entry.getName());
+    @NotNull
+    protected String readInputStream(InputStream inputStream) {
+        StringBuilder builder = new StringBuilder();
+        try {
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            for (String line; (line = r.readLine()) != null; ) {
+                builder.append(line).append('\n');
             }
+        } catch (IOException e) {
+            FriendlyLog.logException("Exception reading content of file", e);
         }
-        return result;
+
+        return builder.toString();
     }
 
-    public List<String> getOriginNames() {
-        ArrayList<String> indexItems = new ArrayList<>();
-        for (SourceOrigin entry : origins) {
-            indexItems.add(entry.name);
+    public boolean canOpenClassName(String namespace) {
+        String filename = namespace.substring(namespace.lastIndexOf("/"));
+        String path = namespace.replace(".", "/");
+        AbstractNode target = NodesHelper.getNodeByFullPath(root, path + filename);
+        if (target != null){
+            return true;
         }
-        return indexItems;
+        return false;
     }
 }

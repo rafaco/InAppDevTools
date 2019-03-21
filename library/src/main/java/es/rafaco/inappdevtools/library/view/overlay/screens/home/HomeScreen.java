@@ -107,7 +107,7 @@ public class HomeScreen extends OverlayScreen {
                     public void run() { OverlayUIService.performNavigation(InspectViewScreen.class);
                     }
                 }));
-        
+
         data.add(new RunnableConfig("Logcat",
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
