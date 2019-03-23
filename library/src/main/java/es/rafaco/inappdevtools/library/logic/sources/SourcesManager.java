@@ -53,7 +53,7 @@ public class SourcesManager {
 
     public String getContent(String path){
         AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
-        if (!target.isDirectory()){
+        if (target.isDirectory()){
             return null;
         }
 
@@ -65,7 +65,9 @@ public class SourcesManager {
                 inputStream = zipfile.getInputStream(zipentry);
             }
             else{
-                inputStream = context.getAssets().open(target.getPath());
+                String obtainedPath = target.getPath();
+                String realPath = obtainedPath.substring(obtainedPath.indexOf("/")+1);
+                inputStream = context.getAssets().open(realPath);
             }
         }
         catch (IOException e) {

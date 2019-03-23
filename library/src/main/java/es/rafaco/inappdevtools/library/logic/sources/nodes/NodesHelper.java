@@ -68,14 +68,11 @@ public class NodesHelper {
 
         if (parts.length>0){
             for (String part: parts){
-                if (isFile && part.equals(fileName)){
-                    return current;
-                }
-
                 Map<String, AbstractNode> children = current.getChildren();
                 if (children == null || children.isEmpty()) return null;
 
-                current = children.get(part + "/");
+                String childrenSelector = (isFile && part.equals(fileName)) ? part : part + "/";
+                current = children.get(childrenSelector);
                 if (current == null) return null;
             }
         }
