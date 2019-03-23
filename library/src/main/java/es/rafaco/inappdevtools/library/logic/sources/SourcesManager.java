@@ -53,7 +53,7 @@ public class SourcesManager {
 
     public String getContent(String path){
         AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
-        if (target.isDirectory()){
+        if (target == null || target.isDirectory()){
             return null;
         }
 
@@ -92,13 +92,23 @@ public class SourcesManager {
         return builder.toString();
     }
 
-    public boolean canOpenClassName(String namespace) {
-        String filename = namespace.substring(namespace.lastIndexOf("/"));
-        String path = namespace.replace(".", "/");
-        AbstractNode target = NodesHelper.getNodeByFullPath(root, path + filename);
-        if (target != null){
-            return true;
+    public boolean canOpenClassName(String fullClassName) {
+        String nodePath = getNodePathFromClassName(fullClassName);
+        return !TextUtils.isEmpty(nodePath);
+    }
+
+    public String getNodePathFromClassName(String fullClassName){
+        String filename = fullClassName.substring(fullClassName.lastIndexOf("/")+1);
+        String path = fullClassName.substring(0, fullClassName.lastIndexOf("/")+1);
+        path = path.replace(".", "/");
+
+        String[] prefixs = new String[]{"src/", "gen/"};
+        for (String prefix: prefixs){
+            AbstractNode target = NodesHelper.getNodeByFullPath(root, prefix + path + filename);
+            if (target != null){
+                return target.getPath();
+            }
         }
-        return false;
+        return null;
     }
 }

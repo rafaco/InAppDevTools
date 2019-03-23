@@ -46,7 +46,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        TraceItem data = (TraceItem) abstractData;
+        final TraceItem data = (TraceItem) abstractData;
         if (data!=null){
 
             itemView.setActivated(data.isExpanded());
@@ -101,7 +101,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                     public void onClick(View v) {
                         OverlayUIService.performNavigation(SourceDetailScreen.class,
                                 SourceDetailScreen.buildParams(null,
-                                        traces.extractPath(),
+                                        data.getFullPath(),
                                         traces.getLineNumber()));
                     }
                 });

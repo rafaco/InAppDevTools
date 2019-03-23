@@ -1,5 +1,7 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+import android.text.TextUtils;
+
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 
 public class TraceItem {
@@ -13,7 +15,7 @@ public class TraceItem {
     private boolean expanded = true;
     private boolean alwaysExpanded = false;
     private boolean isGrouped = false;
-    private boolean openable = false;
+    private String fullPath;
     private int color;
 
     public TraceItem(Sourcetrace sourcetrace) {
@@ -85,11 +87,15 @@ public class TraceItem {
     }
 
     public boolean isOpenable() {
-        return openable;
+        return !TextUtils.isEmpty(fullPath);
     }
 
-    public void setOpenable(boolean openable) {
-        this.openable = openable;
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
     }
 
     public int getColor() {

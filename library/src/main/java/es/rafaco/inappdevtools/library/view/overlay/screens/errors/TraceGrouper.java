@@ -110,7 +110,7 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : "Other");
         item.setColor(getColor(item));
-        item.setOpenable(DevTools.getSourcesManager().canOpenClassName(item.getSourcetrace().extractPath()));
+        item.setFullPath(DevTools.getSourcesManager().getNodePathFromClassName(item.getSourcetrace().extractPath()));
     }
 
     @NotNull
