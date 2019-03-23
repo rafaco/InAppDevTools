@@ -125,49 +125,13 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Network",
-                R.drawable.ic_cloud_queue_white_24dp,
+        data.add(new RunnableConfig("More",
+                R.drawable.ic_more_vert_rally_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(NetworkScreen.class);
+                    public void run() { OverlayUIService.performNavigation(MoreScreen.class);
                     }
                 }));
-
-
-        data.add(new RunnableConfig("Screens",
-                R.drawable.ic_photo_library_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(ScreensScreen.class);
-                    }
-                }));
-
-        data.add(new RunnableConfig("Errors",
-                R.drawable.ic_bug_report_rally_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);
-                    }
-                }));
-
-        data.add(new RunnableConfig("Config",
-                R.drawable.ic_settings_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        DevTools.showMessage("TODO");
-                    }
-                }));
-
-        /*
-        data.add(new RunnableConfig("Inspect",
-                R.drawable.ic_developer_mode_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(InspectScreen.class);
-                    }
-                }));
-        */
 
         return data;
     }
