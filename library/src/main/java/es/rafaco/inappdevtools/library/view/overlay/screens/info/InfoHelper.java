@@ -65,8 +65,6 @@ public class InfoHelper extends ToolHelper {
         String result = "";
         result += getAppInfo().toString();
         result += "\n";
-        result += getDevToolsInfo().toString();
-        result += "\n";
         result += AppInfoUtils.getSigningInfo(context);
         result += "\n";
         result += getPackageInfoInfo().toString();
@@ -82,7 +80,7 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += getLinuxInfo();
         result += "\n";
-        result += "//TODO: Screen info";
+        result += "//TODO: Screen and other hardware";
         result += "\n";
         return result;
     }
@@ -111,8 +109,8 @@ public class InfoHelper extends ToolHelper {
 
     public InfoGroup getDevToolsInfo() {
         CompileConfig buildConfig = new CompileConfig(context);
-        InfoGroup group = new InfoGroup.Builder("DevTools library")
-                .add("DevTools version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+        InfoGroup group = new InfoGroup.Builder("InAppDevTools")
+                .add("Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
                 .add(CompileConfigFields.EXT_ENABLED, buildConfig.getString(CompileConfigFields.EXT_ENABLED))
@@ -156,19 +154,14 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += "Top activity is " + getTopActivity();
         result += "\n";
-        result += logManager.getStartedActivitiesCount() + " activities started";
-        result += "\n";
-        result += DevTools.getActivityLogManager().getLog();
         result += "\n";
         result += getRunningInfo().toString();
-        result += "\n";
-        result += DevTools.getDatabase().getOverview();
         result += "\n";
         return result;
     }
 
     public InfoGroup getRunningInfo() {
-        return new InfoGroup.Builder("Currently running")
+        return new InfoGroup.Builder("")
                 .add("Services", getRunningServices())
                 .add("Tasks", getRunningTasks())
                 .build();
@@ -197,7 +190,7 @@ public class InfoHelper extends ToolHelper {
         return group;
     }
 
-    public String getConfig() {
+    public String getConfigReport() {
         String result = "";
         result += "Compile config:";
         result += "\n";
@@ -211,6 +204,15 @@ public class InfoHelper extends ToolHelper {
         //result += "Git diff:";
         //result += "\n";
         //result += DevTools.getSourcesManager().getContent(SourcesManager.ASSETS, "inappdevtools/git.diff");
+        return result;
+    }
+
+    public String getToolsReport() {
+        String result = "";
+        result += getDevToolsInfo().toString();
+        result += "\n";
+        result += DevTools.getDatabase().getOverview();
+        result += "\n";
         return result;
     }
 
@@ -308,9 +310,10 @@ public class InfoHelper extends ToolHelper {
             if (info.service.getPackageName().equals(packageName)) {
                 String className = info.service.getShortClassName();
                 String name = className.substring(className.lastIndexOf(".")+1);
-                String elapsed = DateUtils.getElapsedTimeLowered(Calendar.getInstance().getTimeInMillis() - info.activeSince);
-                String date = DateUtils.format(info.activeSince);
-                String text = name + " from " + elapsed + "(" + date + ")";
+                long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
+                String elapsed = DateUtils.getElapsedTimeLowered(startTimeMillis);
+                String date = DateUtils.format(startTimeMillis);
+                String text = name + " started " + elapsed + " (" + date + ")";
                 result += text + "\n";
             }
         }

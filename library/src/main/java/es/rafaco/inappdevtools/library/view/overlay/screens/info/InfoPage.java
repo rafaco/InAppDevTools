@@ -14,11 +14,12 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
 public enum InfoPage {
-
-    LIVE("Live"),
-    APK("Apk"),
+    APP("App"),
     DEVICE("Device"),
-    CONFIG("Config");
+    CONFIG("Build"),
+    LIVE("Status"),
+    LIBRARY("Tools");
+
 
     private final InfoHelper helper;
     private InfoViewHolder viewHolder;
@@ -29,17 +30,20 @@ public enum InfoPage {
         helper = new InfoHelper();
         mTitle = title;
 
-        if (title.equals("Live")) {
+        if (title.equals("Status")) {
             mContent = helper.getAppStatus();
         }
-        else if (title.equals("Apk")) {
+        else if (title.equals("App")) {
             mContent = helper.getApkReport();
         }
         if (title.equals("Device")) {
             mContent = helper.getDeviceReport();
         }
-        else if (title.equals("Config")) {
-            mContent = helper.getConfig();
+        else if (title.equals("Build")) {
+            mContent = helper.getConfigReport();
+        }
+        else if (title.equals("Tools")) {
+            mContent = helper.getToolsReport();
         }
 
         viewHolder = new InfoViewHolder(title, mContent);
