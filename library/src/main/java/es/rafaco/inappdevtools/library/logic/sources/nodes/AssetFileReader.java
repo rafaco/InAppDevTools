@@ -35,17 +35,17 @@ public class AssetFileReader {
         File f = new File(context.getCacheDir() + target);
 
         if (!f.exists()){
-            populateAssetFile(target, f);
+            createLocalFromAsset(target, f);
         }
         return f;
     }
 
-    private void populateAssetFile(String target, File f) {
+    private void createLocalFromAsset(String target, File f) {
         FileOutputStream fos = null;
         try {
             f.getParentFile().mkdirs();
-            if (target.startsWith("assets/")){
-                target = target.substring("assets/".length()-1);
+            if (target.startsWith("/assets/")){
+                target = target.substring("/assets/".length());
             }
             InputStream is = context.getAssets().open(target);
             int size = is.available();
