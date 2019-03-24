@@ -10,6 +10,7 @@ import android.util.Log;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
@@ -82,9 +83,15 @@ public class OverlayUIService extends Service {
                 Log.v(DevTools.TAG, "OverlayUIService - onStartCommand without action");
             }
         } catch (Exception e) {
-            FriendlyLog.logException("OverlayUiService unable to start " + action + " " + property, e);
-            e.printStackTrace();
-            stopSelf();
+
+            if(DevTools.isDebug()){
+                throw e;
+            }else{
+                //Handle internal exceptions with low profile
+                FriendlyLog.logException("OverlayUiService unable to start " + action + " " + property, e);
+                e.printStackTrace();
+                stopSelf();
+            }
         }
         return DevTools.getConfig().overlayUiServiceSticky ? START_STICKY : START_NOT_STICKY;
     }

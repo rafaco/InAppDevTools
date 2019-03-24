@@ -29,6 +29,10 @@ public class InfoGroup {
         this.entries = entries;
     }
 
+    public void add(InfoEntry entry) {
+        this.entries.add(entry);
+    }
+
     public void removeEntries() {
         entries.clear();
     }

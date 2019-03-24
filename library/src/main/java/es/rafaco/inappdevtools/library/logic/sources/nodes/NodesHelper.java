@@ -48,6 +48,10 @@ public class NodesHelper {
 
             if (!TextUtils.isEmpty(prefix)){
                 ZipFile file = fileReader.getZipFile(node.getPath());
+                if (file == null){
+
+                    continue;
+                }
                 nodeReader = new ZipNodeReader(file, nodeReader, prefix);
                 root = nodeReader.populate();
             }

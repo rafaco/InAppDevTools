@@ -9,7 +9,7 @@
     tools:context=".view.ItemDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <AppBarLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
@@ -34,7 +34,7 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/item_detail_container"

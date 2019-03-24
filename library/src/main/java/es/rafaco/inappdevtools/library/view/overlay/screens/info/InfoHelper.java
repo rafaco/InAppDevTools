@@ -26,13 +26,13 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
 import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
@@ -51,7 +51,9 @@ public class InfoHelper extends ToolHelper {
         String result = "";
         result += getAppStatus();
         result += "\n";
-        result += getStaticInfo();
+        result += getApkReport();
+        result += "\n";
+        result += getDeviceReport();
         result += "\n";
         return result;
     }
@@ -59,21 +61,28 @@ public class InfoHelper extends ToolHelper {
     //region [ REPORT BUILDER ]
 
     @NonNull
-    public String getStaticInfo() {
+    public String getApkReport() {
         String result = "";
         result += getAppInfo().toString();
         result += "\n";
         result += getDevToolsInfo().toString();
         result += "\n";
+        result += AppInfoUtils.getSigningInfo(context);
+        result += "\n";
+        result += getPackageInfoInfo().toString();
+        result += "\n";
+        return result;
+    }
+
+    public String getDeviceReport() {
+        String result = "";
         result += getDeviceInfo().toString();
         result += "\n";
         result += getOsInfo().toString();
         result += "\n";
         result += getLinuxInfo();
         result += "\n";
-        result += AppInfoUtils.getSigningInfo(context);
-        result += "\n";
-        result += getPackageInfoInfo().toString();
+        result += "//TODO: Screen info";
         result += "\n";
         return result;
     }
@@ -143,12 +152,9 @@ public class InfoHelper extends ToolHelper {
     public String getAppStatus() {
         String result = "";
         ActivityLogManager logManager = DevTools.getActivityLogManager();
-        result += "Currently on " + (logManager.isInBackground() ? "Background" : "Foreground");
+        result += "App on " + (logManager.isInBackground() ? "Background" : "Foreground");
         result += "\n";
         result += "Top activity is " + getTopActivity();
-        result += "\n";
-        result += "\n";
-        result += DevTools.getDatabase().getOverview();
         result += "\n";
         result += logManager.getStartedActivitiesCount() + " activities started";
         result += "\n";
@@ -156,13 +162,14 @@ public class InfoHelper extends ToolHelper {
         result += "\n";
         result += getRunningInfo().toString();
         result += "\n";
+        result += DevTools.getDatabase().getOverview();
+        result += "\n";
         return result;
     }
 
     public InfoGroup getRunningInfo() {
         return new InfoGroup.Builder("Currently running")
                 .add("Services", getRunningServices())
-                .add("Services 2", getRunningServices2())
                 .add("Tasks", getRunningTasks())
                 .build();
     }
@@ -293,51 +300,35 @@ public class InfoHelper extends ToolHelper {
     }
 
     public String getRunningServices() {
-        String output = "";
-        String formatWithoutLabel = "        %s";
+        String result = "\n";
+
         String packageName = context.getPackageName();
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getPackageName().equals(packageName)) {
-                String text = service.service.getShortClassName() + "(" + service.service.getPackageName() + ") ";
-                output += String.format(formatWithoutLabel, text) + "\n";
-            }
-        }
-        return output;
-    }
-
-    public String getRunningServices2() {
-        String output = "";
-        String packageName = context.getPackageName();
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
-
-        long currentMillis = Calendar.getInstance().getTimeInMillis();
-        Calendar cal = Calendar.getInstance();
-
-        for (ActivityManager.RunningServiceInfo info : services) {
+        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (info.service.getPackageName().equals(packageName)) {
-                cal.setTimeInMillis(currentMillis - info.activeSince);
-                output += String.format("Process %s has been running since: %d ms \n", info.process, info.activeSince);
+                String className = info.service.getShortClassName();
+                String name = className.substring(className.lastIndexOf(".")+1);
+                String elapsed = DateUtils.getElapsedTimeLowered(Calendar.getInstance().getTimeInMillis() - info.activeSince);
+                String date = DateUtils.format(info.activeSince);
+                String text = name + " from " + elapsed + "(" + date + ")";
+                result += text + "\n";
             }
         }
-        return output;
+        return result;
     }
 
     private String getRunningTasks() {
-        String output = "";
-        String formatWithoutLabel = "        %s";
+        String output = "\n";
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
         Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
         while(itr.hasNext()){
-            ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo)itr.next();
+            ActivityManager.RunningTaskInfo runningTaskInfo = itr.next();
             int id = runningTaskInfo.id;
-            CharSequence desc= runningTaskInfo.description;
             int numOfActivities = runningTaskInfo.numActivities;
             String topActivity = runningTaskInfo.topActivity.getShortClassName();
-            String text = String.valueOf(id) + "(" + desc + ") top of " + String.valueOf(numOfActivities) + " is " + topActivity;
-            output += String.format(formatWithoutLabel, text) + "\n";
+            String text = String.valueOf(id) + " - " + topActivity + " top of " + numOfActivities;
+            output += text + "\n";
         }
         return output;
     }

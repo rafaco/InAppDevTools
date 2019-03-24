@@ -19,6 +19,8 @@ import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
+import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 
@@ -80,7 +82,9 @@ public class NetworkScreen extends OverlayScreen {
     }
 
     private Cursor getCursor() {
-        Uri transactionUri = Uri.parse("content://es.rafaco.devtoollib.chuck.provider/transaction");
+        Uri transactionUri = Uri.parse("content://" +
+                getContext().getPackageName() +
+                ".chuck.provider/transaction");
         String[] partialProjection = new String[] {
                 "_id",
                 "requestDate",

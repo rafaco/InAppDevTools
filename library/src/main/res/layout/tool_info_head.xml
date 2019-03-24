@@ -6,19 +6,9 @@
     android:gravity="right|center"
     android:layout_marginRight="20dp">
 
-    <Spinner
-        android:id="@+id/info_main_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:textAlignment="textEnd"
-        android:layout_gravity="end|center" />
-    <Spinner
-        android:id="@+id/info_second_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:textAlignment="textEnd"
-        android:layout_gravity="end|center" />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

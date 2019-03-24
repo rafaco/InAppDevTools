@@ -29,35 +29,42 @@ public class AssetFileReader {
     }
 
     public File getLocalFile(String target ){
-        if (target.startsWith("assets/")){
-            target = target.substring("assets/".length()-1);
+        if(!target.startsWith("/")){
+            target = "/" + target;
         }
-        File f = new File(context.getCacheDir()+"/"+ target);
-        if (!f.exists()){
-            FileOutputStream fos = null;
-            try {
-                f.getParentFile().mkdirs();
-                InputStream is = context.getAssets().open(target);
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
+        File f = new File(context.getCacheDir() + target);
 
-                fos = new FileOutputStream(f);
-                fos.write(buffer);
-            } catch (Exception e) {
-                FriendlyLog.logException("SourceReader exception", e);
-            }finally {
-                if (fos!=null){
-                    try {
-                        fos.close();
-                    } catch (IOException e) {
-                        FriendlyLog.logException("Exception", e);
-                    }
+        if (!f.exists()){
+            populateAssetFile(target, f);
+        }
+        return f;
+    }
+
+    private void populateAssetFile(String target, File f) {
+        FileOutputStream fos = null;
+        try {
+            f.getParentFile().mkdirs();
+            if (target.startsWith("assets/")){
+                target = target.substring("assets/".length()-1);
+            }
+            InputStream is = context.getAssets().open(target);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            fos = new FileOutputStream(f);
+            fos.write(buffer);
+        } catch (Exception e) {
+            FriendlyLog.logException("SourceReader exception", e);
+        }finally {
+            if (fos!=null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    FriendlyLog.logException("Exception", e);
                 }
             }
         }
-
-        return f;
     }
 }

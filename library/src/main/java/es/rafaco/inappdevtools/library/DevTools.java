@@ -354,5 +354,10 @@ public class DevTools {
         return onForceCloseRunnable;
     }
 
+    public static boolean isDebug() {
+        //TODO: sinc with config
+        return false;
+    }
+
     //endregion
 }

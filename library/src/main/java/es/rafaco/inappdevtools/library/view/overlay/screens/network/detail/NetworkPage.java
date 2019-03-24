@@ -153,13 +153,17 @@ public enum NetworkPage {
             }
         }
 
-        private void setText (String headersString, String bodyString,boolean isPlainText){
+        private void setText (String headersString, String bodyString, boolean isPlainText){
             Context context = headers.getContext();
             headers.setVisibility((TextUtils.isEmpty(headersString) ? View.GONE : View.VISIBLE));
             headers.setText(Html.fromHtml(headersString));
             if (!isPlainText) {
-                body.setText(context.getString(com.readystatesoftware.chuck.R.string.chuck_body_omitted));
-            } else {
+                body.setText("\n\n"+context.getString(com.readystatesoftware.chuck.R.string.chuck_body_omitted)+ "\n\n");
+            }
+            else if (TextUtils.isEmpty(bodyString)) {
+                body.setText("\n\n"+"( NO DATA )"+ "\n\n");
+            }
+            else {
                 body.setText(bodyString);
             }
         }

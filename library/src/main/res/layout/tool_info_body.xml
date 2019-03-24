@@ -4,19 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/out"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="textStart"
-        android:layout_gravity="start"
-        style="@style/content_margin"/>
-
-    <android.support.v7.widget.AppCompatButton
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/diff_button"
+    <nevet.me.wcviewpager.WrapContentViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/content_margin"/>
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 
 </LinearLayout>
