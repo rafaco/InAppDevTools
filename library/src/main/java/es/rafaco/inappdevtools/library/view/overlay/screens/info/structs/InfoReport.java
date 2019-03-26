@@ -81,7 +81,12 @@ public class InfoReport {
         }
 
         public Builder add(String text) {
-            add(new InfoGroup.Builder()
+            add("", text);
+            return this;
+        }
+
+        public Builder add(String title, String text) {
+            add(new InfoGroup.Builder(title)
                     .add(text)
                     .build());
             return this;

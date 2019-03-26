@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogMana
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.OSInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoGroup;
@@ -68,6 +69,11 @@ public class InfoHelper extends ToolHelper {
         return infoHelper.getReport().toString();
     }
 
+    public String getBuildReportContent() {
+        BuildInfoHelper infoHelper = new BuildInfoHelper(context);
+        return infoHelper.getReport().toString();
+    }
+
 
 
     public String getStatusReportContent() {
@@ -83,26 +89,13 @@ public class InfoHelper extends ToolHelper {
         return result;
     }
 
-    public String getConfigReportContent() {
-        String result = "";
-        result += "Compile config:";
-        result += "\n";
-        result += new CompileConfig(context).getAll();
-        result += "\n";
-        result += "\n";
-        result += "Git config:";
-        result += "\n";
-        result += DevTools.getSourcesManager().getContent("assets/inappdevtools/git_config.json");
-        result += "\n";
-        //result += "Git diff:";
-        //result += "\n";
-        //result += DevTools.getSourcesManager().getContent(SourcesManager.ASSETS, "inappdevtools/git.diff");
-        return result;
-    }
-
     public String getToolsReportContent() {
         String result = "";
         result += getDevToolsInfo().toString();
+        result += "\n";
+        result += "Compile config: ";
+        result += "\n\n";
+        result += new CompileConfig(context).getAll();
         result += "\n";
         result += DevTools.getDatabase().getOverview();
         result += "\n";

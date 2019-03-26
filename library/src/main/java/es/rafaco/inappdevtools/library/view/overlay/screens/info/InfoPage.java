@@ -44,7 +44,7 @@ public enum InfoPage {
             mContent = helper.getOSReportContent();
         }
         else if (title.equals("Build")) {
-            mContent = helper.getConfigReportContent();
+            mContent = helper.getBuildReportContent();
         }
         else if (title.equals("Tools")) {
             mContent = helper.getToolsReportContent();

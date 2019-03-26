@@ -36,7 +36,6 @@ public class AppInfoHelper {
     public InfoReport getReport() {
         return new InfoReport.Builder("")
                 .add(getAppInfo())
-                .add(getAppInfo2())
                 .add(getInstallInfo())
                 .add()
                 .add(AppInfoUtils.getSigningInfo(context))
@@ -46,57 +45,34 @@ public class AppInfoHelper {
 
 
     public InfoGroup getAppInfo() {
-        PackageInfo pInfo = getPackageInfo();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        CompileConfig buildConfig = new CompileConfig(context);
-        InfoGroup group = new InfoGroup.Builder("")
-                .add("Name", getAppName())
-                .add("Version", pInfo.versionName + " (" + pInfo.versionCode + ")")
-                .add("Package", getPackageName())
-                .add("Min SDK", getMinSdkVersion(pInfo))
-                .add("Target SDK", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
-                .add()
-                .add("isDebug", AppBuildConfig.getBooleanValue(context, BuildConfigFields.DEBUG))
-                .add("Flavor", AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR))
-                .add("Build time", buildConfig.getString(CompileConfigFields.BUILD_TIME))
-                .add("Build time", buildConfig.getString(CompileConfigFields.BUILD_TIME_UTC))
-                .add("Build type", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE))
-                .add()
-                .add("lastUpdateTime", formatter.format(new Date(pInfo.lastUpdateTime)))
-                .add("firstInstallTime", formatter.format(new Date(pInfo.firstInstallTime)))
-                .build();
-        return group;
-    }
-
-    public InfoGroup getAppInfo2() {
         EasyAppMod easyAppMod = new EasyAppMod(context);
-        InfoGroup app = new InfoGroup.Builder("App")
-                .add("Installer Store", easyAppMod.getStore())
+        PackageInfo pInfo = getPackageInfo();
+        InfoGroup group = new InfoGroup.Builder("")
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())
-                .add("Activity Name", easyAppMod.getActivityName())
+                //.add("Activity Name", easyAppMod.getActivityName())
                 .add("App version", easyAppMod.getAppVersion())
                 .add("App versioncode", easyAppMod.getAppVersionCode())
-                .add("Does app have Camera permission?",
-                        String.valueOf(easyAppMod.isPermissionGranted(Manifest.permission.CAMERA)))
+                //.add("Does app have Camera permission?",String.valueOf(easyAppMod.isPermissionGranted(Manifest.permission.CAMERA)))
+                .add("Min SDK", getMinSdkVersion(pInfo))
+                .add("Target SDK", String.valueOf(pInfo.applicationInfo.targetSdkVersion))
                 .build();
-        return app;
+        return group;
     }
 
     public InfoGroup getInstallInfo() {
         EasyAppMod easyAppMod = new EasyAppMod(context);
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        InfoGroup group = new InfoGroup.Builder("")
+        InfoGroup group = new InfoGroup.Builder("Installation")
                 .add("Store", easyAppMod.getStore())
-                .add("First Install", DateUtils.getElapsedTime(new Date(pInfo.firstInstallTime).getTime()))
-                .add("First Install Time", formatter.format(new Date(pInfo.firstInstallTime)))
                 .add("Last Update", DateUtils.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Last Update Time", formatter.format(new Date(pInfo.lastUpdateTime)))
+                .add("First Install", DateUtils.getElapsedTime(new Date(pInfo.firstInstallTime).getTime()))
+                .add("First Install Time", formatter.format(new Date(pInfo.firstInstallTime)))
                 .build();
         return group;
     }
-
 
     public InfoGroup getPackageInfoInfo() {
         PackageInfo pInfo = getPackageInfo();
