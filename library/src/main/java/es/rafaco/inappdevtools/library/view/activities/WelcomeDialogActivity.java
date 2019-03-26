@@ -12,6 +12,7 @@ import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 
 public class WelcomeDialogActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
@@ -24,7 +25,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
     }
 
     private void buildDialog() {
-        InfoHelper helper = new InfoHelper();
+        AppInfoHelper helper = new AppInfoHelper(getApplicationContext());
         String elapsedTimeLowered = DateUtils.getElapsedTimeLowered(helper.getAppBuildTime(getApplicationContext()));
         String message = helper.getFormattedAppName() + "\n" + "Build "  + elapsedTimeLowered + "\n\n" +
                         "This app contains a set of tool to log, report and inspect.\n\n";

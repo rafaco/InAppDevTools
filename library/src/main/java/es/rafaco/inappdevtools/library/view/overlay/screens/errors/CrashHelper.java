@@ -9,14 +9,10 @@ import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoCollection;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoReport;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoGroup;
 
 public class CrashHelper extends ToolHelper{
 
@@ -32,7 +28,7 @@ public class CrashHelper extends ToolHelper{
         return null;
     }
 
-    public InfoCollection parseToInfoGroup(Crash data){
+    public InfoReport parseToInfoGroup(Crash data){
 
         InfoGroup status = new InfoGroup.Builder("App status")
                 //.add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
@@ -70,7 +66,7 @@ public class CrashHelper extends ToolHelper{
                 .add("", data.getStacktrace())
                 .build();
 
-        return new InfoCollection.Builder("")
+        return new InfoReport.Builder("")
                 .add(status)
                 .add(basic)
                 .add(thread)

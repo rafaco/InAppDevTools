@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
@@ -171,7 +172,7 @@ public class MainOverlayLayer extends OverlayLayer {
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);
             toolbar.setLogo(UiUtils.getAppIconResourceId());
-            toolbar.setLogoDescription(new InfoHelper().getAppName());
+            //toolbar.setLogoDescription(new AppInfoHelper(context).getAppName());
         }
     }
 

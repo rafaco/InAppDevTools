@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
@@ -14,14 +13,13 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
 public class HomeScreen extends OverlayScreen {
@@ -52,8 +50,9 @@ public class HomeScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        InfoHelper helper = new InfoHelper();
-        String welcome = helper.getFormattedAppLong() + "\n" + helper.getFormattedDeviceLong();
+        AppInfoHelper appHelper = new AppInfoHelper(getContext());
+        DeviceInfoHelper deviceHelper = new DeviceInfoHelper(getContext());
+        String welcome = appHelper.getFormattedAppLong() + "\n" + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);
 
         data.add(new RunnableConfig("Info",

@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info;
+package es.rafaco.inappdevtools.library.view.overlay.screens.info.structs;
 
 import android.text.TextUtils;
 
@@ -63,6 +63,10 @@ public class InfoGroup {
         private String name;
         private List<InfoEntry> entries;
 
+        public Builder() {
+            this("");
+        }
+
         public Builder(String name) {
             this.name = name;
             this.entries = new ArrayList<>();
@@ -70,6 +74,16 @@ public class InfoGroup {
 
         public Builder add(InfoEntry entry) {
             this.entries.add(entry);
+            return this;
+        }
+
+        public Builder add() {
+            add(new InfoEntry("", ""));
+            return this;
+        }
+
+        public Builder add(String text) {
+            add(new InfoEntry("", text));
             return this;
         }
 

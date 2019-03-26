@@ -14,6 +14,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceItem;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 
 public class TraceGrouper {
 
@@ -116,10 +117,9 @@ public class TraceGrouper {
     @NotNull
     private void initMatcher() {
         matcher = new HashMap<>();
-        InfoHelper helper = new InfoHelper();
-
+        AppInfoHelper infoHelper = new AppInfoHelper(DevTools.getAppContext());
         matcher.put(BuildConfig.APPLICATION_ID, "InAppDevTools"); //Our library
-        matcher.put(helper.getPackageName(), "Your App"); //Host app
+        matcher.put(infoHelper.getPackageName(), "Your App"); //Host app
         matcher.put("androidx.", "AndroidX");
         matcher.put("com.android.support", "Android Support");
         matcher.put("com.android", "Android");

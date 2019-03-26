@@ -9,19 +9,18 @@
 
     <string name="hard_soft_info">Hardware and Software Information</string>
     <string name="serial">SERIAL</string>
-    <string name="model">MODEL</string>
+    <string name="brand">Device Brand</string>
+    <string name="model">Device Model</string>
     <string name="id">ID</string>
-    <string name="manufacturer">MANUFACTURER</string>
-    <string name="brand">BRAND</string>
     <string name="type">TYPE</string>
     <string name="user">USER</string>
     <string name="base">BASE</string>
-    <string name="incremental">INCREMENTAL</string>
-    <string name="sdk">SDK</string>
+    <string name="incremental">Incremental</string>
+    <string name="sdk">Version SDK</string>
     <string name="board">BOARD</string>
     <string name="host">HOST</string>
     <string name="fingerprint">FINGERPRINT</string>
-    <string name="versioncode">VERSION CODE</string>
+    <string name="versioncode">Version code</string>
 
     <string name="chuck_ssl">SSL</string>
     <string name="chuck_duration">Duration</string>

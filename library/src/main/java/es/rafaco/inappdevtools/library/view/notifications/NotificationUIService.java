@@ -21,6 +21,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 
@@ -149,7 +150,7 @@ public class NotificationUIService extends Service {
     private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
-        InfoHelper infoHelper = new InfoHelper();
+        AppInfoHelper infoHelper = new AppInfoHelper(getApplicationContext());
         String title, subTitle;
         if (crash == null){
             title = infoHelper.getFormattedModeAndVersion();
@@ -205,8 +206,9 @@ public class NotificationUIService extends Service {
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
+        AppInfoHelper infoHelper = new AppInfoHelper(getApplicationContext());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
-        String title = String.format("Ups, %s crashed", new InfoHelper().getAppName());
+        String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setGroup(GROUP_ID)

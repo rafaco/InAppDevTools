@@ -16,6 +16,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetail
 public enum InfoPage {
     APP("App"),
     DEVICE("Device"),
+    OS("OS"),
     CONFIG("Build"),
     LIVE("Status"),
     LIBRARY("Tools");
@@ -31,19 +32,22 @@ public enum InfoPage {
         mTitle = title;
 
         if (title.equals("Status")) {
-            mContent = helper.getAppStatus();
+            mContent = helper.getStatusReportContent();
         }
         else if (title.equals("App")) {
-            mContent = helper.getApkReport();
+            mContent = helper.getApkReportContent();
         }
         if (title.equals("Device")) {
-            mContent = helper.getDeviceReport();
+            mContent = helper.getDeviceReportContent();
+        }
+        else if (title.equals("OS")) {
+            mContent = helper.getOSReportContent();
         }
         else if (title.equals("Build")) {
-            mContent = helper.getConfigReport();
+            mContent = helper.getConfigReportContent();
         }
         else if (title.equals("Tools")) {
-            mContent = helper.getToolsReport();
+            mContent = helper.getToolsReportContent();
         }
 
         viewHolder = new InfoViewHolder(title, mContent);

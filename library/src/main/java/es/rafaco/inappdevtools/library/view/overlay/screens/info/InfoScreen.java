@@ -44,7 +44,7 @@ public class InfoScreen extends OverlayScreen {
     private void populateToolbar() {
         InfoPagerAdapter adapter = new InfoPagerAdapter(getContext());
         viewPager.setAdapter(adapter);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
     }
 

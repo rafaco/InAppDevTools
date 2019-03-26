@@ -60,6 +60,7 @@ public class AppInfoUtils {
                 catch (CertificateException e) {
                     Log.e(DevTools.TAG, "Error retrieving certificate" + newLine);
                     FriendlyLog.logException("Exception", e);
+                    return "Error retrieving certificate";
                 }
             }
         }

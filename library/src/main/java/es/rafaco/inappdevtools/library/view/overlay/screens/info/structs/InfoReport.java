@@ -1,16 +1,18 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info;
+package es.rafaco.inappdevtools.library.view.overlay.screens.info.structs;
 
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoCollection {
+import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
+
+public class InfoReport {
 
     private String name;
     private List<InfoGroup> entries;
 
-    public InfoCollection(Builder builder) {
+    public InfoReport(Builder builder) {
         this.name = builder.name;
         this.entries = builder.entries;
     }
@@ -74,14 +76,25 @@ public class InfoCollection {
             return this;
         }
 
+        public Builder add() {
+            return add("");
+        }
+
+        public Builder add(String text) {
+            add(new InfoGroup.Builder()
+                    .add(text)
+                    .build());
+            return this;
+        }
+
 
         public Builder set(List<InfoGroup> entries) {
             this.entries = entries;
             return this;
         }
 
-        public InfoCollection build() {
-            return new InfoCollection(this);
+        public InfoReport build() {
+            return new InfoReport(this);
         }
     }
 }

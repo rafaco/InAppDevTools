@@ -26,20 +26,7 @@ public class InfoTool extends Tool {
 
     @Override
     public DecoratedToolInfo getHomeInfo() {
-
-        InfoHelper helper = new InfoHelper();
-        String out = "";
-        out += helper.getFormattedAppLong();
-        out += "\n";
-        out += helper.getFormattedDeviceLong();
-
-        NavigationStep step = new NavigationStep(InfoScreen.class, null);
-        return new DecoratedToolInfo(
-                "Info",
-                out,
-                R.color.rally_blue,
-                1,
-                step);
+        return null;
     }
 
     @Override

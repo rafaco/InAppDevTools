@@ -12,7 +12,7 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoCollection;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoReport;
 
 public class AnrDetailScreen extends OverlayScreen {
 
@@ -72,7 +72,7 @@ public class AnrDetailScreen extends OverlayScreen {
 
     private void updateOutput() {
         AnrHelper helper = new AnrHelper();
-        InfoCollection report = helper.parseToInfoGroup(anr);
+        InfoReport report = helper.parseToInfoGroup(anr);
         report.removeGroupEntries(1);
 
         title.setText(anr.getMessage() + " " + DateUtils.getElapsedTimeLowered(anr.getDate()));

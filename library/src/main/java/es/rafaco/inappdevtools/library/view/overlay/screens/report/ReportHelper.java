@@ -1,21 +1,19 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.report;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
-import es.rafaco.inappdevtools.library.storage.db.SqliteExporter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
 
 public class ReportHelper extends ToolHelper{
@@ -56,7 +54,7 @@ public class ReportHelper extends ToolHelper{
     }
 
     private String getEmailSubject(){
-        InfoHelper helper = new InfoHelper();
+        AppInfoHelper helper = new AppInfoHelper(context);
         String formatter = "%s %s report from %s %s";
         String currentType = "";
         if(type.equals(ReportType.SESSION)){
