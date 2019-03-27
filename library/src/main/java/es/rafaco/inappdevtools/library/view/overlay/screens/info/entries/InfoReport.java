@@ -1,11 +1,9 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.structs;
+package es.rafaco.inappdevtools.library.view.overlay.screens.info.entries;
 
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 
 public class InfoReport {
 

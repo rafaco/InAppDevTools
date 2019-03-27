@@ -15,12 +15,20 @@ import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class CompileConfig {
 
-    private static final String ASSETS_PATH = "inappdevtools/compile_config.json";
+    private static final String DEFAULT_PATH = "inappdevtools/compile_config.json";
     private final Context context;
+    private final String target;
     private JSONObject json;
 
     public CompileConfig(Context context) {
         this.context = context;
+        this.target = DEFAULT_PATH;
+        init();
+    }
+
+    public CompileConfig(Context context, String target) {
+        this.context = context;
+        this.target = target;
         init();
     }
 
@@ -28,8 +36,29 @@ public class CompileConfig {
         return json.optString(key);
     }
 
+    public String getChildString(String parent, String key) {
+        JSONObject jsonObject = json.optJSONObject(parent);
+        if (jsonObject == null) {
+            return "";
+        }
+        
+        try {
+            return jsonObject.getString(key);
+        } catch (JSONException e) {
+            return "";
+        }
+    }
+
     public boolean getBoolean(String key) {
         return json.optBoolean(key);
+    }
+
+    public boolean getChildBoolean(String parent, String key) {
+        JSONObject jsonObject = json.optJSONObject(parent);
+        if (jsonObject == null) {
+            return false;
+        }
+        return jsonObject.optBoolean(key);
     }
 
     public int getInt(String key) {
@@ -45,13 +74,15 @@ public class CompileConfig {
     }
 
     private void init() {
+        try {
+            json = new JSONObject(getFileContents());
+        } catch (Exception e) {
+            FriendlyLog.log("E", "DevTools", "CompileConfig",
+                    "Invalid data at '" + target + "'", Log.getStackTraceString(e));
+        }
+
         if (json == null) {
-            try {
-                json = new JSONObject(getFileContents());
-            } catch (JSONException e) {
-                FriendlyLog.log("E", "DevTools", "CompileConfig",
-                        "Invalid data at '" + ASSETS_PATH + "'", Log.getStackTraceString(e));
-            }
+            json = new JSONObject();
         }
     }
 
@@ -59,7 +90,7 @@ public class CompileConfig {
         StringBuilder builder = null;
 
         try {
-            InputStream stream = context.getAssets().open(ASSETS_PATH);
+            InputStream stream = context.getAssets().open(target);
             BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             builder = new StringBuilder();
             String str;
@@ -72,7 +103,7 @@ public class CompileConfig {
 
         } catch (IOException e) {
             FriendlyLog.log("E", "DevTools", "Config",
-                    "Unable to read '" + ASSETS_PATH + "'", Log.getStackTraceString(e));
+                    "Unable to read '" + target + "'", Log.getStackTraceString(e));
         }
 
         return (builder != null) ? builder.toString() : null;

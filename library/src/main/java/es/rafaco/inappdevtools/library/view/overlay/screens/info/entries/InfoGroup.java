@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.structs;
+package es.rafaco.inappdevtools.library.view.overlay.screens.info.entries;
 
 import android.text.TextUtils;
 

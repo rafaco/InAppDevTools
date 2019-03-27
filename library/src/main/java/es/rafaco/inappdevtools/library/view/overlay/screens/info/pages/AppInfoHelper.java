@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -14,26 +13,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoReport;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
-public class AppInfoHelper {
+public class AppInfoHelper extends AbstractInfoHelper{
 
-    Context context;
+    EasyAppMod easyAppMod;
 
     public AppInfoHelper(Context context) {
-        this.context = context;
+        super(context);
+        easyAppMod = new EasyAppMod(context);
     }
 
-    @NonNull
-    public InfoReport getReport() {
+    @Override
+    public String getOverview() {
+        return getFormattedAppName() + "\n"
+                + "Updated " + DateUtils.getElapsedTimeLowered(
+                        new Date(getPackageInfo().lastUpdateTime).getTime())
+                + (easyAppMod.getStore().equals("unknown") ? "" : " from " + easyAppMod.getStore());
+    }
+
+    @Override
+    public InfoReport getInfoReport() {
         return new InfoReport.Builder("")
                 .add(getAppInfo())
                 .add(getInstallInfo())
@@ -45,7 +49,6 @@ public class AppInfoHelper {
 
 
     public InfoGroup getAppInfo() {
-        EasyAppMod easyAppMod = new EasyAppMod(context);
         PackageInfo pInfo = getPackageInfo();
         InfoGroup group = new InfoGroup.Builder("")
                 .add("App Name", easyAppMod.getAppName())
@@ -61,7 +64,6 @@ public class AppInfoHelper {
     }
 
     public InfoGroup getInstallInfo() {
-        EasyAppMod easyAppMod = new EasyAppMod(context);
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         InfoGroup group = new InfoGroup.Builder("Installation")
@@ -123,7 +125,8 @@ public class AppInfoHelper {
 
     public String getFormattedAppName() {
         PackageInfo packageInfo = getPackageInfo();
-        String environment = "DEBUG"; //TODO: Environment selector propagation
+        //TODO: Environment selector propagation
+        String environment = "DEBUG";
         String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
         return String.format("%s %s %s", getAppName(), environment, version);
     }

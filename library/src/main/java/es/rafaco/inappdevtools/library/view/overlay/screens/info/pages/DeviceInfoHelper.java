@@ -10,8 +10,8 @@ import android.view.WindowManager;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoReport;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import github.nisrulz.easydeviceinfo.base.BatteryHealth;
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod;
 import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
@@ -23,19 +23,28 @@ import github.nisrulz.easydeviceinfo.base.EasySensorMod;
 import static android.content.Context.WINDOW_SERVICE;
 import static es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.OSInfoHelper.humanReadableByteCount;
 
-public class DeviceInfoHelper {
-    Context context;
+public class DeviceInfoHelper extends AbstractInfoHelper {
+
+    EasyConfigMod configHelper;
+    EasyDisplayMod displayHelper;
+    EasyMemoryMod memoryHelper;
 
     public DeviceInfoHelper(Context context) {
-        this.context = context;
+        super(context);
+        configHelper = new EasyConfigMod(context);
+        displayHelper = new EasyDisplayMod(context);
+        memoryHelper = new EasyMemoryMod(context);
     }
 
-    public InfoReport getReport() {
+    @Override
+    public String getOverview() {
+        return configHelper.isRunningOnEmulator() ? "Emulated " : "Real "
+                + getDeviceType() + "\n"
+                + Build.BRAND + " " + Build.MODEL ;
+    }
 
-        EasyConfigMod configHelper = new EasyConfigMod(context);
-        EasyDisplayMod displayHelper = new EasyDisplayMod(context);
-        EasyMemoryMod memoryHelper = new EasyMemoryMod(context);
-
+    @Override
+    public InfoReport getInfoReport() {
         InfoGroup model = new InfoGroup.Builder("")
                 .add("Form factor", getDeviceType())
                 .add(context.getString(R.string.brand), Build.BRAND)
@@ -194,13 +203,13 @@ public class DeviceInfoHelper {
         if (diagonalInches > 10.1) {
             return "TV";
         } else if (diagonalInches <= 10.1 && diagonalInches > 7) {
-            return "TABLET";
+            return "Tablet";
         } else if (diagonalInches <= 7 && diagonalInches > 6.5) {
-            return "PHABLET";
+            return "Phablet";
         } else if (diagonalInches <= 6.5 && diagonalInches >= 2) {
-            return "PHONE";
+            return "Phone";
         } else {
-            return "WATCH";
+            return "Watch";
         }
     }
 

@@ -1,7 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -10,25 +8,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 
-import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.OSInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.structs.InfoGroup;
-
-//TODO: refactor this hole file! across multiples files
 
 public class InfoHelper extends ToolHelper {
 
@@ -38,95 +21,19 @@ public class InfoHelper extends ToolHelper {
         return filePath;
     }
 
-
     @Override
     public String getReportContent() {
-        String result = "";
-        result += getStatusReportContent();
-        result += "\n";
-        result += getApkReportContent();
-        result += "\n";
-        result += getDeviceReportContent();
-        result += "\n";
+        String result = "Generated report from info pages\n" + "//TODO:";
+
+        InfoPage[] values = InfoPage.values();
+        for (InfoPage page : values){
+            result += "[ REPORT " + page.getTitle().toUpperCase() + " ]\n";
+            result += page.getOverview() + "\n\n";
+            result += page.getContent() + "\n\n\n";
+        }
         return result;
     }
 
-
-    //region [ REPORTS (return String) ]
-
-    public String getApkReportContent() {
-        AppInfoHelper infoHelper = new AppInfoHelper(context);
-        return infoHelper.getReport().toString();
-    }
-
-    public String getDeviceReportContent() {
-        DeviceInfoHelper infoHelper = new DeviceInfoHelper(context);
-        return infoHelper.getReport().toString();
-    }
-
-    public String getOSReportContent() {
-        OSInfoHelper infoHelper = new OSInfoHelper(context);
-        return infoHelper.getReport().toString();
-    }
-
-    public String getBuildReportContent() {
-        BuildInfoHelper infoHelper = new BuildInfoHelper(context);
-        return infoHelper.getReport().toString();
-    }
-
-
-
-    public String getStatusReportContent() {
-        String result = "";
-        ActivityLogManager logManager = DevTools.getActivityLogManager();
-        result += "App on " + (logManager.isInBackground() ? "Background" : "Foreground");
-        result += "\n";
-        result += "Top activity is " + getTopActivity();
-        result += "\n";
-        result += "\n";
-        result += getRunningInfo().toString();
-        result += "\n";
-        return result;
-    }
-
-    public String getToolsReportContent() {
-        String result = "";
-        result += getDevToolsInfo().toString();
-        result += "\n";
-        result += "Compile config: ";
-        result += "\n\n";
-        result += new CompileConfig(context).getAll();
-        result += "\n";
-        result += DevTools.getDatabase().getOverview();
-        result += "\n";
-        return result;
-    }
-
-    //endregion
-
-    //region [ GROUPS (return InfoGroup) ]
-
-
-    public InfoGroup getDevToolsInfo() {
-        CompileConfig buildConfig = new CompileConfig(context);
-        InfoGroup group = new InfoGroup.Builder("InAppDevTools")
-                .add("Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
-                .add("Build type", BuildConfig.BUILD_TYPE)
-                .add("Flavor", BuildConfig.FLAVOR)
-                .add(CompileConfigFields.EXT_ENABLED, buildConfig.getString(CompileConfigFields.EXT_ENABLED))
-                .add(CompileConfigFields.EXT_EMAIL, buildConfig.getString(CompileConfigFields.EXT_EMAIL))
-                .build();
-        return group;
-    }
-
-    public InfoGroup getRunningInfo() {
-        return new InfoGroup.Builder("")
-                .add("Services", getRunningServices())
-                .add("Tasks", getRunningTasks())
-                .build();
-    }
-
-    //endregion
 
     //region [ PROPERTY EXTRACTORS ]
 
@@ -135,48 +42,6 @@ public class InfoHelper extends ToolHelper {
                 Build.PRODUCT.contains("sdk");
     }
 
-
-    public String getRunningServices() {
-        String result = "\n";
-
-        String packageName = context.getPackageName();
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (info.service.getPackageName().equals(packageName)) {
-                String className = info.service.getShortClassName();
-                String name = className.substring(className.lastIndexOf(".")+1);
-                long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
-                String elapsed = DateUtils.getElapsedTimeLowered(startTimeMillis);
-                String date = DateUtils.format(startTimeMillis);
-                String text = name + " started " + elapsed + " (" + date + ")";
-                result += text + "\n";
-            }
-        }
-        return result;
-    }
-
-    private String getRunningTasks() {
-        String output = "\n";
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(10);
-        Iterator<ActivityManager.RunningTaskInfo> itr = runningTaskInfoList.iterator();
-        while(itr.hasNext()){
-            ActivityManager.RunningTaskInfo runningTaskInfo = itr.next();
-            int id = runningTaskInfo.id;
-            int numOfActivities = runningTaskInfo.numActivities;
-            String topActivity = runningTaskInfo.topActivity.getShortClassName();
-            String text = String.valueOf(id) + " - " + topActivity + " top of " + numOfActivities;
-            output += text + "\n";
-        }
-        return output;
-    }
-
-    private String getTopActivity() {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo firstTaskInfo = runningTaskInfoList.get(0);
-        return firstTaskInfo.topActivity.getShortClassName();
-    }
 
     public static String getLinuxInfo() {
         ArrayList<String> commandLine = new ArrayList<String>();
