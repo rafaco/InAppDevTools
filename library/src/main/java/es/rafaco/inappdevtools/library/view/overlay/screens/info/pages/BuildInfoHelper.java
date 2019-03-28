@@ -23,11 +23,17 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        return AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE)
-                + AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR)
-                + " build "
+        String firstLine = "Build "
                 + DateUtils.getElapsedTimeLowered(
-                        Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)));
+                        Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)))
+                + " as "
+                + AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE)
+                + AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
+
+        String secondLine = gitConfig.getString("BRANCH") + " " + gitConfig.getString("INFO");
+        String thirdLine = getLocalOverview();
+
+        return firstLine + "\n" + secondLine + "\n" + thirdLine;
     }
 
     @Override
@@ -56,27 +62,63 @@ public class BuildInfoHelper extends AbstractInfoHelper {
             return group.build();
         }
 
-        group.add("Git url", "TODO")
+        group.add("Git url", gitConfig.getString("REMOTE"))
                 .add("Branch", gitConfig.getString("BRANCH"))
-                .add("Tag", gitConfig.getString("TAG"))
-                .add("Ahead from tag", "TODO")
-                .add("Last annotation", "\n" +
-                        gitConfig.getChildString("LAST_COMMIT", "LONG").replace("\n\n", "\n-> "));
+                .add("Tag", gitConfig.getString("INFO"))
+                .add()
+                .add(gitConfig.getChildString("LAST_COMMIT", "LONG").replace("\n\n", "\n-> "));
         return group.build();
     }
 
     public InfoGroup getLocalChangesInfo() {
         InfoGroup.Builder group = new InfoGroup.Builder("Local changes");
-        if (!gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY")){
+
+        String local_commits = gitConfig.getString("LOCAL_COMMITS");
+        int local_commits_count = local_commits.length()
+                - local_commits.replace("\n", "n").length()+1;
+        boolean hasLocalCommits = local_commits_count > 0;
+
+        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
+        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
+        String file_changes_count = String.valueOf(file_status.split("\n").length);
+
+        if (!hasLocalCommits && !hasLocalChanges){
             group.add("No local changes");
             return group.build();
         }
 
-        group.add("Local commits", "TODO")
-                .add("Local commits count", "TODO")
-                .add("Local files changed", "\n" +
-                        gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
+        group.add("Annotations", local_commits_count + " ahead"
+                + "\n" + local_commits)
+                .add()
+                .add("Files", file_changes_count + " with diffs"
+                        + "\n" + gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
 
         return group.build();
+    }
+
+    public String getLocalOverview(){
+        String local_commits = gitConfig.getString("LOCAL_COMMITS");
+        int local_commits_count = local_commits.length()
+                - local_commits.replace("\n", "n").length()+1;
+        boolean hasLocalCommits = local_commits_count > 0;
+
+        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
+        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
+        String file_changes_count = String.valueOf(file_status.split("\n").length);
+
+        if (!hasLocalCommits && !hasLocalChanges){
+            return "No local changes";
+        }
+
+        String result = "";
+        if (hasLocalCommits){
+            result += local_commits_count + " commit ahead ";
+        }
+        if(hasLocalChanges){
+            if (hasLocalCommits) result += " and ";
+            result += file_changes_count + " files changed";
+        }
+
+        return result;
     }
 }

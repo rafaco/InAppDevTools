@@ -48,20 +48,22 @@ class GenerateConfigsTask extends InAppDevToolsTask {
             ]
         } else {
             propertiesMap = [
-                    ENABLED      : true,
-                    INFO         : shell('git describe --tags --always --dirty'),
-                    BRANCH       : (shell('git branch') =~ /(?m)\* (.*)$/)[0][1],
-                    SHA          : shell('git rev-parse --short HEAD'),
-                    TAG          : shell('git describe --tags --abbrev=0'),
-                    LAST_COMMIT  : [
-                            ISCLEAN: gitDiff == '',
-                            MESSAGE: shell('git log -1 --pretty=%B'),
-                            SHORT  : shell('git log --oneline -1'),
-                            LONG   : shell('git log -1')
+                    ENABLED         : true,
+                    REMOTE          : shell('git config --get remote.origin.url'),
+                    INFO            : shell('git describe --tags --always --dirty'),
+                    BRANCH          : (shell('git branch') =~ /(?m)\* (.*)$/)[0][1],
+                    TAG             : shell('git describe --tags --abbrev=0'),
+                    TAG_DISTANCE    : shell('git rev-list ' + shell('git describe --tags --abbrev=0') + ' --count'),
+                    LAST_COMMIT     : [
+                            ISCLEAN : gitDiff == '',
+                            MESSAGE : shell('git log -1 --pretty=%B'),
+                            SHORT   : shell('git log --oneline -1'),
+                            LONG    : shell('git log -1')
                     ],
+                    LOCAL_COMMITS   : shell('git cherry -v'),
                     LOCAL_CHANGES: [
-                            ISDIRTY: gitDiff != '',
-                            STATUS : shell('git status --short'),
+                            ISDIRTY : gitDiff != '',
+                            STATUS  : shell('git status --short'),
                     ]
             ]
         }
