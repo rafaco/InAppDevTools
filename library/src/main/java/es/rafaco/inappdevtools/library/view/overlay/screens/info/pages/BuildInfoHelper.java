@@ -1,6 +1,10 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import org.w3c.dom.Text;
 
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
@@ -74,13 +78,11 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         InfoGroup.Builder group = new InfoGroup.Builder("Local changes");
 
         String local_commits = gitConfig.getString("LOCAL_COMMITS");
-        int local_commits_count = local_commits.length()
-                - local_commits.replace("\n", "n").length()+1;
+        int local_commits_count = countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-
         boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
         String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
-        String file_changes_count = String.valueOf(file_status.split("\n").length);
+        int file_changes_count = countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
             group.add("No local changes");
@@ -90,21 +92,27 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         group.add("Annotations", local_commits_count + " ahead"
                 + "\n" + local_commits)
                 .add()
-                .add("Files", file_changes_count + " with diffs"
+                .add("Files", file_changes_count + " changed"
                         + "\n" + gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
 
         return group.build();
     }
 
+    @NonNull
+    private int countLines(String text) {
+        if (TextUtils.isEmpty(text)){
+            return 0;
+        }
+        return text.split("\n").length;
+    }
+
     public String getLocalOverview(){
         String local_commits = gitConfig.getString("LOCAL_COMMITS");
-        int local_commits_count = local_commits.length()
-                - local_commits.replace("\n", "n").length()+1;
+        int local_commits_count = countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-
         boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
         String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
-        String file_changes_count = String.valueOf(file_status.split("\n").length);
+        int file_changes_count = countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
             return "No local changes";
