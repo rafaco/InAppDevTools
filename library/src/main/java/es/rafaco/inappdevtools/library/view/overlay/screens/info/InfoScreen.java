@@ -1,8 +1,14 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -11,8 +17,11 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 
 public class InfoScreen extends OverlayScreen {
 
+    InfoPagerAdapter pagerAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private int currentPosition;
+    private Timer updateTimer;
 
     public InfoScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -42,10 +51,58 @@ public class InfoScreen extends OverlayScreen {
     }
 
     private void populateToolbar() {
-        InfoPagerAdapter adapter = new InfoPagerAdapter(getContext());
-        viewPager.setAdapter(adapter);
+        pagerAdapter = new InfoPagerAdapter(getContext());
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(onPageChangeListener());
+        currentPosition = 0;
+        startUpdateTimer();
+
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @NonNull
+    private ViewPager.OnPageChangeListener onPageChangeListener() {
+        return new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            public void onPageSelected(int position) {
+                currentPosition = position;
+                if (position == 0){
+                    startUpdateTimer();
+                }else{
+                    stopUpdateTimer();
+                }
+            }
+        };
+    }
+
+    private void startUpdateTimer() {
+        final Handler handler = new Handler();
+        updateTimer = new Timer(false);
+        TimerTask updateTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updatePage();
+                        startUpdateTimer();
+                    }
+                });
+            }
+        };
+        updateTimer.schedule(updateTimerTask, 2000);
+    }
+
+    private void stopUpdateTimer() {
+        updateTimer.cancel();
+    }
+
+    private void updatePage() {
+        final View pageView = viewPager.findViewWithTag(currentPosition);
+        pagerAdapter.updateView(pageView, currentPosition);
     }
 
     @Override
@@ -55,6 +112,6 @@ public class InfoScreen extends OverlayScreen {
 
     @Override
     protected void onDestroy() {
-        //Deliberately empty
+        updateTimer.cancel();
     }
 }

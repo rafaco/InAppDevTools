@@ -60,16 +60,16 @@ public class DevTools {
     public static void install(Context context, DevToolsConfig config) {
 
         if (config == null || !config.enabled){
-            Log.w(DevTools.TAG, "DevTools initialization skipped");
+            android.util.Log.w(DevTools.TAG, "DevTools initialization skipped");
             return;
         }
 
         if (DevTools.config != null){
-            Log.w(DevTools.TAG, "DevTools already initialize");
+            android.util.Log.w(DevTools.TAG, "DevTools already initialize");
             return;
         }
 
-        Log.d(DevTools.TAG, "Initializing DevTools...");
+        android.util.Log.d(DevTools.TAG, "Initializing DevTools...");
         DevTools.config = config;
 
         appContext = context.getApplicationContext();
@@ -88,7 +88,7 @@ public class DevTools {
                 getDatabase().printOverview();
             }
         });
-        Log.i(DevTools.TAG, "DevTools initialized");
+        android.util.Log.i(DevTools.TAG, "DevTools initialized");
 
 
         if (PendingCrashUtil.isPending()){
@@ -332,17 +332,17 @@ public class DevTools {
         if(onForceCloseRunnable != null)
             onForceCloseRunnable.run();
 
-        Log.w(DevTools.TAG, "Stopping watchers");
+        android.util.Log.w(DevTools.TAG, "Stopping watchers");
         watcherManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
-        Log.w(DevTools.TAG, "Stopping Foreground");
+        android.util.Log.w(DevTools.TAG, "Stopping Foreground");
         NotificationUIService.close();
 
-        Log.w(DevTools.TAG, "Stopping Overlay");
+        android.util.Log.w(DevTools.TAG, "Stopping Overlay");
         OverlayUIService.close();
     }
 
@@ -359,5 +359,10 @@ public class DevTools {
         return false;
     }
 
-    //endregion
+    public static class Log {
+
+        public static void v(String msg) {
+            DevTools.showMessage(msg);
+        }
+    }
 }

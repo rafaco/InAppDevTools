@@ -15,7 +15,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetail
 
 public class InfoPageViewHolder {
 
-    private final String title;
+    private String title;
     private String overview;
     private String content;
 
@@ -34,6 +34,13 @@ public class InfoPageViewHolder {
         bodyView = view.findViewById(R.id.body);
         button = view.findViewById(R.id.button);
         return view;
+    }
+
+    public void updateUI(String overview, String body) {
+        this.content = body;
+        this.overview = overview;
+
+        populateUI();
     }
 
     public void populateUI() {
