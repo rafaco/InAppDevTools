@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import org.w3c.dom.Text;
-
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;

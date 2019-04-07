@@ -117,9 +117,13 @@ public class OSInfoHelper extends AbstractInfoHelper  {
         return osName;
     }
 
-    public String parseByte(long bytes) {
+    public static String parseByte(long bytes) {
         //return android.text.format.Formatter.formatFileSize(context, bytes);
         return humanReadableByteCount(bytes, true);
+    }
+
+    public static String parseKb(long kb) {
+        return humanReadableByteCount(kb*1000, true);
     }
 
     public static String humanReadableByteCount(long bytes, boolean si) {
