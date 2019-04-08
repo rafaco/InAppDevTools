@@ -23,7 +23,9 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        return "";
+        ActivityLogManager logManager = DevTools.getActivityLogManager();
+        String result = getTopActivity() + " on " + (logManager.isInBackground() ? "Background" : "Foreground");
+        return result;
     }
 
     @Override
@@ -223,6 +225,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(1);
         ActivityManager.RunningTaskInfo firstTaskInfo = runningTaskInfoList.get(0);
-        return firstTaskInfo.topActivity.getShortClassName();
+        String shortClassName = firstTaskInfo.topActivity.getShortClassName();
+        return shortClassName.substring(shortClassName.lastIndexOf("."));
     }
 }
