@@ -54,7 +54,7 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
         return InfoPage.values()[position].getTitle();
     }
 
-    public void updateView(View pageView, int position){
+    public void updateView(final View pageView, int position){
         final InfoPage page = InfoPage.values()[position];
 
         new AsyncTask<InfoPage, InfoPage, InfoPage>() {
@@ -69,8 +69,8 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
                 result.getViewHolder().updateUI(
                         result.getOverview(),
                         result.getContent());
+                pageView.requestLayout();
             }
         }.execute();
-
     }
 }

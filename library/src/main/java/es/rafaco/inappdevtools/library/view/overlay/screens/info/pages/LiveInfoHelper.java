@@ -2,6 +2,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.os.Debug;
 import android.support.annotation.NonNull;
 
@@ -49,8 +52,9 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         return new InfoGroup.Builder("")
                 .add("Tasks", getRunningTasks())
                 .add("Services", getRunningServices())
-                .add("Processes", getRunningProcesses())
+                .add("Providers", getRunningProviders())
                 .add("Memory", getRunningMemory())
+                .add("Processes", getRunningProcesses())
                 .build();
     }
 
@@ -60,7 +64,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningAppProcessInfo info : manager.getRunningAppProcesses()) {
 
-            String importance = info.importance + ": ";
+            String importance = info.importance + " ";
             if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 importance += "Foreground";
             }else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE) {
@@ -75,15 +79,15 @@ public class LiveInfoHelper extends AbstractInfoHelper {
             else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED) {
                 importance += "Cached";
             }
-            result.append("Process ")
+            result
+                    .append(info.pid)
+                    .append(" - ")
                     .append(info.processName)
                     .append("\n")
                     .append("  importance: ")
                     .append(importance)
-                    .append(" pid: ")
-                    .append(info.pid)
-                    .append(" uid: ")
-                    .append(info.uid)
+                    //.append(" uid: ")
+                    //.append(info.uid)
                     .append("\n");
             for (String pkg : info.pkgList) {
                 result.append("  pkg: ").append(pkg).append("\n");
@@ -91,16 +95,36 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
             Debug.MemoryInfo[] processMemoryInfo;
             try {
-                processMemoryInfo = manager.getProcessMemoryInfo(new int[info.pid]);
-                result.append(getMemoryInfoFormatted(processMemoryInfo[0]));
+                processMemoryInfo = manager.getProcessMemoryInfo(new int[]{info.pid});
+                if (processMemoryInfo!=null && processMemoryInfo.length>0){
+                    result.append(getMemoryInfoFormatted(processMemoryInfo[0]));
+                }
             } catch (Exception e) {
-                //TODO: research whi is always null
-                //result.append("No Info " + e.getMessage()).append("\n");
+                //TODO: research why is always null
+                result.append("No Info " + e.getMessage()).append("\n");
             }
 
-            result.append(getRunningServices(info.pid)).append("\n");
+            //result.append(getRunningServices(info.pid)).append("\n");
+            //result.append(getRunningProviders(info.processName, info.uid)).append("\n");
         }
         return result.toString();
+    }
+
+    public String getRunningProviders() {
+        String result = "\n";
+        String packageName = context.getPackageName();
+
+        for (PackageInfo pack: context.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
+            if (pack.packageName.equals(packageName)){
+                ProviderInfo[] providers = pack.providers;
+                if (providers != null) {
+                    for (ProviderInfo info: providers) {
+                        result += info.authority + "\n";// + info.name  + "\n\n";
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     public String getRunningServices(int pid) {
@@ -136,7 +160,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
         String elapsed = DateUtils.getElapsedTimeLowered(startTimeMillis);
         String date = DateUtils.format(startTimeMillis);
-        String result = "  Service " + name + ". " + info.crashCount + " crashes since " + elapsed;// + " (" + date + ")";
+        String result = name + ". " + info.crashCount + " crashes since " + elapsed;// + " (" + date + ")";
         return result + "\n";
     }
 
@@ -192,10 +216,12 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 
 
+        /*
         //output += " - Debug.MemoryInfo" + "\n";
         Debug.MemoryInfo debugMemoryInfo = new Debug.MemoryInfo();
         Debug.getMemoryInfo(debugMemoryInfo);
         output += getMemoryInfoFormatted(debugMemoryInfo);
+        */
 
         return output;
     }
@@ -226,6 +252,10 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(1);
         ActivityManager.RunningTaskInfo firstTaskInfo = runningTaskInfoList.get(0);
         String shortClassName = firstTaskInfo.topActivity.getShortClassName();
-        return shortClassName.substring(shortClassName.lastIndexOf("."));
+        int lastDot = shortClassName.lastIndexOf(".");
+        if (lastDot > 0){
+            return shortClassName.substring(lastDot + 1);
+        }
+        return shortClassName;
     }
 }
