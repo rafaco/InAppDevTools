@@ -235,7 +235,7 @@ public class FriendlyLog {
             else if (log.getType().equals("Delete")){
                 return R.drawable.ic_delete_forever_rally_24dp;
             }
-            return R.drawable.ic_developer_mode_white_24dp;
+            return R.drawable.ic_developer_mode_rally_24dp;
         }
         return -1;
     }

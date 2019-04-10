@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -340,10 +339,10 @@ public class DevTools {
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
         android.util.Log.w(DevTools.TAG, "Stopping Foreground");
-        NotificationUIService.close();
+        NotificationUIService.stop();
 
         android.util.Log.w(DevTools.TAG, "Stopping Overlay");
-        OverlayUIService.close();
+        OverlayUIService.stop();
     }
 
     public static void addOnForceCloseRunnnable(Runnable onForceClose){

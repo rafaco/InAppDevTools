@@ -113,7 +113,7 @@ public class RunScreen extends OverlayScreen {
                     }
                 }));
         data.add(new RunnableConfig("Dev Options",
-                R.drawable.ic_developer_mode_white_24dp,
+                R.drawable.ic_developer_mode_rally_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
