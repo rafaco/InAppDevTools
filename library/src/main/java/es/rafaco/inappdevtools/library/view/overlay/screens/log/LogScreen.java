@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
 
@@ -165,7 +166,7 @@ public class LogScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
         alertDialog.show();
     }
 

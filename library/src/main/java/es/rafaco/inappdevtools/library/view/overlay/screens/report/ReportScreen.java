@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
@@ -204,7 +205,7 @@ public class ReportScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
         alertDialog.show();
     }
 

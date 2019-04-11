@@ -75,11 +75,11 @@ public class DevTools {
         toolManager = new ToolManager(appContext);
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
-
-        //sourcesManager = new SourcesManager(appContext);
-
-        if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
+        if (config.notificationUiEnabled) startForegroundService(context);
+
+        //Lazy initialized
+        //sourcesManager = new SourcesManager(appContext);
 
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
@@ -88,7 +88,6 @@ public class DevTools {
             }
         });
         android.util.Log.i(DevTools.TAG, "DevTools initialized");
-
 
         if (PendingCrashUtil.isPending()){
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
@@ -105,7 +104,7 @@ public class DevTools {
 
     //endregion
 
-    //region [ PRIVATE INITIALIZATION ]
+    //region [ SERVICES INITIALIZATION ]
 
     private static void startForegroundService(Context context) {
         Intent intent = new Intent(context, NotificationUIService.class);
