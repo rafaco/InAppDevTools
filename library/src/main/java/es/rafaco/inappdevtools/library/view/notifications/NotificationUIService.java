@@ -16,14 +16,18 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 
 public class NotificationUIService extends Service {
 
@@ -61,27 +65,28 @@ public class NotificationUIService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null)
-        {
+        if(intent != null) {
             String action = intent.getAction();
 
             switch (action)
             {
                 case ACTION_START_FOREGROUND_SERVICE:
                     startForegroundService();
-                    //Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
                     break;
                 case ACTION_STOP_FOREGROUND_SERVICE:
-                    stopForegroundService();
-                    //Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
+                case ACTION_DISMISS:
+                    stopService();
                     break;
+
+
                 case ACTION_SCREEN:
                     bringAppToFront();
                     DevTools.takeScreenshot();
                     break;
                 case ACTION_REPORT:
                     bringAppToFront();
-                    DevTools.startReportDialog();
+                    OverlayUIService.performNavigation(ReportScreen.class);
+                    //DevTools.startReportDialog();
                     break;
                 case ACTION_CLEAN:
                     bringAppToFront();
@@ -99,7 +104,7 @@ public class NotificationUIService extends Service {
 
     private void bringAppToFront() {
         //TODO: research a better way to close the headup notification
-        UiUtils.closeAllSystemWindows(getApplicationContext());
+        //UiUtils.closeAllSystemWindows(getApplicationContext());
         Intent app = AppUtils.getAppLauncherIntent(getApplicationContext());
         getApplicationContext().startActivity(app);
     }
@@ -109,8 +114,16 @@ public class NotificationUIService extends Service {
 
         createNotificationChannel();
 
-        Intent intent = AppUtils.getAppLauncherIntent(getApplicationContext());
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        /*Intent intent = AppUtils.getAppLauncherIntent(getApplicationContext());
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                (int)new Date().getTime(), intent, 0);*/
+
+        Intent intent = new Intent(this, NotificationUIService.class);
+        intent.setAction(ACTION_TOOLS);
+        PendingIntent pendingIntent = PendingIntent.getService(this,
+                (int)new Date().getTime(), intent, 0);
+
+
         Notification notification = buildMainNotification(pendingIntent,
                 PendingCrashUtil.isPending() ? new Crash() : null);
 
@@ -132,12 +145,12 @@ public class NotificationUIService extends Service {
     //TODO: [LOW:Arch] Replace by bounded service
     private static NotificationUIService instance;
 
-    public static void close(){
-        instance.stopForegroundService();
+    public static void stop(){
+        if (instance != null) instance.stopService();
     }
     //endregion
 
-    private void stopForegroundService() {
+    private void stopService() {
         Log.d(DevTools.TAG, "Stopping NotificationUIService");
         stopForeground(true);
         stopSelf();
@@ -149,14 +162,24 @@ public class NotificationUIService extends Service {
 
     private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
 
-        Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), UiUtils.getAppIconResourceId());
-        AppInfoHelper infoHelper = new AppInfoHelper(getApplicationContext());
+        String overview;
+        Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
+                UiUtils.getAppIconResourceId());
+        AppInfoHelper appInfo = new AppInfoHelper(getApplicationContext());
+        BuildInfoHelper buildInfo = new BuildInfoHelper(getApplicationContext());
+        overview = appInfo.getAppNameAndVersions() + "\n"
+                + buildInfo.getFriendlyBuildType();
+        if (buildInfo.isGitEnabled()){
+            overview += " from " + buildInfo.getRepositoryOverview();
+        }
+        overview += ", " + buildInfo.getFriendlyElapsedTime();
+
         String title, subTitle;
         if (crash == null){
-            title = infoHelper.getFormattedModeAndVersion();
-            subTitle = developerText;
+            title = "Open developer tools";
+            subTitle = overview;
         }else{
-            title = String.format("Ups, %s crashed", infoHelper.getAppName());
+            title = "Ups, your app crashed";
             subTitle = "Expand me for options...";
         }
 
@@ -184,22 +207,16 @@ public class NotificationUIService extends Service {
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(title);
-        bigTextStyle.bigText(developerText);
+        bigTextStyle.bigText(overview);
         builder.setStyle(bigTextStyle);
 
-        builder.addAction(buildAction(ACTION_TOOLS));
+        //builder.addAction(buildAction(ACTION_TOOLS));
+        //builder.addAction(buildAction(ACTION_CLEAN));
+
+        builder.addAction(buildAction(ACTION_DISMISS));
+        builder.addAction(buildAction(ACTION_SCREEN));
         builder.addAction(buildAction(ACTION_REPORT));
 
-        if (crash == null)
-            builder.addAction(buildAction(ACTION_SCREEN));
-        else
-            builder.addAction(buildAction(ACTION_DISMISS));
-
-
-        if (crash == null)
-            builder.addAction(buildAction(ACTION_CLEAN));
-
-        // Build the notification.
         return builder.build();
     }
 
@@ -246,28 +263,35 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "TAKE SCREEN";
+                title = "SCREENSHOT";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
             case ACTION_REPORT:
                 title = "REPORT";
-                icon = R.drawable.ic_email_rally_24dp;
+                icon = R.drawable.ic_send_rally_24dp;
                 break;
             case ACTION_CLEAN:
                 title = "CLEAN";
                 icon = R.drawable.ic_delete_forever_rally_24dp;
                 break;
             case ACTION_TOOLS:
-            default:
                 title = "TOOLS";
-                icon = R.drawable.ic_developer_mode_white_24dp;
+                icon = R.drawable.ic_developer_mode_rally_24dp;
+                break;
+            case ACTION_DISMISS:
+            default:
+                title = "DISMISS";
+                icon = R.drawable.ic_close_rally_24dp;
                 break;
         }
 
         Intent intent = new Intent(this, NotificationUIService.class);
         intent.setAction(action);
-        PendingIntent pendingPrevIntent = PendingIntent.getService(this, 0, intent, 0);
-        return new NotificationCompat.Action(icon, title, pendingPrevIntent);
+        PendingIntent pendingPrevIntent = PendingIntent.getService(this,
+                (int)new Date().getTime(), intent, 0);
+
+        //TODO: skipped icon
+        return new NotificationCompat.Action(0, title, pendingPrevIntent);
     }
 
     private void createNotificationChannel() {

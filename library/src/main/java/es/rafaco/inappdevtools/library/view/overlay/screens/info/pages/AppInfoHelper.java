@@ -30,7 +30,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
 
     @Override
     public String getOverview() {
-        return getFormattedAppName() + "\n"
+        return getAppNameAndVersions() + "\n"
                 + "Updated " + DateUtils.getElapsedTimeLowered(
                         new Date(getPackageInfo().lastUpdateTime).getTime())
                 + (easyAppMod.getStore().equals("unknown") ? "" : " from " + easyAppMod.getStore());
@@ -123,19 +123,9 @@ public class AppInfoHelper extends AbstractInfoHelper{
         return context.getPackageName();
     }
 
-    public String getFormattedAppName() {
+    public String getAppNameAndVersions() {
         PackageInfo packageInfo = getPackageInfo();
-        //TODO: Environment selector propagation
-        String environment = "DEBUG";
-        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
-        return String.format("%s %s %s", getAppName(), environment, version);
-    }
-
-    public String getFormattedModeAndVersion() {
-        PackageInfo packageInfo = getPackageInfo();
-        String mode = "Developer"; //TODO: Environment selector propagation
-        String version = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
-        return String.format("%s version %s", mode, version);
+        return String.format("%s v%s (%s)", getAppName(),  packageInfo.versionName, packageInfo.versionCode);
     }
 
     @NonNull

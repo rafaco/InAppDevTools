@@ -9,6 +9,7 @@ import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.util.Config;
+import tech.linjiang.pandora.util.Utils;
 
 public class PandoraBridge {
 
@@ -17,6 +18,7 @@ public class PandoraBridge {
     }
 
     public static void init() {
+        Utils.init(getContext());
         Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
         Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
     }

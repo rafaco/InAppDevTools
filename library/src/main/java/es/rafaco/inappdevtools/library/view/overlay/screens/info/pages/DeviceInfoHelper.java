@@ -12,6 +12,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.BatteryHealth;
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod;
 import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
@@ -223,10 +224,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
     @NonNull
     public String getFormattedDeviceLong() {
-        return String.format("%s %s with Android %s", capitalize(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionName()
+        return String.format("%s %s with Android %s", Humanizer.capital(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionName()
     }
 
-    public String capitalize(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1);
-    }
 }

@@ -30,7 +30,7 @@ public class CustomToast {
                 int gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
                 int yOffset = context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset);
                 toast.setGravity(gravity, 0, yOffset);
-                //toast.getView().getParent().getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                //toast.getView().getParent().getWindow().setType(OverlayLayer.getLayoutType());
                 toast.show();
 
                 List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);

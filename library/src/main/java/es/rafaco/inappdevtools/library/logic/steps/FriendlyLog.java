@@ -10,7 +10,6 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -96,7 +95,7 @@ public class FriendlyLog {
 
     @NonNull
     private static String getFormatted(Friendly log) {
-        return String.format("[%s:%s-%s] %s", DateUtils.formatPrecisionTime(log.getDate()), log.getCategory(), log.getType(), log.getMessage());
+        return String.format("[%s-%s] %s", log.getCategory(), log.getType(), log.getMessage());
     }
 
     public static int getColor(Friendly log) {
@@ -127,9 +126,9 @@ public class FriendlyLog {
                 return R.drawable.ic_flip_to_front_white_24dp;
             } else if (log.getType().equals("Background")) {
                 return R.drawable.ic_flip_to_back_white_24dp;
-            } else if (log.getType().equals("Restarted")) {
+            } else if (log.getType().equals("Restart")) {
                 return R.drawable.ic_replay_white_24dp;
-            } else if (log.getType().equals("Startup")) {
+            } else if (log.getType().equals("Start")) {
                 return R.drawable.ic_flag_white_24dp;
             } else if (log.getType().equals("FirstStartup")) {
                 return R.drawable.ic_fiber_new_white_24dp;
@@ -235,7 +234,7 @@ public class FriendlyLog {
             else if (log.getType().equals("Delete")){
                 return R.drawable.ic_delete_forever_rally_24dp;
             }
-            return R.drawable.ic_developer_mode_white_24dp;
+            return R.drawable.ic_developer_mode_rally_24dp;
         }
         return -1;
     }

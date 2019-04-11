@@ -10,7 +10,6 @@ import android.util.Log;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
@@ -169,7 +168,7 @@ public class OverlayUIService extends Service {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
 
         if (action.equals(IntentAction.FORCE_CLOSE)) {
-            onForceClose();
+            stopService();
         }
 
         if (!isInitialised(action, property))
@@ -249,13 +248,14 @@ public class OverlayUIService extends Service {
     //TODO: [LOW:Arch] Replace by bounded service
     private static OverlayUIService instance;
 
-    public static void close(){
-        instance.onForceClose();
+    public static void stop(){
+        if (instance != null) instance.stopService();
     }
 
-    private void onForceClose() {
+    private void stopService() {
         Log.d(DevTools.TAG, "Stopping OverlayUIService");
         stopSelf();
+        instance = null;
     }
 
     @Override

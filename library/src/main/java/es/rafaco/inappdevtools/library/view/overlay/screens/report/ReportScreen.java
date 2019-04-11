@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
@@ -82,13 +83,13 @@ public class ReportScreen extends OverlayScreen {
                 IconUtils.MATERIAL).sizeDp(24);
         icon2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
-
         out = getView().findViewById(R.id.out);
         header = getView().findViewById(R.id.report_welcome);
         sendButton = getView().findViewById(R.id.report_button);
         manageScreensButton = getView().findViewById(R.id.manage_screens_button);
 
-        header.setText("Choose elements to send and press Send");
+        header.setText("WARNING: This feature is almost broken, it will be repair soon...\n\n "
+                + "Choose elements to send and press Send");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,7 +205,7 @@ public class ReportScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
         alertDialog.show();
     }
 

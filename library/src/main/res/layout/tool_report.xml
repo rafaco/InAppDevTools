@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24dp"
+            android:visibility="gone"
             style="@style/content_margin"/>
 
         <android.support.v7.widget.AppCompatButton
@@ -21,6 +22,7 @@
             android:layout_width="match_parent"
             android:textSize="24dp"
             android:text="BUTTON"
+            android:visibility="gone"
             android:layout_height="wrap_content" />
 
         <TextView

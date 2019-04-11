@@ -20,6 +20,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.HttpBinService;
 
@@ -113,7 +114,7 @@ public class RunScreen extends OverlayScreen {
                     }
                 }));
         data.add(new RunnableConfig("Dev Options",
-                R.drawable.ic_developer_mode_white_24dp,
+                R.drawable.ic_developer_mode_rally_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -167,7 +168,7 @@ public class RunScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
         alertDialog.show();
     }
 

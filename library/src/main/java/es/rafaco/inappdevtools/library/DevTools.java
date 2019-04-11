@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,11 +75,11 @@ public class DevTools {
         toolManager = new ToolManager(appContext);
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
-
-        //sourcesManager = new SourcesManager(appContext);
-
-        if (config.notificationUiEnabled) startForegroundService(context);
         if (config.overlayUiEnabled) startUiService(context);
+        if (config.notificationUiEnabled) startForegroundService(context);
+
+        //Lazy initialized
+        //sourcesManager = new SourcesManager(appContext);
 
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
@@ -89,7 +88,6 @@ public class DevTools {
             }
         });
         android.util.Log.i(DevTools.TAG, "DevTools initialized");
-
 
         if (PendingCrashUtil.isPending()){
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
@@ -106,7 +104,7 @@ public class DevTools {
 
     //endregion
 
-    //region [ PRIVATE INITIALIZATION ]
+    //region [ SERVICES INITIALIZATION ]
 
     private static void startForegroundService(Context context) {
         Intent intent = new Intent(context, NotificationUIService.class);
@@ -236,6 +234,7 @@ public class DevTools {
 
     public static void startReportDialog() {
         Intent intent = new Intent(getAppContext(), ReportDialogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getAppContext().startActivity(intent);
     }
 
@@ -273,11 +272,11 @@ public class DevTools {
     public static void logCreatedInitProvider(Context context) {
         appContext = context.getApplicationContext();
         if (PendingCrashUtil.isPending())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Restarted", "App restarted after a crash");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Restart", "App restarted after a crash");
         else if (FirstStartUtil.isFirstStart())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStartup", "App started for first time");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart", "App started for first time");
         else
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "App started");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Start", "App started");
     }
 
 
@@ -340,10 +339,10 @@ public class DevTools {
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
         android.util.Log.w(DevTools.TAG, "Stopping Foreground");
-        NotificationUIService.close();
+        NotificationUIService.stop();
 
         android.util.Log.w(DevTools.TAG, "Stopping Overlay");
-        OverlayUIService.close();
+        OverlayUIService.stop();
     }
 
     public static void addOnForceCloseRunnnable(Runnable onForceClose){

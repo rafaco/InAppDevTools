@@ -10,31 +10,31 @@ public class ProcessLifecycleCallbacks implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void init() {
-        FriendlyLog.log("D", "Process", "ON_CREATE", "Process created");
+        FriendlyLog.log("D", "Process", "Create", "Process created");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void LibOnStart() {
-        FriendlyLog.log("D", "Process", "ON_START", "Process started");
+        FriendlyLog.log("D", "Process", "Start", "Process started");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void LibOnStop() {
-        FriendlyLog.log("D", "Process", "ON_STOP", "Process stopped");
+        FriendlyLog.log("D", "Process", "Stop", "Process stopped");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void LibOnResume() {
-        FriendlyLog.log("D", "Process", "ON_RESUME", "Process resumed");
+        FriendlyLog.log("D", "Process", "Resume", "Process resumed");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void LibOnPause() {
-        FriendlyLog.log("D", "Process", "ON_PAUSE", "Process paused");
+        FriendlyLog.log("D", "Process", "Pause", "Process paused");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void cleanup() {
-        FriendlyLog.log("I", "Process", "ON_DESTROY", "Process destroyed");
+        FriendlyLog.log("I", "Process", "Destroy", "Process destroyed");
     }
 }
