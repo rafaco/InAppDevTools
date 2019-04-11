@@ -50,7 +50,7 @@ You only need to modify 2 gradle files and rebuild your app.
 buildscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.07" apply false
+    id "es.rafaco.inappdevtools" version "0.0.10" apply false
 }
 
 allprojects {
@@ -70,7 +70,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 android {...}
 
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.40'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.41'
 }
 ```
 
