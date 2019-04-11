@@ -272,11 +272,11 @@ public class DevTools {
     public static void logCreatedInitProvider(Context context) {
         appContext = context.getApplicationContext();
         if (PendingCrashUtil.isPending())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Restarted", "App restarted after a crash");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Restart", "App restarted after a crash");
         else if (FirstStartUtil.isFirstStart())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStartup", "App started for first time");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart", "App started for first time");
         else
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Startup", "App started");
+            FriendlyLog.log(new Date().getTime(), "I", "App", "Start", "App started");
     }
 
 

@@ -93,7 +93,9 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
 
         extra_over.setVisibility(isSelected ? View.VISIBLE : View.GONE);
         extras_over.setText(!isSelected ? "" :
-                String.format("%s [%s] %s-%s", DateUtils.format(data.getDate()), data.getSeverity(), data.getCategory(), data.getType()));
+                String.format("%s [%s-%s]",
+                        DateUtils.format(data.getDate()),
+                        data.getCategory(), data.getType()));
 
         if(isSelected && getLink(data)!=null){
             extra_button.setOnClickListener(new View.OnClickListener() {

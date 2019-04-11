@@ -13,58 +13,58 @@ public class SupportFragmentLifecycleCallbacks extends FragmentManager.FragmentL
     @Override
     public void onFragmentPreAttached(FragmentManager fm, Fragment f, Context context) {
         super.onFragmentPreAttached(fm, f, context);
-        friendlyLog("V","PreAttached", fm, f);
+        friendlyLog("V","PreAttach", fm, f);
     }
 
     @Override
     public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
         super.onFragmentAttached(fm, f, context);
-        friendlyLog("D","Attached", fm, f);
+        friendlyLog("D","Attach", fm, f);
     }
 
     @Override
     public void onFragmentCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
         super.onFragmentCreated(fm, f, savedInstanceState);
-        friendlyLog("D","Created", fm, f);
+        friendlyLog("D","Create", fm, f);
     }
 
     @Override
     public void onFragmentActivityCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
         super.onFragmentActivityCreated(fm, f, savedInstanceState);
-        friendlyLog("V","ActivityCreated", fm, f);
+        friendlyLog("V","ActivityCreate", fm, f);
     }
 
     @Override
     public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
         super.onFragmentViewCreated(fm, f, v, savedInstanceState);
-        friendlyLog("V","ViewCreated", fm, f);
+        friendlyLog("V","ViewCreate", fm, f);
     }
 
     @Override
     public void onFragmentStarted(FragmentManager fm, Fragment f) {
         super.onFragmentStarted(fm, f);
-        friendlyLog("D","Started", fm, f);
+        friendlyLog("D","Start", fm, f);
     }
 
     @Override
     public void onFragmentResumed(FragmentManager fm, Fragment f) {
         super.onFragmentResumed(fm, f);
-        friendlyLog("D","Resumed", fm, f);
+        friendlyLog("D","Resume", fm, f);
 
         //TODO: skip on rotation like with activities
-        friendlyLog("I","shown", fm, f);
+        friendlyLog("I","Shown", fm, f);
     }
 
     @Override
     public void onFragmentPaused(FragmentManager fm, Fragment f) {
         super.onFragmentPaused(fm, f);
-        friendlyLog("V","Paused", fm, f);
+        friendlyLog("V","Pause", fm, f);
     }
 
     @Override
     public void onFragmentStopped(FragmentManager fm, Fragment f) {
         super.onFragmentStopped(fm, f);
-        friendlyLog("D","Stopped", fm, f);
+        friendlyLog("D","Stop", fm, f);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SupportFragmentLifecycleCallbacks extends FragmentManager.FragmentL
     @Override
     public void onFragmentDetached(FragmentManager fm, Fragment f) {
         super.onFragmentDetached(fm, f);
-        friendlyLog("D","Detached", fm, f);
+        friendlyLog("D","Detach", fm, f);
     }
 
 

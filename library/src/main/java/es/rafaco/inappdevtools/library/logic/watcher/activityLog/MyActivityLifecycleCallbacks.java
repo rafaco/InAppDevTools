@@ -48,7 +48,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        friendlyLog("D","Created", activity);
+        friendlyLog("D","Create", activity);
 
         //TODO: Crash Handler
         if (false){ //activity.getClass() != config.getErrorActivityClass()) {
@@ -64,7 +64,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityStarted(Activity activity) {
-        friendlyLog("D","Started", activity);
+        friendlyLog("D","Start", activity);
 
         manager.currentlyStartedActivities++;
         manager.isInBackground = (manager.currentlyStartedActivities == 0);
@@ -73,7 +73,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityResumed(final Activity activity) {
-        friendlyLog("V","Resumed", activity);
+        friendlyLog("V","Resume", activity);
 
         if (!manager.getLastActivityResumed().equals(activity.getClass().getSimpleName())){
             FriendlyLog.log("I", "App", "Navigation", "Showing " + activity.getClass().getSimpleName());
@@ -99,7 +99,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityPaused(Activity activity) {
-        friendlyLog("V","Paused", activity);
+        friendlyLog("V","Pause", activity);
 
         manager.activityLog.add(dateFormat.format(new Date()) + ": " + activity.getClass().getSimpleName() + " paused\n");
 
@@ -111,7 +111,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     @Override
     public void onActivityStopped(Activity activity) {
-        friendlyLog("D","Stopped", activity);
+        friendlyLog("D","Stop", activity);
 
         //Do nothing
         manager.currentlyStartedActivities--;
