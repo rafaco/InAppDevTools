@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -73,14 +74,23 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public String getBuildOverview() {
+        String build = getFriendlyBuildType();
+        String time = getFriendlyElapsedTime();
+        return String.format("%s build, %s", build, time);
+    }
+
+    public String getFriendlyElapsedTime() {
+        return DateUtils.getElapsedTimeLowered(
+                Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)));
+    }
+
+    @NonNull
+    public String getFriendlyBuildType() {
         String flavor = AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
         String buildType = AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE);
         String build = TextUtils.isEmpty(flavor) ? buildType : flavor;
         build = Humanizer.capital(build);
-        String time = DateUtils.getElapsedTimeLowered(
-                Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)));
-
-        return String.format("%s build, %s", build, time);
+        return build;
     }
 
     public String getLocalOverview(){

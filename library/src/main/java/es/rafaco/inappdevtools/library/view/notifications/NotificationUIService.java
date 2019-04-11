@@ -23,8 +23,10 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class NotificationUIService extends Service {
@@ -83,7 +85,8 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_REPORT:
                     bringAppToFront();
-                    DevTools.startReportDialog();
+                    OverlayUIService.performNavigation(ReportScreen.class);
+                    //DevTools.startReportDialog();
                     break;
                 case ACTION_CLEAN:
                     bringAppToFront();
@@ -164,10 +167,12 @@ public class NotificationUIService extends Service {
                 UiUtils.getAppIconResourceId());
         AppInfoHelper appInfo = new AppInfoHelper(getApplicationContext());
         BuildInfoHelper buildInfo = new BuildInfoHelper(getApplicationContext());
-        overview = appInfo.getAppNameAndVersions() + "\n" + buildInfo.getBuildOverview();
+        overview = appInfo.getAppNameAndVersions() + "\n"
+                + buildInfo.getFriendlyBuildType();
         if (buildInfo.isGitEnabled()){
             overview += " from " + buildInfo.getRepositoryOverview();
         }
+        overview += ", " + buildInfo.getFriendlyElapsedTime();
 
         String title, subTitle;
         if (crash == null){
@@ -208,9 +213,9 @@ public class NotificationUIService extends Service {
         //builder.addAction(buildAction(ACTION_TOOLS));
         //builder.addAction(buildAction(ACTION_CLEAN));
 
-        builder.addAction(buildAction(ACTION_REPORT));
-        builder.addAction(buildAction(ACTION_SCREEN));
         builder.addAction(buildAction(ACTION_DISMISS));
+        builder.addAction(buildAction(ACTION_SCREEN));
+        builder.addAction(buildAction(ACTION_REPORT));
 
         return builder.build();
     }
@@ -258,7 +263,7 @@ public class NotificationUIService extends Service {
 
         switch (action){
             case ACTION_SCREEN:
-                title = "TAKE SCREEN";
+                title = "SCREENSHOT";
                 icon = R.drawable.ic_add_a_photo_rally_24dp;
                 break;
             case ACTION_REPORT:
@@ -285,7 +290,8 @@ public class NotificationUIService extends Service {
         PendingIntent pendingPrevIntent = PendingIntent.getService(this,
                 (int)new Date().getTime(), intent, 0);
 
-        return new NotificationCompat.Action(icon, title, pendingPrevIntent);
+        //TODO: skipped icon
+        return new NotificationCompat.Action(0, title, pendingPrevIntent);
     }
 
     private void createNotificationChannel() {

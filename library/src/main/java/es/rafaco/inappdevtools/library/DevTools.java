@@ -235,6 +235,7 @@ public class DevTools {
 
     public static void startReportDialog() {
         Intent intent = new Intent(getAppContext(), ReportDialogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getAppContext().startActivity(intent);
     }
 

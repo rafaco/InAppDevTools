@@ -29,6 +29,7 @@ public class FileProviderUtils {
         } else {
             intent.setDataAndType(Uri.fromFile(file), type);
         }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

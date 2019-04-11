@@ -82,13 +82,13 @@ public class ReportScreen extends OverlayScreen {
                 IconUtils.MATERIAL).sizeDp(24);
         icon2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
-
         out = getView().findViewById(R.id.out);
         header = getView().findViewById(R.id.report_welcome);
         sendButton = getView().findViewById(R.id.report_button);
         manageScreensButton = getView().findViewById(R.id.manage_screens_button);
 
-        header.setText("Choose elements to send and press Send");
+        header.setText("WARNING: This feature is almost broken, it will be repair soon...\n\n "
+                + "Choose elements to send and press Send");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
