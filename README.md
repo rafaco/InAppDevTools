@@ -211,38 +211,3 @@ You don't normally need to manually download our library or our plugin as they a
 
 ## License <a name="license"/>
 Apache-2.0
-
-
-<br/>
-<br/>
-
-# OUT-DATED: Following documentation is outdated... working on it
-
-### Integrations <a name="integrations"/>
-This library attempt to extend your app with minimal modification of your source code. Only install is required and you will get...
-Although, you can do a direct integration to get:... 
-
-**Programmatically interacting with tools:**
-- Custom invocation
-- Open Tool
-- Take Screenshot
-- Send Report
-
-
-**Environment selector:**
-
-**Inject details into tools:**
-
-Special properties to include in tools and their reports.
-- Custom properties (setProperty(Name, value))
-- Custom watchers (setWatcher(Name, Runnable))
-- Custom report vs "Custom properties" section at info/status 
-
-**Network inspection:**
-
-- Adding our network interceptor (OkHttpClient & http requests)
-
-**Debugger assistance:**
-- Show debug messages (showInfo, showError,...)
-- Annotations to Debug classes/methods
-- Annotations to improve tracking lifecycle (services, fragments...)
