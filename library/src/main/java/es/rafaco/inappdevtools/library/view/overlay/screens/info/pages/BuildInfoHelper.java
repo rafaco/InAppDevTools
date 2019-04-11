@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -11,6 +10,7 @@ import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class BuildInfoHelper extends AbstractInfoHelper {
 
@@ -25,16 +25,9 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        String firstLine = "Build "
-                + DateUtils.getElapsedTimeLowered(
-                        Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)))
-                + " as "
-                + AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE)
-                + AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
-
-        String secondLine = gitConfig.getString("BRANCH") + " " + gitConfig.getString("INFO");
+        String firstLine = getBuildOverview();
+        String secondLine = getRepositoryOverview();
         String thirdLine = getLocalOverview();
-
         return firstLine + "\n" + secondLine + "\n" + thirdLine;
     }
 
@@ -59,7 +52,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     public InfoGroup getRepositoryInfo() {
         InfoGroup.Builder group = new InfoGroup.Builder("Repository");
 
-        if (!gitConfig.getBoolean("ENABLED")){
+        if (!isGitEnabled()){
             group.add("No git found at build folder");
             return group.build();
         }
@@ -72,45 +65,31 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         return group.build();
     }
 
-    public InfoGroup getLocalChangesInfo() {
-        InfoGroup.Builder group = new InfoGroup.Builder("Local changes");
-
-        String local_commits = gitConfig.getString("LOCAL_COMMITS");
-        int local_commits_count = countLines(local_commits);
-        boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
-        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
-        int file_changes_count = countLines(file_status);
-
-        if (!hasLocalCommits && !hasLocalChanges){
-            group.add("No local changes");
-            return group.build();
+    public String getRepositoryOverview() {
+        if (!isGitEnabled()){
+            return null;
         }
-
-        group.add("Annotations", local_commits_count + " ahead"
-                + "\n" + local_commits)
-                .add()
-                .add("Files", file_changes_count + " changed"
-                        + "\n" + gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
-
-        return group.build();
+        return gitConfig.getString("BRANCH") + " " + gitConfig.getString("INFO");
     }
 
-    @NonNull
-    private int countLines(String text) {
-        if (TextUtils.isEmpty(text)){
-            return 0;
-        }
-        return text.split("\n").length;
+    public String getBuildOverview() {
+        String flavor = AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
+        String buildType = AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE);
+        String build = TextUtils.isEmpty(flavor) ? buildType : flavor;
+        build = Humanizer.capital(build);
+        String time = DateUtils.getElapsedTimeLowered(
+                Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)));
+
+        return String.format("%s build, %s", build, time);
     }
 
     public String getLocalOverview(){
         String local_commits = gitConfig.getString("LOCAL_COMMITS");
-        int local_commits_count = countLines(local_commits);
+        int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
         boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
         String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
-        int file_changes_count = countLines(file_status);
+        int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
             return "No local changes";
@@ -127,4 +106,33 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
         return result;
     }
+
+    public InfoGroup getLocalChangesInfo() {
+        InfoGroup.Builder group = new InfoGroup.Builder("Local changes");
+
+        String local_commits = gitConfig.getString("LOCAL_COMMITS");
+        int local_commits_count = Humanizer.countLines(local_commits);
+        boolean hasLocalCommits = local_commits_count > 0;
+        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
+        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
+        int file_changes_count = Humanizer.countLines(file_status);
+
+        if (!hasLocalCommits && !hasLocalChanges){
+            group.add("No local changes");
+            return group.build();
+        }
+
+        group.add("Annotations", local_commits_count + " ahead"
+                + "\n" + local_commits)
+                .add()
+                .add("Files", file_changes_count + " changed"
+                        + "\n" + gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
+
+        return group.build();
+    }
+
+    public boolean isGitEnabled() {
+        return gitConfig.getBoolean("ENABLED");
+    }
+
 }
