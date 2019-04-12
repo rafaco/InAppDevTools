@@ -7,13 +7,16 @@ pluginManagement {
 enableFeaturePreview('STABLE_PUBLISHING')
 
 
-//Include modules by folder name
+//Include modules using folder names
 include ':library', ':plugin', ':sample'
 
-//Rename modules to correct artifactIds
-rootProject.name = 'inappdevtools-project'
+//Remap module names, used as artifactId when publishing
+ext.remapper = [
+        'root'      : 'inappdevtools-project',
+        'plugin'    : 'inappdevtools-plugin',
+        'library'   : 'inappdevtools'
+]
+rootProject.name = remapper.root
 rootProject.children.each {
-    it.name = ('plugin' == it.name ? 'inappdevtools-plugin' :
-               'library' == it.name ? 'inappdevtools' :
-               it.name)
+    it.name = remapper.containsKey(it.name) ? remapper[it.name] : it.name
 }
