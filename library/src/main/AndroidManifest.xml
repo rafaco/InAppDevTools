@@ -10,13 +10,13 @@
     <application>
 
         <provider
+            android:name=".logic.initialization.InitializationContentProvider"
             android:authorities="${applicationId}.devtoolsinitprovider"
             android:exported="false"
-            android:enabled="true"
-            android:name=".logic.initialization.InitializationContentProvider" />
+            android:enabled="true" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name=".storage.files.IadtFileProvider"
             android:authorities="${applicationId}.devtools.provider"
             android:exported="false"
             android:grantUriPermissions="true">
