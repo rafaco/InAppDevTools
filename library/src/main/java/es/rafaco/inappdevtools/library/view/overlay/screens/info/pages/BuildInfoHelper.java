@@ -88,7 +88,8 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     public String getFriendlyBuildType() {
         String flavor = AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
         String buildType = AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE);
-        String build = TextUtils.isEmpty(flavor) ? buildType : flavor;
+        String build = TextUtils.isEmpty(flavor) ? buildType
+                :  flavor + Humanizer.capital(buildType);
         build = Humanizer.capital(build);
         return build;
     }
