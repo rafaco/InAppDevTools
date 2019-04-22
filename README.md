@@ -16,6 +16,7 @@
 - [Installation](#setup)
   - [Limitations](#req)
   - [Basic setup](#basic)
+  - [Exclude modules](#modules)
   - [Add network interceptor](#network)
 - [Usage](#usage)
   - [Invocation](#invocation)
@@ -41,16 +42,15 @@ His source code is in this repository ("sample" folder) and it's contains implem
 - If AndroidX is enabled: Jetifier should also be enabled. Check it at your gradle.properties
 
 ### Basic set-up <a name="basic"/>
-You only need to modify 2 gradle files and rebuild your app.
+For standard projects you only need to modify 2 gradle files and rebuild your app.
 
-- Step 1: On the build.gradle file of your root module folder:
-  - Declare our plugin (just after buidscript)
-  - Add JitPack repository (TEMP, transitive dependency)
+1. On the build.gradle file of your root module folder, declare our plugin (just after buidscript closure) and add JitPack to the list of repositories (TEMP, transitive dependency):
+
 ```gradle
 buildscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.10" apply false
+    id "es.rafaco.inappdevtools" version "[PLUGIN_VERSION]"
 }
 
 allprojects {
@@ -60,22 +60,38 @@ allprojects {
 }
 ```
 
-- Step 2: On the build.gradle file of your app module folder:
-  - Apply our gradle plugin
-  - Add our library to dependencies
-```gradle
-apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'
+2. On the build.gradle file of your app module folder, apply our gradle plugin and add our library to the list of dependencies: 
 
+```gradle
 android {...}
 
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.41'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:[LIBRARY_VERSION]'
 }
+```
+
+Where:
+
+![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=[PLUGIN_VERSION]&colorB=blue) and 
+![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat)
+
+### Exclude modules from plugin <a name="modules"/>
+If your project have additional modules, you can decide witch one will run our plugin to collect build info, sources and resources. To do so, you need to disable the default behavior of applying our plugin immediately in the root build.gradle:
+
+```gradle
+plugins {
+    id "es.rafaco.inappdevtools" version "[PLUGIN_VERSION]" apply false
+}
+```
+And then manually apply our plugin in the build.gradle of every desired module, including the main one (app):
+
+```gradle
+apply plugin: 'es.rafaco.inappdevtools'
 ```
 
 ### Add network interceptor <a name="network"/>
 If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class:
+
 ```java
 Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
