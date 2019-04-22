@@ -63,28 +63,37 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Run",
-                R.drawable.ic_run_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(RunScreen.class);
-                    }
-                }));
-
-        data.add(new RunnableConfig("Report",
-                R.drawable.ic_send_rally_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
-                    }
-                }));
-
-
         data.add(new RunnableConfig("History",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(FriendlyLogScreen.class);
+                    }
+                }));
+
+        data.add(new RunnableConfig("Logcat",
+                R.drawable.ic_android_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(LogScreen.class);
+                    }
+                }));
+
+
+
+        data.add(new RunnableConfig("Sources",
+                R.drawable.ic_code_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(SourcesScreen.class);
+                    }
+                }));
+
+        data.add(new RunnableConfig("View",
+                R.drawable.ic_layers_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(InspectViewScreen.class);
                     }
                 }));
 
@@ -99,28 +108,21 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("View",
-                R.drawable.ic_layers_white_24dp,
+
+
+        data.add(new RunnableConfig("Run",
+                R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(InspectViewScreen.class);
+                    public void run() { OverlayUIService.performNavigation(RunScreen.class);
                     }
                 }));
 
-        data.add(new RunnableConfig("Logcat",
-                R.drawable.ic_android_white_24dp,
+        data.add(new RunnableConfig("Report",
+                R.drawable.ic_send_rally_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(LogScreen.class);
-                    }
-                }));
-
-
-        data.add(new RunnableConfig("Code",
-                R.drawable.ic_code_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(SourcesScreen.class);
+                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
                     }
                 }));
 
