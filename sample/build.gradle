@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion rootProject.ext.appCompileSdkVersion
+    buildToolsVersion rootProject.ext.appBuildToolsVersion
     defaultConfig {
         applicationId "es.rafaco.inappdevtools.sample"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 45
-        versionName "0.0.01"
+        minSdkVersion rootProject.ext.appMinSdkVersion
+        targetSdkVersion rootProject.ext.appTargetSdkVersion
+        versionCode rootProject.ext.appVersionCode
+        versionName rootProject.ext.appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,11 +27,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    def support_version = "28.0.0"
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "com.android.support:design:$support_version"
-    implementation "com.android.support:support-v4:$support_version"
-    implementation "com.android.support:recyclerview-v7:$support_version"
+
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
+    implementation "com.android.support:design:$rootProject.ext.appSupportVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
@@ -39,11 +39,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    // Import our library from repository (jCenter or localMaven). Standard usage.
-    //implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.42'
+    // Import our library from repository (jCenter or localMaven). Standard usage
+    //api "es.rafaco.inappdevtools:inappdevtools:$rootProject.ext.libraryVersionName"
 
     // Import our library from local subproject, for development.
-    implementation project(path: ':inappdevtools')
+    api project(path: ':inappdevtools')
 }
 
 // Import our plugin from repository (jCenter or localMaven). Standard usage.
