@@ -16,7 +16,7 @@ dependencies {
 
 //PLUGIN DEFINITION
 group 'es.rafaco.inappdevtools'
-version '0.0.10'
+version rootProject.ext.pluginVersionName
 
 gradlePlugin {
     plugins {

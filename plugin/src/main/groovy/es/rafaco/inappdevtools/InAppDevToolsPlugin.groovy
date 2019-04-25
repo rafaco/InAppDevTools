@@ -20,14 +20,25 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     final RESOURCES_TASK = 'packResources'
 
     void apply(Project project) {
+
+        if(!isAndroidApplication(project) && !isAndroidLibrary(project)){
+            return
+        }
+
         //Init extension
         project.extensions.create(TAG, InAppDevToolsExtension)
 
-        //Init output
+        //Init output folder
         def outputFolder = project.file(getOutputPath(project))
         outputFolder.mkdirs()
         project.android.sourceSets.main.assets.srcDirs += "${project.buildDir}${ASSETS_PATH}"
 
+        if (isAndroidApplication(project)){
+            def manifest = new XmlSlurper().parse(project.file(project.android.sourceSets.main.manifest.srcFile))
+            def internalPackage = manifest.@package.text()
+            project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
+            project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
+        }
 
         //Add tasks
         project.task(CONFIG_TASK, type:GenerateConfigsTask)

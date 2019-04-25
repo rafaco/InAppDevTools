@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
     // Declare our plugin (make it available at subprojects)
-    id "es.rafaco.inappdevtools" version "0.0.10" apply false
+    id "es.rafaco.inappdevtools" version "0.0.11" apply false
     id "org.sonarqube" version "2.7"
 }
 
@@ -25,6 +25,8 @@ ext {
     libraryCompileSdkVersion = 27
     libraryBuildToolsVersion = '27.0.3'
     librarySupportVersion = '27.1.1'
+
+    pluginVersionName = '0.0.11'
 
     appVersionName = '0.0.01'
     appVersionCode = 45
@@ -60,16 +62,6 @@ ext {
     */
 }
 
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "rafaco_InAppDevTools"
-        property "sonar.organization", "rafaco-github"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.login", System.getenv('SONAR_TOKEN')
-    }
-}
-
 allprojects {
     repositories {
         maven { url "https://jitpack.io"}
@@ -79,15 +71,24 @@ allprojects {
 }
 
 
-// Clean All task
+// Clean all modules
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
 subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
 }
 
+
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "rafaco_InAppDevTools"
+        property "sonar.organization", "rafaco-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login", System.getenv('SONAR_TOKEN')
+    }
+}
 
 //Enable Gradle report using param --scan
 if (hasProperty('buildScan')) {
