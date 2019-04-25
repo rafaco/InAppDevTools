@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
@@ -16,6 +16,50 @@ plugins {
     id "es.rafaco.inappdevtools" version "0.0.10" apply false
     id "org.sonarqube" version "2.7"
 }
+
+ext {
+    libraryVersionName = '0.0.43'
+    libraryVersionCode = 1
+    libraryMinSdkVersion = 16
+    libraryTargetSdkVersion = 27
+    libraryCompileSdkVersion = 27
+    libraryBuildToolsVersion = '27.0.3'
+    librarySupportVersion = '27.1.1'
+
+    appVersionName = '0.0.01'
+    appVersionCode = 45
+    appMinSdkVersion = 16
+
+    /*
+    // API 23 -> gradleToolVersion = '2.1.0'
+    appTargetSdkVersion = 23
+    appCompileSdkVersion = 23
+    appBuildToolsVersion = '23.0.2'
+    appSupportVersion = '23.0.2'
+    */
+
+    // API 26 -> gradleToolVersion = '3.0.0'
+    appTargetSdkVersion = 26
+    appCompileSdkVersion = 26
+    appBuildToolsVersion = '26.0.2'
+    appSupportVersion = '26.0.2'
+
+
+    /*
+    // API 27 -> gradleToolVersion = '3.1.0'
+    appCompileSdkVersion = 27
+    appBuildToolsVersion = '27.0.3'
+    appSupportVersion = '27.1.1'
+    */
+
+    /*
+    // API 28 -> gradleToolVersion = '3.3.0'
+    appCompileSdkVersion = 28
+    appBuildToolsVersion = '28.0.3'
+    appSupportVersion = '28.0.0'
+    */
+}
+
 
 sonarqube {
     properties {
