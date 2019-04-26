@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
@@ -53,6 +54,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
         InfoGroup group = new InfoGroup.Builder("")
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())
+                .add("Internal Package", AppBuildConfig.getNamespace(context))
                 //.add("Activity Name", easyAppMod.getActivityName())
                 .add("App version", easyAppMod.getAppVersion())
                 .add("App versioncode", easyAppMod.getAppVersionCode())
@@ -181,5 +183,4 @@ public class AppInfoHelper extends AbstractInfoHelper{
         }
         return result;
     }
-
 }

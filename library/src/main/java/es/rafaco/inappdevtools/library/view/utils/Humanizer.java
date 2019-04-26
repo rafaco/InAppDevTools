@@ -4,8 +4,11 @@ import android.text.TextUtils;
 
 public class Humanizer {
 
-    public static String capital(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1);
+    public static String capital(String text){
+        if (TextUtils.isEmpty(text)){
+            return text;
+        }
+        return text.substring(0,1).toUpperCase() + text.substring(1);
     }
 
     public static int countLines(String text) {

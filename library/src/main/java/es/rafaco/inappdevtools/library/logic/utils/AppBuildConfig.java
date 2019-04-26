@@ -19,7 +19,7 @@ public class AppBuildConfig {
      */
     public static Object getObjectValue(Context context, String fieldName) {
         try {
-            Class<?> clazz = Class.forName(context.getPackageName() + ".BuildConfig");
+            Class<?> clazz = Class.forName(getNamespace(context) + ".BuildConfig");
             Field field = clazz.getField(fieldName);
             return field.get(null);
         } catch (ClassNotFoundException e) {
@@ -30,6 +30,16 @@ public class AppBuildConfig {
             FriendlyLog.logException("Exception", e);
         }
         return null;
+    }
+
+    public static String getNamespace(Context context) {
+        int resId = context.getResources().getIdentifier("internal_package",
+                "string", context.getPackageName());
+        if (resId != 0) {
+            return context.getString(resId);
+        }else{
+            return context.getPackageName();
+        }
     }
 
     public static Boolean getBooleanValue(Context context, String fieldName) {
