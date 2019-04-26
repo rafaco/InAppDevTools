@@ -42,13 +42,11 @@ His source code is in this repository ("sample" folder) and it's contains implem
 - If AndroidX is enabled: Jetifier should also be enabled. Check it at your gradle.properties
 
 ### Basic set-up <a name="basic"/>
-For standard projects you only need to modify 2 gradle files and rebuild your app.
+For standard Android projects you only need to modify 2 gradle files. Then build your app and shake it!
 
-1. On the build.gradle file of your root module folder, declare our plugin (just after buidscript closure) and add JitPack to the list of repositories (TEMP, transitive dependency):
+1. On your root build.gradle, import our plugin (plugins closure must be just after buidscript). Then add the JitPack repository (TEMP, is a transitive dependency):
 
 ```gradle
-buildscript {...}
-
 plugins {
     id "es.rafaco.inappdevtools" version "[PLUGIN_VERSION]"
 }
@@ -60,11 +58,9 @@ allprojects {
 }
 ```
 
-2. On the build.gradle file of your app module folder, apply our gradle plugin and add our library to the list of dependencies: 
+2. On your app build.gradle, include our library in your dependencies: 
 
 ```gradle
-android {...}
-
 dependencies {
     implementation 'es.rafaco.inappdevtools:inappdevtools:[LIBRARY_VERSION]'
 }
