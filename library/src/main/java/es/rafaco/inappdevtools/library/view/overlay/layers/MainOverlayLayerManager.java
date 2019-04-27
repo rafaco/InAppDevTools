@@ -212,7 +212,7 @@ public class MainOverlayLayerManager {
         }
 
         navigationHistory.add(newStep);
-        updateBackbutton();
+        updateBackButton();
         updateToolbarTitle();
     }
 
@@ -224,8 +224,8 @@ public class MainOverlayLayerManager {
         getMainLayer().setToolbarTitle(loadedScreen.getTitle());
     }
 
-    private void updateBackbutton() {
-        getMainLayer().toogleBackButton(navigationHistory.size()>1);
+    public void updateBackButton() {
+        getMainLayer().toggleBackButton(navigationHistory.size()>1);
     }
 
     public void goBack(){

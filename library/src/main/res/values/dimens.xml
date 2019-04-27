@@ -21,4 +21,5 @@
 
     <dimen name="overlay_dialog_margin">7dp</dimen>
     <dimen name="toast_y_offset">24dp</dimen>
+    <dimen name="toolbar_height">40dp</dimen>
 </resources>

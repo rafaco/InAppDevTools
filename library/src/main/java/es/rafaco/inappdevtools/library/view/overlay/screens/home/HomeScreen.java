@@ -1,5 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -45,6 +47,15 @@ public class HomeScreen extends OverlayScreen {
     protected void onStart(ViewGroup view) {
         List<Object> data = initData();
         initAdapter(data);
+
+        //TODO: Home icon resize not working on first navigation
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               getScreenManager().getMainLayer().toggleBackButton(false);
+            }
+        }, 100);
     }
 
     private List<Object> initData() {

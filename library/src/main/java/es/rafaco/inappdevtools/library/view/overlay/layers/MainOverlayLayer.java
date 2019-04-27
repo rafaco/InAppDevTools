@@ -6,22 +6,24 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -145,7 +147,8 @@ public class MainOverlayLayer extends OverlayLayer {
                 return true;
             }
         });
-        toogleBackButton(true);
+
+        toggleBackButton(false);
         toolbar.inflateMenu(R.menu.main_overlay);
     }
 
@@ -157,7 +160,7 @@ public class MainOverlayLayer extends OverlayLayer {
         //toolbar.setSubtitle("Sample app");
     }
 
-    public void toogleBackButton(boolean showBack){
+    public void toggleBackButton(boolean showBack){
         if (showBack){
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_rally_24dp);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -166,13 +169,37 @@ public class MainOverlayLayer extends OverlayLayer {
                     onBackButtonPressed();
                 }
             });
+
             toolbar.setLogo(null);
             toolbar.setLogoDescription(null);
         }else{
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);
-            toolbar.setLogo(UiUtils.getAppIconResourceId());
-            //toolbar.setLogoDescription(new AppInfoHelper(context).getAppName());
+
+            addLogoAndResize();
+        }
+    }
+
+    private void addLogoAndResize() {
+        int appIconResourceId = UiUtils.getAppIconResourceId();
+        Drawable logo =  DevTools.getAppContext().getResources().getDrawable(appIconResourceId);
+        toolbar.setLogo(logo);
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View child = toolbar.getChildAt(i);
+            if (child != null)
+                if (child.getClass() == AppCompatImageView.class) {
+                    AppCompatImageView iv2 = (AppCompatImageView) child;
+                    if ( iv2.getDrawable() == logo ) {
+                        iv2.setAdjustViewBounds(true);
+                        iv2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                        //activity_horizontal_margin = 16dp
+                        int leftMargin = (int)UiUtils.getPixelsFromDp(iv2.getContext(), 16);
+                        int otherMargins = iv2.getHeight()/6;
+                        Toolbar.LayoutParams layout = (Toolbar.LayoutParams)iv2.getLayoutParams();
+                        layout.setMargins(leftMargin, otherMargins, otherMargins, otherMargins);
+                        iv2.requestLayout();
+                    }
+                }
         }
     }
 
