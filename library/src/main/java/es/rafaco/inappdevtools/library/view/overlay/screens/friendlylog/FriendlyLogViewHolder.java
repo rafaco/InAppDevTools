@@ -137,6 +137,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
 
         extra_details.setVisibility(View.GONE);
         extra_over.setVisibility(View.GONE);
+        extra_button.setVisibility(View.GONE);
     }
 
     @Override

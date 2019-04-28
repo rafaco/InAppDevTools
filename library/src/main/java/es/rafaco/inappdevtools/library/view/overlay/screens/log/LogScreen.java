@@ -89,7 +89,7 @@ public class LogScreen extends OverlayScreen {
             }
         }, 1000);
 
-        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        //recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void initToolbar() {
@@ -128,7 +128,6 @@ public class LogScreen extends OverlayScreen {
 
 
     //region [ TOOL BAR ]
-
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -196,11 +195,31 @@ public class LogScreen extends OverlayScreen {
     private void initLogLineAdapter() {
         adapter = new LogLineAdapter(this, new ArrayList<LogLine>(), getSelectedConfig());
 
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
+                    scrollToBottom();
+                }
+            }
+        });
+
         recyclerView = getView().findViewById(R.id.output_list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void scrollToBottom() {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            }
+        });
     }
 
     private void initOutputView() {

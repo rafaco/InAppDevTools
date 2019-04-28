@@ -98,9 +98,10 @@ public class FriendlyLogScreen extends OverlayScreen {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-
                 if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
-                    Log.v(DevTools.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart+" itemCount="+itemCount+" size="+adapter.getItemCount()+" isBottom="+!recyclerView.canScrollVertically(1));
+                    //Log.v(DevTools.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart
+                    // +" itemCount="+itemCount+" size="+adapter.getItemCount()
+                    // +" isBottom="+!recyclerView.canScrollVertically(1) + ")");
                     scrollToBottom();
                 }
             }
