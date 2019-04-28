@@ -1,4 +1,4 @@
-package nevet.me.wcviewpager; /**
+package es.rafaco.inappdevtools.library.logic.integrations.wcviewpager; /**
  * The MIT License (MIT)
  *
  * Copyright (c) 2015 Raanan Nevet

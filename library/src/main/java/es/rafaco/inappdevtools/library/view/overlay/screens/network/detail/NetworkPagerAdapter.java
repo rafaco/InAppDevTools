@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 
-import nevet.me.wcviewpager.ObjectAtPositionPagerAdapter;
+import es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.ObjectAtPositionPagerAdapter;
 
 public class NetworkPagerAdapter extends ObjectAtPositionPagerAdapter {
 

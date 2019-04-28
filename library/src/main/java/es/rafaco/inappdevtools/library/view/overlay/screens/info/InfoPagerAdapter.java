@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.rafaco.inappdevtools.library.R;
-import nevet.me.wcviewpager.ObjectAtPositionPagerAdapter;
+import es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.ObjectAtPositionPagerAdapter;
 
 public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
