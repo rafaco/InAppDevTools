@@ -11,19 +11,27 @@
 
         <provider
             android:name=".logic.initialization.InitializationContentProvider"
-            android:authorities="${applicationId}.devtoolsinitprovider"
-            android:exported="false"
-            android:enabled="true" />
+            android:authorities="${applicationId}.iadt.init"
+            android:exported="false"/>
 
         <provider
             android:name=".storage.files.IadtFileProvider"
-            android:authorities="${applicationId}.devtools.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+            android:authorities="${applicationId}.iadt.files"
+            android:grantUriPermissions="true"
+            android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/iadt_files_paths" />
         </provider>
+
+
+        <service android:name=".view.overlay.OverlayUIService"
+            android:exported="false"/>
+
+        <service
+            android:name=".view.notifications.NotificationUIService"
+            android:exported="false" />
+
 
         <activity
             android:name=".view.activities.PermissionActivity"
@@ -37,15 +45,6 @@
 
         <activity android:name=".view.activities.ReportDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
-
-
-        <service android:name=".view.overlay.OverlayUIService"
-            android:exported="false"/>
-
-        <service
-            android:name=".view.notifications.NotificationUIService"
-            android:exported="false" />
-
 
     </application>
 

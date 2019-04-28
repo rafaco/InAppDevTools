@@ -12,7 +12,7 @@ import java.io.File;
 public class FileProviderUtils {
 
     public static String getAuthority(Context context) {
-        return context.getApplicationContext().getPackageName() + ".devtools.provider";
+        return context.getApplicationContext().getPackageName() + ".iadt.files";
     }
 
     public static void openFileExternally(Context context, String filePath) {
