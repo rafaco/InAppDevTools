@@ -18,6 +18,16 @@ public class Humanizer {
         return text.split(newLine()).length;
     }
 
+    public static int countOcurrences(String text, String character) {
+        if (TextUtils.isEmpty(text)
+                || TextUtils.isEmpty(character)
+                || character.length() > 1 ){
+            return -1;
+        }
+
+        return text.length() - text.replace(character, "").length();
+    }
+
     public static String newLine(){
         return System.getProperty("line.separator");
     }

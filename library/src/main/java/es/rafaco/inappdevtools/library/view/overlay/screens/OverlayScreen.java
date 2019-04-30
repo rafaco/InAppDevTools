@@ -18,7 +18,6 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
     private final ViewGroup bodyContainer2;
     public ViewGroup headView;
     public ViewGroup bodyView;
-    private String param;
     private ViewGroup headContainer;
     private ViewGroup bodyContainer;
 
@@ -51,9 +50,7 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         onCreate();
     }
 
-    public void start(String param){
-        this.param = param;
-
+    public void start(){
         if (getHeadLayoutId() != -1){
             headView = (ViewGroup) getInflater().inflate(getHeadLayoutId(), headContainer, false);
             headView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -112,12 +109,16 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         onDestroy();
     }
 
+    public String getParam() {
+        return getScreenManager().getCurrentStepParams();
+    }
+
+    public void updateParam(String newParams) {
+        getScreenManager().updateCurrentStepParams(newParams);
+    }
 
     public MainOverlayLayerManager getScreenManager() {
         return manager;
-    }
-    public String getParam() {
-        return param;
     }
     public Context getContext() {
         return getScreenManager().getContext();
@@ -128,7 +129,6 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
     public ViewGroup getView() {
         return getScreenManager().getView();
     }
-
     protected Toolbar getToolbar() {
         return getScreenManager().getScreenToolbar();
     }
@@ -140,4 +140,5 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
     public boolean onMenuItemClick(MenuItem item) {
         return false;
     }
+
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -47,8 +48,22 @@ public class SourcesManager {
             return new ArrayList<>();
         }
 
-        Collection<AbstractNode> children = parent.getChildren().values();
+        List<AbstractNode> children = new ArrayList<>(parent.getChildren().values());
+        for (int i = 0 ; i<children.size() ; i++){
+            children.set(i, flattenEmptyFolders(children.get(i)));
+        }
+
         return NodesHelper.castToSourceEntry(children);
+    }
+
+    private AbstractNode flattenEmptyFolders(AbstractNode current) {
+        if (current.getChildren().size() == 1){
+            AbstractNode onlyChild = current.getChildren().values().iterator().next();
+            if (onlyChild.isDirectory()){
+                return flattenEmptyFolders(onlyChild);
+            }
+        }
+        return current;
     }
 
     public String getContent(String path){

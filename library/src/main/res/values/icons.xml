@@ -336,7 +336,7 @@
     <string name="gmd_flip">\ue3e8</string>
     <string name="gmd_flip_to_back">\ue882</string>
     <string name="gmd_flip_to_front">\ue883</string>
-    <string name="gmd_folder">\ue2c7</string>
+    <string name="gmd_folder_filled">\ue2c7</string>
     <string name="gmd_folder_open">\ue2c8</string>
     <string name="gmd_folder_shared">\ue2c9</string>
     <string name="gmd_folder_special">\ue617</string>

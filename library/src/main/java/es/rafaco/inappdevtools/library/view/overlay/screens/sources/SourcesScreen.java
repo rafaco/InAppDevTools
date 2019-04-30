@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
@@ -22,7 +23,6 @@ public class SourcesScreen extends OverlayScreen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
-    private List<SourceEntry> history;
 
     public SourcesScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -49,7 +49,6 @@ public class SourcesScreen extends OverlayScreen {
 
     private List<Object> initData() {
         SourceEntry params = getParams();
-        storeHistory(params);
         return getData(params);
     }
 
@@ -58,24 +57,33 @@ public class SourcesScreen extends OverlayScreen {
         List<SourceEntry> filteredItems = DevTools.getSourcesManager().getFilteredItems(path);
         List<Object> data = new ArrayList<>();
 
-        if (filter != null){
-            String label = filter.getName();
-            if (TextUtils.isEmpty(label)){
-                label = filter.getOrigin();
-            }
-            label = ".. (" + label + ")";
+        if (filter != null) { // Not root
 
             data.add(new ThinItem(
-                    label,
-                    R.string.gmd_arrow_upward,
-                    R.color.rally_green,
+                    "Go to root",
+                    R.string.gmd_home,
+                    R.color.rally_white,
                     new Runnable() {
                         @Override
                         public void run() {
-                            SourcesScreen.this.goUp();
+                            SourcesScreen.this.goRoot();
                         }
                     }
             ));
+
+            if (filter.getDeepLevel() != 0){
+                data.add(new ThinItem(
+                        "Up from " + removeLastChar(filter.getName()),
+                        R.string.gmd_arrow_upward,
+                        R.color.rally_white,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                SourcesScreen.this.goUp();
+                            }
+                        }
+                ));
+            }
         }
 
         for (final SourceEntry entry : filteredItems) {
@@ -85,7 +93,7 @@ public class SourcesScreen extends OverlayScreen {
             }
 
             data.add(new ThinItem(label,
-                    entry.isDirectory() ? R.string.gmd_folder : R.string.gmd_insert_drive_file,
+                    entry.isDirectory() ? R.string.gmd_folder_filled : R.string.gmd_insert_drive_file,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
                     entry.isDirectory() ? new Runnable() {
                         @Override
@@ -108,31 +116,32 @@ public class SourcesScreen extends OverlayScreen {
         OverlayUIService.performNavigation(SourceDetailScreen.class, params);
     }
 
+    private void goRoot() {
+        updateFilter(null);
+    }
+
     private void goUp() {
-        history.remove(history.size() - 1);
-        SourceEntry secondLast = history.remove(history.size() - 1);
-        updateFilter(secondLast);
+        String currentName = removeLastChar(getParams().getName());
+        String upName = currentName.substring(0, currentName.lastIndexOf("/")+1);
+        updateFilter(new SourceEntry("TODO", upName, true));
     }
 
-    private String updateFilter(SourceEntry filter) {
-        List<Object> filteredItems = getData(filter);
+    private void updateFilter(SourceEntry entry) {
+        if (entry == null)
+            updateParam(null);
+        else
+            updateParam(buildParams("TODO", entry.getName()));
+
+        List<Object> filteredItems = getData(entry);
         adapter.replaceItems(filteredItems);
-        storeHistory(filter);
-        return null;
-    }
-
-    private void storeHistory(SourceEntry entry) {
-        if (history == null){
-            history = new ArrayList<>();
-        }
-        history.add(entry);
     }
 
     private String getLinkName(SourceEntry entry) {
         if (TextUtils.isEmpty(entry.getName())){
             return entry.getOrigin();
         }
-        return entry.isDirectory() ? entry.getName(): entry.getFileName();
+        return entry.isDirectory() ? removeLastChar(entry.getName())
+                : entry.getFileName();
     }
 
     private void initAdapter(List<Object> data) {
@@ -160,5 +169,10 @@ public class SourcesScreen extends OverlayScreen {
     public SourceEntry getParams(){
         Gson gson = new Gson();
         return gson.fromJson(getParam(), SourceEntry.class);
+    }
+
+    @NonNull
+    private String removeLastChar(String text) {
+        return text.substring(0, text.length()-1);
     }
 }

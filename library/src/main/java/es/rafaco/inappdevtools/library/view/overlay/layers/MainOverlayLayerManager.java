@@ -80,18 +80,19 @@ public class MainOverlayLayerManager {
 
     public void goTo(final Class<? extends OverlayScreen> screenClass, final String param){
 
-        //TODO: use params
         Log.d(DevTools.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + param);
 
-        //Ignore if already selected
-        /*if (getCurrentScreen() != null && screenName.equals(getCurrentScreen().getName())) {
-            return;
-        }*/
+        NavigationStep newStep = new NavigationStep(screenClass, param);
+        addNavigationStep(newStep);
 
-        loadScreen(screenClass, param);
+        loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
+                MainOverlayLayerManager.class, this);
 
-        if (getCurrentScreen() == null)
-        {
+        updateBackButton();
+        updateToolbarTitle();
+        startScreen();
+
+        if (getCurrentScreen() == null) {
             loadedScreen.toggleHeadVisibility(true);
             ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
             currentScreen = loadedScreen;
@@ -187,20 +188,11 @@ public class MainOverlayLayerManager {
         }
     }
 
-    private ViewGroup loadScreen(final Class<? extends OverlayScreen> screenClass, final String param) {
-        loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
-                MainOverlayLayerManager.class, this);
-
-        if (loadedScreen != null){
-            mainLayer.scrollTop();
-            loadScreenToolbar(loadedScreen);
-            loadedScreen.start(param);
-            NavigationStep newStep = new NavigationStep(screenClass, param);
-            addNavigationStep(newStep);
-
-            return loadedScreen.getView();
-        }
-        return null;
+    private ViewGroup startScreen() {
+        mainLayer.scrollTop();
+        loadScreenToolbar(loadedScreen);
+        loadedScreen.start();
+        return loadedScreen.getView();
     }
 
     private void addNavigationStep(NavigationStep newStep) {
@@ -212,8 +204,6 @@ public class MainOverlayLayerManager {
         }
 
         navigationHistory.add(newStep);
-        updateBackButton();
-        updateToolbarTitle();
     }
 
     public void setTitle(String title){
@@ -240,6 +230,15 @@ public class MainOverlayLayerManager {
     public void goHome(){
         navigationHistory.clear();
         goTo(HomeScreen.class.getSimpleName(), null);
+    }
+
+    public String getCurrentStepParams(){
+        return navigationHistory.get(navigationHistory.size() - 1).getParam();
+    }
+
+    public void updateCurrentStepParams(String newParams){
+        NavigationStep currentStep = navigationHistory.remove(navigationHistory.size() - 1);
+        navigationHistory.add(new NavigationStep(currentStep.getClassName(), newParams));
     }
 
     //endregion
