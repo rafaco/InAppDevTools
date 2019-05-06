@@ -24,7 +24,6 @@ public class ToolManager {
         registerTool(LogTool.class);
         registerTool(CommandsTool.class);
         registerTool(NetworkTool.class);
-        registerTool(StorageTool.class);
         registerTool(ErrorsTool.class);
         registerTool(ScreenTool.class);
         registerTool(ReportTool.class);

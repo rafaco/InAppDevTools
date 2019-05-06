@@ -31,13 +31,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.Netwo
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.DatabaseScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.FileScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.FolderScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.SharedPrefsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.StorageScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.storage.TableScreen;
-
 
 public class OverlayUIService extends Service {
 
@@ -146,13 +139,6 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);
         mainOverlayLayerManager.registerScreen(AnrDetailScreen.class);
         mainOverlayLayerManager.registerScreen(NetworkDetailScreen.class);
-
-        mainOverlayLayerManager.registerScreen(StorageScreen.class);
-        mainOverlayLayerManager.registerScreen(DatabaseScreen.class);
-        mainOverlayLayerManager.registerScreen(TableScreen.class);
-        mainOverlayLayerManager.registerScreen(SharedPrefsScreen.class);
-        mainOverlayLayerManager.registerScreen(FolderScreen.class);
-        mainOverlayLayerManager.registerScreen(FileScreen.class);
         mainOverlayLayerManager.registerScreen(RunScreen.class);
         mainOverlayLayerManager.registerScreen(MoreScreen.class);
         mainOverlayLayerManager.registerScreen(InspectViewScreen.class);
