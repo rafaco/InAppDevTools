@@ -172,7 +172,7 @@ public class NotificationUIService extends Service {
         if (buildInfo.isGitEnabled()){
             overview += " from " + buildInfo.getRepositoryOverview();
         }
-        overview += ", " + buildInfo.getFriendlyElapsedTime();
+        //overview += ", " + buildInfo.getFriendlyElapsedTime();
 
         String title, subTitle;
         if (crash == null){
