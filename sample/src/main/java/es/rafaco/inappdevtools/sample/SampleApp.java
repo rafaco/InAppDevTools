@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.sample;
 
 import android.app.Application;
 
-import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.DevToolsConfig;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;

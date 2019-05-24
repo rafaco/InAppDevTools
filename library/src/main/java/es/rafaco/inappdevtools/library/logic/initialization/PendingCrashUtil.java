@@ -3,7 +3,6 @@ package es.rafaco.inappdevtools.library.logic.initialization;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
 import es.rafaco.inappdevtools.library.DevTools;
 
 public class PendingCrashUtil {

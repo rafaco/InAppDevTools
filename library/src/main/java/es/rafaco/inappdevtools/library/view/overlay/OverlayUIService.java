@@ -4,9 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+
+//#ifdef MODERN
+import androidx.annotation.Nullable;
+//#else
+//@import android.support.annotation.Nullable;
+//#endif
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;

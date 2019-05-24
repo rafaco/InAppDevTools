@@ -1,8 +1,13 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;

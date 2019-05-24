@@ -1,7 +1,12 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-import android.arch.persistence.room.InvalidationTracker;
-import android.support.annotation.NonNull;
+//#ifdef MODERN
+import androidx.room.InvalidationTracker;
+import androidx.annotation.NonNull;
+//#else
+//@import android.arch.persistence.room.InvalidationTracker;
+//@import android.support.annotation.NonNull;
+//#endif
 
 import java.util.Set;
 

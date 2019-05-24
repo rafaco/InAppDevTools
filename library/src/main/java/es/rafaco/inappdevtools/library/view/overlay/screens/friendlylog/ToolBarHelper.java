@@ -1,13 +1,23 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.content.Context;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+//#ifdef MODERN
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import static androidx.appcompat.R.*;
+//#else
+//@import android.support.v7.widget.SearchView;
+//@import android.support.v7.widget.Toolbar;
+//@import static android.support.v7.appcompat.R.*;
+//#endif
+
 import es.rafaco.inappdevtools.library.R;
+
+
 
 public class ToolBarHelper {
     Context context;
@@ -44,7 +54,7 @@ public class ToolBarHelper {
 
                 searchView.setQueryHint("Search...");
                 filterView.setQueryHint("Filter...");
-                int searchImgId = android.support.v7.appcompat.R.id.search_button; // I used the explicit layout ID of searchview's ImageView
+                int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView
                 ImageView v = filterView.findViewById(searchImgId);
                 v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_rally_24dp));
                 filterView.setOnQueryTextListener(onQueryCallback);

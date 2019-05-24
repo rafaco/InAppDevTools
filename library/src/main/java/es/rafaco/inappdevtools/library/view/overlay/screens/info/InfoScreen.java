@@ -1,11 +1,18 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
+//#else
+//@import android.support.annotation.NonNull;
+//@import android.support.design.widget.TabLayout;
+//@import android.support.v4.view.ViewPager;
+//#endif
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,7 +20,6 @@ import java.util.TimerTask;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-
 
 public class InfoScreen extends OverlayScreen {
 

@@ -15,7 +15,6 @@ import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
-
 public abstract class SourcesReader {
 
     protected final Context context;

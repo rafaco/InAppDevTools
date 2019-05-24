@@ -9,8 +9,14 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 

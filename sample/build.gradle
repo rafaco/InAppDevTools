@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'wang.dannyhe.tools.preprocessor'
 
 android {
     compileSdkVersion rootProject.ext.appCompileSdkVersion
@@ -9,8 +10,32 @@ android {
         targetSdkVersion rootProject.ext.appTargetSdkVersion
         versionCode rootProject.ext.appVersionCode
         versionName rootProject.ext.appVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //TODO: remove
+        multiDexEnabled false
     }
+
+    flavorDimensions "compatibility"
+    productFlavors {
+        modern {
+            dimension "compatibility"
+            processor.symbols "MODERN"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+           /* System.setProperty('android.useAndroidX', 'true')
+            project.properties['android.useAndroidX']='true'
+            extensions.add('android.useAndroidX', 'true')
+            ext.useAndroidX = 'true'*/
+        }
+        support {
+            dimension "compatibility"
+            processor.symbols "SUPPORT"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,23 +53,34 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    implementation "com.android.support:design:$rootProject.ext.appSupportVersion"
-    implementation "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    implementation "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    modernApi 'com.google.android.material:material:1.0.0-rc01'
+    modernApi 'androidx.appcompat:appcompat:1.0.0'
+    modernApi 'androidx.recyclerview:recyclerview:1.0.0'
+
+    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
+    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
+    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
+    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
+
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:converter-gson:2.5.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestModernImplementation 'androidx.test:runner:1.1.0'
+    androidTestModernImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
 
     // Import our library from repository (jCenter or localMaven). Standard usage
-    //api "es.rafaco.inappdevtools:inappdevtools:$rootProject.ext.libraryVersionName"
+    //implementation "es.rafaco.inappdevtools:inappdevtools:$rootProject.ext.libraryVersionName"
 
-    // Import our library from local subproject, for development.
-    api project(path: ':inappdevtools')
+    // Import our library from local sub-project, for development.
+    implementation project(path: ':inappdevtools')
+    //modernImplementation project(path: ':inappdevtools', configuration: 'modernDebug')
+    //supportImplementation project(path: ':inappdevtools', configuration: 'supportDebug')
 }
+
 
 // Import our plugin from repository (jCenter or localMaven). Standard usage.
 apply plugin: 'es.rafaco.inappdevtools'
@@ -56,4 +92,13 @@ inappdevtools {
     enabled = true
     debug = true
     email = 'inappdevtools@gmail.com'
+}
+
+
+//Configuration for PreProcessor plugin
+preprocessor {
+    verbose true
+    sourceDir file("src/main/java")
+    targetDir file("src/main/java")
+    symbols "GLOBAL","GLOBAL_2"
 }

@@ -16,8 +16,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
-import android.support.v7.widget.CardView;
-import android.support.v4.content.ContextCompat;
+//#ifdef MODERN
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.CardView;
+//#endif
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 

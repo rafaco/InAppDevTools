@@ -3,10 +3,18 @@ package es.rafaco.inappdevtools.library.view.activities;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+
+//#ifdef MODERN
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+//#else
+//@import android.support.v7.app.AlertDialog;
+//@import android.support.v7.app.AppCompatActivity;
+//@import android.support.v7.view.ContextThemeWrapper;
+//#endif
+
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;

@@ -1,10 +1,15 @@
 package es.rafaco.inappdevtools.library.view.components.deco;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.annotation.NonNull;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
 
 import java.util.List;
 

@@ -3,11 +3,16 @@ package es.rafaco.inappdevtools.library;
 import android.content.Context;
 import android.content.Intent;
 
+//#ifdef MODERN
+import androidx.annotation.NonNull; 
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.watcher.WatcherManager;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
@@ -76,9 +81,9 @@ public class DevTools {
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
         if (config.overlayUiEnabled) startUiService(context);
-        if (config.notificationUiEnabled) startForegroundService(context);
 
         //Lazy initialized
+        //if (config.notificationUiEnabled) startForegroundService(context);
         //sourcesManager = new SourcesManager(appContext);
 
         ThreadUtils.runOnBackThread(new Runnable() {

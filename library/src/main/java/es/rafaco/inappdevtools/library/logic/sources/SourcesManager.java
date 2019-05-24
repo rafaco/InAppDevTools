@@ -2,27 +2,20 @@ package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
-import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetFileReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
-import es.rafaco.inappdevtools.library.logic.sources.nodes.StandardNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 

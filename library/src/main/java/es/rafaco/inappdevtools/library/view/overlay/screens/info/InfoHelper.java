@@ -1,8 +1,13 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import java.io.BufferedReader;
 import java.io.IOException;

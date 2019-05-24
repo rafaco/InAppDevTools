@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             style="@style/content_margin"/>
 
-        <android.support.v7.widget.RecyclerView
+        <es.rafaco.compat.RecyclerView
             android:id="@+id/errors_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -3,7 +3,12 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import android.view.View;
 import android.widget.TextView;
 
-import android.support.v4.content.ContextCompat;
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//#endif
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;

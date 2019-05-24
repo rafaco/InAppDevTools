@@ -1,8 +1,14 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+//#ifdef MODERN
+import androidx.room.Room;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+//#else
+//@import android.arch.persistence.room.Room;
+//@import android.arch.persistence.room.Database;
+//@import android.arch.persistence.room.RoomDatabase;
+//#endif
 
 import android.util.Log;
 
@@ -22,11 +28,11 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
 @Database(version = 19, exportSchema = true,
         entities = {Crash.class,
-                    Anr.class,
-                    Screen.class,
-                    Logcat.class,
-                    Friendly.class,
-                    Sourcetrace.class,
+                Anr.class,
+                Screen.class,
+                Logcat.class,
+                Friendly.class,
+                Sourcetrace.class,
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 

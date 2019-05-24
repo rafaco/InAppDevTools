@@ -2,14 +2,22 @@ package es.rafaco.inappdevtools.library.view.activities;
 
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+//#ifdef MODERN
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.AppCompatButton;
+//#else
+//@import android.support.v7.app.AlertDialog;
+//@import android.support.v7.app.AppCompatActivity;
+//@import android.support.v7.view.ContextThemeWrapper;
+//@import android.support.v7.widget.AppCompatButton;
+//#endif
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;

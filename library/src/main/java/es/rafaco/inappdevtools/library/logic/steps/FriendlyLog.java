@@ -1,8 +1,13 @@
 package es.rafaco.inappdevtools.library.logic.steps;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 

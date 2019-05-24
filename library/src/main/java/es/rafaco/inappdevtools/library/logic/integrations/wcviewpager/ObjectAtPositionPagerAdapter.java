@@ -22,9 +22,14 @@ package es.rafaco.inappdevtools.library.logic.integrations.wcviewpager; /**
  * THE SOFTWARE.
  */
 
-import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.viewpager.widget.PagerAdapter;
+//#else
+//@import android.support.v4.view.PagerAdapter;
+//#endif
 
 /**
  * Simple implementation of @see ObjectAtPositionInterface can be extended by any custom adapter

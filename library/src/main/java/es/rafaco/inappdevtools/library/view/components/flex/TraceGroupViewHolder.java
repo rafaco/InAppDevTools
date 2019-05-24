@@ -7,9 +7,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//#endif
+
 import com.alorma.timeline.TimelineView;
 
-import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.TraceGrouper;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;

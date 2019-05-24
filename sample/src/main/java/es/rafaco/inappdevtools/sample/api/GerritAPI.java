@@ -1,4 +1,5 @@
 package es.rafaco.inappdevtools.sample.api;
+
 import java.util.List;
 
 import retrofit2.Call;

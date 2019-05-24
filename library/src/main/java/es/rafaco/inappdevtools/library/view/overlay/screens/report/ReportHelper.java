@@ -2,8 +2,13 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.report;
 
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;

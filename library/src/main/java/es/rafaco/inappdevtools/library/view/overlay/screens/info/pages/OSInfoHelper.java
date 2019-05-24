@@ -2,9 +2,14 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import java.lang.reflect.Field;
 import java.util.Locale;

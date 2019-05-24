@@ -4,11 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;

@@ -1,13 +1,19 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.CardView;
+//#endif
 
 import com.alorma.timeline.TimelineView;
 

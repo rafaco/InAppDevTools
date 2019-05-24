@@ -24,12 +24,18 @@ package es.rafaco.inappdevtools.library.logic.integrations.wcviewpager; /**
 
 import android.content.Context;
 
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+
+//#ifdef MODERN
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+//#else
+//@import android.support.v4.view.PagerAdapter;
+//@import android.support.v4.view.ViewPager;
+//#endif
 
 
 public class WrapContentViewPager extends ViewPager {

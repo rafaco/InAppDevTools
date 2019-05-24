@@ -5,9 +5,16 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+
+        //#ifdef MODERN  //TODO: Gradle pre-processor needed
+        classpath 'com.android.tools.build:gradle:3.3.0'
+        //#else
+        //classpath 'com.android.tools.build:gradle:3.0.0'
+        //#endif
+
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'wang.dannyhe.tools:plugin:0.0.7'
     }
 }
 
@@ -18,47 +25,41 @@ plugins {
 }
 
 ext {
+    pluginVersionName = '0.0.11'
+
     libraryVersionName = '0.0.44'
     libraryVersionCode = 1
     libraryMinSdkVersion = 16
-    libraryTargetSdkVersion = 27
-    libraryCompileSdkVersion = 27
-    libraryBuildToolsVersion = '27.0.3'
-    librarySupportVersion = '27.1.1'
-
-    pluginVersionName = '0.0.11'
 
     appVersionName = '0.0.01'
     appVersionCode = 45
     appMinSdkVersion = 16
 
-    /*
-    // API 23 -> gradleToolVersion = '2.1.0'
+    //#ifdef MODERN  //TODO: Gradle pre-processor needed
+    appTargetSdkVersion = 28
+    appCompileSdkVersion = 28
+    appBuildToolsVersion = '28.0.3'
+    appSupportVersion = '28.0.0'
+    libraryTargetSdkVersion = 28
+    libraryCompileSdkVersion = 28
+    libraryBuildToolsVersion = '28.0.3'
+    librarySupportVersion = '28.0.0'
+    //#else
+    //    appTargetSdkVersion = 26
+    //    appCompileSdkVersion = 26
+    //    appBuildToolsVersion = '26.0.2'
+    //    appSupportVersion = '26.0.2'
+    //    libraryTargetSdkVersion = 27
+    //    libraryCompileSdkVersion = 27
+    //    libraryBuildToolsVersion = '27.0.3'
+    //    librarySupportVersion = '27.1.1'
+    //#endif
+
+    /*WIP: API 23 -> gradleToolVersion = '2.1.0'
     appTargetSdkVersion = 23
     appCompileSdkVersion = 23
     appBuildToolsVersion = '23.0.2'
     appSupportVersion = '23.0.2'
-    */
-
-    // API 26 -> gradleToolVersion = '3.0.0'
-    appTargetSdkVersion = 26
-    appCompileSdkVersion = 26
-    appBuildToolsVersion = '26.0.2'
-    appSupportVersion = '26.0.2'
-
-
-    /*
-    // API 27 -> gradleToolVersion = '3.1.0'
-    appCompileSdkVersion = 27
-    appBuildToolsVersion = '27.0.3'
-    appSupportVersion = '27.1.1'
-    */
-
-    /*
-    // API 28 -> gradleToolVersion = '3.3.0'
-    appCompileSdkVersion = 28
-    appBuildToolsVersion = '28.0.3'
-    appSupportVersion = '28.0.0'
     */
 }
 
@@ -78,7 +79,6 @@ task clean(type: Delete) {
 subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
 }
-
 
 
 sonarqube {

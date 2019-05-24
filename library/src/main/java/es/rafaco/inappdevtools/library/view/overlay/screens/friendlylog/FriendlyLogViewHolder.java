@@ -4,9 +4,16 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.RecyclerView;
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.AppCompatButton;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

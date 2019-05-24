@@ -1,11 +1,16 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+
+//#ifdef MODERN
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v7.app.AlertDialog;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;

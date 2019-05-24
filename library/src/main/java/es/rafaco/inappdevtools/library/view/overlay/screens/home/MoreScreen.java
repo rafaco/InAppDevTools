@@ -1,7 +1,12 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v7.widget.RecyclerView;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;

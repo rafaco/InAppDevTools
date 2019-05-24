@@ -5,12 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//#endif
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-import android.support.v4.content.ContextCompat;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import io.github.kbiakov.codeview.adapters.AbstractCodeAdapter;

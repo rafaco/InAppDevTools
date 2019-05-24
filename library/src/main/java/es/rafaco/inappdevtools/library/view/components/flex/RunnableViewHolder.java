@@ -2,9 +2,15 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+
+//#ifdef MODERN
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.AppCompatButton;
+//#endif
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     style="@style/content_padding">
 
-    <android.support.design.widget.TabLayout
+    <es.rafaco.compat.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

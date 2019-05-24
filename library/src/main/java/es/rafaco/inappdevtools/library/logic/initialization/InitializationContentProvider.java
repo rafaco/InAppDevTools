@@ -7,7 +7,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+//#ifdef MODERN
+import androidx.annotation.Nullable;
+//#else
+//@import android.support.annotation.Nullable;
+//#endif
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 

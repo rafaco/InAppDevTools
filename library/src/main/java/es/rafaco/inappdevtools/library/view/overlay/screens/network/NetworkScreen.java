@@ -4,23 +4,29 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+//#ifdef MODERN
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v4.view.ViewCompat;
+//@import android.support.v7.widget.AppCompatButton;
+//@import android.support.v7.widget.DefaultItemAnimator;
+//@import android.support.v7.widget.LinearLayoutManager;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
+
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 
@@ -53,7 +59,6 @@ public class NetworkScreen extends OverlayScreen {
     protected void onCreate() {
         //Nothing needed
     }
-
 
     @Override
     protected void onStart(ViewGroup view) {
@@ -125,18 +130,6 @@ public class NetworkScreen extends OverlayScreen {
         });
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     private void onClearAll() {
         AsyncTask.execute(new Runnable() {
             @Override
@@ -146,14 +139,9 @@ public class NetworkScreen extends OverlayScreen {
         });
     }
 
-
     public String getWelcomeMessage(){
         return "All network traffic going trow Retrofit.";
     }
-
-
-
-
 
     //region [ TOOL BAR ]
 

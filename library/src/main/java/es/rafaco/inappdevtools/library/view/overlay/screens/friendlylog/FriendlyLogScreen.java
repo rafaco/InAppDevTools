@@ -1,24 +1,36 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
-import android.arch.paging.LivePagedListBuilder;
-import android.arch.paging.PagedList;
+//#ifdef MODERN
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+//#else
+//@import android.support.v7.app.AlertDialog;
+//@import android.support.v7.widget.SearchView;
+//@import android.support.v7.widget.RecyclerView;
+//@import android.support.v7.widget.LinearLayoutManager;
+//@import android.arch.lifecycle.LiveData;
+//@import android.arch.lifecycle.Observer;
+//@import android.arch.lifecycle.ProcessLifecycleOwner;
+//@import android.arch.paging.LivePagedListBuilder;
+//@import android.arch.paging.PagedList;
+//#endif
+
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
@@ -39,7 +51,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     private RecyclerView recyclerView;
     private TextView welcome;
 
-    public LiveData<PagedList<Friendly>> logList;
+    public LiveData logList;
     private final int pageSize = 20;
     private ToolBarHelper toolbarHelper;
     private int selectedLogLevel = 2;
@@ -154,7 +166,8 @@ public class FriendlyLogScreen extends OverlayScreen {
             @Override
             public boolean onQueryTextChange(String newText) {
                 dataSourceFactory.setText(newText);
-                logList.getValue().getDataSource().invalidate();
+                //TODO: Research if needed - Commented on AndroidX migration
+                //logList.getValue().getDataSource().invalidate();
                 return false;
             }
         });
@@ -190,7 +203,8 @@ public class FriendlyLogScreen extends OverlayScreen {
                         if (which!=selectedLogLevel) {
                             selectedLogLevel = which;
                             dataSourceFactory.setLevelString(getSelectedVerbosity());
-                            logList.getValue().getDataSource().invalidate();
+                            //TODO: Research if needed - Commented on AndroidX migration
+                            //logList.getValue().getDataSource().invalidate();
                         }
                         dialog.dismiss();
                     }
@@ -224,7 +238,8 @@ public class FriendlyLogScreen extends OverlayScreen {
                         if (which!=selectedLogLevel) {
                             selectedLogLevel = which;
                             dataSourceFactory.setLevelString(getSelectedVerbosity());
-                            logList.getValue().getDataSource().invalidate();
+                            //TODO: Research if needed - Commented on AndroidX migration
+                            //logList.getValue().getDataSource().invalidate();
                         }
                         dialog.dismiss();
                     }

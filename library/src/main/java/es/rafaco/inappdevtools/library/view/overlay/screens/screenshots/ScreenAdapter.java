@@ -2,11 +2,20 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
 import android.content.Context;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+//#ifdef MODERN
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.PopupMenu;
+//#else
+//@import android.support.v7.widget.RecyclerView;
+//@import android.support.v7.util.DiffUtil;
+//@import android.support.v7.widget.CardView;
+//@import android.support.v7.view.ContextThemeWrapper;
+//@import android.support.v7.widget.PopupMenu;
+//#endif
+
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;

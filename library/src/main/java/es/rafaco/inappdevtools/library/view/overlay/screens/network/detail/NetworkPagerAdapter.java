@@ -1,9 +1,14 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.network.detail;
 
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 

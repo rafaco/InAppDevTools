@@ -2,8 +2,13 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+//#ifdef MODERN
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v7.widget.RecyclerView;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +21,6 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;

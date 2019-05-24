@@ -2,10 +2,15 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.view.ViewGroup;
 
+//#ifdef MODERN
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v7.widget.RecyclerView;
+//#endif
+
 import java.util.ArrayList;
 import java.util.List;
 
-import android.support.v7.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;

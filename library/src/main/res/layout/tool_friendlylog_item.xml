@@ -73,7 +73,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <es.rafaco.compat.AppCompatButton
             android:id="@+id/extra_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

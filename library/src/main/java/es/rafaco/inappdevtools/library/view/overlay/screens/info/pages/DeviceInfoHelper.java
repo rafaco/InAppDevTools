@@ -3,9 +3,14 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
+//#ifdef MODERN
+import androidx.annotation.NonNull;
+//#else
+//@import android.support.annotation.NonNull;
+//#endif
 
 import java.util.List;
 

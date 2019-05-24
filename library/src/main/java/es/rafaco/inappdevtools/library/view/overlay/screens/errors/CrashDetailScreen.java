@@ -8,10 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//#ifdef MODERN
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v7.widget.AppCompatButton;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
+
 import java.util.List;
 
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;

@@ -28,7 +28,7 @@
             android:textColor="@color/rally_white"
             style="@style/TextCondensedMedium" />
 
-        <android.support.v7.widget.AppCompatButton
+        <es.rafaco.compat.AppCompatButton
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/button"
             android:layout_width="match_parent"

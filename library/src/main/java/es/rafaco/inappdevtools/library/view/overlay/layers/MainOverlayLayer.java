@@ -5,11 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-
 import android.graphics.drawable.Drawable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +14,23 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+//#ifdef MODERN
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+//#else
+//@import android.support.v4.widget.NestedScrollView;
+//@import android.support.v7.widget.AppCompatImageView;
+//@import android.support.v7.widget.Toolbar;
+//#endif
+
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 
 public class MainOverlayLayer extends OverlayLayer {
 

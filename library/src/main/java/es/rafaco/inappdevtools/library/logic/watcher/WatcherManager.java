@@ -4,17 +4,16 @@ import android.content.Context;
 import android.util.Log;
 import android.view.GestureDetector;
 
-import android.arch.lifecycle.ProcessLifecycleOwner;
-
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.DevToolsConfig;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
-import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ProcessLifecycleCallbacks;
+import es.rafaco.compat.CompatProcessLifecycleCallbacks;
 import es.rafaco.inappdevtools.library.logic.watcher.anr.AnrLogger;
 import es.rafaco.inappdevtools.library.logic.watcher.crash.CrashHandler;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+
 
 public class WatcherManager {
 
@@ -38,7 +37,8 @@ public class WatcherManager {
         if (config.anrLoggerEnabled) startAnrLogger();
         if (config.strictModeEnabled) startStrictMode();
         if (config.activityLoggerEnabled) startActivityLogger();
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(new ProcessLifecycleCallbacks());
+        startLifecycleLogger();
+
         startGestureWatcher();
         startDeviceButtonsWatcher();
         startScreenChangeWatcher();
@@ -47,6 +47,10 @@ public class WatcherManager {
 
         startShakeWatcher();
         PandoraBridge.init();
+    }
+
+    private void startLifecycleLogger() {
+        new CompatProcessLifecycleCallbacks();
     }
 
     public void destroy() {

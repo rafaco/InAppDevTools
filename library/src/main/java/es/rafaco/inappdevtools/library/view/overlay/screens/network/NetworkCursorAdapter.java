@@ -2,13 +2,19 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+//#ifdef MODERN
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+//#else
+//@import android.support.v4.content.ContextCompat;
+//@import android.support.v7.widget.RecyclerView;
+//#endif
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 import com.readystatesoftware.chuck.internal.data.LocalCupboard;

@@ -1,10 +1,13 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
+//#ifdef MODERN
+import androidx.sqlite.db.SupportSQLiteDatabase;
+//#else
+//@import android.arch.persistence.db.SupportSQLiteDatabase;
+//#endif
+
 import android.database.Cursor;
 import android.util.Log;
-
-//import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+//import com.opencsv.CSVWriter;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;

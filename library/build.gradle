@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
+apply plugin: 'wang.dannyhe.tools.preprocessor'
 
 android {
     compileSdkVersion rootProject.ext.libraryCompileSdkVersion
@@ -16,8 +17,8 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,53 +30,103 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
         sourceCompatibility JavaVersion.VERSION_1_7
     }
+
+    flavorDimensions "compatibility"
+    productFlavors {
+        modern {
+            dimension "compatibility"
+            buildConfigField "String", "MY_FLAVOR", "\"modern\""
+            processor.symbols "MODERN"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
+        support {
+            dimension "compatibility"
+            buildConfigField "String", "MY_FLAVOR", "\"support\""
+            processor.symbols "SUPPORT"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    }
 }
 
 
 dependencies {
 
-    api "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:design:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
+    // Modern flavor
+    modernApi 'com.google.android.material:material:1.0.0-rc01'
+    def androidx_version = "1.0.0"
+    modernApi "androidx.appcompat:appcompat:$androidx_version"
+    modernApi "androidx.recyclerview:recyclerview:$androidx_version"
+    modernApi "androidx.cardview:cardview:$androidx_version"
+    modernApi "androidx.media:media:$androidx_version"
+    modernApi "androidx.annotation:annotation:$androidx_version"
+    def androidx_2_version = "2.0.0" //"2.1.0-alpha02"
+    modernApi "androidx.room:room-runtime:$androidx_2_version"
+    modernAnnotationProcessor "androidx.room:room-compiler:$androidx_2_version"
+    modernApi "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
+    modernApi "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
+    modernAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
+    modernApi "androidx.paging:paging-runtime:$androidx_2_version"
+    modernApi "com.github.whataa:pandora:androidx_v2.0.4"
 
+    // Support flavor
+    supportApi "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:design:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
     def arch_version = "1.1.0"
-    api "android.arch.persistence.room:runtime:$arch_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
-    api "android.arch.lifecycle:extensions:$arch_version"
-    api "android.arch.lifecycle:runtime:$arch_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    supportApi "android.arch.persistence.room:runtime:$arch_version"
+    supportAnnotationProcessor "android.arch.persistence.room:compiler:$arch_version"
+    supportApi "android.arch.lifecycle:extensions:$arch_version"
+    supportApi "android.arch.lifecycle:runtime:$arch_version"
+    supportAnnotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     def paging_version = "1.0.1"
-    api "android.arch.paging:runtime:$paging_version"
+    supportApi "android.arch.paging:runtime:$paging_version"
+    supportApi "com.github.whataa:pandora:v2.0.4"
 
+    // All flavors
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.12.0'
-
     api 'com.readystatesoftware.chuck:library:1.1.0'
-    api 'com.github.whataa:pandora:v1.2.2' //no-op available
     api 'com.github.kbiakov:CodeView-android:1.3.1'
     api 'com.github.alorma:timelineview:2.3.0'
     api 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     api 'com.valdesekamdem.library:md-toast:0.9.0'
-    api 'com.opencsv:opencsv:4.2'
     api "com.github.nisrulz:easydeviceinfo-base:2.4.1"
+    //api 'com.opencsv:opencsv:4.2' // Using org.apache.commons
 
+    //Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testImplementation "android.arch.persistence.room:testing:$arch_version"
-    testImplementation "android.arch.core:core-testing:$arch_version"
-    testImplementation "android.arch.paging:common:$paging_version"
+    androidTestModernImplementation 'androidx.test:runner:1.1.0'
+    androidTestModernImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testSupportImplementation "android.arch.persistence.room:testing:$arch_version"
+    testSupportImplementation "android.arch.core:core-testing:$arch_version"
+    testSupportImplementation "android.arch.paging:common:$paging_version"
 }
 
+
+//Configuration for InAppDevTools plugin
 inappdevtools{
     debug = true
 }
 
-//TODO: improvement needed
+
+//Configuration for PreProcessor plugin
+preprocessor {
+    verbose true
+    sourceDir file("src/main/java")
+    targetDir file("src/main/java")
+    symbols "GLOBAL","GLOBAL_2"
+}
+
+
+//Add Publication plugin when in publication environment
 if (project.rootProject.file('local.properties').exists()
         && !(project.getGradle().startParameter.isOffline())) {
     apply from: 'publish.gradle'
