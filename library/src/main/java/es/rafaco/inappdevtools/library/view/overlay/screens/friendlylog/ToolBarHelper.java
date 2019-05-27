@@ -29,37 +29,40 @@ public class ToolBarHelper {
     }
 
     public void initSearchButtons(SearchView.OnQueryTextListener onQueryCallback) {
-        final MenuItem searchItem = toolbar.getMenu().findItem(R.id.action_search);
-        final MenuItem filterItem = toolbar.getMenu().findItem(R.id.action_filter);
-        if (searchItem != null && filterItem != null) {
-            MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
-                @Override
-                public boolean onMenuItemActionExpand(MenuItem item) {
-                    hideOthersMenuItem(item);
-                    return true;
-                }
+        initSearchMenuItem(R.id.action_search, "Search...");
 
-                @Override
-                public boolean onMenuItemActionCollapse(MenuItem item) {
-                    showAllMenuItem();
-                    return true;
-                }
-            };
-            searchItem.setOnActionExpandListener(onActionExpandListener);
-            filterItem.setOnActionExpandListener(onActionExpandListener);
-
-            final SearchView searchView = (SearchView) searchItem.getActionView();
-            final SearchView filterView = (SearchView) filterItem.getActionView();
-            if (searchView != null && filterView != null) {
-
-                searchView.setQueryHint("Search...");
-                filterView.setQueryHint("Filter...");
-                int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView
-                ImageView v = filterView.findViewById(searchImgId);
-                v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_rally_24dp));
-                filterView.setOnQueryTextListener(onQueryCallback);
-            }
+        MenuItem filterItem = initSearchMenuItem(R.id.action_filter, "Filter...");
+        SearchView filterView = (SearchView) filterItem.getActionView();
+        if (filterView != null) {
+            int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView
+            ImageView v = filterView.findViewById(searchImgId);
+            v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_rally_24dp));
+            filterView.setOnQueryTextListener(onQueryCallback);
         }
+    }
+
+    public MenuItem initSearchMenuItem(int menuActionId, String hint){
+        final MenuItem item = toolbar.getMenu().findItem(menuActionId);
+        MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                hideOthersMenuItem(item);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                showAllMenuItem();
+                return true;
+            }
+        };
+        item.setOnActionExpandListener(onActionExpandListener);
+
+        final SearchView searchView = (SearchView) item.getActionView();
+        if (searchView != null) {
+            searchView.setQueryHint(hint);
+        }
+        return item;
     }
 
     public void showAllMenuItem() {

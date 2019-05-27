@@ -3,8 +3,6 @@ package es.rafaco.inappdevtools.library.logic.sources;
 import android.content.Context;
 import android.text.TextUtils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,7 +83,6 @@ public class SourcesManager {
         return readInputStream(inputStream);
     }
 
-    @NotNull
     protected String readInputStream(InputStream inputStream) {
         StringBuilder builder = new StringBuilder();
         try {

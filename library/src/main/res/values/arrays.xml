@@ -9,6 +9,11 @@
         <item>ERROR</item>
     </string-array>
 
+    <string-array name="source_tune">
+        <item>Show line number</item>
+        <item>Wrap lines</item>
+    </string-array>
+
     <string-array name="simulations">
         <item>Network Traffic</item>
         <item>ANR error</item>

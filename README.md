@@ -213,7 +213,8 @@ You don't normally need to manually download our library or our plugin as they a
 - To [whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
 - To [jgilfelt](https://github.com/jgilfelt) for [chuck](https://github.com/jgilfelt/chuck): library used for network inspector.
 - To [alorma](https://github.com/alorma) for [timelineview](https://github.com/alorma/timelineview): library used at stacktrace.
-- To [kbiakov](https://github.com/kbiakov) for [CodeView-Android](https://github.com/kbiakov/CodeView-Android): library used to view source codes.
+- To [tiagohm](https://github.com/tiagohm) for [CodeView](https://github.com/tiagohm/CodeView): inspiration for my codeview.
+~~- To [kbiakov](https://github.com/kbiakov) for [CodeView-Android](https://github.com/kbiakov/CodeView-Android): library used to view source codes.~~
 - To [Zsolt Kocsi](https://github.com/zsoltk) for [paperwork](https://github.com/zsoltk/paperwork): inspiration for CompileConfig.
 - To [valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast): inspiration for our CustomToast.
 - To [Wajahat Karim](https://github.com/wajahatkarim3) for [JCenter-Gradle-Scripts](https://github.com/wajahatkarim3/JCenter-Gradle-Scripts): used to publish into Bintray.

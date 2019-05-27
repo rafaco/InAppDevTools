@@ -74,6 +74,8 @@
                 android:id="@+id/tool_body_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
                 android:layout_marginBottom="1dp"
                 android:orientation="vertical">
             </FrameLayout>
@@ -84,6 +86,8 @@
             android:id="@+id/tool_body_container2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_marginBottom="1dp"
             android:orientation="vertical">
         </FrameLayout>

@@ -5,7 +5,7 @@ android {
     compileSdkVersion rootProject.ext.appCompileSdkVersion
     buildToolsVersion rootProject.ext.appBuildToolsVersion
     defaultConfig {
-        applicationId "es.rafaco.inappdevtools.sample"
+        applicationId "es.rafaco.inappdevtools.app"
         minSdkVersion rootProject.ext.appMinSdkVersion
         targetSdkVersion rootProject.ext.appTargetSdkVersion
         versionCode rootProject.ext.appVersionCode

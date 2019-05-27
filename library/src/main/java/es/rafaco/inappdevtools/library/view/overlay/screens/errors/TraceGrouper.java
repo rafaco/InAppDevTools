@@ -1,7 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +11,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceItem;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 
 public class TraceGrouper {
@@ -114,7 +111,6 @@ public class TraceGrouper {
         item.setFullPath(DevTools.getSourcesManager().getNodePathFromClassName(item.getSourcetrace().extractPath()));
     }
 
-    @NotNull
     private void initMatcher() {
         matcher = new HashMap<>();
         AppInfoHelper infoHelper = new AppInfoHelper(DevTools.getAppContext());

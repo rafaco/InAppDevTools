@@ -2,7 +2,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,4 +149,7 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         return false;
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
 }

@@ -254,6 +254,7 @@ public class MainOverlayLayerManager {
         if (loadedScreen.getToolbarLayoutId() != -1){
             screenToolbar.setVisibility(View.VISIBLE);
             screenToolbar.inflateMenu(loadedScreen.getToolbarLayoutId());
+            loadedScreen.onCreateOptionsMenu(screenToolbar.getMenu());
             screenToolbar.setOnMenuItemClickListener(loadedScreen);
         }else {
             screenToolbar.setVisibility(View.GONE);

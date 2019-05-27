@@ -2,8 +2,6 @@ package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,7 +68,6 @@ public abstract class SourcesReader {
 
     protected abstract InputStream getInputStream(ZipFile zip, String entryName) throws IOException;
 
-    @NotNull
     protected String readInputStream(InputStream inputStream) {
         StringBuilder builder = new StringBuilder();
         try {
