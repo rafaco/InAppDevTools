@@ -59,7 +59,8 @@ public class InfoPageViewHolder {
             bodyView.setText(content);
         }
 
-        setDiffButton(title.equals("Config"));
+        //TODO: improve, it depends on a hardcoded string
+        setDiffButton(title.equals("Build"));
     }
 
     private void setDiffButton(boolean isConfigPage) {
