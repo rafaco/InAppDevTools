@@ -152,13 +152,13 @@ public class FriendlyLog {
                 return R.drawable.ic_landscape_white_24dp;
             }
             else if (log.getType().equals("ScreenOn")) {
-                return R.drawable.ic_phonelink_ring_black_24dp;
+                return R.drawable.ic_phonelink_ring_white_24dp;
             }
             else if (log.getType().equals("ScreenOff")) {
-                return R.drawable.ic_phonelink_erase_black_24dp;
+                return R.drawable.ic_phonelink_erase_white_24dp;
             }
             else if (log.getType().equals("UserPresent")) {
-                return R.drawable.ic_person_pin_black_24dp;
+                return R.drawable.ic_person_pin_white_24dp;
             }
         }
         else if (log.getCategory().equals("UserTouch")) {
@@ -169,7 +169,7 @@ public class FriendlyLog {
                 return R.drawable.ic_touch_app_white_24dp;
             }
             else if (log.getType().equals("BackKey")){
-                return R.drawable.ic_arrow_back_rally_24dp;
+                return R.drawable.ic_arrow_back_white_24dp;
             }
             else if (log.getType().equals("HomeKey")){
                 return R.drawable.ic_circle_white_24dp;
@@ -181,7 +181,7 @@ public class FriendlyLog {
                 return R.drawable.ic_power_white_24dp;
             }
             else if (log.getType().equals("Shake")){
-                return R.drawable.ic_vibration_rally_24dp;
+                return R.drawable.ic_vibration_white_24dp;
             }
         }
         else if (log.getCategory().equals("Process")){
@@ -234,15 +234,15 @@ public class FriendlyLog {
 
         else if (log.getCategory().equals("DevTools")){
             if (log.getType().equals("Screenshot")){
-                return R.drawable.ic_add_a_photo_rally_24dp;
+                return R.drawable.ic_add_a_photo_white_24dp;
             }
             else if (log.getType().equals("Exception")){
-                return R.drawable.ic_bug_report_rally_24dp;
+                return R.drawable.ic_bug_report_white_24dp;
             }
             else if (log.getType().equals("Delete")){
-                return R.drawable.ic_delete_forever_rally_24dp;
+                return R.drawable.ic_delete_forever_white_24dp;
             }
-            return R.drawable.ic_developer_mode_rally_24dp;
+            return R.drawable.ic_developer_mode_white_24dp;
         }
         return -1;
     }

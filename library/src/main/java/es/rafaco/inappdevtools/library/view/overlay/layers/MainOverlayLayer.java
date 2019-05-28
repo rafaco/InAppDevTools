@@ -166,7 +166,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
     public void toggleBackButton(boolean showBack){
         if (showBack){
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_rally_24dp);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -249,7 +249,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
         if (currentSizePosition.equals(SizePosition.FULL)) {
             currentSizePosition = SizePosition.HALF_FIRST;
-            item.setIcon(R.drawable.ic_arrow_up_rally_24dp);
+            item.setIcon(R.drawable.ic_arrow_up_white_24dp);
 
             int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
             viewLayoutParams.height = halfHeight;
@@ -258,14 +258,14 @@ public class MainOverlayLayer extends OverlayLayer {
         }
         else if (currentSizePosition.equals(SizePosition.HALF_FIRST)) {
             currentSizePosition = SizePosition.HALF_SECOND;
-            item.setIcon(R.drawable.ic_unfold_more_rally_24dp);
+            item.setIcon(R.drawable.ic_unfold_more_white_24dp);
 
             viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
             childLayoutParams.gravity = Gravity.TOP;
         }
         else {
             currentSizePosition = SizePosition.FULL;
-            item.setIcon(R.drawable.ic_arrow_down_rally_24dp);
+            item.setIcon(R.drawable.ic_arrow_down_white_24dp);
 
             viewLayoutParams.height = MATCH_PARENT;
             viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;

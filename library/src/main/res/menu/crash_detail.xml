@@ -6,19 +6,19 @@
 
     <item
         android:id="@+id/action_send"
-        android:icon="@drawable/ic_send_rally_24dp"
+        android:icon="@drawable/ic_send_white_24dp"
         android:title="Open..."
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_share"
-        android:icon="@drawable/ic_share_rally_24dp"
+        android:icon="@drawable/ic_share_white_24dp"
         android:title="Share..."
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_delete"
-        android:icon="@drawable/ic_delete_forever_rally_24dp"
+        android:icon="@drawable/ic_delete_forever_white_24dp"
         android:title="Delete"
         app:showAsAction="ifRoom" />
 

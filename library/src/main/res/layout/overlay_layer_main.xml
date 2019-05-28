@@ -46,7 +46,7 @@
                 android:layout_height="40dp"
                 android:theme="@style/LibActionBarTheme"
                 app:popupTheme="@style/popupMenuStyle"
-                app:collapseIcon="@drawable/ic_close_rally_24dp"/>
+                app:collapseIcon="@drawable/ic_close_white_24dp"/>
 
         </LinearLayout>
 

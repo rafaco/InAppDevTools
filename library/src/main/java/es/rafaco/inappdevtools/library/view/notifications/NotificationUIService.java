@@ -196,7 +196,7 @@ public class NotificationUIService extends Service {
                 .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setOnlyAlertOnce(true)
-                .setSmallIcon(R.drawable.ic_bug_report_rally_24dp)
+                .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
                 .setColorized(false)
                 .setContentIntent(pendingIntent)
@@ -240,7 +240,7 @@ public class NotificationUIService extends Service {
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setOnlyAlertOnce(true)
-                .setSmallIcon(R.drawable.ic_bug_report_rally_24dp)
+                .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
                 .setLargeIcon(largeIconBitmap)
                 .setColor(getResources().getColor(R.color.rally_orange))
                 .setColorized(true)
@@ -271,24 +271,24 @@ public class NotificationUIService extends Service {
         switch (action){
             case ACTION_SCREEN:
                 title = "SCREENSHOT";
-                icon = R.drawable.ic_add_a_photo_rally_24dp;
+                icon = R.drawable.ic_add_a_photo_white_24dp;
                 break;
             case ACTION_REPORT:
                 title = "REPORT";
-                icon = R.drawable.ic_send_rally_24dp;
+                icon = R.drawable.ic_send_white_24dp;
                 break;
             case ACTION_CLEAN:
                 title = "CLEAN";
-                icon = R.drawable.ic_delete_forever_rally_24dp;
+                icon = R.drawable.ic_delete_forever_white_24dp;
                 break;
             case ACTION_TOOLS:
                 title = "TOOLS";
-                icon = R.drawable.ic_developer_mode_rally_24dp;
+                icon = R.drawable.ic_developer_mode_white_24dp;
                 break;
             case ACTION_DISMISS:
             default:
                 title = "DISMISS";
-                icon = R.drawable.ic_close_rally_24dp;
+                icon = R.drawable.ic_close_white_24dp;
                 break;
         }
 

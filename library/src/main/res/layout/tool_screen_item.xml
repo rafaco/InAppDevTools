@@ -65,7 +65,7 @@
                 android:layout_marginBottom="@dimen/card_overflow_margin_top"
                 android:scaleType="centerCrop"
                 android:clickable="true"
-                android:src="@drawable/ic_more_vert_rally_24dp" />
+                android:src="@drawable/ic_more_vert_white_24dp" />
 
         </RelativeLayout>
 

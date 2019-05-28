@@ -134,7 +134,7 @@ public class HomeScreen extends OverlayScreen {
                 }));
 
         data.add(new RunnableConfig("Report",
-                R.drawable.ic_send_rally_24dp,
+                R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(ReportScreen.class);
@@ -142,7 +142,7 @@ public class HomeScreen extends OverlayScreen {
                 }));
 
         data.add(new RunnableConfig("More",
-                R.drawable.ic_more_vert_rally_24dp,
+                R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(MoreScreen.class);

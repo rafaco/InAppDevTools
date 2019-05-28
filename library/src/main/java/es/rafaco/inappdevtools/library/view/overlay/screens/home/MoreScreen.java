@@ -69,7 +69,7 @@ public class MoreScreen extends OverlayScreen {
                 }));
 
         data.add(new RunnableConfig("Errors",
-                R.drawable.ic_bug_report_rally_24dp,
+                R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);

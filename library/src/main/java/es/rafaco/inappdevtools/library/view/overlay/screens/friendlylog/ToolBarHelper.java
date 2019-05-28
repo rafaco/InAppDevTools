@@ -36,7 +36,7 @@ public class ToolBarHelper {
         if (filterView != null) {
             int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView
             ImageView v = filterView.findViewById(searchImgId);
-            v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_rally_24dp));
+            v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_white_24dp));
             filterView.setOnQueryTextListener(onQueryCallback);
         }
     }

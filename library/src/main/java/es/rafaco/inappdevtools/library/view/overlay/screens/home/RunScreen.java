@@ -79,7 +79,7 @@ public class RunScreen extends OverlayScreen {
     private void addDevToolsItems(List<Object> data) {
         data.add("DevTools");
         data.add(new RunnableConfig( "Take Screen",
-                R.drawable.ic_add_a_photo_rally_24dp,
+                R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -119,7 +119,7 @@ public class RunScreen extends OverlayScreen {
                     }
                 }));
         data.add(new RunnableConfig("Dev Options",
-                R.drawable.ic_developer_mode_rally_24dp,
+                R.drawable.ic_developer_mode_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {

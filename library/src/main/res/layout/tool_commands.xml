@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/rally_bg_blur"
                 android:text="Take Screen"
-                android:drawableLeft="@drawable/ic_add_a_photo_rally_24dp"/>
+                android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"/>
 
             <es.rafaco.compat.AppCompatButton
                 android:id="@+id/inspect_button"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/rally_bg_blur"
                 android:text="Simulate Crash"
-                android:drawableLeft="@drawable/ic_bug_report_rally_24dp"/>
+                android:drawableLeft="@drawable/ic_bug_report_white_24dp"/>
 
         </LinearLayout>
 
