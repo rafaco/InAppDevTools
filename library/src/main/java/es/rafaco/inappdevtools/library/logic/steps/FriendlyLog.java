@@ -180,6 +180,9 @@ public class FriendlyLog {
             else if (log.getType().equals("DreamKey")){
                 return R.drawable.ic_power_white_24dp;
             }
+            else if (log.getType().equals("Shake")){
+                return R.drawable.ic_vibration_rally_24dp;
+            }
         }
         else if (log.getCategory().equals("Process")){
             return R.drawable.ic_application_white_24dp;

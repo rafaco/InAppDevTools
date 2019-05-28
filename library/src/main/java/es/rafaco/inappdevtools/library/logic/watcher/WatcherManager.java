@@ -106,6 +106,7 @@ public class WatcherManager {
         shakeWatcher.setListener(new ShakeWatcher.InnerListener() {
             @Override
             public void onShake() {
+                FriendlyLog.log("D", "User", "Shake", "Shake detected");
                 DevTools.openTools(false);
             }
         });
