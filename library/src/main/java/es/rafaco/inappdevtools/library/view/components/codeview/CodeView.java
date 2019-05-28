@@ -22,6 +22,37 @@ import es.rafaco.inappdevtools.library.R;
 
 // Adaptation of CodeView library by tiagohm
 // Extracted from: https://github.com/tiagohm/CodeView
+// Library updated from v9.12.0 to v9.15.6 (shrink to 10%!!)
+//bash.js: on
+//cs.js: on
+//cpp.js: on
+//css.js: on
+//coffeescript.js: on
+//diff.js: on
+//xml.js: on
+//http.js: on
+//json.js: on
+//java.js: on
+//javascript.js: on
+//makefile.js: on
+//markdown.js: on
+//objectivec.js: on
+//php.js: on
+//perl.js: on
+//properties.js: on
+//python.js: on
+//ruby.js: on
+//sql.js: on
+//shell.js: on
+//dart.js: on
+//go.js: on
+//gradle.js: on
+//groovy.js: on
+//kotlin.js: on
+//lua.js: on
+//scala.js: on
+//scheme.js: on
+//plaintext.js: on
 
 public class CodeView extends WebView {
 
@@ -342,7 +373,7 @@ public class CodeView extends WebView {
         sb.append("td.destacado span {background: #ffda11; color: #000;}");
         sb.append("</style>");
         //scripts
-        sb.append("<script src='file:///android_asset/codeview/highlight.js'></script>");
+        sb.append("<script src='file:///android_asset/codeview/highlight.pack.js'></script>");
         sb.append("<script>hljs.initHighlightingOnLoad();</script>");
         sb.append("</head>");
         //code

@@ -20,6 +20,6 @@ public class Theme {
     }
 
     public String getPath() {
-        return "file:///android_asset/codeview/" + getName() + ".css";
+        return "file:///android_asset/codeview/styles/" + getName() + ".css";
     }
 }
