@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
+import es.rafaco.inappdevtools.library.view.components.codeview.Language;
 
 public class NodesHelper {
 
@@ -89,5 +90,20 @@ public class NodesHelper {
             entries.add(new SourceEntry("TODO", node.getPath(), node.isDirectory()));
         }
         return entries;
+    }
+
+    public static String getFileNameAndExtensionFromPath(String path){
+        String[] parts = path.split("[/]");
+        boolean isFile = !path.endsWith("/");
+        return isFile ? (parts[parts.length-1]) : "";
+    }
+
+    public static String getFileExtensionFromPath(String path){
+        if (path.contains(".")){
+            int lastFound = path.lastIndexOf(".");
+            String extension = path.substring(lastFound + 1);
+            return extension;
+        }
+        return "";
     }
 }

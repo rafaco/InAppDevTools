@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import es.rafaco.inappdevtools.library.R;
 
 // Adaptation of CodeView library by tiagohm
-// https://github.com/tiagohm/CodeView
+// Extracted from: https://github.com/tiagohm/CodeView
 
 public class CodeView extends WebView {
 
@@ -61,7 +61,7 @@ public class CodeView extends WebView {
 
     public CodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //Inicialização.
+
         init(context, attrs);
     }
 
@@ -98,15 +98,13 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Define um listener.
+     * Define a listener for main events
      */
     public CodeView setOnHighlightListener(OnHighlightListener listener) {
-        //Definir um listener.
         if (listener != null) {
-            //Definir um novo listener
             if (onHighlightListener != listener) {
                 onHighlightListener = listener;
-                //Adiciona o objeto que atenderá os eventos js e disparará o listener definido.
+
                 addJavascriptInterface(new Object() {
                     @JavascriptInterface
                     public void onStartCodeHighlight() {
@@ -146,7 +144,6 @@ public class CodeView extends WebView {
                 }, "android");
             }
         }
-        //Remover o listener.
         else {
             removeJavascriptInterface("android");
         }
@@ -154,14 +151,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém o tamanho da fonte do texto em pixels.
+     * Retrieve font size in pixels
      */
     public float getFontSize() {
         return fontSize;
     }
 
     /**
-     * Define o tamanho da fonte do texto em pixels.
+     * Define font size in pixels
      */
     public CodeView setFontSize(float fontSize) {
         if (fontSize < 8) fontSize = 8;
@@ -173,14 +170,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém o código exibido.
+     * Retrieve the code to show
      */
     public String getCode() {
         return code;
     }
 
     /**
-     * Define o código que será exibido.
+     * Define the code to show
      */
     public CodeView setCode(String code) {
         if (code == null) code = "";
@@ -190,14 +187,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém o tema.
+     * Retrieve the theme
      */
     public Theme getTheme() {
         return theme;
     }
 
     /**
-     * Define o tema.
+     * Define the theme
      */
     public CodeView setTheme(Theme theme) {
         this.theme = theme;
@@ -205,14 +202,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém a linguagem.
+     * Retrieve the language
      */
     public Language getLanguage() {
         return language;
     }
 
     /**
-     * Define a linguagem.
+     * Define the language
      */
     public CodeView setLanguage(Language language) {
         this.language = language;
@@ -220,14 +217,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Verifica se está aplicando a quebra de linha.
+     * Check if wrap lines defined
      */
     public boolean isWrapLine() {
         return wrapLine;
     }
 
     /**
-     * Define se aplicará a quebra de linha.
+     * Define wrap lines
      */
     public CodeView setWrapLine(boolean wrapLine) {
         this.wrapLine = wrapLine;
@@ -235,14 +232,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Verifica se o zoom está habilitado.
+     * Check if zoom is enabled
      */
     public boolean isZoomEnabled() {
         return zoomEnabled;
     }
 
     /**
-     * Define que o zoom estará habilitado ou não.
+     * Define zoom enabled
      */
     public CodeView setZoomEnabled(boolean zoomEnabled) {
         this.zoomEnabled = zoomEnabled;
@@ -250,14 +247,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Verifica se o número da linha está sendo exibido.
+     * Check if show line number enabled
      */
     public boolean isShowLineNumber() {
         return showLineNumber;
     }
 
     /**
-     * Define a visibilidade do número da linha.
+     * Define show line number enabled
      */
     public CodeView setShowLineNumber(boolean showLineNumber) {
         this.showLineNumber = showLineNumber;
@@ -265,14 +262,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém o número da primeira linha.
+     * Retrieve first line offset
      */
     public int getStartLineNumber() {
         return startLineNumber;
     }
 
     /**
-     * Define o número da primeira linha.
+     * Define first line offset
      */
     public CodeView setStartLineNumber(int startLineNumber) {
         if (startLineNumber < 0) startLineNumber = 1;
@@ -281,14 +278,14 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Obtém a quantidade de linhas no código.
+     * Retrieve line count
      */
     public int getLineCount() {
         return lineCount;
     }
 
     /**
-     * Exibe ou oculta o número da linha.
+     * Swap current showLineNumber
      */
     public void toggleLineNumber() {
         showLineNumber = !showLineNumber;
@@ -296,7 +293,7 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Aplica os atributos e exibe o código.
+     * Apply attrs and show code
      */
     public void apply() {
         loadDataWithBaseURL("",
@@ -333,7 +330,7 @@ public class CodeView extends WebView {
             sb.append("word-wrap: break-word; white-space: pre-wrap; word-break: break-all;");
             sb.append("}\n");
         }
-        //Outros
+        //others
         sb.append("table, td, tr {");
         sb.append("margin: 0px; padding: 0px;");
         sb.append("}\n");
@@ -395,11 +392,8 @@ public class CodeView extends WebView {
     private String insertLineNumber(String code) {
         Matcher m = Pattern.compile("(.*?)&#10;").matcher(code);
         StringBuffer sb = new StringBuffer();
-        //Posição atual da linha.
         int pos = getStartLineNumber();
-        //Quantidade de linhas.
         lineCount = 0;
-        //Para cada linha encontrada, encapsulá-la dentro uma linha de uma tabela.
         while (m.find()) {
             m.appendReplacement(sb,
                     String.format(Locale.ENGLISH,
@@ -413,7 +407,7 @@ public class CodeView extends WebView {
     }
 
     /**
-     * Eventos de pinça.
+     * Pinch events
      */
     private class PinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 

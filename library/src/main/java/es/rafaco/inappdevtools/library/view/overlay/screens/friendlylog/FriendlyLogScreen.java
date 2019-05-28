@@ -157,7 +157,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void initToolbar() {
         toolbarHelper = new ToolBarHelper(getToolbar());
-        toolbarHelper.initSearchButtons(new SearchView.OnQueryTextListener() {
+        toolbarHelper.initSearchFilterButtons(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;

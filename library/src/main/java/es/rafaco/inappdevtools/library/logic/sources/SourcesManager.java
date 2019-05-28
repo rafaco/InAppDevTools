@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,6 +65,21 @@ public class SourcesManager {
             return null;
         }
 
+        InputStream inputStream = getInputStream(target);
+        return readToString(inputStream);
+    }
+
+    public File getLocalFile(String path){
+        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
+        if (target == null || target.isDirectory()){
+            return null;
+        }
+
+        InputStream inputStream = getInputStream(target);
+        return readToLocalFile(path, inputStream);
+    }
+
+    private InputStream getInputStream(AbstractNode target) {
         InputStream inputStream;
         try {
             if (target instanceof ZipNode) {
@@ -80,10 +97,10 @@ public class SourcesManager {
             FriendlyLog.logException("Exception", e);
             return null;
         }
-        return readInputStream(inputStream);
+        return inputStream;
     }
 
-    protected String readInputStream(InputStream inputStream) {
+    private String readToString(InputStream inputStream) {
         StringBuilder builder = new StringBuilder();
         try {
             BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
@@ -95,6 +112,34 @@ public class SourcesManager {
         }
 
         return builder.toString();
+    }
+
+    private File readToLocalFile(String path, InputStream inputStream) {
+        File f = new File(context.getCacheDir()+"/"+ path);
+        if (!f.exists()){
+            FileOutputStream fos = null;
+            try {
+                f.getParentFile().mkdirs();
+                int size = inputStream.available();
+                byte[] buffer = new byte[size];
+                inputStream.read(buffer);
+                inputStream.close();
+
+                fos = new FileOutputStream(f);
+                fos.write(buffer);
+            } catch (Exception e) {
+                FriendlyLog.logException("SourceReader exception", e);
+            }finally {
+                if (fos!=null){
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        FriendlyLog.logException("Exception", e);
+                    }
+                }
+            }
+        }
+        return f;
     }
 
     public boolean canOpenClassName(String fullClassName) {

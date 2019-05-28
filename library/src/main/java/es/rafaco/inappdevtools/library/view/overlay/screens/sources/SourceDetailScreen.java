@@ -2,24 +2,20 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.app.SearchManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //#ifdef MODERN
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 //#else
 //@import android.support.v7.app.AlertDialog;
 //@import android.support.v7.widget.SearchView;
-//@import import androidx.core.view.MenuItemCompat;
 //#endif
 
 import com.google.gson.Gson;
@@ -28,6 +24,9 @@ import java.lang.reflect.Method;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
+import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
+import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
 import es.rafaco.inappdevtools.library.view.components.codeview.Language;
 import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
@@ -44,7 +43,6 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
     private CodeView codeViewer;
     private ToolBarHelper toolbarHelper;
     boolean[] tuneSelection;
-    private boolean flag = false;
 
     public SourceDetailScreen(MainOverlayLayerManager manager) {
         super(manager);
@@ -100,12 +98,12 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
                     public void run() {
                         codeViewer.setOnHighlightListener(SourceDetailScreen.this)
                                 .setTheme(Theme.ANDROIDSTUDIO)
-                                .setCode(content)
-                                .setLanguage(Language.AUTO)
                                 .setFontSize(12)
                                 .setShowLineNumber(true)
                                 .setWrapLine(false)
                                 .setZoomEnabled(false)
+                                .setCode(content)
+                                .setLanguage(parseLanguage())
                                 .apply();
 
                         if (getParams().lineNumber > 0){
@@ -122,18 +120,17 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         //initToolbar();
     }
 
-    private String getLanguage() {
-        if (getParams().path.contains(".")){
-            int lastFound = getParams().path.lastIndexOf(".");
-            return getParams().path.substring(lastFound + 1);
+    public Language parseLanguage() {
+        String extension = NodesHelper.getFileExtensionFromPath(getParams().path);
+        Language language = Language.getLanguageByName(extension.toLowerCase());
+        if (language != null){
+            return language;
         }
-        return "";
+        return Language.AUTO;
     }
 
 
-
-
-    //region [ CodeView HighlightListener ]
+    //region [ CodeView listener ]
 
     @Override
     public void onStartCodeHighlight() {
@@ -141,22 +138,23 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
 
     @Override
     public void onFinishCodeHighlight() {
-        Toast.makeText(getContext(), "line count: " + codeViewer.getLineCount(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onLanguageDetected(Language language, int relevance) {
-        Toast.makeText(getContext(), "language: " + language + " relevance: " + relevance, Toast.LENGTH_SHORT).show();
+        DevTools.showMessage("Detected language: " + language + " relevance: " + relevance);
     }
 
     @Override
     public void onFontSizeChanged(int sizeInPx) {
-        Log.d("TAG", "font-size: " + sizeInPx + "px");
+        //DevTools.showMessage("CodeView font-size to " + sizeInPx + "px");
     }
 
     @Override
     public void onLineClicked(int lineNumber, String content) {
-        Toast.makeText(getContext(), "line: " + lineNumber + " html: " + content, Toast.LENGTH_SHORT).show();
+        String text = "Line " + lineNumber + " of " +  getParams().path + ":\n" + content;
+        ClipboardUtils.save(getContext(), text);
+        DevTools.showMessage("Line " + lineNumber + " copied to clipboard");
     }
 
     //endregion
@@ -164,27 +162,10 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
 
     //region [ TOOL BAR ]
 
-    private void initToolbar() {
-        toolbarHelper = new ToolBarHelper(getToolbar());
-        toolbarHelper.initSearchButtons(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //TODO
-                return false;
-            }
-        });
-
-        toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");
-        toolbarHelper.showAllMenuItem();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        getToolbar().setSubtitle(NodesHelper.getFileNameAndExtensionFromPath(getParams().path));
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");
@@ -251,6 +232,12 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         int selected = item.getItemId();
         if (selected == R.id.action_tune) {
             onTuneButton();
+        }else if (selected == R.id.action_share) {
+            onShareButton();
+        }
+        else if (selected == R.id.action_copy) {
+            ClipboardUtils.save(getContext(), codeViewer.getCode());
+            DevTools.showMessage("Content copied to clipboard");
         }
         return super.onMenuItemClick(item);
     }
@@ -279,6 +266,26 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         alertDialog.show();
     }
 
+    private void onShareButton() {
+        new AsyncTask<String, String, String>(){
+            @Override
+            protected String doInBackground(String... strings) {
+                return DevTools.getSourcesManager().getLocalFile(getParams().path)
+                        .getAbsolutePath();
+            }
+
+            @Override
+            protected void onPostExecute(final String path) {
+                super.onPostExecute(path);
+
+                if (path == null){
+                    DevTools.showMessage("Unable to get file path");
+                    return;
+                }
+                FileProviderUtils.openFileExternally(DevTools.getAppContext(), path, Intent.ACTION_SEND);
+            }
+        }.execute();
+    }
     //endregion
 
 

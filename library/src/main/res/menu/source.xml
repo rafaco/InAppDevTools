@@ -14,5 +14,17 @@
         android:title="Tune"
         android:icon="@drawable/ic_tune_rally_24dp"
         app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_copy"
+        android:title="Copy"
+        android:icon="@drawable/ic_content_copy_rally_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
+        android:title="Share"
+        android:icon="@drawable/ic_share_rally_24dp"
+        app:showAsAction="ifRoom" />
 
 </menu>

@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,11 +22,14 @@ public class FileProviderUtils {
     }
 
     public static void openFileExternally(Context context, String filePath) {
+        openFileExternally(context, filePath, Intent.ACTION_VIEW);
+    }
+    public static void openFileExternally(Context context, String filePath, String action ) {
         File file = new File(filePath);
         String type = getMimeType(file);
 
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
+        intent.setAction(action);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             String authority = getAuthority(context);
@@ -35,7 +39,12 @@ public class FileProviderUtils {
             intent.setDataAndType(Uri.fromFile(file), type);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+
+        try{
+            context.startActivity(intent);
+        }catch (ActivityNotFoundException exception){
+
+        }
     }
 
     private static String getMimeType(File file) {

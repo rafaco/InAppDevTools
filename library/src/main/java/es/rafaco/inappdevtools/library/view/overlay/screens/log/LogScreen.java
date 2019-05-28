@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -104,7 +103,7 @@ public class LogScreen extends OverlayScreen {
 
     private void initToolbar() {
         toolbarHelper = new ToolBarHelper(getToolbar());
-        toolbarHelper.initSearchButtons(new SearchView.OnQueryTextListener() {
+        toolbarHelper.initSearchFilterButtons(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;

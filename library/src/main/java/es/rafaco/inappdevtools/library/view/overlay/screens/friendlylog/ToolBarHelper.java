@@ -28,10 +28,10 @@ public class ToolBarHelper {
         this.toolbar = toolbar;
     }
 
-    public void initSearchButtons(SearchView.OnQueryTextListener onQueryCallback) {
+    public void initSearchFilterButtons(SearchView.OnQueryTextListener onQueryCallback) {
         initSearchMenuItem(R.id.action_search, "Search...");
-
         MenuItem filterItem = initSearchMenuItem(R.id.action_filter, "Filter...");
+
         SearchView filterView = (SearchView) filterItem.getActionView();
         if (filterView != null) {
             int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView

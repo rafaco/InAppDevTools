@@ -4,16 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+        <es.rafaco.inappdevtools.library.view.components.codeview.CodeView
+            android:id="@+id/code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <!--android:layout_marginBottom="12dp"-->
+
     <TextView
         android:id="@+id/code_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/content_margin" />
-
-    <es.rafaco.inappdevtools.library.view.components.codeview.CodeView
-        android:id="@+id/code_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"/>
+        style="@style/content_margin"
+        android:textAlignment="textStart"
+        android:gravity="start"
+        android:layout_gravity="start" />
 
 </LinearLayout>
