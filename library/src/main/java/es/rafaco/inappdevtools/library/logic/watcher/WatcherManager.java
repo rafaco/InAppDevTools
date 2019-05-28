@@ -160,6 +160,7 @@ public class WatcherManager {
             @Override
             public void onUserPresent() {
                 FriendlyLog.log("D", "Device", "UserPresent", "User is now present");
+                DevTools.initForegroundIfPending();
             }
         });
         screenChangeWatcher.start();

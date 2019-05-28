@@ -53,6 +53,7 @@ public class DevTools {
 
     public static int readerCounter = 0;
     private static Runnable onForceCloseRunnable;
+    private static boolean isPendingForegroundInit;
 
 
     //region [ PUBLIC INITIALIZATION ]
@@ -73,17 +74,27 @@ public class DevTools {
             return;
         }
 
-        android.util.Log.d(DevTools.TAG, "Initializing DevTools...");
         DevTools.config = config;
+        initBackground(context);
+
+        if (!AppUtils.isForegroundImportance(context)){
+            isPendingForegroundInit = true;
+        }else{
+            initForeground(context);
+        }
+
+    }
+
+    private static void initBackground(Context context) {
+        android.util.Log.d(DevTools.TAG, "Initializing background services...");
+
 
         appContext = context.getApplicationContext();
         toolManager = new ToolManager(appContext);
         watcherManager = new WatcherManager(appContext);
         watcherManager.init(config);
-        if (config.overlayUiEnabled) startUiService(context);
 
         //Lazy initialized
-        //if (config.notificationUiEnabled) startForegroundService(context);
         //sourcesManager = new SourcesManager(appContext);
 
         ThreadUtils.runOnBackThread(new Runnable() {
@@ -92,7 +103,16 @@ public class DevTools {
                 getDatabase().printOverview();
             }
         });
-        android.util.Log.i(DevTools.TAG, "DevTools initialized");
+        android.util.Log.i(DevTools.TAG, "DevTools background initialized");
+    }
+
+    public static void initForegroundIfPending(){
+        if (isPendingForegroundInit){
+            initForeground(DevTools.getAppContext());
+        }
+    }
+    private static void initForeground(Context context){
+        android.util.Log.d(DevTools.TAG, "Initializing foreground services...");
 
         if (PendingCrashUtil.isPending()){
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
@@ -105,6 +125,13 @@ public class DevTools {
             getAppContext().startActivity(intent);
             FirstStartUtil.saveFirstStart();
         }
+        else{
+            if (config.overlayUiEnabled)
+            startOverlayService(context);
+        }
+
+        if (config.notificationUiEnabled)
+            startForegroundService(context);
     }
 
     //endregion
@@ -117,7 +144,7 @@ public class DevTools {
         context.startService(intent);
     }
 
-    private static void startUiService(Context context) {
+    private static void startOverlayService(Context context) {
         context.startService(new Intent(context, OverlayUIService.class));
     }
 

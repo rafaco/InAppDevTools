@@ -167,4 +167,14 @@ public class AppUtils {
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         context.startActivity(i);
     }
+
+    public static boolean isForegroundImportance(Context context){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        if (runningAppProcesses != null) {
+            int importance = runningAppProcesses.get(0).importance;
+            return importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+        }
+        return false;
+    }
 }
