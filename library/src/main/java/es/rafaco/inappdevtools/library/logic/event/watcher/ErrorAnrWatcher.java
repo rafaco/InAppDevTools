@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher.anr;
+package es.rafaco.inappdevtools.library.logic.event.watcher;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,32 +11,52 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.event.Event;
+import es.rafaco.inappdevtools.library.logic.event.EventManager;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 
-public class AnrLogger {
+public class ErrorAnrWatcher extends Watcher {
 
-    private ANRWatchDog watcher;
+    private ANRWatchDog watchDog;
 
-    public AnrLogger() {
-        watcher = new ANRWatchDog()
+    public ErrorAnrWatcher(EventManager eventManager) {
+        super(eventManager);
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public boolean onlyForeground() {
+        return false;
+    }
+
+    @Override
+    public void start() {
+
+        watchDog = new ANRWatchDog()
                 .setANRListener(new ANRWatchDog.ANRListener() {
                     @Override
                     public void onAppNotResponding(ANRError error) {
-                        onAnrDetected(error);
+                        Anr anr = parseAnr(error);
+                        storeAnr(anr);
+                        eventManager.fire(Event.ERROR_ANR, anr);
                     }
                 })
                 .setIgnoreDebugger(true);
-        watcher.start();
-        Log.d(DevTools.TAG, "AnrLogger started");
+        watchDog.start();
     }
 
-    public void destroy(){
-        watcher.interrupt();
+    @Override
+    public void stop() {
+        watchDog.interrupt();
     }
 
-    private void onAnrDetected(ANRError error) {
+    private Anr parseAnr(ANRError error) {
         String errorString;
         errorString = String.format("ANR ERROR: %s - %s", error.getMessage(), error.getCause());
         DevTools.showMessage(errorString);
@@ -52,7 +72,7 @@ public class AnrLogger {
         String stackTraceString = sw.toString();
         anr.setStacktrace(stackTraceString);
 
-        storeAnr(anr);
+        return anr;
     }
 
     private void storeAnr(final Anr anr) {

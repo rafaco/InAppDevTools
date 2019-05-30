@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher;
+package es.rafaco.inappdevtools.library.logic.event.watcher;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,25 +8,38 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.event.Event;
+import es.rafaco.inappdevtools.library.logic.event.EventManager;
+import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class ShakeWatcher extends Watcher {
 
     private final SensorManager sensorManager;
     private final Sensor sensor;
-    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
-    public ShakeWatcher(Context context) {
-        super(context);
+    public ShakeWatcher(EventManager manager) {
+        super(manager);
 
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mReceiver = new InnerReceiver();
     }
 
     @Override
-    public void setListener(Object listener) {
-        mListener = (InnerListener) listener;
+    public void init() {
+        eventManager.subscribe(Event.SHAKE, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "User", "Shake", "Shake detected");
+                DevTools.openTools(false);
+            }
+        });
+    }
+
+    @Override
+    public boolean onlyForeground() {
+        return true;
     }
 
     @Override
@@ -67,7 +80,7 @@ public class ShakeWatcher extends Watcher {
                 mShakeTimestamp = now;
                 Log.d(DevTools.TAG, "RAFA - Shake action detected!");
 
-                if (mListener!=null) mListener.onShake();
+                eventManager.fire(Event.SHAKE);
             }
         }
 
@@ -75,9 +88,5 @@ public class ShakeWatcher extends Watcher {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
-    }
-
-    public interface InnerListener {
-        void onShake();
     }
 }

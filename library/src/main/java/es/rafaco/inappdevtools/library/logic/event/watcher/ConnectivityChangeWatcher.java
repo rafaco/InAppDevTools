@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher;
+package es.rafaco.inappdevtools.library.logic.event.watcher;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+import es.rafaco.inappdevtools.library.logic.event.Event;
+import es.rafaco.inappdevtools.library.logic.event.EventManager;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class ConnectivityChangeWatcher extends Watcher {
@@ -14,54 +16,61 @@ public class ConnectivityChangeWatcher extends Watcher {
     public static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
 
     private IntentFilter mFilter;
-    private InnerListener mListener;
     private InnerReceiver mReceiver;
 
-    public ConnectivityChangeWatcher(Context context) {
-        super(context);
+    public ConnectivityChangeWatcher(EventManager manager) {
+        super(manager);
 
         mFilter = new IntentFilter(ACTION_CONNECTIVITY_CHANGE);
-        mFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         mReceiver = new InnerReceiver();
     }
 
     @Override
-    public void setListener(Object listener) {
-        mListener = (InnerListener) listener;
+    public void init() {
+        eventManager.subscribe(Event.CONNECTIVITY_UP, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "Network", "Connected", "Connected to a " + param + " network");
+            }
+        });
+
+        eventManager.subscribe(Event.CONNECTIVITY_DOWN, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "Network", "Disconnected", "Disconnected from " + param + " network");
+            }
+        });
+    }
+
+    @Override
+    public boolean onlyForeground() {
+        return true;
     }
 
     @Override
     public void start() {
         if (mReceiver != null) {
-            mContext.registerReceiver(mReceiver, mFilter);
+            getContext().registerReceiver(mReceiver, mFilter);
         }
     }
 
     @Override
     public void stop() {
         if (mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
+            getContext().unregisterReceiver(mReceiver);
         }
     }
 
    class InnerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            if(intent.getAction().equalsIgnoreCase(ACTION_CONNECTIVITY_CHANGE)) {
+            NetworkInfo networkInfo = (NetworkInfo)intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
-                NetworkInfo networkInfo = (NetworkInfo)intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-
-                if (networkInfo.isConnectedOrConnecting()) {
-                    if (mListener!=null) mListener.onNetworkAvailable(getNetworkTypeString(networkInfo));
-                }
-                else {
-                    if (mListener!=null) mListener.onNetworkLost(getNetworkTypeString(networkInfo));
-                }
+            if (networkInfo.isConnectedOrConnecting()) {
+                eventManager.fire(Event.CONNECTIVITY_UP, getNetworkTypeString(networkInfo));
             }
-            else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
-                //TODO: airplane mode
-                FriendlyLog.log("I", "Connectivity", "Airplane", "ACTION_AIRPLANE_MODE_CHANGED");
-
+            else {
+                eventManager.fire(Event.CONNECTIVITY_DOWN, getNetworkTypeString(networkInfo));
             }
         }
 
@@ -101,10 +110,5 @@ public class ConnectivityChangeWatcher extends Watcher {
            }
            return "?";
        }
-    }
-
-    public interface InnerListener {
-        void onNetworkLost(String networkType);
-        void onNetworkAvailable(String networkType);
     }
 }

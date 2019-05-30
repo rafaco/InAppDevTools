@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
@@ -11,7 +10,6 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.tools.ToolHelper;

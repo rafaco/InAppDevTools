@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.watcher.ShakeWatcher;
+import es.rafaco.inappdevtools.library.logic.event.watcher.ShakeWatcher;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 import static android.content.Context.SENSOR_SERVICE;

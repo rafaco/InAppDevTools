@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.logic.event.EventManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.logic.watcher.WatcherManager;
+import es.rafaco.inappdevtools.library.logic.event.watcher.WatcherManager;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.logic.watcher.activityLog.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
@@ -48,6 +49,7 @@ public class DevTools {
     private static Context appContext;
     private static DevToolsConfig config;
     private static ToolManager toolManager;
+    private static EventManager eventManager;
     private static WatcherManager watcherManager;
     private static SourcesManager sourcesManager;
 
@@ -91,8 +93,8 @@ public class DevTools {
 
         appContext = context.getApplicationContext();
         toolManager = new ToolManager(appContext);
+        eventManager = new EventManager(appContext);
         watcherManager = new WatcherManager(appContext);
-        watcherManager.init(config);
 
         //Lazy initialized
         //sourcesManager = new SourcesManager(appContext);
@@ -161,9 +163,15 @@ public class DevTools {
     public static ToolManager getToolManager() {
         return toolManager;
     }
+
+    public static EventManager getEventManager() {
+        return eventManager;
+    }
+
     public static WatcherManager getWatcherManager() {
         return watcherManager;
     }
+
     public static SourcesManager getSourcesManager() {
         //TODO: Delayed initialisation (not working if need permission)
         if (sourcesManager == null){

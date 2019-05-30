@@ -1,25 +1,66 @@
-package es.rafaco.inappdevtools.library.logic.watcher;
+package es.rafaco.inappdevtools.library.logic.event.watcher;
 
-import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import es.rafaco.inappdevtools.library.logic.event.Event;
+import es.rafaco.inappdevtools.library.logic.event.EventManager;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
 public class GestureWatcher extends Watcher {
 
-    private InnerListener mListener;
     private GestureDetector mReceiver;
 
-
-    public GestureWatcher(Context context) {
-        super(context);
-        mReceiver = new GestureDetector(context, new InnerReceiver());
+    public GestureWatcher(EventManager manager) {
+        super(manager);
+        mReceiver = new GestureDetector(getContext(), new InnerReceiver());
     }
 
     @Override
-    public void setListener(Object listener) {
-        mListener = (InnerListener) listener;
+    public void init() {
+        eventManager.subscribe(Event.GESTURE_SINGLE_TAP, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "UserTouch", "SingleTap",
+                        "User touch - onSingleTapConfirmed: " + param);
+            }
+        });
+
+        eventManager.subscribe(Event.GESTURE_CONTEXT_TAP, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "UserTouch", "ContextClick",
+                        "User touch - onContextClick: " + param);
+            }
+        });
+
+        eventManager.subscribe(Event.GESTURE_DOUBLE_TAP, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "UserTouch", "DoubleTap",
+                        "User touch - onDoubleTap: " + param);
+            }
+        });
+
+        eventManager.subscribe(Event.GESTURE_LONG_PRESSED, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "UserTouch", "LongPress",
+                        "User touch - onLongPress: " + param);
+            }
+        });
+
+        eventManager.subscribe(Event.GESTURE_FLING_TAP, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("D", "UserTouch", "Fling", (String)param);
+            }
+        });
+    }
+
+    @Override
+    public boolean onlyForeground() {
+        return true;
     }
 
     @Override
@@ -46,30 +87,25 @@ public class GestureWatcher extends Watcher {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            FriendlyLog.log("W", "UserTouch", "SingleTap", "User touch - onSingleTapConfirmed: " + e.toString());
-            if (mListener!=null) mListener.onSingleTap("");
+            eventManager.fire(Event.GESTURE_SINGLE_TAP, e.toString());
             return false;
         }
 
         @Override
         public boolean onContextClick(MotionEvent e) {
-            //TODO: What is this? is not working
-            FriendlyLog.log("W", "UserTouch", "ContextClick", "User touch - onContextClick: " + e.toString());
-            if (mListener!=null) mListener.onContextClick("");
+            eventManager.fire(Event.GESTURE_CONTEXT_TAP, e.toString());
             return false;
         }
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            FriendlyLog.log("W", "UserTouch", "DoubleTap", "User touch - onDoubleTap: " + e.toString());
-            if (mListener!=null) mListener.onDoubleTap("");
+            eventManager.fire(Event.GESTURE_DOUBLE_TAP, e.toString());
             return false;
         }
 
         @Override
         public void onLongPress(MotionEvent e) {
-            FriendlyLog.log("W", "UserTouch", "LongPress", "User touch - onLongPress: " + e.toString());
-            if (mListener!=null) mListener.onLongPress("");
+            eventManager.fire(Event.GESTURE_LONG_PRESSED, e.toString());
         }
 
         @Override
@@ -122,10 +158,9 @@ public class GestureWatcher extends Watcher {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-
             message = "User touch: " + message;
-            FriendlyLog.log("W", "UserTouch", "Fling", message, extra);
-            if (mListener!=null) mListener.onFling(message);
+
+            eventManager.fire(Event.GESTURE_FLING_TAP, message + " : " + extra);
 
             return false;
         }
@@ -168,13 +203,5 @@ public class GestureWatcher extends Watcher {
         }
 
         //endregion
-    }
-
-    public interface InnerListener {
-        boolean onSingleTap(String info);
-        boolean onContextClick(String info);
-        boolean onDoubleTap(String info);
-        boolean onFling(String info);
-        void onLongPress(String info);
     }
 }
