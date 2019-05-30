@@ -18,8 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.event.watcher.ActivityWatcher;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 
@@ -31,8 +31,8 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        ActivityLogManager logManager = DevTools.getActivityLogManager();
-        String result = getTopActivity() + " on " + (logManager.isInBackground() ? "Background" : "Foreground");
+        ActivityWatcher activityWatcher = (ActivityWatcher) DevTools.getWatcherManager().getWatcher(ActivityWatcher.class);
+        String result = getTopActivity() + " on " + (activityWatcher.isInBackground() ? "Background" : "Foreground");
         return result;
     }
 
@@ -46,9 +46,9 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getActivityInfo() {
-        ActivityLogManager logManager = DevTools.getActivityLogManager();
+        ActivityWatcher activityWatcher = (ActivityWatcher) DevTools.getWatcherManager().getWatcher(ActivityWatcher.class);
         return new InfoGroup.Builder("")
-                .add("App on " + (logManager.isInBackground() ? "Background" : "Foreground"))
+                .add("App on " + (activityWatcher.isInBackground() ? "Background" : "Foreground"))
                 .add("Top activity is " + getTopActivity())
                 .build();
     }

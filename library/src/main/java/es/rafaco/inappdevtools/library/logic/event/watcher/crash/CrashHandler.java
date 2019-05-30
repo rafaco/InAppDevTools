@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher.crash;
+package es.rafaco.inappdevtools.library.logic.event.watcher.crash;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.event.watcher.ActivityWatcher;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -111,13 +112,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
 
+        ActivityWatcher activityWatcher = (ActivityWatcher) DevTools.getWatcherManager().getWatcher(ActivityWatcher.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isTheUiThread(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
-        crash.setForeground(!DevTools.getActivityLogManager().isInBackground());
-        crash.setLastActivity(DevTools.getActivityLogManager().getLastActivityResumed());
+        crash.setForeground(!activityWatcher.isInBackground());
+        crash.setLastActivity(activityWatcher.getLastActivityResumed());
         return crash;
     }
 

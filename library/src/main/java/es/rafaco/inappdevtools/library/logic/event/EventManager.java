@@ -28,8 +28,8 @@ public class EventManager {
         if (!eventListeners.containsKey(event)){
             eventListeners.put(event, new ArrayList<OnEventListener>());
         }
-        List<OnEventListener> currentEventListeners = eventListeners.get(event);
-        currentEventListeners.add(listener);
+        List<OnEventListener> currentOnEventListeners = eventListeners.get(event);
+        currentOnEventListeners.add(listener);
     }
 
     public void fire(Event event){
@@ -38,8 +38,8 @@ public class EventManager {
 
     public void fire(Event event, Object param){
         if (eventListeners.containsKey(event)){
-            List<OnEventListener> eventListeners = this.eventListeners.get(event);
-            for (OnEventListener listener : eventListeners) {
+            List<OnEventListener> onEventListeners = this.eventListeners.get(event);
+            for (OnEventListener listener : onEventListeners) {
                 listener.onEvent(event, param);
             }
         }

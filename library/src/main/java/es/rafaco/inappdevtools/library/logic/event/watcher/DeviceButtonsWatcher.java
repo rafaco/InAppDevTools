@@ -52,14 +52,7 @@ public class DeviceButtonsWatcher extends Watcher {
                 FriendlyLog.log("D", "User", "UnknownKey", "Pressed Unknown button: " + param);
             }
         });
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return true;
-    }
-
-    @Override
+    }@Override
     public void start() {
         if (mReceiver != null) {
             getContext().registerReceiver(mReceiver, mFilter);

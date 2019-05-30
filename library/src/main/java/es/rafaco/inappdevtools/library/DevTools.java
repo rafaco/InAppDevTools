@@ -2,6 +2,7 @@ package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.GestureDetector;
 
 //#ifdef MODERN
 import androidx.annotation.NonNull; 
@@ -14,10 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.event.EventManager;
+import es.rafaco.inappdevtools.library.logic.event.watcher.GestureWatcher;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.event.watcher.WatcherManager;
-import es.rafaco.inappdevtools.library.logic.watcher.activityLog.ActivityLogManager;
-import es.rafaco.inappdevtools.library.logic.watcher.activityLog.CustomChuckInterceptor;
+import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.initialization.FirstStartUtil;
@@ -157,9 +158,11 @@ public class DevTools {
     public static Context getAppContext() {
         return appContext;
     }
+
     public static DevToolsConfig getConfig() {
         return config;
     }
+
     public static ToolManager getToolManager() {
         return toolManager;
     }
@@ -179,12 +182,17 @@ public class DevTools {
         }
         return sourcesManager;
     }
-    public static ActivityLogManager getActivityLogManager() {
-        return watcherManager.getActivityLogManager();
-    }
 
     public static DevToolsDatabase getDatabase() {
         return DevToolsDatabase.getInstance();
+    }
+
+    //TODO:
+    public static GestureDetector getGestureDetector() {
+        GestureWatcher watcher = (GestureWatcher) getWatcherManager().getWatcher(GestureWatcher.class);
+
+        if (watcher==null) return null;
+        return watcher.getDetector();
     }
 
     @NonNull

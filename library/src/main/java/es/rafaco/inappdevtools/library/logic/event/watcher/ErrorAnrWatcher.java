@@ -28,14 +28,7 @@ public class ErrorAnrWatcher extends Watcher {
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return false;
-    }
-
-    @Override
+    }@Override
     public void start() {
 
         watchDog = new ANRWatchDog()

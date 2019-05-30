@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.logic.utils;
 import android.content.Context;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DateUtils {
 
@@ -28,7 +29,9 @@ public class DateUtils {
         return relativeDate.toString();
     }
 
-
+    public static String formatNow() {
+        return format(new Date().getTime());
+    }
     public static String format(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         return simpleDateFormat.format(timeMillis);

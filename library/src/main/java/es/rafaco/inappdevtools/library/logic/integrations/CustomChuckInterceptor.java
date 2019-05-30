@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher.activityLog;
+package es.rafaco.inappdevtools.library.logic.integrations;
 
 /*
  * Copyright (C) 2015 Square, Inc, 2017 Jeff Gilfelt.

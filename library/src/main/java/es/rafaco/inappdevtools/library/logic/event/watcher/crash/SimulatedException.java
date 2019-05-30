@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.watcher.crash;
+package es.rafaco.inappdevtools.library.logic.event.watcher.crash;
 
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 

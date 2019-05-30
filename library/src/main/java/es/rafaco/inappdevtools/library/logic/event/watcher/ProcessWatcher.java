@@ -17,9 +17,9 @@ import es.rafaco.inappdevtools.library.logic.event.Event;
 import es.rafaco.inappdevtools.library.logic.event.EventManager;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
-public class ProcessLifecycleWatcher extends Watcher implements LifecycleObserver {
+public class ProcessWatcher extends Watcher implements LifecycleObserver {
 
-    public ProcessLifecycleWatcher(EventManager manager) {
+    public ProcessWatcher(EventManager manager) {
         super(manager);
     }
 
@@ -66,14 +66,7 @@ public class ProcessLifecycleWatcher extends Watcher implements LifecycleObserve
                 FriendlyLog.log("I", "Process", "Destroy", "Process destroyed");
             }
         });
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return false;
-    }
-
-    @Override
+    }@Override
     public void start() {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }

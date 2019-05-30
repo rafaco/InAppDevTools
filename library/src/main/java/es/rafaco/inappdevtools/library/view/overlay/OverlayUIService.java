@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.event.watcher.ActivityWatcher;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -252,8 +253,10 @@ public class OverlayUIService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent){
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
-        DevTools.getActivityLogManager().setLastActivityResumed("");
         Log.w(DevTools.TAG, "OverlayUIService - onTaskRemoved");
+
+        ActivityWatcher activityWatcher = (ActivityWatcher) DevTools.getWatcherManager().getWatcher(ActivityWatcher.class);
+        activityWatcher.setLastActivityResumed("");
     }
 
     @Override

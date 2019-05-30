@@ -56,14 +56,7 @@ public class GestureWatcher extends Watcher {
                 FriendlyLog.log("D", "UserTouch", "Fling", (String)param);
             }
         });
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return true;
-    }
-
-    @Override
+    }@Override
     public void start() {
         //TODO?
     }

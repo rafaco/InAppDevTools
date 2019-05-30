@@ -51,14 +51,7 @@ public class ScreenChangeWatcher extends Watcher {
                 DevTools.showMessage("PRESENTE!");
             }
         });
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return false;
-    }
-
-    @Override
+    }@Override
     public void start() {
         if (mReceiver != null) {
             getContext().registerReceiver(mReceiver, mFilter);

@@ -39,11 +39,6 @@ public class AirplaneModeChangeWatcher extends Watcher {
     }
 
     @Override
-    public boolean onlyForeground() {
-        return true;
-    }
-
-    @Override
     public void start() {
         if (mReceiver != null) {
             getContext().registerReceiver(mReceiver, mFilter);

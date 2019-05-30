@@ -40,14 +40,7 @@ public class ConnectivityChangeWatcher extends Watcher {
                 FriendlyLog.log("D", "Network", "Disconnected", "Disconnected from " + param + " network");
             }
         });
-    }
-
-    @Override
-    public boolean onlyForeground() {
-        return true;
-    }
-
-    @Override
+    }@Override
     public void start() {
         if (mReceiver != null) {
             getContext().registerReceiver(mReceiver, mFilter);

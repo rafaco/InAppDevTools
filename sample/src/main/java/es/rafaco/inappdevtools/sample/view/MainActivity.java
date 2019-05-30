@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return DevTools.getWatcherManager().getGestureDetector().onGenericMotionEvent(event);
+            return DevTools.getGestureDetector().onGenericMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
     }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        DevTools.getWatcherManager().getGestureDetector().onTouchEvent(ev);
+        DevTools.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
 }

@@ -14,10 +14,43 @@ public enum Event {
     PROCESS_ON_PAUSE("process_on_pause"),
     PROCESS_ON_DESTROY("process_on_destroy"),
 
+    //Activity
+    ACTIVITY_OPEN("activity_open"),
+    ACTIVITY_ON_CREATE ("activity_on_create"),
+    ACTIVITY_ON_START("activity_on_start"),
+    ACTIVITY_ON_STOP("activity_on_stop"),
+    ACTIVITY_ON_RESUME("activity_on_resume"),
+    ACTIVITY_ON_PAUSE("activity_on_pause"),
+    ACTIVITY_ON_SAVE_INSTANCE("activity_on_save_instance"),
+    ACTIVITY_ON_DESTROY("activity_on_destroy"),
+
+    //Fragment
+    FRAGMENT_PRE_ATTACHED("fragment_pre_attached"),
+    FRAGMENT_ATTACHED ("fragment_attached"),
+    FRAGMENT_CREATED("fragment_created"),
+    FRAGMENT_ACTIVITY_CREATED("fragment_activity_created"),
+    FRAGMENT_VIEW_CREATED("fragment_view_created"),
+    FRAGMENT_STARTED("fragment_started"),
+    FRAGMENT_RESUMED("fragment_resumed"),
+    FRAGMENT_PAUSED("fragment_paused"),
+    FRAGMENT_STOPPED("fragment_stopped"),
+    FRAGMENT_SAVE_INSTANCE("fragment_save_instance"),
+    FRAGMENT_VIEW_DESTROY("fragment_view_destroy"),
+    FRAGMENT_DESTROY("fragment_destroy"),
+    FRAGMENT_DETACHED("fragment_detached"),
+
     //ScreenChange
     SCREEN_OFF("ScreenOff"),
     SCREEN_ON("ScreenOn"),
     USER_PRESENT("UserPresent"),
+
+    //ScreenChange
+    ORIENTATION_PORTRAIT("orientation_portrait"),
+    ORIENTATION_LANDSCAPE("orientation_landscape"),
+
+    //ScreenChange
+    IMPORTANCE_FOREGROUND("importance_foreground"),
+    IMPORTANCE_BACKGROUND("importance_background"),
 
     //Shake
     SHAKE("Shake"),

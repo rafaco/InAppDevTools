@@ -35,14 +35,20 @@ public class ShakeWatcher extends Watcher {
                 DevTools.openTools(false);
             }
         });
-    }
 
-    @Override
-    public boolean onlyForeground() {
-        return true;
-    }
-
-    @Override
+        eventManager.subscribe(Event.ACTIVITY_ON_RESUME, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                start();
+            }
+        });
+        eventManager.subscribe(Event.ACTIVITY_ON_PAUSE, new EventManager.OnEventListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                stop();
+            }
+        });
+    }@Override
     public void start() {
         sensorManager.registerListener(mReceiver, sensor, SensorManager.SENSOR_DELAY_UI);
     }

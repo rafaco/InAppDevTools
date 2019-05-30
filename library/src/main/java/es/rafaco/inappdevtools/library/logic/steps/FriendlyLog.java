@@ -135,7 +135,7 @@ public class FriendlyLog {
                 return R.drawable.ic_replay_white_24dp;
             } else if (log.getType().equals("Start")) {
                 return R.drawable.ic_flag_white_24dp;
-            } else if (log.getType().equals("FirstStartup")) {
+            } else if (log.getType().equals("FirstStart")) {
                 return R.drawable.ic_fiber_new_white_24dp;
             } else if (log.getType().equals("Navigation")) {
                 return R.drawable.ic_view_carousel_white_24dp;

@@ -16,7 +16,6 @@ public abstract class Watcher {
     }
 
     public abstract void init();
-    public abstract boolean onlyForeground();
     public abstract void start();
     public abstract void stop();
 

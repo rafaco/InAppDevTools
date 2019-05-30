@@ -1,5 +1,12 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 //#ifdef MODERN
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -21,13 +28,6 @@ import androidx.paging.PagedList;
 //@import android.arch.paging.LivePagedListBuilder;
 //@import android.arch.paging.PagedList;
 //#endif
-
-import android.content.DialogInterface;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -227,21 +227,20 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onClearButton() {
-        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
-                .setTitle("Clean log history")
-                .setMessage("Do you want to wipe out all log history? You can not undo a wipe out. (")
+                .setTitle("Confirm full wipe out")
+                .setMessage("Do you want to completely clean the log history? You can not undo this operation")
                 .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, selectedLogLevel, new DialogInterface.OnClickListener(){
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which!=selectedLogLevel) {
-                            selectedLogLevel = which;
-                            dataSourceFactory.setLevelString(getSelectedVerbosity());
-                            //TODO: Research if needed - Commented on AndroidX migration
-                            //logList.getValue().getDataSource().invalidate();
-                        }
                         dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Clean all", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearAll();
                     }
                 });
 

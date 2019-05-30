@@ -19,7 +19,7 @@ import java.util.TooManyListenersException;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
-import es.rafaco.inappdevtools.library.logic.watcher.crash.SimulatedException;
+import es.rafaco.inappdevtools.library.logic.event.watcher.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
