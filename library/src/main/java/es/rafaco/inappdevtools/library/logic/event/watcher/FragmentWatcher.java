@@ -3,11 +3,11 @@ package es.rafaco.inappdevtools.library.logic.event.watcher;
 import android.app.Activity;
 
 //#ifdef MODERN
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+//@import androidx.appcompat.app.AppCompatActivity;
+//@import androidx.fragment.app.FragmentManager;
 //#else
-//@import android.support.v4.app.FragmentManager;
-//@import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.event.Event;
@@ -32,7 +32,7 @@ public class FragmentWatcher extends Watcher {
             }
         });
 
-        eventManager.subscribe(Event.ACTIVITY_ON_CREATE, new EventManager.OnEventListener() {
+        eventManager.subscribe(Event.ACTIVITY_ON_DESTROY, new EventManager.OnEventListener() {
             @Override
             public void onEvent(Event event, Object param) {
                 unregisterFragmentLifecycleCallbacks((Activity)param);

@@ -8,25 +8,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.widget.SearchView;
+//@import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.lifecycle.LiveData;
+//@import androidx.lifecycle.Observer;
+//@import androidx.lifecycle.ProcessLifecycleOwner;
+//@import androidx.paging.LivePagedListBuilder;
+//@import androidx.paging.PagedList;
 //#else
-//@import android.support.v7.app.AlertDialog;
-//@import android.support.v7.widget.SearchView;
-//@import android.support.v7.widget.RecyclerView;
-//@import android.support.v7.widget.LinearLayoutManager;
-//@import android.arch.lifecycle.LiveData;
-//@import android.arch.lifecycle.Observer;
-//@import android.arch.lifecycle.ProcessLifecycleOwner;
-//@import android.arch.paging.LivePagedListBuilder;
-//@import android.arch.paging.PagedList;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 //#endif
 
 import com.google.gson.Gson;
@@ -166,8 +166,7 @@ public class FriendlyLogScreen extends OverlayScreen {
             @Override
             public boolean onQueryTextChange(String newText) {
                 dataSourceFactory.setText(newText);
-                //TODO: Research if needed - Commented on AndroidX migration
-                //logList.getValue().getDataSource().invalidate();
+                adapter.getCurrentList().getDataSource().invalidate();
                 return false;
             }
         });
@@ -203,8 +202,7 @@ public class FriendlyLogScreen extends OverlayScreen {
                         if (which!=selectedLogLevel) {
                             selectedLogLevel = which;
                             dataSourceFactory.setLevelString(getSelectedVerbosity());
-                            //TODO: Research if needed - Commented on AndroidX migration
-                            //logList.getValue().getDataSource().invalidate();
+                            adapter.getCurrentList().getDataSource().invalidate();
                         }
                         dialog.dismiss();
                     }

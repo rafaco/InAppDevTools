@@ -43,7 +43,6 @@ public class EventManager {
                 listener.onEvent(event, param);
             }
         }
-        eventListeners.put(event, new ArrayList<OnEventListener>());
     }
 
     public Context getContext() {

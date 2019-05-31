@@ -3,7 +3,6 @@ package es.rafaco.inappdevtools.library.logic.event;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public enum Event {
 
     //Process

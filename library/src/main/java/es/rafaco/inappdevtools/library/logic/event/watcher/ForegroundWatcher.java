@@ -74,8 +74,8 @@ public class ForegroundWatcher extends Watcher {
                 @Override
                 public void run() {
                     mInBackground = true;
-                    mBackgroundTransition = null;
                     eventManager.fire(Event.IMPORTANCE_BACKGROUND);
+                    mBackgroundTransition = null;
                 }
             };
             mBackgroundDelayHandler.postDelayed(mBackgroundTransition, BACKGROUND_DELAY);
