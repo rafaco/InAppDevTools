@@ -15,25 +15,25 @@ import android.view.View;
 import android.widget.Toast;
 
 //#ifdef MODERN
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.FileProvider;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.app.AppCompatActivity;
+//@import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.appcompat.widget.AppCompatButton;
+//@import androidx.core.content.FileProvider;
+//@import androidx.core.view.ViewCompat;
+//@import androidx.recyclerview.widget.DefaultItemAnimator;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v7.widget.AppCompatButton;
-//@import android.support.v7.widget.RecyclerView;
-//@import android.support.v4.content.FileProvider;
-//@import android.support.v4.view.ViewCompat;
-//@import android.support.v7.app.AlertDialog;
-//@import android.support.v7.app.AppCompatActivity;
-//@import android.support.v7.view.ContextThemeWrapper;
-//@import android.support.v7.widget.DefaultItemAnimator;
-//@import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
+import android.support.v4.content.FileProvider;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 //#endif
 
 import java.io.File;

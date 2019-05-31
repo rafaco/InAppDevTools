@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-public class CoordinatorLayout extends androidx.coordinatorlayout.widget.CoordinatorLayout {
+//@import androidx.annotation.NonNull;
+//@import androidx.annotation.Nullable;
+//@public class CoordinatorLayout extends androidx.coordinatorlayout.widget.CoordinatorLayout {
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.annotation.Nullable;
-//@public class CoordinatorLayout extends android.support.design.widget.CoordinatorLayout {
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+public class CoordinatorLayout extends android.support.design.widget.CoordinatorLayout {
 //#endif
 
     public CoordinatorLayout(@NonNull Context context) {

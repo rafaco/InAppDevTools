@@ -8,9 +8,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.io.File;

@@ -5,13 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
+//@import androidx.annotation.NonNull;
+//@import androidx.paging.PagedListAdapter;
+//@import androidx.recyclerview.widget.DiffUtil;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.arch.paging.PagedListAdapter;
-//@import  android.support.v7.util.DiffUtil;
+import android.support.annotation.NonNull;
+import android.arch.paging.PagedListAdapter;
+import  android.support.v7.util.DiffUtil;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;

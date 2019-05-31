@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class TabLayout extends com.google.android.material.tabs.TabLayout {
+//@public class TabLayout extends com.google.android.material.tabs.TabLayout {
 //#else
-//@public class TabLayout extends android.support.design.widget.TabLayout {
+public class TabLayout extends android.support.design.widget.TabLayout {
 //#endif
 
     public TabLayout(Context context) {

@@ -6,9 +6,9 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.lang.reflect.Field;

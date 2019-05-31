@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.core.content.ContextCompat;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v4.content.ContextCompat;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;

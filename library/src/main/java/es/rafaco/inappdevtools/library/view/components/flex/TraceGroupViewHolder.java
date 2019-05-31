@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.core.content.ContextCompat;
+//@import androidx.core.content.ContextCompat;
 //#else
-//@import android.support.v4.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 //#endif
 
 import com.alorma.timeline.TimelineView;

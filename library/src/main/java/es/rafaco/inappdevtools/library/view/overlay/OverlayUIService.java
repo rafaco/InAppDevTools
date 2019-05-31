@@ -8,9 +8,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 //#ifdef MODERN
-import androidx.annotation.Nullable;
+//@import androidx.annotation.Nullable;
 //#else
-//@import android.support.annotation.Nullable;
+import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;

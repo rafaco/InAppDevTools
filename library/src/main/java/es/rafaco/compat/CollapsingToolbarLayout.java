@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class CollapsingToolbarLayout extends com.google.android.material.appbar.CollapsingToolbarLayout {
+//@public class CollapsingToolbarLayout extends com.google.android.material.appbar.CollapsingToolbarLayout {
 //#else
-//@public class CollapsingToolbarLayout extends android.support.design.widget.CollapsingToolbarLayout {
+public class CollapsingToolbarLayout extends android.support.design.widget.CollapsingToolbarLayout {
 //#endif
 
     public CollapsingToolbarLayout(Context context) {

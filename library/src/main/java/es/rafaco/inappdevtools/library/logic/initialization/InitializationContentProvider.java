@@ -9,9 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 //#ifdef MODERN
-import androidx.annotation.Nullable;
+//@import androidx.annotation.Nullable;
 //#else
-//@import android.support.annotation.Nullable;
+import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;

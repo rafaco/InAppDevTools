@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class AppCompatButton extends androidx.appcompat.widget.AppCompatButton {
+//@public class AppCompatButton extends androidx.appcompat.widget.AppCompatButton {
 //#else
-//@public class AppCompatButton extends android.support.v7.widget.AppCompatButton {
+public class AppCompatButton extends android.support.v7.widget.AppCompatButton {
 //#endif
 
     public AppCompatButton(Context context) {

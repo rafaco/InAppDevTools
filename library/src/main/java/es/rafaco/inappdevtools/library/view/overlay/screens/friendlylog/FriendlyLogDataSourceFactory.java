@@ -3,9 +3,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 import android.util.Log;
 
 //#ifdef MODERN
-import androidx.paging.DataSource;
+//@import androidx.paging.DataSource;
 //#else
-//@import android.arch.paging.DataSource;
+import android.arch.paging.DataSource;
 //#endif
 
 import java.util.Arrays;

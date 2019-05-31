@@ -13,13 +13,13 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.annotation.NonNull;
+//@import androidx.core.content.ContextCompat;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.v4.content.ContextCompat;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;

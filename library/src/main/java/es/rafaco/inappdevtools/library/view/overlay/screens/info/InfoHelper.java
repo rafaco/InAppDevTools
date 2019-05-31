@@ -4,9 +4,9 @@ import android.os.Build;
 import android.util.Log;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.io.BufferedReader;

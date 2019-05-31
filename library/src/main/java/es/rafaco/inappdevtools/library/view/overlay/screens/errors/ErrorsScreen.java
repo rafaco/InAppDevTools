@@ -1,21 +1,21 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 //#ifdef MODERN
-import androidx.core.view.ViewCompat;
-import androidx.annotation.NonNull;
-import androidx.room.InvalidationTracker;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.core.view.ViewCompat;
+//@import androidx.annotation.NonNull;
+//@import androidx.room.InvalidationTracker;
+//@import androidx.recyclerview.widget.DefaultItemAnimator;
+//@import androidx.recyclerview.widget.DividerItemDecoration;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.arch.persistence.room.InvalidationTracker;
-//@import android.support.annotation.NonNull;
-//@import android.support.v4.view.ViewCompat;
-//@import android.support.v7.widget.DefaultItemAnimator;
-//@import android.support.v7.widget.DividerItemDecoration;
-//@import android.support.v7.widget.LinearLayoutManager;
-//@import android.support.v7.widget.RecyclerView;
+import android.arch.persistence.room.InvalidationTracker;
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import android.os.AsyncTask;

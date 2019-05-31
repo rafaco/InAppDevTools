@@ -1,9 +1,9 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
 //#ifdef MODERN
-import androidx.sqlite.db.SupportSQLiteDatabase;
+//@import androidx.sqlite.db.SupportSQLiteDatabase;
 //#else
-//@import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 //#endif
 
 import android.database.Cursor;

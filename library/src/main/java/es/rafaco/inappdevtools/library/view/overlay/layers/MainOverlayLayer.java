@@ -15,13 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 //#ifdef MODERN
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
+//@import androidx.appcompat.widget.AppCompatImageView;
+//@import androidx.appcompat.widget.Toolbar;
+//@import androidx.core.widget.NestedScrollView;
 //#else
-//@import android.support.v4.widget.NestedScrollView;
-//@import android.support.v7.widget.AppCompatImageView;
-//@import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.Toolbar;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;

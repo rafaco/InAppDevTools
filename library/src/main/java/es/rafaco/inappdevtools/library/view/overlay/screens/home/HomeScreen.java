@@ -5,9 +5,9 @@ import android.os.Looper;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;

@@ -4,11 +4,11 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.annotation.NonNull;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import com.google.gson.Gson;

@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 
 //#ifdef MODERN
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+//@import androidx.annotation.RequiresApi;
+//@import androidx.fragment.app.Fragment;
+//@import androidx.fragment.app.FragmentManager;
 //#else
-//@import android.support.annotation.RequiresApi;
-//@import android.app.Fragment;
-//@import android.app.FragmentManager;
+import android.support.annotation.RequiresApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;

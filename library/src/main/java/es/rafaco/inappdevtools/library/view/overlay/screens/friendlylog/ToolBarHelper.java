@@ -6,13 +6,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 //#ifdef MODERN
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import static androidx.appcompat.R.*;
+//@import androidx.appcompat.widget.SearchView;
+//@import androidx.appcompat.widget.Toolbar;
+//@import static androidx.appcompat.R.*;
 //#else
-//@import android.support.v7.widget.SearchView;
-//@import android.support.v7.widget.Toolbar;
-//@import static android.support.v7.appcompat.R.*;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import static android.support.v7.appcompat.R.*;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;

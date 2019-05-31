@@ -8,9 +8,9 @@ import android.content.pm.ProviderInfo;
 import android.os.Debug;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.util.Calendar;

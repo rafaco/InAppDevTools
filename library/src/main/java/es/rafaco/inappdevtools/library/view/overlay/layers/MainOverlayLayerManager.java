@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 //#ifdef MODERN
-import androidx.appcompat.widget.Toolbar;
+//@import androidx.appcompat.widget.Toolbar;
 //#else
-//@import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 //#endif
 
 import java.util.ArrayList;

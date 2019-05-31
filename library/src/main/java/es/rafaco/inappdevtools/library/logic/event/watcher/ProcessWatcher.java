@@ -2,15 +2,15 @@ package es.rafaco.inappdevtools.library.logic.event.watcher;
 
 
 //#ifdef MODERN
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
+//@import androidx.lifecycle.Lifecycle;
+//@import androidx.lifecycle.LifecycleObserver;
+//@import androidx.lifecycle.OnLifecycleEvent;
+//@import androidx.lifecycle.ProcessLifecycleOwner;
 //#else
-//@import android.arch.lifecycle.Lifecycle;
-//@import android.arch.lifecycle.LifecycleObserver;
-//@import android.arch.lifecycle.OnLifecycleEvent;
-//@import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.event.Event;

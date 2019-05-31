@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class FloatingActionButton extends com.google.android.material.floatingactionbutton.FloatingActionButton {
+//@public class FloatingActionButton extends com.google.android.material.floatingactionbutton.FloatingActionButton {
 //#else
-//@public class FloatingActionButton extends android.support.design.widget.FloatingActionButton {
+public class FloatingActionButton extends android.support.design.widget.FloatingActionButton {
 //#endif
 
     public FloatingActionButton(Context context) {

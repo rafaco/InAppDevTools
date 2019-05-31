@@ -14,13 +14,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+//@import androidx.annotation.NonNull;
+//@import androidx.core.app.NotificationCompat;
+//@import androidx.core.app.NotificationManagerCompat;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.v4.app.NotificationCompat;
-//@import android.support.v4.app.NotificationManagerCompat;
+import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 //#endif
 
 import java.util.Date;

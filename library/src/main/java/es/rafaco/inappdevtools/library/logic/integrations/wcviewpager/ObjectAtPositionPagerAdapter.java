@@ -26,9 +26,9 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.viewpager.widget.PagerAdapter;
+//@import androidx.viewpager.widget.PagerAdapter;
 //#else
-//@import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.PagerAdapter;
 //#endif
 
 /**

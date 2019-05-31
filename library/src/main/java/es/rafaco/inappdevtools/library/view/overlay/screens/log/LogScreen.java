@@ -15,19 +15,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.annotation.NonNull;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.widget.SearchView;
+//@import androidx.recyclerview.widget.DefaultItemAnimator;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.v7.app.AlertDialog;
-//@import android.support.v7.widget.SearchView;
-//@import android.support.v7.widget.DefaultItemAnimator;
-//@import android.support.v7.widget.LinearLayoutManager;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;

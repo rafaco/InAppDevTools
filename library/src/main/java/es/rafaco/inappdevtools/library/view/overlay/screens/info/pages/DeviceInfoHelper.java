@@ -7,9 +7,9 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.util.List;

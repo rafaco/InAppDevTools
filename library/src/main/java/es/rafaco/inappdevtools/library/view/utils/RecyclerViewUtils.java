@@ -1,9 +1,9 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
 //#ifdef MODERN
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import android.view.View;

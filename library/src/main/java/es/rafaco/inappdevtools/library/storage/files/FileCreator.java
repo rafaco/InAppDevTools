@@ -3,9 +3,9 @@ package es.rafaco.inappdevtools.library.storage.files;
 import android.util.Log;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
+//@import androidx.annotation.NonNull;
 //#else
-//@import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.io.File;

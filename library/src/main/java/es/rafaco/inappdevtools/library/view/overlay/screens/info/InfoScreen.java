@@ -5,13 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
-import com.google.android.material.tabs.TabLayout;
+//@import androidx.annotation.NonNull;
+//@import androidx.viewpager.widget.ViewPager;
+//@import com.google.android.material.tabs.TabLayout;
 //#else
-//@import android.support.annotation.NonNull;
-//@import android.support.design.widget.TabLayout;
-//@import android.support.v4.view.ViewPager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 //#endif
 
 import java.util.Timer;

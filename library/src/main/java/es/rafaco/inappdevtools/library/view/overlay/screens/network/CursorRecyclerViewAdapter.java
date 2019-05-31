@@ -21,9 +21,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 //#ifdef MODERN
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 /**

@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 
 //#ifdef MODERN
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.app.AppCompatActivity;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //#else
-//@import android.support.v7.app.AlertDialog;
-//@import android.support.v7.app.AppCompatActivity;
-//@import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 //#endif
 
 

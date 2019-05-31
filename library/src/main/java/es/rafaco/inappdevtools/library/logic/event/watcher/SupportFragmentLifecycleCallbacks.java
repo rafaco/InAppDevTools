@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 
 //#ifdef MODERN
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+//@import androidx.fragment.app.Fragment;
+//@import androidx.fragment.app.FragmentManager;
 //#else
-//@import android.support.v4.app.Fragment;
-//@import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;

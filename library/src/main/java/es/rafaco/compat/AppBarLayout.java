@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class AppBarLayout extends com.google.android.material.appbar.AppBarLayout {
+//@public class AppBarLayout extends com.google.android.material.appbar.AppBarLayout {
 //#else
-//@public class AppBarLayout extends android.support.design.widget.AppBarLayout {
+public class AppBarLayout extends android.support.design.widget.AppBarLayout {
 //#endif
 
     public AppBarLayout(Context context) {

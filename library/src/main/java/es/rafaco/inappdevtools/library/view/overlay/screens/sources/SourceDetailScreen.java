@@ -11,11 +11,11 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.widget.SearchView;
 //#else
-//@import android.support.v7.app.AlertDialog;
-//@import android.support.v7.widget.SearchView;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 //#endif
 
 import com.google.gson.Gson;

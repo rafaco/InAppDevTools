@@ -6,11 +6,11 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 //#ifdef MODERN
-import androidx.viewpager.widget.ViewPager;
-import com.google.android.material.tabs.TabLayout;
+//@import androidx.viewpager.widget.ViewPager;
+//@import com.google.android.material.tabs.TabLayout;
 //#else
-//@import android.support.design.widget.TabLayout;
-//@import android.support.v4.view.ViewPager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 //#endif
 
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;

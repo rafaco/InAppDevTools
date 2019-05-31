@@ -7,9 +7,9 @@ import android.os.Build;
 import android.text.Html;
 
 //#ifdef MODERN
-import androidx.core.content.FileProvider;
+//@import androidx.core.content.FileProvider;
 //#else
-//@import android.support.v4.content.FileProvider;
+import android.support.v4.content.FileProvider;
 //#endif
 
 import java.io.File;

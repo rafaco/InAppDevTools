@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-public class NestedScrollView extends androidx.core.widget.NestedScrollView {
+//@public class NestedScrollView extends androidx.core.widget.NestedScrollView {
 //#else
-//@public class NestedScrollView extends android.support.v4.widget.NestedScrollView {
+public class NestedScrollView extends android.support.v4.widget.NestedScrollView {
 //#endif
 
     public NestedScrollView(Context context) {

@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.core.view.ViewCompat;
+//@import androidx.appcompat.widget.AppCompatButton;
+//@import androidx.recyclerview.widget.DefaultItemAnimator;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v4.view.ViewCompat;
-//@import android.support.v7.widget.AppCompatButton;
-//@import android.support.v7.widget.DefaultItemAnimator;
-//@import android.support.v7.widget.LinearLayoutManager;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;

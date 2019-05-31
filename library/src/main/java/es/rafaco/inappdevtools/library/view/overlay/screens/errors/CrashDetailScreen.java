@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.appcompat.widget.AppCompatButton;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-//@import android.support.v7.widget.AppCompatButton;
-//@import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.List;

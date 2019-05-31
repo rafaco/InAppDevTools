@@ -4,11 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef MODERN
-import androidx.annotation.Nullable;
-public class ToolBar extends androidx.appcompat.widget.Toolbar {
+//@import androidx.annotation.Nullable;
+//@public class ToolBar extends androidx.appcompat.widget.Toolbar {
 //#else
-//@import android.support.annotation.Nullable;
-//@public class ToolBar extends android.support.v7.widget.Toolbar {
+import android.support.annotation.Nullable;
+public class ToolBar extends android.support.v7.widget.Toolbar {
 //#endif
     
     public ToolBar(Context context) {

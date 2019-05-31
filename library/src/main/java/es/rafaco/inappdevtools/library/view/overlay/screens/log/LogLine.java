@@ -6,9 +6,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 //#ifdef MODERN
-import androidx.core.content.ContextCompat;
+//@import androidx.core.content.ContextCompat;
 //#else
-//@import android.support.v4.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 //#endif
 
 

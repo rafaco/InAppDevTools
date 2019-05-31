@@ -8,11 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 //#ifdef MODERN
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
+//@import androidx.core.content.ContextCompat;
+//@import androidx.cardview.widget.CardView;
 //#else
-//@import android.support.v4.content.ContextCompat;
-//@import android.support.v7.widget.CardView;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 //#endif
 
 import com.alorma.timeline.TimelineView;

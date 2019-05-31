@@ -30,11 +30,11 @@ import android.view.Gravity;
 import android.view.View;
 
 //#ifdef MODERN
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+//@import androidx.viewpager.widget.PagerAdapter;
+//@import androidx.viewpager.widget.ViewPager;
 //#else
-//@import android.support.v4.view.PagerAdapter;
-//@import android.support.v4.view.ViewPager;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 //#endif
 
 
