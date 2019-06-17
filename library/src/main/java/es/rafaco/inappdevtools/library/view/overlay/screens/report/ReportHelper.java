@@ -15,13 +15,13 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
 
-public class ReportHelper extends ToolHelper{
+public class ReportHelper extends OverlayScreenHelper {
 
     @Override
     public String getReportPath() {

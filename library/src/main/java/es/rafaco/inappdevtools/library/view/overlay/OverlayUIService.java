@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.event.watcher.ActivityWatcher;
+import es.rafaco.inappdevtools.library.logic.events.detectors.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -258,7 +258,7 @@ public class OverlayUIService extends Service {
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
         Log.w(DevTools.TAG, "OverlayUIService - onTaskRemoved");
 
-        ActivityWatcher activityWatcher = (ActivityWatcher) DevTools.getWatcherManager().getWatcher(ActivityWatcher.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) DevTools.getEventDetector(ActivityEventDetector.class);
         activityWatcher.setLastActivityResumed("");
     }
 

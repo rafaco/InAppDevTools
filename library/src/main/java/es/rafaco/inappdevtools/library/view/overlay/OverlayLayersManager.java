@@ -18,10 +18,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.IconOverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.RemoveOverlayLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.*;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
@@ -131,7 +128,7 @@ public class OverlayLayersManager {
         ((OverlayUIService)context).stopSelf();
     }
 
-    /*  Implement Touch Listener to Icon OverlayLayer Root View
+    /*  Implement Touch Listener2 to Icon OverlayLayer Root View
      *   Control Drag and move icon view using user's touch action.  */
     private void implementTouchListenerToIconWidgetView() {
         final View iconWidgetView = getView(OverlayLayer.Type.ICON);

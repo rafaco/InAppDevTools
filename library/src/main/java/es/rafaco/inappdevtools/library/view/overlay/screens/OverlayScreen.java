@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;

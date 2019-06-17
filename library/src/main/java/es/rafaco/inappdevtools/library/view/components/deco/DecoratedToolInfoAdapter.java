@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.tools.ErrorsTool;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 public class DecoratedToolInfoAdapter
@@ -37,10 +36,6 @@ public class DecoratedToolInfoAdapter
     @Override
     public DecoratedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DecoratedViewHolder(parent, switchMode);
-    }
-
-    public void update(final int i, Class<ErrorsTool> errorsToolClass) {
-        new ErrorsTool().updateHomeInfo(this);
     }
 
     @Override

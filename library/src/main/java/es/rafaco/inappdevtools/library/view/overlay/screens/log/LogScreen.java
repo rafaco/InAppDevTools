@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -179,7 +179,7 @@ public class LogScreen extends OverlayScreen {
     }
 
     private void onSaveButton() {
-        ToolHelper helper = new LogHelper();
+        OverlayScreenHelper helper = new LogHelper();
         String path = helper.getReportPath();
         DevTools.showMessage("Log stored to " + path);
     }

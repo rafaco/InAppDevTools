@@ -37,7 +37,7 @@ import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -219,7 +219,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onSaveButton() {
-        ToolHelper helper = new LogHelper();
+        OverlayScreenHelper helper = new LogHelper();
         String path = (String) helper.getReportPath();
         DevTools.showMessage("Log stored to " + path);
     }

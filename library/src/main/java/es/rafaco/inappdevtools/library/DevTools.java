@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.logic.event.EventManager;
-import es.rafaco.inappdevtools.library.logic.event.watcher.GestureWatcher;
+import es.rafaco.inappdevtools.library.logic.events.EventDetector;
+import es.rafaco.inappdevtools.library.logic.events.EventManager;
+import es.rafaco.inappdevtools.library.logic.events.detectors.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.logic.event.watcher.WatcherManager;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
@@ -28,7 +28,6 @@ import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
-import es.rafaco.inappdevtools.library.tools.ToolManager;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
@@ -49,7 +48,6 @@ public class DevTools {
 
     private static Context appContext;
     private static DevToolsConfig config;
-    private static ToolManager toolManager;
     private static EventManager eventManager;
     private static SourcesManager sourcesManager;
 
@@ -92,7 +90,6 @@ public class DevTools {
 
 
         appContext = context.getApplicationContext();
-        toolManager = new ToolManager(appContext);
         eventManager = new EventManager(appContext);
 
         //Lazy initialized
@@ -161,16 +158,12 @@ public class DevTools {
         return config;
     }
 
-    public static ToolManager getToolManager() {
-        return toolManager;
-    }
-
     public static EventManager getEventManager() {
         return eventManager;
     }
 
-    public static WatcherManager getWatcherManager() {
-        return eventManager.getWatcherManager();
+    public static EventDetector getEventDetector(Class<? extends EventDetector> className) {
+        return eventManager.getEventDetectorsManager().get(className);
     }
 
     public static SourcesManager getSourcesManager() {
@@ -187,7 +180,7 @@ public class DevTools {
 
     //TODO:
     public static GestureDetector getGestureDetector() {
-        GestureWatcher watcher = (GestureWatcher) getWatcherManager().getWatcher(GestureWatcher.class);
+        GestureEventDetector watcher = (GestureEventDetector) getEventDetector(GestureEventDetector.class);
 
         if (watcher==null) return null;
         return watcher.getDetector();

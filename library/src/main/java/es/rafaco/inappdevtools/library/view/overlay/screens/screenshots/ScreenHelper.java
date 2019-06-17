@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
 import android.graphics.Bitmap;
-import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
@@ -15,16 +14,15 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.storage.files.MediaScannerUtils;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
-public class ScreenHelper extends ToolHelper{
+public class ScreenHelper extends OverlayScreenHelper {
 
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 

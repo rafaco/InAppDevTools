@@ -1,13 +1,13 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 
 
-public class AnrHelper extends ToolHelper {
+public class AnrHelper extends OverlayScreenHelper {
 
 
     @Override

@@ -265,21 +265,7 @@ public class MainOverlayLayerManager {
         return screenToolbar;
     }
 
-
-    //TODO: remove ALL related registered screens????
-    //
-    //
-    public List<String> getRegisteredScreens(){
-        List<String> mainScreens = new ArrayList<>();
-        for (Class<? extends OverlayScreen> screen : registeredScreens) {
-            mainScreens.add(screen.getSimpleName());
-        }
-        return mainScreens;
-    }
-
     public void registerScreen(Class<? extends OverlayScreen> screenClass){
-
-        //TODO: if ((isClass(className)){
         registeredScreens.add(screenClass);
     }
 

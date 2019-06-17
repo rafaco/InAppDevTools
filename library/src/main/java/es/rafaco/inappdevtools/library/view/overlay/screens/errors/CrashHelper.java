@@ -9,12 +9,12 @@ import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.tools.ToolHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 
-public class CrashHelper extends ToolHelper{
+public class CrashHelper extends OverlayScreenHelper {
 
     public static final String CAUSED_BY = "Caused by:";
 
