@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
-
 public class InitializationContentProvider extends ContentProvider {
 
     private static final String META_DATA_KEY = "devtools_auto_init_enabled";

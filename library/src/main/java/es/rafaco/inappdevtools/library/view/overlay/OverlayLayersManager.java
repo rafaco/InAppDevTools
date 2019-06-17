@@ -123,7 +123,7 @@ public class OverlayLayersManager {
     }
 
     private void onIconWidgetClick() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW, null);
         context.startService(intent);
     }
 

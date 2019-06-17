@@ -51,7 +51,6 @@ public class DevTools {
     private static DevToolsConfig config;
     private static ToolManager toolManager;
     private static EventManager eventManager;
-    private static WatcherManager watcherManager;
     private static SourcesManager sourcesManager;
 
     public static int readerCounter = 0;
@@ -95,7 +94,6 @@ public class DevTools {
         appContext = context.getApplicationContext();
         toolManager = new ToolManager(appContext);
         eventManager = new EventManager(appContext);
-        watcherManager = new WatcherManager(appContext);
 
         //Lazy initialized
         //sourcesManager = new SourcesManager(appContext);
@@ -172,7 +170,7 @@ public class DevTools {
     }
 
     public static WatcherManager getWatcherManager() {
-        return watcherManager;
+        return eventManager.getWatcherManager();
     }
 
     public static SourcesManager getSourcesManager() {
@@ -303,7 +301,7 @@ public class DevTools {
             return;
         }
 
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.MAIN, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW, null);
         getAppContext().startService(intent);
     }
 
@@ -380,7 +378,7 @@ public class DevTools {
             onForceCloseRunnable.run();
 
         android.util.Log.w(DevTools.TAG, "Stopping watchers");
-        watcherManager.destroy();
+        eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);

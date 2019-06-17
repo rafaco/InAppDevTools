@@ -16,15 +16,13 @@ import es.rafaco.inappdevtools.library.logic.event.watcher.crash.CrashHandler;
 public class WatcherManager {
 
     private final Context context;
+    private final EventManager eventManager;
     private List<Watcher> watchers = new ArrayList<>();
 
-    public WatcherManager(Context context) {
-        this.context = context;
+    public WatcherManager(EventManager eventManager) {
+        this.eventManager = eventManager;
+        this.context = eventManager.getContext();
         init(DevTools.getConfig());
-    }
-
-    protected EventManager getEventManager(){
-        return DevTools.getEventManager();
     }
 
     public void init(DevToolsConfig config) {
@@ -55,7 +53,7 @@ public class WatcherManager {
 
     private void initWatcher(Class<? extends Watcher> className) {
         Watcher watcher = new ClassHelper<Watcher>().createClass(className,
-                EventManager.class, getEventManager());
+                EventManager.class, eventManager);
         if (watcher!= null){
             watcher.init();
             watchers.add(watcher);
@@ -92,7 +90,7 @@ public class WatcherManager {
 
 
 
-
+    //TODO: Refactor into an isolated watcher
     private void startCrashHandler() {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {

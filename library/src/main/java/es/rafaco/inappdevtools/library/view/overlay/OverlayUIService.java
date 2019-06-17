@@ -46,8 +46,19 @@ public class OverlayUIService extends Service {
     private static Boolean initialised = false;
     private String lastRequestParam;
 
-    public enum IntentAction { PERMISSION_GRANTED, RESTART_APP, CLOSE_APP, EXCEPTION, REPORT, SCREEN, TOOL, MAIN, ICON,
-        NAVIGATE_TO, NAVIGATE_BACK, HIDE, NAVIGATE_HOME, FORCE_CLOSE;
+    public enum IntentAction {
+        PERMISSION_GRANTED,
+        NAVIGATE_HOME,
+        NAVIGATE_BACK,
+        NAVIGATE_TO,
+        SHOW,
+        HIDE,
+        ICON,
+        REPORT,
+        SCREEN,
+        TOOL,
+        RESTART_APP,
+        CLOSE_APP,
     }
 
     private OverlayLayersManager overlayLayersManager;
@@ -159,10 +170,6 @@ public class OverlayUIService extends Service {
     private void processIntentAction(IntentAction action, String property) {
         Log.v(DevTools.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
 
-        if (action.equals(IntentAction.FORCE_CLOSE)) {
-            stopService();
-        }
-
         if (!isInitialised(action, property))
             return;
 
@@ -171,10 +178,20 @@ public class OverlayUIService extends Service {
             //TODO: remove
         }
 
-        if (action.equals(IntentAction.TOOL)){
-            navigateTo(property.replace(" Tool", ""));
+        if (action.equals(IntentAction.NAVIGATE_HOME)){
+            navigateHome();
         }
-        else if (action.equals(IntentAction.MAIN)) {
+        else if (action.equals(IntentAction.NAVIGATE_BACK)){
+            navigateBack();
+        }
+        else if (action.equals(IntentAction.NAVIGATE_TO)){
+            String cleanName = property.replace(" Tool", "");
+            navigateTo(cleanName, lastRequestParam);
+        }
+        else if (action.equals(IntentAction.HIDE) || action.equals(IntentAction.ICON)){
+            hide();
+        }
+        else if (action.equals(IntentAction.SHOW)) {
             if (mainOverlayLayerManager.getCurrentScreen() == null){
                 navigateHome();
             }
@@ -185,20 +202,6 @@ public class OverlayUIService extends Service {
         }
         else if (action.equals(IntentAction.SCREEN)){
             navigateTo(ReportScreen.class.getSimpleName());
-        }
-
-        else if (action.equals(IntentAction.NAVIGATE_TO)){
-            String cleanName = property.replace(" Tool", "");
-            navigateTo(cleanName, lastRequestParam);
-        }
-        else if (action.equals(IntentAction.NAVIGATE_BACK)){
-            navigateBack();
-        }
-        else if (action.equals(IntentAction.NAVIGATE_HOME)){
-            navigateHome();
-        }
-        else if (action.equals(IntentAction.HIDE) || action.equals(IntentAction.ICON)){
-            hide();
         }
         else if (action.equals(IntentAction.CLOSE_APP)){
             DevTools.forceCloseApp(false);

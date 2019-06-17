@@ -9,11 +9,16 @@ import java.util.Map;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.DevToolsConfig;
+import es.rafaco.inappdevtools.library.logic.event.reactor.EventReactor;
+import es.rafaco.inappdevtools.library.logic.event.reactor.OverlaySyncEventReactor;
+import es.rafaco.inappdevtools.library.logic.event.watcher.WatcherManager;
 
 public class EventManager {
 
     private final Context context;
+    private WatcherManager watcherManager;
     private Map<Event, List<OnEventListener>> eventListeners = new HashMap<>();
+    private List<EventReactor> eventReactors = new ArrayList<>();
 
     public EventManager(Context context) {
         this.context = context;
@@ -21,7 +26,8 @@ public class EventManager {
     }
 
     public void init(DevToolsConfig config) {
-
+        watcherManager = new WatcherManager(this);
+        eventReactors.add(new OverlaySyncEventReactor(this));
     }
 
     public void subscribe(Event event, OnEventListener listener){
@@ -47,6 +53,15 @@ public class EventManager {
 
     public Context getContext() {
         return context;
+    }
+
+    public WatcherManager getWatcherManager() {
+        return watcherManager;
+    }
+
+    public void destroy() {
+        eventListeners.clear();
+        watcherManager.destroy();
     }
 
     public interface OnEventListener {

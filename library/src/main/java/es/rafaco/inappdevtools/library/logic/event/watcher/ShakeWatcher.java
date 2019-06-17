@@ -48,7 +48,9 @@ public class ShakeWatcher extends Watcher {
                 stop();
             }
         });
-    }@Override
+    }
+
+    @Override
     public void start() {
         sensorManager.registerListener(mReceiver, sensor, SensorManager.SENSOR_DELAY_UI);
     }
