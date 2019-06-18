@@ -36,6 +36,8 @@ public class EventDetectorsManager {
 
 
     private void initDetectors() {
+        initDetector(InitialEventDetector.class);
+
         initDetector(ProcessEventDetector.class);
         initDetector(ForegroundEventDetector.class);
         initDetector(ActivityEventDetector.class);
@@ -61,14 +63,14 @@ public class EventDetectorsManager {
 
     private void startAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d("WATCHER", "EventDetector started " + eventDetector.getClass().getSimpleName());
+            Log.d(DevTools.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
             eventDetector.start();
         }
     }
 
     private void stopAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d("WATCHER", "EventDetector stopped " + eventDetector.getClass().getSimpleName());
+            Log.d(DevTools.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
             eventDetector.stop();
         }
     }

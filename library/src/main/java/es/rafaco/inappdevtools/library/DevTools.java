@@ -75,21 +75,20 @@ public class DevTools {
         }
 
         DevTools.config = config;
-        initBackground(context);
+        appContext = context.getApplicationContext();
+        FriendlyLog.log(new Date().getTime(), "D", "DevTools", "Init", "DevTools started");
+
+        initBackground();
 
         if (!AppUtils.isForegroundImportance(context)){
             isPendingForegroundInit = true;
         }else{
             initForeground(context);
         }
-
     }
 
-    private static void initBackground(Context context) {
+    private static void initBackground() {
         android.util.Log.d(DevTools.TAG, "Initializing background services...");
-
-
-        appContext = context.getApplicationContext();
         eventManager = new EventManager(appContext);
 
         //Lazy initialized
@@ -306,16 +305,6 @@ public class DevTools {
         String message = "Breakpoint from " + caller.getClass().getSimpleName(); // + ": " + objectToString;
         CustomToast.show(getAppContext(), message, CustomToast.TYPE_INFO);
         FriendlyLog.log("D", "Debug", "Breakpoint", message);
-    }
-
-    public static void logCreatedInitProvider(Context context) {
-        appContext = context.getApplicationContext();
-        if (PendingCrashUtil.isPending())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Restart", "App restarted after a crash");
-        else if (FirstStartUtil.isFirstStart())
-            FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart", "App started for first time");
-        else
-            FriendlyLog.log(new Date().getTime(), "I", "App", "Start", "App started");
     }
 
 

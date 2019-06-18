@@ -65,6 +65,10 @@ public class CompileConfig {
         return json.optInt(key);
     }
 
+    public long getLong(String key) {
+        return json.optLong(key);
+    }
+
     public String getAll(){
         try {
             return json.toString(2);

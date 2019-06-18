@@ -27,8 +27,6 @@ public class InitializationContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
-        DevTools.logCreatedInitProvider(getContext());
-
         //TODO: conditional intialization
         //boolean enabled = getMetadata().getBoolean(META_DATA_KEY, true);
         if(true){

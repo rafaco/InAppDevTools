@@ -233,7 +233,13 @@ public class FriendlyLog {
         }
 
         else if (log.getCategory().equals("DevTools")){
-            if (log.getType().equals("Screenshot")){
+            if (log.getType().equals("NewBuild")) {
+                return R.drawable.ic_fiber_new_white_24dp;
+            }
+            else if (log.getType().equals("Init")){
+                return R.drawable.ic_flag_white_24dp;
+            }
+            else if (log.getType().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_white_24dp;
             }
             else if (log.getType().equals("Exception")){

@@ -77,7 +77,9 @@ public enum Event {
 
     ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
     ERROR_ANR("ErrorAnr"),
-    ERROR_CRASH("ErrorCrash");
+    ERROR_CRASH("ErrorCrash"),
+
+    NEW_BUILD("NewBuild");
 
     private static final Map<String, Event> EVENTS = new HashMap<>();
     private final String name;
