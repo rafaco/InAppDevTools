@@ -23,6 +23,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 //#endif
 
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.sample.SampleApp;
 import es.rafaco.inappdevtools.sample.api.Controller;
@@ -99,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            DevTools.getConfig().getBoolean(Config.ENABLED)) {
             return DevTools.getGestureDetector().onGenericMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
@@ -109,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        DevTools.getGestureDetector().onTouchEvent(ev);
+        if (DevTools.getConfig().getBoolean(Config.ENABLED)) {
+            DevTools.getGestureDetector().onTouchEvent(ev);
+        }
         return super.dispatchTouchEvent(ev);
     }
 }

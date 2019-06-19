@@ -8,11 +8,12 @@ enableFeaturePreview('STABLE_PUBLISHING')
 
 
 //Include modules using folder names
-include ':library', ':plugin', ':sample'
+include ':plugin', ':library', ':sample'
 
 //Remap module names, used as artifactId when publishing
 ext.remapper = [
         'root'      : 'inappdevtools-project',
+        'sample'    : 'inappdevtools-sample',
         'plugin'    : 'inappdevtools-plugin',
         'library'   : 'inappdevtools'
 ]

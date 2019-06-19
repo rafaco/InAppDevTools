@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.*;
@@ -48,7 +49,7 @@ public class OverlayLayersManager {
     //region [ LAYERS MANAGER ]
 
     private void initLayers() {
-        if (DevTools.getConfig().overlayUiIconEnabled){
+        if (isOverlayIconEnabled()){
             addLayer(new RemoveOverlayLayer(this));
             addLayer(new IconOverlayLayer(this));
             implementTouchListenerToIconWidgetView();
@@ -102,11 +103,11 @@ public class OverlayLayersManager {
     public void setMainVisibility(boolean mainVisible) {
         if (mainVisible) {
             getView(OverlayLayer.Type.MAIN).setVisibility(View.VISIBLE);
-            if (DevTools.getConfig().overlayUiIconEnabled)
+            if (isOverlayIconEnabled())
                 getView(OverlayLayer.Type.ICON).setVisibility(View.GONE);
         } else {
             getView(OverlayLayer.Type.MAIN).setVisibility(View.GONE);
-            if (DevTools.getConfig().overlayUiIconEnabled)
+            if (isOverlayIconEnabled())
                 getView(OverlayLayer.Type.ICON).setVisibility(View.VISIBLE);
         }
     }
@@ -394,7 +395,7 @@ public class OverlayLayersManager {
             getMainLayer().onConfigurationChange(newConfig);
         }
 
-        if (DevTools.getConfig().overlayUiIconEnabled){
+        if (isOverlayIconEnabled()){
             View iconWidgetView = getView(OverlayLayer.Type.ICON);
             if (iconWidgetView != null) {
 
@@ -422,4 +423,7 @@ public class OverlayLayersManager {
 
     //endregion
 
+    private boolean isOverlayIconEnabled() {
+        return DevTools.getConfig().getBoolean(Config.OVERLAY_ICON_ENABLED);
+    }
 }

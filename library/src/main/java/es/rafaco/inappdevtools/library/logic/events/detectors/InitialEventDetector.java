@@ -20,38 +20,59 @@ public class InitialEventDetector extends EventDetector {
 
     @Override
     public void subscribe() {
-        eventManager.subscribe(Event.NEW_BUILD, new EventManager.OneShotListener(){
 
+        eventManager.subscribe(Event.LIBRARY_START, new EventManager.OneShotListener(){
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "DevTools", "NewBuild",
-                        "New build from " + DateUtils.getElapsedTimeLowered((long)param));
-
-                new CacheUtils().deleteAll(getContext());
+                FriendlyLog.log("D", "DevTools", "Init",
+                        "DevTools started");
             }
         });
 
-        eventManager.subscribe(Event.PROCESS_ON_CREATE, new EventManager.Listener(){
+        eventManager.subscribe(Event.APP_START, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                if (PendingCrashUtil.isPending())
+                if (PendingCrashUtil.isPending()) {
                     FriendlyLog.log(new Date().getTime(), "W", "App", "Restart",
                             "App restarted after a crash");
-                else if (FirstStartUtil.isFirstStart())
+                } else if (FirstStartUtil.isFirstStart()) {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart",
-                            "App started for first time");
-                else
+                            "App first start (no data)");
+                } else if (NewBuildUtil.isNewBuild()) {
+                    FriendlyLog.log(new Date().getTime(), "W", "App", "Start",
+                            "App started (new compilation over old data)");
+                } else {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started");
+                }
+            }
+        });
+
+        eventManager.subscribe(Event.NEW_BUILD, new EventManager.OneShotListener(){
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("V", "DevTools", "NewBuild",
+                        "New compilation from " + DateUtils.getElapsedTimeLowered((long)param));
+
+                CacheUtils.deleteAll(getContext());
             }
         });
     }
 
     @Override
     public void start() {
+        eventManager.fire(Event.LIBRARY_START);
+
         if (NewBuildUtil.isNewBuild()){
             eventManager.fire(Event.NEW_BUILD, NewBuildUtil.getBuildTime());
         }
+
+        eventManager.subscribe(Event.PROCESS_ON_CREATE, new EventManager.OneShotListener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                eventManager.fire(Event.APP_START);
+            }
+        });
     }
 
     @Override

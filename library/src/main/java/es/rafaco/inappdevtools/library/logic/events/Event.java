@@ -5,6 +5,15 @@ import java.util.Map;
 
 public enum Event {
 
+    NEW_BUILD("NewBuild"),
+    CONFIG_CHANGED("ConfigChanged"),
+    LIBRARY_START("LibraryStart"),
+    APP_START("AppStart"),
+
+    ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
+    ERROR_ANR("ErrorAnr"),
+    ERROR_CRASH("ErrorCrash"),
+
     //Process
     PROCESS_ON_CREATE ("process_on_create"),
     PROCESS_ON_START("process_on_start"),
@@ -73,13 +82,7 @@ public enum Event {
     GESTURE_CONTEXT_TAP("ContextClick"),
     GESTURE_DOUBLE_TAP("DoubleClick"),
     GESTURE_FLING_TAP("FlingClick"),
-    GESTURE_LONG_PRESSED("LongPress"),
-
-    ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
-    ERROR_ANR("ErrorAnr"),
-    ERROR_CRASH("ErrorCrash"),
-
-    NEW_BUILD("NewBuild");
+    GESTURE_LONG_PRESSED("LongPress");
 
     private static final Map<String, Event> EVENTS = new HashMap<>();
     private final String name;

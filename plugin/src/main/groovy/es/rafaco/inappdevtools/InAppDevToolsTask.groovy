@@ -22,6 +22,6 @@ class InAppDevToolsTask extends DefaultTask{
     }
 
     protected boolean isDebug() {
-        return true
+        return extension.debug
     }
 }

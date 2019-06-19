@@ -4,8 +4,9 @@ import android.content.Context;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 
@@ -31,18 +32,19 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
 
     private InfoGroup getCompileConfig() {
         return new InfoGroup.Builder("Compile config")
-                .add(new CompileConfig(context).getAll())
+                .add(new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG).getAll())
                 .build();
     }
 
     public InfoGroup getDevToolsInfo() {
-        CompileConfig buildConfig = new CompileConfig(context);
+        JsonAssetHelper compileConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
         InfoGroup group = new InfoGroup.Builder("InAppDevTools")
                 .add("Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
-                .add(CompileConfigFields.EXT_ENABLED, buildConfig.getString(CompileConfigFields.EXT_ENABLED))
-                .add(CompileConfigFields.EXT_EMAIL, buildConfig.getString(CompileConfigFields.EXT_EMAIL))
+                .add(Config.ENABLED.getKey(), compileConfig.getString(Config.ENABLED.getKey()))
+                .add(Config.DEBUG.getKey(), compileConfig.getString(Config.DEBUG.getKey()))
+                .add(Config.EMAIL.getKey(), compileConfig.getString(Config.EMAIL.getKey()))
                 .build();
         return group;
     }

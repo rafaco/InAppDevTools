@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.DevToolsConfig;
-
 public class EventManager {
 
     private final Context context;
@@ -20,10 +17,6 @@ public class EventManager {
 
     public EventManager(Context context) {
         this.context = context;
-        init(DevTools.getConfig());
-    }
-
-    public void init(DevToolsConfig config) {
         eventDetectorsManager = new EventDetectorsManager(this);
         eventSubscribersManager = new EventSubscribersManager(this);
     }

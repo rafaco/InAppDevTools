@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.utils;
+package es.rafaco.inappdevtools.library.storage.files;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,23 +13,20 @@ import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
-public class CompileConfig {
+public class JsonAssetHelper {
 
-    private static final String DEFAULT_PATH = "inappdevtools/compile_config.json";
     private final Context context;
     private final String target;
     private JSONObject json;
 
-    public CompileConfig(Context context) {
-        this.context = context;
-        this.target = DEFAULT_PATH;
-        init();
-    }
-
-    public CompileConfig(Context context, String target) {
+    public JsonAssetHelper(Context context, String target) {
         this.context = context;
         this.target = target;
         init();
+    }
+
+    public boolean contains(String key){
+        return json.has(key);
     }
 
     public String getString(String key) {
@@ -81,7 +78,7 @@ public class CompileConfig {
         try {
             json = new JSONObject(getFileContents());
         } catch (Exception e) {
-            FriendlyLog.log("E", "DevTools", "CompileConfig",
+            FriendlyLog.log("E", "DevTools", "JsonAsset",
                     "Invalid data at '" + target + "'", Log.getStackTraceString(e));
         }
 

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.detectors.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
@@ -78,7 +79,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
-        if (DevTools.getConfig().crashHandlerCallDefaultHandler){
+        if (DevTools.getConfig().getBoolean(Config.CALL_DEFAULT_CRASH_HANDLER)){
             Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{

@@ -129,15 +129,18 @@ public class FriendlyLog {
         if (log.getCategory().equals("App")) {
             if (log.getType().equals("Foreground")) {
                 return R.drawable.ic_flip_to_front_white_24dp;
-            } else if (log.getType().equals("Background")) {
+            }
+            else if (log.getType().equals("Background")) {
                 return R.drawable.ic_flip_to_back_white_24dp;
-            } else if (log.getType().equals("Restart")) {
-                return R.drawable.ic_replay_white_24dp;
-            } else if (log.getType().equals("Start")) {
-                return R.drawable.ic_flag_white_24dp;
-            } else if (log.getType().equals("FirstStart")) {
+            }
+            else if (log.getType().equals("FirstStart")) {
                 return R.drawable.ic_fiber_new_white_24dp;
-            } else if (log.getType().equals("Navigation")) {
+            }
+            else if (log.getType().equals("Restart") ||
+                    log.getType().equals("Start")) {
+                return R.drawable.ic_flag_white_24dp;
+            }
+            else if (log.getType().equals("Navigation")) {
                 return R.drawable.ic_view_carousel_white_24dp;
             }
             else if (log.getType().equals("TaskRemoved")) {
@@ -234,7 +237,7 @@ public class FriendlyLog {
 
         else if (log.getCategory().equals("DevTools")){
             if (log.getType().equals("NewBuild")) {
-                return R.drawable.ic_fiber_new_white_24dp;
+                return R.drawable.ic_code_white_24dp;
             }
             else if (log.getType().equals("Init")){
                 return R.drawable.ic_flag_white_24dp;

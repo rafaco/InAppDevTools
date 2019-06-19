@@ -3,7 +3,6 @@ package es.rafaco.inappdevtools.sample;
 import android.app.Application;
 
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.DevToolsConfig;
 import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 
 
@@ -13,12 +12,6 @@ public class SampleApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-
-        //TODO: we have currently a double install without and with configuration
-        DevTools.install(this, DevToolsConfig.newBuilder()
-            .addEmail("rafaco@gmail.com")
-            .build()
-        );
 
         //DevTools.breakpoint(this);
 

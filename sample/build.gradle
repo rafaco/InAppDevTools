@@ -90,14 +90,14 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
-    debug = true
+    debug = false
     email = 'inappdevtools@gmail.com'
 }
 
 
 //Configuration for PreProcessor plugin
 preprocessor {
-    verbose true
+    verbose project.extensions.getByName('inappdevtools').debug
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
     symbols "GLOBAL","GLOBAL_2"

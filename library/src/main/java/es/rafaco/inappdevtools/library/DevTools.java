@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.GestureEventDetector;
@@ -47,7 +49,7 @@ public class DevTools {
     public static final String TAG = "InAppDevTools";
 
     private static Context appContext;
-    private static DevToolsConfig config;
+    private static ConfigManager configManager;
     private static EventManager eventManager;
     private static SourcesManager sourcesManager;
 
@@ -59,24 +61,14 @@ public class DevTools {
     //region [ PUBLIC INITIALIZATION ]
 
     public static void install(Context context) {
-        install(context, DevToolsConfig.newBuilder().build());
-    }
 
-    public static void install(Context context, DevToolsConfig config) {
-
-        if (config == null || !config.enabled){
-            android.util.Log.w(DevTools.TAG, "DevTools initialization skipped");
-            return;
-        }
-
-        if (DevTools.config != null){
-            android.util.Log.w(DevTools.TAG, "DevTools already initialize");
-            return;
-        }
-
-        DevTools.config = config;
         appContext = context.getApplicationContext();
-        FriendlyLog.log(new Date().getTime(), "D", "DevTools", "Init", "DevTools started");
+        configManager = new ConfigManager(appContext);
+
+        if (!isEnabled()){
+            android.util.Log.w(DevTools.TAG, "DevTools DISABLED by configuration");
+            return;
+        }
 
         initBackground();
 
@@ -85,6 +77,10 @@ public class DevTools {
         }else{
             initForeground(context);
         }
+    }
+
+    public static boolean isEnabled() {
+        return getConfig().getBoolean(Config.ENABLED);
     }
 
     private static void initBackground() {
@@ -123,11 +119,11 @@ public class DevTools {
             FirstStartUtil.saveFirstStart();
         }
         else{
-            if (config.overlayUiEnabled)
-            startOverlayService(context);
+            if (getConfig().getBoolean(Config.OVERLAY_ENABLED))
+                startOverlayService(context);
         }
 
-        if (config.notificationUiEnabled)
+        if (getConfig().getBoolean(Config.NOTIFICATION_ENABLED))
             startForegroundService(context);
     }
 
@@ -153,8 +149,8 @@ public class DevTools {
         return appContext;
     }
 
-    public static DevToolsConfig getConfig() {
-        return config;
+    public static ConfigManager getConfig() {
+        return configManager;
     }
 
     public static EventManager getEventManager() {
@@ -187,6 +183,11 @@ public class DevTools {
 
     @NonNull
     public static OkHttpClient getOkHttpClient() {
+        if (!isEnabled()){
+            OkHttpClient client = new OkHttpClient.Builder().build();
+            return client;
+        }
+        
         //TODO: relocate an create a unique interceptor, and a method to return it
         CustomChuckInterceptor httpGrabberInterceptor = new CustomChuckInterceptor(getAppContext());
         httpGrabberInterceptor.showNotification(false);
@@ -207,6 +208,8 @@ public class DevTools {
     }
 
     public static void showMessage(final String text) {
+        if (!isEnabled()) return;
+
         CustomToast.show(getAppContext(), text, CustomToast.TYPE_INFO);
         FriendlyLog.log("I", "Message", "Info", text);
     }
@@ -224,11 +227,13 @@ public class DevTools {
 
 
     public static void takeScreenshot() {
+        if (!isEnabled()) return;
+
         Screen screen = new ScreenHelper().takeAndSaveScreen();
 
         FriendlyLog.log("I", "DevTools", "Screenshot","Screenshot taken");
 
-        if(config.overlayUiEnabled && OverlayUIService.isInitialize()){
+        if(isEnabled() && OverlayUIService.isInitialize()){
             Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.ICON, null);
             getAppContext().startService(intent);
         }
@@ -281,6 +286,7 @@ public class DevTools {
     }
 
     public static void openTools(boolean atHome) {
+        if (!isEnabled()) return;
 
         if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
@@ -300,6 +306,8 @@ public class DevTools {
     //endregion
 
     public static void breakpoint(Object caller){
+        if (!isEnabled()) return;
+
         //String objectToString = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
         //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
         String message = "Breakpoint from " + caller.getClass().getSimpleName(); // + ": " + objectToString;

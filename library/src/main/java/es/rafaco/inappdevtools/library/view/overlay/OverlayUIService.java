@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.detectors.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
@@ -102,7 +103,9 @@ public class OverlayUIService extends Service {
                 stopSelf();
             }
         }
-        return DevTools.getConfig().overlayUiServiceSticky ? START_STICKY : START_NOT_STICKY;
+
+        return DevTools.getConfig().getBoolean(Config.STICKY_SERVICE) ?
+                START_STICKY : START_NOT_STICKY;
     }
 
     @Override

@@ -17,20 +17,50 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     @TaskAction
     void perform() {
         def configStartTime = Instant.now()
+
         generateCompileConfig(project)
-        generateGitConfig(project)
-        def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
-        println "   InAppDevToolsPlugin:generateConfigs for ${project.name} took " + duration + " seconds"
+        if (extension.enabled){
+            generateGitConfig(project)
+        }
+
+        if (isDebug()) {
+            def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
+            println "   GenerateConfigs took " + duration + " secs for ${project.name}"
+        }
     }
 
     private void generateCompileConfig(Project project) {
         Map propertiesMap = [
                 BUILD_TIME    : new Date().getTime(),
                 BUILD_TIME_UTC: new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
-                EXT_EMAIL     : extension.email,
-                EXT_ENABLED   : extension.enabled,
-                EXT_DEBUG     : extension.debug
         ]
+
+        if (extension.enabled!=null)
+            propertiesMap.put("ENABLED", extension.enabled)
+
+        if (extension.debug!=null)
+            propertiesMap.put("DEBUG", extension.debug)
+
+        if (extension.email!=null)
+            propertiesMap.put("EMAIL", extension.email)
+
+        if (extension.overlayEnabled!=null)
+            propertiesMap.put("OVERLAY_ENABLED", extension.overlayEnabled)
+
+        if (extension.overlayIconEnabled!=null)
+            propertiesMap.put("OVERLAY_ICON_ENABLED", extension.overlayIconEnabled)
+
+        if (extension.notificationEnabled!=null)
+            propertiesMap.put("NOTIFICATION_ENABLED", extension.notificationEnabled)
+
+        if (extension.crashHandlerEnabled!=null)
+            propertiesMap.put("CRASH_HANDLER_ENABLED", extension.crashHandlerEnabled)
+
+        if (extension.callDefaultCrashHandler!=null)
+            propertiesMap.put("CALL_DEFAULT_CRASH_HANDLER", extension.callDefaultCrashHandler)
+
+        if (extension.stickyService!=null)
+            propertiesMap.put("STICKY_SERVICE", extension.stickyService)
 
         File file = getFile(project, "${outputPath}/compile_config.json")
         saveConfigMap(propertiesMap, file)
@@ -73,7 +103,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         File diffFile = new File("${outputPath}/git.diff")
         if (gitDiff != null && gitDiff != '') {
-            if (isDebug()) {  println "Generated config: " + diffFile.getPath() }
+            if (isDebug()) {  println "Generated: " + diffFile.getPath() }
             diffFile.text = gitDiff
         }else{
             if (diffFile.exists()) { diffFile.delete() }
@@ -84,7 +114,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         String extensionJson
         if (isDebug()) {
             extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
-            println "Generated config: " + file.getPath()
+            println "Generated: " + file.getPath()
             println extensionJson
         } else {
             extensionJson = JsonOutput.toJson(map)

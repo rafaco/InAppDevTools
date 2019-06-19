@@ -9,24 +9,26 @@ import android.text.TextUtils;
 import android.support.annotation.NonNull;
 //#endif
 
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfig;
-import es.rafaco.inappdevtools.library.logic.utils.CompileConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class BuildInfoHelper extends AbstractInfoHelper {
 
-    CompileConfig buildConfig;
-    CompileConfig gitConfig;
+    JsonAssetHelper buildConfig;
+    JsonAssetHelper gitConfig;
 
     public BuildInfoHelper(Context context) {
         super(context);
-        buildConfig = new CompileConfig(context);
-        gitConfig = new CompileConfig(context, "inappdevtools/git_config.json");
+
+        buildConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
+        gitConfig = new JsonAssetHelper(context, JsonAsset.GIT_CONFIG);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     public InfoGroup getBuildInfo() {
         InfoGroup group = new InfoGroup.Builder("Build")
-                .add("Build time", buildConfig.getString(CompileConfigFields.BUILD_TIME_UTC))
+                .add("Build time", buildConfig.getString(Config.BUILD_TIME_UTC.getKey()))
                 .add("Build type", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR))
                 .build();
@@ -86,7 +88,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     public String getFriendlyElapsedTime() {
         return DateUtils.getElapsedTimeLowered(
-                Long.parseLong(buildConfig.getString(CompileConfigFields.BUILD_TIME)));
+                Long.parseLong(buildConfig.getString(Config.BUILD_TIME.getKey())));
     }
 
     @NonNull

@@ -110,15 +110,9 @@ dependencies {
 }
 
 
-//Configuration for InAppDevTools plugin
-inappdevtools{
-    debug = true
-}
-
-
 //Configuration for PreProcessor plugin
 preprocessor {
-    verbose true
+    verbose project.extensions.getByName('inappdevtools').debug
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
     symbols "GLOBAL","GLOBAL_2"

@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.invocation.Gradle
+import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.bundling.Zip
 import java.util.regex.Matcher
@@ -16,6 +17,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final OUTPUT_PATH = ASSETS_PATH + '/' + TAG
 
     final CONFIG_TASK = 'generateConfigs'
+    final CLEAN_TASK = 'cleanGenerated'
     final SOURCES_TASK = 'packSources'
     final RESOURCES_TASK = 'packResources'
 
@@ -44,15 +46,27 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.task(CONFIG_TASK, type:GenerateConfigsTask)
         addPackSourcesTask(project, outputFolder)
         addPackResourcesTask(project, outputFolder)
+        addCleanTask(project, outputFolder)
 
         // Link tasks on project
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                if (isDebug(project)){ println "InAppDevTools: Added tasks before " + theTask.name }
-                theTask.dependsOn += [
-                        project.tasks.getByName(SOURCES_TASK),
-                        project.tasks.getByName(RESOURCES_TASK),
-                        project.tasks.getByName(CONFIG_TASK)]
+
+                if (isEnabled(project)){
+                    if (isDebug(project)){ println "InAppDevTools: Added tasks before " + theTask.name }
+                    theTask.dependsOn += [
+                            project.tasks.getByName(SOURCES_TASK),
+                            project.tasks.getByName(RESOURCES_TASK),
+                            project.tasks.getByName(CONFIG_TASK)]
+                }
+                else{
+                    if (isDebug(project)){ println "InAppDevTools: Removed generated assets"}
+                    //project.android.sourceSets.main.assets.srcDirs -= "${project.buildDir}${ASSETS_PATH}"
+                    //delete(project.file("${project.buildDir}\\generated\\assets\\inappdevtools"))
+                    theTask.dependsOn += [
+                            project.tasks.getByName(CLEAN_TASK),
+                            project.tasks.getByName(CONFIG_TASK)]
+                }
             }
         }
 
@@ -62,8 +76,22 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
+    private Task addCleanTask(Project project, outputFolder) {
+        project.task(CLEAN_TASK,
+                description: 'Clean generated files',
+                group: TAG,
+                type: Delete) {
+
+            doLast {
+                project.delete outputFolder
+                println "Deleted ${outputFolder} from ${project.name}"
+            }
+
+        }
+    }
+
     private Task addPackResourcesTask(Project project, outputFolder) {
-        project.task('packResources',
+        project.task(RESOURCES_TASK,
                 description: 'Generate a Zip file with the resources',
                 group: TAG,
                 type: Zip) {
@@ -88,7 +116,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     }
 
     private Task addPackSourcesTask(Project project, outputFolder) {
-        project.task('packSources',
+        project.task(SOURCES_TASK,
                 description: 'Generate a Jar file with all java sources, including generated ones',
                 group: TAG,
                 type: Jar) {
@@ -102,22 +130,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
             eachFile { fileDetails ->
                 def filePath = fileDetails.path
-                println "PROCESSING: " + filePath
+                if (isDebug(project)) println "PROCESSED: " + filePath
                 if (filePath.contains(currentVariant)) {
                     fileDetails.path = filePath.substring(filePath.indexOf(currentVariant), filePath.length())
-                    println "RENAMED into " + fileDetails.path
+                    if (isDebug(project))  println "RENAMED into " + fileDetails.path
                 }
             }
-            /*
-            rename { String fileName ->
-                print "PROCESSING: " + fileName
-                if (fileName.contains(currentVariant)){
-                    print "RENAMED: " + fileName " into "
-                    fileName.substring(fileName.indexOf(getVariantName(project))+2)
-                    print fileName
-                }
-            }
-            rename '.*(debug)(.*)', '$2'*/
+
             destinationDir project.file(outputFolder)
             archiveName = outputName
             includeEmptyDirs = false
@@ -144,6 +163,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static boolean isDebug(Project project){
         if (getExtension(project)!=null){
             return getExtension(project).debug
+        }
+        return false
+    }
+
+    static boolean isEnabled(Project project){
+        if (getExtension(project)!=null){
+            return getExtension(project).enabled
         }
         return false
     }
