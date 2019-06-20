@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -22,6 +23,7 @@ import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -104,6 +106,18 @@ public class RunScreen extends OverlayScreen {
                         RunScreen.this.onSimulateButton();
                     }
                 }));
+
+        data.add(new RunnableConfig("DISABLE...",
+                R.drawable.ic_power_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayUIService.runAction(OverlayUIService.IntentAction.HIDE, null);
+                        Intent intent = new Intent(getContext(), WelcomeDialogActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(intent);
+                    }
+                }));
     }
 
 
@@ -128,20 +142,21 @@ public class RunScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Force close",
-                R.drawable.ic_close_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        DevTools.forceCloseApp(false);
-                    }
-                }));
         data.add(new RunnableConfig("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         DevTools.restartApp(false);
+                    }
+                }));
+
+        data.add(new RunnableConfig("Force close",
+                R.drawable.ic_power_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DevTools.forceCloseApp(false);
                     }
                 }));
     }

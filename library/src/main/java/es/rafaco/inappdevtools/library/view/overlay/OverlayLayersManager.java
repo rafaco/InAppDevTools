@@ -424,6 +424,6 @@ public class OverlayLayersManager {
     //endregion
 
     private boolean isOverlayIconEnabled() {
-        return DevTools.getConfig().getBoolean(Config.OVERLAY_ICON_ENABLED);
+        return DevTools.getConfig().getBoolean(Config.INVOCATION_BY_ICON);
     }
 }

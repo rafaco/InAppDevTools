@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.detectors.*;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
@@ -23,8 +22,8 @@ public class EventDetectorsManager {
         this.eventManager = eventManager;
         this.context = eventManager.getContext();
 
-        if (DevTools.getConfig().getBoolean(Config.CRASH_HANDLER_ENABLED))
-            startCrashHandler();
+        //TODO: Refactor into a detector
+        startCrashHandler();
 
         initDetectors();
         startAll();

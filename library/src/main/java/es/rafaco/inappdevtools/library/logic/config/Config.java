@@ -8,9 +8,9 @@ public enum Config {
     DEBUG("DEBUG", boolean.class, false),
     EMAIL("EMAIL", String.class, ""),
     OVERLAY_ENABLED("OVERLAY_ENABLED", boolean.class, true),
-    OVERLAY_ICON_ENABLED("OVERLAY_ICON_ENABLED", boolean.class, false),
-    NOTIFICATION_ENABLED("NOTIFICATION_ENABLED", boolean.class, true),
-    CRASH_HANDLER_ENABLED("CRASH_HANDLER_ENABLED", boolean.class, true),
+    INVOCATION_BY_SHAKE("INVOCATION_BY_SHAKE", boolean.class, true),
+    INVOCATION_BY_ICON("INVOCATION_BY_ICON", boolean.class, false),
+    INVOCATION_BY_NOTIFICATION("INVOCATION_BY_NOTIFICATION", boolean.class, true),
     CALL_DEFAULT_CRASH_HANDLER("CALL_DEFAULT_CRASH_HANDLER", boolean.class, false),
     STICKY_SERVICE("STICKY_SERVICE", boolean.class, false);
 

@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 //#endif
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.config.Config;
@@ -123,7 +122,7 @@ public class DevTools {
                 startOverlayService(context);
         }
 
-        if (getConfig().getBoolean(Config.NOTIFICATION_ENABLED))
+        if (getConfig().getBoolean(Config.INVOCATION_BY_NOTIFICATION))
             startForegroundService(context);
     }
 

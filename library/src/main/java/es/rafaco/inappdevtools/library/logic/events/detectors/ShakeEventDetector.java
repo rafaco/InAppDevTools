@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -33,7 +34,9 @@ public class ShakeEventDetector extends EventDetector {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "User", "Shake", "Shake detected");
-                DevTools.openTools(false);
+                if (DevTools.getConfig().getBoolean(Config.INVOCATION_BY_SHAKE)){
+                    DevTools.openTools(false);
+                }
             }
         });
 
