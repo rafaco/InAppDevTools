@@ -10,11 +10,11 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 
-class AssetsReader extends AbstractNodeReader{
+public class AssetsNodeReader extends AbstractNodeReader{
 
     private final Context context;
 
-    AssetsReader(Context context, String prefix) {
+    public AssetsNodeReader(Context context, String prefix) {
         super();
         this.context = context;
         this.prefix = prefix;
@@ -22,7 +22,7 @@ class AssetsReader extends AbstractNodeReader{
         addEntry(prefix, prefix + "/", true);
     }
 
-    AssetsReader(Context context, AbstractNodeReader previousReader, String prefix) {
+    public AssetsNodeReader(Context context, AbstractNodeReader previousReader, String prefix) {
         super(previousReader, prefix);
         this.context = context;
     }

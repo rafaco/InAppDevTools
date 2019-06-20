@@ -9,7 +9,6 @@ import java.util.zip.ZipFile;
 
 import static es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode.FOLDER_SEP;
 
-
 /**
  * Helper class for {@link ZipNode#fromZipFile}.
  * It helps creating a tree of ZipNodes from a ZipFile.
@@ -23,13 +22,13 @@ public class ZipNodeReader extends AbstractNodeReader {
     /**
      * creates a new ZipNodeReader from a ZipFile.
      */
-    ZipNodeReader(ZipFile f) {
+    public ZipNodeReader(ZipFile f) {
         super();
         this.file = f;
         root = new StandardNode("root", "/", true);
     }
 
-    ZipNodeReader(ZipFile f, AbstractNodeReader previousReader, String prefix) {
+    public ZipNodeReader(ZipFile f, AbstractNodeReader previousReader, String prefix) {
         super(previousReader, prefix);
         this.file = f;
     }

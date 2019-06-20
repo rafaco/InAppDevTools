@@ -15,7 +15,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
-import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
 

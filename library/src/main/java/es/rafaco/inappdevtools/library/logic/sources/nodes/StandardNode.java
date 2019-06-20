@@ -29,6 +29,6 @@ public class StandardNode extends AbstractNode{
 
     /*
     public static StandardNode fromAssets(Context context) {
-        return (StandardNode) new AssetsReader(context, "assets").populate();
+        return (StandardNode) new AssetsNodeReader(context, "assets").populate();
     }*/
 }

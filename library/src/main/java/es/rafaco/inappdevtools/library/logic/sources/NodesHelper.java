@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.sources.nodes;
+package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNodeReader;
+import es.rafaco.inappdevtools.library.storage.files.AssetFileReader;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetsNodeReader;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.RootNodeReader;
+import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNodeReader;
 
 public class NodesHelper {
 
@@ -28,13 +32,13 @@ public class NodesHelper {
         AbstractNodeReader nodeReader = null;
 
         //Prepare first level
-        nodeReader = new RootReader();
-        ((RootReader) nodeReader).addNode(ASSETS);
-        ((RootReader) nodeReader).addNode(SOURCES);
-        ((RootReader) nodeReader).addNode(RESOURCES);
+        nodeReader = new RootNodeReader();
+        ((RootNodeReader) nodeReader).addNode(ASSETS);
+        ((RootNodeReader) nodeReader).addNode(SOURCES);
+        ((RootNodeReader) nodeReader).addNode(RESOURCES);
 
         //Populate ASSETS
-        nodeReader = new AssetsReader(context, nodeReader, ASSETS);
+        nodeReader = new AssetsNodeReader(context, nodeReader, ASSETS);
         AbstractNode root = nodeReader.populate();
 
         //Populate SRC and RES

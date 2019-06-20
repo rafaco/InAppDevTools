@@ -1,8 +1,8 @@
 package es.rafaco.inappdevtools.library.logic.sources.nodes;
 
-public class RootReader extends AbstractNodeReader {
+public class RootNodeReader extends AbstractNodeReader {
 
-    public RootReader() {
+    public RootNodeReader() {
         super();
         root = new StandardNode("root", "/", true);
     }

@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.sources.nodes;
+package es.rafaco.inappdevtools.library.storage.files;
 
 import android.content.Context;
 
@@ -28,7 +28,7 @@ public class AssetFileReader {
         return zip;
     }
 
-    public File getLocalFile(String target ){
+    private File getLocalFile(String target ){
         if(!target.startsWith("/")){
             target = "/" + target;
         }

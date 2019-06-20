@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 
 import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.sources.nodes.NodesHelper;
+import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
