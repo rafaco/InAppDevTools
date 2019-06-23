@@ -86,13 +86,32 @@ public abstract class AbstractNode {
 
     public List<AbstractNode> filter(String keyword) {
         List<AbstractNode> result = new ArrayList<>();
-        if (getName().contains(keyword) || getPath().contains(keyword)){
+        if (getName().toLowerCase().contains(keyword.toLowerCase())
+                || getPath().toLowerCase().contains(keyword.toLowerCase())){
             result.add(this);
         }
 
         if (isDirectory() && !children.isEmpty()){
             for (AbstractNode child : children.values() ) {
                 List<AbstractNode> filter = child.filter(keyword);
+                if (!filter.isEmpty()){
+                    result.addAll(filter);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<AbstractNode> filterFilesName(String keyword) {
+        List<AbstractNode> result = new ArrayList<>();
+        if (!isDirectory()
+                && getName().toLowerCase().contains(keyword.toLowerCase())){
+            result.add(this);
+        }
+
+        if (isDirectory() && !children.isEmpty()){
+            for (AbstractNode child : children.values() ) {
+                List<AbstractNode> filter = child.filterFilesName(keyword);
                 if (!filter.isEmpty()){
                     result.addAll(filter);
                 }

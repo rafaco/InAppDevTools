@@ -34,8 +34,8 @@ public class SourcesManager {
         root = NodesHelper.populate(context);
     }
 
-    public List<SourceEntry> getFilteredItems(String filter){
-        AbstractNode parent = NodesHelper.getNodeByFullPath(root, filter);
+    public List<SourceEntry> getChildItems(String parentPath){
+        AbstractNode parent = NodesHelper.getNodeByFullPath(root, parentPath);
         if (parent == null){
             return new ArrayList<>();
         }
@@ -46,6 +46,15 @@ public class SourcesManager {
         }
 
         return NodesHelper.castToSourceEntry(children);
+    }
+
+    public List<SourceEntry> getSearchItems(String searchText){
+        List<AbstractNode> results = root.filterFilesName(searchText);
+
+        if (results == null){
+            return new ArrayList<>();
+        }
+        return NodesHelper.castToSourceEntry(results);
     }
 
     private AbstractNode flattenEmptyFolders(AbstractNode current) {

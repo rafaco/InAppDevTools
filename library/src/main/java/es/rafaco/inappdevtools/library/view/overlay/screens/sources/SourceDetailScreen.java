@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManag
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 import static android.content.Context.SEARCH_SERVICE;
 
@@ -165,7 +166,7 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getToolbar().setSubtitle(NodesHelper.getFileNameAndExtensionFromPath(getParams().path));
+        getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");

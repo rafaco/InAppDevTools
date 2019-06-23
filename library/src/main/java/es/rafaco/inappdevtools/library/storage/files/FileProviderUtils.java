@@ -3,6 +3,8 @@ package es.rafaco.inappdevtools.library.storage.files;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
@@ -24,6 +26,7 @@ public class FileProviderUtils {
     public static void openFileExternally(Context context, String filePath) {
         openFileExternally(context, filePath, Intent.ACTION_VIEW);
     }
+
     public static void openFileExternally(Context context, String filePath, String action ) {
         File file = new File(filePath);
         String type = getMimeType(file);
@@ -51,5 +54,15 @@ public class FileProviderUtils {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         return mime.getMimeTypeFromExtension(extension);
+    }
+
+    public static void shareText(Context context, String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+
+        Intent chooserIntent = Intent.createChooser(intent, "Share with");
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(chooserIntent);
     }
 }

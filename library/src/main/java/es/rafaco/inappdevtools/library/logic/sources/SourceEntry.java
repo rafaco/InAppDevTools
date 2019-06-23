@@ -42,6 +42,10 @@ public class SourceEntry {
     }
 
     public int getDeepLevel(){
+        if (name == null){
+            return 0;
+        }
+
         int slashCount = name.length() - name.replace("/", "").length();
         if (slashCount>0 && isDirectory){
             return slashCount - 1;

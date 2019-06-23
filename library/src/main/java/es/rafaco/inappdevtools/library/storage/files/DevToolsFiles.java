@@ -4,8 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-
 public class DevToolsFiles {
 
     public static String storeCrashDetail(long crashId, String report) {
@@ -29,10 +27,11 @@ public class DevToolsFiles {
                 report);
     }
 
-    public static File prepareSource(String target, String extension) {
-        return FileCreator.prepare(
+    public static String storeSources(String report, long timeMillis) {
+        return FileCreator.withContent(
                 "sources",
-                target + "." + extension);
+                "sources_" + timeMillis + ".txt",
+                report);
     }
 
     public static File prepareLogcat(long timeMillis) {
