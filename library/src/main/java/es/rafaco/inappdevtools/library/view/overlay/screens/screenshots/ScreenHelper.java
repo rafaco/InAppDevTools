@@ -11,8 +11,8 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
@@ -54,7 +54,7 @@ public class ScreenHelper extends OverlayScreenHelper {
             ThreadUtils.runOnBackThread(new Runnable() {
                 @Override
                 public void run() {
-                    DevTools.getDatabase().screenDao().insertAll(screen);
+                    IadtController.get().getDatabase().screenDao().insertAll(screen);
                 }
             });
         }

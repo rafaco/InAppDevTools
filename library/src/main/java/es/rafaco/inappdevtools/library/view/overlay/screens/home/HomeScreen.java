@@ -15,7 +15,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -70,7 +70,7 @@ public class HomeScreen extends OverlayScreen {
         String welcome = appHelper.getFormattedAppLong() + "\n" + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);
 
-        data.add(new RunnableConfig("Info",
+        data.add(new RunnableItem("Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
@@ -78,7 +78,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("History",
+        data.add(new RunnableItem("History",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
@@ -86,7 +86,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Logcat",
+        data.add(new RunnableItem("Logcat",
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override
@@ -96,7 +96,7 @@ public class HomeScreen extends OverlayScreen {
 
 
 
-        data.add(new RunnableConfig("Sources",
+        data.add(new RunnableItem("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
@@ -104,7 +104,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("View",
+        data.add(new RunnableItem("View",
                 R.drawable.ic_layers_white_24dp,
                 new Runnable() {
                     @Override
@@ -112,7 +112,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Storage",
+        data.add(new RunnableItem("Storage",
                 R.drawable.ic_storage_white_24dp,
                 new Runnable() {
                     @Override
@@ -125,7 +125,7 @@ public class HomeScreen extends OverlayScreen {
 
 
 
-        data.add(new RunnableConfig("Run",
+        data.add(new RunnableItem("Run",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
@@ -133,7 +133,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Report",
+        data.add(new RunnableItem("Report",
                 R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
@@ -141,7 +141,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("More",
+        data.add(new RunnableItem("More",
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override

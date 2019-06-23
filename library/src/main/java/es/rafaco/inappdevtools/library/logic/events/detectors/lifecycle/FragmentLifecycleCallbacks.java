@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle;
 
 import android.content.Context;
 import android.os.Build;
@@ -15,7 +15,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FragmentLifecycleCallbacks extends FragmentManager.FragmentLifecycleCallbacks {

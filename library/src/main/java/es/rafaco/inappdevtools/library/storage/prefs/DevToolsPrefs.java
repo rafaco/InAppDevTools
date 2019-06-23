@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.storage.prefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class DevToolsPrefs {
 
@@ -42,6 +42,6 @@ public class DevToolsPrefs {
     }
 
     private static Context getContext() {
-        return DevTools.getAppContext();
+        return Iadt.getAppContext();
     }
 }

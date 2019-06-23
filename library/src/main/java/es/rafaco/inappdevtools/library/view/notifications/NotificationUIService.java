@@ -25,11 +25,12 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.logic.utils.init.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
@@ -66,7 +67,7 @@ public class NotificationUIService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(DevTools.TAG, "My foreground service onCreate().");
+        Log.d(Iadt.TAG, "My foreground service onCreate().");
         instance = this;
     }
 
@@ -88,21 +89,21 @@ public class NotificationUIService extends Service {
 
                 case ACTION_SCREEN:
                     bringAppToFront();
-                    DevTools.takeScreenshot();
+                    Iadt.takeScreenshot();
                     break;
                 case ACTION_REPORT:
                     bringAppToFront();
                     OverlayUIService.performNavigation(ReportScreen.class);
-                    //DevTools.startReportDialog();
+                    //Iadt.startReportDialog();
                     break;
                 case ACTION_CLEAN:
                     bringAppToFront();
                     Toast.makeText(getApplicationContext(), "You click CLEAN button.", Toast.LENGTH_LONG).show();
-                    DevTools.cleanSession();
+                    IadtController.cleanSession();
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();
-                    DevTools.openTools(false);
+                    IadtController.get().showOverlay(false);
                     break;
             }
         }
@@ -117,7 +118,7 @@ public class NotificationUIService extends Service {
     }
 
     private void startForegroundService() {
-        Log.d(DevTools.TAG, "Start foreground service.");
+        Log.d(Iadt.TAG, "Start foreground service.");
 
         createNotificationChannel();
 
@@ -158,7 +159,7 @@ public class NotificationUIService extends Service {
     //endregion
 
     private void stopService() {
-        Log.d(DevTools.TAG, "Stopping NotificationUIService");
+        Log.d(Iadt.TAG, "Stopping NotificationUIService");
         stopForeground(true);
         stopSelf();
         instance = null;
@@ -309,7 +310,7 @@ public class NotificationUIService extends Service {
             NotificationChannel channel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if(channel==null){
                 CharSequence name = "NotificationUIService";
-                String description = "To show DevTools report notification";
+                String description = "To show Iadt report notification";
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 channel = new NotificationChannel(CHANNEL_ID, name, importance);
                 channel.setDescription(description);
@@ -324,7 +325,7 @@ public class NotificationUIService extends Service {
                 .setContentTitle("Group Title")
                 .setContentText("Group text")
                 .setAutoCancel(true)
-                //TODO: add DevTools icon
+                //TODO: add Iadt icon
                 //.setLargeIcon(emailObject.getSenderAvatar())
                 .setGroup(GROUP_ID)
                 .setPriority(Notification.PRIORITY_MAX)

@@ -33,8 +33,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TooManyListenersException;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -105,7 +106,7 @@ public class ErrorsScreen extends OverlayScreen {
                 getErrors();
             }
         };
-        tracker = DevTools.getDatabase().getInvalidationTracker();
+        tracker = IadtController.get().getDatabase().getInvalidationTracker();
         tracker.addObserver(anrObserver);
         tracker.addObserver(crashObserver);
     }
@@ -163,7 +164,7 @@ public class ErrorsScreen extends OverlayScreen {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
+                DevToolsDatabase db = IadtController.get().getDatabase();
                 db.crashDao().deleteAll();
                 db.anrDao().deleteAll();
 
@@ -174,14 +175,14 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
     public void onAnrButton() {
-        Log.i(DevTools.TAG, "ANR requested, sleeping main thread for a while...");
+        Log.i(Iadt.TAG, "ANR requested, sleeping main thread for a while...");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep((long)10 * 1000);
                 } catch (InterruptedException e) {
-                    Log.e(DevTools.TAG, "Something wrong happen", e);
+                    Log.e(Iadt.TAG, "Something wrong happen", e);
                     Thread.currentThread().interrupt();
                 }
             }
@@ -189,7 +190,7 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
     public void onCrashUiButton() {
-        Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
+        Log.i(Iadt.TAG, "Simulated crash on the UI thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
@@ -200,7 +201,7 @@ public class ErrorsScreen extends OverlayScreen {
     }
 
     public void onCrashBackgroundButton() {
-        Log.i(DevTools.TAG, "Simulated crash on a background thread...");
+        Log.i(Iadt.TAG, "Simulated crash on a background thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
@@ -220,7 +221,7 @@ public class ErrorsScreen extends OverlayScreen {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
+                DevToolsDatabase db = IadtController.get().getDatabase();
                 final ArrayList<DecoratedToolInfo> array = new ArrayList<>();
                 List<Crash> crashes = db.crashDao().getAll();
                 for (Crash crash : crashes){
@@ -302,7 +303,7 @@ public class ErrorsScreen extends OverlayScreen {
         else if (selected == R.id.action_send)
         {
             //TODO: send all errors
-            DevTools.showMessage("Not already implemented");
+            Iadt.showMessage("Not already implemented");
         }
         return super.onMenuItemClick(item);
     }

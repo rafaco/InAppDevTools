@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.logic.log;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -8,10 +8,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineAdapter;
 
-public class LogReaderTask extends AsyncTask<Void, String, Void>
+public class LogCatReaderTask extends AsyncTask<Void, String, Void>
 {
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
@@ -21,18 +21,19 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     private boolean isRunning = true;
     private Process logprocess = null;
     private BufferedReader reader = null;
-    private LogLineAdapter adaptor = null;
+    private LogLineAdapter adaptor;
     private int readCounter = 0;
     private int nullCounter = 0;
     private int sameCounter = 0;
     private int processedCounter = 0;
     private Runnable onCancelledCallback;
+    private static int counter = -1;
 
-    public LogReaderTask(LogLineAdapter adaptor, String commandScript) {
+    public LogCatReaderTask(LogLineAdapter adaptor, String commandScript) {
         this.adaptor = adaptor;
         this.commandScript = commandScript;
-        this.id = DevTools.readerCounter++;
-        Log.v(DevTools.TAG, "LogReaderTask " + id + " created:" + commandScript);
+        this.id = counter++;
+        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " created:" + commandScript);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
             isRunning = false;
         }
 
-        Log.v(DevTools.TAG, "LogReaderTask " + id + " finished doInBackground");
+        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " finished doInBackground");
         return null;
     }
 
@@ -82,8 +83,8 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     protected void onCancelled() {
         isRunning = false;
         if (logprocess != null) logprocess.destroy();
-        Log.v(DevTools.TAG, "LogReaderTask " + id + " onCancelled");
-        Log.v(DevTools.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
+        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " onCancelled");
+        Log.v(Iadt.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
                 adaptor.getItemCount(), readCounter, processedCounter, nullCounter, sameCounter));
 
         if(onCancelledCallback !=null){
@@ -102,8 +103,8 @@ public class LogReaderTask extends AsyncTask<Void, String, Void>
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        Log.v(DevTools.TAG, "LogReaderTask " + id + " onPostExecute");
-        Log.v(DevTools.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
+        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " onPostExecute");
+        Log.v(Iadt.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
     }
 
     @Override

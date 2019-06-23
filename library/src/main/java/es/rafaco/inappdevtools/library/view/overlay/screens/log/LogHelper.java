@@ -8,8 +8,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.LogCatReaderTask;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
@@ -48,20 +49,20 @@ public class LogHelper extends OverlayScreenHelper {
     }
 
     public static void clearLogcatBuffer() {
-        String[] fullCommand = new String[]{LogReaderTask.BASH_PATH, LogReaderTask.BASH_ARGS, "logcat -c"};
+        String[] fullCommand = new String[]{LogCatReaderTask.BASH_PATH, LogCatReaderTask.BASH_ARGS, "logcat -c"};
         Process process = null;
         try {
             process = new ProcessBuilder()
                     .command(fullCommand)
                     .redirectErrorStream(true)
                     .start();
-            FriendlyLog.log("D", "DevTools", "Delete","Logcat buffer deleted by user");
+            FriendlyLog.log("D", "Iadt", "Delete","Logcat buffer deleted by user");
         } catch (IOException e) {
-            Log.e(DevTools.TAG, "LogcatBuffer showPlaceholder has failed :(");
+            Log.e(Iadt.TAG, "LogcatBuffer showPlaceholder has failed :(");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String stackTraceString = sw.toString();
-            Log.e(DevTools.TAG, stackTraceString);
+            Log.e(Iadt.TAG, stackTraceString);
         }
     }
 

@@ -21,9 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
-import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
@@ -60,8 +59,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
         descriptors = new ArrayList<>();
         descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_header));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunnableConfig.class,  RunnableViewHolder.class, R.layout.flexible_button));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, ThinItem.class,  LinkViewHolder.class, R.layout.flexible_link));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunnableItem.class,  RunnableViewHolder.class, R.layout.flexible_button));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_link));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_trace));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_trace_group));
     }

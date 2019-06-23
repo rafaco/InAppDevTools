@@ -1,22 +1,22 @@
-package es.rafaco.inappdevtools.library.logic.integrations;
+package es.rafaco.inappdevtools.library.logic.runnables;
 
-public class RunnableConfig {
+public class RunnableItem {
     String title;
     Runnable performer;
     Runnable callback;
     int icon;
 
-    public RunnableConfig(String title, Runnable performer) {
+    public RunnableItem(String title, Runnable performer) {
         this.title = title;
         this.performer = performer;
     }
 
-    public RunnableConfig(String title, int icon, Runnable performer) {
+    public RunnableItem(String title, int icon, Runnable performer) {
         this(title, performer);
         this.icon = icon;
     }
 
-    public RunnableConfig(String title, int icon, Runnable performer, Runnable callback) {
+    public RunnableItem(String title, int icon, Runnable performer, Runnable callback) {
         this(title, icon, performer);
         this.callback = callback;
     }

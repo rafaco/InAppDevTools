@@ -11,9 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
@@ -51,7 +51,7 @@ public class MoreScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new RunnableConfig("Network",
+        data.add(new RunnableItem("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -60,7 +60,7 @@ public class MoreScreen extends OverlayScreen {
                 }));
 
 
-        data.add(new RunnableConfig("Screens",
+        data.add(new RunnableItem("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -68,7 +68,7 @@ public class MoreScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Errors",
+        data.add(new RunnableItem("Errors",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,12 +76,12 @@ public class MoreScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Config",
+        data.add(new RunnableItem("Config",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.showMessage("TODO");
+                        Iadt.showMessage("TODO");
                     }
                 }));
 

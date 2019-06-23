@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +27,7 @@ public class Controller implements Callback<List<Change>> {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(DevTools.getOkHttpClient())
+                .client(Iadt.getOkHttpClient())
                 .build();
 
         GerritAPI gerritAPI = retrofit.create(GerritAPI.class);

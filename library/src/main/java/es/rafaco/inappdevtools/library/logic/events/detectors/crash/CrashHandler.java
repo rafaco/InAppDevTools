@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
-import es.rafaco.inappdevtools.library.logic.events.detectors.ActivityEventDetector;
-import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.logic.utils.init.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -50,8 +51,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         long startTime = new Date().getTime();
-        db = DevTools.getDatabase();
-        Log.v(DevTools.TAG, "CrashHandler: processing uncaughtException");
+        db = IadtController.get().getDatabase();
+        Log.v(Iadt.TAG, "CrashHandler: processing uncaughtException");
 
         try {
             friendlyLogId = FriendlyLog.logCrash(ex.getMessage());
@@ -61,30 +62,30 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             long crashId = storeCrash(crash);
             PendingCrashUtil.savePending();
 
-            DevTools.beforeClose();
+            IadtController.get().beforeClose();
             saveLogcat(crashId);
             saveScreenshot();
             saveDetailReport();
             saveStacktrace(crashId, ex);
 
-            Log.v(DevTools.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
+            Log.v(Iadt.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex);
         }
         catch (Exception e) {
-            Log.e(DevTools.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
-            Log.e(DevTools.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
-            Log.e(DevTools.TAG, String.valueOf(e.getStackTrace()));
+            Log.e(Iadt.TAG, "CrashHandler: exception while processing uncaughtException on " + DateUtils.getElapsedTime(startTime));
+            Log.e(Iadt.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
+            Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
             FriendlyLog.logException("Exception", e);
         }
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
-        if (DevTools.getConfig().getBoolean(Config.CALL_DEFAULT_CRASH_HANDLER)){
-            Log.i(DevTools.TAG, "CrashHandler: Let the exception propagate to default handler");
+        if (IadtController.get().getConfig().getBoolean(Config.CALL_DEFAULT_CRASH_HANDLER)){
+            Log.i(Iadt.TAG, "CrashHandler: Let the exception propagate to default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{
-            Log.e(DevTools.TAG, "CrashHandler: Restarting app");
-            DevTools.restartApp(true);
+            Log.e(Iadt.TAG, "CrashHandler: Restarting app");
+            IadtController.get().restartApp(true);
         }
     }
 
@@ -113,7 +114,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
 
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) DevTools.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isTheUiThread(thread));
@@ -125,9 +126,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void printLogcatError(Thread thread, Crash crash) {
-        Log.e(DevTools.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
-        Log.e(DevTools.TAG, crash.getStacktrace());
-        Log.e(DevTools.TAG, String.format("Thread %s [%s] is %s. Main: %s",
+        Log.e(Iadt.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
+        Log.e(Iadt.TAG, crash.getStacktrace());
+        Log.e(Iadt.TAG, String.format("Thread %s [%s] is %s. Main: %s",
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),
@@ -158,7 +159,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private Boolean saveLogcat(long crashId){
         LogHelper helper = new LogHelper();
-        Log.d(DevTools.TAG, "Extracting logcat");
+        Log.d(Iadt.TAG, "Extracting logcat");
 
         Logcat logcat = helper.buildCrashReport(crashId);
         if (logcat != null){
@@ -180,13 +181,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         String report = helper.parseToInfoGroup(current).toString();
         String filePath = DevToolsFiles.storeCrashDetail(current.getUid(), report);
         current.setReportPath(filePath);
-        DevTools.getDatabase().crashDao().update(current);
+        IadtController.get().getDatabase().crashDao().update(current);
 
         return true;
     }
 
     private Boolean saveStacktrace(long crashId, Throwable ex){
-        Log.d(DevTools.TAG, "Storing stacktrace");
+        Log.d(Iadt.TAG, "Storing stacktrace");
         SourcetraceDao stacktraceDao = db.sourcetraceDao();
         List<Sourcetrace> traces = new ArrayList<>();
         StackTraceElement[] stackTrace = ex.getStackTrace();
@@ -223,7 +224,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
 
         stacktraceDao.insertAll(traces);
-        Log.d(DevTools.TAG, "Stored " + traces.size() + " traces");
+        Log.d(Iadt.TAG, "Stored " + traces.size() + " traces");
         return true;
     }
 }

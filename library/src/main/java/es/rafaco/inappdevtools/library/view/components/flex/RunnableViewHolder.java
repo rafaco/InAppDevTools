@@ -13,7 +13,7 @@ import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 
 public class RunnableViewHolder extends FlexibleViewHolder {
 
@@ -26,7 +26,7 @@ public class RunnableViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final RunnableConfig data = (RunnableConfig) abstractData;
+        final RunnableItem data = (RunnableItem) abstractData;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
         if (data.getIcon()>0){

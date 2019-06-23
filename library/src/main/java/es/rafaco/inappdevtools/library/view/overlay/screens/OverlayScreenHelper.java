@@ -4,14 +4,14 @@ import android.content.Context;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public abstract class OverlayScreenHelper {
 
     public final Context context;
 
     public OverlayScreenHelper() {
-        this.context = DevTools.getAppContext();
+        this.context = Iadt.getAppContext();
     }
 
     public abstract String getReportPath();

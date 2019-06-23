@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
@@ -26,7 +26,7 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
         return new InfoReport.Builder("")
                 .add(getDevToolsInfo())
                 .add(getCompileConfig())
-                .add(DevTools.getDatabase().getOverview())
+                .add(IadtController.get().getDatabase().getOverview())
                 .build();
     }
 

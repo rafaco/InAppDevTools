@@ -10,8 +10,8 @@
     <application>
 
         <provider
-            android:name=".logic.initialization.InitializationContentProvider"
-            android:authorities="${applicationId}.iadt.init"
+            android:name=".IadtController"
+            android:authorities="${applicationId}.iadt.controller"
             android:exported="false"/>
 
         <provider

@@ -26,7 +26,7 @@ import android.support.v7.widget.Toolbar;
 
 import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.sample.dummy.DummyContent;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 import java.util.List;
 

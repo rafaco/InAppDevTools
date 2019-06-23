@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.R;
@@ -424,6 +424,6 @@ public class OverlayLayersManager {
     //endregion
 
     private boolean isOverlayIconEnabled() {
-        return DevTools.getConfig().getBoolean(Config.INVOCATION_BY_ICON);
+        return Iadt.getConfig().getBoolean(Config.INVOCATION_BY_ICON);
     }
 }

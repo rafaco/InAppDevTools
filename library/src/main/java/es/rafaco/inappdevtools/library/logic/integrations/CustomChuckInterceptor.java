@@ -35,7 +35,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;

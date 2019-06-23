@@ -42,8 +42,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
@@ -70,9 +71,9 @@ public class ReportDialogActivity extends AppCompatActivity {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                final List<Crash> crashes = DevTools.getDatabase().crashDao().getAll();
-                final List<Anr> anrs = DevTools.getDatabase().anrDao().getAll();
-                final List<Screen> screens = DevTools.getDatabase().screenDao().getAll();
+                final List<Crash> crashes = IadtController.get().getDatabase().crashDao().getAll();
+                final List<Anr> anrs = IadtController.get().getDatabase().anrDao().getAll();
+                final List<Screen> screens = IadtController.get().getDatabase().screenDao().getAll();
                 ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -183,7 +184,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         Uri screenFolderUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = FileProviderUtils.getAuthority(DevTools.getAppContext());
+            String authority = FileProviderUtils.getAuthority(Iadt.getAppContext());
             screenFolderUri = FileProvider.getUriForFile(getApplicationContext(), authority, screensFolder);
         } else {
             screenFolderUri = Uri.fromFile(screensFolder);
@@ -248,7 +249,7 @@ public class ReportDialogActivity extends AppCompatActivity {
                                 cursor.close();
 
                             }
-                            Log.v(DevTools.TAG, "Selected Images" + mArrayUri.size());
+                            Log.v(Iadt.TAG, "Selected Images" + mArrayUri.size());
                             onImagesSelected(mArrayUri);
                         }
                     }
@@ -267,7 +268,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
     private void onImagesSelected(ArrayList<Uri> mArrayUri) {
         //TODO: use selected images
-        DevTools.sendReport(ReportHelper.ReportType.SESSION, mArrayUri);
+        Iadt.sendReport(ReportHelper.ReportType.SESSION, mArrayUri);
         alertDialog.dismiss();
         finish();
     }

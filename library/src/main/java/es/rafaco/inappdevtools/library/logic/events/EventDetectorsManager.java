@@ -6,8 +6,21 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.events.detectors.*;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.InitialEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneModeChangeEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.ConnectivityChangeEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.DeviceButtonsEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.FragmentEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ProcessEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.user.ActivityTouchEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.user.ScreenChangeEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.user.ShakeEventDetector;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.CrashHandler;
@@ -59,14 +72,14 @@ public class EventDetectorsManager {
 
     private void startAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(DevTools.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
+            Log.d(Iadt.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
             eventDetector.start();
         }
     }
 
     private void stopAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(DevTools.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
+            Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
             eventDetector.stop();
         }
     }
@@ -92,9 +105,9 @@ public class EventDetectorsManager {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
             Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
-            Log.d(DevTools.TAG, "Exception handler added");
+            Log.d(Iadt.TAG, "Exception handler added");
         }else{
-            Log.d(DevTools.TAG, "Exception handler already attach on thread");
+            Log.d(Iadt.TAG, "Exception handler already attach on thread");
         }
     }
 }

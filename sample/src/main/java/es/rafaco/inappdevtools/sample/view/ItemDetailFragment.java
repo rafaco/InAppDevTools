@@ -15,9 +15,9 @@ import android.support.v4.app.Fragment;
 import android.support.design.widget.CollapsingToolbarLayout;
 //#endif
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.sample.dummy.DummyContent;
-import es.rafaco.inappdevtools.library.DevTools;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -70,7 +70,7 @@ public class ItemDetailFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
-            DevTools.breakpoint(mItem);
+            Iadt.codepoint(mItem);
         }
 
         return rootView;

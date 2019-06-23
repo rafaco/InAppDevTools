@@ -2,8 +2,8 @@ package es.rafaco.inappdevtools.sample;
 
 import android.app.Application;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 
 
 public class SampleApp extends Application {
@@ -13,29 +13,29 @@ public class SampleApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //DevTools.breakpoint(this);
+        //Iadt.codePoint(this);
 
-        DevTools.addCustomRunnable(new RunnableConfig("Show message",
+        Iadt.addCustomRunnable(new RunnableItem("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.showMessage("Mostrando mensaje");
+                        Iadt.showMessage("Mostrando mensaje");
                     }
                 },
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.showMessage("Mensaje mostrado");
+                        Iadt.showMessage("Mensaje mostrado");
                     }
                 }));
 
-        DevTools.addCustomRunnable(new RunnableConfig("Select API...",
+        Iadt.addCustomRunnable(new RunnableItem("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.showMessage("Not already implemented");
+                        Iadt.showMessage("Not already implemented");
                     }
                 }));
     }

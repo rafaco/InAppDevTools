@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.io.File;
 
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class CacheUtils {
 

@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 
 public class EmailUtils {
@@ -46,7 +46,7 @@ public class EmailUtils {
 
                 //TODO:??
                 if (!file.exists() || !file.canRead()) {
-                    DevTools.showMessage("Attachment Error");
+                    Iadt.showMessage("Attachment Error");
                     //return;
                 }
 

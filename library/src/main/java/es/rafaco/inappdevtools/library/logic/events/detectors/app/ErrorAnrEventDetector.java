@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,11 +10,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 
@@ -55,8 +56,8 @@ public class ErrorAnrEventDetector extends EventDetector {
     private Anr parseAnr(ANRError error) {
         String errorString;
         errorString = String.format("ANR ERROR: %s - %s", error.getMessage(), error.getCause());
-        DevTools.showMessage(errorString);
-        Log.e(DevTools.TAG, errorString);
+        Iadt.showMessage(errorString);
+        Log.e(Iadt.TAG, errorString);
 
         Anr anr = new Anr();
         anr.setDate(new Date().getTime());
@@ -75,7 +76,7 @@ public class ErrorAnrEventDetector extends EventDetector {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
+                DevToolsDatabase db = IadtController.get().getDatabase();
                 long anrId = db.anrDao().insert(anr);
                 FriendlyLog.logAnr(anrId, anr);
             }

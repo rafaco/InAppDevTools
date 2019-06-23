@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -75,30 +75,30 @@ public class RunScreen extends OverlayScreen {
 
     private void addCustomItems(List<Object> data) {
         data.add("Sample App");
-        data.addAll(DevTools.getCustomRunnables());
+        data.addAll(IadtController.get().getRunnableManager().getAll());
     }
 
     private void addDevToolsItems(List<Object> data) {
-        data.add("DevTools");
-        data.add(new RunnableConfig( "Take Screen",
+        data.add("Iadt");
+        data.add(new RunnableItem( "Take Screen",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.takeScreenshot();
+                        IadtController.get().takeScreenshot();
                     }
                 }));
 
-        data.add(new RunnableConfig("Breakpoint",
+        data.add(new RunnableItem("Codepoint",
                 R.drawable.ic_pan_tool_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.breakpoint(RunScreen.this);
+                        Iadt.codepoint(RunScreen.this);
                     }
                 }));
 
-        data.add(new RunnableConfig("Simulate...",
+        data.add(new RunnableItem("Simulate...",
                 R.drawable.ic_input_white_24dp,
                 new Runnable() {
                     @Override
@@ -107,12 +107,12 @@ public class RunScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("DISABLE...",
+        data.add(new RunnableItem("DISABLE...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayUIService.runAction(OverlayUIService.IntentAction.HIDE, null);
+                        IadtController.get().hideOverlay();
                         Intent intent = new Intent(getContext(), WelcomeDialogActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getContext().startActivity(intent);
@@ -123,40 +123,40 @@ public class RunScreen extends OverlayScreen {
 
     private void addAndroidItems(List<Object> data) {
         data.add("Android");
-        data.add(new RunnableConfig("App Info",
+        data.add(new RunnableItem("App Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
+                        IadtController.get().hideOverlay();
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
-        data.add(new RunnableConfig("Dev Options",
+        data.add(new RunnableItem("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
+                        IadtController.get().hideOverlay();
                         AppUtils.openDeveloperOptions(RunScreen.this.getContext());
                     }
                 }));
 
-        data.add(new RunnableConfig("Restart app",
+        data.add(new RunnableItem("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.restartApp(false);
+                        IadtController.get().restartApp(false);
                     }
                 }));
 
-        data.add(new RunnableConfig("Force close",
+        data.add(new RunnableItem("Force close",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        DevTools.forceCloseApp(false);
+                        IadtController.get().forceCloseApp(false);
                     }
                 }));
     }
@@ -172,7 +172,7 @@ public class RunScreen extends OverlayScreen {
                         dialog.dismiss();
                         switch (which){
                             case 0: //Traffic
-                                HttpBinService.simulation(DevTools.getOkHttpClient());
+                                HttpBinService.simulation(Iadt.getOkHttpClient());
                                 break;
                             case 1: //Anr
                                 onAnrButton();
@@ -193,14 +193,14 @@ public class RunScreen extends OverlayScreen {
     }
 
     public void onAnrButton() {
-        Log.i(DevTools.TAG, "ANR requested, sleeping main thread for a while...");
+        Log.i(Iadt.TAG, "ANR requested, sleeping main thread for a while...");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep((long)10 * 1000);
                 } catch (InterruptedException e) {
-                    Log.e(DevTools.TAG, "Something wrong happen", e);
+                    Log.e(Iadt.TAG, "Something wrong happen", e);
                     Thread.currentThread().interrupt();
                 }
             }
@@ -208,7 +208,7 @@ public class RunScreen extends OverlayScreen {
     }
 
     public void onCrashUiButton() {
-        Log.i(DevTools.TAG, "Simulated crash on the UI thread...");
+        Log.i(Iadt.TAG, "Simulated crash on the UI thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
@@ -219,7 +219,7 @@ public class RunScreen extends OverlayScreen {
     }
 
     public void onCrashBackButton() {
-        Log.i(DevTools.TAG, "Simulated crash on a background thread...");
+        Log.i(Iadt.TAG, "Simulated crash on a background thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override

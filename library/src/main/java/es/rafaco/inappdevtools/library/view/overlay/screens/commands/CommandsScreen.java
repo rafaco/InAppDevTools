@@ -7,9 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
@@ -64,7 +63,7 @@ public class CommandsScreen extends OverlayScreen {
         devOptionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayUIService.runAction(OverlayUIService.IntentAction.ICON, null);
+                IadtController.get().hideOverlay();
                 AppUtils.openDeveloperOptions(getContext());
             }
         });
@@ -81,7 +80,7 @@ public class CommandsScreen extends OverlayScreen {
         fullRestartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DevTools.restartApp(false);
+                IadtController.get().restartApp(false);
             }
         });
 

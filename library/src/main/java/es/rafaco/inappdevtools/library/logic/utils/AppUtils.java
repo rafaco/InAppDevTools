@@ -8,15 +8,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class AppUtils {
 
@@ -49,7 +48,7 @@ public class AppUtils {
     }
 
     public static void clearAppData() {
-        Context appContext = DevTools.getAppContext();
+        Context appContext = Iadt.getAppContext();
         try {
 
             if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
@@ -78,7 +77,7 @@ public class AppUtils {
     }
 
     public static void programRestart(Context context, boolean isCrash) {
-        Log.e("DevTools", "Programming restart after 100ms");
+        Log.e("Iadt", "Programming restart after 100ms");
         PackageManager pm = context.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
 
@@ -94,7 +93,7 @@ public class AppUtils {
     }
 
     public static void exit() {
-        Log.d("DevTools", "Killing application");
+        Log.d("Iadt", "Killing application");
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);
     }

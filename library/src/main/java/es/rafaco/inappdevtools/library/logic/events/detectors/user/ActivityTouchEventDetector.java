@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.user;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -49,13 +49,13 @@ public class ActivityTouchEventDetector extends EventDetector {
     private void addTouchListener(final Activity activity) {
         FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
         if (decorView == null){
-            Log.d(DevTools.TAG, "Resumed activity without decorView");
+            Log.d(Iadt.TAG, "Resumed activity without decorView");
             return;
         }
         decorView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d(DevTools.TAG, "Click X:" + event.getX() + " Y:" + event.getY() + " at " + activity.getClass().getSimpleName() +
+                Log.d(Iadt.TAG, "Click X:" + event.getX() + " Y:" + event.getY() + " at " + activity.getClass().getSimpleName() +
                         " - " + v.getClass().getSimpleName() + ": " + getResourceName(v, activity));
                 return false;
             }
@@ -65,7 +65,7 @@ public class ActivityTouchEventDetector extends EventDetector {
     private void removeTouchListener(Activity activity) {
         FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
         if (decorView == null){
-            Log.d(DevTools.TAG, "Paused activity without decorView");
+            Log.d(Iadt.TAG, "Paused activity without decorView");
             return;
         }
         decorView.setOnTouchListener(null);

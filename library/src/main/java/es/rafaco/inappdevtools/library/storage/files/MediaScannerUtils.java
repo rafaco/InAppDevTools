@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 import java.io.File;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class MediaScannerUtils {
 
@@ -17,7 +17,7 @@ public class MediaScannerUtils {
     public static void scan(String[] paths) {
         // Tell the media scanner about the new file so that it is immediately available to the user.
         MediaScannerConnection.scanFile(
-                DevTools.getAppContext(),
+                Iadt.getAppContext(),
                 paths,
                 null,
                 new MediaScannerConnection.OnScanCompletedListener() {

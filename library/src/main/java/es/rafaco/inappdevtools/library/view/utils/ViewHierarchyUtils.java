@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ViewHierarchyUtils {
 
@@ -41,7 +41,7 @@ public class ViewHierarchyUtils {
 
             for(String viewName : rootViewNames) {
                 View rootView = (View)getRootView.invoke(wmgInstnace, viewName);
-                Log.i(DevTools.TAG, "Found root view: " + viewName + ": " + rootView);
+                Log.i(Iadt.TAG, "Found root view: " + viewName + ": " + rootView);
                 rootViews.add(new Pair<>(viewName, rootView));
 
                 if(print)
@@ -85,9 +85,9 @@ public class ViewHierarchyUtils {
     private static boolean dumpViewWithProperties(View view, int level) {
         //Add to view Hierarchy.
         if (view instanceof TextView) {
-            Log.d(DevTools.TAG, "TextView from hierarchy dumped: " + view.toString() + " with text: " + ((TextView) view).getText().toString() + " ,in Level: " + level);
+            Log.d(Iadt.TAG, "TextView from hierarchy dumped: " + view.toString() + " with text: " + ((TextView) view).getText().toString() + " ,in Level: " + level);
         } else {
-            Log.d(DevTools.TAG, "View from hierarchy dumped: " + view.toString() + " ,in Level: " + level);
+            Log.d(Iadt.TAG, "View from hierarchy dumped: " + view.toString() + " ,in Level: " + level);
         }
         return true;
     }

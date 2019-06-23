@@ -1,11 +1,11 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import android.os.Handler;
 
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ForegroundEventDetector extends EventDetector {
 

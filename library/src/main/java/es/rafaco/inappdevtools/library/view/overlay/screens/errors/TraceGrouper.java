@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
@@ -108,12 +108,12 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : "Other");
         item.setColor(getColor(item));
-        item.setFullPath(DevTools.getSourcesManager().getNodePathFromClassName(item.getSourcetrace().extractPath()));
+        item.setFullPath(IadtController.get().getSourcesManager().getNodePathFromClassName(item.getSourcetrace().extractPath()));
     }
 
     private void initMatcher() {
         matcher = new HashMap<>();
-        AppInfoHelper infoHelper = new AppInfoHelper(DevTools.getAppContext());
+        AppInfoHelper infoHelper = new AppInfoHelper(IadtController.get().getAppContext());
         matcher.put(BuildConfig.APPLICATION_ID, "InAppDevTools"); //Our library
         matcher.put(infoHelper.getPackageName(), "Your App"); //Host app
         matcher.put("androidx.", "AndroidX");

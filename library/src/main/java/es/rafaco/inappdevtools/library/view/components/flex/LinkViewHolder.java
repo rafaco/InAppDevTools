@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
 public class LinkViewHolder extends FlexibleViewHolder {
@@ -26,7 +25,7 @@ public class LinkViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final ThinItem data = (ThinItem) abstractData;
+        final LinkItem data = (LinkItem) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
             int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());

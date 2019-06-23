@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
-import android.app.SearchManager;
 import android.os.AsyncTask;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -19,9 +18,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.ThinItem;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.view.components.flex.LinkItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
@@ -105,7 +105,7 @@ public class SourcesScreen extends OverlayScreen {
 
     private List<Object> getDataByEntry(SourceEntry filter) {
         String path = (filter!=null) ? filter.getName() : null;
-        List<SourceEntry> filteredItems = DevTools.getSourcesManager().getChildItems(path);
+        List<SourceEntry> filteredItems = IadtController.get().getSourcesManager().getChildItems(path);
 
         List<Object> data= new ArrayList<>();
         addRootAndUp(filter, data);
@@ -117,7 +117,7 @@ public class SourcesScreen extends OverlayScreen {
 
     private List<Object> getDataBySearch(String filter) {
         List<Object> data= new ArrayList<>();
-        List<SourceEntry> filteredItems = DevTools.getSourcesManager().getSearchItems(filter);
+        List<SourceEntry> filteredItems = IadtController.get().getSourcesManager().getSearchItems(filter);
         if (filter.length()< 2) {
             addShortSearchResult(data);
             return data;
@@ -197,7 +197,7 @@ public class SourcesScreen extends OverlayScreen {
     //region [ FLEXIBLE ITEMS ]
 
     private List<Object> addShortSearchResult(List<Object> data) {
-        data.add(new ThinItem(
+        data.add(new LinkItem(
                 "Type 2 characters at least...",
                 R.string.gmd_pause,
                 R.color.rally_white,
@@ -212,7 +212,7 @@ public class SourcesScreen extends OverlayScreen {
     }
 
     private List<Object> addEmptySearchResult(List<Object> data) {
-        data.add(new ThinItem(
+        data.add(new LinkItem(
                 "No results found",
                 R.string.gmd_stop,
                 R.color.rally_white,
@@ -230,7 +230,7 @@ public class SourcesScreen extends OverlayScreen {
 
         if (filter != null) { // Not root
 
-            data.add(new ThinItem(
+            data.add(new LinkItem(
                     "Go to root",
                     R.string.gmd_home,
                     R.color.rally_white,
@@ -243,7 +243,7 @@ public class SourcesScreen extends OverlayScreen {
             ));
 
             if (filter.getDeepLevel() != 0){
-                data.add(new ThinItem(
+                data.add(new LinkItem(
                         "Up from " + PathUtils.removeLastSlash(filter.getName()),
                         R.string.gmd_arrow_upward,
                         R.color.rally_white,
@@ -267,7 +267,7 @@ public class SourcesScreen extends OverlayScreen {
                 label = label.replace(filter.getName(), "");
             }
 
-            data.add(new ThinItem(label,
+            data.add(new LinkItem(label,
                     entry.isDirectory() ? R.string.gmd_folder_filled : R.string.gmd_insert_drive_file,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
                     entry.isDirectory() ? new Runnable() {
@@ -334,11 +334,11 @@ public class SourcesScreen extends OverlayScreen {
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_share) {
-            FileProviderUtils.shareText(DevTools.getAppContext(), getContentOverview());
+            FileProviderUtils.shareText(Iadt.getAppContext(), getContentOverview());
         }
         else if (selected == R.id.action_copy) {
             ClipboardUtils.save(getContext(), getContentOverview());
-            DevTools.showMessage("Content overview copied to clipboard");
+            Iadt.showMessage("Content overview copied to clipboard");
         }
         return super.onMenuItemClick(item);
     }

@@ -8,5 +8,6 @@ import android.support.v4.content.FileProvider;
 
 public class IadtFileProvider extends FileProvider {
     // This class is intentionally empty and only referenced in our library manifest
-    // We extend FileProvider to avoid collision with another FileProvider included at host app
+    // We extend it to avoid collision and to allow default FileProvider implementation
+    // at host app
 }

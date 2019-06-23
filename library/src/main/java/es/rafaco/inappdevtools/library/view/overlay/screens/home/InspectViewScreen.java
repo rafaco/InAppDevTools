@@ -13,7 +13,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.integrations.RunnableConfig;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -47,7 +47,7 @@ public class InspectViewScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new RunnableConfig("Select element",
+        data.add(new RunnableItem("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
                     @Override
@@ -57,7 +57,7 @@ public class InspectViewScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Browse hierarchy",
+        data.add(new RunnableItem("Browse hierarchy",
                 R.drawable.ic_layers_white_24dp, new Runnable() {
             @Override
             public void run() {
@@ -66,7 +66,7 @@ public class InspectViewScreen extends OverlayScreen {
             }
         }));
 
-        data.add(new RunnableConfig("Take Measure",
+        data.add(new RunnableItem("Take Measure",
                 R.drawable.ic_format_line_spacing_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,7 +76,7 @@ public class InspectViewScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableConfig("Show gridline",
+        data.add(new RunnableItem("Show gridline",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override

@@ -17,10 +17,10 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.utils.ExpandCollapseUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
@@ -85,7 +85,7 @@ public class MainOverlayLayerManager {
 
     public void goTo(final Class<? extends OverlayScreen> screenClass, final String param){
 
-        Log.d(DevTools.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + param);
+        Log.d(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + param);
 
         NavigationStep newStep = new NavigationStep(screenClass, param);
         addNavigationStep(newStep);
@@ -288,7 +288,7 @@ public class MainOverlayLayerManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        OverlayUIService.runAction(OverlayUIService.IntentAction.HIDE,null);
+        IadtController.get().hideOverlay();
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {

@@ -19,8 +19,9 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
 //#endif
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -40,7 +41,7 @@ public class CrashDialogActivity extends AppCompatActivity {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                crash = DevTools.getDatabase().crashDao().getLast();
+                crash = IadtController.get().getDatabase().crashDao().getLast();
                 CrashDialogActivity.this.buildDialog(crash);
             }
         });
@@ -92,15 +93,15 @@ public class CrashDialogActivity extends AppCompatActivity {
     }
 
     private void onCrashDetail(Crash crash) {
-        if (DevTools.getConfig().getBoolean(Config.OVERLAY_ENABLED)){
+        if (Iadt.getConfig().getBoolean(Config.OVERLAY_ENABLED)){
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, String.valueOf(crash.getUid()));
-            DevTools.getAppContext().startService(intent);
+            Iadt.getAppContext().startService(intent);
             destroyDialog();
         }
     }
 
     private void onCrashReport(Crash crash) {
-        DevTools.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+        Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
         destroyDialog();
     }
 

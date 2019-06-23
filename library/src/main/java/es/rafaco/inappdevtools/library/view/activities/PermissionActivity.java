@@ -20,7 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 //#endif
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 
@@ -53,10 +53,10 @@ public class PermissionActivity extends AppCompatActivity {
             onRevokeCallback = onFailCallback;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-            DevTools.showMessage("Permission needed, please accept it.");
-            Intent intent = PermissionActivity.buildIntent(action, DevTools.getAppContext());
+            Iadt.showMessage("Permission needed, please accept it.");
+            Intent intent = PermissionActivity.buildIntent(action, Iadt.getAppContext());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            DevTools.getAppContext().startActivity(intent, null);
+            Iadt.getAppContext().startActivity(intent, null);
         }else{
             onSuccessCallback.run();
         }
@@ -76,7 +76,7 @@ public class PermissionActivity extends AppCompatActivity {
                 requestStoragePermission();
             }
         } else {
-            Log.d(DevTools.TAG, "OverlayUIService - onStartCommand without action");
+            Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
         }
 
     }
@@ -116,7 +116,7 @@ public class PermissionActivity extends AppCompatActivity {
             if (checkOverlayPermission()){
                 onOverlayPermissionGranted();
             } else{
-                DevTools.showMessage(R.string.draw_other_app_permission_denied);
+                Iadt.showMessage(R.string.draw_other_app_permission_denied);
                 finish();
             }
         }
@@ -133,7 +133,7 @@ public class PermissionActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     onStoragePermissionGranted();
                 } else {
-                    DevTools.showMessage("Storage permission denied, operation cancelled");
+                    Iadt.showMessage("Storage permission denied, operation cancelled");
                     finish();
                 }
                 break;
@@ -178,7 +178,7 @@ public class PermissionActivity extends AppCompatActivity {
 
     private static boolean checkStandardPermission(String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            return ContextCompat.checkSelfPermission(DevTools.getAppContext(),
+            return ContextCompat.checkSelfPermission(Iadt.getAppContext(),
                     permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
@@ -186,7 +186,7 @@ public class PermissionActivity extends AppCompatActivity {
 
     private static boolean checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            return Settings.canDrawOverlays(DevTools.getAppContext());
+            return Settings.canDrawOverlays(Iadt.getAppContext());
         }
         return true;
     }

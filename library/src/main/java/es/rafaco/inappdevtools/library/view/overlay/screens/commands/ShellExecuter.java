@@ -6,8 +6,8 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ShellExecuter {
 
@@ -22,14 +22,14 @@ public class ShellExecuter {
             p = Runtime.getRuntime().exec(command);
             //TODO: LOW - was waitFor() needed? prevent crash handler to work
             //int waitResponse = p.waitFor();
-            //Log.w(DevTools.TAG, "waitResponse: " + waitResponse);
+            //Log.w(Iadt.TAG, "waitResponse: " + waitResponse);
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             StringBuffer output = new StringBuffer();
             String line;
             while ((line = reader.readLine())!= null) {
                 output.append(line + "\n");
             }
-            Log.v(DevTools.TAG, "ShellExecuter result: " + output.length() + " lines.");
+            Log.v(Iadt.TAG, "ShellExecuter result: " + output.length() + " lines.");
             response = output.toString();
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);

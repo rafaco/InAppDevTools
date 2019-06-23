@@ -31,9 +31,10 @@ import android.arch.paging.PagedList;
 
 import com.google.gson.Gson;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -111,7 +112,7 @@ public class FriendlyLogScreen extends OverlayScreen {
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
-                    //Log.v(DevTools.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart
+                    //Log.v(Iadt.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart
                     // +" itemCount="+itemCount+" size="+adapter.getItemCount()
                     // +" isBottom="+!recyclerView.canScrollVertically(1) + ")");
                     scrollToBottom();
@@ -186,7 +187,7 @@ public class FriendlyLogScreen extends OverlayScreen {
             onClearButton();
         }
         else{
-            DevTools.showMessage("Not already implemented");
+            Iadt.showMessage("Not already implemented");
         }
         return super.onMenuItemClick(item);
     }
@@ -221,7 +222,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     private void onSaveButton() {
         OverlayScreenHelper helper = new LogHelper();
         String path = (String) helper.getReportPath();
-        DevTools.showMessage("Log stored to " + path);
+        Iadt.showMessage("Log stored to " + path);
     }
 
     private void onClearButton() {
@@ -248,8 +249,8 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void clearAll() {
-        DevTools.getDatabase().friendlyDao().deleteAll();
-        FriendlyLog.log("D", "DevTools", "Delete","Friendly log history deleted by user");
+        IadtController.get().getDatabase().friendlyDao().deleteAll();
+        FriendlyLog.log("D", "Iadt", "Delete","Friendly log history deleted by user");
         adapter.notifyDataSetChanged();
     }
 
@@ -269,13 +270,13 @@ public class FriendlyLogScreen extends OverlayScreen {
 
             if (currentScrollStatus != ScrollStatus.BOTTOM && !recyclerView.canScrollVertically(1)) {
                 currentScrollStatus = ScrollStatus.BOTTOM;
-                Log.v(DevTools.TAG, "Scroll reached bottom ("+dx+","+dy+")");
+                Log.v(Iadt.TAG, "Scroll reached bottom ("+dx+","+dy+")");
             }
             else if (currentScrollStatus != ScrollStatus.TOP && !recyclerView.canScrollVertically(-1)) {
                 currentScrollStatus = ScrollStatus.TOP;
-                Log.v(DevTools.TAG, "Scroll reached top ("+dx+","+dy+")");
+                Log.v(Iadt.TAG, "Scroll reached top ("+dx+","+dy+")");
             }else{
-                Log.v(DevTools.TAG, "Scroll at middle ("+dx+","+dy+")");
+                Log.v(Iadt.TAG, "Scroll at middle ("+dx+","+dy+")");
                 currentScrollStatus = ScrollStatus.MIDDLE;
             }
         }

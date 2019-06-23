@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,10 +17,9 @@ import java.util.List;
 
 //import com.opencsv.CSVWriter;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.storage.files.MediaScannerUtils;
-import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 
 
 /**
@@ -43,7 +41,7 @@ public class SqliteExporter {
     private static final String SEPARATOR = "\n";
 
     public static String[] getAllDatabases(){
-        return DevTools.getAppContext().databaseList();
+        return Iadt.getAppContext().databaseList();
     }
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{

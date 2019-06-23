@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class ThreadUtils {
 
@@ -14,7 +14,7 @@ public class ThreadUtils {
 
     public static void logCurrentThread(String fromText){
         String thread = (amIOnUiThread()) ? "MAIN" : "a background";
-        DevTools.showMessage(fromText + " is running on " + thread + " thread");
+        Iadt.showMessage(fromText + " is running on " + thread + " thread");
     }
 
     public static String getFormattedThread(){

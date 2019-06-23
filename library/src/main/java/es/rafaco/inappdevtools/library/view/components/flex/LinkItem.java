@@ -1,13 +1,13 @@
-package es.rafaco.inappdevtools.library.logic.integrations;
+package es.rafaco.inappdevtools.library.view.components.flex;
 
-public class ThinItem {
+public class LinkItem {
 
     private final Runnable onClick;
     String title;
     int icon;
     int color;
 
-    public ThinItem(String title, int icon, int color, Runnable onclick) {
+    public LinkItem(String title, int icon, int color, Runnable onclick) {
         this.title = title;
         this.icon = icon;
         this.color = color;

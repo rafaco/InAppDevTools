@@ -14,8 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 //#endif
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
@@ -53,7 +54,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
-                        DevTools.getConfig().setBoolean(Config.ENABLED, false);
+                        Iadt.getConfig().setBoolean(Config.ENABLED, false);
                         showConfirmationDialog();
                     }
                 })
@@ -76,7 +77,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
-                        DevTools.restartApp(false);
+                        IadtController.get().restartApp(false);
                         finish();
                     }
                 })

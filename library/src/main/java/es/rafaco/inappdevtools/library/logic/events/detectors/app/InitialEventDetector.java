@@ -1,14 +1,14 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.initialization.FirstStartUtil;
-import es.rafaco.inappdevtools.library.logic.initialization.NewBuildUtil;
-import es.rafaco.inappdevtools.library.logic.initialization.PendingCrashUtil;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.init.FirstStartUtil;
+import es.rafaco.inappdevtools.library.logic.utils.init.NewBuildUtil;
+import es.rafaco.inappdevtools.library.logic.utils.init.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.CacheUtils;
 
@@ -24,8 +24,8 @@ public class InitialEventDetector extends EventDetector {
         eventManager.subscribe(Event.LIBRARY_START, new EventManager.OneShotListener(){
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "DevTools", "Init",
-                        "DevTools started");
+                FriendlyLog.log("D", "Iadt", "Init",
+                        "Iadt started");
             }
         });
 
@@ -48,10 +48,10 @@ public class InitialEventDetector extends EventDetector {
             }
         });
 
-        eventManager.subscribe(Event.NEW_BUILD, new EventManager.OneShotListener(){
+        eventManager.subscribe(Event.NEW_BUILD, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("V", "DevTools", "NewBuild",
+                FriendlyLog.log("V", "Iadt", "NewBuild",
                         "New compilation from " + DateUtils.getElapsedTimeLowered((long)param));
 
                 CacheUtils.deleteAll(getContext());

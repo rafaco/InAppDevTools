@@ -1,9 +1,9 @@
-package es.rafaco.inappdevtools.library.logic.initialization;
+package es.rafaco.inappdevtools.library.logic.utils.init;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class PendingCrashUtil {
 
@@ -11,7 +11,7 @@ public class PendingCrashUtil {
     public static final String PENDING_CRASH_KEY = "PENDING_CRASH";
 
     public static boolean isPending(){
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         return isPending(context);
     }
 
@@ -29,7 +29,7 @@ public class PendingCrashUtil {
     }
 
     private static void storeBoolean(String prefKey, String key, boolean value){
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         SharedPreferences prefs = context.getSharedPreferences(
                 prefKey, Context.MODE_PRIVATE);
         prefs.edit().putBoolean(key, value).apply();

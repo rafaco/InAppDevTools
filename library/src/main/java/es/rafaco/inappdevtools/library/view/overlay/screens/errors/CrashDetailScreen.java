@@ -18,8 +18,9 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -109,10 +110,10 @@ public class CrashDetailScreen extends OverlayScreen {
     private void requestData() {
         if (!TextUtils.isEmpty(getParam())){
             final long crashId = Long.parseLong(getParam());
-            crash = DevTools.getDatabase().crashDao().findById(crashId);
+            crash = IadtController.get().getDatabase().crashDao().findById(crashId);
         }
         else{
-            crash = DevTools.getDatabase().crashDao().getLast();
+            crash = IadtController.get().getDatabase().crashDao().getLast();
         }
         updateView();
     }
@@ -135,7 +136,7 @@ public class CrashDetailScreen extends OverlayScreen {
             @Override
             public void run() {
                 long screenId = crash.getScreenId();
-                Screen screen = DevTools.getDatabase().screenDao().findById(screenId);
+                Screen screen = IadtController.get().getDatabase().screenDao().findById(screenId);
                 if (screen!=null && !TextUtils.isEmpty(screen.getPath())){
                     new ImageLoaderAsyncTask(thumbnail).execute(screen.getPath());
                 }
@@ -215,13 +216,13 @@ public class CrashDetailScreen extends OverlayScreen {
         int selected = item.getItemId();
         if (selected == R.id.action_send)
         {
-            DevTools.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+            Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
             getScreenManager().hide();
         }
         else if (selected == R.id.action_share)
         {
             //TODO: share error
-            DevTools.showMessage("Not already implemented");
+            Iadt.showMessage("Not already implemented");
         }
         else if (selected == R.id.action_delete)
         {
@@ -234,7 +235,7 @@ public class CrashDetailScreen extends OverlayScreen {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DevToolsDatabase db = DevTools.getDatabase();
+                DevToolsDatabase db = IadtController.get().getDatabase();
                 db.crashDao().delete(crash);
             }
         });

@@ -17,8 +17,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.events.detectors.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
@@ -31,7 +31,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) DevTools.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
         String result = getTopActivity() + " on " + (activityWatcher.isInBackground() ? "Background" : "Foreground");
         return result;
     }
@@ -46,7 +46,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getActivityInfo() {
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) DevTools.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
         return new InfoGroup.Builder("")
                 .add("App on " + (activityWatcher.isInBackground() ? "Background" : "Foreground"))
                 .add("Top activity is " + getTopActivity())

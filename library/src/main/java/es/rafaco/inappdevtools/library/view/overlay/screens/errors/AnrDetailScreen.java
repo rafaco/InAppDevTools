@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -60,7 +60,7 @@ public class AnrDetailScreen extends OverlayScreen {
             ThreadUtils.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    anr = DevTools.getDatabase().anrDao().findById(anrId);
+                    anr = IadtController.get().getDatabase().anrDao().findById(anrId);
                     updateOutput();
                 }
             });

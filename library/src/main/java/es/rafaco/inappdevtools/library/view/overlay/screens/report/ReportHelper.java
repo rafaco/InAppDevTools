@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
@@ -88,7 +88,7 @@ public class ReportHelper extends OverlayScreenHelper {
                     .toString();
         }else{
             emailbody = new  StringBuilder()
-                    .append("<h2><b>DevTools report!</b></h2>")
+                    .append("<h2><b>Iadt report!</b></h2>")
                     .append("<p><b>Some Content</b></p>")
                     .append("<small><p>More content</p></small>")
                     .append("<a href = \"https://example.com\">https://example.com</a>")
@@ -117,13 +117,13 @@ public class ReportHelper extends OverlayScreenHelper {
                     }
                 }
             }catch (Exception e){
-                Log.e(DevTools.TAG, "Exception parsing screens for report");
+                Log.e(Iadt.TAG, "Exception parsing screens for report");
             }
 
             /* TODO: Re-enable db dump
             try {
-                SupportSQLiteDatabase db = DevTools.getDatabase().getOpenHelper().getReadableDatabase();
-                String name = DevTools.getDatabase().getOpenHelper().getDatabaseName();
+                SupportSQLiteDatabase db = IadtController.get().getDatabase().getOpenHelper().getReadableDatabase();
+                String name = IadtController.get().getDatabase().getOpenHelper().getDatabaseName();
                 filePaths.add(SqliteExporter.export(name, db));
             } catch (IOException e) {
                 e.printStackTrace();

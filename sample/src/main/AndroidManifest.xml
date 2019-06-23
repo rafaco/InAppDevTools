@@ -35,8 +35,6 @@
                 android:value=".view.ItemListActivity" />
         </activity>
 
-        <meta-data android:name="devtools_auto_init_enabled" android:value="false" />
-
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

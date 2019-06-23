@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class ExpandCollapseUtils {
 
@@ -49,7 +49,7 @@ public class ExpandCollapseUtils {
 
     public static void collapse(final View v, Animation.AnimationListener listener) {
         if (v==null){
-            Log.d(DevTools.TAG, "Unable to collapse an empty view");
+            Log.d(Iadt.TAG, "Unable to collapse an empty view");
             listener.onAnimationEnd(null);
             return;
         }
@@ -83,7 +83,7 @@ public class ExpandCollapseUtils {
 
     public static void expand(final View v, Animation.AnimationListener listener) {
         if (v==null){
-            Log.d(DevTools.TAG, "Unable to expand an empty view");
+            Log.d(Iadt.TAG, "Unable to expand an empty view");
             listener.onAnimationEnd(null);
             return;
         }

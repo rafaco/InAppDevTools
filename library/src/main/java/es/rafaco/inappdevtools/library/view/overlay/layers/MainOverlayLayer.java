@@ -24,8 +24,9 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 //#endif
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
@@ -158,7 +159,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
     public void setToolbarTitle(String title){
         if (title == null)
-            title = "DevTools";
+            title = "Iadt";
 
         toolbar.setTitle(title);
         //toolbar.setSubtitle("Sample app");
@@ -186,7 +187,7 @@ public class MainOverlayLayer extends OverlayLayer {
 
     private void addLogoAndResize() {
         int appIconResourceId = UiUtils.getAppIconResourceId();
-        Drawable logo =  DevTools.getAppContext().getResources().getDrawable(appIconResourceId);
+        Drawable logo =  Iadt.getAppContext().getResources().getDrawable(appIconResourceId);
         toolbar.setLogo(logo);
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             View child = toolbar.getChildAt(i);
@@ -209,25 +210,20 @@ public class MainOverlayLayer extends OverlayLayer {
 
     private void onToolbarButtonPressed(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_hide)
-        {
-            Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE,null);
-            DevTools.getAppContext().startService(intent);
+        if (selected == R.id.action_hide) {
+            IadtController.get().hideOverlay();
         }
-        else if (selected == R.id.action_half_position)
-        {
+        else if (selected == R.id.action_half_position) {
             toogleSizePosition(item);
         }
-        else if (selected == R.id.action_close)
-        {
-            Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.CLOSE_APP,null);
-            DevTools.getAppContext().startService(intent);
+        else if (selected == R.id.action_close) {
+            IadtController.get().forceCloseApp(false);
         }
     }
 
     private void onBackButtonPressed() {
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_BACK,null);
-        DevTools.getAppContext().startService(intent);
+        IadtController.get().getAppContext().startService(intent);
     }
 
     public View getFullContainer() {

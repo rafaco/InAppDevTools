@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class JsonAssetHelper {
 
@@ -78,7 +78,7 @@ public class JsonAssetHelper {
         try {
             json = new JSONObject(getFileContents());
         } catch (Exception e) {
-            FriendlyLog.log("E", "DevTools", "JsonAsset",
+            FriendlyLog.log("E", "Iadt", "JsonAsset",
                     "Invalid data at '" + target + "'", Log.getStackTraceString(e));
         }
 
@@ -103,7 +103,7 @@ public class JsonAssetHelper {
             in.close();
 
         } catch (IOException e) {
-            FriendlyLog.log("E", "DevTools", "Config",
+            FriendlyLog.log("E", "Iadt", "Config",
                     "Unable to read '" + target + "'", Log.getStackTraceString(e));
         }
 

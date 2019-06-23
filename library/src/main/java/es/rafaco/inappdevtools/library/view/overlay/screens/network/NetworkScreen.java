@@ -25,7 +25,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -154,12 +154,12 @@ public class NetworkScreen extends OverlayScreen {
         }
         else if (selected == R.id.action_simulate)
         {
-            HttpBinService.simulation(DevTools.getOkHttpClient());
+            HttpBinService.simulation(Iadt.getOkHttpClient());
         }
         else if (selected == R.id.action_send)
         {
             //TODO: send all errors
-            DevTools.showMessage("Not already implemented");
+            Iadt.showMessage("Not already implemented");
         }
         return super.onMenuItemClick(item);
     }

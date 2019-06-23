@@ -28,8 +28,8 @@ public class LogFilterConfig {
     public String tag(){
         if(presetFilter.equals("Cordova")){
             return "chromium";
-        }else if(presetFilter.equals("DevTools")){
-            return "DevTools";
+        }else if(presetFilter.equals("Iadt")){
+            return "Iadt";
         }else{
             return null;
         }

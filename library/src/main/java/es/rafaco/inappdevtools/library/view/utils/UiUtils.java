@@ -24,7 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 
 
@@ -38,12 +38,12 @@ public class UiUtils {
     }
 
     public static Drawable getAppIconDrawable() {
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         return context.getPackageManager().getApplicationIcon(context.getApplicationInfo());
     }
 
     public static int getAppIconResourceId(){
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         return applicationInfo.icon;
     }
@@ -54,13 +54,13 @@ public class UiUtils {
     }
 
     private void showKeyboard(View target){
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(target.getContext().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     private void hideKeyboard(View target){
-        Context context = DevTools.getAppContext();
+        Context context = Iadt.getAppContext();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(target.getContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(target.getWindowToken(),0);
     }

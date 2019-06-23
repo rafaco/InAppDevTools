@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.steps;
+package es.rafaco.inappdevtools.library.logic.log;
 
 import android.graphics.Color;
 import android.util.Log;
@@ -13,8 +13,9 @@ import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -93,7 +94,7 @@ public class FriendlyLog {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                DevTools.getDatabase().friendlyDao().insert(log);
+                IadtController.get().getDatabase().friendlyDao().insert(log);
             }
         });
     }
@@ -231,11 +232,11 @@ public class FriendlyLog {
             }else{
                 return R.drawable.ic_block_white_24dp;
             }
-        }else if (log.getType().equals("Breakpoint")){
+        }else if (log.getType().equals("Codepoint")){
             return R.drawable.ic_pan_tool_white_24dp;
         }
 
-        else if (log.getCategory().equals("DevTools")){
+        else if (log.getCategory().equals("Iadt")){
             if (log.getType().equals("NewBuild")) {
                 return R.drawable.ic_code_white_24dp;
             }
@@ -264,15 +265,15 @@ public class FriendlyLog {
         log.setType("Crash");
         log.setMessage(message);
         logAtLogcat(log);
-        return DevTools.getDatabase().friendlyDao().insert(log);
+        return IadtController.get().getDatabase().friendlyDao().insert(log);
     }
 
     public static void logCrashDetails(long friendlyLogId, long crashId, Crash crash) {
-        final Friendly log = DevTools.getDatabase().friendlyDao().findById(friendlyLogId);
+        final Friendly log = IadtController.get().getDatabase().friendlyDao().findById(friendlyLogId);
         log.setDate(crash.getDate());
         log.setMessage(crash.getMessage());
         log.setLinkedId(crashId);
-        DevTools.getDatabase().friendlyDao().update(log);
+        IadtController.get().getDatabase().friendlyDao().update(log);
     }
 
     public static void logAnr(long anrId, Anr anr) {
@@ -301,9 +302,9 @@ public class FriendlyLog {
     }
 
     public static void logNetworkUpdate(HttpTransaction transaction) {
-        final Friendly log = DevTools.getDatabase().friendlyDao().findByLinkedId(transaction.getId());
+        final Friendly log = IadtController.get().getDatabase().friendlyDao().findByLinkedId(transaction.getId());
         if (log == null){
-            DevTools.showMessage("Unable to link the network request");
+            Iadt.showMessage("Unable to link the network request");
             return;
         }
 
@@ -331,13 +332,13 @@ public class FriendlyLog {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public void run() {
-                DevTools.getDatabase().friendlyDao().update(log);
+                IadtController.get().getDatabase().friendlyDao().update(log);
             }
         });
     }
 
     public static void logException(String message, Throwable e) {
-        log("W", "DevTools", "Exception",
+        log("W", "Iadt", "Exception",
                 message + " -> " + e.getMessage(),
                 Log.getStackTraceString(e));
     }

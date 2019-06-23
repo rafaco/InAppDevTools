@@ -13,8 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FileCreator {
 
@@ -65,7 +65,7 @@ public class FileCreator {
     }
 
     private static String getLibDir(){
-        return DevTools.getAppContext().getFilesDir() + "/" + DevTools.TAG.toLowerCase();
+        return Iadt.getAppContext().getFilesDir() + "/" + Iadt.TAG.toLowerCase();
     }
 
     private static File createDirIfNotExist(String path){

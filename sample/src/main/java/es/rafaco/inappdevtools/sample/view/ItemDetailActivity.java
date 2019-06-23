@@ -24,8 +24,8 @@ import android.support.v7.app.ActionBar;
 
 import es.rafaco.inappdevtools.sample.R;
 import es.rafaco.inappdevtools.sample.dummy.DummyContent;
-import es.rafaco.inappdevtools.library.DevTools;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -50,7 +50,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-                DevTools.breakpoint(mItem);
+                Iadt.codepoint(mItem);
             }
         });
 

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 
@@ -85,7 +85,7 @@ public class InfoHelper extends OverlayScreenHelper {
                 meminfo.append("\n");
             }
         } catch (IOException e) {
-            Log.e(DevTools.TAG, "Could not read /proc/meminfo", e);
+            Log.e(Iadt.TAG, "Could not read /proc/meminfo", e);
         }
 
         return meminfo.toString();

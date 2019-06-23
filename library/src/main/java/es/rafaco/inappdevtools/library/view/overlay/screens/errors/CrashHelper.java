@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
@@ -91,7 +91,7 @@ public class CrashHelper extends OverlayScreenHelper {
     }
 
     private void addScreenFile(Crash crash, List<String> filePaths) {
-        Screen screen = DevTools.getDatabase().screenDao().findById(crash.getScreenId());
+        Screen screen = IadtController.get().getDatabase().screenDao().findById(crash.getScreenId());
         String filePath = screen.getPath();
 
         if (!TextUtils.isEmpty(filePath)) {
@@ -100,7 +100,7 @@ public class CrashHelper extends OverlayScreenHelper {
     }
 
     private void addLogcatFile(Crash crash, List<String> filePaths) {
-        Logcat logcat = DevTools.getDatabase().logcatDao().findById(crash.getLogcatId());
+        Logcat logcat = IadtController.get().getDatabase().logcatDao().findById(crash.getLogcatId());
         String filePath = logcat.getPath();
 
         if (!TextUtils.isEmpty(filePath)) {

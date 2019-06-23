@@ -1,6 +1,6 @@
-package es.rafaco.inappdevtools.library.logic.initialization;
+package es.rafaco.inappdevtools.library.logic.utils.init;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
@@ -29,7 +29,7 @@ public class NewBuildUtil {
     private static void update(){
 
         long lastBuildTime = DevToolsPrefs.getLong(PREF_KEY, -1);
-        long currentBuildTime = DevTools.getConfig().getLong(Config.BUILD_TIME);
+        long currentBuildTime = Iadt.getConfig().getLong(Config.BUILD_TIME);
 
         if (lastBuildTime<0){
             //First start

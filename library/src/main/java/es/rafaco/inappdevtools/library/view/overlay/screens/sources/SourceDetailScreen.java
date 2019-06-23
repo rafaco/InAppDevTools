@@ -22,8 +22,9 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Method;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
@@ -81,7 +82,7 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         new AsyncTask<String, String, String>(){
             @Override
             protected String doInBackground(String... strings) {
-                return DevTools.getSourcesManager().getContent(getParams().path);
+                return IadtController.get().getSourcesManager().getContent(getParams().path);
             }
 
             @Override
@@ -143,19 +144,19 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
 
     @Override
     public void onLanguageDetected(Language language, int relevance) {
-        DevTools.showMessage("Detected language: " + language + " relevance: " + relevance);
+        Iadt.showMessage("Detected language: " + language + " relevance: " + relevance);
     }
 
     @Override
     public void onFontSizeChanged(int sizeInPx) {
-        //DevTools.showMessage("CodeView font-size to " + sizeInPx + "px");
+        //Iadt.showMessage("CodeView font-size to " + sizeInPx + "px");
     }
 
     @Override
     public void onLineClicked(int lineNumber, String content) {
         String text = "Line " + lineNumber + " of " +  getParams().path + ":\n" + content;
         ClipboardUtils.save(getContext(), text);
-        DevTools.showMessage("Line " + lineNumber + " copied to clipboard");
+        Iadt.showMessage("Line " + lineNumber + " copied to clipboard");
     }
 
     //endregion
@@ -238,7 +239,7 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         }
         else if (selected == R.id.action_copy) {
             ClipboardUtils.save(getContext(), codeViewer.getCode());
-            DevTools.showMessage("Content copied to clipboard");
+            Iadt.showMessage("Content copied to clipboard");
         }
         return super.onMenuItemClick(item);
     }
@@ -271,7 +272,7 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
         new AsyncTask<String, String, String>(){
             @Override
             protected String doInBackground(String... strings) {
-                return DevTools.getSourcesManager().getLocalFile(getParams().path)
+                return IadtController.get().getSourcesManager().getLocalFile(getParams().path)
                         .getAbsolutePath();
             }
 
@@ -280,10 +281,10 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
                 super.onPostExecute(path);
 
                 if (path == null){
-                    DevTools.showMessage("Unable to get file path");
+                    Iadt.showMessage("Unable to get file path");
                     return;
                 }
-                FileProviderUtils.openFileExternally(DevTools.getAppContext(), path, Intent.ACTION_SEND);
+                FileProviderUtils.openFileExternally(Iadt.getAppContext(), path, Intent.ACTION_SEND);
             }
         }.execute();
     }

@@ -32,8 +32,9 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.log.LogCatReaderTask;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
@@ -44,7 +45,7 @@ public class LogScreen extends OverlayScreen {
 
 
     protected LogLineAdapter adapter;
-    protected LogReaderTask logReaderTask = null;
+    protected LogCatReaderTask logReaderTask = null;
     protected RecyclerView recyclerView;
     private String textFilter = "";
 
@@ -151,7 +152,7 @@ public class LogScreen extends OverlayScreen {
             onClearLog();
         }
         else{
-            DevTools.showMessage("Not already implemented");
+            Iadt.showMessage("Not already implemented");
         }
         return super.onMenuItemClick(item);
     }
@@ -166,7 +167,7 @@ public class LogScreen extends OverlayScreen {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which!=selectedLogLevel) {
                             selectedLogLevel = which;
-                            Log.d(DevTools.TAG, "Verbosity level changed to: " + getSelectedVerbosity());
+                            Log.d(Iadt.TAG, "Verbosity level changed to: " + getSelectedVerbosity());
                             updateFilter();
                         }
                         dialog.dismiss();
@@ -181,11 +182,11 @@ public class LogScreen extends OverlayScreen {
     private void onSaveButton() {
         OverlayScreenHelper helper = new LogHelper();
         String path = helper.getReportPath();
-        DevTools.showMessage("Log stored to " + path);
+        Iadt.showMessage("Log stored to " + path);
     }
 
     public void onClearLog(){
-        Log.v(DevTools.TAG, "Logcat showPlaceholder requested");
+        Log.v(Iadt.TAG, "Logcat showPlaceholder requested");
         logReaderTask.stopTask(new Runnable() {
             @Override
             public void run() {
@@ -244,7 +245,7 @@ public class LogScreen extends OverlayScreen {
         //command = String.format(command, selectedLogLevel);
         String command = "logcat -v time";
 
-        logReaderTask = new LogReaderTask(adapter, command);
+        logReaderTask = new LogCatReaderTask(adapter, command);
         if(Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
             logReaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {

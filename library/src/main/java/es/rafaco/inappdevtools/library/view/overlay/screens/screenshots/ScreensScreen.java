@@ -18,8 +18,8 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.rafaco.inappdevtools.library.DevTools;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
@@ -85,7 +85,7 @@ public class ScreensScreen extends OverlayScreen {
     }
 
     private void onScreenshotButton() {
-        DevTools.takeScreenshot();
+        IadtController.get().takeScreenshot();
     }
 
 

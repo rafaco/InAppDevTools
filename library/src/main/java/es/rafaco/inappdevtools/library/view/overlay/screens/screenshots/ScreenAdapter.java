@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -163,14 +163,14 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
         public boolean onMenuItemClick(MenuItem menuItem) {
             int i = menuItem.getItemId();
             if (i == R.id.action_preview) {
-                DevTools.showMessage("Preview");
+                Iadt.showMessage("Preview");
                 return true;
             } else if (i == R.id.action_open) {
                 CustomToast.show(recycledView.getContext(), "Open", CustomToast.TYPE_WARNING);
 
                 return true;
             } else if (i == R.id.action_delete) {
-                DevTools.showMessage("Delete");
+                Iadt.showMessage("Delete");
                 return true;
             }
             return false;

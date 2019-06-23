@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.user;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -7,12 +7,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ShakeEventDetector extends EventDetector {
 
@@ -34,8 +35,8 @@ public class ShakeEventDetector extends EventDetector {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "User", "Shake", "Shake detected");
-                if (DevTools.getConfig().getBoolean(Config.INVOCATION_BY_SHAKE)){
-                    DevTools.openTools(false);
+                if (Iadt.getConfig().getBoolean(Config.INVOCATION_BY_SHAKE)){
+                    IadtController.get().showOverlay(false);
                 }
             }
         });
@@ -90,7 +91,7 @@ public class ShakeEventDetector extends EventDetector {
                     return;
                 }
                 mShakeTimestamp = now;
-                Log.d(DevTools.TAG, "RAFA - Shake action detected!");
+                Log.d(Iadt.TAG, "RAFA - Shake action detected!");
 
                 eventManager.fire(Event.SHAKE);
             }

@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.events.detectors;
+package es.rafaco.inappdevtools.library.logic.events.detectors.device;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class DeviceButtonsEventDetector extends EventDetector {
 
@@ -84,7 +84,7 @@ public class DeviceButtonsEventDetector extends EventDetector {
             if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
                 if (reason != null) {
-                    Log.v(DevTools.TAG, "DeviceButtonsEventDetector - action:" + action + ", reason:" + reason);
+                    Log.v(Iadt.TAG, "DeviceButtonsEventDetector - action:" + action + ", reason:" + reason);
 
                     if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
                         eventManager.fire(Event.DEVICE_HOME_PRESSED);

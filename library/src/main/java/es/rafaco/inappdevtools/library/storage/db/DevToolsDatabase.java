@@ -12,7 +12,7 @@ import android.arch.persistence.room.RoomDatabase;
 
 import android.util.Log;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnrDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -42,7 +42,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public static DevToolsDatabase getInstance() {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(DevTools.getAppContext(), DevToolsDatabase.class, DB_NAME)
+                    Room.databaseBuilder(Iadt.getAppContext(), DevToolsDatabase.class, DB_NAME)
                             //TODO: Research alternatives, on crash we can't create new threads
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
@@ -66,13 +66,13 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     //endregion
 
     public void printOverview(){
-        Log.d(DevTools.TAG, getOverview());
+        Log.d(Iadt.TAG, getOverview());
     }
 
     public String getOverview(){
         String overview = "";
         String jump = "\n\t";
-        overview +="DevTools DB overview: " + jump;
+        overview +="Iadt DB overview: " + jump;
         overview +="  FriendlyLog: " + friendlyDao().count() + jump;
         overview +="  Logcat: " + logcatDao().count() + jump;
         overview +="  Screen: " + screenDao().count() + jump;

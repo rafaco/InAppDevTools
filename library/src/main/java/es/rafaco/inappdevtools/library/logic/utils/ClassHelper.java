@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.logic.utils;
 
 import java.lang.reflect.InvocationTargetException;
 
-import es.rafaco.inappdevtools.library.logic.steps.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ClassHelper<T> {
 

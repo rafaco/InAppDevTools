@@ -25,7 +25,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.rafaco.inappdevtools.library.DevTools;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
@@ -176,11 +176,11 @@ public class ReportScreen extends OverlayScreen {
     }
 
     private void onSessionReport() {
-        DevTools.sendReport(ReportHelper.ReportType.SESSION, null);
+        Iadt.sendReport(ReportHelper.ReportType.SESSION, null);
     }
 
     private void onFullReport() {
-        DevTools.sendReport(ReportHelper.ReportType.FULL, null);
+        Iadt.sendReport(ReportHelper.ReportType.FULL, null);
     }
 
     private void onCustomReport() {
@@ -188,7 +188,7 @@ public class ReportScreen extends OverlayScreen {
     }
 
     private void onCrashReport() {
-        DevTools.sendReport(ReportHelper.ReportType.CRASH, null);
+        Iadt.sendReport(ReportHelper.ReportType.CRASH, null);
     }
 
 
@@ -221,7 +221,7 @@ public class ReportScreen extends OverlayScreen {
 
     private void onSendReportPressed() {
         //TODO:
-        DevTools.sendReport(ReportHelper.ReportType.SESSION, null);
+        Iadt.sendReport(ReportHelper.ReportType.SESSION, null);
     }
 
     private void onManageScreensPressed() {
