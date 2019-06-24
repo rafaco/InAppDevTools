@@ -10,6 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +25,7 @@ import android.widget.ImageView;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.widget.TextView;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -115,5 +119,31 @@ public class UiUtils {
             }
             cardView.setClickable(clickable);
         }
+    }
+
+    public static void highlightString(Context context, CharSequence text, String keyword, TextView textView) {
+
+        SpannableString spannableString = new SpannableString(text);
+
+        /* Remove previous spans
+        BackgroundColorSpan[] backgroundSpans = spannableString.getSpans(0, spannableString.length(), BackgroundColorSpan.class);
+        for (BackgroundColorSpan span: backgroundSpans) {
+            spannableString.removeSpan(span);
+        }*/
+
+        int indexOfKeyword = spannableString.toString().indexOf(keyword);
+        while (indexOfKeyword > 0) {
+            int color = ContextCompat.getColor(context, R.color.rally_blue);
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(color);
+            spannableString.setSpan(backgroundColorSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            //ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });
+            //TextAppearanceSpan textAppearanceSpan = new TextAppearanceSpan(null, Typeface.BOLD_ITALIC, -1, blueColor, null);
+            //spannableString.setSpan(textAppearanceSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            indexOfKeyword = spannableString.toString().indexOf(keyword, indexOfKeyword + keyword.length());
+        }
+
+        textView.setText(spannableString);
     }
 }

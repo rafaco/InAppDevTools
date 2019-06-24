@@ -225,7 +225,7 @@ public final class IadtController extends ContentProvider {
         getAppContext().startService(intent);
     }
 
-    protected void hideOverlay() {
+    public void hideOverlay() {
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE, null);
         getAppContext().startService(intent);
     }

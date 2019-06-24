@@ -1,10 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.content.Context;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +11,9 @@ import android.widget.TextView;
 
 //#ifdef MODERN
 //@import androidx.annotation.NonNull;
-//@import androidx.core.content.ContextCompat;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
@@ -26,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class LogLineAdapter
         extends RecyclerView.Adapter<LogLineAdapter.LogViewHolder>
@@ -89,7 +85,7 @@ public class LogLineAdapter
             holder.text.setText(line);
         }
         else{
-            highlightString(line, textFilter, holder.text);
+            UiUtils.highlightString(context, line, textFilter, holder.text);
         }
 
         holder.text.setTextColor(color);
@@ -189,36 +185,6 @@ public class LogLineAdapter
         originalData.clear();
         filteredData.clear();
         notifyDataSetChanged();
-    }
-
-    //endregion
-
-    //region [ UI UTIL ]
-
-    private void highlightString(CharSequence text, String keyword, TextView textView) {
-
-        SpannableString spannableString = new SpannableString(text);
-
-        /* Remove previous spans
-        BackgroundColorSpan[] backgroundSpans = spannableString.getSpans(0, spannableString.length(), BackgroundColorSpan.class);
-        for (BackgroundColorSpan span: backgroundSpans) {
-            spannableString.removeSpan(span);
-        }*/
-
-        int indexOfKeyword = spannableString.toString().indexOf(keyword);
-        while (indexOfKeyword > 0) {
-            int color = ContextCompat.getColor(context, R.color.rally_blue);
-            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(color);
-            spannableString.setSpan(backgroundColorSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            //ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });
-            //TextAppearanceSpan textAppearanceSpan = new TextAppearanceSpan(null, Typeface.BOLD_ITALIC, -1, blueColor, null);
-            //spannableString.setSpan(textAppearanceSpan, indexOfKeyword, indexOfKeyword + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            indexOfKeyword = spannableString.toString().indexOf(keyword, indexOfKeyword + keyword.length());
-        }
-
-        textView.setText(spannableString);
     }
 
     //endregion

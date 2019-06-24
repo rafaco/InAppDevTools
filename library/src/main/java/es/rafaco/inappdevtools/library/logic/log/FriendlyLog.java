@@ -127,6 +127,10 @@ public class FriendlyLog {
     }
 
     public static int getIcon(Friendly log) {
+
+        //TODO: Refactor needed, it's a mess
+        //TODO: check log.getType()!=null before equals
+
         if (log.getCategory().equals("App")) {
             if (log.getType().equals("Foreground")) {
                 return R.drawable.ic_flip_to_front_white_24dp;

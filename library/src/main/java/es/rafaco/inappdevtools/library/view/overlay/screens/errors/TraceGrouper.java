@@ -190,6 +190,10 @@ public class TraceGrouper {
     }
 
     private void adjustTimeline(List<Object> traceData) {
+        if (traceData.size()==0){
+            return;
+        }
+        
         for (int i = 0; i < traceData.size(); i++){
             Object firstItem = traceData.get(i);
             if (firstItem instanceof TraceItem){
@@ -197,7 +201,6 @@ public class TraceGrouper {
                 break;
             }
         }
-
         Object lastItem = traceData.get(traceData.size()-1);
         if (lastItem instanceof TraceItem){
             ((TraceItem)lastItem).setPosition(TraceItem.Position.END);

@@ -20,7 +20,7 @@ public class Friendly {
     private long date;
 
     @ColumnInfo(name = "severity")
-    private String severity;
+    private String severity = "V";
 
     @ColumnInfo(name = "category")
     private String category;
