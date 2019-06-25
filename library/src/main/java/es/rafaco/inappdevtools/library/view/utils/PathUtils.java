@@ -1,8 +1,5 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
-
-import android.arch.persistence.room.Database;
-
 public class PathUtils {
 
     public static String removeLastSlash(String path) {

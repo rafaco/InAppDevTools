@@ -48,13 +48,13 @@ public enum Event {
     FRAGMENT_DETACHED("fragment_detached"),
 
     //ScreenChange
+    ORIENTATION_PORTRAIT("orientation_portrait"),
+    ORIENTATION_LANDSCAPE("orientation_landscape"),
+
+    //ScreenChange
     SCREEN_OFF("ScreenOff"),
     SCREEN_ON("ScreenOn"),
     USER_PRESENT("UserPresent"),
-
-    //ScreenChange
-    ORIENTATION_PORTRAIT("orientation_portrait"),
-    ORIENTATION_LANDSCAPE("orientation_landscape"),
 
     //ScreenChange
     IMPORTANCE_FOREGROUND("importance_foreground"),

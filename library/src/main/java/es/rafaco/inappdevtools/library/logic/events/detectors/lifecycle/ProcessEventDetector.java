@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle;
 
-
 //#ifdef MODERN
 //@import androidx.lifecycle.Lifecycle;
 //@import androidx.lifecycle.LifecycleObserver;

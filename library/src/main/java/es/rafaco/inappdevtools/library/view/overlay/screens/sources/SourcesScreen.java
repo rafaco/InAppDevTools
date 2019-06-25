@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,8 +8,10 @@ import android.view.ViewGroup;
 
 //#ifdef MODERN
 //@import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.appcompat.widget.SearchView;
 //#else
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 //#endif
 
 import com.google.gson.Gson;
