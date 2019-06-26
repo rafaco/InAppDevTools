@@ -7,7 +7,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 
 public class DevToolsPrefs {
 
-    public static final String SHARED_PREFS_KEY = "inappdevtools";
+    public static final String SHARED_PREFS_KEY = "iadt";
 
     public static boolean contains(String key){
         return getPrefs().contains(key);

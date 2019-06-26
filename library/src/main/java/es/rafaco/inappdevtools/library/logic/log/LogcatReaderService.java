@@ -24,6 +24,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLine;
 
 public class LogcatReaderService extends IntentService {
@@ -34,8 +35,8 @@ public class LogcatReaderService extends IntentService {
     public static final String LOGCAT_COMMAND = "logcat -v time";
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
-    private static final int QUEUE_MAX_SIZE = 22 * 100;
-    private static final int QUEUE_MAX_TIME = 5000;
+    private static final int QUEUE_MAX_SIZE = 500;
+    private static final int QUEUE_MAX_TIME = 2000;
     private final int BUFFER_SIZE = 1024;
 
     private boolean isReaderRunning = false;
@@ -124,7 +125,17 @@ public class LogcatReaderService extends IntentService {
         isCancelled = false;
         isReaderRunning = true;
         queue = new LinkedList<>();
-        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, LOGCAT_COMMAND};
+
+        String command = LOGCAT_COMMAND;
+        if (true){
+            command += " -d";
+        }
+        long lastLogcat = LastLogcatUtil.get();
+        String logcatTime = DateUtils.formatLogcatDate(lastLogcat);
+        if (lastLogcat!=-1L){
+            command += " -t '" + lastLogcat + "'";
+        }
+        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
 
         if (logcatProcess != null)
             logcatProcess.destroy();
@@ -203,11 +214,11 @@ public class LogcatReaderService extends IntentService {
     private void processQueue() {
         isInjectorRunning = true;
         List<Friendly> logsToInsert = new ArrayList<>();
-        while (!queue.isEmpty() && !isCancelled){
+        while (!isCancelled
+                && !(queue.isEmpty() || logsToInsert.size() > QUEUE_MAX_SIZE)) {
             Friendly log = parseLine(queue.poll());
-            boolean added;
             if (log!=null){
-                added = logsToInsert.add(log);
+                logsToInsert.add(log);
             }else{
                 //TODO: log not added
             }
@@ -217,6 +228,9 @@ public class LogcatReaderService extends IntentService {
             if (!logsToInsert.isEmpty()){
                 insertedCounter += logsToInsert.size();
                 IadtController.getDatabase().friendlyDao().insertAll(logsToInsert);
+                Friendly newerLog = logsToInsert.get(0); //TODO
+                long newLastLogcatString = newerLog.getDate();
+                LastLogcatUtil.set(newLastLogcatString);
                 lastInsertTime = DateUtils.getLong();
                 FriendlyLog.log("V", "Iadt", "LogcatReaderService", "processQueue Inserted " + logsToInsert.size() + " lines");
             }else{

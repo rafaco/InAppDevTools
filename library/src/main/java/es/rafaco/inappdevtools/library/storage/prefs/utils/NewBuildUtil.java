@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.utils.init;
+package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.config.Config;
@@ -6,7 +6,7 @@ import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class NewBuildUtil {
 
-    public static final String PREF_KEY = "LAST_BUILD_TIME";
+    public static final String PREF_VALUE_KEY = "LAST_BUILD_TIME";
     public static Boolean isNewBuildOnMemory;
     public static Long buildTimeOnMemory;
 
@@ -28,7 +28,7 @@ public class NewBuildUtil {
 
     private static void update(){
 
-        long lastBuildTime = DevToolsPrefs.getLong(PREF_KEY, -1);
+        long lastBuildTime = DevToolsPrefs.getLong(PREF_VALUE_KEY, -1);
         long currentBuildTime = Iadt.getConfig().getLong(Config.BUILD_TIME);
 
         if (lastBuildTime<0){
@@ -49,6 +49,6 @@ public class NewBuildUtil {
     }
 
     private static void storeBuildTime(){
-        DevToolsPrefs.setLong(PREF_KEY, buildTimeOnMemory);
+        DevToolsPrefs.setLong(PREF_VALUE_KEY, buildTimeOnMemory);
     }
 }

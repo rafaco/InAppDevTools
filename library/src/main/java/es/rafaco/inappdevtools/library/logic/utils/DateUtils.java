@@ -63,6 +63,7 @@ public class DateUtils {
                         android.text.format.DateUtils.FORMAT_SHOW_TIME);
     }
 
+
     public static long parseLogcatDate(String text){
         int year = Calendar.getInstance().get(Calendar.YEAR);
         String dateTimePattern = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -74,5 +75,10 @@ public class DateUtils {
             e.printStackTrace();
         }
         return date.getTime();
+    }
+
+    public static String formatLogcatDate(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+        return simpleDateFormat.format(timeMillis);
     }
 }
