@@ -78,7 +78,7 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("History",
+        data.add(new RunnableItem("Log",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override

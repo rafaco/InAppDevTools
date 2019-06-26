@@ -24,6 +24,8 @@
                 android:resource="@xml/iadt_files_paths" />
         </provider>
 
+        <service android:name=".logic.log.LogcatReaderService"
+            android:exported="false"/>
 
         <service android:name=".view.overlay.OverlayUIService"
             android:exported="false"/>

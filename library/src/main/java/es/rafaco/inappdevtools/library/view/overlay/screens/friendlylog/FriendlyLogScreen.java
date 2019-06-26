@@ -1,6 +1,11 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +40,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -53,9 +59,10 @@ public class FriendlyLogScreen extends OverlayScreen {
     private TextView welcome;
 
     public LiveData logList;
-    private final int pageSize = 20;
     private ToolBarHelper toolbarHelper;
     private int selectedLogLevel = 2;
+    private LogcatReaderService myService;
+    private boolean isBind;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -92,10 +99,49 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         initToolbar();
         initView(bodyView);
-        initAdapter();
 
+        initAdapter();
         initScroll();
+
+        //bindService();
     }
+
+
+
+    private void bindService() {
+        Intent intent = new Intent(getContext(), LogcatReaderService.class);
+        getContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LogcatReaderService.LocalService localService = (LogcatReaderService.LocalService) service;
+            myService = localService.getService();
+            onServiceBind(name, service);
+            isBind = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+        }
+    };
+
+    private void onServiceBind(ComponentName name, IBinder service) {
+        myService.performAction(LogcatReaderService.START_ACTION, "scanner");
+    }
+
+    @Override
+    protected void onStop() {
+        //TODO: removeLifecycleObserver();
+
+        if (isBind) {
+            getContext().unbindService(serviceConnection);
+        }
+    }
+
+
 
     private void initView(ViewGroup view) {
         welcome = view.findViewById(R.id.welcome);
@@ -120,21 +166,23 @@ public class FriendlyLogScreen extends OverlayScreen {
             }
         });
 
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
+                .setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(4)
                 .setPageSize(20)
                 .setPrefetchDistance(60)
                 .build();
-        dataSourceFactory = new FriendlyLogDataSourceFactory(dao);
-        dataSourceFactory.setText("");
-        dataSourceFactory.setLevelString(getSelectedVerbosity());
-        logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
+
+        initLiveDataWithFriendlyLog(myPagingConfig);
+
         logList.observe(ProcessLifecycleOwner.get(), new Observer<PagedList<Friendly>>() {
             @Override
             public void onChanged(PagedList<Friendly> pagedList) {
+                //FriendlyLog.log("V", "Iadt", "IadtLiveData", "Observer onChanged");
                 adapter.submitList(pagedList);
             }
         });
+        Log.d("IadtLiveData", "Observer registered to PagedList from FriendlyDao");
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
@@ -142,11 +190,17 @@ public class FriendlyLogScreen extends OverlayScreen {
         recyclerView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+
+        //TODO: addLifecycleObserver();
+        LogcatReaderService.start(getContext(), "FriendlyLogScreen");
     }
 
-    @Override
-    protected void onStop() {
-        //Nothing needed
+    private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
+        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        dataSourceFactory = new FriendlyLogDataSourceFactory(dao);
+        dataSourceFactory.setText("");
+        dataSourceFactory.setLevelString(getSelectedVerbosity());
+        logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
     }
 
     @Override
@@ -226,20 +280,27 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onClearButton() {
+        final boolean[] checked = { false };
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
-                .setTitle("Confirm full wipe out")
-                .setMessage("Do you want to completely clean the log history? You can not undo this operation")
+                .setTitle("Delete all log in DB?")
+                //.setMessage("Do you really want to wipe the db with the log history? You will not be able to see it or use it in your reports")
                 .setCancelable(true)
+                .setMultiChoiceItems(new String[]{"Clear also logcat buffer"}, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        checked[0] = b;
+                    }
+                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton("Clean all", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clearAll();
+                        clearAll(checked[0]);
                     }
                 });
 
@@ -248,7 +309,10 @@ public class FriendlyLogScreen extends OverlayScreen {
         alertDialog.show();
     }
 
-    private void clearAll() {
+    private void clearAll(boolean clearLogcatBuffer) {
+        if (clearLogcatBuffer){
+            IadtController.cleanSession();
+        }
         IadtController.get().getDatabase().friendlyDao().deleteAll();
         FriendlyLog.log("D", "Iadt", "Delete","Friendly log history deleted by user");
         adapter.notifyDataSetChanged();
@@ -318,5 +382,6 @@ public class FriendlyLogScreen extends OverlayScreen {
             this.lineNumber = lineNumber;
         }
     }
+
     //endregion
 }

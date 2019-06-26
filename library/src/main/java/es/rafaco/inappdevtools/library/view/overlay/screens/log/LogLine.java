@@ -11,12 +11,12 @@ import android.util.Log;
 import android.support.v4.content.ContextCompat;
 //#endif
 
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.rafaco.inappdevtools.library.R;
-
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
 public class LogLine {
 
@@ -106,8 +106,6 @@ public class LogLine {
     private static char convertLogLevelToChar(int logLevel) {
 
         switch (logLevel) {
-            case Log.VERBOSE:
-                return 'V';
             case Log.DEBUG:
                 return 'D';
             case Log.ERROR:
@@ -118,8 +116,10 @@ public class LogLine {
                 return 'W';
             case LOG_WTF:
                 return 'F';
+            case Log.VERBOSE:
+            default:
+                return 'V';
         }
-        return ' ';
     }
 
     public static boolean validateLevel(int logLevel, String logLevelLimit) {
@@ -261,5 +261,21 @@ public class LogLine {
 
     public void setHighlighted(boolean highlighted) {
         this.highlighted = highlighted;
+    }
+
+    public Friendly parseToFriendly() {
+        Friendly parsed = new Friendly();
+        parsed.setCategory("Logcat");
+        parsed.setType(!TextUtils.isEmpty(getTag()) ? getTag() : "-");
+        if (!TextUtils.isEmpty(timestamp)){
+            parsed.setDate(DateUtils.parseLogcatDate(timestamp));
+        }else{
+            Log.d("LOGCAT", "Ignored without date: " + originalLine);
+        }
+        parsed.setSeverity(""+convertLogLevelToChar(logLevel));
+        parsed.setMessage(getLogOutput());
+        parsed.setExtra(getOriginalLine());
+
+        return parsed;
     }
 }

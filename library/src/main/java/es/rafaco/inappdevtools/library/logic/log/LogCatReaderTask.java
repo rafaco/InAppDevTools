@@ -13,9 +13,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineAdapter;
 
 public class LogCatReaderTask extends AsyncTask<Void, String, Void>
 {
+    private final int BUFFER_SIZE = 1024;
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
-    private final int BUFFER_SIZE = 1024;
+
     private final String commandScript;
     private final int id;
     private boolean isRunning = true;
@@ -57,7 +58,6 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void>
         }
 
         String line;
-        //line = new String[1];
         try {
             while (isRunning && (line = reader.readLine())!= null) {
                 readCounter ++;
@@ -65,10 +65,6 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void>
                 lineArray[0] = line;
                 publishProgress(lineArray);
             }
-            /*while(isRunning){
-                line[0] = reader.readLine();
-                publishProgress(line);
-            }*/
         }
         catch (IOException e) {
             FriendlyLog.logException("Exception", e);
@@ -114,8 +110,11 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void>
 
         //TODO: Research why there are too much nulls and duplicated
 
-        //Remove duplicated
         String newLine = values[0];
+        onLineRead(newLine);
+    }
+
+    private void onLineRead(String newLine) {
         if(TextUtils.isEmpty(newLine)) {
             nullCounter++;
             return;

@@ -48,7 +48,7 @@ public interface FriendlyDao {
     long insert(Friendly log);
 
     @Insert
-    long[] insertAll(Friendly... logs);
+    long[] insertAll(List<Friendly> logs);
 
     @Update
     void update(Friendly log);
