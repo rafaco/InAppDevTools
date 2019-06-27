@@ -18,6 +18,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
@@ -73,6 +74,14 @@ public class MoreScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);
+                    }
+                }));
+
+        data.add(new RunnableItem("Console",
+                R.drawable.ic_computer_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(ConsoleScreen.class);
                     }
                 }));
 

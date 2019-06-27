@@ -7,7 +7,7 @@ public class LastLogcatUtil {
     public static final String PREF_VALUE_KEY = "LAST_LOGCAT";
 
     public static Long get(){
-        return DevToolsPrefs.getLong(PREF_VALUE_KEY, -1L);
+        return DevToolsPrefs.getLong(PREF_VALUE_KEY, 0);
     }
 
     public static void set(long value){

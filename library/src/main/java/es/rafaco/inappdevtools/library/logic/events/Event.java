@@ -84,25 +84,27 @@ public enum Event {
     GESTURE_FLING_TAP("FlingClick"),
     GESTURE_LONG_PRESSED("LongPress");
 
-    private static final Map<String, Event> EVENTS = new HashMap<>();
     private final String name;
-
-    static {
-        for (Event event : values()) {
-            EVENTS.put(event.name, event);
-        }
-    }
 
     Event(String name) {
         this.name = name;
     }
 
-    public static Event getByName(String name) {
-        return EVENTS.get(name);
-    }
-
     public String getName() {
         return name;
+    }
+
+
+    private static final Map<String, Event> ITEMS = new HashMap<>();
+
+    static {
+        for (Event event : values()) {
+            ITEMS.put(event.name, event);
+        }
+    }
+
+    public static Event getByName(String name) {
+        return ITEMS.get(name);
     }
 
 }

@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.commands.CommandsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -153,7 +153,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
         mainOverlayLayerManager.registerScreen(FriendlyLogScreen.class);
         mainOverlayLayerManager.registerScreen(LogScreen.class);
-        mainOverlayLayerManager.registerScreen(CommandsScreen.class);
+        mainOverlayLayerManager.registerScreen(ConsoleScreen.class);
         mainOverlayLayerManager.registerScreen(ScreensScreen.class);
         mainOverlayLayerManager.registerScreen(ReportScreen.class);
         mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);

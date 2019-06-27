@@ -10,11 +10,10 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.log.LogCatReaderTask;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.commands.ShellExecuter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 
 public class LogHelper extends OverlayScreenHelper {
 
@@ -49,7 +48,7 @@ public class LogHelper extends OverlayScreenHelper {
     }
 
     public static void clearLogcatBuffer() {
-        String[] fullCommand = new String[]{LogCatReaderTask.BASH_PATH, LogCatReaderTask.BASH_ARGS, "logcat -c"};
+        String[] fullCommand = Shell.formatBashCommand("logcat -c");
         Process process = null;
         try {
             process = new ProcessBuilder()
@@ -78,9 +77,9 @@ public class LogHelper extends OverlayScreenHelper {
     }
 
     public String getCrashReport(){
-        ShellExecuter exe = new ShellExecuter();
+        Shell exe = new Shell();
         String command = "logcat -d -t 1000 *:V";
-        String output = exe.Executer(command);
+        String output = exe.run(command);
         return  output;
     }
 }

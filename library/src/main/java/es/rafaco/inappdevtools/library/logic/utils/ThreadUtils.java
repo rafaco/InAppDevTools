@@ -12,9 +12,9 @@ public class ThreadUtils {
 
     private ThreadUtils() { throw new IllegalStateException("Utility class"); }
 
-    public static void logCurrentThread(String fromText){
+    public static String formatRunningOnString(String fromText){
         String thread = (amIOnUiThread()) ? "MAIN" : "a background";
-        Iadt.showMessage(fromText + " is running on " + thread + " thread");
+        return fromText + " is running on " + thread + " thread";
     }
 
     public static String getFormattedThread(){

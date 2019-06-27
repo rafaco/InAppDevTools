@@ -1,12 +1,13 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.view.View;
-import android.widget.TextView;
 
 //#ifdef MODERN
 //@import androidx.core.content.ContextCompat;
+//@import androidx.appcompat.widget..AppCompatTextView;
 //#else
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatTextView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
@@ -14,8 +15,8 @@ import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
 public class LinkViewHolder extends FlexibleViewHolder {
 
-    TextView icon;
-    TextView title;
+    AppCompatTextView icon;
+    AppCompatTextView title;
 
     public LinkViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);

@@ -31,6 +31,7 @@ public class LogcatReaderService extends IntentService {
 
     public final static String START_ACTION = "start_action";
     public final static String CANCEL_ACTION = "cancel_action";
+    public final static String PARAM_KEY = "param";
 
     public static final String LOGCAT_COMMAND = "logcat -v time";
     public static final String BASH_PATH = "/system/bin/sh";
@@ -71,11 +72,6 @@ public class LogcatReaderService extends IntentService {
         return mBinder;
     }
 
-    @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        performAction(intent.getAction(), "");
-    }
-
     public class LocalService extends Binder {
         public LogcatReaderService getService(){
             return LogcatReaderService.this;
@@ -83,13 +79,15 @@ public class LogcatReaderService extends IntentService {
     }
 
 
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent){
+        performAction(intent.getAction(), intent.getStringExtra(PARAM_KEY));
+    }
 
     public void performAction(String action, String param) {
-        Log.d(Iadt.TAG, "LogcatReaderService onHandleIntent" );
-        ThreadUtils.logCurrentThread("LogcatReaderService onHandleIntent");
+        Log.d(Iadt.TAG, ThreadUtils.formatRunningOnString("LogcatReaderService performAction"));
+        Log.v(Iadt.TAG, "LogcatReaderService action: " + action + " param: " + param);
         
-        //param = intent.getStringExtra(REQUEST_PARAM_KEY);
-        param = param;
         if (action != null && action.equals(CANCEL_ACTION)) {
             onCancelled(param);
         }else{
@@ -114,7 +112,6 @@ public class LogcatReaderService extends IntentService {
             return;
         }
 
-        Log.v(Iadt.TAG, "LogcatReaderService started with params:" + param);
         //String result = run(param);
         //sendResult(result);
 
@@ -131,11 +128,13 @@ public class LogcatReaderService extends IntentService {
             command += " -d";
         }
         long lastLogcat = LastLogcatUtil.get();
-        String logcatTime = DateUtils.formatLogcatDate(lastLogcat);
-        if (lastLogcat!=-1L){
-            command += " -t '" + lastLogcat + "'";
+        if (lastLogcat != 0){
+            String logcatTime = DateUtils.formatLogcatDate(lastLogcat);
+            command += " -t '" + logcatTime + "'";
         }
         String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
+
+        Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
 
         if (logcatProcess != null)
             logcatProcess.destroy();
@@ -163,10 +162,8 @@ public class LogcatReaderService extends IntentService {
                     && !isCancelled
                     && (line = reader.readLine())!= null) {
                 readCounter ++;
-                
-                if (line.contains("setTypeface with style")){
-                    ignoredCounter++;
-                }else{
+
+                if (!checkEmptyLines(line)) {
                     queue.add(line);
                     processQueueIfNeeded();
                 }
@@ -179,6 +176,14 @@ public class LogcatReaderService extends IntentService {
 
         isReaderRunning = false;
         Log.i(Iadt.TAG, "LogcatReaderService finished!");
+
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LogcatReaderService.start(getApplicationContext(), "Update");
+            }
+        }, QUEUE_MAX_TIME * 2);
+
         logcatProcess.destroy();
     }
 
@@ -241,28 +246,43 @@ public class LogcatReaderService extends IntentService {
     }
 
     private Friendly parseLine(String newLine) {
-        //Remove empty lines
-        if(TextUtils.isEmpty(newLine)) {
-            nullDiscardCounter++;
-            Log.w(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
-            return null;
-        }
-
-        //Remove duplicated
-        if(lastLine != null){
-            if(newLine.equals(lastLine)){
-                //TODO: Add a multiplicity counter to LogLine and increment it
-                sameDiscardCounter++;
-                Log.w(Iadt.TAG, "LogcatReaderService detected a duplicated line ("+ sameDiscardCounter +"): " + newLine);
-                return null;
-            }
-        }
+        if (checkEmptyLines(newLine)) return null;
+        //if (checkDuplicates(newLine)) return null;
 
         lastLine = newLine;
         LogLine logLine = LogLine.newLogLine(newLine, false);
         return logLine.parseToFriendly();
     }
 
+    private boolean checkIgnored(String line) {
+        if(line.contains("setTypeface with style")) {
+            ignoredCounter++;
+            Log.w(Iadt.TAG, "LogcatReaderService detected a ignored line ("+ ignoredCounter +")");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkDuplicates(String newLine) {
+        if(lastLine != null){
+            if(newLine.equals(lastLine)){
+                //TODO: Add a multiplicity counter to LogLine and increment it
+                sameDiscardCounter++;
+                Log.w(Iadt.TAG, "LogcatReaderService detected a duplicated line ("+ sameDiscardCounter +"): " + newLine);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkEmptyLines(String newLine) {
+        if(TextUtils.isEmpty(newLine)) {
+            nullDiscardCounter++;
+            Log.w(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
+            return true;
+        }
+        return false;
+    }
 
 
 

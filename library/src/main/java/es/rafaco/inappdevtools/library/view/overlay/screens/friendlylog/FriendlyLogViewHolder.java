@@ -7,17 +7,18 @@ import android.os.Build;
 //#ifdef MODERN
 //@import androidx.core.content.ContextCompat;
 //@import androidx.appcompat.widget.AppCompatButton;
+//@import androidx.appcompat.widget.AppCompatTextView;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -36,13 +37,13 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     long uid;
     ImageView icon;
     View decorator;
-    TextView title;
+    AppCompatTextView title;
 
     LinearLayout wrapper;
     LinearLayout extra_over;
-    TextView extras_over;
+    AppCompatTextView extras_over;
     LinearLayout extra_details;
-    TextView extras_details;
+    AppCompatTextView extras_details;
     AppCompatButton extra_button;
 
     public FriendlyLogViewHolder(View view, final FriendlyLogAdapter.OnClickListener clickListener) {

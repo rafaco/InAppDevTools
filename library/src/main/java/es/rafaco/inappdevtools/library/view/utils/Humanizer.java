@@ -31,4 +31,8 @@ public class Humanizer {
     public static String newLine(){
         return System.getProperty("line.separator");
     }
+
+    public static String fullStop(){
+        return newLine()+ newLine();
+    }
 }

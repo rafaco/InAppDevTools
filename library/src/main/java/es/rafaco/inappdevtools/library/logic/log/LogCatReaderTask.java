@@ -9,14 +9,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineAdapter;
 
-public class LogCatReaderTask extends AsyncTask<Void, String, Void>
-{
-    private final int BUFFER_SIZE = 1024;
-    public static final String BASH_PATH = "/system/bin/sh";
-    public static final String BASH_ARGS = "-c";
+public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
 
+    private final int BUFFER_SIZE = 1024;
     private final String commandScript;
     private final int id;
     private boolean isRunning = true;
@@ -40,8 +38,8 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void>
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, commandScript};
-            logprocess = Runtime.getRuntime().exec(fullCommand);
+            String[] bashCommand = Shell.formatBashCommand(commandScript);
+            logprocess = Runtime.getRuntime().exec(bashCommand);
         }
         catch (Exception e) {
             FriendlyLog.logException("Exception", e);

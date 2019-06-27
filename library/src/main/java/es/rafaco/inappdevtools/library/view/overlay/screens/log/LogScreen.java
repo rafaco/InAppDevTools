@@ -241,7 +241,6 @@ public class LogScreen extends OverlayScreen {
         stopLogReader();
 
         //TODO!
-        //String command = presetFilters.get(presetSpinner.getSelectedItemPosition()).second;
         //command = String.format(command, selectedLogLevel);
         String command = "logcat -v time";
 

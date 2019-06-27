@@ -29,7 +29,7 @@ public class FriendlyLogAdapter
                 @Override
                 public boolean areContentsTheSame(Friendly oldItem,
                                                   Friendly newItem) {
-                    return oldItem.equals(newItem);
+                    return oldItem.equalContent(newItem);
                 }
             };
 

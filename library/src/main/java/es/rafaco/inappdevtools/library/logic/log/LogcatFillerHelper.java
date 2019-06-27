@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.overlay.screens.commands.ShellExecuter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLine;
 
 public class LogcatFillerHelper {
@@ -57,9 +57,9 @@ public class LogcatFillerHelper {
     }
 
     public String getLogcatHead(){
-        ShellExecuter exe = new ShellExecuter();
+        Shell shell = new Shell();
         String command = "logcat -d -t 1000 -v time *:V";
-        String output = exe.Executer(command);
+        String output = shell.run(command);
         return output;
     }
 }

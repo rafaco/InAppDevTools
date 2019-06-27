@@ -17,6 +17,7 @@ import java.security.cert.X509Certificate;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class AppInfoUtils {
 
@@ -29,7 +30,7 @@ public class AppInfoUtils {
 
     public static String getSigningInfo(Context context){
         StringBuilder sb = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
+        String newLine = Humanizer.newLine();
         final PackageManager packageManager = context.getPackageManager();
         PackageInfo p = null;
 
