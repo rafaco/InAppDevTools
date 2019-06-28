@@ -15,26 +15,6 @@ public class DateUtils {
         return System.currentTimeMillis();
     }
 
-    public static String getElapsedTimeLowered(long oldTimeMillis){
-        String elapsed = getElapsedTime(oldTimeMillis);
-        elapsed = Character.toLowerCase(elapsed.charAt(0)) + elapsed.substring(1);
-        return  elapsed;
-    }
-
-    public static String getElapsedTime(long oldTimeMillis){
-        if (getLong() - oldTimeMillis < 60*1000){
-            return "Just now";
-        }
-
-        CharSequence relativeDate =
-                android.text.format.DateUtils.getRelativeTimeSpanString(
-                        oldTimeMillis,
-                        getLong(),
-                        android.text.format.DateUtils.MINUTE_IN_MILLIS,
-                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE);
-        return relativeDate.toString();
-    }
-
     public static String formatNow() {
         return format(getLong());
     }

@@ -2,6 +2,9 @@ package es.rafaco.inappdevtools.library.view.utils;
 
 import android.text.TextUtils;
 
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+
 public class Humanizer {
 
     public static String capital(String text){
@@ -34,5 +37,39 @@ public class Humanizer {
 
     public static String fullStop(){
         return newLine()+ newLine();
+    }
+
+    public static String getElapsedTimeLowered(long oldTimeMillis){
+        String elapsed = getElapsedTime(oldTimeMillis);
+        elapsed = Character.toLowerCase(elapsed.charAt(0)) + elapsed.substring(1);
+        return  elapsed;
+    }
+
+
+    public static String getElapsedTime(long oldTimeMillis, long newTimeMillis){
+        return newTimeMillis-oldTimeMillis + "ms";
+        //TODO: FIX IT
+        /*CharSequence absoluteDate =
+                android.text.format.DateUtils.formatDateRange(
+                        Iadt.getAppContext(),
+                        oldTimeMillis,
+                        newTimeMillis,
+                        android.text.format.DateUtils.FORMAT_ABBREV_ALL);
+        return absoluteDate.toString();
+        */
+    }
+
+    public static String getElapsedTime(long oldTimeMillis){
+        if (DateUtils.getLong() - oldTimeMillis < 60*1000){
+            return "Just now";
+        }
+
+        CharSequence relativeDate =
+                android.text.format.DateUtils.getRelativeTimeSpanString(
+                        oldTimeMillis,
+                        DateUtils.getLong(),
+                        android.text.format.DateUtils.MINUTE_IN_MILLIS,
+                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE);
+        return relativeDate.toString();
     }
 }

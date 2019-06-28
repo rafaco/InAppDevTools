@@ -11,15 +11,18 @@ import android.os.Debug;
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;
+import android.util.Log;
 //#endif
 
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
@@ -67,9 +70,15 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     }
 
     public String getRunningThreads() {
+
         StringBuilder result = new StringBuilder(Humanizer.newLine());
-        String packageName = context.getPackageName();
+        StopWatch counter = new StopWatch("getAllThreads()");
         Thread[] allThreads = ThreadUtils.getAllThreads();
+        counter.step("Process result");
+
+//        StopWatch counter2 = new StopWatch("getAllStacktraces()");
+//        Set<Thread> allStacktraces = ThreadUtils.getAllStacktraces();
+//        counter2.step("Process result");
 
 
         ThreadGroup previousGroup = null;
@@ -90,7 +99,9 @@ public class LiveInfoHelper extends AbstractInfoHelper {
                         result.insert(previousGroupStart,
                                 Humanizer.newLine()
                                         + ThreadUtils.formatGroup(previousGroup)
+                                        + (nullCount!=0 ? " (" + nullCount + " nulls)" : "")
                                         + Humanizer.newLine());
+                        nullCount = 0;
                     }
                     previousGroup = info.getThreadGroup();
                     previousGroupStart = result.length();
@@ -106,12 +117,15 @@ public class LiveInfoHelper extends AbstractInfoHelper {
             }
         }
 
-        result.insert(previousGroupStart,
-                Humanizer.newLine()
-                        + ThreadUtils.formatGroup(previousGroup)
-                        + Humanizer.newLine());
-        result.append(nullCount + " nulls of " + allThreads.length + ". "
-                + (allThreads.length - nullCount) + " shown");
+        if (previousGroup != null){
+            result.insert(previousGroupStart,
+                    Humanizer.newLine()
+                            + ThreadUtils.formatGroup(previousGroup)
+                            + (nullCount!=0 ? " (" + nullCount + " nulls)" : "")
+                            + Humanizer.newLine());
+        }
+
+        Log.d(Iadt.TAG, counter.finish());
         return result.toString();
     }
 
@@ -228,7 +242,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         String className = info.service.getShortClassName();
         String name = className.substring(className.lastIndexOf(".")+1);
         long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
-        String elapsed = DateUtils.getElapsedTimeLowered(startTimeMillis);
+        String elapsed = Humanizer.getElapsedTimeLowered(startTimeMillis);
         String date = DateUtils.format(startTimeMillis);
         String result = name + ". " + info.crashCount + " crashes since " + elapsed;// + " (" + date + ")";
         return result + "\n";

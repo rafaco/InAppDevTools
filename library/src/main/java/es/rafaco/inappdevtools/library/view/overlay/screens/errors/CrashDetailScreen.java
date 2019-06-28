@@ -21,7 +21,6 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
@@ -34,6 +33,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.Friendly
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
 public class CrashDetailScreen extends OverlayScreen {
@@ -127,7 +127,7 @@ public class CrashDetailScreen extends OverlayScreen {
     }
 
     private void initOverview() {
-        when.setText("Your app crashed " + DateUtils.getElapsedTimeLowered(crash.getDate()));
+        when.setText("Your app crashed " + Humanizer.getElapsedTimeLowered(crash.getDate()));
         thread.setText("Thread: " + crash.getThreadName());
         foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());

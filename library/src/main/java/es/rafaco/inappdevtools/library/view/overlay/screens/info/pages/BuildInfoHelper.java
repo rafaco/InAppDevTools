@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
@@ -87,7 +86,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public String getFriendlyElapsedTime() {
-        return DateUtils.getElapsedTimeLowered(
+        return Humanizer.getElapsedTimeLowered(
                 Long.parseLong(buildConfig.getString(Config.BUILD_TIME.getKey())));
     }
 

@@ -29,8 +29,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
@@ -65,7 +65,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
         Screen screen = screenList.get(position);
         holder.title.setText(screen.getActivityName());
-        holder.count.setText(DateUtils.getElapsedTime(screen.getDate()));
+        holder.count.setText(Humanizer.getElapsedTime(screen.getDate()));
 
         // loading album cover using Glide library
         //Glide.with(mContext).load(screen.getThumbnail()).into(holder.thumbnail);

@@ -48,7 +48,7 @@ import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
-import static es.rafaco.inappdevtools.library.logic.utils.DateUtils.getElapsedTimeLowered;
+import static es.rafaco.inappdevtools.library.view.utils.Humanizer.getElapsedTimeLowered;
 
 public class ErrorsScreen extends OverlayScreen {
 

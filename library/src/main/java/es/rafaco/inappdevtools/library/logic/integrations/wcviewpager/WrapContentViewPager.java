@@ -73,7 +73,7 @@ public class WrapContentViewPager extends ViewPager {
             public void onPageSelected(int position) {
                 if (state == SCROLL_STATE_IDLE) {
                     height = 0; // measure the selected page in-case it's a change without scrolling
-                    Log.d(TAG, "onPageSelected:" + position);
+                    //Log.d(TAG, "onPageSelected:" + position);
                 }
             }
 
@@ -122,18 +122,19 @@ public class WrapContentViewPager extends ViewPager {
                     }
                 }
 
-                // make sure that we have an height (not sure if this is necessary because it seems that onPageScrolled is called right after
+                // Make sure that we have an height (not sure if this is necessary
+                // because it seems that onPageScrolled is called right after)
                 int position = getCurrentItem();
                 View child = getViewAtPosition(position);
                 if (child != null) {
                     height = measureViewHeight(child);
                 }
-                Log.d(TAG, "onMeasure height:" + height + " decor:" + decorHeight);
+                //Log.d(TAG, "onMeasure height:" + height + " decor:" + decorHeight);
 
             }
             int totalHeight = height + decorHeight + getPaddingBottom() + getPaddingTop();
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(totalHeight, MeasureSpec.EXACTLY);
-            Log.d(TAG, "onMeasure total height:" + totalHeight);
+            //Log.d(TAG, "onMeasure total height:" + totalHeight);
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -152,7 +153,7 @@ public class WrapContentViewPager extends ViewPager {
                 leftHeight = measureViewHeight(leftView);
                 rightHeight = measureViewHeight(rightView);
                 animateHeight = true;
-                Log.d(TAG, "onPageScrolled heights left:" + leftHeight + " right:" + rightHeight);
+                //Log.d(TAG, "onPageScrolled heights left:" + leftHeight + " right:" + rightHeight);
             } else {
                 animateHeight = false;
             }
@@ -160,7 +161,7 @@ public class WrapContentViewPager extends ViewPager {
         if (animateHeight) {
             int newHeight = (int) (leftHeight * (1 - offset) + rightHeight * (offset));
             if (height != newHeight) {
-                Log.d(TAG, "onPageScrolled height change:" + newHeight);
+                //Log.d(TAG, "onPageScrolled height change:" + newHeight);
                 height = newHeight;
                 requestLayout();
                 invalidate();
@@ -187,6 +188,4 @@ public class WrapContentViewPager extends ViewPager {
         }
         return null;
     }
-
-
 }

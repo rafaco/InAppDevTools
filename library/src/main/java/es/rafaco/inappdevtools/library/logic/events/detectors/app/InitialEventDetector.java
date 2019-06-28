@@ -9,8 +9,8 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.CacheUtils;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InitialEventDetector extends EventDetector {
 
@@ -52,7 +52,7 @@ public class InitialEventDetector extends EventDetector {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("V", "Iadt", "NewBuild",
-                        "New compilation from " + DateUtils.getElapsedTimeLowered((long)param));
+                        "New compilation from " + Humanizer.getElapsedTimeLowered((long)param));
 
                 CacheUtils.deleteAll(getContext());
             }

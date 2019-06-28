@@ -20,9 +20,9 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
 public class AppInfoHelper extends AbstractInfoHelper{
@@ -37,7 +37,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
     @Override
     public String getOverview() {
         return getAppNameAndVersions() + "\n"
-                + "Updated " + DateUtils.getElapsedTimeLowered(
+                + "Updated " + Humanizer.getElapsedTimeLowered(
                         new Date(getPackageInfo().lastUpdateTime).getTime())
                 + (easyAppMod.getStore().equals("unknown") ? "" : " from " + easyAppMod.getStore());
     }
@@ -75,9 +75,9 @@ public class AppInfoHelper extends AbstractInfoHelper{
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         InfoGroup group = new InfoGroup.Builder("Installation")
                 .add("Store", easyAppMod.getStore())
-                .add("Last Update", DateUtils.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
+                .add("Last Update", Humanizer.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Last Update Time", formatter.format(new Date(pInfo.lastUpdateTime)))
-                .add("First Install", DateUtils.getElapsedTime(new Date(pInfo.firstInstallTime).getTime()))
+                .add("First Install", Humanizer.getElapsedTime(new Date(pInfo.firstInstallTime).getTime()))
                 .add("First Install Time", formatter.format(new Date(pInfo.firstInstallTime)))
                 .build();
         return group;

@@ -18,8 +18,8 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class WelcomeDialogActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
@@ -33,7 +33,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
 
     private void buildDialog() {
         AppInfoHelper helper = new AppInfoHelper(getApplicationContext());
-        String elapsedTimeLowered = DateUtils.getElapsedTimeLowered(helper.getAppBuildTime(getApplicationContext()));
+        String elapsedTimeLowered = Humanizer.getElapsedTimeLowered(helper.getAppBuildTime(getApplicationContext()));
         String message = helper.getAppNameAndVersions() + "\n" + " compiled "  + elapsedTimeLowered + "\n\n"
                 + "This compilation contains tools to inspect, log and report. Just shake your app to start inspecting it!" + "\n\n"
                 + "We are recording your usage of this app locally but only you can share it using the report feature. You can disable all tools now.\n\n";
