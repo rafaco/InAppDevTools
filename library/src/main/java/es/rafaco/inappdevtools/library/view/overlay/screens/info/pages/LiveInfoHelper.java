@@ -20,8 +20,10 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LiveInfoHelper extends AbstractInfoHelper {
 
@@ -60,7 +62,70 @@ public class LiveInfoHelper extends AbstractInfoHelper {
                 .add("Providers", getRunningProviders())
                 .add("Memory", getRunningMemory())
                 .add("Processes", getRunningProcesses())
+                .add("Threads", getRunningThreads())
                 .build();
+    }
+
+    public String getRunningThreads() {
+        StringBuilder result = new StringBuilder(Humanizer.newLine());
+        String packageName = context.getPackageName();
+        Thread[] allThreads = ThreadUtils.getAllThreads();
+
+
+        ThreadGroup previousGroup = null;
+        int previousGroupStart = 0;
+        int nullCount = 0;
+
+        for (Thread info : allThreads) {
+            if (info == null){
+                //result.append("null" + Humanizer.newLine());
+                nullCount++;
+            }
+            else{
+
+                String currentName = (info.getThreadGroup()==null) ? "" : info.getThreadGroup().getName();
+                if (previousGroup == null
+                        || !previousGroup.getName().equals(currentName)) {
+                    if (previousGroup != null){
+                        result.insert(previousGroupStart,
+                                Humanizer.newLine()
+                                        + ThreadUtils.formatGroup(previousGroup)
+                                        + Humanizer.newLine());
+                    }
+                    previousGroup = info.getThreadGroup();
+                    previousGroupStart = result.length();
+                }
+
+                result  .append(formatThreadId(info))
+                        .append(" ")
+                        .append(formatThreadDescription(info))
+                        //.append(info.getName())
+                        .append(" ")
+                        .append(info.getState())
+                        .append(Humanizer.newLine());
+            }
+        }
+
+        result.insert(previousGroupStart,
+                Humanizer.newLine()
+                        + ThreadUtils.formatGroup(previousGroup)
+                        + Humanizer.newLine());
+        result.append(nullCount + " nulls of " + allThreads.length + ". "
+                + (allThreads.length - nullCount) + " shown");
+        return result.toString();
+    }
+
+    private String formatThreadId(Thread info){
+        String id = String.valueOf(info.getId());
+        while(id.length()<4){
+            id = "  " + id;
+        }
+        return id;
+    }
+
+    private String formatThreadDescription(Thread info){
+        String standard = info.toString();
+        return standard.replaceFirst("Thread", "");
     }
 
     public String getRunningProcesses() {

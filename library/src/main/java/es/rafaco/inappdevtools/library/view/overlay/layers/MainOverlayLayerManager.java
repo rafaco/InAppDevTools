@@ -162,7 +162,7 @@ public class MainOverlayLayerManager {
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    ThreadUtils.runOnUiThread(new Runnable() {
+                    ThreadUtils.runOnMain(new Runnable() {
                         @Override
                         public void run() {
                             loadedScreen.toggleHeadVisibility(true);
@@ -171,7 +171,7 @@ public class MainOverlayLayerManager {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            ThreadUtils.runOnUiThread(new Runnable() {
+                            ThreadUtils.runOnMain(new Runnable() {
                                 @Override
                                 public void run() {
                                     loadedScreen.toggleBodyVisibility(true);

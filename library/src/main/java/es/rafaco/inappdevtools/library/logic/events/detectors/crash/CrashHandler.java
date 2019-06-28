@@ -117,7 +117,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
-        crash.setMainThread(ThreadUtils.isTheUiThread(thread));
+        crash.setMainThread(ThreadUtils.isMain(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
         crash.setForeground(!activityWatcher.isInBackground());
@@ -132,7 +132,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),
-                String.valueOf(ThreadUtils.isTheUiThread(thread))));
+                String.valueOf(ThreadUtils.isMain(thread))));
     }
 
     //TODO: currentCrashId never get used, why?

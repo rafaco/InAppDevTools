@@ -23,7 +23,7 @@ public class CustomToast {
     public static final int TYPE_ERROR = 3;
 
     public static void show(final Context context, final String text, final int type){
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 MDToast toast = MDToast.makeText(context, text, MDToast.LENGTH_LONG, type);

@@ -176,7 +176,7 @@ public class ErrorsScreen extends OverlayScreen {
 
     public void onAnrButton() {
         Log.i(Iadt.TAG, "ANR requested, sleeping main thread for a while...");
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -192,7 +192,7 @@ public class ErrorsScreen extends OverlayScreen {
     public void onCrashUiButton() {
         Log.i(Iadt.TAG, "Simulated crash on the UI thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 throw new SimulatedException("Simulated crash on the UI thread", cause);
@@ -203,7 +203,7 @@ public class ErrorsScreen extends OverlayScreen {
     public void onCrashBackgroundButton() {
         Log.i(Iadt.TAG, "Simulated crash on a background thread...");
         final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 throw new SimulatedException("Simulated crash on a background thread", cause);
@@ -253,7 +253,7 @@ public class ErrorsScreen extends OverlayScreen {
                     }
                 });
 
-                ThreadUtils.runOnUiThread(new Runnable() {
+                ThreadUtils.runOnMain(new Runnable() {
                     @Override
                     public void run() {
                         updateList(array);

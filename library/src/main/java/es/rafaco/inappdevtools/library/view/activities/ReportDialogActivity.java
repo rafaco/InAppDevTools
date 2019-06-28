@@ -68,13 +68,13 @@ public class ReportDialogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 final List<Crash> crashes = IadtController.get().getDatabase().crashDao().getAll();
                 final List<Anr> anrs = IadtController.get().getDatabase().anrDao().getAll();
                 final List<Screen> screens = IadtController.get().getDatabase().screenDao().getAll();
-                ThreadUtils.runOnUiThread(new Runnable() {
+                ThreadUtils.runOnMain(new Runnable() {
                     @Override
                     public void run() {
                         buildDialog(crashes, anrs, screens);

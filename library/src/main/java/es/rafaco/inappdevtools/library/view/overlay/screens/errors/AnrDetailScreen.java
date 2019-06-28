@@ -57,7 +57,7 @@ public class AnrDetailScreen extends OverlayScreen {
         if (!TextUtils.isEmpty(getParam())){
             final long anrId = Long.parseLong(getParam());
 
-            ThreadUtils.runOnUiThread(new Runnable() {
+            ThreadUtils.runOnMain(new Runnable() {
                 @Override
                 public void run() {
                     anr = IadtController.get().getDatabase().anrDao().findById(anrId);

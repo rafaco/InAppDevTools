@@ -38,7 +38,7 @@ public class CrashDialogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 crash = IadtController.get().getDatabase().crashDao().getLast();

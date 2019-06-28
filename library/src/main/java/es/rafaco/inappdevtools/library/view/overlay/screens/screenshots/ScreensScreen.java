@@ -104,12 +104,12 @@ public class ScreensScreen extends OverlayScreen {
     }
 
     private void requestData() {
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 ScreenDao screenDao = DevToolsDatabase.getInstance().screenDao();
                 final ArrayList<Screen> newScreenList = (ArrayList<Screen>) screenDao.getAll();
-                ThreadUtils.runOnUiThread(new Runnable() {
+                ThreadUtils.runOnMain(new Runnable() {
                     @Override
                     public void run() {
                         updateList(newScreenList);

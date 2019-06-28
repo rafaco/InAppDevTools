@@ -17,7 +17,7 @@ public class RecyclerViewUtils {
 
 
     public static void updateEmptyState(final RecyclerView recyclerView, final View emptyView, final List<?> data) {
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 if (data.isEmpty()) {

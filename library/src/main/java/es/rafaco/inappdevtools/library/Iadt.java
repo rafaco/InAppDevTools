@@ -108,6 +108,7 @@ public class Iadt {
     //region [ FEATURE: CUSTOM RUNNABLE ]
 
     public static void addCustomRunnable(RunnableItem runnable){
+        if(!isEnabled()) return;
         getController().getRunnableManager().add(runnable);
     }
 

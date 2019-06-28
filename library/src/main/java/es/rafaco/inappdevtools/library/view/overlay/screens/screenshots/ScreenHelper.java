@@ -29,7 +29,7 @@ public class ScreenHelper extends OverlayScreenHelper {
 
     @Override
     public String getReportPath() {
-        //TODO: ThreadUtils.runOnBackThread(new Runnable() {
+        //TODO: ThreadUtils.runOnBack(new Runnable() {
         ScreenDao screenDao = DevToolsDatabase.getInstance().screenDao();
         final Screen lastScreen = screenDao.getLast();
 
@@ -51,7 +51,7 @@ public class ScreenHelper extends OverlayScreenHelper {
         final Screen screen = takeScreenIntoFile(false);
         if (screen != null){
             Toast.makeText(context.getApplicationContext(), "Screen saved", Toast.LENGTH_LONG).show();
-            ThreadUtils.runOnBackThread(new Runnable() {
+            ThreadUtils.runOnBack(new Runnable() {
                 @Override
                 public void run() {
                     IadtController.get().getDatabase().screenDao().insertAll(screen);

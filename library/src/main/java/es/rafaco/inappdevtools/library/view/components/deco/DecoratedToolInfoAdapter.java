@@ -55,7 +55,7 @@ public class DecoratedToolInfoAdapter
     }
 
     public void replaceAll(final List<DecoratedToolInfo> data){
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 originalData.clear();

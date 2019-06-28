@@ -130,7 +130,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     }
 
     public void replaceItems(final List<Object> data){
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 items.clear();

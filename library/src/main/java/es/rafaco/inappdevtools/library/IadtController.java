@@ -91,7 +91,7 @@ public final class IadtController extends ContentProvider {
         eventManager = new EventManager(appContext);
         runnablesManager = new RunnablesManager((appContext));
 
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 DevToolsDatabase.getInstance().printOverview();
@@ -251,7 +251,7 @@ public final class IadtController extends ContentProvider {
     public void sendReport(ReportHelper.ReportType type, final Object param) {
         switch (type){
             case CRASH:
-                ThreadUtils.runOnBackThread(new Runnable() {
+                ThreadUtils.runOnBack(new Runnable() {
                     @Override
                     public void run() {
                         Crash crash;
@@ -270,7 +270,7 @@ public final class IadtController extends ContentProvider {
                 break;
 
             case SESSION:
-                ThreadUtils.runOnBackThread(new Runnable() {
+                ThreadUtils.runOnBack(new Runnable() {
                     @Override
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;
@@ -303,7 +303,7 @@ public final class IadtController extends ContentProvider {
         if (!isCrash)
             beforeClose(); //on crash is performed by CrashHandler
 
-        ThreadUtils.runOnBackThread(new Runnable() {
+        ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 AppUtils.exit();

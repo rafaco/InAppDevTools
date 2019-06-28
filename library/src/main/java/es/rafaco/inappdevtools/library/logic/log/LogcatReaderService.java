@@ -111,7 +111,7 @@ public class LogcatReaderService extends IntentService {
     }
 
     public void performAction(String action, String param) {
-        Log.v(Iadt.TAG, ThreadUtils.formatRunningOnString("LogcatReaderService performAction"));
+        Log.v(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService performAction"));
         Log.v(Iadt.TAG, "LogcatReaderService action: " + action + " param: " + param);
         
         if (action != null && action.equals(CANCEL_ACTION)) {
@@ -353,7 +353,7 @@ public class LogcatReaderService extends IntentService {
 
     private void programNextExecution() {
         Log.d(Iadt.TAG, "LogcatReaderService programNextExecution()");
-        ThreadUtils.runOnUiThread(new Runnable() {
+        ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
                 LogcatReaderService.start(getApplicationContext(), "Update");
