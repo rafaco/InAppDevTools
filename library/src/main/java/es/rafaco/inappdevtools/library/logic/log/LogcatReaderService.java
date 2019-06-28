@@ -32,14 +32,13 @@ public class LogcatReaderService extends IntentService {
     public final static String START_ACTION = "start_action";
     public final static String CANCEL_ACTION = "cancel_action";
     public final static String PARAM_KEY = "param";
-
     public static final String LOGCAT_COMMAND = "logcat -v time";
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
     private static final int QUEUE_MAX_SIZE = 500;
-    private static final int QUEUE_MAX_TIME = 2000;
-    private final int BUFFER_SIZE = 1024;
+    private static final long QUEUE_MAX_TIME = 2000;
 
+    private final int BUFFER_SIZE = 1024;
     private boolean isReaderRunning = false;
     private boolean isInjectorRunning = false;
     private boolean isCancelled;
@@ -62,6 +61,7 @@ public class LogcatReaderService extends IntentService {
         super("LogcatReaderService");
     }
 
+    //region [ BINDING ]
 
     private final IBinder mBinder = new LocalService();
 
@@ -78,6 +78,32 @@ public class LogcatReaderService extends IntentService {
         }
     }
 
+    //endregion
+
+    //region [ PUBLIC STATIC ACCESS ]
+
+    public static void start(Context context, String param) {
+        Log.d(Iadt.TAG, "LogcatReaderService static start" );
+        Intent intent =  new Intent();
+        intent.setClass(context, LogcatReaderService.class);
+        intent.setAction(START_ACTION);
+        intent.putExtra(PARAM_KEY, param);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startService(intent);
+    }
+
+    public static void cancel(Context context) {
+        Log.d(Iadt.TAG, "LogcatReaderService static cancel" );
+        Intent intent =  new Intent();
+        intent.setClass(context, LogcatReaderService.class);
+        intent.setAction(CANCEL_ACTION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startService(intent);
+    }
+
+    //endregion
+
+    //region [ ACTION CONTROLLER ]
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent){
@@ -85,7 +111,7 @@ public class LogcatReaderService extends IntentService {
     }
 
     public void performAction(String action, String param) {
-        Log.d(Iadt.TAG, ThreadUtils.formatRunningOnString("LogcatReaderService performAction"));
+        Log.v(Iadt.TAG, ThreadUtils.formatRunningOnString("LogcatReaderService performAction"));
         Log.v(Iadt.TAG, "LogcatReaderService action: " + action + " param: " + param);
         
         if (action != null && action.equals(CANCEL_ACTION)) {
@@ -98,25 +124,34 @@ public class LogcatReaderService extends IntentService {
     private void onCancelled(String param) {
         isReaderRunning = false;
         isCancelled = true;
-        if (logcatProcess != null)
-            logcatProcess.destroy();
 
         Log.v(Iadt.TAG, "LogcatReaderService onCancelled");
         Log.i(Iadt.TAG, String.format("Inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
                 insertedCounter, readCounter, ignoredCounter, nullDiscardCounter, sameDiscardCounter));
+
+        exit();
+    }
+
+    private void exit() {
+        if (logcatProcess != null)
+            logcatProcess.destroy();
+        stopSelf();
     }
 
     private void onStarted(String param) {
         if (isReaderRunning){
-            Log.w(Iadt.TAG, "LogcatReaderService Skipped, already running" );
+            Log.w(Iadt.TAG, "LogcatReaderService start skipped, already running" );
             return;
         }
 
-        //String result = run(param);
-        //sendResult(result);
-
         gatherLog();
+
+        //sendResult(result);
     }
+    
+    //endregion
+
+    //region [ FILL QUEUE ]
 
     private void gatherLog(){
         isCancelled = false;
@@ -163,7 +198,7 @@ public class LogcatReaderService extends IntentService {
                     && (line = reader.readLine())!= null) {
                 readCounter ++;
 
-                if (!checkEmptyLines(line)) {
+                if (!checkEmptyLines(line) && !checkIgnored(line)) {
                     queue.add(line);
                     processQueueIfNeeded();
                 }
@@ -174,27 +209,22 @@ public class LogcatReaderService extends IntentService {
             isReaderRunning = false;
         }
 
+        Log.d(Iadt.TAG, "LogcatReaderService reader finished. Read: " + readCounter);
         isReaderRunning = false;
-        Log.i(Iadt.TAG, "LogcatReaderService finished!");
-
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                LogcatReaderService.start(getApplicationContext(), "Update");
-            }
-        }, QUEUE_MAX_TIME * 2);
-
         logcatProcess.destroy();
+
+        onPartFinished();
     }
 
     private void processQueueIfNeeded() {
-        if(isInjectorRunning || queue.isEmpty()){
+        if(isInjectorRunning || queue.isEmpty() || isCancelled){
             return;
         }
 
-        if (queue.size() > QUEUE_MAX_SIZE) {
+        if (queue.size() > QUEUE_MAX_SIZE || DateUtils.getLong() > (lastInsertTime + QUEUE_MAX_TIME) ) {
             processQueue();
-        }else{
+        }
+        else if (queue.size() > 0) {
             startUpdateTimerIfNeeded();
         }
     }
@@ -208,15 +238,27 @@ public class LogcatReaderService extends IntentService {
             @Override
             public void run() {
                 processQueue();
-                processQueueTimerTask.cancel();
-                processQueueTimerTask = null;
+                cancelUpdateTimer();
             }
         };
 
         processQueueTimer.schedule(processQueueTimerTask, QUEUE_MAX_TIME);
     }
 
+    private void cancelUpdateTimer() {
+        if (processQueueTimerTask!=null){
+            processQueueTimerTask.cancel();
+            processQueueTimerTask = null;
+        }
+    }
+
+    //endregion
+
+    //region [ PROCESS QUEUE ]
+
     private void processQueue() {
+        cancelUpdateTimer();
+        Log.d(Iadt.TAG, "LogcatReaderService processQueue started with " +  queue.size() + " items");
         isInjectorRunning = true;
         List<Friendly> logsToInsert = new ArrayList<>();
         while (!isCancelled
@@ -229,20 +271,7 @@ public class LogcatReaderService extends IntentService {
             }
         }
 
-        if (!isCancelled){
-            if (!logsToInsert.isEmpty()){
-                insertedCounter += logsToInsert.size();
-                IadtController.getDatabase().friendlyDao().insertAll(logsToInsert);
-                Friendly newerLog = logsToInsert.get(0); //TODO
-                long newLastLogcatString = newerLog.getDate();
-                LastLogcatUtil.set(newLastLogcatString);
-                lastInsertTime = DateUtils.getLong();
-                FriendlyLog.log("V", "Iadt", "LogcatReaderService", "processQueue Inserted " + logsToInsert.size() + " lines");
-            }else{
-                FriendlyLog.log("V", "Iadt", "LogcatReaderService", "processQueue No lines inserted");
-            }
-        }
-        isInjectorRunning = false;
+        onQueueProcessed(logsToInsert);
     }
 
     private Friendly parseLine(String newLine) {
@@ -255,9 +284,9 @@ public class LogcatReaderService extends IntentService {
     }
 
     private boolean checkIgnored(String line) {
-        if(line.contains("setTypeface with style")) {
+        if(line.contains("setTypeface with style") || line.startsWith("---------")) {
             ignoredCounter++;
-            Log.w(Iadt.TAG, "LogcatReaderService detected a ignored line ("+ ignoredCounter +")");
+            Log.v(Iadt.TAG, "LogcatReaderService detected and ignored a line. Total is "+ ignoredCounter);
             return true;
         }
         return false;
@@ -268,7 +297,7 @@ public class LogcatReaderService extends IntentService {
             if(newLine.equals(lastLine)){
                 //TODO: Add a multiplicity counter to LogLine and increment it
                 sameDiscardCounter++;
-                Log.w(Iadt.TAG, "LogcatReaderService detected a duplicated line ("+ sameDiscardCounter +"): " + newLine);
+                Log.v(Iadt.TAG, "LogcatReaderService detected a duplicated line. Total is " + sameDiscardCounter);
                 return true;
             }
         }
@@ -278,48 +307,61 @@ public class LogcatReaderService extends IntentService {
     private boolean checkEmptyLines(String newLine) {
         if(TextUtils.isEmpty(newLine)) {
             nullDiscardCounter++;
-            Log.w(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
+            Log.v(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
             return true;
         }
         return false;
     }
 
+    //endregion
 
+    //region [ INJECT TO DB ]
 
+    private void onQueueProcessed(List<Friendly> logsToInsert) {
+        if (!isCancelled){
+            if (!logsToInsert.isEmpty()){
+                IadtController.getDatabase().friendlyDao().insertAll(logsToInsert);
 
-    public static void start(Context context, String param) {
-        Log.d(Iadt.TAG, "LogcatReaderService start" );
-        Intent intent =  new Intent();
-        intent.setClass(context, LogcatReaderService.class);
-        //intent.putExtra(REQUEST_PARAM_KEY, param);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startService(intent);
+                insertedCounter += logsToInsert.size();
+                lastInsertTime = DateUtils.getLong();
+
+                long lastLogcatData = logsToInsert.get(logsToInsert.size()-1).getDate();
+                LastLogcatUtil.set(lastLogcatData);
+
+                Log.d(Iadt.TAG, "LogcatReaderService processQueue Inserted " + logsToInsert.size() + " lines");
+            }
+            else{
+                Log.w(Iadt.TAG, "LogcatReaderService processQueue No lines inserted");
+            }
+        }
+        isInjectorRunning = false;
+        onPartFinished();
     }
 
-    /*public static void cancel(Context context) {
-        Log.d(Iadt.TAG, "LogcatReaderService cancel" );
-        Intent intent =  new Intent();
-        intent.setClass(context, LogcatReaderService.class);
-        intent.setAction(CANCEL_ACTION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startService(intent);
+    private void onPartFinished() {
+        if(isCancelled){
+            exit();
+        }
+        else if (!queue.isEmpty() && !isInjectorRunning) {
+            processQueue();
+        }
+        else if (!isInjectorRunning && !isReaderRunning) {
+            programNextExecution();
+            exit();
+        }
     }
 
-    private String run(String param){
-        LogcatFillerHelper helper = new LogcatFillerHelper();
-        List<Friendly> data = helper.getData();
-        helper.injectData(data);
-        return param;
+    private void programNextExecution() {
+        Log.d(Iadt.TAG, "LogcatReaderService programNextExecution()");
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LogcatReaderService.start(getApplicationContext(), "Update");
+            }
+        }, QUEUE_MAX_TIME * 2);
     }
 
-    private void sendResult(String msg){
-        Intent intent = new Intent();
-        intent.setAction(RESPONSE_ACTION);
-        intent.putExtra(RESPONSE_PARAM_KEY,msg);
-        sendBroadcast(intent);
-    }*/
-
-
+    //endregion
 
     //region [ LIFECYCLE ]
 
@@ -345,12 +387,24 @@ public class LogcatReaderService extends IntentService {
     public void onDestroy() {
         Log.d(Iadt.TAG, "LogcatReaderService onDestroy" );
         Log.d(Iadt.TAG, "LogcatReaderService isReaderRunning = " + (isReaderRunning ==true ? "true" : "false"));
+        Log.d(Iadt.TAG, "LogcatReaderService isInjectorRunning = " + (isInjectorRunning ==true ? "true" : "false"));
         Log.i(Iadt.TAG, String.format("Inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
                 insertedCounter, readCounter, ignoredCounter, nullDiscardCounter, sameDiscardCounter));
         super.onDestroy();
     }
 
     //endregion
+
+
+    /*
+    private void sendResult(String msg){
+        Intent intent = new Intent();
+        intent.setAction(RESPONSE_ACTION);
+        intent.putExtra(RESPONSE_PARAM_KEY,msg);
+        sendBroadcast(intent);
+    }*/
+
+
 
     /*private void addLifecycleObserver() {
         lifecycleObserver = new LifecycleObserver() {

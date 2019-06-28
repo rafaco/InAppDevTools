@@ -6,15 +6,18 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
-import es.rafaco.inappdevtools.library.Iadt;
-
 public class ThreadUtils {
 
     private ThreadUtils() { throw new IllegalStateException("Utility class"); }
 
     public static String formatRunningOnString(String fromText){
-        String thread = (amIOnUiThread()) ? "MAIN" : "a background";
-        return fromText + " is running on " + thread + " thread";
+        String threadName = (amIOnUiThread()) ? "MAIN" : "a background";
+        String result = fromText + " is running on " + threadName + " thread";
+        if (!amIOnUiThread()){
+            Thread thread = Thread.currentThread();
+            result += ": " + thread.getName() + " " + thread.getId();
+        }
+        return result;
     }
 
     public static String getFormattedThread(){

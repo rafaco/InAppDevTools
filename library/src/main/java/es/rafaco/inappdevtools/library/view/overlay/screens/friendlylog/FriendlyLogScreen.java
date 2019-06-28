@@ -106,7 +106,31 @@ public class FriendlyLogScreen extends OverlayScreen {
         //bindService();
     }
 
+    @Override
+    protected void onStop() {
+        //TODO: removeLifecycleObserver();
+        LogcatReaderService.start(getContext(), "Update");
 
+        if (isBind) {
+            getContext().unbindService(serviceConnection);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        //Nothing needed
+    }
+
+
+
+    private void initView(ViewGroup view) {
+        welcome = view.findViewById(R.id.welcome);
+        welcome.setVisibility(View.GONE);
+
+        recyclerView = getView().findViewById(R.id.list);
+    }
+
+    //region [ BINDING]
 
     private void bindService() {
         Intent intent = new Intent(getContext(), LogcatReaderService.class);
@@ -132,23 +156,9 @@ public class FriendlyLogScreen extends OverlayScreen {
         myService.performAction(LogcatReaderService.START_ACTION, "scanner");
     }
 
-    @Override
-    protected void onStop() {
-        //TODO: removeLifecycleObserver();
+    //endregion
 
-        if (isBind) {
-            getContext().unbindService(serviceConnection);
-        }
-    }
-
-
-
-    private void initView(ViewGroup view) {
-        welcome = view.findViewById(R.id.welcome);
-        welcome.setVisibility(View.GONE);
-
-        recyclerView = getView().findViewById(R.id.list);
-    }
+    //region [ ADAPTER ]
 
     private void initAdapter(){
         adapter = new FriendlyLogAdapter();
@@ -191,8 +201,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
         adapter.notifyDataSetChanged();
 
-        //TODO: addLifecycleObserver();
-        LogcatReaderService.start(getContext(), "FriendlyLogScreen");
+        LogcatReaderService.start(getContext(), "Initialize from LogScreen");
     }
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
@@ -203,10 +212,7 @@ public class FriendlyLogScreen extends OverlayScreen {
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
     }
 
-    @Override
-    protected void onDestroy() {
-        //Nothing needed
-    }
+    //endregion
 
     //region [ TOOL BAR ]
 
