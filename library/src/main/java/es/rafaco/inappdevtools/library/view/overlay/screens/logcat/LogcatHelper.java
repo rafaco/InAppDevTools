@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.util.Log;
 
@@ -15,7 +15,7 @@ import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 
-public class LogHelper extends OverlayScreenHelper {
+public class LogcatHelper extends OverlayScreenHelper {
 
     @Override
     public String getReportPath() {

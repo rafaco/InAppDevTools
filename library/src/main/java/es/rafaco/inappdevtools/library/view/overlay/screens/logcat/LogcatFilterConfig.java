@@ -1,14 +1,14 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.text.TextUtils;
 
-public class LogFilterConfig {
+public class LogcatFilterConfig {
 
     String presetFilter;
     String logFilter;
     String textFilter;
 
-    public LogFilterConfig(String presetFilter, String logFilter, String textFilter) {
+    public LogcatFilterConfig(String presetFilter, String logFilter, String textFilter) {
         this.presetFilter = presetFilter;
         this.logFilter = logFilter;
         this.textFilter = textFilter.toLowerCase();
@@ -35,10 +35,10 @@ public class LogFilterConfig {
         }
     }
 
-    public Boolean validate(LogLine logLine) {
+    public Boolean validate(LogcatLine logLine) {
 
         //Filter by Level
-        if (!LogLine.validateLevel(logLine.getLogLevel(), logFilter)) {
+        if (!LogcatLine.validateLevel(logLine.getLogLevel(), logFilter)) {
             return false;
         }
 

@@ -48,7 +48,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
 public class FriendlyLogScreen extends OverlayScreen {
@@ -280,7 +280,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onSaveButton() {
-        OverlayScreenHelper helper = new LogHelper();
+        OverlayScreenHelper helper = new LogcatHelper();
         String path = (String) helper.getReportPath();
         Iadt.showMessage("Log stored to " + path);
     }

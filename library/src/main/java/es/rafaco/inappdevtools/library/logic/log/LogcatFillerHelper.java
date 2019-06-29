@@ -10,7 +10,7 @@ import java.util.Scanner;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLine;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 
 public class LogcatFillerHelper {
 
@@ -48,7 +48,7 @@ public class LogcatFillerHelper {
         Scanner scanner = new Scanner(rawLogcat);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            LogLine logLine = LogLine.newLogLine(line, false);
+            LogcatLine logLine = LogcatLine.newLogLine(line, false);
             data.add(logLine.parseToFriendly());
         }
         scanner.close();

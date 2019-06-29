@@ -19,7 +19,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 
 public class ReportHelper extends OverlayScreenHelper {
 
@@ -104,7 +104,7 @@ public class ReportHelper extends OverlayScreenHelper {
 
         if(type.equals(ReportType.SESSION)){
 
-            filePaths.add(new LogHelper().getReportPath());
+            filePaths.add(new LogcatHelper().getReportPath());
 
             //Include only the last one
             //filePaths.add(new ScreenHelper().getReportPath());

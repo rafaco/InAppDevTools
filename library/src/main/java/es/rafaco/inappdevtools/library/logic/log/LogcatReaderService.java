@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLine;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 
 public class LogcatReaderService extends IntentService {
 
@@ -282,7 +282,7 @@ public class LogcatReaderService extends IntentService {
         //if (checkDuplicates(newLine)) return null;
 
         lastLine = newLine;
-        LogLine logLine = LogLine.newLogLine(newLine, false);
+        LogcatLine logLine = LogcatLine.newLogLine(newLine, false);
         return logLine.parseToFriendly();
     }
 
@@ -298,7 +298,7 @@ public class LogcatReaderService extends IntentService {
     private boolean checkDuplicates(String newLine) {
         if(lastLine != null){
             if(newLine.equals(lastLine)){
-                //TODO: Add a multiplicity counter to LogLine and increment it
+                //TODO: Add a multiplicity counter to LogcatLine and increment it
                 sameDiscardCounter++;
                 if (isDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a duplicated line. Total is " + sameDiscardCounter);
                 return true;

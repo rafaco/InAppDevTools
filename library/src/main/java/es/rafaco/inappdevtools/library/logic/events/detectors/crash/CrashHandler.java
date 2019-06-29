@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -158,7 +158,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveLogcat(long crashId){
-        LogHelper helper = new LogHelper();
+        LogcatHelper helper = new LogcatHelper();
         Log.d(Iadt.TAG, "Extracting logcat");
 
         Logcat logcat = helper.buildCrashReport(crashId);

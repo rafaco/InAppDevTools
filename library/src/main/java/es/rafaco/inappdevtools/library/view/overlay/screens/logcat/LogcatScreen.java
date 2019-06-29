@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.animation.LayoutTransition;
 import android.content.DialogInterface;
@@ -41,10 +41,10 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
 
-public class LogScreen extends OverlayScreen {
+public class LogcatScreen extends OverlayScreen {
 
 
-    protected LogLineAdapter adapter;
+    protected LogcatLineAdapter adapter;
     protected LogCatReaderTask logReaderTask = null;
     protected RecyclerView recyclerView;
     private String textFilter = "";
@@ -56,7 +56,7 @@ public class LogScreen extends OverlayScreen {
     private ToolBarHelper toolbarHelper;
 
 
-    public LogScreen(MainOverlayLayerManager manager) {
+    public LogcatScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
@@ -76,7 +76,7 @@ public class LogScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_log_body; }
+    public int getBodyLayoutId() { return R.layout.tool_logcat_body; }
 
     @Override
     protected void onCreate() {
@@ -180,7 +180,7 @@ public class LogScreen extends OverlayScreen {
     }
 
     private void onSaveButton() {
-        OverlayScreenHelper helper = new LogHelper();
+        OverlayScreenHelper helper = new LogcatHelper();
         String path = helper.getReportPath();
         Iadt.showMessage("Log stored to " + path);
     }
@@ -191,7 +191,7 @@ public class LogScreen extends OverlayScreen {
             @Override
             public void run() {
                 adapter.clear();
-                LogHelper.clearLogcatBuffer();
+                LogcatHelper.clearLogcatBuffer();
                 startLogReader();
             }
         });
@@ -203,7 +203,7 @@ public class LogScreen extends OverlayScreen {
     //region [ OUTPUT LIST ]
 
     private void initLogLineAdapter() {
-        adapter = new LogLineAdapter(this, new ArrayList<LogLine>(), getSelectedConfig());
+        adapter = new LogcatLineAdapter(this, new ArrayList<LogcatLine>(), getSelectedConfig());
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -282,13 +282,13 @@ public class LogScreen extends OverlayScreen {
     }
 
     private void updateFilter() {
-        LogFilterConfig filterConfig = getSelectedConfig();
+        LogcatFilterConfig filterConfig = getSelectedConfig();
         adapter.updateFilter(filterConfig);
     }
 
     @NonNull
-    private LogFilterConfig getSelectedConfig() {
-        return new LogFilterConfig(
+    private LogcatFilterConfig getSelectedConfig() {
+        return new LogcatFilterConfig(
                     "All",
                     getSelectedVerbosity(),
                     textFilter);

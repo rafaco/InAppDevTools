@@ -24,7 +24,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.Friendly
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
@@ -90,7 +90,7 @@ public class HomeScreen extends OverlayScreen {
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(LogScreen.class);
+                    public void run() { OverlayUIService.performNavigation(LogcatScreen.class);
                     }
                 }));
 

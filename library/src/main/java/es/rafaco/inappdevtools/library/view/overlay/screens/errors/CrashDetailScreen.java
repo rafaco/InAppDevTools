@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManag
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
@@ -196,7 +196,7 @@ public class CrashDetailScreen extends OverlayScreen {
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayUIService.performNavigation(LogScreen.class, null);
+                OverlayUIService.performNavigation(LogcatScreen.class, null);
             }
         });
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {

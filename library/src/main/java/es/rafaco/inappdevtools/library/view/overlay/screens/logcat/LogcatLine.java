@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,7 +18,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
-public class LogLine {
+public class LogcatLine {
 
     private static final int TIMESTAMP_LENGTH = 19;
     public static final int LOG_WTF = 100;
@@ -46,9 +46,9 @@ public class LogLine {
     private boolean expanded = false;
     private boolean highlighted = false;
 
-    public static LogLine newLogLine(String originalLine, boolean expanded) {
+    public static LogcatLine newLogLine(String originalLine, boolean expanded) {
 
-        LogLine logLine = new LogLine();
+        LogcatLine logLine = new LogcatLine();
         logLine.setOriginalLine(originalLine);
         logLine.setExpanded(expanded);
 

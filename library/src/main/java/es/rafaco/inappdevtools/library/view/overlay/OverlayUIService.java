@@ -35,7 +35,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
@@ -150,7 +150,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(NetworkScreen.class);
         mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
         mainOverlayLayerManager.registerScreen(FriendlyLogScreen.class);
-        mainOverlayLayerManager.registerScreen(LogScreen.class);
+        mainOverlayLayerManager.registerScreen(LogcatScreen.class);
         mainOverlayLayerManager.registerScreen(ConsoleScreen.class);
         mainOverlayLayerManager.registerScreen(ScreensScreen.class);
         mainOverlayLayerManager.registerScreen(ReportScreen.class);

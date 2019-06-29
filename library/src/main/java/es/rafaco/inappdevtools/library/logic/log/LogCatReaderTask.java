@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLineAdapter;
 
 public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
 
@@ -20,7 +20,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
     private boolean isRunning = true;
     private Process logprocess = null;
     private BufferedReader reader = null;
-    private LogLineAdapter adaptor;
+    private LogcatLineAdapter adaptor;
     private int readCounter = 0;
     private int nullCounter = 0;
     private int sameCounter = 0;
@@ -28,7 +28,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
     private Runnable onCancelledCallback;
     private static int counter = -1;
 
-    public LogCatReaderTask(LogLineAdapter adaptor, String commandScript) {
+    public LogCatReaderTask(LogcatLineAdapter adaptor, String commandScript) {
         this.adaptor = adaptor;
         this.commandScript = commandScript;
         this.id = counter++;
@@ -123,7 +123,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
             String previousLine = adaptor.getItemByPosition(adaptor.getItemCount()-1)
                     .getOriginalLine();
             if(newLine.equals(previousLine)){
-                //TODO: Add a multiplicity counter to LogLine and increment it
+                //TODO: Add a multiplicity counter to LogcatLine and increment it
                 sameCounter ++;
                 return;
             }

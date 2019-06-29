@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.log;
+package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -23,21 +23,21 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class LogLineAdapter
-        extends RecyclerView.Adapter<LogLineAdapter.LogViewHolder>
+public class LogcatLineAdapter
+        extends RecyclerView.Adapter<LogcatLineAdapter.LogViewHolder>
         implements Filterable {
 
-    private final LogScreen manager;
+    private final LogcatScreen manager;
     private Context context;
-    private List<LogLine> originalData;
-    private List<LogLine> filteredData;
+    private List<LogcatLine> originalData;
+    private List<LogcatLine> filteredData;
 
     private LogFilter logFilter;
     private String currentFilterString;
 
-    public LogLineAdapter(LogScreen manager,
-                          ArrayList<LogLine> data,
-                          LogFilterConfig config)
+    public LogcatLineAdapter(LogcatScreen manager,
+                             ArrayList<LogcatLine> data,
+                             LogcatFilterConfig config)
     {
         this.manager = manager;
         this.context = manager.getView().getContext();
@@ -58,9 +58,9 @@ public class LogLineAdapter
     @Override
     public LogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tool_log_item, parent, false);
+                .inflate(R.layout.tool_logcat_item, parent, false);
 
-        return new LogLineAdapter.LogViewHolder(itemView);
+        return new LogcatLineAdapter.LogViewHolder(itemView);
     }
 
     static class LogViewHolder extends RecyclerView.ViewHolder {
@@ -74,7 +74,7 @@ public class LogLineAdapter
 
     @Override
     public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
-        LogLine itemData = getItemByPosition(position);
+        LogcatLine itemData = getItemByPosition(position);
 
         String type = itemData.getLogLevelText();
         String line = itemData.getLogOutput();
@@ -92,7 +92,7 @@ public class LogLineAdapter
 
     }
 
-    public LogLine getItemByPosition(int position) {
+    public LogcatLine getItemByPosition(int position) {
         return filteredData.get(position);
     }
 
@@ -105,34 +105,34 @@ public class LogLineAdapter
         return logFilter;
     }
 
-    public void updateFilter(LogFilterConfig newConfig) {
+    public void updateFilter(LogcatFilterConfig newConfig) {
         logFilter.update(newConfig);
     }
 
     private class LogFilter extends Filter {
 
-        private LogFilterConfig config;
+        private LogcatFilterConfig config;
 
-        public LogFilter(LogFilterConfig config) {
+        public LogFilter(LogcatFilterConfig config) {
             super();
             this.config = config;
         }
 
-        public LogFilterConfig getConfig() {
+        public LogcatFilterConfig getConfig() {
             return config;
         }
 
-        public void update(LogFilterConfig config){
+        public void update(LogcatFilterConfig config){
             this.config = config;
             filter("");
         }
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            final List<LogLine> originalList = originalData;
+            final List<LogcatLine> originalList = originalData;
             int count = originalList.size();
-            final ArrayList<LogLine> filteredList = new ArrayList<>(count);
-            LogLine currentLogLine;
+            final ArrayList<LogcatLine> filteredList = new ArrayList<>(count);
+            LogcatLine currentLogLine;
             for (int i = 0; i < count; i++) {
                 currentLogLine = originalList.get(i);
                 if (config.validate(currentLogLine)){
@@ -149,7 +149,7 @@ public class LogLineAdapter
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredData = (ArrayList<LogLine>) results.values;
+            filteredData = (ArrayList<LogcatLine>) results.values;
             notifyDataSetChanged();
             manager.showFilterOutputToast();
         }
@@ -168,12 +168,12 @@ public class LogLineAdapter
     //region [ UPDATE DATA ]
 
     public void add(String value, int id) {
-        LogLine newLine = LogLine.newLogLine(value, false);
+        LogcatLine newLine = LogcatLine.newLogLine(value, false);
         originalData.add(newLine);
 
         if (logFilter.getConfig().validate(newLine)){
 
-            filteredData.add(LogLine.newLogLine(value, false));
+            filteredData.add(LogcatLine.newLogLine(value, false));
             //notifyDataSetChanged();
             notifyItemInserted(filteredData.size()-1);
 
