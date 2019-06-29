@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.logic.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.subscribers.*;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 
@@ -17,6 +18,9 @@ public class EventSubscribersManager {
     }
 
     private void initItems() {
+        if(Iadt.isDebug()){
+            initItem(OverlayNavigationSubscriber.class);
+        }
         initItem(ForegroundInitSubscriber.class);
         initItem(ForegroundSyncSubscriber.class);
     }

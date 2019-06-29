@@ -51,6 +51,7 @@ public final class IadtController extends ContentProvider {
     private RunnablesManager runnablesManager;
     private boolean notHostProcess;
     private boolean isPendingForegroundInit;
+    private String currentOverlayScreen;
 
     public IadtController() {
         if (INSTANCE != null) {
@@ -284,6 +285,15 @@ public final class IadtController extends ContentProvider {
 
     public static void cleanSession() {
         LogHelper.clearLogcatBuffer();
+    }
+
+
+    public void setCurrentOverlay(String stringClassName) {
+        currentOverlayScreen = stringClassName;
+    }
+
+    public String  getCurrentOverlay() {
+        return currentOverlayScreen;
     }
 
     //endregion

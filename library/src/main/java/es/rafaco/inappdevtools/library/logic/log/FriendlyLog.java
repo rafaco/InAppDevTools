@@ -22,6 +22,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
 public class FriendlyLog {
+
     public static final String TAG = "FriendlyLog";
 
     public enum LEVEL { V, D, I, W, E, F, WTF }
@@ -64,6 +65,12 @@ public class FriendlyLog {
     }
 
     private static void logAtLogcat(Friendly log) {
+
+        //TODO: use a configuration
+        if (false){ //Iadt.isDebug()){
+            return;
+        }
+
         String text = getFormatted(log);
         switch (log.getSeverity()){
             case "D":
@@ -87,7 +94,6 @@ public class FriendlyLog {
                 Log.v(TAG, text);
                 break;
         }
-
     }
 
     private static void insertOnBackground(final Friendly log) {
@@ -246,6 +252,12 @@ public class FriendlyLog {
             }
             else if (log.getType().equals("Init")){
                 return R.drawable.ic_flag_white_24dp;
+            }
+            else if (log.getType().equals("Navigation")){
+                return R.drawable.ic_location_on_white_24dp;
+            }
+            else if (log.getType().equals("Hidden")){
+                return R.drawable.ic_visibility_off_white_24dp;
             }
             else if (log.getType().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_white_24dp;

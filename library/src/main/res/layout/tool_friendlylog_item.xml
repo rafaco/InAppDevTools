@@ -14,8 +14,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:background="@color/rally_green"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginLeft="4dp"/>
 
     <RelativeLayout
         android:id="@+id/header"
@@ -40,12 +39,12 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:layout_below="@id/extra_over"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="4dp"/>
+            android:layout_marginLeft="4dp"/>
 
         <es.rafaco.compat.AppCompatTextView
             android:id="@+id/title"
@@ -54,6 +53,9 @@
             android:layout_below="@id/extra_over"
             android:layout_toRightOf="@id/icon"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="6dp"
             android:ellipsize="end"
             android:textColor="@color/rally_white"/>
 

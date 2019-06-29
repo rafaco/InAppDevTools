@@ -72,4 +72,8 @@ public class Humanizer {
                         android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE);
         return relativeDate.toString();
     }
+
+    public static boolean isEven(int x){
+        return (x % 2 == 0);
+    }
 }

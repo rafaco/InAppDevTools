@@ -22,4 +22,9 @@ public class NavigationStep{
     public String getParam() {
         return param;
     }
+
+    @Override
+    public String toString(){
+       return "NavigationStep [" + getStringClassName()+ "] : " + getParam();
+    }
 }

@@ -9,6 +9,8 @@ public enum Event {
     CONFIG_CHANGED("ConfigChanged"),
     LIBRARY_START("LibraryStart"),
     APP_START("AppStart"),
+    OVERLAY_NAVIGATION("OverlayNavigation"),
+    OVERLAY_HIDDEN("OverlayHidden"),
 
     ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
     ERROR_ANR("ErrorAnr"),

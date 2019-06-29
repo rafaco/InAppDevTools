@@ -274,7 +274,7 @@ public class LogLine {
         }
         parsed.setSeverity(""+convertLogLevelToChar(logLevel));
         parsed.setMessage(getLogOutput());
-        parsed.setExtra(getOriginalLine());
+        //parsed.setExtra(getOriginalLine());
 
         return parsed;
     }

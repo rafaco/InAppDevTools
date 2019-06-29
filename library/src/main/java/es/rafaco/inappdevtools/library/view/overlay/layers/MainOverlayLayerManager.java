@@ -20,6 +20,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.view.utils.ExpandCollapseUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -83,13 +84,14 @@ public class MainOverlayLayerManager {
         goTo(screenClass, param);
     }
 
-    public void goTo(final Class<? extends OverlayScreen> screenClass, final String param){
+    public void goTo(final Class<? extends OverlayScreen> screenClass, final String params){
 
-        Log.d(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + param);
-
-        NavigationStep newStep = new NavigationStep(screenClass, param);
+        NavigationStep newStep = new NavigationStep(screenClass, params);
         addNavigationStep(newStep);
 
+        IadtController.get().getEventManager().fire(Event.OVERLAY_NAVIGATION, newStep);
+
+        Log.v(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + params);
         loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
                 MainOverlayLayerManager.class, this);
 

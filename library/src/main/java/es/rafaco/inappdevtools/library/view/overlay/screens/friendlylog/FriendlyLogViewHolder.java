@@ -16,6 +16,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -77,6 +79,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         title.setVisibility(View.VISIBLE);
         title.setText(data.getMessage());
         title.setSingleLine(!isSelected);
+        title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
         title.setBackgroundColor(Color.TRANSPARENT);
 
         contextualizedColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
@@ -134,18 +137,24 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         return null;
     }
 
-    public void showPlaceholder() {
+    public void showPlaceholder(int position) {
+        int color = ContextCompat.getColor(title.getContext(), R.color.rally_gray);
+
         title.setVisibility(View.VISIBLE);
         title.setText("");
-        title.setBackgroundColor(Color.GRAY);
-        decorator.setBackgroundColor(Color.GRAY);
+        title.setBackgroundColor(color);
+        decorator.setBackgroundColor(color);
 
         icon.setVisibility(View.VISIBLE);
-        icon.setBackgroundColor(Color.GRAY);
+        icon.setBackgroundColor(color);
 
         extra_details.setVisibility(View.GONE);
         extra_over.setVisibility(View.GONE);
         extra_button.setVisibility(View.GONE);
+
+        if (Humanizer.isEven(position)){
+            title.setMaxWidth(title.getWidth()/2);
+        }
     }
 
     @Override

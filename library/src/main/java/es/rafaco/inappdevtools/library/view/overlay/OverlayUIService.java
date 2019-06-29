@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
@@ -43,10 +44,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensS
 public class OverlayUIService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
-    public static final String EXTRA_INTENT_PROPERTY = "EXTRA_INTENT_PROPERTY";
-    private static final String EXTRA_INTENT_PARAM = "EXTRA_INTENT_PARAM";
+    public static final String EXTRA_INTENT_TARGET = "EXTRA_INTENT_TARGET";
+    private static final String EXTRA_INTENT_PARAMS = "EXTRA_INTENT_PARAMS";
     private static Boolean initialised = false;
-    private String lastRequestParam;
 
     public enum IntentAction {
         PERMISSION_GRANTED,
@@ -83,23 +83,21 @@ public class OverlayUIService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
-        String property = intent.getStringExtra(EXTRA_INTENT_PROPERTY);
+        String target = intent.getStringExtra(EXTRA_INTENT_TARGET);
+        String params = intent.getStringExtra(EXTRA_INTENT_PARAMS);
         try {
-            //TODO: cleanUp
-            lastRequestParam = intent.getStringExtra(EXTRA_INTENT_PARAM);
             if (action != null){
-                processIntentAction(action, property);
+                processIntentAction(action, target, params);
             }else{
-                Log.v(Iadt.TAG, "OverlayUIService - onStartCommand without action");
+                Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
             }
         } catch (Exception e) {
 
             if(Iadt.isDebug()){
                 throw e;
             }else{
-                //Handle internal exceptions with low profile
-                FriendlyLog.logException("OverlayUiService unable to start " + action + " " + property, e);
-                e.printStackTrace();
+                FriendlyLog.logException("OverlayUiService unable to start "
+                        + action + " " + target + " " + params,  e);
                 stopSelf();
             }
         }
@@ -126,7 +124,7 @@ public class OverlayUIService extends Service {
         return initialised;
     }
 
-    private boolean isInitialised(final IntentAction action, final String property) {
+    private boolean isInitialised() {
         if (initialised)
             return true;
 
@@ -137,7 +135,7 @@ public class OverlayUIService extends Service {
         else {
             init();
             initialised = true;
-            Log.w(Iadt.TAG, "OverlayUIService - initialised");
+            Log.d(Iadt.TAG, "OverlayUIService - initialised");
             return true;
         }
     }
@@ -170,10 +168,8 @@ public class OverlayUIService extends Service {
 
     //region [ PROCESS INTENT ACTION ]
 
-    private void processIntentAction(IntentAction action, String property) {
-        Log.v(Iadt.TAG, "OverlayUIService - onStartCommand with action: " + action.toString());
-
-        if (!isInitialised(action, property))
+    private void processIntentAction(IntentAction action, String target, String params) {
+        if (!isInitialised())
             return;
 
         //Restore previous request on permission granted
@@ -188,8 +184,8 @@ public class OverlayUIService extends Service {
             navigateBack();
         }
         else if (action.equals(IntentAction.NAVIGATE_TO)){
-            String cleanName = property.replace(" Tool", "");
-            navigateTo(cleanName, lastRequestParam);
+            String cleanName = target.replace(" Tool", "");
+            navigateTo(cleanName, params);
         }
         else if (action.equals(IntentAction.HIDE)){
             hide();
@@ -220,6 +216,9 @@ public class OverlayUIService extends Service {
 
     private void hide() {
         overlayLayersManager.setMainVisibility(false);
+        if (Iadt.isDebug()){
+            IadtController.get().getEventManager().fire(Event.OVERLAY_HIDDEN, null);
+        }
     }
 
     public void navigateHome() {
@@ -251,23 +250,22 @@ public class OverlayUIService extends Service {
     }
 
     private void stopService() {
-        Log.d(Iadt.TAG, "Stopping OverlayUIService");
+        Log.v(Iadt.TAG, "Stopping OverlayUIService");
         stopSelf();
         instance = null;
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
+        //TODO: relocate to eventmanager
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
-        Log.w(Iadt.TAG, "OverlayUIService - onTaskRemoved");
-
         ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
         activityWatcher.setLastActivityResumed("");
     }
 
     @Override
     public void onDestroy() {
-        Log.d(Iadt.TAG, "OverlayUIService - onDestroy");
+        Log.v(Iadt.TAG, "OverlayUIService - onDestroy");
         if (mainOverlayLayerManager != null) mainOverlayLayerManager.destroy();
         if (overlayLayersManager != null) overlayLayersManager.destroy();
         instance = null;
@@ -295,14 +293,14 @@ public class OverlayUIService extends Service {
         Iadt.getAppContext().startService(intent);
     }
 
-    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String param) {
+    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String params) {
         Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
         intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
         if (screenClass!=null){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, screenClass.getSimpleName());
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
         }
-        if (!TextUtils.isEmpty(param)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAM, param);
+        if (!TextUtils.isEmpty(params)){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAMS, params);
         }
         return intent;
     }
@@ -311,7 +309,7 @@ public class OverlayUIService extends Service {
         Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
         intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PROPERTY, property);
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, property);
         }
         return intent;
     }

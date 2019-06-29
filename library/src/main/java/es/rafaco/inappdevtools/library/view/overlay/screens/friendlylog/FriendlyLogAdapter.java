@@ -16,6 +16,7 @@ import  android.support.v7.util.DiffUtil;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FriendlyLogAdapter
         extends PagedListAdapter<Friendly, FriendlyLogViewHolder> {
@@ -62,7 +63,7 @@ public class FriendlyLogAdapter
             holder.bindTo(item, selectedItemId == item.getUid());
         } else {
             //Log.d("Friendly", "Placeholder for" + position);
-            holder.showPlaceholder();
+            holder.showPlaceholder(position);
         }
     }
 

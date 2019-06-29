@@ -147,11 +147,9 @@ public class Iadt {
 
     //endregion
 
-    //region [ FEATURE: CODEPOINT (WIP with low priority ]
-
+    //TODO: CODEPOINT (WIP with low priority ]
     public static void codepoint(Object caller){
         if (!isEnabled()) return;
-
         //String objectToString = ToStringBuilder.reflectionToString(caller, ToStringStyle.MULTI_LINE_STYLE);
         //String result2 = new GsonBuilder().setPrettyPrinting().create().toJson(caller);
         String message = "Codepoint from " + caller.getClass().getSimpleName(); // + ": " + objectToString;
