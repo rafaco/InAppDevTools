@@ -150,4 +150,8 @@ public class ThreadUtils {
         backTask.execute();
     }
 
+    public static int myPid(){
+        return  android.os.Process.myPid();
+    }
+
 }

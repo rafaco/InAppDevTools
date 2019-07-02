@@ -277,4 +277,16 @@ public class LogcatLine {
 
         return parsed;
     }
+
+    public static long extractDate(String line){
+        if (!TextUtils.isEmpty(line)
+                && Character.isDigit(line.charAt(0))
+                && line.length() >= TIMESTAMP_LENGTH) {
+            String timestamp = line.substring(0, TIMESTAMP_LENGTH - 1);
+            return DateUtils.parseLogcatDate(timestamp);
+        }
+        else{
+            return 0;
+        }
+    }
 }

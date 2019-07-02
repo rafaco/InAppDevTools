@@ -23,16 +23,19 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.LogcatDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
-@Database(version = 20, exportSchema = true,
+@Database(version = 23, exportSchema = true,
         entities = {Crash.class,
                 Anr.class,
                 Screen.class,
                 Logcat.class,
                 Friendly.class,
                 Sourcetrace.class,
+                Session.class
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
@@ -63,6 +66,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract LogcatDao logcatDao();
     public abstract FriendlyDao friendlyDao();
     public abstract SourcetraceDao sourcetraceDao();
+    public abstract SessionDao sessionDao();
     //endregion
 
     public void printOverview(){
@@ -73,12 +77,14 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         String overview = "";
         String jump = "\n\t";
         overview +="Iadt DB overview: " + jump;
+        overview +="  Session: " + sessionDao().count() + jump;
         overview +="  FriendlyLog: " + friendlyDao().count() + jump;
         overview +="  Logcat: " + logcatDao().count() + jump;
         overview +="  Screen: " + screenDao().count() + jump;
         overview +="  Anr: " + anrDao().count() + jump;
         overview +="  Crash: " + crashDao().count() + jump;
         overview +="  Sourcetrace: " + sourcetraceDao().count() + jump;
+
 
         return overview;
     }

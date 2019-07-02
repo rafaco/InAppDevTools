@@ -266,11 +266,11 @@ public class FriendlyLog {
         }
 
         else if (log.getCategory().equals("Iadt")){
-            if (log.getSubcategory().equals("NewBuild")) {
-                return R.drawable.ic_code_white_24dp;
+            if (log.getSubcategory().equals("Init")){
+                return R.drawable.ic_new_releases_white_24dp;
             }
-            else if (log.getSubcategory().equals("Init")){
-                return R.drawable.ic_flag_white_24dp;
+            else if (log.getSubcategory().equals("NewBuild")) {
+                return R.drawable.ic_build_white_24dp;
             }
             else if (log.getSubcategory().equals("Navigation")){
                 return R.drawable.ic_location_on_white_24dp;

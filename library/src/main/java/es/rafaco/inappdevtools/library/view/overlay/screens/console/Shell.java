@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class Shell {
 
@@ -36,7 +37,7 @@ public class Shell {
             StringBuffer output = new StringBuffer();
             String line;
             while (!isCancelled && (line = reader.readLine())!= null) {
-                output.append(line + "\n");
+                output.append(line + Humanizer.newLine());
             }
             Log.v(Iadt.TAG, "Shell result: " + output.length() + " lines.");
             response = output.toString();

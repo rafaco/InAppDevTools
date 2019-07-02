@@ -5,10 +5,11 @@ import java.util.Map;
 
 public enum Event {
 
-    NEW_BUILD("NewBuild"),
-    CONFIG_CHANGED("ConfigChanged"),
-    LIBRARY_START("LibraryStart"),
+    APP_NEW_SESSION("AppNewSession"),
+    APP_NEW_BUILD("AppNewBuild"),
     APP_START("AppStart"),
+
+    CONFIG_CHANGED("ConfigChanged"),
     OVERLAY_NAVIGATION("OverlayNavigation"),
     OVERLAY_HIDDEN("OverlayHidden"),
 

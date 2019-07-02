@@ -2,6 +2,8 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
 
 import android.text.TextUtils;
 
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+
 public class LogcatFilterConfig {
 
     String presetFilter;
@@ -20,7 +22,7 @@ public class LogcatFilterConfig {
 
     public int pid(){
         if (onlyMyPid()){
-            return android.os.Process.myPid();
+            return ThreadUtils.myPid();
         }
         return -1;
     }

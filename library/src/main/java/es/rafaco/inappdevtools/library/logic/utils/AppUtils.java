@@ -94,7 +94,7 @@ public class AppUtils {
 
     public static void exit() {
         Log.d("Iadt", "Killing application");
-        android.os.Process.killProcess(android.os.Process.myPid());
+        android.os.Process.killProcess(ThreadUtils.myPid());
         System.exit(10);
     }
 
