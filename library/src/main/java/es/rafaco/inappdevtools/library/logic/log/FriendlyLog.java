@@ -40,7 +40,7 @@ public class FriendlyLog {
         log.setDate(date);
         log.setSeverity(severity);
         log.setCategory(category);
-        log.setType(type);
+        log.setSubcategory(type);
         log.setMessage(message);
 
         logAtLogcat(log);
@@ -56,7 +56,7 @@ public class FriendlyLog {
         log.setDate(date);
         log.setSeverity(severity);
         log.setCategory(category);
-        log.setType(type);
+        log.setSubcategory(type);
         log.setMessage(message);
         log.setExtra(extra);
 
@@ -96,6 +96,25 @@ public class FriendlyLog {
         }
     }
 
+    public static String convertCharToLongString(String logLevelChar) {
+
+        switch (logLevelChar) {
+            case "V":
+                return "VERBOSE";
+            case "D":
+                return "DEBUG";
+            case "I":
+                return "INFO";
+            case "W":
+                return "WARN";
+            case "E":
+                return "ERROR";
+            case "F":
+                return "FAIL";
+        }
+        return ("UNKNOWN");
+    }
+
     private static void insertOnBackground(final Friendly log) {
         ThreadUtils.runOnBack(new Runnable() {
             @Override
@@ -107,7 +126,7 @@ public class FriendlyLog {
 
     @NonNull
     private static String getFormatted(Friendly log) {
-        return String.format("[%s-%s] %s", log.getCategory(), log.getType(), log.getMessage());
+        return String.format("[%s-%s] %s", log.getCategory(), log.getSubcategory(), log.getMessage());
     }
 
     public static int getColor(Friendly log) {
@@ -135,43 +154,43 @@ public class FriendlyLog {
     public static int getIcon(Friendly log) {
 
         //TODO: Refactor needed, it's a mess
-        //TODO: check log.getType()!=null before equals
+        //TODO: check log.getSubcategory()!=null before equals
 
         if (log.getCategory().equals("App")) {
-            if (log.getType().equals("Foreground")) {
+            if (log.getSubcategory().equals("Foreground")) {
                 return R.drawable.ic_flip_to_front_white_24dp;
             }
-            else if (log.getType().equals("Background")) {
+            else if (log.getSubcategory().equals("Background")) {
                 return R.drawable.ic_flip_to_back_white_24dp;
             }
-            else if (log.getType().equals("FirstStart")) {
+            else if (log.getSubcategory().equals("FirstStart")) {
                 return R.drawable.ic_fiber_new_white_24dp;
             }
-            else if (log.getType().equals("Restart") ||
-                    log.getType().equals("Start")) {
+            else if (log.getSubcategory().equals("Restart") ||
+                    log.getSubcategory().equals("Start")) {
                 return R.drawable.ic_flag_white_24dp;
             }
-            else if (log.getType().equals("Navigation")) {
+            else if (log.getSubcategory().equals("Navigation")) {
                 return R.drawable.ic_view_carousel_white_24dp;
             }
-            else if (log.getType().equals("TaskRemoved")) {
+            else if (log.getSubcategory().equals("TaskRemoved")) {
                 return R.drawable.ic_close_white_24dp;
             }
         }
         else if (log.getCategory().equals("Device")) {
-            if (log.getType().equals("Portrait")) {
+            if (log.getSubcategory().equals("Portrait")) {
                 return R.drawable.ic_portrait_white_24dp;
             }
-            else if (log.getType().equals("Landscape")) {
+            else if (log.getSubcategory().equals("Landscape")) {
                 return R.drawable.ic_landscape_white_24dp;
             }
-            else if (log.getType().equals("ScreenOn")) {
+            else if (log.getSubcategory().equals("ScreenOn")) {
                 return R.drawable.ic_phonelink_ring_white_24dp;
             }
-            else if (log.getType().equals("ScreenOff")) {
+            else if (log.getSubcategory().equals("ScreenOff")) {
                 return R.drawable.ic_phonelink_erase_white_24dp;
             }
-            else if (log.getType().equals("UserPresent")) {
+            else if (log.getSubcategory().equals("UserPresent")) {
                 return R.drawable.ic_person_pin_white_24dp;
             }
         }
@@ -179,22 +198,22 @@ public class FriendlyLog {
             return R.drawable.ic_touch_app_white_24dp;
         }
         else if (log.getCategory().equals("User")){
-            if (log.getType().equals("Touch")){
+            if (log.getSubcategory().equals("Touch")){
                 return R.drawable.ic_touch_app_white_24dp;
             }
-            else if (log.getType().equals("BackKey")){
+            else if (log.getSubcategory().equals("BackKey")){
                 return R.drawable.ic_arrow_back_white_24dp;
             }
-            else if (log.getType().equals("HomeKey")){
+            else if (log.getSubcategory().equals("HomeKey")){
                 return R.drawable.ic_circle_white_24dp;
             }
-            else if (log.getType().equals("RecentKey")){
+            else if (log.getSubcategory().equals("RecentKey")){
                 return R.drawable.ic_square_white_24dp;
             }
-            else if (log.getType().equals("DreamKey")){
+            else if (log.getSubcategory().equals("DreamKey")){
                 return R.drawable.ic_power_white_24dp;
             }
-            else if (log.getType().equals("Shake")){
+            else if (log.getSubcategory().equals("Shake")){
                 return R.drawable.ic_vibration_white_24dp;
             }
         }
@@ -214,58 +233,58 @@ public class FriendlyLog {
             return R.drawable.ic_message_white_24dp;
         }
         else if (log.getCategory().equals("Network")){
-            if (log.getType().equals("Requested")){
+            if (log.getSubcategory().equals("Requested")){
                 return R.drawable.ic_cloud_queue_white_24dp;
             }
-            else if (log.getType().equals("Complete")){
+            else if (log.getSubcategory().equals("Complete")){
                 return R.drawable.ic_cloud_done_white_24dp;
             }
-            else if (log.getType().equals("Failed")){
+            else if (log.getSubcategory().equals("Failed")){
                 return R.drawable.ic_cloud_off_white_24dp;
             }
-            else if (log.getType().equals("Connected")){
+            else if (log.getSubcategory().equals("Connected")){
                 return R.drawable.ic_wifi_tethering_white_24dp;
             }
-            else if (log.getType().equals("Disconnected")){
+            else if (log.getSubcategory().equals("Disconnected")){
                 return R.drawable.ic_portable_wifi_off_white_24dp;
             }
-            else if (log.getType().equals("AirplaneOn")){
+            else if (log.getSubcategory().equals("AirplaneOn")){
                 return R.drawable.ic_airplanemode_active_white_24dp;
             }
-            else if (log.getType().equals("AirplaneOff")){
+            else if (log.getSubcategory().equals("AirplaneOff")){
                 return R.drawable.ic_airplanemode_inactive_white_24dp;
             }
         }
         else if (log.getCategory().equals("Error")){
-            if (log.getType().equals("Crash")){
+            if (log.getSubcategory().equals("Crash")){
                 return R.drawable.ic_error_white_24dp;
             }else{
                 return R.drawable.ic_block_white_24dp;
             }
-        }else if (log.getType().equals("Codepoint")){
+        }else if (log.getSubcategory().equals("Codepoint")){
             return R.drawable.ic_pan_tool_white_24dp;
         }
 
         else if (log.getCategory().equals("Iadt")){
-            if (log.getType().equals("NewBuild")) {
+            if (log.getSubcategory().equals("NewBuild")) {
                 return R.drawable.ic_code_white_24dp;
             }
-            else if (log.getType().equals("Init")){
+            else if (log.getSubcategory().equals("Init")){
                 return R.drawable.ic_flag_white_24dp;
             }
-            else if (log.getType().equals("Navigation")){
+            else if (log.getSubcategory().equals("Navigation")){
                 return R.drawable.ic_location_on_white_24dp;
             }
-            else if (log.getType().equals("Hidden")){
+            else if (log.getSubcategory().equals("Hidden")){
                 return R.drawable.ic_visibility_off_white_24dp;
             }
-            else if (log.getType().equals("Screenshot")){
+            else if (log.getSubcategory().equals("Screenshot")){
                 return R.drawable.ic_add_a_photo_white_24dp;
             }
-            else if (log.getType().equals("Exception")){
+            else if (log.getSubcategory().equals("Exception")){
                 return R.drawable.ic_bug_report_white_24dp;
             }
-            else if (log.getType().equals("Delete")){
+            else if (log.getSubcategory().equals("Delete")){
                 return R.drawable.ic_delete_forever_white_24dp;
             }
             return R.drawable.ic_developer_mode_white_24dp;
@@ -281,7 +300,7 @@ public class FriendlyLog {
         log.setDate(new Date().getTime());
         log.setSeverity("E");
         log.setCategory("Error");
-        log.setType("Crash");
+        log.setSubcategory("Crash");
         log.setMessage(message);
         logAtLogcat(log);
         return IadtController.get().getDatabase().friendlyDao().insert(log);
@@ -300,7 +319,7 @@ public class FriendlyLog {
         log.setDate(anr.getDate());
         log.setSeverity("E");
         log.setCategory("Error");
-        log.setType("Anr");
+        log.setSubcategory("Anr");
         log.setMessage(anr.getMessage());
         log.setLinkedId(anrId);
         logAtLogcat(log);
@@ -312,7 +331,7 @@ public class FriendlyLog {
         log.setDate(transaction.getRequestDate().getTime());
         log.setSeverity("D");
         log.setCategory("Network");
-        log.setType(transaction.getStatus().name());
+        log.setSubcategory(transaction.getStatus().name());
         log.setMessage("Request to " + transaction.getPath());
         log.setLinkedId(transaction.getId());
 
@@ -339,11 +358,11 @@ public class FriendlyLog {
                 overview = transaction.getResponseMessage() + "(" + transaction.getResponseCode() + ")";
         }
         log.setMessage(overview + " from " + transaction.getPath());
-        log.setType(transaction.getStatus().name());
+        log.setSubcategory(transaction.getStatus().name());
 
-        if (log.getType().equals(HttpTransaction.Status.Failed.name())){
+        if (log.getSubcategory().equals(HttpTransaction.Status.Failed.name())){
             log.setSeverity("E");
-        }else if (log.getType().equals(HttpTransaction.Status.Complete.name())){
+        }else if (log.getSubcategory().equals(HttpTransaction.Status.Complete.name())){
             log.setSeverity("I");
         }
 

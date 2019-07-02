@@ -122,8 +122,8 @@ public class ReportHelper extends OverlayScreenHelper {
 
             /* TODO: Re-enable db dump
             try {
-                SupportSQLiteDatabase db = IadtController.get().getDatabase().getOpenHelper().getReadableDatabase();
-                String name = IadtController.get().getDatabase().getOpenHelper().getDatabaseName();
+                SupportSQLiteDatabase db = IadtController.getSelectedQuery().getDatabase().getOpenHelper().getReadableDatabase();
+                String name = IadtController.getSelectedQuery().getDatabase().getOpenHelper().getDatabaseName();
                 filePaths.add(SqliteExporter.export(name, db));
             } catch (IOException e) {
                 e.printStackTrace();

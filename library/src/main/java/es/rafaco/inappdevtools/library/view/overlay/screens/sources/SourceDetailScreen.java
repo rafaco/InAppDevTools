@@ -71,7 +71,8 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
 
     @Override
     protected void onCreate() {
-        //Nothing needed
+        //TODO: subtitle
+        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
     }
 
     @Override
@@ -167,7 +168,8 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
+        //TODO: subtitle
+        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");

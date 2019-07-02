@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <es.rafaco.compat.RecyclerView
+        android:id="@+id/flexible1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        style="@style/content_margin"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/rally_blue"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textSize="16dp"/>
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/type_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/type_spinner"
+            android:text="Type of log: "
+            android:textSize="16dp"
+            style="@style/content_margin"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/verbosity_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textSize="16dp"/>
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/verbosity_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/verbosity_spinner"
+            android:text="Verbosity: "
+            android:textSize="16dp"
+            style="@style/content_margin"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textSize="16dp"/>
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/category_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/category_spinner"
+            android:text="Event category: "
+            android:textSize="16dp"
+            style="@style/content_margin"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/logcat_tag_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textSize="16dp"/>
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/logcat_tag_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/logcat_tag_spinner"
+            android:text="Logcat tag: "
+            android:textSize="16dp"
+            style="@style/content_margin"/>
+
+    </RelativeLayout>
+
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/label2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Severities"
+        android:textSize="16dp"
+        style="@style/content_margin"/>
+
+    <es.rafaco.compat.RecyclerView
+        android:id="@+id/flexible2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        style="@style/content_margin"/>
+
+</LinearLayout>

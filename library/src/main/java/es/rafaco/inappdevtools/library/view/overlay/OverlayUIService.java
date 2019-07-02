@@ -25,6 +25,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
@@ -162,6 +163,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(InspectViewScreen.class);
         mainOverlayLayerManager.registerScreen(SourcesScreen.class);
         mainOverlayLayerManager.registerScreen(SourceDetailScreen.class);
+        mainOverlayLayerManager.registerScreen(AnalysisScreen.class);
     }
 
     //endregion

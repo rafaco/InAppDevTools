@@ -24,6 +24,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
@@ -34,6 +35,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     public static final String TYPE_LINK = "TYPE_LINK";
     public static final String TYPE_TRACE = "TYPE_TRACE";
     public static final String TYPE_TRACE_GROUP = "TYPE_TRACE_GROUP";
+    public static final String TYPE_ANALYSIS = "TYPE_ANALYSIS";
 
     public class FlexibleItemDescriptor {
         public final String name;
@@ -63,6 +65,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_link));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_trace));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_trace_group));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_ANALYSIS, AnalysisItem.class,  AnalysisViewHolder.class, R.layout.flexible_analysis));
     }
 
     @Override

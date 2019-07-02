@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
-@Database(version = 19, exportSchema = true,
+@Database(version = 20, exportSchema = true,
         entities = {Crash.class,
                 Anr.class,
                 Screen.class,

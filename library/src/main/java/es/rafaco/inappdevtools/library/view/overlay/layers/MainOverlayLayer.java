@@ -162,6 +162,8 @@ public class MainOverlayLayer extends OverlayLayer {
             title = "Iadt";
 
         toolbar.setTitle(title);
+
+        //TODO: subtitle
         //toolbar.setSubtitle("Sample app");
     }
 

@@ -25,8 +25,8 @@ public class Friendly {
     @ColumnInfo(name = "category")
     private String category;
 
-    @ColumnInfo(name = "type")
-    private String type;
+    @ColumnInfo(name = "subcategory")
+    private String subcategory;
 
     @ColumnInfo(name = "message")
     private String message;
@@ -69,12 +69,12 @@ public class Friendly {
         this.category = category;
     }
 
-    public String getType() {
-        return type;
+    public String getSubcategory() {
+        return subcategory;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
     }
 
     public String getMessage() {
@@ -115,7 +115,7 @@ public class Friendly {
             return false;
         if (category != null ? !category.equals(friendly.category) : friendly.category != null)
             return false;
-        if (type != null ? !type.equals(friendly.type) : friendly.type != null) return false;
+        if (subcategory != null ? !subcategory.equals(friendly.subcategory) : friendly.subcategory != null) return false;
         if (message != null ? !message.equals(friendly.message) : friendly.message != null)
             return false;
         return extra != null ? extra.equals(friendly.extra) : friendly.extra == null;
@@ -133,7 +133,7 @@ public class Friendly {
             return false;
         if (category != null ? !category.equals(friendly.category) : friendly.category != null)
             return false;
-        if (type != null ? !type.equals(friendly.type) : friendly.type != null) return false;
+        if (subcategory != null ? !subcategory.equals(friendly.subcategory) : friendly.subcategory != null) return false;
         if (message != null ? !message.equals(friendly.message) : friendly.message != null)
             return false;
         return extra != null ? extra.equals(friendly.extra) : friendly.extra == null;

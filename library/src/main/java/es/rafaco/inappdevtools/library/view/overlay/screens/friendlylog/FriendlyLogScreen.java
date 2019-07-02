@@ -1,15 +1,22 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
+import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.v7.widget.ScrollingTabContainerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 //#ifdef MODERN
@@ -36,14 +43,20 @@ import android.arch.paging.PagedList;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
@@ -63,6 +76,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     private int selectedLogLevel = 2;
     private LogcatReaderService myService;
     private boolean isBind;
+    private int selectedLogType = 2;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -86,7 +100,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     @Override
     public int getToolbarLayoutId() {
-        return R.menu.logcat;
+        return R.menu.friendlylog;
     }
 
     @Override
@@ -237,7 +251,11 @@ public class FriendlyLogScreen extends OverlayScreen {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_level) {
+        if (selected == R.id.action_tune) {
+            //OverlayUIService.performNavigation(AnalysisScreen.class);
+            onTuneButton();
+        }
+        else if (selected == R.id.action_level) {
             onLevelButton();
         }
         else if (selected == R.id.action_save) {
@@ -250,6 +268,152 @@ public class FriendlyLogScreen extends OverlayScreen {
             Iadt.showMessage("Not already implemented");
         }
         return super.onMenuItemClick(item);
+    }
+
+    private void onTuneButton() {
+        AlertDialog alertDialog;
+
+        String[] options = new String[]{ "Events", "Logcat", "Both"};
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Advanced filter")
+                .setCancelable(true)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        LayoutInflater inflater = getInflater();
+        View dialogView = inflater.inflate(R.layout.tool_friendlylog_dialog, null);
+        alertDialogBuilder.setView(dialogView);
+
+        RecyclerView recyclerView1 = dialogView.findViewById(R.id.flexible1);
+        FriendlyLogAnalysis analysis = new FriendlyLogAnalysis();
+        List<Object> currentResult = new ArrayList<Object>(analysis.getCurrentResult(dataSourceFactory));
+        FlexibleAdapter adapter1 = new FlexibleAdapter(1, currentResult);
+        recyclerView1.setAdapter(adapter1);
+
+        List<String> list = new ArrayList<>();
+        list.add("IADT Events");
+        list.add("Standard Logcat");
+        list.add("All");
+        addFilterLine(dialogView, R.id.type_spinner, list, selectedLogType, new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedLogType = position;
+                List<String> inSelection = new ArrayList<>();
+                List<String> notInSelection = new ArrayList<>();
+                if(position == 0){
+                    notInSelection.add("Logcat");
+                }else if (position ==1){
+                    inSelection.add("Logcat");
+                }
+                dataSourceFactory.setNotCategories(notInSelection);
+                dataSourceFactory.setCategories(inSelection);
+                adapter.getCurrentList().getDataSource().invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
+        list = new ArrayList<>();
+        for (String item : levelsArray) {
+            list.add(item + " XX%");
+        }
+        addFilterLine(dialogView, R.id.verbosity_spinner, list, selectedLogLevel, new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedLogLevel = position;
+                dataSourceFactory.setLevelString(getSelectedVerbosity());
+                adapter.getCurrentList().getDataSource().invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        list = new ArrayList<>();
+        List<AnalysisItem> categoryResult = analysis.getCategoryResult();
+        list.add("All 100%");
+        for (AnalysisItem item : categoryResult) {
+            list.add(item.getName() + " " + item.getPercentage()+ "%");
+        }
+
+        addFilterLine(dialogView, R.id.category_spinner, list, 0, new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                List<String> inCats = new ArrayList<>();
+
+                if (position == 0){ //All
+                    dataSourceFactory.setCategories(inCats);
+                }else{
+                    String item = (String) parent.getAdapter().getItem(position);
+                    inCats.add(item.substring(0, item.indexOf(" ")));
+                    dataSourceFactory.setCategories(inCats);
+                }
+                adapter.getCurrentList().getDataSource().invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        list = new ArrayList<>();
+        List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
+        list.add("All 100%");
+        for (AnalysisItem item : subcategoryResult) {
+            list.add(item.getName() + " " + item.getPercentage()+ "%");
+        }
+
+        addFilterLine(dialogView, R.id.logcat_tag_spinner, list, 0, new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedLogLevel = position;
+                List<String> subcats = new ArrayList<>();
+                if (position == 0){ //All
+                    dataSourceFactory.setSubcategories(subcats);
+                }else{
+                    String item = (String) parent.getAdapter().getItem(position);
+                    subcats.add(item.substring(0, item.indexOf(" ")));
+                    dataSourceFactory.setSubcategories(subcats);
+                    List<String> cats = new ArrayList<>();
+                    cats.add("Logcat");
+                    dataSourceFactory.setCategories(cats);
+                }
+                adapter.getCurrentList().getDataSource().invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        AppCompatTextView editText2 = dialogView.findViewById(R.id.label2);
+        editText2.setText("Severities");
+        RecyclerView recyclerView2 = dialogView.findViewById(R.id.flexible2);
+        List<Object> severityResult = new ArrayList<Object>(analysis.getSeverityResult());
+        FlexibleAdapter adapter2 = new FlexibleAdapter(1, severityResult);
+        recyclerView2.setAdapter(adapter2);
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.show();
+    }
+
+    private void addFilterLine(View dialogView, int spinnerResId, List<String> list, int selected, AdapterView.OnItemSelectedListener listener) {
+        Spinner typeSpinner = dialogView.findViewById(spinnerResId);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(dataAdapter);
+        typeSpinner.setSelection(selected);
+        typeSpinner.setOnItemSelectedListener(listener);
     }
 
     private void onLevelButton() {

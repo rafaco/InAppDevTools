@@ -24,6 +24,7 @@ public class LogcatLine {
     public static final int LOG_WTF = 100;
 
     private static Pattern logPattern = Pattern.compile(
+            // Line sample: 2019-06-30 01:03:07.079 1090-1237/es.rafaco.inappdevtools.app D/OpenGLRenderer:
             // log level
             "(\\w)" +
             "/" +
@@ -71,9 +72,7 @@ public class LogcatLine {
             logLine.setLogLevel(convertCharToLogLevel(logLine.getLogLevelChar()));
             logLine.setTag(matcher.group(2));
             logLine.setProcessId(Integer.parseInt(matcher.group(3)));
-
             logLine.setLogOutput(originalLine.substring(matcher.end()));
-
         } else {
             //Log.d(Iadt.TAG, String.format("Line doesn't match pattern: %s", originalLine));
             logLine.setLogOutput(originalLine);
@@ -266,7 +265,7 @@ public class LogcatLine {
     public Friendly parseToFriendly() {
         Friendly parsed = new Friendly();
         parsed.setCategory("Logcat");
-        parsed.setType(!TextUtils.isEmpty(getTag()) ? getTag() : "-");
+        parsed.setSubcategory(!TextUtils.isEmpty(getTag()) ? getTag() : "-");
         if (!TextUtils.isEmpty(timestamp)){
             parsed.setDate(DateUtils.parseLogcatDate(timestamp));
         }else{

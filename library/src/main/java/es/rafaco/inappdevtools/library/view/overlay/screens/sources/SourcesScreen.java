@@ -295,7 +295,8 @@ public class SourcesScreen extends OverlayScreen {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getToolbar().setSubtitle(getSubtitle());
+        //TODO: subtitle
+        //getToolbar().setSubtitle(getSubtitle());
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search file names...");

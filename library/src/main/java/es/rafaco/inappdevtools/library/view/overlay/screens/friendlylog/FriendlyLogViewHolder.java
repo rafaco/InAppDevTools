@@ -106,7 +106,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         extras_over.setText(!isSelected ? "" :
                 String.format("%s [%s-%s]",
                         DateUtils.format(data.getDate()),
-                        data.getCategory(), data.getType()));
+                        data.getCategory(), data.getSubcategory()));
 
         if(isSelected && getLink(data)!=null){
             extra_button.setOnClickListener(new View.OnClickListener() {
@@ -124,10 +124,10 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     }
 
     private NavigationStep getLink(Friendly data) {
-        if(data.getType().equals("Crash")){
+        if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
-        else if(data.getType().equals("Anr")){
+        else if(data.getSubcategory().equals("Anr")){
             return new NavigationStep(AnrDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
         else if(data.getCategory().equals("Network")){
