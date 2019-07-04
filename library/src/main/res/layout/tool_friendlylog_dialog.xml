@@ -3,11 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <es.rafaco.compat.RecyclerView
-        android:id="@+id/flexible1"
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/current_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:text="Current overview"
+        android:textSize="18dp"
         style="@style/content_margin"/>
 
     <View
@@ -15,108 +16,125 @@
         android:layout_height="1dp"
         android:background="@color/rally_blue"/>
 
-    <RelativeLayout
+
+    <es.rafaco.compat.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Available filters: "
+        android:textSize="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        style="@style/content_margin"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Spinner
-            android:id="@+id/type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="16dp"/>
 
         <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/type_label"
-            android:layout_width="match_parent"
+            android:id="@+id/session_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/type_spinner"
-            android:text="Type of log: "
-            android:textSize="16dp"
+            android:text="Session: "
+            android:textSize="18dp"
             style="@style/content_margin"/>
 
-    </RelativeLayout>
+        <Spinner
+            android:id="@+id/session_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
 
-    <RelativeLayout
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Spinner
-            android:id="@+id/verbosity_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="16dp"/>
 
         <es.rafaco.compat.AppCompatTextView
             android:id="@+id/verbosity_label"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/verbosity_spinner"
-            android:text="Verbosity: "
-            android:textSize="16dp"
+            android:text="Severity: "
+            android:textSize="18dp"
             style="@style/content_margin"/>
 
-    </RelativeLayout>
+        <Spinner
+            android:id="@+id/verbosity_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
 
-    <RelativeLayout
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="wrap_content"
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/type_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="16dp"/>
+            android:text="Type: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <es.rafaco.compat.AppCompatTextView
             android:id="@+id/category_label"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/category_spinner"
             android:text="Event category: "
-            android:textSize="16dp"
+            android:textSize="18dp"
             style="@style/content_margin"/>
 
-    </RelativeLayout>
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
 
-    <RelativeLayout
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Spinner
-            android:id="@+id/logcat_tag_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="16dp"/>
-
         <es.rafaco.compat.AppCompatTextView
             android:id="@+id/logcat_tag_label"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/logcat_tag_spinner"
             android:text="Logcat tag: "
-            android:textSize="16dp"
+            android:textSize="18dp"
             style="@style/content_margin"/>
 
-    </RelativeLayout>
+        <Spinner
+            android:id="@+id/logcat_tag_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
 
-
-    <es.rafaco.compat.AppCompatTextView
-        android:id="@+id/label2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Severities"
-        android:textSize="16dp"
-        style="@style/content_margin"/>
-
-    <es.rafaco.compat.RecyclerView
-        android:id="@+id/flexible2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        style="@style/content_margin"/>
+    </LinearLayout>
 
 </LinearLayout>

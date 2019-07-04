@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.log;
+package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.os.AsyncTask;
 import android.util.Log;

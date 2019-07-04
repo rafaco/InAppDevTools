@@ -34,18 +34,18 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.log.LogCatReaderTask;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderTask;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class LogcatScreen extends OverlayScreen {
 
 
     protected LogcatLineAdapter adapter;
-    protected LogCatReaderTask logReaderTask = null;
+    protected LogcatReaderTask logReaderTask = null;
     protected RecyclerView recyclerView;
     private String textFilter = "";
 
@@ -244,7 +244,7 @@ public class LogcatScreen extends OverlayScreen {
         //command = String.format(command, selectedLogLevel);
         String command = "logcat -v time";
 
-        logReaderTask = new LogCatReaderTask(adapter, command);
+        logReaderTask = new LogcatReaderTask(adapter, command);
         if(Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
             logReaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {

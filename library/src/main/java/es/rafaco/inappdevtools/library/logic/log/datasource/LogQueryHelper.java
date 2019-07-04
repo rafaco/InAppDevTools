@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.logic.log.datasource;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,15 +16,15 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
-public class FriendlyLogQueryHelper {
+public class LogQueryHelper {
 
-    private final FriendlyLogDataSourceFactory factory;
+    private final LogFilter config;
     private String queryString = new String();
     private List<Object> args = new ArrayList();
     private boolean containsCondition = false;
 
-    public FriendlyLogQueryHelper(FriendlyLogDataSourceFactory factory) {
-        this.factory = factory;
+    public LogQueryHelper(LogFilter config) {
+        this.config = config;
     }
 
     public SupportSQLiteQuery getSelectedQuery() {
@@ -32,45 +32,47 @@ public class FriendlyLogQueryHelper {
         args = new ArrayList();
         containsCondition = false;
 
-        queryString += "SELECT * FROM friendly WHERE";
+        queryString += "SELECT * FROM friendly";
 
-        if(!TextUtils.isEmpty(factory.getText())){
-            addAndIfNeeded();
+        if(!TextUtils.isEmpty(config.getText())){
+            addConjunction();
             queryString += " ( message LIKE ? OR category LIKE ? OR subcategory LIKE ? OR extra LIKE ? )";
-            multiplicateArg(factory.getText(), 4);
+            String likeFilter = "%" + config.getText() + "%";
+            multiplicateArg(likeFilter, 4);
         }
 
-        if(!factory.getLevel().equals("V")) {
-            addAndIfNeeded();
-            addInWithList("severity", factory.getSeverities(), true);
+        if(config.getSeverities().size() < 5) {
+            addConjunction();
+            addInWithList("severity", config.getSeverities(), true);
         }
 
-        if(!factory.getCategories().isEmpty()){
-            addAndIfNeeded();
-            addInWithList("category", factory.getCategories(), true);
+        if(!config.getCategories().isEmpty()){
+            addConjunction();
+            addInWithList("category", config.getCategories(), true);
         }
 
-        if(!factory.getNotCategories().isEmpty()){
-            addAndIfNeeded();
-            addInWithList("category", factory.getNotCategories(), false);
+        if(!config.getNotCategories().isEmpty()){
+            addConjunction();
+            addInWithList("category", config.getNotCategories(), false);
         }
 
-        if(!factory.getSubcategories().isEmpty()){
-            addAndIfNeeded();
-            addInWithList("subcategory", factory.getSubcategories(), true);
+        if(!config.getSubcategories().isEmpty()){
+            addConjunction();
+            addInWithList("subcategory", config.getSubcategories(), true);
         }
 
-        /*if(fromDate!=null){
-            queryString += " date AFTER ?";
-            args.add(fromDate.getTime());
-            containsCondition = true;
+        if(config.getFromDate()>0){
+            addConjunction();
+            queryString += " date >= ?";
+            args.add(config.getFromDate());
         }
 
-        if(toDate!=null){
-            queryString += " date BEFORE ?";
-            args.add(toDate.getTime());
-            containsCondition = true;
-        }*/
+        if(config.getToDate()>0){
+            addConjunction();
+            //TODO: replace by <= when using real finish date instead of next session date
+            queryString += " date < ?";
+            args.add(config.getToDate());
+        }
 
         queryString += " ORDER BY date ASC";
 
@@ -78,10 +80,11 @@ public class FriendlyLogQueryHelper {
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 
-    private void addAndIfNeeded() {
+    private void addConjunction() {
         if (containsCondition)
             queryString += " AND";
         else
+            queryString += " WHERE";
             containsCondition = true;
     }
 

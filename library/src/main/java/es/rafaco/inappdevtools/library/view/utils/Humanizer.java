@@ -7,11 +7,15 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
 
-    public static String capital(String text){
+    public static String toCapitalCase(String text){
         if (TextUtils.isEmpty(text)){
             return text;
         }
-        return text.substring(0,1).toUpperCase() + text.substring(1);
+        String result = text.substring(0,1).toUpperCase();
+        if (text.length()>1) {
+            result += text.substring(1).toLowerCase();
+        }
+        return result;
     }
 
     public static int countLines(String text) {
@@ -75,5 +79,21 @@ public class Humanizer {
 
     public static boolean isEven(int x){
         return (x % 2 == 0);
+    }
+
+    public static String ordinal(int position){
+        if (position < 0){
+            return String.valueOf(position);
+        }
+
+        String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        switch (position % 100) {
+            case 11:
+            case 12:
+            case 13:
+                return position + "th";
+            default:
+                return position + sufixes[position % 10];
+        }
     }
 }

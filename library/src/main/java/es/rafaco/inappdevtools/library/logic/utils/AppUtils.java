@@ -17,6 +17,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
+import static es.rafaco.inappdevtools.library.Iadt.TAG;
+
 public class AppUtils {
 
     private AppUtils() { throw new IllegalStateException("Utility class"); }
@@ -173,6 +175,14 @@ public class AppUtils {
         if (runningAppProcesses != null) {
             int importance = runningAppProcesses.get(0).importance;
             return importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+        }
+        return false;
+    }
+
+    public static boolean isLaunchedFromHistory(Intent intent){
+        if((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY )!=0) {
+            Log.d(TAG, "App is opened from history (recent)");
+            return true;
         }
         return false;
     }

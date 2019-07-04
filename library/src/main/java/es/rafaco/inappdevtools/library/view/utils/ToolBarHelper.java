@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.view.utils;
 
 import android.content.Context;
 import android.view.Menu;
@@ -16,8 +16,6 @@ import static android.support.v7.appcompat.R.*;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-
-
 
 public class ToolBarHelper {
     Context context;

@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -35,7 +35,7 @@ public class AnalysisScreen extends OverlayScreen {
 
     @Override
     protected void onStart(ViewGroup toolHead) {
-        FriendlyLogAnalysis analysis = new FriendlyLogAnalysis();
+        LogAnalysisHelper analysis = new LogAnalysisHelper();
 
         List<Object> data1 = new ArrayList<Object>(analysis.getSeverityResult());
         initAdapter(R.id.flexible1, data1);

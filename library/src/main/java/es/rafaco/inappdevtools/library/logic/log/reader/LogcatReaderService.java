@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.log;
+package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -21,6 +21,7 @@ import java.util.TimerTask;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;

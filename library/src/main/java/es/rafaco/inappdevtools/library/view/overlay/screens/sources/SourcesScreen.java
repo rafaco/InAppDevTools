@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class SourcesScreen extends OverlayScreen {

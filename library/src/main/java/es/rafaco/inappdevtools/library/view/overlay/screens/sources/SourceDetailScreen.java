@@ -34,8 +34,7 @@ import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.ToolBarHelper;
-import es.rafaco.inappdevtools.library.view.utils.PathUtils;
+import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 import static android.content.Context.SEARCH_SERVICE;
 

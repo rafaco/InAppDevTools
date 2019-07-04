@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.log;
+package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -9,10 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLineAdapter;
 
-public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
+public class LogcatReaderTask extends AsyncTask<Void, String, Void> {
 
     private final int BUFFER_SIZE = 1024;
     private final String commandScript;
@@ -28,11 +29,11 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
     private Runnable onCancelledCallback;
     private static int counter = -1;
 
-    public LogCatReaderTask(LogcatLineAdapter adaptor, String commandScript) {
+    public LogcatReaderTask(LogcatLineAdapter adaptor, String commandScript) {
         this.adaptor = adaptor;
         this.commandScript = commandScript;
         this.id = counter++;
-        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " created:" + commandScript);
+        Log.v(Iadt.TAG, "LogcatReaderTask " + id + " created:" + commandScript);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
             isRunning = false;
         }
 
-        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " finished doInBackground");
+        Log.v(Iadt.TAG, "LogcatReaderTask " + id + " finished doInBackground");
         return null;
     }
 
@@ -77,7 +78,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
     protected void onCancelled() {
         isRunning = false;
         if (logprocess != null) logprocess.destroy();
-        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " onCancelled");
+        Log.v(Iadt.TAG, "LogcatReaderTask " + id + " onCancelled");
         Log.v(Iadt.TAG, String.format("Printed %s of %s (%S) lines (filtered %s nulls and %s duplicated)",
                 adaptor.getItemCount(), readCounter, processedCounter, nullCounter, sameCounter));
 
@@ -97,7 +98,7 @@ public class LogCatReaderTask extends AsyncTask<Void, String, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        Log.v(Iadt.TAG, "LogCatReaderTask " + id + " onPostExecute");
+        Log.v(Iadt.TAG, "LogcatReaderTask " + id + " onPostExecute");
         Log.v(Iadt.TAG, String.format("Printed %s of %s lines (filtered %s nulls and %s duplicated)", readCounter, adaptor.getItemCount(), nullCounter, sameCounter));
     }
 

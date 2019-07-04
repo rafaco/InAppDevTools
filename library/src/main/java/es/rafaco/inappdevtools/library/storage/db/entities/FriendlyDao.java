@@ -66,6 +66,13 @@ public interface FriendlyDao {
             + " ORDER BY COUNT(*) DESC")
     List<AnalysisItem> analiseLogcatTag();
 
+    @Query("SELECT uid AS name,"
+            + " 1 AS count,"
+            + " (100.0 / (select count(*) from session)) AS percentage"
+            + " FROM session"
+            + " ORDER BY date DESC")
+    List<AnalysisItem> analiseSession();
+
     @RawQuery(observedEntities = Friendly.class)
     List<AnalysisItem> analiseWithQuery(SupportSQLiteQuery query);
 

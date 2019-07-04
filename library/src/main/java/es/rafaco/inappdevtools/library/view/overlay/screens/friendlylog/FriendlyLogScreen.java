@@ -1,22 +1,16 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
-import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v7.widget.ScrollingTabContainerView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 //#ifdef MODERN
@@ -43,40 +37,36 @@ import android.arch.paging.PagedList;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.log.LogcatReaderService;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class FriendlyLogScreen extends OverlayScreen {
 
-    private FriendlyLogDataSourceFactory dataSourceFactory;
+    private LogDataSourceFactory dataSourceFactory;
     private FriendlyLogAdapter adapter;
     private RecyclerView recyclerView;
     private TextView welcome;
 
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
-    private int selectedLogLevel = 2;
     private LogcatReaderService myService;
+    private LogFilterHelper filterHelper;
     private boolean isBind;
-    private int selectedLogType = 2;
+    private FilterDialogWrapper filterDialogWrapper;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -114,16 +104,26 @@ public class FriendlyLogScreen extends OverlayScreen {
         initToolbar();
         initView(bodyView);
 
+        initFilterHelper();
         initAdapter();
         initScroll();
 
         //bindService();
     }
 
+    private void initFilterHelper() {
+        filterHelper = getParams();
+    }
+
     @Override
     protected void onStop() {
         //TODO: removeLifecycleObserver();
         LogcatReaderService.start(getContext(), "Update");
+
+        //updateParams();
+        if (filterDialogWrapper!=null && filterDialogWrapper.getDialog()!=null){
+            filterDialogWrapper.getDialog().dismiss();
+        }
 
         if (isBind) {
             getContext().unbindService(serviceConnection);
@@ -220,9 +220,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
-        dataSourceFactory = new FriendlyLogDataSourceFactory(dao);
-        dataSourceFactory.setText("");
-        dataSourceFactory.setLevelString(getSelectedVerbosity());
+        dataSourceFactory = new LogDataSourceFactory(dao, filterHelper.getFilter());
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
     }
 
@@ -240,7 +238,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                dataSourceFactory.setText(newText);
+                dataSourceFactory.getConfig().setText(newText);
                 adapter.getCurrentList().getDataSource().invalidate();
                 return false;
             }
@@ -271,162 +269,27 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onTuneButton() {
-        AlertDialog alertDialog;
-
-        String[] options = new String[]{ "Events", "Logcat", "Both"};
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
-                .setTitle("Advanced filter")
-                .setCancelable(true)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        LayoutInflater inflater = getInflater();
-        View dialogView = inflater.inflate(R.layout.tool_friendlylog_dialog, null);
-        alertDialogBuilder.setView(dialogView);
-
-        RecyclerView recyclerView1 = dialogView.findViewById(R.id.flexible1);
-        FriendlyLogAnalysis analysis = new FriendlyLogAnalysis();
-        List<Object> currentResult = new ArrayList<Object>(analysis.getCurrentResult(dataSourceFactory));
-        FlexibleAdapter adapter1 = new FlexibleAdapter(1, currentResult);
-        recyclerView1.setAdapter(adapter1);
-
-        List<String> list = new ArrayList<>();
-        list.add("IADT Events");
-        list.add("Standard Logcat");
-        list.add("All");
-        addFilterLine(dialogView, R.id.type_spinner, list, selectedLogType, new AdapterView.OnItemSelectedListener() {
+        filterDialogWrapper = new FilterDialogWrapper(getContext(), adapter, filterHelper);
+        filterDialogWrapper.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedLogType = position;
-                List<String> inSelection = new ArrayList<>();
-                List<String> notInSelection = new ArrayList<>();
-                if(position == 0){
-                    notInSelection.add("Logcat");
-                }else if (position ==1){
-                    inSelection.add("Logcat");
-                }
-                dataSourceFactory.setNotCategories(notInSelection);
-                dataSourceFactory.setCategories(inSelection);
-                adapter.getCurrentList().getDataSource().invalidate();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onDismiss(DialogInterface dialog) {
+                updateParams();
             }
         });
-
-        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
-        list = new ArrayList<>();
-        for (String item : levelsArray) {
-            list.add(item + " XX%");
-        }
-        addFilterLine(dialogView, R.id.verbosity_spinner, list, selectedLogLevel, new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedLogLevel = position;
-                dataSourceFactory.setLevelString(getSelectedVerbosity());
-                adapter.getCurrentList().getDataSource().invalidate();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        list = new ArrayList<>();
-        List<AnalysisItem> categoryResult = analysis.getCategoryResult();
-        list.add("All 100%");
-        for (AnalysisItem item : categoryResult) {
-            list.add(item.getName() + " " + item.getPercentage()+ "%");
-        }
-
-        addFilterLine(dialogView, R.id.category_spinner, list, 0, new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<String> inCats = new ArrayList<>();
-
-                if (position == 0){ //All
-                    dataSourceFactory.setCategories(inCats);
-                }else{
-                    String item = (String) parent.getAdapter().getItem(position);
-                    inCats.add(item.substring(0, item.indexOf(" ")));
-                    dataSourceFactory.setCategories(inCats);
-                }
-                adapter.getCurrentList().getDataSource().invalidate();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        list = new ArrayList<>();
-        List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
-        list.add("All 100%");
-        for (AnalysisItem item : subcategoryResult) {
-            list.add(item.getName() + " " + item.getPercentage()+ "%");
-        }
-
-        addFilterLine(dialogView, R.id.logcat_tag_spinner, list, 0, new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedLogLevel = position;
-                List<String> subcats = new ArrayList<>();
-                if (position == 0){ //All
-                    dataSourceFactory.setSubcategories(subcats);
-                }else{
-                    String item = (String) parent.getAdapter().getItem(position);
-                    subcats.add(item.substring(0, item.indexOf(" ")));
-                    dataSourceFactory.setSubcategories(subcats);
-                    List<String> cats = new ArrayList<>();
-                    cats.add("Logcat");
-                    dataSourceFactory.setCategories(cats);
-                }
-                adapter.getCurrentList().getDataSource().invalidate();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        AppCompatTextView editText2 = dialogView.findViewById(R.id.label2);
-        editText2.setText("Severities");
-        RecyclerView recyclerView2 = dialogView.findViewById(R.id.flexible2);
-        List<Object> severityResult = new ArrayList<Object>(analysis.getSeverityResult());
-        FlexibleAdapter adapter2 = new FlexibleAdapter(1, severityResult);
-        recyclerView2.setAdapter(adapter2);
-
-        alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
-        alertDialog.show();
-    }
-
-    private void addFilterLine(View dialogView, int spinnerResId, List<String> list, int selected, AdapterView.OnItemSelectedListener listener) {
-        Spinner typeSpinner = dialogView.findViewById(spinnerResId);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(dataAdapter);
-        typeSpinner.setSelection(selected);
-        typeSpinner.setOnItemSelectedListener(listener);
+        filterDialogWrapper.getDialog().show();
     }
 
     private void onLevelButton() {
         String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("Select log level")
                 .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, selectedLogLevel, new DialogInterface.OnClickListener(){
+                .setSingleChoiceItems(levelsArray, filterHelper.getSeverityInt(), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which!=selectedLogLevel) {
-                            selectedLogLevel = which;
-                            dataSourceFactory.setLevelString(getSelectedVerbosity());
+                        if (which != filterHelper.getSeverityInt()) {
+                            filterHelper.setSeverityInt(which);
                             adapter.getCurrentList().getDataSource().invalidate();
                         }
                         dialog.dismiss();
@@ -436,11 +299,6 @@ public class FriendlyLogScreen extends OverlayScreen {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
         alertDialog.show();
-    }
-
-    public String getSelectedVerbosity() {
-        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
-        return levelsArray[selectedLogLevel].substring(0, 1).toUpperCase();
     }
 
     private void onSaveButton() {
@@ -529,28 +387,21 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     //region [ PARAMS ]
 
-    //TODO: usage with crashID
-    public static String buildParams(String type, String path, int lineNumber){
-        SourceDetailScreen.InnerParams paramObject = new SourceDetailScreen.InnerParams(type, path, lineNumber);
-        Gson gson = new Gson();
-        return gson.toJson(paramObject);
-    }
-
-    public SourceDetailScreen.InnerParams getParams(){
-        Gson gson = new Gson();
-        return gson.fromJson(getParam(), SourceDetailScreen.InnerParams.class);
-    }
-
-    public static class InnerParams {
-        public String type;
-        public String path;
-        public int lineNumber;
-
-        public InnerParams(String type, String path, int lineNumber) {
-            this.type = type;
-            this.path = path;
-            this.lineNumber = lineNumber;
+    public LogFilterHelper getParams(){
+        if (TextUtils.isEmpty(getParam())){
+          return new LogFilterHelper();
         }
+        Gson gson = new Gson();
+        return gson.fromJson(super.getParam(), LogFilterHelper.class);
+    }
+
+    public void updateParams(){
+        super.updateParam(buildParams(filterHelper));
+    }
+
+    public static String buildParams(LogFilterHelper filterHelper){
+        Gson gson = new Gson();
+        return gson.toJson(filterHelper);
     }
 
     //endregion

@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.logic.log.datasource;
 
 import android.arch.persistence.db.SimpleSQLiteQuery;
 
@@ -8,10 +8,15 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 
-public class FriendlyLogAnalysis {
+public class LogAnalysisHelper {
 
-    public FriendlyLogAnalysis() {
+    public LogAnalysisHelper() {
 
+    }
+
+    public List<AnalysisItem> getSessionResult(){
+        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseSession();
+        return analysisItems;
     }
 
     public List<AnalysisItem> getSeverityResult(){
@@ -33,10 +38,14 @@ public class FriendlyLogAnalysis {
         return analysisItems;
     }
 
-    public List<AnalysisItem> getCurrentResult(FriendlyLogDataSourceFactory dataSourceFactory) {
-        FriendlyLogQueryHelper helper = new FriendlyLogQueryHelper(dataSourceFactory);
+    public List<AnalysisItem> getCurrentFilterOverview(LogFilter config) {
+        LogQueryHelper helper = new LogQueryHelper(config);
         SimpleSQLiteQuery currentFilterSize = helper.getCurrentFilterSize();
         List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);
         return analysisItems;
+    }
+
+    public int getTotalLogSize() {
+        return IadtController.getDatabase().friendlyDao().count();
     }
 }

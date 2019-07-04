@@ -229,7 +229,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
     @NonNull
     public String getFormattedDeviceLong() {
-        return String.format("%s %s with Android %s", Humanizer.capital(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionName()
+        return String.format("%s %s with Android %s", Humanizer.toCapitalCase(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionName()
     }
 
 }
