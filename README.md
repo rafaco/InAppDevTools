@@ -66,26 +66,32 @@ For extended installation instructions, visit our wiki: [Extended installation](
 
 ## Usage <a name="usage"/>
 
-After the installation you only need to rebuild your app, run it on a device and invoke our UI using one of the following methods:
+After the installation you only need to rebuild your app, run it on a real device or emulator. 
+
+On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device
 - Touch our notification
 - Tap our floating icon over your app (disabled by default)
-
-You can also use our static public interface (Iadt) to show/hide our UI programmatically:
-
+- Or programmatically using our public interface (Iadt):
 ```java
-Iadt.showOverlay();
-Iadt.hideOverlay();
+Iadt.show();
+Iadt.hide();
 ```
 
 
 ### Configuration <a name="configuration"/>
-You can configure our library behaviour using our gradle extension on your app module's build.gradle.
+You can configure our library **and our plugin** behaviour at build time by using our gradle extension on your app module's build.gradle. Note that the plugin is only afected by this way of configuration and their values will remain after cleaning app's data. 
 ```gradle
 inappdevtools {
     enabled = true
     email = 'yourmail@yourdomain.com'
 }
+```
+
+You can also modify our library behaviour at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. This values will be lost after cleaning app's data. 
+```java
+Iadt.getConfig().setBoolean(Config.ENABLED, false);
+Iadt.restartApp();
 ```
 
 Available properties:
@@ -151,7 +157,7 @@ I'm really looking forward to create a small comunity around this library! You c
 - //TODO: add com.github.anrwatchdog:anrwatchdog?
 - //TODO: add replacement for com.opencsv:opencsvallo
 
-## Credits
+## About the author
 I'm a Senior Software Engineer and this project started as a playground to learn Android on my spare time. I have a lot of fun with it and as it has turned out to be an interesting project for every Android developer, I've finally left a permanent work position to focus on this. I hope to publish a first complete version at the end of this summer (2019) before continue with my career.
 
 ## License <a name="license"/>
