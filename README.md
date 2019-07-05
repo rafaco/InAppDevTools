@@ -14,17 +14,17 @@
 
 For extended feature description, visit our wiki: [Feature description](https://github.com/rafaco/InAppDevTools/wiki/Feature-description)
 
-![Home](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg)
-![Info](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Info.jpg)
-
-
-![Crash](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Crash.jpg)
-![Source](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Source.jpg)
-![Logs](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Logs.jpg)
-
-![View](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View.jpg)
-![View2](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View2.jpg)
-![Storage](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Storage.jpg)
+<p>
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Info.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Crash.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Source.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Logs.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View2.jpg" width="200">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Storage.jpg" width="200">
+<!---![Home](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg)-->
+</p>
 
 ## Installation <a name="setup"/>
 
