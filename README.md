@@ -14,8 +14,17 @@
 
 For extended feature description, visit our wiki: [Feature description](https://github.com/rafaco/InAppDevTools/wiki/Feature-description)
 
-//TODO add screenshots
+![Home](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg)
+![Info](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Info.jpg)
 
+
+![Crash](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Crash.jpg)
+![Source](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Source.jpg)
+![Logs](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Logs.jpg)
+
+![View](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View.jpg)
+![View2](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_View2.jpg)
+![Storage](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Storage.jpg)
 
 ## Installation <a name="setup"/>
 
