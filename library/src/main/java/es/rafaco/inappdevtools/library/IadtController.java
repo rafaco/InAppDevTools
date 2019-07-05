@@ -209,6 +209,7 @@ public final class IadtController extends ContentProvider {
 
     public void showOverlay(final boolean forceHome) {
         if (!isEnabled()) return;
+        if (isPendingForegroundInit) return;
 
         //TODO: control fail back
         if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
@@ -226,18 +227,25 @@ public final class IadtController extends ContentProvider {
         getAppContext().startService(intent);
     }
 
-    public void hideOverlay() {
+    public boolean hideOverlay() {
+        if (!isEnabled()
+                || isPendingForegroundInit
+                || IadtController.get().getCurrentOverlay() == null){
+            return false;
+        }
+
         Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE, null);
         getAppContext().startService(intent);
+        return true;
     }
 
     public void takeScreenshot() {
-        Screen screen = new ScreenHelper().takeAndSaveScreen();
+        if (!isEnabled()) return;
 
+        Screen screen = new ScreenHelper().takeAndSaveScreen();
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayUIService.isInitialize()){
-            //TODO: what if !isInitialize()
             hideOverlay();
         }
         FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());

@@ -5,9 +5,12 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
 
+/**
+ * Hide our overlay UI when the app goes to background and restore it when get foreground
+ */
 public class ForegroundSyncSubscriber extends EventSubscriber {
 
-    private static boolean autoclosed = false;
+    private static boolean pendingRestoration = false;
 
     public ForegroundSyncSubscriber(EventManager eventManager) {
         super(eventManager);
@@ -18,25 +21,18 @@ public class ForegroundSyncSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (autoclosed){
+                if (pendingRestoration){
                     IadtController.get().showOverlay(false);
-                    autoclosed = false;
+                    pendingRestoration = false;
                 }
             }
         });
         eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (isOverlayShown()){
-                    IadtController.get().hideOverlay();
-                    autoclosed = true;
-                }
+                boolean hidden = IadtController.get().hideOverlay();
+                if (hidden) pendingRestoration = true;
             }
         });
-    }
-
-    private boolean isOverlayShown() {
-        //TODO: detect overlay on screen
-        return true;
     }
 }

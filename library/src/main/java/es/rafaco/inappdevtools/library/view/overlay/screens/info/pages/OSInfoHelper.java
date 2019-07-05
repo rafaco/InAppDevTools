@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
@@ -36,7 +37,7 @@ public class OSInfoHelper extends AbstractInfoHelper  {
 
     @Override
     public String getOverview() {
-        return "Android " + deviceHelper.getOSCodename() + " (" + Build.VERSION.RELEASE + ")\n"
+        return "Android " + getOsCodename() + " (" + Build.VERSION.RELEASE + ")\n"
                 + (deviceHelper.isDeviceRooted() ? "[Rooted] " : "")
                 + getDisplayLanguage() + " - " + getDisplayCountry();
     }
@@ -67,10 +68,21 @@ public class OSInfoHelper extends AbstractInfoHelper  {
 
     protected InfoGroup getAndroidGroup(EasyDeviceMod deviceHelper) {
         return new InfoGroup.Builder("")
-                .add("Android version", deviceHelper.getOSCodename() + " (" + Build.VERSION.RELEASE + ")")
+                .add("Android version", getOsCodename() + " (" + Build.VERSION.RELEASE + ")")
                 .add("Android SDK version",  getVersionCodeName()+ " (" + String.valueOf(Build.VERSION.SDK_INT) + ")")
                 .add("isRooted", deviceHelper.isDeviceRooted())
                     .build();
+    }
+
+    private String getOsCodename() {
+        //Parsing values not included in DeviceInfo
+        if (getVersionCodeName().equals("O")){
+            return "Oreo";
+        }else if (getVersionCodeName().equals("P")){
+            return "Pie";
+        }else{
+            return deviceHelper.getOSCodename();
+        }
     }
 
     protected InfoGroup getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
@@ -80,17 +92,16 @@ public class OSInfoHelper extends AbstractInfoHelper  {
                     .add("Up time", configHelper.getFormattedUpTime())
                     .add("Language", deviceHelper.getLanguage())
                     .add("Ringer mode", parseRingerMode(configHelper.getDeviceRingerMode()))
-                    .add("Orientation", "//TODO")
                     .build();
     }
 
     protected InfoGroup getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
         return new InfoGroup.Builder("Memory & Storage")
-                    .add("RAM", parseByte(memoryHelper.getTotalRAM()))
-                    .add("Internal",  parseByte(memoryHelper.getAvailableInternalMemorySize())
-                            + "/" + parseByte(memoryHelper.getTotalInternalMemorySize()))
-                    .add("External", parseByte(memoryHelper.getAvailableExternalMemorySize())
-                            + "/" + parseByte(memoryHelper.getTotalExternalMemorySize()))
+                    .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
+                    .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
+                            + "/" + Humanizer.parseByte(memoryHelper.getTotalInternalMemorySize()))
+                    .add("External", Humanizer.parseByte(memoryHelper.getAvailableExternalMemorySize())
+                            + "/" + Humanizer.parseByte(memoryHelper.getTotalExternalMemorySize()))
                     .add("hasSDCard", configHelper.hasSdCard())
                     .build();
     }
@@ -120,22 +131,5 @@ public class OSInfoHelper extends AbstractInfoHelper  {
         Field[] fields = Build.VERSION_CODES.class.getFields();
         String osName = fields[Build.VERSION.SDK_INT].getName();
         return osName;
-    }
-
-    public static String parseByte(long bytes) {
-        //return android.text.format.Formatter.formatFileSize(context, bytes);
-        return humanReadableByteCount(bytes, true);
-    }
-
-    public static String parseKb(long kb) {
-        return humanReadableByteCount(kb*1000, true);
-    }
-
-    public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 }

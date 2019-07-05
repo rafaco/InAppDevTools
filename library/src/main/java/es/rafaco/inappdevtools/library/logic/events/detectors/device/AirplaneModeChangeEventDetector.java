@@ -24,7 +24,7 @@ public class AirplaneModeChangeEventDetector extends EventDetector {
 
     @Override
     public void subscribe() {
-        eventManager.subscribe(Event.CONNECTIVITY_UP, new EventManager.Listener() {
+        eventManager.subscribe(Event.AIRPLANE_MODE_UP, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "Network", "AirplaneOn",
@@ -32,7 +32,7 @@ public class AirplaneModeChangeEventDetector extends EventDetector {
             }
         });
 
-        eventManager.subscribe(Event.CONNECTIVITY_UP, new EventManager.Listener() {
+        eventManager.subscribe(Event.AIRPLANE_MODE_DOWN, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "Network", "AirplaneOff",

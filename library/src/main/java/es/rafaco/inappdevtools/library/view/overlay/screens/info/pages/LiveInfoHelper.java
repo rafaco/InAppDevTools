@@ -277,26 +277,26 @@ public class LiveInfoHelper extends AbstractInfoHelper {
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         manager.getMemoryInfo(memoryInfo);
         output += String.format("  Device: %s / %s total (%s threshold)%s",
-                OSInfoHelper.parseByte(memoryInfo.availMem),
-                OSInfoHelper.parseByte(memoryInfo.totalMem),
-                OSInfoHelper.parseByte(memoryInfo.threshold),
+                Humanizer.parseByte(memoryInfo.availMem),
+                Humanizer.parseByte(memoryInfo.totalMem),
+                Humanizer.parseByte(memoryInfo.threshold),
                 memoryInfo.lowMemory? " LOW!" : ""
         ) + "\n";
 
         //output += "--> Runtime data: dalvik process" + "\n";
         Runtime runtime = Runtime.getRuntime();
         int processors = runtime.availableProcessors();
-        String totalMemory = OSInfoHelper.humanReadableByteCount(runtime.totalMemory(), true);
-        String freeMemory = OSInfoHelper.humanReadableByteCount(runtime.freeMemory(), true);
+        String totalMemory = Humanizer.humanReadableByteCount(runtime.totalMemory(), true);
+        String freeMemory = Humanizer.humanReadableByteCount(runtime.freeMemory(), true);
         output += String.format("  Runtime: %s / %s (%s processors) ",
                 freeMemory,
                 totalMemory,
                 processors) + "\n";
 
         //output += "--> Debug data: system wide" + "\n";
-        String nativeHeapSize = OSInfoHelper.humanReadableByteCount(Debug.getNativeHeapSize(), true);
+        String nativeHeapSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapSize(), true);
         //String nativeHeapAllocatedSize = OSInfoHelper.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
-        String nativeHeapFreeSize = OSInfoHelper.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
+        String nativeHeapFreeSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 
 
@@ -314,19 +314,19 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     private String getMemoryInfoFormatted(Debug.MemoryInfo debugMemoryInfo) {
         String result;
         result = String.format("  Dalvik: %s pss, %s shared, %s private",
-                OSInfoHelper.parseKb(debugMemoryInfo.dalvikPss),
-                OSInfoHelper.parseKb(debugMemoryInfo.dalvikSharedDirty),
-                OSInfoHelper.parseKb(debugMemoryInfo.dalvikPrivateDirty)
+                Humanizer.parseKb(debugMemoryInfo.dalvikPss),
+                Humanizer.parseKb(debugMemoryInfo.dalvikSharedDirty),
+                Humanizer.parseKb(debugMemoryInfo.dalvikPrivateDirty)
                 ) + "\n";
         result += String.format("  Native: %s pss, %s shared, %s private",
-                OSInfoHelper.parseKb(debugMemoryInfo.nativePss),
-                OSInfoHelper.parseKb(debugMemoryInfo.nativeSharedDirty),
-                OSInfoHelper.parseKb(debugMemoryInfo.nativePrivateDirty)
+                Humanizer.parseKb(debugMemoryInfo.nativePss),
+                Humanizer.parseKb(debugMemoryInfo.nativeSharedDirty),
+                Humanizer.parseKb(debugMemoryInfo.nativePrivateDirty)
                 ) + "\n";
         result += String.format("  Other: %s pss, %s shared, %s private",
-                OSInfoHelper.parseKb(debugMemoryInfo.otherPss),
-                OSInfoHelper.parseKb(debugMemoryInfo.otherSharedDirty),
-                OSInfoHelper.parseKb(debugMemoryInfo.otherPrivateDirty)
+                Humanizer.parseKb(debugMemoryInfo.otherPss),
+                Humanizer.parseKb(debugMemoryInfo.otherSharedDirty),
+                Humanizer.parseKb(debugMemoryInfo.otherPrivateDirty)
                 ) + "\n";
         return result;
     }

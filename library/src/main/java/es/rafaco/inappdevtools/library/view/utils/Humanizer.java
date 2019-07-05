@@ -96,4 +96,25 @@ public class Humanizer {
                 return position + sufixes[position % 10];
         }
     }
+
+
+    //region [ BYTE/KB ]
+
+    public static String parseByte(long bytes) {
+        return humanReadableByteCount(bytes, true);
+    }
+
+    public static String parseKb(long kb) {
+        return humanReadableByteCount(kb*1000, true);
+    }
+
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        int unit = si ? 1000 : 1024;
+        if (bytes < unit) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
+
+    //endregion
 }

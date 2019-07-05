@@ -25,9 +25,9 @@ import github.nisrulz.easydeviceinfo.base.EasyCpuMod;
 import github.nisrulz.easydeviceinfo.base.EasyDisplayMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.EasySensorMod;
+import github.nisrulz.easydeviceinfo.common.EasyDeviceInfo;
 
 import static android.content.Context.WINDOW_SERVICE;
-import static es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.OSInfoHelper.humanReadableByteCount;
 
 public class DeviceInfoHelper extends AbstractInfoHelper {
 
@@ -60,14 +60,14 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
         InfoGroup hardware = new InfoGroup.Builder("Hardware")
                 .add("CPU", new EasyCpuMod().getStringSupportedABIS())
-                .add("RAM", parseByte(memoryHelper.getTotalRAM()))
+                .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
                 .add("Screen", displayHelper.getResolution()
                         + " @ " + String.valueOf((int)displayHelper.getRefreshRate() + " fps"))
-                .add("Screen Density", displayHelper.getDensity() )
-                .add("Internal",  parseByte(memoryHelper.getAvailableInternalMemorySize())
-                       + "/" + parseByte(memoryHelper.getTotalInternalMemorySize()))
-                .add("External", parseByte(memoryHelper.getAvailableExternalMemorySize())
-                       + "/" + parseByte(memoryHelper.getTotalExternalMemorySize()))
+                .add("Screen Density", getDensity())
+                .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
+                       + "/" + Humanizer.parseByte(memoryHelper.getTotalInternalMemorySize()))
+                .add("External", Humanizer.parseByte(memoryHelper.getAvailableExternalMemorySize())
+                       + "/" + Humanizer.parseByte(memoryHelper.getTotalExternalMemorySize()))
                 .add("hasSDCard", configHelper.hasSdCard())
                 .build();
 
@@ -198,6 +198,26 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
                 .build();
     }
 
+    private String getDensity() {
+        String helperDensity = displayHelper.getDensity();
+        if (helperDensity.equals(EasyDeviceInfo.notFoundVal)){
+            //Parsing values not included in DeviceInfo
+            int density = context.getResources().getDisplayMetrics().densityDpi;
+            if (density >= DisplayMetrics.DENSITY_260
+                    && density <= DisplayMetrics.DENSITY_300){
+                return "XHDPI";
+            }
+            else if (density >= DisplayMetrics.DENSITY_340
+                    && density <= DisplayMetrics.DENSITY_440){
+                return "XXHDPI";
+            }
+            else if (density == DisplayMetrics.DENSITY_560){
+                return "XXXHDPI";
+            }
+        }
+        return helperDensity;
+    }
+
     private String getDeviceType() {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
@@ -217,10 +237,6 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
         } else {
             return "Watch";
         }
-    }
-
-    public static String parseByte(long bytes) {
-        return humanReadableByteCount(bytes, true);
     }
 
     public String getFormattedDevice() {
