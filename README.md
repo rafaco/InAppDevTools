@@ -66,7 +66,7 @@ For extended installation instructions, visit our wiki: [Extended installation](
 
 ## Usage <a name="usage"/>
 
-After the installation you only need to rebuild your app, run it on a real device or emulator. 
+After the [installation](#setup) you only need to rebuild your app and run it on a real device or emulator. 
 
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device
@@ -88,7 +88,7 @@ inappdevtools {
 }
 ```
 
-You can also modify our library behaviour at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. This values will be lost after cleaning app's data. 
+You can also override previous build time configurations at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. This values will be lost after cleaning app's data. 
 ```java
 Iadt.getConfig().setBoolean(Config.ENABLED, false);
 Iadt.restartApp();
@@ -105,7 +105,7 @@ Available properties:
 | `invocation_by_shake` | boolean | true | Disable opening our UI on device shake  |
 | `invocation_by_icon` | boolean | false | Enable a permanent overlay icon to open our UI  |
 | `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI  |
-| `call_default_crash_handler` | boolean | false | Propagate unhandler exceptions to the default handler (crashalitics)  |
+| `call_default_crash_handler` | boolean | false | Propagate unhandler exceptions to the default handler (Crashalitics)  |
 
 ## Customization <a name="customization"/>
 
@@ -126,7 +126,7 @@ Available properties:
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
-//TODO: pass SonarCloud quality gate
+//TODO: Pass SonarCloud's quality gate
 
 
 ## Downloads  <a name="download"/>
