@@ -1,39 +1,19 @@
 # In-App DevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
 
-**Android library with a set of tools for developers. It allows to inspect and debug apps from within it, on the same screen. Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, reports, method tracker, coding helpers and much more.**
+**In-App DevTools is a set of developer tools that can be added to your debug compilation as a library. It's like Chrome DevTools but for Android apps and runnning on the same screen (no cable, on the go!). Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, info panels, flexible reports, classs/method tracker, coding helpers and much more.**
 
-- Inspectors: sources, logcat, layout hierarchy, edit your storage (db, SharedPrefs and Files) and info panels
+- Inspectors: sources, logs, view layout, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
-- See a crash detail immediately and navigate to causing source lines
+- See a crash detail immediately and navigate to the causing source lines.
 - Send flexible reports by email or other apps
 - Customize your own tools, easily run your task and use our dev helpers.
 - Easy to install and configurable
 
-
-##### Table of Contents
-
-- [Demo](#sample)
-- [Installation](#setup)
-  - [Limitations](#req)
-  - [Basic setup](#basic)
-  - [Exclude modules](#modules)
-  - [Add network interceptor](#network)
-- [Usage](#usage)
-  - [Invocation](#invocation)
-  - [Configuration](#configuration)
-- [Features](#features)
-  - [Overlay system](#overlay)  
-  - [Friendly logger](#friendly)
-  - [Crash handler](#crash)
-  - [Inspectors](#inspector)
-  - [Reports](#reports)
-- [Customization](#customization) 
-
+# Screenshots
+//TODO
 
 ## Demo App <a name="sample"/>
-A demostration app is available to download from GooglePlay (comming soon). It's allow you to play staight away with our library installed on an app.
-
-His source code is in this repository ("sample" folder) and it's contains implementation examples. Clone the project and run the sample app module to install it into a real device or an emulator.
+It will be available to download from GooglePlay, starting from version 1.0.
 
 ## Installation <a name="setup"/>
 
@@ -66,26 +46,12 @@ dependencies {
 }
 ```
 
-Latest versions are 
+Latest versions are (don´t include the "v" character):
 ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=[PLUGIN_VERSION]&colorB=blue&style=flat-square) and 
-![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat-square) (don´t include the "v" character)
-
-### Exclude modules from plugin <a name="modules"/>
-If your project have additional modules, you can decide witch one will run our plugin to collect build info, sources and resources. To do so, you need to disable the default behavior of applying our plugin immediately in the root build.gradle:
-
-```gradle
-plugins {
-    id "es.rafaco.inappdevtools" version "[PLUGIN_VERSION]" apply false
-}
-```
-And then manually apply our plugin in the build.gradle of every desired module, including the main one (app):
-
-```gradle
-apply plugin: 'es.rafaco.inappdevtools'
-```
+![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat-square) 
 
 ### Add network interceptor <a name="network"/>
-If your app use Retrofit, you can inspect and report all network communications make by your app. To enable it, add our OkHttpClient to your api initialization class:
+If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your api initialization class:
 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
@@ -113,7 +79,11 @@ Available properties:
 | `enabled` | boolean | true | Disable all if set false |
 | `debug` | boolean | false | Additional logs from our library and our plugin  |
 | `email` | String | null | Default email to use for reports |
-
+| `overlay_enabled` | boolean | true | Disable our overlay UI  |
+| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake  |
+| `invocation_by_icon` | boolean | false | Enable a permanent overlay icon to open our UI  |
+| `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI  |
+| `call_default_crash_handler` | boolean | false | Propagate unhandler exceptions to the default handler (crashalitics)  |
 
 ## Features <a name="features"/>
 
@@ -195,19 +165,21 @@ We use overlays to show information over your app instead of activities
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
 ## Downloads  <a name="download"/>
-Our sample app will be available to download from [Google Play](https://play.google.com).
 
 You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
 
 - Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
 - Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
 - Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
+~~- Our sample app will be available to download from [Google Play](https://play.google.com).~~
 
-## Apps using this library <a name="usages"/>
-- Your app linked here! Just ask me for it
-- Our sample app
+## About the author and this project
+
+I'm a Senior Software Engineer and this project started as a playground to learn Android on my spare time. I have a lot of fun with it and as it has turned into an interesting project for every Android developer, I've finally left a permanent work position to focus on this. I hope to publish a first complete version at the end of this summer (2019) before continue with my career.
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+I'm really looking forward to it! Report bugs, send me a feature request or just give me some feedback about what you like and what would you change.
 
 ## Thanks <a name="thanks"/>
 - To [whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
@@ -220,6 +192,9 @@ You don't normally need to manually download our library or our plugin as they a
 - To [Wajahat Karim](https://github.com/wajahatkarim3) for [JCenter-Gradle-Scripts](https://github.com/wajahatkarim3/JCenter-Gradle-Scripts): used to publish into Bintray.
 - //TODO: add com.github.anrwatchdog:anrwatchdog?
 - //TODO: add replacement for com.opencsv:opencsvallo
+
+## Apps using this library <a name="usages"/>
+- Your app linked here! Just ask me for it
 
 ## License <a name="license"/>
 Apache-2.0
