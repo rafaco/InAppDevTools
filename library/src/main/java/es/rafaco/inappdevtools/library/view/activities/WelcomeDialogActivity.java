@@ -34,9 +34,10 @@ public class WelcomeDialogActivity extends AppCompatActivity {
     private void buildDialog() {
         AppInfoHelper helper = new AppInfoHelper(getApplicationContext());
         String elapsedTimeLowered = Humanizer.getElapsedTimeLowered(helper.getAppBuildTime(getApplicationContext()));
-        String message = helper.getAppNameAndVersions() + "\n" + " compiled "  + elapsedTimeLowered + "\n\n"
-                + "This compilation contains tools to inspect, log and report. Just shake your app to start inspecting it!" + "\n\n"
-                + "We are recording your usage of this app locally but only you can share it using the report feature. You can disable all tools now.\n\n";
+        String message = helper.getAppNameAndVersions() + "\n" + "Compiled "  + elapsedTimeLowered + ".\n\n"
+                + "This is a developer compilation that contains tools to inspect, log and report. They are locally recording everything happening underneath, but only you can send any of this data using 'Share' or 'Report' features. You can disable this tools now." + "\n\n"
+
+                + "Tip: Shake your device to start!\n\n";
 
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);

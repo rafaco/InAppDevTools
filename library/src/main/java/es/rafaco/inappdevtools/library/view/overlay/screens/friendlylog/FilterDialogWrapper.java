@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogFilterHelper;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
 
 public class FilterDialogWrapper {
@@ -37,11 +32,19 @@ public class FilterDialogWrapper {
     public AlertDialog prepare() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
-                .setTitle("Log filters")
+                .setTitle("Log filter")
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Show all", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        helper.disableAll();
+                        adapter.getCurrentList().getDataSource().invalidate();
                         dialog.dismiss();
                     }
                 });

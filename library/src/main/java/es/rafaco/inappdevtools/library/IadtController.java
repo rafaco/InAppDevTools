@@ -229,8 +229,8 @@ public final class IadtController extends ContentProvider {
 
     public boolean hide() {
         if (!isEnabled()
-                || isPendingForegroundInit
-                || IadtController.get().getCurrentOverlay() == null){
+                || isPendingForegroundInit){
+                //|| IadtController.get().getCurrentOverlay() == null){
             return false;
         }
 

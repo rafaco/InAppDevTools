@@ -32,6 +32,28 @@
         android:layout_height="wrap_content">
 
         <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/type_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Type: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <es.rafaco.compat.AppCompatTextView
             android:id="@+id/session_label"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -64,28 +86,6 @@
 
         <Spinner
             android:id="@+id/verbosity_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/type_label"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Type: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
-
-        <Spinner
-            android:id="@+id/type_spinner"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

@@ -27,12 +27,7 @@ public class LogFilterHelper {
 
     public LogFilterHelper() {
         this(new LogFilter());
-        setTextFilter("");
-        setSessionInt(1);   //Current
-        setSeverityInt(2);  //Info
-        setTypeInt(1);      //Events
-        setCategoryInt(0, "All");
-        setTagInt(0, "All");
+        defaultFilter();
     }
 
     public LogFilterHelper(LogFilter filter) {
@@ -50,12 +45,7 @@ public class LogFilterHelper {
 
     public String getOverview(){
         AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getFilter()).get(0);
-        String result = String.format("Currently showing %s%% (%s/%s)",
-                currentAnalysisItem.getPercentage(),
-                currentAnalysisItem.getCount(),
-                analysis.getTotalLogSize());
-
-        result += Humanizer.fullStop();
+        String result = Humanizer.fullStop() + "Currently showing ";
 
         if (TextUtils.isEmpty(filter.getText())
                 && getTypeInt() == 0
@@ -63,7 +53,12 @@ public class LogFilterHelper {
                 && getSeverityInt() == 0
                 && getCategoryInt() == 0
                 && getTagInt() == 0){
-            result += "Nothing filtered";
+            result += "All";
+            result += ". ";
+            result += String.format("all. %s%% (%s)",
+                    currentAnalysisItem.getPercentage(),
+                    analysis.getTotalLogSize());
+            result += Humanizer.fullStop();
             return result;
         }
 
@@ -74,9 +69,13 @@ public class LogFilterHelper {
         }
 
         if (getSessionInt() != 0){
-            long target = DevToolsDatabase.getInstance().sessionDao().count() - getSessionInt() + 1;
-            Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
-            result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
+            if(getSessionInt()==1){
+                result += "from current session " + ", ";
+            }else{
+                long target = DevToolsDatabase.getInstance().sessionDao().count() - getSessionInt() + 1;
+                Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
+                result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
+            }
         }
 
         if (getSeverityInt() != 0){
@@ -107,7 +106,13 @@ public class LogFilterHelper {
                     result.substring(lastCommaPosition + 2);
         }
 
-        result += ".";
+        result += ". ";
+        result += String.format("%s%% (%s/%s)",
+                currentAnalysisItem.getPercentage(),
+                currentAnalysisItem.getCount(),
+                analysis.getTotalLogSize());
+        result += Humanizer.fullStop();
+
         return result;
     }
 
@@ -294,17 +299,35 @@ public class LogFilterHelper {
         this.tagInt = tagInt;
 
         List<String> subcats = new ArrayList<>();
-        if (tagInt == 0){ //All
+        if (tagInt == 0) { //All
             filter.setSubcategories(subcats);
-        }else{
+        } else {
             subcats.add(realSubcategory);
             filter.setSubcategories(subcats);
             //List<String> cats = new ArrayList<>();
             //cats.add("Logcat");
             //filter.setCategories(cats);
         }
-        Log.v(Iadt.TAG, "TagInt changed to " + tagInt + " -> IN subcategory(" + subcats +")");
+        Log.v(Iadt.TAG, "TagInt changed to " + tagInt + " -> IN subcategory(" + subcats + ")");
     }
 
     //endregion
+
+    private void defaultFilter() {
+        setTextFilter("");
+        setSessionInt(1);   //Current
+        setSeverityInt(2);  //Info
+        setTypeInt(1);      //Events
+        setCategoryInt(0, "All");
+        setTagInt(0, "All");
+    }
+
+    public void disableAll() {
+        setTextFilter("");
+        setSessionInt(0);
+        setSeverityInt(0);
+        setTypeInt(0);
+        setCategoryInt(0, "All");
+        setTagInt(0, "All");
+    }
 }
