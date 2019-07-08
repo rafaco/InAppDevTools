@@ -39,7 +39,7 @@ For standard Android projects you only need to modify 2 gradle files and rebuild
 
 ```gradle
 plugins {
-    id "es.rafaco.inappdevtools" version "[PLUGIN_VERSION]"
+    id "es.rafaco.inappdevtools" version "0.0.12"
 }
 
 allprojects {
@@ -53,13 +53,13 @@ allprojects {
 
 ```gradle
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:[LIBRARY_VERSION]'
+    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.45'
 }
 ```
 
-Latest versions are (don´t include the "v" character):
+Latest versions are 
 ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=[PLUGIN_VERSION]&colorB=blue&style=flat-square) and 
-![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat-square) 
+![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat-square).  Don't include the "v" character. 
 
 ### Add network interceptor (optional) <a name="network"/>
 If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
