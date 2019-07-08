@@ -92,16 +92,20 @@ public class LogFilterHelper {
         }
 
         if (!TextUtils.isEmpty(filter.getText())){
-            result += "containing '" + filter.getText() + "', ";
+            result += "containing '" + filter.getText() + "'" + ", ";
         }
 
         //remove last comma separator
-        result = result.substring(0, result.length() - 2);
+        if (result.endsWith(", ")){
+            result = result.substring(0, result.length() - 2);
+        }
 
-        //replace last comma by "and"
+        //replace second last comma by "and"
         int lastCommaPosition = result.lastIndexOf(", ");
-        result = result.substring(0, lastCommaPosition) + " and " +
-                result.substring(lastCommaPosition + 2);
+        if (lastCommaPosition > 0 && result.length() > lastCommaPosition + 2){
+            result = result.substring(0, lastCommaPosition) + " and " +
+                    result.substring(lastCommaPosition + 2);
+        }
 
         result += ".";
         return result;

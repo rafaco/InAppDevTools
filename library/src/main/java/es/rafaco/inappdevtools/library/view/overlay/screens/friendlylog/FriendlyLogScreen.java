@@ -77,7 +77,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     @Override
     public String getTitle() {
-        return "Friendly Log";
+        return "Logs";
     }
 
     @Override

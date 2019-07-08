@@ -207,7 +207,7 @@ public final class IadtController extends ContentProvider {
 
     //region [ METHODS FOR FEATURES ]
 
-    public void showOverlay(final boolean forceHome) {
+    public void show() {
         if (!isEnabled()) return;
         if (isPendingForegroundInit) return;
 
@@ -217,7 +217,7 @@ public final class IadtController extends ContentProvider {
                     new Runnable() {
                         @Override
                         public void run() {
-                            showOverlay(forceHome);
+                            show();
                         }
                     }, null);
             return;
@@ -227,7 +227,7 @@ public final class IadtController extends ContentProvider {
         getAppContext().startService(intent);
     }
 
-    public boolean hideOverlay() {
+    public boolean hide() {
         if (!isEnabled()
                 || isPendingForegroundInit
                 || IadtController.get().getCurrentOverlay() == null){
@@ -246,7 +246,7 @@ public final class IadtController extends ContentProvider {
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayUIService.isInitialize()){
-            hideOverlay();
+            hide();
         }
         FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());
     }

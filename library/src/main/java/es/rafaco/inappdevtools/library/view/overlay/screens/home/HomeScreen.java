@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
@@ -20,6 +21,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
@@ -86,11 +88,11 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("Logcat",
-                R.drawable.ic_android_white_24dp,
+        data.add(new RunnableItem("Report",
+                R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(LogcatScreen.class);
+                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
                     }
                 }));
 
@@ -124,7 +126,14 @@ public class HomeScreen extends OverlayScreen {
                 }));
 
 
-
+        data.add(new RunnableItem("Console",
+                R.drawable.ic_computer_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(ConsoleScreen.class);
+                    }
+                }));
+        
         data.add(new RunnableItem("Run",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
@@ -133,13 +142,6 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("Report",
-                R.drawable.ic_send_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
-                    }
-                }));
 
         data.add(new RunnableItem("More",
                 R.drawable.ic_more_vert_white_24dp,

@@ -103,7 +103,7 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();
-                    IadtController.get().showOverlay(false);
+                    IadtController.get().show();
                     break;
             }
         }

@@ -112,7 +112,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hideOverlay();
+                        IadtController.get().hide();
                         Intent intent = new Intent(getContext(), WelcomeDialogActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getContext().startActivity(intent);
@@ -128,7 +128,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hideOverlay();
+                        IadtController.get().hide();
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
@@ -137,7 +137,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hideOverlay();
+                        IadtController.get().hide();
                         AppUtils.openDeveloperOptions(RunScreen.this.getContext());
                     }
                 }));

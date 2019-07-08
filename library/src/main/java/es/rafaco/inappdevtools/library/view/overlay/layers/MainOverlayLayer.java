@@ -213,7 +213,7 @@ public class MainOverlayLayer extends OverlayLayer {
     private void onToolbarButtonPressed(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_hide) {
-            IadtController.get().hideOverlay();
+            IadtController.get().hide();
         }
         else if (selected == R.id.action_half_position) {
             toogleSizePosition(item);

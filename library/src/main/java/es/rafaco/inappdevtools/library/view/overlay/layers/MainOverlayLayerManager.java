@@ -290,7 +290,7 @@ public class MainOverlayLayerManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        IadtController.get().hideOverlay();
+        IadtController.get().hide();
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {

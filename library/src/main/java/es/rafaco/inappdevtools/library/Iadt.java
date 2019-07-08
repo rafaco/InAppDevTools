@@ -54,14 +54,14 @@ public class Iadt {
 
     //region [ OVERLAY CONTROLLER ]
 
-    public static void showOverlay(boolean forceHome) {
+    public static void show() {
         if (!isEnabled()) return;
-        getController().showOverlay(forceHome);
+        getController().show();
     }
 
-    public static void hideOverlay() {
+    public static void hide() {
         if (!isEnabled()) return;
-        getController().hideOverlay();
+        getController().hide();
     }
 
     public static void takeScreenshot() {
@@ -79,12 +79,10 @@ public class Iadt {
     //region [ APP CONTROLLER (RESTART AND FORCE CLOSE) ]
 
     public static void restartApp(){
-        if (!isEnabled()) return;
         getController().restartApp(false);
     }
 
     public static void forceCloseApp(){
-        if (!isEnabled()) return;
         getController().forceCloseApp(false);
     }
 

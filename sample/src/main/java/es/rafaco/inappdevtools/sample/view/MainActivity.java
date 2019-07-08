@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FriendlyLog.log("I", "User", "Touch", "User clicked on ShowDevTools");
-                Iadt.showOverlay(false);
+                Iadt.show();
             }
         });
 
