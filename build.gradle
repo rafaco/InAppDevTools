@@ -27,7 +27,7 @@ plugins {
 ext {
     pluginVersionName = '0.0.12'
 
-    libraryVersionName = '0.0.46h'
+    libraryVersionName = '0.0.46p'
     libraryVersionCode = 1
     libraryMinSdkVersion = 16
 

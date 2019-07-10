@@ -49,17 +49,31 @@ allprojects {
 }
 ```
 
-2. On your app build.gradle, include our library in your dependencies: 
+2. On your app build.gradle, include our library in your dependencies and add targetCompatibility with Java8. You can keep smaller sourceCompatibility. 
 
 ```gradle
+
+android {
+    (...)
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
 dependencies {
-    implementation 'es.rafaco.inappdevtools:inappdevtools:0.0.46'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.46'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.46'
+    
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.46'
 }
 ```
 
-Latest versions are 
-![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=[PLUGIN_VERSION]&colorB=blue&style=flat-square) and 
-![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=[LIBRARY_VERSION]&style=flat-square).  Don't include the "v" character. 
+Flavor | Version | Description
+    ---|---|---
+    androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects migrated to AndroidX libraries.
+    support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For projects using Support libraries.
+    noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation (androidx and support).
+
+Don't include the "v" character in dependencies. 
 
 ### Add network interceptor (optional) <a name="network"/>
 If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
@@ -89,15 +103,17 @@ Iadt.hide();
 
 
 ### Configuration <a name="configuration"/>
-You can configure our library **and our plugin** behaviour at build time by using our gradle extension on your app module's build.gradle. Note that the plugin is only afected by this way of configuration and their values will remain after cleaning app's data. 
+You can configure our library behaviour at build time by using our gradle extension on your app module's build.gradle. Our plugin get affected by this configuration and values will remain after cleaning app's data. 
 ```gradle
+apply plugin: 'es.rafaco.inappdevtools'
+
 inappdevtools {
     enabled = true
     email = 'yourmail@yourdomain.com'
 }
 ```
 
-You can also override previous build time configurations at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. This values will be lost after cleaning app's data. 
+You can override previous configurations at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. Values will be lost after cleaning app's data. 
 ```java
 Iadt.getConfig().setBoolean(Config.ENABLED, false);
 Iadt.restartApp();

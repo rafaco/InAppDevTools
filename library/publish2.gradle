@@ -6,7 +6,7 @@ ext {
     //libraryVersion = 'X.X.XX'             // Version: Relocated to root script
 
     bintrayRepo = "InAppDevTools"
-    bintrayName = "inappdevtools"
+    bintrayPkg = "inappdevtools"
 
     proyectName = 'InAppDevTools'
     proyectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
@@ -124,11 +124,11 @@ publishing.publications {
                     root.appendNode("name", proyectName) // "iadt-" + variantArtifactId)
                     root.appendNode("url", siteUrl)
                     root.children().last() + pomConfig
-                    def depsNode = root["dependencies"][0] ?: root.appendNode("dependencies")
 
-                    def addDep = {
+                    def dependenciesNode = root["dependencies"][0] ?: root.appendNode("dependencies")
+                    def addDependency = {
                         if (it.group == null) return // Avoid empty dependency nodes
-                        def dependencyNode = depsNode.appendNode('dependency')
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', it.group)
                         dependencyNode.appendNode('artifactId', it.name)
                         dependencyNode.appendNode('version', it.version)
@@ -137,13 +137,16 @@ publishing.publications {
                         }
                     }
 
-                    // Add deps that everyone has
-                    configurations.compile.allDependencies.each addDep
-                    // Add flavor specific deps
+                    // Add general dependencies
+                    configurations.compile.allDependencies.each addDependency
+                    configurations.api.allDependencies.each  addDependency
+                    configurations.implementation.allDependencies.each  addDependency
+
+                    // Add flavor dependencies
                     if (flavored) {
-                        configurations["${variant.flavorName}Api"].allDependencies.each addDep
-                        configurations["${variant.flavorName}Compile"].allDependencies.each addDep
-                        configurations["${variant.flavorName}Implementation"].allDependencies.each addDep
+                        configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
+                        configurations["${variant.flavorName}Api"].allDependencies.each addDependency
+                        configurations["${variant.flavorName}Implementation"].allDependencies.each addDependency
                     }
                     //TODO: add builtTypes specific dependencies if needed
                 }
@@ -155,17 +158,19 @@ publishing.publications {
 group = groupId
 version = libraryVersionName
 
+
 afterEvaluate {
     bintray {
         user = System.getenv('BINTRAY_USER')
         key = System.getenv('BINTRAY_KEY')
 
         publications = publicationNames
-        override = true
+
+        dryRun = false      //[Default: false] Skip deployment
+        publish = false     //[Default: false] Skip publication after deployment
+        override = false    //[Default: false] Override artifacts already published
 
         pkg {
-            repo = bintrayRepo
-            name = bintrayName  //Was project.name
             desc = proyectDesc
             websiteUrl = siteUrl
             vcsUrl = gitUrl
@@ -173,9 +178,11 @@ afterEvaluate {
             licenses = allLicenses
             labels = ['aar', 'android']
             publicDownloadNumbers = true
-            githubRepo = githubRepo
+            //githubRepo = githubRepo
+            //githubReleaseNotesFile = 'README.md'
 
-            //Added
+            repo = bintrayRepo
+            name = bintrayPkg  //Was project.name
             version {
                 desc = proyectDesc
                 gpg {

@@ -128,7 +128,3 @@ if (project.rootProject.file('local.properties').exists()
         && !(project.getGradle().startParameter.isOffline())) {
     apply from: 'publish2.gradle'
 }
-
-ext {
-    libraryDesc = "Delegates for kotlin on android that check UI thread"
-}
