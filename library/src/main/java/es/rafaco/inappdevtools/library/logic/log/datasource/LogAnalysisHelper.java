@@ -1,8 +1,12 @@
 package es.rafaco.inappdevtools.library.logic.log.datasource;
 
-import android.arch.persistence.db.SimpleSQLiteQuery;
-
 import java.util.List;
+
+//#ifdef MODERN
+//@import androidx.sqlite.db.SimpleSQLiteQuery;
+//#else
+import android.arch.persistence.db.SimpleSQLiteQuery;
+//#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;

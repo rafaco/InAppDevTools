@@ -2,16 +2,21 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+//#ifdef MODERN
+//@import androidx.appcompat.app.AlertDialog;
+//#else
+import android.support.v7.app.AlertDialog;
+//#endif
+
 import java.util.List;
 
+import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogFilterHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;

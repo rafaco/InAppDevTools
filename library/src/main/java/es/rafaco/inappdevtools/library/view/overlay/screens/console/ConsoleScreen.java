@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.console;
 
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -9,6 +8,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+//#ifdef MODERN
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;

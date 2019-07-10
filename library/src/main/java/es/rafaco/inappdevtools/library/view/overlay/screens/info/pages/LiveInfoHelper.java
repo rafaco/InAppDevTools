@@ -6,18 +6,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.os.Debug;
+import android.util.Log;
 
 //#ifdef MODERN
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;
-import android.util.Log;
 //#endif
 
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
