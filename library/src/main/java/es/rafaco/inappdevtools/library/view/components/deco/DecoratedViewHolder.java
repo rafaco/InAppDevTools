@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else

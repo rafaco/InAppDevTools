@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import android.view.View;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else

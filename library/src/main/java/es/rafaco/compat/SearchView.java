@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@public class SearchView extends androidx.appcompat.widget.SearchView {
 //#else
 public class SearchView extends android.support.v7.widget.SearchView {

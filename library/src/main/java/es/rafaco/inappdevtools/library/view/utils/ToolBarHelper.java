@@ -5,7 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.widget.SearchView;
 //@import androidx.appcompat.widget.Toolbar;
 //@import static androidx.appcompat.R.*;

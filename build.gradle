@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
 
-        //#ifdef MODERN  //TODO: Gradle pre-processor: manual toggle comment is needed
+        //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
         classpath 'com.android.tools.build:gradle:3.4.1'
         //#else
         //classpath 'com.android.tools.build:gradle:3.0.0'
@@ -35,7 +35,7 @@ ext {
     appVersionCode = 45
     appMinSdkVersion = 16
 
-    //#ifdef MODERN  //TODO: Gradle pre-processor: manual toggle comment is needed
+    //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
     appTargetSdkVersion = 28
     appCompileSdkVersion = 28
     appBuildToolsVersion = '28.0.3'

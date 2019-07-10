@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.appcompat.widget.Toolbar;

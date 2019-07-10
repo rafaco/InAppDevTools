@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.annotation.Nullable;
 //@public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {

@@ -33,10 +33,10 @@ android {
 
     flavorDimensions "compatibility"
     productFlavors {
-        modern {
+        androidx {
             dimension "compatibility"
-            buildConfigField "String", "MY_FLAVOR", "\"modern\""
-            processor.symbols "MODERN"
+            buildConfigField "String", "MY_FLAVOR", "\"androidx\""
+            processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -57,22 +57,22 @@ android {
 
 dependencies {
 
-    // Modern flavor
-    modernApi 'com.google.android.material:material:1.0.0-rc01'
+    // AndroidX flavor
+    androidxApi 'com.google.android.material:material:1.0.0-rc01'
     def androidx_version = "1.0.0"
-    modernApi "androidx.appcompat:appcompat:$androidx_version"
-    modernApi "androidx.recyclerview:recyclerview:$androidx_version"
-    modernApi "androidx.cardview:cardview:$androidx_version"
-    modernApi "androidx.media:media:$androidx_version"
-    modernApi "androidx.annotation:annotation:$androidx_version"
+    androidxApi "androidx.appcompat:appcompat:$androidx_version"
+    androidxApi "androidx.recyclerview:recyclerview:$androidx_version"
+    androidxApi "androidx.cardview:cardview:$androidx_version"
+    androidxApi "androidx.media:media:$androidx_version"
+    androidxApi "androidx.annotation:annotation:$androidx_version"
     def androidx_2_version = "2.0.0" //"2.1.0-alpha02"
-    modernApi "androidx.room:room-runtime:$androidx_2_version"
-    modernAnnotationProcessor "androidx.room:room-compiler:$androidx_2_version"
-    modernApi "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
-    modernApi "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
-    modernAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
-    modernApi "androidx.paging:paging-runtime:$androidx_2_version"
-    modernApi "com.github.whataa:pandora:androidx_v2.0.4"
+    androidxApi "androidx.room:room-runtime:$androidx_2_version"
+    androidxAnnotationProcessor "androidx.room:room-compiler:$androidx_2_version"
+    androidxApi "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
+    androidxApi "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
+    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
+    androidxApi "androidx.paging:paging-runtime:$androidx_2_version"
+    androidxApi "com.github.whataa:pandora:androidx_v2.0.4"
 
     // Support flavor
     supportApi "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
@@ -104,8 +104,8 @@ dependencies {
 
     //Test
     testImplementation 'junit:junit:4.12'
-    androidTestModernImplementation 'androidx.test:runner:1.1.0'
-    androidTestModernImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
+    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testSupportImplementation "android.arch.persistence.room:testing:$arch_version"

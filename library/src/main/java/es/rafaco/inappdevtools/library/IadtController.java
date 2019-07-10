@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //#else
 import android.support.annotation.Nullable;

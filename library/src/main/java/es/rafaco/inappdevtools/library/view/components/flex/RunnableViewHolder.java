@@ -4,7 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.core.content.ContextCompat;
 //#else

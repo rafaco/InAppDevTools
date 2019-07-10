@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.fragment.app.Fragment;
 //@import com.google.android.material.appbar.CollapsingToolbarLayout;
 //#else

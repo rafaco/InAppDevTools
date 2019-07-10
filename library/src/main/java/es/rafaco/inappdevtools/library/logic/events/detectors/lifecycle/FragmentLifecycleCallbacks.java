@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.RequiresApi;
 //@import androidx.fragment.app.Fragment;
 //@import androidx.fragment.app.FragmentManager;

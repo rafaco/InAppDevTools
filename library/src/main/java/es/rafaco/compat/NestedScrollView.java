@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@public class NestedScrollView extends androidx.core.widget.NestedScrollView {
 //#else
 public class NestedScrollView extends android.support.v4.widget.NestedScrollView {

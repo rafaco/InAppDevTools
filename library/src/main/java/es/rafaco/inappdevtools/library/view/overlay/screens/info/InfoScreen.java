@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.viewpager.widget.ViewPager;
 //@import com.google.android.material.tabs.TabLayout;

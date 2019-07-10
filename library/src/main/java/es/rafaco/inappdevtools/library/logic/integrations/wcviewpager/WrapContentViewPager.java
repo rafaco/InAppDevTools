@@ -29,7 +29,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.viewpager.widget.PagerAdapter;
 //@import androidx.viewpager.widget.ViewPager;
 //#else

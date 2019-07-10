@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.room.Room;
 //@import androidx.room.Database;
 //@import androidx.room.RoomDatabase;

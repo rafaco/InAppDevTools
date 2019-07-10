@@ -4,7 +4,7 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.view.ContextThemeWrapper;

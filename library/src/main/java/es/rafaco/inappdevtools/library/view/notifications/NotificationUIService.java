@@ -13,7 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.core.app.NotificationCompat;
 //@import androidx.core.app.NotificationManagerCompat;

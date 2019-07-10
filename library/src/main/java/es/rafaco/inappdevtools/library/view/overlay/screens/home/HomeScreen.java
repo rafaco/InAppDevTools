@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;

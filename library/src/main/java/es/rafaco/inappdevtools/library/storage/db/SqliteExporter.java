@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.db;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.sqlite.db.SupportSQLiteDatabase;
 //#else
 import android.arch.persistence.db.SupportSQLiteDatabase;

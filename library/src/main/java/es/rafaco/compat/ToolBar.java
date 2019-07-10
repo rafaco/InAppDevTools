@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //@public class ToolBar extends androidx.appcompat.widget.Toolbar {
 //#else

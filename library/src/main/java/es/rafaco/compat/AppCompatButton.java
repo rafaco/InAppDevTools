@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@public class AppCompatButton extends androidx.appcompat.widget.AppCompatButton {
 //#else
 public class AppCompatButton extends android.support.v7.widget.AppCompatButton {

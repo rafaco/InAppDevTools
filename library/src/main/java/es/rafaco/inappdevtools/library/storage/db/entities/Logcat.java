@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.db.entities;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.room.ColumnInfo;
 //@import androidx.room.Entity;
 //@import androidx.room.PrimaryKey;

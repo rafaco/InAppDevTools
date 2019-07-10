@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //#else
 import android.support.annotation.Nullable;

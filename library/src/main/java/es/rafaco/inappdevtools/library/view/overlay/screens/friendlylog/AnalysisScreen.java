@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.view.ViewCompat;
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.recyclerview.widget.DefaultItemAnimator;

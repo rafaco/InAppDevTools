@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.logic.log.datasource;
 import android.text.TextUtils;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.sqlite.db.SimpleSQLiteQuery;
 //@import androidx.sqlite.db.SupportSQLiteQuery;
 //#else

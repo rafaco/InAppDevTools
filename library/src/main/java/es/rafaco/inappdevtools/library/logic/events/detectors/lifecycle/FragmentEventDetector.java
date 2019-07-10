@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle;
 
 import android.app.Activity;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.fragment.app.FragmentManager;
 //#else

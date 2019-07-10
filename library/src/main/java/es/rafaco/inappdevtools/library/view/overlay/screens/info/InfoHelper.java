@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 import android.os.Build;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;

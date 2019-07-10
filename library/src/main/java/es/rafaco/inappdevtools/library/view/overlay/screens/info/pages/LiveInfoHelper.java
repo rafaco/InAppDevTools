@@ -8,7 +8,7 @@ import android.content.pm.ProviderInfo;
 import android.os.Debug;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;

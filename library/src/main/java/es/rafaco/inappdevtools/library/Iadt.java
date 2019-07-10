@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library;
 import android.content.Context;
 import android.view.GestureDetector;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull; 
 //#else
 import android.support.annotation.NonNull;

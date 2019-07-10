@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@public class TabLayout extends com.google.android.material.tabs.TabLayout {
 //#else
 public class TabLayout extends android.support.design.widget.TabLayout {

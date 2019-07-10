@@ -3,7 +3,7 @@ package es.rafaco.compat;
 import android.content.Context;
 import android.util.AttributeSet;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@public class AppCompatTextView extends androidx.appcompat.widget.AppCompatTextView {
 //#else
 public class AppCompatTextView extends android.support.v7.widget.AppCompatTextView {

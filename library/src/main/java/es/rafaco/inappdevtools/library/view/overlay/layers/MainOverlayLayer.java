@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatImageView;
 //@import androidx.appcompat.widget.Toolbar;
 //@import androidx.core.widget.NestedScrollView;

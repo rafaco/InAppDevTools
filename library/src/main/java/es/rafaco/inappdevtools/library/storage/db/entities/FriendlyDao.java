@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.db.entities;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.room.Dao;
 //@import androidx.room.Delete;
 //@import androidx.room.Insert;

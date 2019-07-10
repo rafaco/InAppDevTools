@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.logic.log.datasource;
 
 import java.util.List;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.sqlite.db.SimpleSQLiteQuery;
 //#else
 import android.arch.persistence.db.SimpleSQLiteQuery;

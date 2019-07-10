@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
