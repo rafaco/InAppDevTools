@@ -11,6 +11,8 @@ ext {
 
     siteUrl = 'https://github.com/rafaco/InAppDevTools'
     gitUrl = 'https://github.com/rafaco/InAppDevTools.git'
+    issuesUrl = 'https://github.com/rafaco/InAppDevTools/issues'
+    githubRepo = 'rafaco/InAppDevTools'
 
     developerId = 'rafaco'
     developerName = 'Rafa Acosta'

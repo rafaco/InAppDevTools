@@ -48,15 +48,17 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
-    publishNonDefault true
-    defaultPublishConfig 'supportDebug'
+
+    //Allow direct import from app module, without local or bintray repos:
+    // implementation project(path: ':inappdevtools')
+    //defaultPublishConfig 'supportDebug'
 }
 
 
 dependencies {
 
     // Modern flavor
-   /* modernApi 'com.google.android.material:material:1.0.0-rc01'
+    modernApi 'com.google.android.material:material:1.0.0-rc01'
     def androidx_version = "1.0.0"
     modernApi "androidx.appcompat:appcompat:$androidx_version"
     modernApi "androidx.recyclerview:recyclerview:$androidx_version"
@@ -70,25 +72,24 @@ dependencies {
     modernApi "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
     modernAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
     modernApi "androidx.paging:paging-runtime:$androidx_2_version"
-    modernApi "com.github.whataa:pandora:androidx_v2.0.4"*/
+    modernApi "com.github.whataa:pandora:androidx_v2.0.4"
 
-    //TODO: MULTI VARIANT: dependencies as supportApi or modernApi are not included in POM
     // Support flavor
-    api "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:design:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:design:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
     def arch_version = "1.1.0"
-    api "android.arch.persistence.room:runtime:$arch_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
-    api "android.arch.lifecycle:extensions:$arch_version"
-    api "android.arch.lifecycle:runtime:$arch_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    supportApi "android.arch.persistence.room:runtime:$arch_version"
+    supportAnnotationProcessor "android.arch.persistence.room:compiler:$arch_version"
+    supportApi "android.arch.lifecycle:extensions:$arch_version"
+    supportApi "android.arch.lifecycle:runtime:$arch_version"
+    supportAnnotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     def paging_version = "1.0.1"
-    api "android.arch.paging:runtime:$paging_version"
-    api "com.github.whataa:pandora:v2.0.4"
+    supportApi "android.arch.paging:runtime:$paging_version"
+    supportApi "com.github.whataa:pandora:v2.0.4"
 
     // All flavors
     api 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -125,5 +126,9 @@ preprocessor {
 //Add Publication plugin when in publication environment
 if (project.rootProject.file('local.properties').exists()
         && !(project.getGradle().startParameter.isOffline())) {
-    apply from: 'publish.gradle'
+    apply from: 'publish2.gradle'
+}
+
+ext {
+    libraryDesc = "Delegates for kotlin on android that check UI thread"
 }
