@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.report;
+package es.rafaco.inappdevtools.library.logic.reports;
 
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +20,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.EmailUtils;
 
 public class ReportHelper extends OverlayScreenHelper {
 

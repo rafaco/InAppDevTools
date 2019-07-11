@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/inappdevtools-project.iml" filepath="$PROJECT_DIR$/inappdevtools-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/inappdevtools-sample.iml" filepath="$PROJECT_DIR$/sample/inappdevtools-sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/noop/noop.iml" filepath="$PROJECT_DIR$/noop/noop.iml" />
     </modules>
   </component>
 </project>

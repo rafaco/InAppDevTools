@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="rally_bg_solid">#3C3D45</color>
+    <color name="rally_blue_med">#007BE1</color>
+    <color name="rally_blue_dark">#0050ae</color>
+    <color name="rally_yellow">#FFCF44</color>
+    <color name="rally_orange">#FF665B</color>
 </resources>

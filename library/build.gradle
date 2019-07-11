@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
-apply plugin: 'wang.dannyhe.tools.preprocessor'
+apply from: '../gradle/compat/preprocessor.gradle'
 
 android {
     compileSdkVersion rootProject.ext.libraryCompileSdkVersion
@@ -112,16 +112,6 @@ dependencies {
     testSupportImplementation "android.arch.core:core-testing:$arch_version"
     testSupportImplementation "android.arch.paging:common:$paging_version"
 }
-
-
-//Configuration for PreProcessor plugin
-preprocessor {
-    verbose project.extensions.getByName('inappdevtools').debug
-    sourceDir file("src/main/java")
-    targetDir file("src/main/java")
-    symbols "GLOBAL","GLOBAL_2"
-}
-
 
 //Add Publication plugin when in publication environment
 if (project.rootProject.file('local.properties').exists()

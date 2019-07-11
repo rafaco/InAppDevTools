@@ -32,7 +32,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 

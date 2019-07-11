@@ -1,12 +1,10 @@
 package es.rafaco.inappdevtools.sample;
 
 import android.app.Application;
-import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.LiveInfoHelper;
 
 
 public class SampleApp extends Application {
@@ -73,6 +71,6 @@ public class SampleApp extends Application {
                     }
                 }));
 
-        Log.i(TAG, new LiveInfoHelper(getApplicationContext()).getRunningThreads());
+        //Log.i(TAG, new LiveInfoHelper(getApplicationContext()).getRunningThreads());
     }
 }

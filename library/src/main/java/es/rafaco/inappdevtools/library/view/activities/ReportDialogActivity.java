@@ -55,7 +55,7 @@ import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAda
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
 
 public class ReportDialogActivity extends AppCompatActivity {

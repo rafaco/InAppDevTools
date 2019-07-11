@@ -13,7 +13,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/widget_icon_shape"
+        android:background="@drawable/warning_shape"
         android:backgroundTint="@color/rally_yellow">
 
         <TextView

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'wang.dannyhe.tools.preprocessor'
+apply from: '../gradle/compat/preprocessor.gradle'
 
 android {
     compileSdkVersion rootProject.ext.appCompileSdkVersion
@@ -72,33 +72,35 @@ dependencies {
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
 
-    // Import our library from repository (jCenter or localMaven). Standard usage
-    //implementation "es.rafaco.inappdevtools:inappdevtools:$rootProject.ext.libraryVersionName"
+    /*
+     *  Import our library from repository (jCenter or localMaven). Standard usage
+     */
+    //supportImplementation "es.rafaco.inappdevtools:support:$rootProject.ext.libraryVersionName"
+    //androidxImplementation "es.rafaco.inappdevtools:androidx:$rootProject.ext.libraryVersionName"
+    //releaseImplementation "es.rafaco.inappdevtools:noop:$rootProject.ext.libraryVersionName"
 
-    // Import our library from local sub-project, for development.
-    implementation project(path: ':inappdevtools')
+    /*
+     *  Import our library directly from modules. For development.
+     */
+    debugImplementation project(path: ':inappdevtools') //dynamic flavor selected
+    releaseImplementation project(path: ':noop')
+
     //androidxImplementation project(path: ':inappdevtools', configuration: 'androidxDebug')
     //supportImplementation project(path: ':inappdevtools', configuration: 'supportDebug')
 }
 
-
-// Import our plugin from repository (jCenter or localMaven). Standard usage.
+/*
+ *  Import our plugin from repository (jCenter or localMaven). Standard usage
+ */
 apply plugin: 'es.rafaco.inappdevtools'
 
-// Import our plugin from local module, for development.
-//apply from: '../plugin/inappdevtools.gradle'
+/*
+ *  Import our plugin directly from modules. For development.
+ */
+//apply from: '../plugin/build.gradle'
 
 inappdevtools {
     enabled = true
     debug = false
     email = 'inappdevtools@gmail.com'
-}
-
-
-//Configuration for PreProcessor plugin
-preprocessor {
-    verbose project.extensions.getByName('inappdevtools').debug
-    sourceDir file("src/main/java")
-    targetDir file("src/main/java")
-    symbols "GLOBAL","GLOBAL_2"
 }
