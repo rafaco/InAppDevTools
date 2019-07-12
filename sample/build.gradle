@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: '../gradle/compat/preprocessor.gradle'
+apply from: '../compat/compat.gradle'
 
 android {
     compileSdkVersion rootProject.ext.appCompileSdkVersion
@@ -22,17 +22,12 @@ android {
             processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-           /* System.setProperty('android.useAndroidX', 'true')
-            project.properties['android.useAndroidX']='true'
-            extensions.add('android.useAndroidX', 'true')
-            ext.useAndroidX = 'true'*/
         }
         support {
             dimension "compatibility"
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
 
@@ -53,18 +48,24 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    androidxApi 'com.google.android.material:material:1.0.0-rc01'
-    androidxApi 'androidx.appcompat:appcompat:1.0.0'
-    androidxApi 'androidx.recyclerview:recyclerview:1.0.0'
+    // Compat AndroidX/Support module
+    api project(path: ':compat')
 
-    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
+    // View libraries in use (already included in from compat project)
+    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
+    //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
+    //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
+    //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
+
+    //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
 
+    //Testing (TODO)
     testImplementation 'junit:junit:4.12'
     androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
     androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
@@ -82,8 +83,8 @@ dependencies {
     /*
      *  Import our library directly from modules. For development.
      */
-    debugImplementation project(path: ':inappdevtools') //dynamic flavor selected
-    releaseImplementation project(path: ':noop')
+    debugApi project(path: ':inappdevtools') //dynamic flavor selected
+    releaseApi project(path: ':noop')
 
     //androidxImplementation project(path: ':inappdevtools', configuration: 'androidxDebug')
     //supportImplementation project(path: ':inappdevtools', configuration: 'supportDebug')

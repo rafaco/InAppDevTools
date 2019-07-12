@@ -8,7 +8,7 @@ enableFeaturePreview('STABLE_PUBLISHING')
 
 
 //Include modules using folder names
-include ':plugin', ':library', ':sample', ':noop'
+include ':plugin', ':library', ':sample', ':noop', ':compat'
 
 //Remap module names, used as artifactId when publishing
 ext.remapper = [
