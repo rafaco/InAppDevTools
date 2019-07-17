@@ -56,34 +56,18 @@ publishing.publications {
         if (variant.buildType.name == "debug") return // Prevents publishing debug library
 
         def flavored = !variant.flavorName.isEmpty()
-
-        /**
-         * Translates "_" in flavor names to "-" for artifactIds, because "-" in flavor name is an
-         * illegal character, but is well used in artifactId names.
-         */
+        //Translates "_" in flavor names to "-" for artifactIds, because "-" in flavor name is an
         def variantArtifactId = flavored ? variant.flavorName.replace('_', '-') : project.name
-
-        /**
-         * If the javadoc destinationDir wasn't changed per flavor, the libraryVariants would
-         * overwrite the javaDoc as all variants would write in the same directory
-         * before the last javadoc jar would have been built, which would cause the last javadoc
-         * jar to include classes from other flavors that it doesn't include.
-         *
-         * Yes, tricky.
-         *
-         * Note that "${buildDir}/docs/javadoc" is the default javadoc destinationDir.
-         */
+        // Use different javadoc destinationDir per flavor, needed for multi-build
         def javaDocDestDir = file("${buildDir}/docs/javadoc ${flavored ? variantArtifactId : ""}")
-
-        /**
-         * Includes
-         */
+        //Include all sources
         def sourceDirs = variant.sourceSets.collect {
             it.javaDirectories // Also includes kotlin sources if any.
         }
+
         def javadoc = task("${variant.name}Javadoc", type: Javadoc) {
             description "Generates Javadoc for ${variant.name}."
-            source = variant.javaCompile.source         // javaCompile is deprecated
+            source = variant.javaCompileProvider.get().source //Was deprecated: variant.javaCompile.source
             destinationDir = javaDocDestDir
             classpath += files(android.getBootClasspath().join(File.pathSeparator))
             classpath += files(configurations.compile)
@@ -105,7 +89,7 @@ publishing.publications {
         }
 
         def publicationName = "${variant.name.capitalize()}"
-        //def publicationName = "Iadt${variant.name.capitalize()}Library"
+        //def publicationName = "Iadt_${variant.name.capitalize()}"
         publicationNames.add(publicationName)
 
         "$publicationName"(MavenPublication) {
@@ -113,7 +97,7 @@ publishing.publications {
             group groupId
             version libraryVersionName
 
-            artifact variant.outputs[0].packageLibrary // This is the aar library
+            artifact variant.packageLibraryProvider.get() //Was deprecated: variant.outputs[0].packageLibrary
             artifact sourcesJar
             artifact javadocJar
 
@@ -142,13 +126,17 @@ publishing.publications {
                     configurations.api.allDependencies.each  addDependency
                     configurations.implementation.allDependencies.each  addDependency
 
+                    //TODO: Add builtType dependencies
+                    //configurations["${variant.buildType}Compile"].allDependencies.each addDependency
+                    //configurations["${variant.buildType}Api"].allDependencies.each addDependency
+                    //configurations["${variant.buildType}Implementation"].allDependencies.each addDependency
+
                     // Add flavor dependencies
                     if (flavored) {
                         configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
                         configurations["${variant.flavorName}Api"].allDependencies.each addDependency
                         configurations["${variant.flavorName}Implementation"].allDependencies.each addDependency
                     }
-                    //TODO: add builtTypes specific dependencies if needed
                 }
             }
         }
@@ -166,7 +154,7 @@ afterEvaluate {
 
         publications = publicationNames
 
-        dryRun = false      //[Default: false] Skip deployment
+        dryRun = true      //[Default: false] Skip deployment
         publish = false     //[Default: false] Skip publication after deployment
         override = false    //[Default: false] Override artifacts already published
 

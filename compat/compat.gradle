@@ -5,7 +5,7 @@ preprocessor {
     try {
         iadtExtension = project.extensions.getByName('inappdevtools')
     } catch(Exception ex) {
-        println("Preprocesor: No extension detected!")
+        //println("Silent preprocessor: No extension detected")
     }
     verbose iadtExtension != null ? iadtExtension.debug : false
     sourceDir file("src/main/java")
