@@ -1,15 +1,14 @@
-//Added
 
 ext {
-    groupId = 'es.rafaco.inappdevtools'     // GroupId
-    //artifactId = 'inappdevtools'            // ArtifactId: Renamed into flavor
+    //groupId = 'es.rafaco.inappdevtools'     // GroupId - WIP, relocated to importer module
+    //artifactId = 'inappdevtools'          // ArtifactId: Renamed into flavor
     //libraryVersion = 'X.X.XX'             // Version: Relocated to root script
 
-    bintrayRepo = "InAppDevTools"
-    bintrayPkg = "inappdevtools"
+    //bintrayRepo = "InAppDevTools"
+    //bintrayPkg = "inappdevtools"          //WIP, relocated to importer module
 
-    proyectName = 'InAppDevTools'
-    proyectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+    //proyectName = 'InAppDevTools'
+    //proyectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
 
     siteUrl = 'https://github.com/rafaco/InAppDevTools'
     gitUrl = 'https://github.com/rafaco/InAppDevTools.git'
@@ -88,7 +87,7 @@ publishing.publications {
             classifier = 'sources'
         }
 
-        def publicationName = "${variant.name.capitalize()}"
+        def publicationName = "iadt_${variant.name.capitalize()}"
         //def publicationName = "Iadt_${variant.name.capitalize()}"
         publicationNames.add(publicationName)
 
@@ -107,6 +106,7 @@ publishing.publications {
                     def root = asNode()
                     root.appendNode("name", proyectName) // "iadt-" + variantArtifactId)
                     root.appendNode("url", siteUrl)
+                    root.appendNode("description", proyectDesc)
                     root.children().last() + pomConfig
 
                     def dependenciesNode = root["dependencies"][0] ?: root.appendNode("dependencies")
@@ -154,7 +154,7 @@ afterEvaluate {
 
         publications = publicationNames
 
-        dryRun = true      //[Default: false] Skip deployment
+        dryRun = false      //[Default: false] Skip deployment
         publish = false     //[Default: false] Skip publication after deployment
         override = false    //[Default: false] Override artifacts already published
 
@@ -172,7 +172,7 @@ afterEvaluate {
             repo = bintrayRepo
             name = bintrayPkg  //Was project.name
             version {
-                desc = proyectDesc
+                desc = proyectDesc //TODO: versionDesc
                 gpg {
                     sign = true
                     passphrase = System.getenv('BINTRAY_GPG')

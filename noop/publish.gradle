@@ -8,7 +8,7 @@ ext {
     proyectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
 }
 
-//Publish to bintray
+// Publish to maven local and Bintray
 //TODO: safe-remove this conditions
 if (project.rootProject.file('local.properties').exists()
         && !(project.getGradle().startParameter.isOffline())) {

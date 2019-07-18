@@ -48,8 +48,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // Compat AndroidX/Support module
-    api project(path: ':compat')
+    // Compat AndroidX/Support module (include view components)
+    //api project(path: ':compat')
+    supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
 
     // View libraries in use (already included in from compat project)
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"

@@ -1,0 +1,16 @@
+ext {
+    groupId = 'es.rafaco.compat'
+
+    bintrayRepo = "InAppDevTools"
+    bintrayPkg = "compat"
+
+    proyectName = 'Compat'
+    proyectDesc = 'Internal Android library used by es.rafaco.inappdevtools to encapsulate AndroidX/Support libraries from the same source code'
+}
+
+// Publish to maven local and Bintray
+//TODO: safe-remove this conditions
+if (project.rootProject.file('local.properties').exists()
+        && !(project.getGradle().startParameter.isOffline())) {
+    apply from: '../gradle/publisher/publisher.gradle'
+}

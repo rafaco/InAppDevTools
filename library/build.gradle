@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
 apply from: '../compat/compat.gradle'
+apply from: 'publish.gradle'
 
 android {
     compileSdkVersion rootProject.ext.libraryCompileSdkVersion
@@ -57,8 +58,10 @@ android {
 
 dependencies {
 
-    // AndroidX/Support view components
-    api project(path: ':compat')
+    // Compat AndroidX/Support module (include view components)
+    //api project(path: ':compat')
+    supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
 
     // AndroidX logic components
     androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"
@@ -106,10 +109,4 @@ dependencies {
     testSupportImplementation "android.arch.persistence.room:testing:$rootProject.ext.librarySupportArchVersion"
     testSupportImplementation "android.arch.core:core-testing:$rootProject.ext.librarySupportArchVersion"
     testSupportImplementation "android.arch.paging:common:$rootProject.ext.librarySupportPagingVersion"
-}
-
-//Add Publication plugin when in publication environment
-if (project.rootProject.file('local.properties').exists()
-        && !(project.getGradle().startParameter.isOffline())) {
-    apply from: 'publish2.gradle'
 }
