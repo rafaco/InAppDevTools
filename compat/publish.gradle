@@ -1,11 +1,18 @@
 ext {
     groupId = 'es.rafaco.compat'
 
-    bintrayRepo = "InAppDevTools"
-    bintrayPkg = "compat"
+    bintrayRepo = "Compat"
+    bintrayRepoDesc = "Android library to switch usage of AndroidX/Support libraries without duplicating source code. Currently tightly coupled with project es.rafaco.inappdevtools, but it could become a flexible adapter in the future."
 
-    proyectName = 'Compat'
-    proyectDesc = 'Internal Android library used by es.rafaco.inappdevtools to encapsulate AndroidX/Support libraries from the same source code'
+    bintrayDynamicPkg = true
+
+    /*bintrayPkg = "androidx"
+    projectName = 'Compat-AndroidX'
+    projectDesc = 'AndroidX flavor of es.rafaco.compat'*/
+
+    bintrayPkg = "support"
+    projectName = 'Compat-Support'
+    projectDesc = 'Support flavor of es.rafaco.compat'
 }
 
 // Publish to maven local and Bintray

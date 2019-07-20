@@ -1,11 +1,12 @@
 ext {
     groupId = 'es.rafaco.inappdevtools'
 
+    bintrayDynamicPkg = false
     bintrayRepo = "InAppDevTools"
-    bintrayPkg = "inappdevtools"
+    bintrayPkg = "noop"
 
-    proyectName = 'InAppDevTools'
-    proyectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+    projectName = 'InAppDevTools'
+    projectDesc = 'Noop flavor of InAppDevTools'
 }
 
 // Publish to maven local and Bintray

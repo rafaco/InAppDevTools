@@ -59,9 +59,9 @@ android {
 dependencies {
 
     // Compat AndroidX/Support module (include view components)
-    //api project(path: ':compat')
-    supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
-    androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    api project(path: ':compat')
+    //supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    //androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
 
     // AndroidX logic components
     androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"

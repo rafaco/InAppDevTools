@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Library publish [PROD]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Publish compat to BINTRAY (*)" type="GradleRunConfiguration" factoryName="Gradle" folderName="Publish to PROD">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/library" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/compat" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
@@ -15,6 +15,7 @@
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
+    <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
     <method v="2" />
   </configuration>
 </component>
