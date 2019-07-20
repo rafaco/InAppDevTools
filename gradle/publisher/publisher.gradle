@@ -80,10 +80,11 @@ publishing.publications {
 
         def javadoc = task("${variant.name}Javadoc", type: Javadoc) {
             description "Generates Javadoc for ${variant.name}."
-            source = variant.javaCompileProvider.get().source
-            //Was deprecated: variant.javaCompile.source
+            source = sourceDirs //variant.javaCompileProvider.get().source //Was deprecated: variant.javaCompile.source
             destinationDir = javaDocDestDir
             classpath += files(android.getBootClasspath().join(File.pathSeparator))
+            //TODO:
+            //configurations.compile.setCanBeResolved(true)
             classpath += files(configurations.compile)
             options.links("http://docs.oracle.com/javase/7/docs/api/")
             options.links("http://d.android.com/reference/")
@@ -137,22 +138,24 @@ publishing.publications {
                         if (it.hasProperty('optional') && it.optional) {
                             dependencyNode.appendNode('optional', 'true')
                         }
+                        println(" - Added ${it.group}:${it.name}:${it.version}")
                     }
 
                     // Add general dependencies
+                    println("Processing compile dependencies...")
                     configurations.compile.allDependencies.each addDependency
-                    configurations.api.allDependencies.each addDependency
+                    println("Processing implementation dependencies...")
                     configurations.implementation.allDependencies.each addDependency
 
                     //TODO: Add builtType dependencies
                     //configurations["${variant.buildType}Compile"].allDependencies.each addDependency
-                    //configurations["${variant.buildType}Api"].allDependencies.each addDependency
                     //configurations["${variant.buildType}Implementation"].allDependencies.each addDependency
 
                     // Add flavor dependencies
                     if (flavored) {
+                        println("Processing flavorCompile dependencies...")
                         configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
-                        configurations["${variant.flavorName}Api"].allDependencies.each addDependency
+                        println("Processing flavorImplementation dependencies...")
                         configurations["${variant.flavorName}Implementation"].allDependencies.each addDependency
                     }
                 }
@@ -163,7 +166,7 @@ publishing.publications {
 
 afterEvaluate {
     bintray {
-        dryRun = false      //[Default: false] Skip deployment
+        dryRun = true      //[Default: false] Skip deployment
         publish = false     //[Default: false] Skip publication after deployment
         override = true    //[Default: false] Override artifacts already published
 
