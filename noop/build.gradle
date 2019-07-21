@@ -24,8 +24,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     api "com.github.whataa:pandora-no-op:v2.0.3"
 
     testImplementation 'junit:junit:4.12'

@@ -56,12 +56,24 @@ android {
 }
 
 
+// Dynamic dependencies for Compat module (AndroidX/Support)
+android.libraryVariants.all { variant ->
+    if (variant.buildType.name == "debug") {
+        dependencies{
+            debugApi project(path: ':compat')
+        }
+    }
+    else if (variant.flavorName == 'androidx'){
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    }
+    else{
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    }
+}
+
 dependencies {
 
-    // Compat AndroidX/Support module (include view components)
-    api project(path: ':compat')
-    //supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
-    //androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    // AndroidX/Support view components are added by compat module
 
     // AndroidX logic components
     androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"
