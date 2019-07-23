@@ -87,7 +87,7 @@ dependencies {
     /*
      *  IADT library import directly from modules. For development.
      */
-    api project(path: ':inappdevtools')
+    api project(path: ':library')
     //api project(path: ':noop')
 
     /*

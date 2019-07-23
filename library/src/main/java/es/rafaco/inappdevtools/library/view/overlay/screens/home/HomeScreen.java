@@ -88,16 +88,6 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("Report",
-                R.drawable.ic_send_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
-                    }
-                }));
-
-
-
         data.add(new RunnableItem("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
@@ -105,6 +95,8 @@ public class HomeScreen extends OverlayScreen {
                     public void run() { OverlayUIService.performNavigation(SourcesScreen.class);
                     }
                 }));
+
+
 
         data.add(new RunnableItem("View",
                 R.drawable.ic_layers_white_24dp,
@@ -125,7 +117,6 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
 
-
         data.add(new RunnableItem("Console",
                 R.drawable.ic_computer_white_24dp,
                 new Runnable() {
@@ -134,11 +125,20 @@ public class HomeScreen extends OverlayScreen {
                     }
                 }));
         
+        
         data.add(new RunnableItem("Run",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayUIService.performNavigation(RunScreen.class);
+                    }
+                }));
+
+        data.add(new RunnableItem("Report",
+                R.drawable.ic_send_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
                     }
                 }));
 
