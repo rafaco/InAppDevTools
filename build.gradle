@@ -24,6 +24,15 @@ plugins {
     id "org.sonarqube" version "2.7"
 }
 
+allprojects {
+    repositories {
+        mavenLocal()
+        maven { url "https://jitpack.io"}
+        google()
+        jcenter()
+    }
+}
+
 ext {
     pluginVersionName = '0.0.12'
 
@@ -71,14 +80,6 @@ ext {
     */
 }
 
-allprojects {
-    repositories {
-        mavenLocal()
-        maven { url "https://jitpack.io"}
-        google()
-        jcenter()
-    }
-}
 
 
 // Clean all modules

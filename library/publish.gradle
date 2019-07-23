@@ -1,12 +1,18 @@
 ext {
     groupId = 'es.rafaco.inappdevtools'
+    bintrayRepo = "InAppDevTools"
+    bintrayRepoDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+    vcsUrl = 'https://github.com/rafaco/InAppDevTools/tree/master/library'
 
     bintrayDynamicPkg = true
-    bintrayRepo = "InAppDevTools"
-    bintrayPkg = "support"
 
-    projectName = 'InAppDevTools'
-    projectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+    /*bintrayPkg = "androidx"
+    projectName = 'IADT-AndroidX'
+    projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'*/
+
+    bintrayPkg = "support"
+    projectName = 'IADT-Support'
+    projectDesc = 'Support flavor of es.rafaco.inappdevtools'
 }
 
 //Publish to bintray

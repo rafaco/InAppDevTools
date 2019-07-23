@@ -30,12 +30,12 @@ For extended feature description, visit our wiki: [Feature description](https://
 
 ### Limitations <a name="req"/>
 - minSdkVersion >= 16 (Jelly Bean). Check it at your app/build.gradle
-- If AndroidX is enabled, Jetifier should also be enabled (An AndroidX specific version will be release).
+- Minimun Gradle version: //TODO
 
 ### Basic set-up <a name="basic"/>
 For standard Android projects you only need to modify 2 gradle files and rebuild your app.
 
-1. On your root build.gradle, import our plugin (plugins closure must be just after buidscript). Then add the JitPack repository (TEMP, it's a transitive dependency):
+On your root build.gradle, import our plugin (plugins closure must be just after buidscript). Then add the JitPack repository (TEMP, it's a transitive dependency):
 
 ```gradle
 plugins {
@@ -49,12 +49,13 @@ allprojects {
 }
 ```
 
-2. On your app build.gradle, include our library in your dependencies and add targetCompatibility with Java8. You can keep smaller sourceCompatibility. 
+On your app build.gradle, you have to add targetCompatibility with Java8. You can keep smaller values for sourceCompatibility. 
+
+Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available.
 
 ```gradle
 
 android {
-    (...)
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -67,11 +68,12 @@ dependencies {
 }
 ```
 
+
 Flavor | Version | Description
     ---|---|---
-    androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects migrated to AndroidX libraries.
-    support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For projects using Support libraries.
-    noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation (androidx and support).
+    androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.
+    support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Support libraries.
+    noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).
 
 Don't include the "v" character in dependencies. 
 
@@ -165,8 +167,20 @@ You don't normally need to manually download our library or our plugin as they a
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
-I'm really looking forward to create a small comunity around this library! You can use the [issues](https://github.com/rafaco/InAppDevTools/issues) tab to report bugs, request a feature or just to give me some feedback. Pull request are more than welcome.
+I'm really looking forward to create a small community around this library! You can use the [issues](https://github.com/rafaco/InAppDevTools/issues) tab to report bugs, request a feature or just to give me some feedback. Pull request are more than welcome.
 
+### Building artifacts
+
+All artifacts are generated from this Git project, using different combinations of module and variant.
+
+| Artifact | Module | Variant | Description |
+| --- | --- | --- | --- |
+| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle|
+| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries |
+| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries |
+| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational |
+| es.rafaco.compat:support | compat | support | Compat library for Support libraries |
+| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries |
 
 ## Apps using this library <a name="usages"/>
 - Your app linked here! Just ask me for it
@@ -178,12 +192,14 @@ I'm really looking forward to create a small comunity around this library! You c
 - To [@tiagohm](https://github.com/tiagohm) for [CodeView](https://github.com/tiagohm/CodeView): inspiration for my codeview.
 - To [@Zsolt Kocsi](https://github.com/zsoltk) for [paperwork](https://github.com/zsoltk/paperwork): inspiration for CompileConfig.
 - To [@valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast): inspiration for our CustomToast.
-- To [@Wajahat Karim](https://github.com/wajahatkarim3) for [JCenter-Gradle-Scripts](https://github.com/wajahatkarim3/JCenter-Gradle-Scripts): used to publish into Bintray.
 - //TODO: add com.github.anrwatchdog:anrwatchdog?
 - //TODO: add replacement for com.opencsv:opencsvallo
 
-## About the author
-I'm a Senior Software Engineer and this project started as a playground to learn Android on my spare time. I have a lot of fun with it and as it has turned out to be an interesting project for every Android developer, I've finally left a permanent work position to focus on this. I hope to publish a first complete version at the end of this summer (2019) before continue with my career.
+## About the author and the project
+
+I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. This is my first contribution to the open source community and I'm looking forward to create a small community around.
+
+This project started as a playground to learn Android, then it become a personal tool to support my daily duties and then I realise it could be interesting for every Android developer. After 2 years having a lot of fun with it, mainly overnight, I've left a permanent work position to make it flexible and polished for everyone joy. I hope to publish a first complete version at the end of this summer (2019) before continue with my career.
 
 ## License <a name="license"/>
 Apache-2.0

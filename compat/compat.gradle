@@ -7,7 +7,7 @@ preprocessor {
     } catch(Exception ex) {
         //println("Silent preprocessor: No extension detected")
     }
-    verbose iadtExtension != null ? iadtExtension.debug : false
+    verbose (iadtExtension != null ? iadtExtension.debug : false)
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
     symbols "GLOBAL","GLOBAL_2"

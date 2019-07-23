@@ -12,10 +12,11 @@ include ':plugin', ':library', ':sample', ':noop', ':compat'
 
 //Remap module names, used as artifactId when publishing
 ext.remapper = [
-        'root'      : 'inappdevtools-project',
-        'sample'    : 'inappdevtools-sample',
-        'plugin'    : 'inappdevtools-plugin',
-        'library'   : 'inappdevtools'
+        //'root'      : 'inappdevtools-project',
+        //'sample'    : 'inappdevtools-sample',
+        //'library'   : 'inappdevtools'
+        //TODO: remove
+        'plugin'    : 'inappdevtools-plugin'
 ]
 rootProject.name = remapper.root
 rootProject.children.each {
