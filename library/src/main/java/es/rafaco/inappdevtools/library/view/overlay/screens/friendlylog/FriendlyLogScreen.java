@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.widget.SearchView;
 //@import androidx.recyclerview.widget.RecyclerView;

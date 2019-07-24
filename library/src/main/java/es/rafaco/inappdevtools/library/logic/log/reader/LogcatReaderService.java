@@ -5,9 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+
+//#ifdef ANDROIDX
+//@import androidx.annotation.Nullable;
+//#else
+import android.support.annotation.Nullable;
+//#endif
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Library Gradle Profile" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Library Gradle Profile" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/library" />
@@ -15,6 +15,7 @@
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
+    <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
     <method v="2" />
   </configuration>
 </component>

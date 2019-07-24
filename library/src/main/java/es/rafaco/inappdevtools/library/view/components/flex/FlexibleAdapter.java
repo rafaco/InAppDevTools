@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.core.view.ViewCompat;
 //@import androidx.recyclerview.widget.GridLayoutManager;

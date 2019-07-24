@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
 import android.content.Context;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //@import androidx.recyclerview.widget.DiffUtil;
 //@import androidx.cardview.widget.CardView;

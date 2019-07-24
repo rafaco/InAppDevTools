@@ -25,7 +25,7 @@ package es.rafaco.inappdevtools.library.logic.integrations.wcviewpager; /**
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.viewpager.widget.PagerAdapter;
 //#else
 import android.support.v4.view.PagerAdapter;

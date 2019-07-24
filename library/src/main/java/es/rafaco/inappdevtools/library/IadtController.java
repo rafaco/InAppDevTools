@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //#else
 import android.support.annotation.Nullable;
@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

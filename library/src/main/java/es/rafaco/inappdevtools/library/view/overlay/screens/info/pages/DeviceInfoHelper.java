@@ -6,7 +6,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;

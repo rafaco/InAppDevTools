@@ -1,0 +1,19 @@
+ext {
+    groupId = 'es.rafaco.inappdevtools'
+    bintrayRepo = "InAppDevTools"
+    bintrayRepoDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+    vcsUrl = 'https://github.com/rafaco/InAppDevTools/tree/master/noop'
+
+    bintrayDynamicPkg = false
+
+    bintrayPkg = "noop"
+    projectName = 'IADT-noop'
+    projectDesc = 'Noop flavor of InAppDevTools'
+}
+
+// Publish to maven local and Bintray
+//TODO: safe-remove this conditions
+if (project.rootProject.file('local.properties').exists()
+        && !(project.getGradle().startParameter.isOffline())) {
+    apply from: '../gradle/publisher/publisher.gradle'
+}

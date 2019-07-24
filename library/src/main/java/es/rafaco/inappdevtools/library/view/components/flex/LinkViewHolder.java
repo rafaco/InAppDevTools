@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //@import androidx.appcompat.widget.AppCompatTextView;
 //#else

@@ -1,0 +1,207 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+ext {
+    //groupId = 'es.rafaco.inappdevtools'     // GroupId - WIP, relocated to importer module
+    //artifactId = 'inappdevtools'          // ArtifactId: Renamed into flavor
+    //libraryVersion = 'X.X.XX'             // Version: Relocated to root script
+
+    //bintrayRepo = "InAppDevTools"
+    //bintrayPkg = "inappdevtools"          //WIP, relocated to importer module
+
+    //projectName = 'InAppDevTools'
+    //projectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
+
+    siteUrl = 'https://github.com/rafaco/InAppDevTools'
+    issuesUrl = 'https://github.com/rafaco/InAppDevTools/issues'
+    githubRepo = 'rafaco/InAppDevTools'
+
+    developerId = 'rafaco'
+    developerName = 'Rafael Acosta'
+    developerEmail = 'rafaco@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+group = groupId
+version = libraryWorkingVersion
+
+def publicationNames = []
+def pomConfig = {
+    licenses {
+        license {
+            name licenseName
+            url licenseUrl
+        }
+    }
+    developers {
+        developer {
+            id developerId
+            name developerName
+            email developerEmail
+        }
+    }
+    scm {
+        connection vcsUrl
+        //developerConnection vcsUrl
+        url siteUrl
+    }
+}
+
+publishing.publications {
+    android.libraryVariants.all { variant ->
+        def flavored = !variant.flavorName.isEmpty()
+
+        // Prevents publishing debug library
+        if (variant.buildType.name == "debug") {
+            println("- Skipped publication of ${variant.flavorName} ${variant.buildType.name}")
+            return
+        }
+
+        //Prevent other variants when using DynamicPkgName
+        if (flavored && bintrayDynamicPkg == true && variant.flavorName != bintrayPkg){
+            println("- Skipped publication of ${variant.flavorName} ${variant.buildType.name}")
+            return
+        }
+
+        //Translates "_" in flavor names to "-" for artifactIds, because "-" in flavor name is an
+        def variantArtifactId = flavored ? variant.flavorName.replace('_', '-') : project.name
+
+        // Use different javadoc destinationDir per flavor, needed for multi-build
+        def javaDocDestDir = file("${buildDir}/docs/javadoc ${flavored ? variantArtifactId : ""}")
+
+        //Include all sources
+        def sourceDirs = variant.sourceSets.collect {
+            it.javaDirectories // Also includes kotlin sources if any.
+        }
+
+        def javadoc = task("${variant.name}Javadoc", type: Javadoc) {
+            description "Generates Javadoc for ${variant.name}."
+            source = sourceDirs //variant.javaCompileProvider.get().source //Was deprecated: variant.javaCompile.source
+            destinationDir = javaDocDestDir
+            classpath += files(android.getBootClasspath().join(File.pathSeparator))
+            //TODO:
+            //configurations.compile.setCanBeResolved(true)
+            classpath += files(configurations.compile)
+            options.links("http://docs.oracle.com/javase/7/docs/api/")
+            options.links("http://d.android.com/reference/")
+            exclude '**/BuildConfig.java'
+            exclude '**/R.java'
+            failOnError false
+        }
+        def javadocJar = task("${variant.name}JavadocJar", type: Jar, dependsOn: javadoc) {
+            description "Puts Javadoc for ${variant.name} in a jar."
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+        def sourcesJar = task("${variant.name}SourcesJar", type: Jar) {
+            description "Puts sources for ${variant.name} in a jar."
+            from sourceDirs
+            classifier = 'sources'
+        }
+
+        def publicationName = "${variant.name.capitalize()}"
+        //def publicationName = "Iadt_${variant.name.capitalize()}"
+        publicationNames.add(publicationName)
+
+        println "+ Preparing publication: ${publicationName}"
+
+        "$publicationName"(MavenPublication) {
+            group groupId
+            artifactId variantArtifactId
+            version libraryWorkingVersion
+
+            artifact variant.packageLibraryProvider.get()
+            //Was deprecated: variant.outputs[0].packageLibrary
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                packaging 'aar'
+                withXml {
+                    def root = asNode()
+                    root.appendNode("name", projectName)
+                    root.appendNode("url", siteUrl)
+                    root.appendNode("description", projectDesc)
+                    root.children().last() + pomConfig
+
+                    def dependenciesNode = root["dependencies"][0] ?: root.appendNode("dependencies")
+                    def addDependency = {
+                        if (it.group == null) return // Avoid empty dependency nodes
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                        if (it.hasProperty('optional') && it.optional) {
+                            dependencyNode.appendNode('optional', 'true')
+                        }
+                        println(" - Added ${it.group}:${it.name}:${it.version}")
+                    }
+
+                    // Add general dependencies
+                    println("Processing compile dependencies...")
+                    configurations.compile.allDependencies.each addDependency
+                    println("Processing implementation dependencies...")
+                    configurations.implementation.allDependencies.each addDependency
+
+                    //TODO: Add builtType dependencies
+                    //configurations["${variant.buildType}Compile"].allDependencies.each addDependency
+                    //configurations["${variant.buildType}Implementation"].allDependencies.each addDependency
+
+                    // Add flavor dependencies
+                    if (flavored) {
+                        println("Processing flavorCompile dependencies...")
+                        configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
+                        println("Processing flavorImplementation dependencies...")
+                        configurations["${variant.flavorName}Implementation"].allDependencies.each addDependency
+                    }
+                }
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    bintray {
+        dryRun = false      //[Default: false] Skip deployment
+        publish = false     //[Default: false] Skip publication after deployment
+        override = false    //[Default: false] Override artifacts already published
+
+        publications = publicationNames
+
+        pkg {
+            repo = bintrayRepo
+            name = bintrayPkg  //Was project.name
+            version {
+                name = libraryWorkingVersion
+                desc = projectDesc //TODO: versionDesc
+                gpg {
+                    sign = true
+                    passphrase = System.getenv('BINTRAY_GPG')
+                }
+            }
+
+            desc = projectDesc
+            websiteUrl = siteUrl
+            vcsUrl = vcsUrl
+            issueTrackerUrl = issuesUrl
+            licenses = allLicenses
+            labels = ['aar', 'android']
+            publicDownloadNumbers = true
+            githubRepo = githubRepo
+            //githubReleaseNotesFile = 'README.md'
+        }
+
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_KEY')
+    }
+}
+
+task checkBintrayUpload {
+    doLast {
+        println "Bintray publication done! ${bintray.pkg.repo} -> ${bintray.pkg.name} -> ${bintray.pkg.version.name} from ${bintray.pkg.publications}"
+    }
+}
+bintrayUpload.finalizedBy checkBintrayUpload

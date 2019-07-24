@@ -1,0 +1,14 @@
+apply plugin: 'wang.dannyhe.tools.preprocessor'
+
+preprocessor {
+    def iadtExtension
+    try {
+        iadtExtension = project.extensions.getByName('inappdevtools')
+    } catch(Exception ex) {
+        //println("Silent preprocessor: No extension detected")
+    }
+    verbose (iadtExtension != null ? iadtExtension.debug : false)
+    sourceDir file("src/main/java")
+    targetDir file("src/main/java")
+    symbols "GLOBAL","GLOBAL_2"
+}

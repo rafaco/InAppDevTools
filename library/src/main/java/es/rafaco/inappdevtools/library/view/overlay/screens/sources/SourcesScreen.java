@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //@import androidx.appcompat.widget.SearchView;
 //#else

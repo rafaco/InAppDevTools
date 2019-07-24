@@ -20,7 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.cardview.widget.CardView;
 //@import androidx.core.content.ContextCompat;
 //#else

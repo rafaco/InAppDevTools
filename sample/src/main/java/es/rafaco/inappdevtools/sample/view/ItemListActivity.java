@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.widget.Toolbar;

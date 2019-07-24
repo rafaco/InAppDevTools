@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library;
 import android.content.Context;
 import android.view.GestureDetector;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull; 
 //#else
 import android.support.annotation.NonNull;
@@ -15,7 +15,7 @@ import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
 import okhttp3.OkHttpClient;
 
@@ -165,5 +165,9 @@ public class Iadt {
 
     public static boolean isDebug() {
         return getController().isDebug();
+    }
+
+    public static boolean isNoop(){
+        return false;
     }
 }

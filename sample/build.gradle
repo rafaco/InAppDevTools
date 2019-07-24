@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'wang.dannyhe.tools.preprocessor'
+apply from: '../compat/compat.gradle'
 
 android {
     compileSdkVersion rootProject.ext.appCompileSdkVersion
@@ -17,22 +17,17 @@ android {
 
     flavorDimensions "compatibility"
     productFlavors {
-        modern {
+        androidx {
             dimension "compatibility"
-            processor.symbols "MODERN"
+            processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-           /* System.setProperty('android.useAndroidX', 'true')
-            project.properties['android.useAndroidX']='true'
-            extensions.add('android.useAndroidX', 'true')
-            ext.useAndroidX = 'true'*/
         }
         support {
             dimension "compatibility"
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
 
@@ -50,55 +45,72 @@ android {
 }
 
 
+// Dynamic dependencies for Compat module (AndroidX/Support)
+android.applicationVariants.all { variant ->
+    if (variant.buildType.name == "debug") {
+        dependencies {
+            debugApi project(path: ':compat')
+        }
+    }
+    else if (variant.flavorName == 'androidx'){
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
+    }
+    else{
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    modernApi 'com.google.android.material:material:1.0.0-rc01'
-    modernApi 'androidx.appcompat:appcompat:1.0.0'
-    modernApi 'androidx.recyclerview:recyclerview:1.0.0'
+    // AndroidX/Support view components are added by compat module:
+    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
+    //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
+    //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
+    //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
-    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
+    //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
 
+    //TODO: Testing :(
     testImplementation 'junit:junit:4.12'
-    androidTestModernImplementation 'androidx.test:runner:1.1.0'
-    androidTestModernImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
+    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    /*
+     *  IADT library import directly from modules. For development.
+     */
+    api project(path: ':library')
+    //api project(path: ':noop')
 
-    // Import our library from repository (jCenter or localMaven). Standard usage
-    //implementation "es.rafaco.inappdevtools:inappdevtools:$rootProject.ext.libraryVersionName"
-
-    // Import our library from local sub-project, for development.
-    implementation project(path: ':inappdevtools')
-    //modernImplementation project(path: ':inappdevtools', configuration: 'modernDebug')
-    //supportImplementation project(path: ':inappdevtools', configuration: 'supportDebug')
+    /*
+     *  IADT library import from repository (jCenter or localMaven). Standard usage
+     */
+    //supportImplementation "es.rafaco.inappdevtools:support:$rootProject.ext.libraryPublishedVersion"
+    //androidxImplementation "es.rafaco.inappdevtools:androidx:$rootProject.ext.libraryPublishedVersion"
+    //releaseImplementation "es.rafaco.inappdevtools:noop:$rootProject.ext.libraryPublishedVersion"
 }
 
 
-// Import our plugin from repository (jCenter or localMaven). Standard usage.
-apply plugin: 'es.rafaco.inappdevtools'
+/*
+ *  IADT plugin import directly from modules. For development.
+ */
+//apply from: '../plugin/build.gradle'
 
-// Import our plugin from local module, for development.
-//apply from: '../plugin/inappdevtools.gradle'
+/*
+ *  IADT plugin import from repository (jCenter or localMaven). Standard usage
+ */
+apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
     debug = false
     email = 'inappdevtools@gmail.com'
-}
-
-
-//Configuration for PreProcessor plugin
-preprocessor {
-    verbose project.extensions.getByName('inappdevtools').debug
-    sourceDir file("src/main/java")
-    targetDir file("src/main/java")
-    symbols "GLOBAL","GLOBAL_2"
 }

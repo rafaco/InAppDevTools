@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.appcompat.widget.Toolbar;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                throw new NullPointerException("A simulated exception from MainActivity fab button");
+                //throw new NullPointerException("A simulated exception from MainActivity fab button");
             }
         });
 

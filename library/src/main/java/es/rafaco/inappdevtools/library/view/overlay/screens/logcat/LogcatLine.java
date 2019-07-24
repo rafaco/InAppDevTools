@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //#else
 import android.support.v4.content.ContextCompat;

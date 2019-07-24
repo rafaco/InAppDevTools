@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.FileProvider;
 //#else
 import android.support.v4.content.FileProvider;

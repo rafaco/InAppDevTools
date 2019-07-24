@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.sample;
 
 import android.content.Context;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 //#else

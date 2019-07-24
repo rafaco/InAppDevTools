@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.view.ViewCompat;
 //@import androidx.annotation.NonNull;
 //@import androidx.room.InvalidationTracker;

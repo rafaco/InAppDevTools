@@ -6,10 +6,10 @@ buildscript {
     }
     dependencies {
 
-        //#ifdef MODERN  //TODO: Gradle pre-processor: manual toggle comment is needed
-        //classpath 'com.android.tools.build:gradle:3.3.0'
+        //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
+        classpath 'com.android.tools.build:gradle:3.4.1'
         //#else
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        //classpath 'com.android.tools.build:gradle:3.0.0'
         //#endif
 
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
@@ -24,10 +24,20 @@ plugins {
     id "org.sonarqube" version "2.7"
 }
 
+allprojects {
+    repositories {
+        mavenLocal()
+        maven { url "https://jitpack.io"}
+        google()
+        jcenter()
+    }
+}
+
 ext {
     pluginVersionName = '0.0.12'
 
-    libraryVersionName = '0.0.46'
+    libraryPublishedVersion = '0.0.46t'
+    libraryWorkingVersion = '0.0.46t'
     libraryVersionCode = 1
     libraryMinSdkVersion = 16
 
@@ -35,15 +45,23 @@ ext {
     appVersionCode = 45
     appMinSdkVersion = 16
 
-    //#ifdef MODERN  //TODO: Gradle pre-processor: manual toggle comment is needed
+    //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
     appTargetSdkVersion = 28
     appCompileSdkVersion = 28
     appBuildToolsVersion = '28.0.3'
-    appSupportVersion = '28.0.0'
     libraryTargetSdkVersion = 28
     libraryCompileSdkVersion = 28
     libraryBuildToolsVersion = '28.0.3'
+
+    //TEMP without preprocessor
+    //TODO: we don't need preprocessor, migrate to properties per variant
+    libraryAndroidxMaterialVersion = "1.0.0-rc01"
+    libraryAndroidxVersion = "1.0.0"
+    libraryAndroidx2Version = "2.0.0"
     librarySupportVersion = '28.0.0'
+    librarySupportArchVersion = "1.1.0"
+    librarySupportPagingVersion = "1.0.1"
+
     //#else
 //    appTargetSdkVersion = 26
 //    appCompileSdkVersion = 26
@@ -63,13 +81,6 @@ ext {
     */
 }
 
-allprojects {
-    repositories {
-        maven { url "https://jitpack.io"}
-        google()
-        jcenter()
-    }
-}
 
 
 // Clean all modules

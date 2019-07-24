@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.view.ViewCompat;
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.widget.AppCompatButton;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;

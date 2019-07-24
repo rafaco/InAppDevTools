@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else

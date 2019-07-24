@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 import android.content.Context;
 import android.text.TextUtils;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //#else
 import android.support.annotation.NonNull;

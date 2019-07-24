@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.viewpager.widget.ViewPager;
 //@import com.google.android.material.tabs.TabLayout;
 //#else

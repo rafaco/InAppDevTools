@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.widget.SearchView;
 //#else

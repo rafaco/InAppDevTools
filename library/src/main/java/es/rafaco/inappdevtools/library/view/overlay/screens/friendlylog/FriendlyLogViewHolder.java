@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.appcompat.widget.AppCompatTextView;

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.view.ContextThemeWrapper;
@@ -27,7 +27,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
 

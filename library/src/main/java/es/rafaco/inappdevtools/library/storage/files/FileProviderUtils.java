@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.core.content.FileProvider;
 //#else
 import android.support.v4.content.FileProvider;

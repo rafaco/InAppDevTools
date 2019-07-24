@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'es.rafaco.inappdevtools'
-apply plugin: 'wang.dannyhe.tools.preprocessor'
+apply from: '../compat/compat.gradle'
+apply from: 'publish.gradle'
 
 android {
     compileSdkVersion rootProject.ext.libraryCompileSdkVersion
@@ -10,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.libraryMinSdkVersion
         targetSdkVersion rootProject.ext.libraryTargetSdkVersion
         versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryVersionName
+        versionName rootProject.ext.libraryWorkingVersion
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -33,10 +34,10 @@ android {
 
     flavorDimensions "compatibility"
     productFlavors {
-        modern {
+        androidx {
             dimension "compatibility"
-            buildConfigField "String", "MY_FLAVOR", "\"modern\""
-            processor.symbols "MODERN"
+            buildConfigField "String", "MY_FLAVOR", "\"androidx\""
+            processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -48,52 +49,60 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
-    publishNonDefault true
-    defaultPublishConfig 'supportDebug'
+
+    //Allow direct import from app module, without local or bintray repos:
+    // implementation project(path: ':inappdevtools')
+    //defaultPublishConfig 'supportDebug'
 }
 
 
+// Dynamic dependencies for Compat module (AndroidX/Support)
+android.libraryVariants.all { variant ->
+    if (variant.buildType.name == "debug") {
+        dependencies{
+            debugApi project(path: ':compat')
+        }
+    }
+    else if (variant.flavorName == 'androidx'){
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
+    }
+    else{
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
+    }
+}
+
 dependencies {
 
-    // Modern flavor
-   /* modernApi 'com.google.android.material:material:1.0.0-rc01'
-    def androidx_version = "1.0.0"
-    modernApi "androidx.appcompat:appcompat:$androidx_version"
-    modernApi "androidx.recyclerview:recyclerview:$androidx_version"
-    modernApi "androidx.cardview:cardview:$androidx_version"
-    modernApi "androidx.media:media:$androidx_version"
-    modernApi "androidx.annotation:annotation:$androidx_version"
-    def androidx_2_version = "2.0.0" //"2.1.0-alpha02"
-    modernApi "androidx.room:room-runtime:$androidx_2_version"
-    modernAnnotationProcessor "androidx.room:room-compiler:$androidx_2_version"
-    modernApi "androidx.lifecycle:lifecycle-runtime:$androidx_2_version"
-    modernApi "androidx.lifecycle:lifecycle-extensions:$androidx_2_version"
-    modernAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$androidx_2_version"
-    modernApi "androidx.paging:paging-runtime:$androidx_2_version"
-    modernApi "com.github.whataa:pandora:androidx_v2.0.4"*/
+    // AndroidX/Support view components are added by compat module
 
-    //TODO: MULTI VARIANT: dependencies as supportApi or modernApi are not included in POM
-    // Support flavor
-    api "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:design:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
-    api "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
-    def arch_version = "1.1.0"
-    api "android.arch.persistence.room:runtime:$arch_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
-    api "android.arch.lifecycle:extensions:$arch_version"
-    api "android.arch.lifecycle:runtime:$arch_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
-    def paging_version = "1.0.1"
-    api "android.arch.paging:runtime:$paging_version"
-    api "com.github.whataa:pandora:v2.0.4"
+    // AndroidX logic components
+    androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"
+    androidxApi "androidx.room:room-runtime:$rootProject.ext.libraryAndroidx2Version"
+    androidxAnnotationProcessor "androidx.room:room-compiler:$rootProject.ext.libraryAndroidx2Version"
+    androidxApi "androidx.lifecycle:lifecycle-runtime:$rootProject.ext.libraryAndroidx2Version"
+    androidxApi "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.libraryAndroidx2Version"
+    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.ext.libraryAndroidx2Version"
+    androidxApi "androidx.paging:paging-runtime:$rootProject.ext.libraryAndroidx2Version"
 
-    // All flavors
+    // Support logic components
+    supportApi "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
+    supportApi "android.arch.persistence.room:runtime:$rootProject.ext.librarySupportArchVersion"
+    supportAnnotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.librarySupportArchVersion"
+    supportApi "android.arch.lifecycle:extensions:$rootProject.ext.librarySupportArchVersion"
+    supportApi "android.arch.lifecycle:runtime:$rootProject.ext.librarySupportArchVersion"
+    supportAnnotationProcessor "android.arch.lifecycle:compiler:$rootProject.ext.librarySupportArchVersion"
+    supportApi "android.arch.paging:runtime:$rootProject.ext.librarySupportPagingVersion"
+
+    // Pandora
+    androidxApi "com.github.whataa:pandora:androidx_v2.0.4"
+    supportApi "com.github.whataa:pandora:v2.0.4"
+
+    // Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+
+    // Others
     api 'com.readystatesoftware.chuck:library:1.1.0'
     api 'com.github.alorma:timelineview:2.3.0'
     api 'com.github.anrwatchdog:anrwatchdog:1.3.0'
@@ -103,27 +112,13 @@ dependencies {
 
     //Test
     testImplementation 'junit:junit:4.12'
-    androidTestModernImplementation 'androidx.test:runner:1.1.0'
-    androidTestModernImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    // AndroidX/Support test components (TODO)
+    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
+    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testSupportImplementation "android.arch.persistence.room:testing:$arch_version"
-    testSupportImplementation "android.arch.core:core-testing:$arch_version"
-    testSupportImplementation "android.arch.paging:common:$paging_version"
-}
-
-
-//Configuration for PreProcessor plugin
-preprocessor {
-    verbose project.extensions.getByName('inappdevtools').debug
-    sourceDir file("src/main/java")
-    targetDir file("src/main/java")
-    symbols "GLOBAL","GLOBAL_2"
-}
-
-
-//Add Publication plugin when in publication environment
-if (project.rootProject.file('local.properties').exists()
-        && !(project.getGradle().startParameter.isOffline())) {
-    apply from: 'publish.gradle'
+    testSupportImplementation "android.arch.persistence.room:testing:$rootProject.ext.librarySupportArchVersion"
+    testSupportImplementation "android.arch.core:core-testing:$rootProject.ext.librarySupportArchVersion"
+    testSupportImplementation "android.arch.paging:common:$rootProject.ext.librarySupportPagingVersion"
 }

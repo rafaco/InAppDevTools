@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.log.datasource;
 
-//#ifdef MODERN
+//#ifdef ANDROIDX
 //@import androidx.paging.DataSource;
 //#else
 import android.arch.paging.DataSource;
