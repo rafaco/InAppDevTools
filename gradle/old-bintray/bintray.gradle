@@ -1,7 +1,7 @@
 // Script from https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/insbintraytall.gradle
 apply plugin: 'com.jfrog.bintray'
 
-version = rootProject.ext.libraryVersionName
+version = rootProject.ext.libraryWorkingVersion
 
 if (project.hasProperty("android")) { // Android libraries
     task sourcesJar(type: Jar) {

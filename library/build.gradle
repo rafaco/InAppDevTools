@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.libraryMinSdkVersion
         targetSdkVersion rootProject.ext.libraryTargetSdkVersion
         versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryVersionName
+        versionName rootProject.ext.libraryWorkingVersion
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -64,10 +64,10 @@ android.libraryVariants.all { variant ->
         }
     }
     else if (variant.flavorName == 'androidx'){
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
     }
     else{
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
     }
 }
 

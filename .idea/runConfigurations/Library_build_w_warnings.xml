@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Publish compat to BINTRAY (*)" type="GradleRunConfiguration" factoryName="Gradle" folderName="Publish to PROD">
+  <configuration default="false" name="Library build w/warnings" type="GradleRunConfiguration" factoryName="Gradle" folderName="Build w/warnings">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/compat" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/library" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="" />
+      <option name="scriptParameters" value="-Pandroid.debug.obsoleteApi=true --stacktrace" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="bintrayUpload" />
+          <option value="assemble" />
         </list>
       </option>
       <option name="vmOptions" value="" />

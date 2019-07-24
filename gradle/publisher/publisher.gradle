@@ -26,7 +26,7 @@ ext {
 }
 
 group = groupId
-version = libraryVersionName
+version = libraryWorkingVersion
 
 def publicationNames = []
 def pomConfig = {
@@ -111,7 +111,7 @@ publishing.publications {
         "$publicationName"(MavenPublication) {
             group groupId
             artifactId variantArtifactId
-            version libraryVersionName
+            version libraryWorkingVersion
 
             artifact variant.packageLibraryProvider.get()
             //Was deprecated: variant.outputs[0].packageLibrary
@@ -165,9 +165,9 @@ publishing.publications {
 
 afterEvaluate {
     bintray {
-        dryRun = true      //[Default: false] Skip deployment
+        dryRun = false      //[Default: false] Skip deployment
         publish = false     //[Default: false] Skip publication after deployment
-        override = true    //[Default: false] Override artifacts already published
+        override = false    //[Default: false] Override artifacts already published
 
         publications = publicationNames
 
@@ -175,7 +175,7 @@ afterEvaluate {
             repo = bintrayRepo
             name = bintrayPkg  //Was project.name
             version {
-                name = libraryVersionName
+                name = libraryWorkingVersion
                 desc = projectDesc //TODO: versionDesc
                 gpg {
                     sign = true
@@ -190,7 +190,7 @@ afterEvaluate {
             licenses = allLicenses
             labels = ['aar', 'android']
             publicDownloadNumbers = true
-            //githubRepo = githubRepo
+            githubRepo = githubRepo
             //githubReleaseNotesFile = 'README.md'
         }
 

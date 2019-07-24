@@ -53,10 +53,10 @@ android.applicationVariants.all { variant ->
         }
     }
     else if (variant.flavorName == 'androidx'){
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
     }
     else{
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
     }
 }
 
@@ -93,9 +93,9 @@ dependencies {
     /*
      *  IADT library import from repository (jCenter or localMaven). Standard usage
      */
-    //supportImplementation "es.rafaco.inappdevtools:support:$rootProject.ext.libraryVersionName"
-    //androidxImplementation "es.rafaco.inappdevtools:androidx:$rootProject.ext.libraryVersionName"
-    //releaseImplementation "es.rafaco.inappdevtools:noop:$rootProject.ext.libraryVersionName"
+    //supportImplementation "es.rafaco.inappdevtools:support:$rootProject.ext.libraryPublishedVersion"
+    //androidxImplementation "es.rafaco.inappdevtools:androidx:$rootProject.ext.libraryPublishedVersion"
+    //releaseImplementation "es.rafaco.inappdevtools:noop:$rootProject.ext.libraryPublishedVersion"
 }
 
 
