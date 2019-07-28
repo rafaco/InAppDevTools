@@ -166,7 +166,7 @@ publishing.publications {
 afterEvaluate {
     bintray {
         dryRun = false      //[Default: false] Skip deployment
-        publish = false     //[Default: false] Skip publication after deployment
+        publish = true     //[Default: false] Skip publication after deployment
         override = false    //[Default: false] Override artifacts already published
 
         publications = publicationNames
