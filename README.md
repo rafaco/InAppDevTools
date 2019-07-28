@@ -69,11 +69,11 @@ dependencies {
 ```
 
 
-Flavor | Version | Description
-    ---|---|---
-    androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.
-    support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Support libraries.
-    noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).
+| Flavor | Version | Description |
+|---|---|---|
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
+|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).|
 
 Don't include the "v" character in dependencies. 
 
@@ -137,7 +137,35 @@ Available properties:
 ## Customization <a name="customization"/>
 
 
-## Continuous Integration <a name="ci"/>
+
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+I'm really looking forward to create a small community around this library! You can use the [issues tab](https://github.com/rafaco/InAppDevTools/issues) to report bugs, request a feature or just to give me your feedback. Pull request are more than welcome.
+
+### Downloads  <a name="download"/>
+
+You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
+
+- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
+- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
+- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
+- ~~Our sample app is be available to download from [Google Play](https://play.google.com).~~
+
+### Building artifacts
+
+All artifacts are generated from this Git project, using different combinations of module and variant.
+
+| Artifact | Module | Variant | Description |
+| --- | --- | --- | --- |
+| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle|
+| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries |
+| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries |
+| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational |
+| es.rafaco.compat:support | compat | support | Compat library for Support libraries |
+| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries |
+
+### Continuous Integration <a name="ci"/>
+(Work in progress)
 [![CircleCI](https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=svg)](https://circleci.com/gh/rafaco/InAppDevTools/tree/master) 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=alert_status)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools) 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
@@ -153,37 +181,12 @@ Available properties:
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
-//TODO: Pass SonarCloud's quality gate
 
+## About the author and the project
 
-## Downloads  <a name="download"/>
+I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. This is my first open source contribution and I'm looking forward to create a small community around.
 
-You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
-
-- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
-- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
-- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
-- ~~Our sample app is be available to download from [Google Play](https://play.google.com).~~
-
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
-
-I'm really looking forward to create a small community around this library! You can use the [issues](https://github.com/rafaco/InAppDevTools/issues) tab to report bugs, request a feature or just to give me some feedback. Pull request are more than welcome.
-
-### Building artifacts
-
-All artifacts are generated from this Git project, using different combinations of module and variant.
-
-| Artifact | Module | Variant | Description |
-| --- | --- | --- | --- |
-| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle|
-| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries |
-| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries |
-| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational |
-| es.rafaco.compat:support | compat | support | Compat library for Support libraries |
-| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries |
-
-## Apps using this library <a name="usages"/>
-- Your app linked here! Just ask me for it
+I started this project as a playground to learn Android, then it become a personal tool to support my daily duties and then I realise it could be interesting for every Android developer. After 2 years of overnight coding fun, I've left a permanent work position to make it flexible and polished for everyone joy. I hope to publish a fully functional version at the end of this summer (2019).
 
 ## Thanks <a name="thanks"/>
 - To [@whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
@@ -195,11 +198,8 @@ All artifacts are generated from this Git project, using different combinations 
 - //TODO: add com.github.anrwatchdog:anrwatchdog?
 - //TODO: add replacement for com.opencsv:opencsvallo
 
-## About the author and the project
-
-I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. This is my first contribution to the open source community and I'm looking forward to create a small community around.
-
-This project started as a playground to learn Android, then it become a personal tool to support my daily duties and then I realise it could be interesting for every Android developer. After 2 years having a lot of fun with it, mainly overnight, I've left a permanent work position to make it flexible and polished for everyone joy. I hope to publish a first complete version at the end of this summer (2019) before continue with my career.
+## Apps using this library <a name="usages"/>
+- Your app linked here! Just ask me for it
 
 ## License <a name="license"/>
 Apache-2.0
