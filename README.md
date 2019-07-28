@@ -12,8 +12,6 @@
 - Customize your own tools, easily run your task and use our dev helpers.
 - Easy to install and configurable
 
-For extended feature description, visit our wiki: [Feature description](https://github.com/rafaco/InAppDevTools/wiki/Feature-description)
-
 <p>
 <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg" width="200">
 <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Info.jpg" width="200">
@@ -25,6 +23,8 @@ For extended feature description, visit our wiki: [Feature description](https://
 <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Storage.jpg" width="200">
 <!---![Home](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg)-->
 </p>
+
+For extended feature description, visit our wiki: [Feature description](https://github.com/rafaco/InAppDevTools/wiki/Feature-description)
 
 ## Installation <a name="setup"/>
 
@@ -51,7 +51,7 @@ allprojects {
 
 On your app build.gradle, you have to add targetCompatibility with Java8. You can keep smaller values for sourceCompatibility. 
 
-Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available.
+Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available and recomended for release compilations.
 
 ```gradle
 
@@ -61,10 +61,10 @@ android {
     }
 }
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.46'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.46'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.50'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.50'
     
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.46'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.50'
 }
 ```
 
@@ -134,7 +134,7 @@ Available properties:
 | `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI  |
 | `call_default_crash_handler` | boolean | false | Propagate unhandler exceptions to the default handler (Crashalitics)  |
 
-## Customization <a name="customization"/>
+<!-- ## Customization <a name="customization"/> -->
 
 
 
@@ -142,27 +142,22 @@ Available properties:
 
 I'm really looking forward to create a small community around this library! You can use the [issues tab](https://github.com/rafaco/InAppDevTools/issues) to report bugs, request a feature or just to give me your feedback. Pull request are more than welcome.
 
-### Downloads  <a name="download"/>
-
-You don't normally need to manually download our library or our plugin as they are published in repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and build your project.
-
-- Our library is available at our [Bintray](https://bintray.com/rafaco/InAppDevTools/inappdevtools) repository and linked to [jCenter](https://bintray.com/bintray/jcenter?filterByPkgName=inappdevtools) (preconfigured)
-- Our plugin is available at [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) (preconfigured)
-- Our source repository is available at [GitHub](https://github.com/rafaco/InAppDevTools/) and you can download snapshots of every library version at [releases](https://github.com/rafaco/InAppDevTools/releases)
-- ~~Our sample app is be available to download from [Google Play](https://play.google.com).~~
-
 ### Building artifacts
 
-All artifacts are generated from this Git project, using different combinations of module and variant.
+Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the [installation](#setup) process and rebuild your project.
 
-| Artifact | Module | Variant | Description |
-| --- | --- | --- | --- |
-| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle|
-| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries |
-| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries |
-| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational |
-| es.rafaco.compat:support | compat | support | Compat library for Support libraries |
-| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries |
+All artifacts are generated from [this GitHub repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of module and variant.
+
+| Artifact | Module | Variant | Description | Publication |
+| --- | --- | --- | --- | --- |
+| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle| [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) |
+| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
+| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
+| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
+| es.rafaco.compat:support | compat | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
+| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
+| es.rafaco.iadt.demo | sample | androidx | Demo app  | ~~[Google Play](https://play.google.com)~~ |
+
 
 ### Continuous Integration <a name="ci"/>
 (Work in progress)
@@ -181,8 +176,7 @@ All artifacts are generated from this Git project, using different combinations 
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
-
-## About the author and the project
+### About the author
 
 I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. This is my first open source contribution and I'm looking forward to create a small community around.
 
