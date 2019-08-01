@@ -15,7 +15,9 @@ buildscript {
 ```
 
 
-On your module build.gradle: apply compat.gradle script, define a processor symbols per flavor and add this module as dependency
+On your module/s build.gradle:
+- apply compat.gradle script(//TODO!). 
+- Define a processor symbols per flavor if you already have then, otherwise copy and add this module as follows. To finish add a dynamic dependency to the compat library
 ```gradle
 apply from: '../compat/compat.gradle'
 
@@ -33,14 +35,25 @@ android{
     }
 }
 
+// Dynamic dependency base on selected productFlavors
+def compatVersion = "0.0.50"
+android.applicationVariants.all { variant ->
+    if (variant.flavorName == 'androidx'){
+        dependencies.androidxApi "es.rafaco.compat:androidx:$compatVersion"
+    }
+    else{
+        dependencies.supportApi "es.rafaco.compat:support:$compatVersion"
+    }
+}
+
 dependencies {
-    api project(path: ':compat')
+    (YOUR_DEPENDENCIES)
 }
 ```
 
-### 1. Imports in Java classes
+### 1. Conditional java sources
 
-Instead of duplicate your Java source, just to have different imports, you can use conditional imports base on previous preprocessor symbols. We will preprocess your sources for every build and comment/uncomment the right one.
+Instead of duplicate your Java classes for each library, you can use conditional source base on selected variant. Our pre-processor will comment/uncomment the right one at build time.
 
 ```java
 package com.namespace.yours;
@@ -53,19 +66,19 @@ import android.support.v7.widget.RecyclerView;
 
 public class YourClass {
 ``` 
+This is specially useful on imports as shown on the previous example. It can also be used anywhere on your java source files: package, class signature, method name, implementations, comments...
 
-### 2. Conditional imports in XML layouts
+### 2. Conditional namespace in XML layouts
 
-Instead of duplicate your XML layouts
-You can replace the namespace of standard view components to es.rafaco.compat. This will automatically apply the correct view component (support or androidx)
+Instead of duplicate your XML layouts, you can replace the namespace of standard view components to es.rafaco.compat. This will automatically apply the correct view component base on the build variant (support or androidx)
 
 ```xml
 <!-- Replace: 
-    <androidx.appcompat.widget.AppCompatButton  /> and
+    <androidx.appcompat.widget.AppCompatButton
+        .../> and
     <android.support.v7.widget.AppCompatButton  /> -->
 <!-- By: -->
 <es.rafaco.compat.AppCompatButton
-    android:id="@+id/button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 ``` 

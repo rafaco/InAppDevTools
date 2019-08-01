@@ -1,9 +1,7 @@
 # In-App DevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
 
 
-## Description
-
-**In-App DevTools is a set of developer tools that can be added to your debug compilation as a library. It's like Chrome DevTools but for Android apps and runnning on the same screen! (without cable and on the go). Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, networkactivity, info panels, flexible reports, classs/method tracker, coding helpers and much more.**
+**In-App DevTools is a set of developer tools that can be added to your debug compilation as a library. It's like Chrome DevTools but for Android apps and running on the same screen! (without cable and on the go). Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logs, view layout, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
@@ -51,7 +49,7 @@ allprojects {
 
 On your app build.gradle, you have to add targetCompatibility with Java8. You can keep smaller values for sourceCompatibility. 
 
-Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available and recomended for release compilations.
+Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available and recommended for release compilations.
 
 ```gradle
 
