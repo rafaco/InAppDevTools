@@ -30,8 +30,10 @@ public class ForegroundSyncSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                boolean hidden = IadtController.get().hide();
-                if (hidden) pendingRestoration = true;
+                if (IadtController.get().getCurrentOverlay()!=null){
+                    boolean hidden = IadtController.get().hide();
+                    pendingRestoration = hidden;
+                }
             }
         });
     }

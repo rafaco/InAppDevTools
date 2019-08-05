@@ -146,7 +146,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
     private void showPopupMenu(View view) {
 
-        Context wrapper = new ContextThemeWrapper(mContext, R.style.popupMenuStyle);
+        Context wrapper = new ContextThemeWrapper(mContext, R.style.LibPopupMenuStyle);
         PopupMenu popup = new PopupMenu(wrapper, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.screen, popup.getMenu());

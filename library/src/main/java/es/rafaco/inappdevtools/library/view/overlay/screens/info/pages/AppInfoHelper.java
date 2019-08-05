@@ -107,6 +107,10 @@ public class AppInfoHelper extends AbstractInfoHelper{
     }
 
 
+    public static String getAppBuildTimeNice(Context context){
+        return Humanizer.getElapsedTimeLowered(getAppBuildTime(context));
+    }
+
     public static long getAppBuildTime(Context context){
         long time;
         try {

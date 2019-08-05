@@ -36,7 +36,7 @@ public class InitialEventDetector extends EventDetector {
                 int pid = ThreadUtils.myPid();
                 long detectionDate = (Long) param;
 
-                //TODO: delay after App started
+                //TODO: delayed after App started
                 long improveStartTime = improveStartTime(detectionDate, pid);
 
                 Session session = new Session();

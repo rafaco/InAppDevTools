@@ -1,27 +1,27 @@
 <resources>
+
     <string name="library_name">InAppDevTools</string>
 
-    <string name="floating_widget">DevTool: Floating Widget</string>
-    <string name="create_floating_widget">Create Floating Widget</string>
-    <string name="floating_widget_label">DevTool</string>
-    <string name="floating_widget_details">Just login by now</string>
-    <string name="draw_other_app_permission_denied">Draw over other app permission not available. App won\'t work without permission. Please try again.</string>
+    <!-- Dialogs -->
+    <string name="welcome_privacy_title">Developer Tools</string>
+    <string name="welcome_privacy_content">This compilation contains developer tools that are locally recording everything for us. We will never send it without your explicit consent and only you can do it by using our reporting feature.\n\nIf you are not a developer or you are not agree, tap disable.</string>
+    <string name="welcome_permission_title">Overlay permission</string>
+    <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen you have to accept it, then press back button.</string>
+    <string name="welcome_enabled_title">Developer Tools enabled</string>
+    <string name="welcome_enabled_content">Our interface will pop up if your app crash.\n\nYou can inspect your running app at any time by shaking your device, tapping our notification or programmatically using Iadt.show().\n\nYou can also open it now.</string>
+    <string name="welcome_disabled_title">Disable Developer Tools</string>
+    <string name="welcome_disabled_content">Your app need to be restarted for a clean startup without our tools.\n\nTip: You can re-enable them by cleaning this application data.</string>
+    <string name="draw_other_app_permission_denied">InApp DevTools require \'draw over other apps\' permission</string>
 
-    <string name="hard_soft_info">Hardware and Software Information</string>
-    <string name="serial">SERIAL</string>
-    <string name="brand">Device Brand</string>
-    <string name="model">Device Model</string>
-    <string name="id">ID</string>
-    <string name="type">TYPE</string>
-    <string name="user">USER</string>
-    <string name="base">BASE</string>
-    <string name="incremental">Incremental</string>
-    <string name="sdk">Version SDK</string>
-    <string name="board">BOARD</string>
-    <string name="host">HOST</string>
-    <string name="fingerprint">FINGERPRINT</string>
-    <string name="versioncode">Version code</string>
+    <!-- Dialogs buttons-->
+    <string name="button_continue">CONTINUE</string>
+    <string name="button_disable">DISABLE&#8230;</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="button_close">CLOSE</string>
+    <string name="button_open_now">OPEN NOW</string>
+    <string name="button_disable_all">DISABLE AND RESTART</string>
 
+    <!-- Chuck -->
     <string name="chuck_ssl">SSL</string>
     <string name="chuck_duration">Duration</string>
     <string name="chuck_request_size">Request size</string>

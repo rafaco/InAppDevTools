@@ -18,9 +18,7 @@ public class EventSubscribersManager {
     }
 
     private void initItems() {
-        if(Iadt.isDebug()){
-            initItem(OverlayNavigationSubscriber.class);
-        }
+        initItem(OverlayNavigationSubscriber.class);
         initItem(ForegroundInitSubscriber.class);
         initItem(ForegroundSyncSubscriber.class);
     }

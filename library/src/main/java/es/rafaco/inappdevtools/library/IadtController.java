@@ -49,7 +49,6 @@ public final class IadtController extends ContentProvider {
     private EventManager eventManager;
     private SourcesManager sourcesManager;
     private RunnablesManager runnablesManager;
-    private boolean notHostProcess;
     private boolean isPendingForegroundInit;
     private String currentOverlayScreen;
 
@@ -61,9 +60,7 @@ public final class IadtController extends ContentProvider {
 
     public static IadtController get() {
         if (INSTANCE == null) {
-            // Not the host process
             IadtController iadtController = new IadtController();
-            iadtController.notHostProcess = true;
             iadtController.onCreate();
         }
         return INSTANCE;
@@ -113,6 +110,24 @@ public final class IadtController extends ContentProvider {
     }
 
     private void initForeground(){
+        if (FirstStartUtil.isFirstStart()){
+            WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            onInitForeground();
+                        }
+                    },
+                    null);
+            FirstStartUtil.saveFirstStart();
+        }
+        else{
+            onInitForeground();
+        }
+    }
+
+    private void onInitForeground(){
+        isPendingForegroundInit = false;
         Log.d(Iadt.TAG, "Initializing foreground services...");
 
         if (PendingCrashUtil.isPending()){
@@ -120,13 +135,6 @@ public final class IadtController extends ContentProvider {
             Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
             getAppContext().startService(intent);
             PendingCrashUtil.clearPending();
-        }
-        else if (FirstStartUtil.isFirstStart()){
-            // IsFirstStart, we open WelcomeDialog
-            Intent intent = new Intent(getAppContext(), WelcomeDialogActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getAppContext().startActivity(intent);
-            FirstStartUtil.saveFirstStart();
         }
         else{
             if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
@@ -209,17 +217,28 @@ public final class IadtController extends ContentProvider {
 
     public void show() {
         if (!isEnabled()) return;
-        if (isPendingForegroundInit) return;
 
-        //TODO: control fail back
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            show();
-                        }
-                    }, null);
+        if (isPendingForegroundInit) {
+            initForegroundIfPending();
+            if (!isPendingForegroundInit)
+                return;
+        }
+        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+                WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                show();
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Iadt.showMessage(R.string.draw_other_app_permission_denied);
+                            }
+                        });
+            }
             return;
         }
 
@@ -230,7 +249,6 @@ public final class IadtController extends ContentProvider {
     public boolean hide() {
         if (!isEnabled()
                 || isPendingForegroundInit){
-                //|| IadtController.get().getCurrentOverlay() == null){
             return false;
         }
 
@@ -300,7 +318,7 @@ public final class IadtController extends ContentProvider {
         currentOverlayScreen = stringClassName;
     }
 
-    public String  getCurrentOverlay() {
+    public String getCurrentOverlay() {
         return currentOverlayScreen;
     }
 
@@ -350,7 +368,7 @@ public final class IadtController extends ContentProvider {
 
     //endregion
 
-    //region [ LEGACY METHODS FROM extending ContentProvider ]
+    //region [ LEGACY METHODS: from extending ContentProvider ]
 
     @Nullable
     @Override

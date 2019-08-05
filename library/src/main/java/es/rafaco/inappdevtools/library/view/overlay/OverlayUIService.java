@@ -129,7 +129,7 @@ public class OverlayUIService extends Service {
         if (initialised)
             return true;
 
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+        if (false){ //!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             //TODO: remove
             throw new UnsupportedOperationException("Alguien ha llamado a OverlayUIService desde fuera!!!");
         }
@@ -173,11 +173,6 @@ public class OverlayUIService extends Service {
     private void processIntentAction(IntentAction action, String target, String params) {
         if (!isInitialised())
             return;
-
-        //Restore previous request on permission granted
-        if (action.equals(IntentAction.PERMISSION_GRANTED)) {
-            //TODO: remove
-        }
 
         if (action.equals(IntentAction.NAVIGATE_HOME)){
             navigateHome();

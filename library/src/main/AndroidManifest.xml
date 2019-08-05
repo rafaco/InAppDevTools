@@ -37,7 +37,7 @@
 
         <activity
             android:name=".view.activities.PermissionActivity"
-            android:theme="@style/LibTheme.Dialog" />
+            android:theme="@style/LibTheme.Translucent" />
 
         <activity android:name=".view.activities.WelcomeDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>

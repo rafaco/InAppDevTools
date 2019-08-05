@@ -113,9 +113,19 @@ public class RunScreen extends OverlayScreen {
                     @Override
                     public void run() {
                         IadtController.get().hide();
-                        Intent intent = new Intent(getContext(), WelcomeDialogActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getContext().startActivity(intent);
+                        WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.DISABLE,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Iadt.showMessage("Developer tools disabled!");
+                                    }
+                                },
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Iadt.showMessage("Developer tools NOT disabled");
+                                    }
+                                });
                     }
                 }));
     }

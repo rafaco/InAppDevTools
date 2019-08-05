@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:theme="@style/LibActionBarTheme"
-                app:popupTheme="@style/popupMenuStyle"
+                app:popupTheme="@style/LibPopupMenuStyle"
                 android:contentInsetLeft="0dp"
                 android:contentInsetStart="0dp"
                 app:contentInsetLeft="0dp"
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:theme="@style/LibActionBarTheme"
-                app:popupTheme="@style/popupMenuStyle"
+                app:popupTheme="@style/LibPopupMenuStyle"
                 app:collapseIcon="@drawable/ic_close_white_24dp"/>
 
         </LinearLayout>

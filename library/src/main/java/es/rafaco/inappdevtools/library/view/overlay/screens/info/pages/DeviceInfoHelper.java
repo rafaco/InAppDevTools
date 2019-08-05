@@ -53,8 +53,8 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
     public InfoReport getInfoReport() {
         InfoGroup model = new InfoGroup.Builder("")
                 .add("Form factor", getDeviceType())
-                .add(context.getString(R.string.brand), Build.BRAND)
-                .add(context.getString(R.string.model), Build.MODEL)
+                .add("Brand", Build.BRAND)
+                .add("Model", Build.MODEL)
                 .add("isEmulator", configHelper.isRunningOnEmulator())
                 .build();
 
