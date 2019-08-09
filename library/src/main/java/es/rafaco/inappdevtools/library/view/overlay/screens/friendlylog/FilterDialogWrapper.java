@@ -1,7 +1,9 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,9 +37,9 @@ public class FilterDialogWrapper {
     }
 
     public AlertDialog prepare() {
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
-                .setTitle("Log filter")
+        ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
+                .setTitle("Log filters")
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -54,7 +56,7 @@ public class FilterDialogWrapper {
                     }
                 });
 
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(ctw);
         View dialogView = inflater.inflate(R.layout.tool_friendlylog_dialog, null);
         alertDialogBuilder.setView(dialogView);
 
@@ -131,6 +133,7 @@ public class FilterDialogWrapper {
 
         dialog = alertDialogBuilder.create();
         dialog.getWindow().setType(OverlayLayer.getLayoutType());
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.widget_full_shape);
 
         return dialog;
     }

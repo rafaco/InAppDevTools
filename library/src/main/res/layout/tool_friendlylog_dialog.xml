@@ -9,23 +9,8 @@
         android:layout_height="wrap_content"
         android:text="Current overview"
         android:textSize="18dp"
-        style="@style/content_margin"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/rally_blue"/>
-
-
-    <es.rafaco.compat.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Available filters: "
-        android:textSize="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        style="@style/content_margin"/>
+        style="@style/content_margin"
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

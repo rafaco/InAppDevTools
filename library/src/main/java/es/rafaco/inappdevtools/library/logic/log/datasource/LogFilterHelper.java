@@ -45,7 +45,7 @@ public class LogFilterHelper {
 
     public String getOverview(){
         AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getFilter()).get(0);
-        String result = Humanizer.fullStop() + "Currently showing ";
+        String result = "Currently showing ";
 
         if (TextUtils.isEmpty(filter.getText())
                 && getTypeInt() == 0
@@ -111,7 +111,7 @@ public class LogFilterHelper {
                 currentAnalysisItem.getPercentage(),
                 currentAnalysisItem.getCount(),
                 analysis.getTotalLogSize());
-        result += Humanizer.fullStop();
+        //result += Humanizer.fullStop();
 
         return result;
     }

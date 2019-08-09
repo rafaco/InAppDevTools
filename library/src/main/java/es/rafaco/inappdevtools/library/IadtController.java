@@ -288,10 +288,11 @@ public final class IadtController extends ContentProvider {
                             crash = IadtController.get().getDatabase().crashDao().findById((long) param);
                         }
                         if (crash == null) {
-                            Iadt.showError("Unable to found it");
-                            return;
+                            Iadt.showError("Unable to found a crash to report");
                         }
-                        new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
+                        else {
+                            new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
+                        }
                     }
                 });
                 break;

@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
@@ -71,14 +72,13 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     public String getRunningThreads() {
 
         StringBuilder result = new StringBuilder(Humanizer.newLine());
-        StopWatch counter = new StopWatch("getAllThreads()");
         Thread[] allThreads = ThreadUtils.getAllThreads();
-        counter.step("Process result");
 
-//        StopWatch counter2 = new StopWatch("getAllStacktraces()");
-//        Set<Thread> allStacktraces = ThreadUtils.getAllStacktraces();
-//        counter2.step("Process result");
-
+        /*StopWatch counter2 = new StopWatch("getAllStacktraces()");
+        Set<Thread> allStacktraces = ThreadUtils.getAllStacktraces();
+        counter2.step("Process result");
+        Log.d(Iadt.TAG, counter.finish());
+        Log.d(Iadt.TAG, counter2.finish());*/
 
         ThreadGroup previousGroup = null;
         int previousGroupStart = 0;
@@ -123,8 +123,6 @@ public class LiveInfoHelper extends AbstractInfoHelper {
                             + (nullCount!=0 ? " (" + nullCount + " nulls)" : "")
                             + Humanizer.newLine());
         }
-
-        Log.d(Iadt.TAG, counter.finish());
         return result.toString();
     }
 

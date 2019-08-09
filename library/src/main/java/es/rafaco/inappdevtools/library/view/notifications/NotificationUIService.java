@@ -39,9 +39,9 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class NotificationUIService extends Service {
 
-    private static final int NOTIFICATION_ID = 3456;
-    private static final String CHANNEL_ID = "es.rafaco.devtools";
-    private static final String GROUP_ID = "es.rafaco.devtools.foreground_service";
+    private static final int NOTIFICATION_ID = 3002;
+    private static final String CHANNEL_ID = "es.rafaco.iadt";
+    private static final String GROUP_ID = "es.rafaco.iadt.foreground_service";
     private static final int SUMMARY_ID = 0;
 
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";

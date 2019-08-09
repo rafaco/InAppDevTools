@@ -25,8 +25,8 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    private static final int OVERLAY_REQUEST_CODE = 1222;
-    private static final int STORAGE_REQUEST_CODE = 1333;
+    private static final int OVERLAY_REQUEST_CODE = 3000;
+    private static final int STORAGE_REQUEST_CODE = 3001;
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     private static Runnable onGrantedCallback;
     private static Runnable onRevokeCallback;

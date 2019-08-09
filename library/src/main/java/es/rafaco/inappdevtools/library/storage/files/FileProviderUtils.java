@@ -19,6 +19,8 @@ import java.io.File;
 
 public class FileProviderUtils {
 
+    public static final String ROOT_FOLDER = "iadt";
+
     public static String getAuthority(Context context) {
         return context.getApplicationContext().getPackageName() + ".iadt.files";
     }

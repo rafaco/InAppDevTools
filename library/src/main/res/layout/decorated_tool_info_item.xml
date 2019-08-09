@@ -68,7 +68,6 @@
             android:layout_below="@id/title"
             android:layout_toRightOf="@id/head_icon"
             android:layout_toLeftOf="@id/buttons_wrapper"
-            android:text="You choose between bug or a suggestion, as well as what attachments you want to include. Later in gmail you can add additional comments."
             android:ellipsize="end"
             android:maxLines="3"
             android:textColor="@color/rally_white"
