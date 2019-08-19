@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.log.datasource;
+package es.rafaco.inappdevtools.library.logic.log.filter;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,29 +10,31 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class LogFilterHelper {
+public class LogUiFilter {
 
-    private LogAnalysisHelper analysis;
+    public enum Preset { ALL, EVENTS_ALL, EVENTS_INFO, LOGCAT_ALL, LOGCAT_INFO, CUSTOM}
     private LogFilter filter;
     private int sessionInt;
     private int severityInt;
     private int typeInt;
     private int categoryInt;
     private int tagInt;
+    private LogAnalysisHelper analysis;
 
-    public LogFilterHelper() {
-        this(new LogFilter());
-        defaultFilter();
-    }
-
-    public LogFilterHelper(LogFilter filter) {
+    public LogUiFilter(LogFilter filter) {
         this.filter = filter;
         this.analysis = new LogAnalysisHelper();
+    }
+
+    public LogUiFilter(Preset preset) {
+        this(new LogFilter());
+        applyPreset(preset);
     }
 
     public LogFilter getFilter() {
@@ -43,11 +45,13 @@ public class LogFilterHelper {
         this.filter = filter;
     }
 
+    //region [ OVERVIEW ]
+
     public String getOverview(){
         AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getFilter()).get(0);
         String result = "Currently showing ";
 
-        if (TextUtils.isEmpty(filter.getText())
+        if (TextUtils.isEmpty(getText())
                 && getTypeInt() == 0
                 && getSessionInt() == 0
                 && getSeverityInt() == 0
@@ -90,8 +94,8 @@ public class LogFilterHelper {
             result += filter.getSubcategories().get(0) + " logcat" +  ", ";
         }
 
-        if (!TextUtils.isEmpty(filter.getText())){
-            result += "containing '" + filter.getText() + "'" + ", ";
+        if (!TextUtils.isEmpty(getText())){
+            result += "containing '" + getText() + "'" + ", ";
         }
 
         //remove last comma separator
@@ -116,16 +120,16 @@ public class LogFilterHelper {
         return result;
     }
 
+    //endregion
+
     //region [ TEXT ]
 
-    public void setTextFilter(String text) {
+    public void setText(String text) {
         filter.setText(text);
     }
 
-    public void setSeverityInt(int selectedSeverity) {
-        this.severityInt = selectedSeverity;
-        filter.setSeverities(getSeveritiesFromSelected(selectedSeverity));
-        Log.v(Iadt.TAG, "SeverityInt changed to: " + selectedSeverity + " (" + getSeverityShortString() + ")");
+    private String getText() {
+        return filter.getText();
     }
 
     //endregion
@@ -186,6 +190,16 @@ public class LogFilterHelper {
 
     //region [ SEVERITY ]
 
+    public int getSeverityInt() {
+        return severityInt;
+    }
+
+    public void setSeverityInt(int selectedSeverity) {
+        this.severityInt = selectedSeverity;
+        filter.setSeverities(getFilterSeverities(selectedSeverity));
+        Log.v(Iadt.TAG, "SeverityInt changed to: " + selectedSeverity + " (" + getSeverityShortString() + ")");
+    }
+
     public List<String> getSeverityOptions() {
         String[] levelsArray = IadtController.get().getAppContext().getResources()
                 .getStringArray(R.array.log_levels);
@@ -194,10 +208,6 @@ public class LogFilterHelper {
             list.add(item + " XX%");
         }
         return list;
-    }
-
-    public int getSeverityInt() {
-        return severityInt;
     }
 
     public String getSeverityShortString(){
@@ -210,7 +220,7 @@ public class LogFilterHelper {
         return Humanizer.toCapitalCase(levelsArray[severityInt]);
     }
 
-    protected List<String> getSeveritiesFromSelected(int selected) {
+    protected List<String> getFilterSeverities(int selected) {
         List<String> levels = Arrays.asList("V", "D", "I", "W", "E");
         return levels.subList(selected, levels.size());
     }
@@ -279,7 +289,9 @@ public class LogFilterHelper {
 
     //endregion
 
-    //region [ TAGS / SUBCATEGORIES ]
+    //region [ TAGS ]
+    //TODO: multiple tags selection
+    // At UI, a dialog selector with checkboxes could work
 
     public List<String> getTagList() {
         ArrayList<String> list = new ArrayList<>();
@@ -313,8 +325,20 @@ public class LogFilterHelper {
 
     //endregion
 
-    private void defaultFilter() {
-        setTextFilter("");
+    //region [ PRESETS ]
+    //TODO: custom presets defined from host app
+
+    public void applyPreset(Preset preset) {
+        if (preset.equals(Preset.EVENTS_INFO)){
+            applyEventsInfoPreset();
+        }
+        else if (preset.equals(Preset.ALL)){
+            applyEventInfoPreset();
+        }
+    }
+
+    private void applyEventsInfoPreset() {
+        setText("");
         setSessionInt(1);   //Current
         setSeverityInt(2);  //Info
         setTypeInt(1);      //Events
@@ -322,12 +346,14 @@ public class LogFilterHelper {
         setTagInt(0, "All");
     }
 
-    public void disableAll() {
-        setTextFilter("");
+    public void applyEventInfoPreset() {
+        setText("");
         setSessionInt(0);
         setSeverityInt(0);
         setTypeInt(0);
         setCategoryInt(0, "All");
         setTagInt(0, "All");
     }
+
+    //endregion
 }

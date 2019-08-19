@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.logic.log.filter;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -20,17 +20,18 @@ import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.log.datasource.LogFilterHelper;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogAdapter;
 
-public class FilterDialogWrapper {
+public class LogFilterDialog {
 
     private final Context context;
     FriendlyLogAdapter adapter;
-    LogFilterHelper helper;
+    LogUiFilter helper;
     private AlertDialog dialog;
+    private AppCompatTextView currentOverview;
 
-    public FilterDialogWrapper(Context context, FriendlyLogAdapter adapter, LogFilterHelper helper) {
+    public LogFilterDialog(Context context, FriendlyLogAdapter adapter, LogUiFilter helper) {
         this.context = context;
         this.adapter = adapter;
         this.helper = helper;
@@ -50,7 +51,7 @@ public class FilterDialogWrapper {
                 .setNegativeButton("Show all", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        helper.disableAll();
+                        helper.applyPreset(LogUiFilter.Preset.ALL);
                         adapter.getCurrentList().getDataSource().invalidate();
                         dialog.dismiss();
                     }
@@ -60,14 +61,15 @@ public class FilterDialogWrapper {
         View dialogView = inflater.inflate(R.layout.tool_friendlylog_dialog, null);
         alertDialogBuilder.setView(dialogView);
 
-        AppCompatTextView currentOverview = dialogView.findViewById(R.id.current_label);
-        currentOverview.setText(helper.getOverview());
+        currentOverview = dialogView.findViewById(R.id.current_label);
+        updateOverview();
 
         addFilterLine(dialogView, R.id.session_spinner, helper.getSessionOptions(), helper.getSessionInt(),
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         helper.setSessionInt(position);
+                        updateOverview();
                         adapter.getCurrentList().getDataSource().invalidate();
                     }
                     @Override
@@ -80,6 +82,7 @@ public class FilterDialogWrapper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 helper.setTypeInt(position);
+                updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
             @Override
@@ -91,6 +94,7 @@ public class FilterDialogWrapper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 helper.setSeverityInt(position);
+                updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
             @Override
@@ -107,6 +111,7 @@ public class FilterDialogWrapper {
                     realCategory = fullString.substring(0, fullString.indexOf(" "));
                 }
                 helper.setCategoryInt(position, realCategory);
+                updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
             @Override
@@ -123,6 +128,7 @@ public class FilterDialogWrapper {
                     realCategory = fullString.substring(0, fullString.indexOf(" "));
                 }
                 helper.setTagInt(position, realCategory);
+                updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
 
@@ -136,6 +142,10 @@ public class FilterDialogWrapper {
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.widget_full_shape);
 
         return dialog;
+    }
+
+    private void updateOverview() {
+        currentOverview.setText(helper.getOverview());
     }
 
     public AlertDialog getDialog() {

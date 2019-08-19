@@ -6,6 +6,7 @@ package es.rafaco.inappdevtools.library.logic.log.datasource;
 import android.arch.paging.DataSource;
 //#endif
 
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 

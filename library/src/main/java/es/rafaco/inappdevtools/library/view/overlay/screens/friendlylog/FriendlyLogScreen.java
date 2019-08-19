@@ -42,7 +42,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
-import es.rafaco.inappdevtools.library.logic.log.datasource.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterDialog;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -64,9 +65,9 @@ public class FriendlyLogScreen extends OverlayScreen {
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
     private LogcatReaderService myService;
-    private LogFilterHelper filterHelper;
+    private LogUiFilter logUiFilter;
+    private LogFilterDialog filterDialog;
     private boolean isBind;
-    private FilterDialogWrapper filterDialogWrapper;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -112,7 +113,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void initFilterHelper() {
-        filterHelper = getParams();
+        logUiFilter = getParams();
     }
 
     @Override
@@ -121,8 +122,8 @@ public class FriendlyLogScreen extends OverlayScreen {
         LogcatReaderService.start(getContext(), "Update");
 
         //updateParams();
-        if (filterDialogWrapper!=null && filterDialogWrapper.getDialog()!=null){
-            filterDialogWrapper.getDialog().dismiss();
+        if (filterDialog !=null && filterDialog.getDialog()!=null){
+            filterDialog.getDialog().dismiss();
         }
 
         if (isBind) {
@@ -220,7 +221,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
-        dataSourceFactory = new LogDataSourceFactory(dao, filterHelper.getFilter());
+        dataSourceFactory = new LogDataSourceFactory(dao, logUiFilter.getFilter());
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
     }
 
@@ -269,14 +270,14 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onTuneButton() {
-        filterDialogWrapper = new FilterDialogWrapper(getContext(), adapter, filterHelper);
-        filterDialogWrapper.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+        filterDialog = new LogFilterDialog(getContext(), adapter, logUiFilter);
+        filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 updateParams();
             }
         });
-        filterDialogWrapper.getDialog().show();
+        filterDialog.getDialog().show();
     }
 
     private void onLevelButton() {
@@ -285,11 +286,11 @@ public class FriendlyLogScreen extends OverlayScreen {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("Select log level")
                 .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, filterHelper.getSeverityInt(), new DialogInterface.OnClickListener(){
+                .setSingleChoiceItems(levelsArray, logUiFilter.getSeverityInt(), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which != filterHelper.getSeverityInt()) {
-                            filterHelper.setSeverityInt(which);
+                        if (which != logUiFilter.getSeverityInt()) {
+                            logUiFilter.setSeverityInt(which);
                             adapter.getCurrentList().getDataSource().invalidate();
                         }
                         dialog.dismiss();
@@ -387,19 +388,20 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     //region [ PARAMS ]
 
-    public LogFilterHelper getParams(){
+    public LogUiFilter getParams(){
         if (TextUtils.isEmpty(getParam())){
-          return new LogFilterHelper();
+            //TODO: should it be Log Filter????
+          return new LogUiFilter();
         }
         Gson gson = new Gson();
-        return gson.fromJson(super.getParam(), LogFilterHelper.class);
+        return gson.fromJson(super.getParam(), LogUiFilter.class);
     }
 
     public void updateParams(){
-        super.updateParam(buildParams(filterHelper));
+        super.updateParam(buildParams(logUiFilter));
     }
 
-    public static String buildParams(LogFilterHelper filterHelper){
+    public static String buildParams(LogUiFilter filterHelper){
         Gson gson = new Gson();
         return gson.toJson(filterHelper);
     }

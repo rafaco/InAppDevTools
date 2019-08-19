@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.logic.log.datasource;
+package es.rafaco.inappdevtools.library.logic.log.filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class LogFilter {
         this.severities = severities;
     }
 
-    protected List<String> getSeverities(){
+    public List<String> getSeverities(){
         return severities;
     }
 

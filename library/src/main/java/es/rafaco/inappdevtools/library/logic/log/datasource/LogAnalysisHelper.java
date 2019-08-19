@@ -10,12 +10,12 @@ import android.arch.persistence.db.SimpleSQLiteQuery;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 
 public class LogAnalysisHelper {
 
     public LogAnalysisHelper() {
-
     }
 
     public List<AnalysisItem> getSessionResult(){
