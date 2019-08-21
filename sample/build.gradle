@@ -111,6 +111,6 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
-    debug = true
+    debug = false
     email = 'inappdevtools@gmail.com'
 }

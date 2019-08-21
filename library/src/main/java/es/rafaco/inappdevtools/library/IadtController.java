@@ -89,12 +89,14 @@ public final class IadtController extends ContentProvider {
         eventManager = new EventManager(appContext);
         runnablesManager = new RunnablesManager((appContext));
 
-        ThreadUtils.runOnBack(new Runnable() {
-            @Override
-            public void run() {
-                DevToolsDatabase.getInstance().printOverview();
-            }
-        });
+        if (isDebug()){
+            ThreadUtils.runOnBack(new Runnable() {
+                @Override
+                public void run() {
+                    DevToolsDatabase.getInstance().printOverview();
+                }
+            });
+        }
 
         if (!AppUtils.isForegroundImportance(context)){
             isPendingForegroundInit = true;

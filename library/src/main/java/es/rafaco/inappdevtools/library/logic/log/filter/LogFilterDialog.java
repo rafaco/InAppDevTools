@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -83,7 +84,9 @@ public class LogFilterDialog {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 helper.setTypeInt(position);
                 updateOverview();
-                adapter.getCurrentList().getDataSource().invalidate();
+                if (adapter != null && adapter.getCurrentList() != null){
+                    adapter.getCurrentList().getDataSource().invalidate();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

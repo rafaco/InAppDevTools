@@ -52,7 +52,7 @@ public class ActivityEventDetector extends EventDetector implements Application.
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("I", "App", "Navigation",
-                        "Open " + ((Activity) param).getClass().getSimpleName());
+                        "Navigation to " + ((Activity) param).getClass().getSimpleName());
             }
         });
 

@@ -390,8 +390,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     public LogUiFilter getParams(){
         if (TextUtils.isEmpty(getParam())){
-            //TODO: should it be Log Filter????
-          return new LogUiFilter();
+          return new LogUiFilter(LogUiFilter.Preset.EVENTS_INFO);
         }
         Gson gson = new Gson();
         return gson.fromJson(super.getParam(), LogUiFilter.class);

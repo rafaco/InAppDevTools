@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.InitialEventDetector;
@@ -72,14 +73,16 @@ public class EventDetectorsManager {
 
     private void startAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(Iadt.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
             eventDetector.start();
         }
     }
 
     private void stopAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
             eventDetector.stop();
         }
     }

@@ -333,7 +333,7 @@ public class LogUiFilter {
             applyEventsInfoPreset();
         }
         else if (preset.equals(Preset.ALL)){
-            applyEventInfoPreset();
+            applyAllPreset();
         }
     }
 
@@ -346,7 +346,7 @@ public class LogUiFilter {
         setTagInt(0, "All");
     }
 
-    public void applyEventInfoPreset() {
+    public void applyAllPreset() {
         setText("");
         setSessionInt(0);
         setSeverityInt(0);

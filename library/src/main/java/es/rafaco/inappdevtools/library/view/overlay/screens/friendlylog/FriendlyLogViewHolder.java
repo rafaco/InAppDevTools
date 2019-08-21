@@ -2,6 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Build;
 
 //#ifdef ANDROIDX
@@ -70,29 +71,36 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         uid = data.getUid();
 
         int bgColorId = isSelected ? R.color.rally_bg_blur : R.color.rally_bg_solid;
-        int contextualizedColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
-        wrapper.setBackgroundColor(contextualizedColor);
+        int bgColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
+        wrapper.setBackgroundColor(bgColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             itemView.setElevation(isSelected ? 5 : 0);
         }
 
+        int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
+        decorator.setBackgroundColor(severityColor);
+
+        boolean isLogcat = data.getCategory().equals("Logcat");
+        if (isLogcat){
+            title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
+        }else{
+            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
+        }
+        title.setTextColor(severityColor);
         title.setVisibility(View.VISIBLE);
         title.setText(data.getMessage());
         title.setSingleLine(!isSelected);
         title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
         title.setBackgroundColor(Color.TRANSPARENT);
 
-        contextualizedColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
-        decorator.setBackgroundColor(contextualizedColor);
-
         int icon = FriendlyLog.getIcon(data);
         if (icon != -1){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 this.icon.setImageDrawable(itemView.getContext().getDrawable(icon));
-                this.icon.setColorFilter(contextualizedColor);
             } else {
                 this.icon.setImageDrawable(itemView.getContext().getResources().getDrawable(icon));
             }
+            this.icon.setColorFilter(severityColor);
             this.icon.setVisibility(View.VISIBLE);
             this.icon.setBackgroundColor(Color.TRANSPARENT);
         }else{
@@ -115,7 +123,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
                     OverlayUIService.performNavigationStep(FriendlyLogViewHolder.this.getLink(data));
                 }
             });
-            extra_button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+            extra_button.getBackground().setColorFilter(severityColor, PorterDuff.Mode.MULTIPLY);
             extra_button.setVisibility(View.VISIBLE);
         }else{
             extra_button.setOnClickListener(null);
