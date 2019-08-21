@@ -47,12 +47,13 @@ android {
 
 // Dynamic dependencies for Compat module (AndroidX/Support)
 android.applicationVariants.all { variant ->
-    if (variant.buildType.name == "debug") {
+    /*if (variant.buildType.name == "debug") {
         dependencies {
             debugApi project(path: ':compat')
         }
     }
-    else if (variant.flavorName == 'androidx'){
+    else */
+    if (variant.flavorName == 'androidx'){
         dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
     }
     else{
