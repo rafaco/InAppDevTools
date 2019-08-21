@@ -118,12 +118,12 @@
     <style name="TextMonospaceSmall">
         <item name="android:typeface">monospace</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">10dp</item>
         <item name="android:textColor">@color/rally_white</item>
     </style>
 
     <style name="TextMonospaceMedium" parent="TextMonospaceSmall">
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
 

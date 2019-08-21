@@ -289,9 +289,9 @@ public class FriendlyLog {
             }
             return R.drawable.ic_developer_mode_white_24dp;
         }
-        else if (log.getCategory().equals("Logcat")){
+        /*else if (log.getCategory().equals("Logcat")){
             return R.drawable.ic_android_white_24dp;
-        }
+        }*/
         return -1;
     }
 

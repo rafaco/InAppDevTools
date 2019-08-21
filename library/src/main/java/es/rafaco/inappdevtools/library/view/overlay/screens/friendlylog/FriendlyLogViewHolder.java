@@ -69,6 +69,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
 
     public void bindTo(final Friendly data, boolean isSelected) {
         uid = data.getUid();
+        boolean isLogcat = data.getCategory().equals("Logcat");
 
         int bgColorId = isSelected ? R.color.rally_bg_blur : R.color.rally_bg_solid;
         int bgColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
@@ -78,13 +79,14 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
         }
 
         int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
+
         decorator.setBackgroundColor(severityColor);
 
-        boolean isLogcat = data.getCategory().equals("Logcat");
         if (isLogcat){
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
         }else{
             title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
+            title.setTypeface(title.getTypeface(), Typeface.BOLD);
         }
         title.setTextColor(severityColor);
         title.setVisibility(View.VISIBLE);

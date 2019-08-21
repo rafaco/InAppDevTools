@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:layout_marginLeft="2dp">
 
             <es.rafaco.compat.AppCompatTextView
                 android:id="@+id/extras_over"
