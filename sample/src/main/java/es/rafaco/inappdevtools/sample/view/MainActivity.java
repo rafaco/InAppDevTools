@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         Controller controller = new Controller();
         controller.start(getApplicationContext());
-
-        Log.d(SampleApp.TAG, "MainActivity onCreate() performed");
     }
 
     @Override

@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 
 public class LogcatReaderService extends IntentService {
@@ -57,13 +57,17 @@ public class LogcatReaderService extends IntentService {
     private Long lastInsertTime = DateUtils.getLong();
     private Timer processQueueTimer = new Timer(false);
     private TimerTask processQueueTimerTask;
+    private Intent bindingIntent;
 
     private int ignoredCounter = 0;
     private int readCounter = 0;
     private int nullDiscardCounter = 0;
     private int sameDiscardCounter = 0;
     private int insertedCounter = 0;
-    private Intent bindingIntent;
+
+    private List<Friendly> previousStartDateLines;
+    private boolean startDateDuplicationPassed;
+    private int startDateDiscardCounter = 0;
 
     public LogcatReaderService() {
         super("LogcatReaderService");
@@ -119,7 +123,7 @@ public class LogcatReaderService extends IntentService {
     }
 
     public void performAction(String action, String param) {
-        Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService " + action + "-" + param));
+        if (isDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService " + action + "-" + param));
         
         if (action != null && action.equals(CANCEL_ACTION)) {
             onCancelled(param);
@@ -142,8 +146,15 @@ public class LogcatReaderService extends IntentService {
     }
 
     private void exit() {
-        if (logcatProcess != null)
+        try {
+            if (logcatProcess != null) {
+                logcatProcess.exitValue();
+                logcatProcess = null;
+            }
+        }
+        catch(IllegalThreadStateException e) {
             logcatProcess.destroy();
+        }
         stopSelf();
     }
 
@@ -171,18 +182,21 @@ public class LogcatReaderService extends IntentService {
         if (true){
             command += " -d";
         }
-        long lastLogcat = LastLogcatUtil.get();
-        if (lastLogcat != 0){
-            String logcatTime = DateUtils.formatLogcatDate(lastLogcat);
-            command += " -t '" + logcatTime + "'";
-        }
-        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
 
+        boolean filterByDate = LastLogcatUtil.get() != 0;
+        if (filterByDate){
+            String logcatTime = DateUtils.formatLogcatDate(LastLogcatUtil.get());
+            command += " -t '" + logcatTime + "'";
+            previousStartDateLines = IadtController.getDatabase().friendlyDao().filterByDate(LastLogcatUtil.get());
+        }else{
+            previousStartDateLines = new ArrayList<>();
+        }
+
+        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
         if (isDebug()) Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
 
         if (logcatProcess != null)
             logcatProcess.destroy();
-
         try {
             logcatProcess = Runtime.getRuntime().exec(fullCommand);
         }
@@ -205,9 +219,12 @@ public class LogcatReaderService extends IntentService {
             while (isReaderRunning
                     && !isCancelled
                     && (line = reader.readLine())!= null) {
+
                 readCounter ++;
 
-                if (!checkEmptyLines(line) && !checkIgnored(line)) {
+                if (!checkEmptyLines(line)
+                        && !checkIgnored(line)
+                        && !checkStartDateDuplication(line)) {
                     queue.add(line);
                     processQueueIfNeeded();
                 }
@@ -322,6 +339,26 @@ public class LogcatReaderService extends IntentService {
         return false;
     }
 
+    private boolean checkStartDateDuplication(String newLine) {
+        if(!startDateDuplicationPassed){
+            if (previousStartDateLines.size()<1){
+                startDateDuplicationPassed = true;
+                return false;
+            }
+
+            for (Friendly line: previousStartDateLines) {
+                if (newLine.contains(line.getMessage())){
+                    startDateDiscardCounter++;
+                    previousStartDateLines.remove(line);
+                    //if (isDebug())
+                        //Log.v(Iadt.TAG, "LogcatReaderService detected initial duplication. Total is " + startDateDiscardCounter);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //endregion
 
     //region [ INJECT TO DB ]
@@ -398,9 +435,9 @@ public class LogcatReaderService extends IntentService {
             Log.v(Iadt.TAG, "LogcatReaderService onDestroy" );
             Log.v(Iadt.TAG, "LogcatReaderService isReaderRunning = " + (isReaderRunning ==true ? "true" : "false"));
             Log.v(Iadt.TAG, "LogcatReaderService isInjectorRunning = " + (isInjectorRunning ==true ? "true" : "false"));
+            Log.d(Iadt.TAG, String.format("LogcatReaderService inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
+                    insertedCounter, readCounter, ignoredCounter, nullDiscardCounter, sameDiscardCounter));
         }
-        Log.d(Iadt.TAG, String.format("LogcatReaderService inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
-                insertedCounter, readCounter, ignoredCounter, nullDiscardCounter, sameDiscardCounter));
         super.onDestroy();
     }
 
@@ -413,7 +450,7 @@ public class LogcatReaderService extends IntentService {
 
     private long getMaxQueueTime(){
         String currentOverlay = IadtController.get().getCurrentOverlay();
-        if (currentOverlay == null || !currentOverlay.equals(FriendlyLogScreen.class.getSimpleName())){
+        if (currentOverlay == null || !currentOverlay.equals(LogScreen.class.getSimpleName())){
             return BACKGROUND_MAX_TIME;
         }else{
             return LIVE_MAX_TIME;
@@ -436,7 +473,7 @@ public class LogcatReaderService extends IntentService {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             public void start() {
                 //TODO: if !isRunning...
-                //LogcatReaderService.start(getContext(), "FriendlyLogScreen");
+                //LogcatReaderService.start(getContext(), "LogScreen");
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

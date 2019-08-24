@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +16,9 @@ import  android.support.v7.util.DiffUtil;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class FriendlyLogAdapter
-        extends PagedListAdapter<Friendly, FriendlyLogViewHolder> {
+public class LogAdapter
+        extends PagedListAdapter<Friendly, LogViewHolder> {
 
     private static DiffUtil.ItemCallback<Friendly> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Friendly>() {
@@ -38,7 +37,7 @@ public class FriendlyLogAdapter
     private static int selectedItemPosition = -1;
     private OnClickListener mClickListener;
 
-    protected FriendlyLogAdapter() {
+    protected LogAdapter() {
         super(DIFF_CALLBACK);
 
         setClickListener();
@@ -46,16 +45,16 @@ public class FriendlyLogAdapter
 
     @NonNull
     @Override
-    public FriendlyLogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public LogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.tool_friendlylog_item, viewGroup, false);
-        FriendlyLogViewHolder friendlyLogViewHolder = new FriendlyLogViewHolder(itemView, mClickListener);
+                .inflate(R.layout.tool_log_item, viewGroup, false);
+        LogViewHolder logViewHolder = new LogViewHolder(itemView, mClickListener);
 
-        return friendlyLogViewHolder;
+        return logViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendlyLogViewHolder holder,
+    public void onBindViewHolder(@NonNull LogViewHolder holder,
                                  int position) {
         Friendly item = getItem(position);
         if (item != null) {
@@ -81,9 +80,9 @@ public class FriendlyLogAdapter
                     int previousPosition = selectedItemPosition;
                     selectedItemId = id;
                     selectedItemPosition = position;
-                    FriendlyLogAdapter.this.notifyItemChanged(previousPosition);
+                    LogAdapter.this.notifyItemChanged(previousPosition);
                 }
-                FriendlyLogAdapter.this.notifyItemChanged(position);
+                LogAdapter.this.notifyItemChanged(position);
             }
         });
     }

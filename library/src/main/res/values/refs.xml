@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Overrides for CodeView -->
+    <!-- Overrides for CodeView
     <item type="layout" name="layout_code_view" tools:override="true">@layout/override_cv_layout_code_view</item>
     <dimen name="shadow_height">16dp</dimen>
-    <dimen name="shadow_width">24dp</dimen>
+    <dimen name="shadow_width">24dp</dimen>-->
 
 
     <!-- Overrides for Chuck -->

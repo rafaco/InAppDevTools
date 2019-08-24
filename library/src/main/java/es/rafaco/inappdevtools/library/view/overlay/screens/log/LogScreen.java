@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,15 +34,15 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 //#endif
 
-import com.google.gson.Gson;
-
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterDialog;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -55,24 +54,24 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
-public class FriendlyLogScreen extends OverlayScreen {
+public class LogScreen extends OverlayScreen {
 
     private LogDataSourceFactory dataSourceFactory;
-    private FriendlyLogAdapter adapter;
+    private LogAdapter adapter;
     private RecyclerView recyclerView;
     private TextView welcome;
 
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
     private LogcatReaderService myService;
-    private LogUiFilter logUiFilter;
+    private LogFilterHelper logFilterHelper;
     private LogFilterDialog filterDialog;
     private boolean isBind;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
 
-    public FriendlyLogScreen(MainOverlayLayerManager manager) {
+    public LogScreen(MainOverlayLayerManager manager) {
         super(manager);
     }
 
@@ -87,7 +86,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_friendlylog_body; }
+    public int getBodyLayoutId() { return R.layout.tool_log_body; }
 
     @Override
     public int getToolbarLayoutId() {
@@ -113,7 +112,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void initFilterHelper() {
-        logUiFilter = getParams();
+        logFilterHelper = getParams();
     }
 
     @Override
@@ -176,7 +175,7 @@ public class FriendlyLogScreen extends OverlayScreen {
     //region [ ADAPTER ]
 
     private void initAdapter(){
-        adapter = new FriendlyLogAdapter();
+        adapter = new LogAdapter();
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -207,7 +206,7 @@ public class FriendlyLogScreen extends OverlayScreen {
                 adapter.submitList(pagedList);
             }
         });
-        Log.d("IadtLiveData", "Observer registered to PagedList from FriendlyDao");
+        //Log.d("IadtLiveData", "Observer registered to PagedList from FriendlyDao");
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
@@ -221,7 +220,7 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
-        dataSourceFactory = new LogDataSourceFactory(dao, logUiFilter.getFilter());
+        dataSourceFactory = new LogDataSourceFactory(dao, logFilterHelper.getBackFilter());
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
     }
 
@@ -270,11 +269,11 @@ public class FriendlyLogScreen extends OverlayScreen {
     }
 
     private void onTuneButton() {
-        filterDialog = new LogFilterDialog(getContext(), adapter, logUiFilter);
+        filterDialog = new LogFilterDialog(getContext(), adapter, logFilterHelper);
         filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                updateParams();
+                updateParams(logFilterHelper);
             }
         });
         filterDialog.getDialog().show();
@@ -282,15 +281,16 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     private void onLevelButton() {
         String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
+        final LogUiFilter filter = logFilterHelper.getUiFilter();
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("Select log level")
                 .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, logUiFilter.getSeverityInt(), new DialogInterface.OnClickListener(){
+                .setSingleChoiceItems(levelsArray, filter.getSeverityInt(), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which != logUiFilter.getSeverityInt()) {
-                            logUiFilter.setSeverityInt(which);
+                        if (which != filter.getSeverityInt()) {
+                            filter.setSeverityInt(which);
                             adapter.getCurrentList().getDataSource().invalidate();
                         }
                         dialog.dismiss();
@@ -388,21 +388,17 @@ public class FriendlyLogScreen extends OverlayScreen {
 
     //region [ PARAMS ]
 
-    public LogUiFilter getParams(){
-        if (TextUtils.isEmpty(getParam())){
-          return new LogUiFilter(LogUiFilter.Preset.EVENTS_INFO);
+    public LogFilterHelper getParams(){
+        LogUiFilter logUiFilter = LogFilterStore.get();
+        if (logUiFilter == null){
+            return new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
         }
-        Gson gson = new Gson();
-        return gson.fromJson(super.getParam(), LogUiFilter.class);
+        return new LogFilterHelper(logUiFilter);
     }
 
-    public void updateParams(){
-        super.updateParam(buildParams(logUiFilter));
-    }
-
-    public static String buildParams(LogUiFilter filterHelper){
-        Gson gson = new Gson();
-        return gson.toJson(filterHelper);
+    public void updateParams(LogFilterHelper uiFilter){
+        LogFilterStore.store(uiFilter.getUiFilter());
+        dataSourceFactory.setConfig(uiFilter.getBackFilter());
     }
 
     //endregion

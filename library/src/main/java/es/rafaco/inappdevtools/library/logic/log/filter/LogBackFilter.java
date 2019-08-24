@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.library.logic.log.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogFilter {
+public class LogBackFilter {
 
     String text = "";
     List<String> severities;
@@ -13,7 +13,7 @@ public class LogFilter {
     long fromDate;
     long toDate;
 
-    public LogFilter() {
+    public LogBackFilter() {
         this.severities = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.notCategories = new ArrayList<>();

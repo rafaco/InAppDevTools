@@ -3,18 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <es.rafaco.compat.AppCompatTextView
-        android:id="@+id/current_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Current overview"
-        android:textSize="18dp"
-        style="@style/content_margin"
-        android:layout_marginBottom="20dp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <es.rafaco.compat.AppCompatTextView
             android:id="@+id/type_label"
@@ -121,5 +113,15 @@
             android:textSize="18dp"/>
 
     </LinearLayout>
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/current_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current overview"
+        android:textSize="18dp"
+        android:textStyle="normal|italic"
+        style="@style/content_margin"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

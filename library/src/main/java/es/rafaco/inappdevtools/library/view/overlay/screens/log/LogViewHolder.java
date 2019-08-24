@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -33,9 +33,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailSc
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private final FriendlyLogAdapter.OnClickListener clickListener;
+    private final LogAdapter.OnClickListener clickListener;
 
     long uid;
     ImageView icon;
@@ -49,7 +49,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
     AppCompatTextView extras_details;
     AppCompatButton extra_button;
 
-    public FriendlyLogViewHolder(View view, final FriendlyLogAdapter.OnClickListener clickListener) {
+    public LogViewHolder(View view, final LogAdapter.OnClickListener clickListener) {
         super(view);
 
         this.clickListener = clickListener;
@@ -122,7 +122,7 @@ public class FriendlyLogViewHolder extends RecyclerView.ViewHolder implements Vi
             extra_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OverlayUIService.performNavigationStep(FriendlyLogViewHolder.this.getLink(data));
+                    OverlayUIService.performNavigationStep(LogViewHolder.this.getLink(data));
                 }
             });
             extra_button.getBackground().setColorFilter(severityColor, PorterDuff.Mode.MULTIPLY);

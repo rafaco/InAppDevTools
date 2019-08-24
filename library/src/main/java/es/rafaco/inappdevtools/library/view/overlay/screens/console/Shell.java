@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -26,7 +27,9 @@ public class Shell {
 
     public String run(String[] command) {
         String response = "";
-        Log.v(Iadt.TAG, "Shell running: " + command);
+
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "Shell running: " + command);
 
         try {
             process = Runtime.getRuntime().exec(command);
@@ -39,7 +42,8 @@ public class Shell {
             while (!isCancelled && (line = reader.readLine())!= null) {
                 output.append(line + Humanizer.newLine());
             }
-            Log.v(Iadt.TAG, "Shell result: " + output.length() + " lines.");
+            if (IadtController.get().isDebug())
+                Log.v(Iadt.TAG, "Shell result: " + output.length() + " lines.");
             response = output.toString();
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);

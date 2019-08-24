@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -22,17 +21,17 @@ import java.util.List;
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogAdapter;
 
 public class LogFilterDialog {
 
     private final Context context;
-    FriendlyLogAdapter adapter;
-    LogUiFilter helper;
+    LogAdapter adapter;
+    LogFilterHelper helper;
     private AlertDialog dialog;
     private AppCompatTextView currentOverview;
 
-    public LogFilterDialog(Context context, FriendlyLogAdapter adapter, LogUiFilter helper) {
+    public LogFilterDialog(Context context, LogAdapter adapter, LogFilterHelper helper) {
         this.context = context;
         this.adapter = adapter;
         this.helper = helper;
@@ -52,24 +51,26 @@ public class LogFilterDialog {
                 .setNegativeButton("Show all", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        helper.applyPreset(LogUiFilter.Preset.ALL);
+                        helper.applyPreset(LogFilterHelper.Preset.ALL);
                         adapter.getCurrentList().getDataSource().invalidate();
                         dialog.dismiss();
                     }
                 });
 
         LayoutInflater inflater = LayoutInflater.from(ctw);
-        View dialogView = inflater.inflate(R.layout.tool_friendlylog_dialog, null);
+        View dialogView = inflater.inflate(R.layout.tool_log_filter, null);
         alertDialogBuilder.setView(dialogView);
 
         currentOverview = dialogView.findViewById(R.id.current_label);
         updateOverview();
 
-        addFilterLine(dialogView, R.id.session_spinner, helper.getSessionOptions(), helper.getSessionInt(),
+        final LogUiFilter filter = helper.getUiFilter();
+
+        addFilterLine(dialogView, R.id.session_spinner, helper.getSessionOptions(), filter.getSessionInt(),
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        helper.setSessionInt(position);
+                        filter.setSessionInt(position);
                         updateOverview();
                         adapter.getCurrentList().getDataSource().invalidate();
                     }
@@ -78,11 +79,11 @@ public class LogFilterDialog {
                     }
                 });
 
-        addFilterLine(dialogView, R.id.type_spinner, helper.getTypeOptions(), helper.getTypeInt(),
+        addFilterLine(dialogView, R.id.type_spinner, helper.getTypeOptions(), filter.getTypeInt(),
                 new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                helper.setTypeInt(position);
+                filter.setTypeInt(position);
                 updateOverview();
                 if (adapter != null && adapter.getCurrentList() != null){
                     adapter.getCurrentList().getDataSource().invalidate();
@@ -93,10 +94,10 @@ public class LogFilterDialog {
             }
         });
 
-        addFilterLine(dialogView, R.id.verbosity_spinner, helper.getSeverityOptions(), helper.getSeverityInt(), new AdapterView.OnItemSelectedListener() {
+        addFilterLine(dialogView, R.id.verbosity_spinner, helper.getSeverityOptions(), filter.getSeverityInt(), new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                helper.setSeverityInt(position);
+                filter.setSeverityInt(position);
                 updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
@@ -105,7 +106,7 @@ public class LogFilterDialog {
             }
         });
 
-        addFilterLine(dialogView, R.id.category_spinner, helper.getCategoryOptions(), helper.getCategoryInt(), new AdapterView.OnItemSelectedListener() {
+        addFilterLine(dialogView, R.id.category_spinner, helper.getCategoryOptions(), filter.getCategoryInt(), new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String realCategory = "All";
@@ -113,7 +114,8 @@ public class LogFilterDialog {
                     String fullString = ((String)parent.getAdapter().getItem(position));
                     realCategory = fullString.substring(0, fullString.indexOf(" "));
                 }
-                helper.setCategoryInt(position, realCategory);
+                filter.setCategoryInt(position);
+                filter.setCategoryName(realCategory);
                 updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }
@@ -122,7 +124,7 @@ public class LogFilterDialog {
             }
         });
 
-        addFilterLine(dialogView, R.id.logcat_tag_spinner, helper.getTagList(), helper.getTagInt(), new AdapterView.OnItemSelectedListener() {
+        addFilterLine(dialogView, R.id.logcat_tag_spinner, helper.getTagOptions(), filter.getTagInt(), new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String realCategory = "All";
@@ -130,7 +132,8 @@ public class LogFilterDialog {
                     String fullString = ((String)parent.getAdapter().getItem(position));
                     realCategory = fullString.substring(0, fullString.indexOf(" "));
                 }
-                helper.setTagInt(position, realCategory);
+                filter.setTagInt(position);
+                filter.setTagName(realCategory);
                 updateOverview();
                 adapter.getCurrentList().getDataSource().invalidate();
             }

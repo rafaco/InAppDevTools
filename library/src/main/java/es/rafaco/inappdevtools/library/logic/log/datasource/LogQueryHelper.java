@@ -15,16 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.log.filter.LogFilter;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 
 public class LogQueryHelper {
 
-    private final LogFilter filter;
+    private final LogBackFilter filter;
     private String queryString = new String();
     private List<Object> args = new ArrayList();
     private boolean containsCondition = false;
 
-    public LogQueryHelper(LogFilter filter) {
+    public LogQueryHelper(LogBackFilter filter) {
         this.filter = filter;
     }
 
@@ -77,7 +78,9 @@ public class LogQueryHelper {
 
         queryString += " ORDER BY date ASC";
 
-        Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 
@@ -120,7 +123,8 @@ public class LogQueryHelper {
         queryString = queryString.replace("ORDER BY date ASC", "");
                 //"GROUP BY " + columnName + "ORDER BY COUNT(*) DESC");
 
-        Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 }

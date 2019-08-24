@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog;
+package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.view.ViewGroup;
 

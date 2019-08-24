@@ -83,9 +83,13 @@ public final class IadtController extends ContentProvider {
         if (!isEnabled()){
             Log.w(Iadt.TAG, "Iadt DISABLED by configuration");
             return;
+        }else{
+            Log.d(Iadt.TAG, "Iadt ENABLED");
         }
 
-        Log.d(Iadt.TAG, "Initializing background services...");
+        if (isDebug())
+            Log.d(Iadt.TAG, "Initializing background services...");
+
         eventManager = new EventManager(appContext);
         runnablesManager = new RunnablesManager((appContext));
 
@@ -130,7 +134,9 @@ public final class IadtController extends ContentProvider {
 
     private void onInitForeground(){
         isPendingForegroundInit = false;
-        Log.d(Iadt.TAG, "Initializing foreground services...");
+
+        if (isDebug())
+            Log.d(Iadt.TAG, "Initializing foreground services...");
 
         if (PendingCrashUtil.isPending()){
             // IsPendingCrash, we open crash details at overlay
@@ -355,17 +361,20 @@ public final class IadtController extends ContentProvider {
         if(getRunnableManager().getForceCloseRunnable() != null)
             getRunnableManager().getForceCloseRunnable().run();
 
-        Log.w(Iadt.TAG, "Stopping watchers");
+        if (isDebug())
+            Log.w(Iadt.TAG, "Stopping watchers");
         eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
-        Log.w(Iadt.TAG, "Stopping Foreground");
+        if (isDebug())
+            Log.w(Iadt.TAG, "Stopping Foreground");
         NotificationUIService.stop();
 
-        Log.w(Iadt.TAG, "Stopping Overlay");
+        if (isDebug())
+            Log.w(Iadt.TAG, "Stopping Overlay");
         OverlayUIService.stop();
     }
 

@@ -60,12 +60,12 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         this.items = data;
 
         descriptors = new ArrayList<>();
-        descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_header));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunnableItem.class,  RunnableViewHolder.class, R.layout.flexible_button));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_link));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_trace));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_trace_group));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_ANALYSIS, AnalysisItem.class,  AnalysisViewHolder.class, R.layout.flexible_analysis));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_item_header));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunnableItem.class,  RunnableViewHolder.class, R.layout.flexible_item_button));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_item_link));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_item_trace));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_ANALYSIS, AnalysisItem.class,  AnalysisViewHolder.class, R.layout.flexible_item_analysis));
     }
 
     @Override

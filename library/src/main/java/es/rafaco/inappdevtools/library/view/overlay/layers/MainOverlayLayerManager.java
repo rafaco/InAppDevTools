@@ -91,7 +91,9 @@ public class MainOverlayLayerManager {
 
         IadtController.get().getEventManager().fire(Event.OVERLAY_NAVIGATION, newStep);
 
-        Log.v(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + params);
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + params);
+        
         loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
                 MainOverlayLayerManager.class, this);
 

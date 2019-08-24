@@ -6,18 +6,18 @@ package es.rafaco.inappdevtools.library.logic.log.datasource;
 import android.arch.paging.DataSource;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.log.filter.LogFilter;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 
 public class LogDataSourceFactory extends DataSource.Factory {
 
-    private LogFilter config;
+    private LogBackFilter config;
     private FriendlyDao dao;
 
-    public LogDataSourceFactory(FriendlyDao dao, LogFilter config) {
+    public LogDataSourceFactory(FriendlyDao dao, LogBackFilter config) {
         this.dao = dao;
-        this.config = (config != null) ? config : new LogFilter();
+        this.config = (config != null) ? config : new LogBackFilter();
     }
 
     @Override
@@ -29,11 +29,11 @@ public class LogDataSourceFactory extends DataSource.Factory {
         return dao.filterWithQuery(helper.getSelectedQuery()).create();
     }
 
-    public LogFilter getConfig(){
+    public LogBackFilter getConfig(){
         return config;
     }
 
-    public void setConfig(LogFilter config){
+    public void setConfig(LogBackFilter config){
         this.config = config;
     }
 }

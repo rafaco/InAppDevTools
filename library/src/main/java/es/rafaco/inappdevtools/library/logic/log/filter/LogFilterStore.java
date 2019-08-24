@@ -8,17 +8,16 @@ public class LogFilterStore {
 
     public static final String PREF_VALUE_KEY = "LOG_FILTER";
 
-    public static LogFilter get(){
+    public static LogUiFilter get(){
         Gson gson = new Gson();
         String string = DevToolsPrefs.getString(PREF_VALUE_KEY, null);
         if (string == null){
-            return new LogFilter();
+            return null;
         }
-
-        return gson.fromJson(string, LogFilter.class);
+        return gson.fromJson(string, LogUiFilter.class);
     }
 
-    public static void store(LogFilter filter){
+    public static void store(LogUiFilter filter){
         Gson gson = new Gson();
         String json = gson.toJson(filter);
         DevToolsPrefs.setString(PREF_VALUE_KEY, json);

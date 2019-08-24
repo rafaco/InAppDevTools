@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -46,7 +45,7 @@ public class RunScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_flexible; }
+    public int getBodyLayoutId() { return R.layout.flexible_container; }
 
     @Override
     protected void onCreate() {

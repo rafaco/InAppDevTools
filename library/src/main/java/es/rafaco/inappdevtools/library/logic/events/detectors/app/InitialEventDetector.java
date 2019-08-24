@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -86,7 +87,8 @@ public class InitialEventDetector extends EventDetector {
 
     @Override
     public void start() {
-        Log.w("SESSION", "New session start");
+        if (IadtController.get().isDebug())
+            Log.w("SESSION", "New session start");
         eventManager.fire(Event.APP_NEW_SESSION, DateUtils.getLong());
 
         if (NewBuildUtil.isNewBuild()){

@@ -67,7 +67,8 @@ public class NotificationUIService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(Iadt.TAG, "My foreground service onCreate().");
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "My foreground service onCreate().");
         instance = this;
     }
 
@@ -118,7 +119,8 @@ public class NotificationUIService extends Service {
     }
 
     private void startForegroundService() {
-        Log.d(Iadt.TAG, "Start foreground service.");
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "Start foreground service.");
 
         createNotificationChannel();
 
@@ -159,7 +161,8 @@ public class NotificationUIService extends Service {
     //endregion
 
     private void stopService() {
-        Log.d(Iadt.TAG, "Stopping NotificationUIService");
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "Stopping NotificationUIService");
         stopForeground(true);
         stopSelf();
         instance = null;

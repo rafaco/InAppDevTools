@@ -24,8 +24,8 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.AnalysisScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
@@ -89,11 +89,12 @@ public class OverlayUIService extends Service {
             if (action != null){
                 processIntentAction(action, target, params);
             }else{
-                Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
+                if (IadtController.get().isDebug())
+                    Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
             }
         } catch (Exception e) {
 
-            if(Iadt.isDebug()){
+            if (IadtController.get().isDebug()){
                 throw e;
             }else{
                 FriendlyLog.logException("OverlayUiService unable to start "
@@ -135,7 +136,8 @@ public class OverlayUIService extends Service {
         else {
             init();
             initialised = true;
-            Log.d(Iadt.TAG, "OverlayUIService - initialised");
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "OverlayUIService - initialised");
             return true;
         }
     }
@@ -149,7 +151,7 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(InfoScreen.class);
         mainOverlayLayerManager.registerScreen(NetworkScreen.class);
         mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
-        mainOverlayLayerManager.registerScreen(FriendlyLogScreen.class);
+        mainOverlayLayerManager.registerScreen(LogScreen.class);
         mainOverlayLayerManager.registerScreen(LogcatScreen.class);
         mainOverlayLayerManager.registerScreen(ConsoleScreen.class);
         mainOverlayLayerManager.registerScreen(ScreensScreen.class);
@@ -246,7 +248,8 @@ public class OverlayUIService extends Service {
     }
 
     private void stopService() {
-        Log.v(Iadt.TAG, "Stopping OverlayUIService");
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "Stopping OverlayUIService");
         stopSelf();
         instance = null;
     }
@@ -261,7 +264,8 @@ public class OverlayUIService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.v(Iadt.TAG, "OverlayUIService - onDestroy");
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "OverlayUIService - onDestroy");
         if (mainOverlayLayerManager != null) mainOverlayLayerManager.destroy();
         if (overlayLayersManager != null) overlayLayersManager.destroy();
         instance = null;

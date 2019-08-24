@@ -66,8 +66,9 @@ public class FriendlyLog {
 
     private static void logAtLogcat(Friendly log) {
 
-        //TODO: use a configuration
-        if (false){ //Iadt.isDebug()){
+        //TODO: use a configuration flag
+        // Or print always and filter at log screen
+        if (!Iadt.isDebug()){
             return;
         }
 

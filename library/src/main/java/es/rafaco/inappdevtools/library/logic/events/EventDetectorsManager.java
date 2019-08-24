@@ -108,9 +108,10 @@ public class EventDetectorsManager {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
             Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
-            Log.d(Iadt.TAG, "Exception handler added");
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Exception handler added");
         }else{
-            Log.d(Iadt.TAG, "Exception handler already attach on thread");
+            Log.w(Iadt.TAG, "Exception handler already attach on thread");
         }
     }
 }
