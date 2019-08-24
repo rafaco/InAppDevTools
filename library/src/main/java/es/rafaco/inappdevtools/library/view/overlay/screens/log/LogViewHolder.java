@@ -39,7 +39,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     long uid;
     ImageView icon;
-    View decorator;
+    AppCompatTextView decorator;
     AppCompatTextView title;
 
     LinearLayout wrapper;
@@ -79,16 +79,18 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         }
 
         int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
-
         decorator.setBackgroundColor(severityColor);
+        decorator.setText(data.getSeverity());
 
         if (isLogcat){
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
+            title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
         }else{
             title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
             title.setTypeface(title.getTypeface(), Typeface.BOLD);
+            title.setTextColor(severityColor);
         }
-        title.setTextColor(severityColor);
+
         title.setVisibility(View.VISIBLE);
         title.setText(data.getMessage());
         title.setSingleLine(!isSelected);

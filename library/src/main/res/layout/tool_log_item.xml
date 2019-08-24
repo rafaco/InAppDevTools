@@ -8,11 +8,13 @@
     android:paddingTop="2dp"
     android:paddingBottom="2dp">
 
-    <View
+    <es.rafaco.compat.AppCompatTextView
         android:id="@+id/decorator"
-        android:layout_width="2dp"
+        android:layout_width="12dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
+        android:textAlignment="center"
+        android:textColor="@color/rally_bg_blur"
         android:background="@color/rally_green"
         android:layout_marginLeft="4dp"/>
 
