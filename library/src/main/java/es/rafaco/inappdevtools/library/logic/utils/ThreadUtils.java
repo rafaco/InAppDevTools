@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.Set;
 
@@ -154,4 +155,8 @@ public class ThreadUtils {
         return  android.os.Process.myPid();
     }
 
+    public static void printCurrentStacktrace(){
+        new Throwable().printStackTrace();
+        //Log.e("TEST", new Throwable());
+    }
 }

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/extra_over"
+            android:id="@+id/over_title_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -33,7 +33,7 @@
             android:layout_marginLeft="2dp">
 
             <es.rafaco.compat.AppCompatTextView
-                android:id="@+id/extras_over"
+                android:id="@+id/over_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/rally_white"/>
@@ -44,7 +44,7 @@
             android:id="@+id/icon"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:layout_below="@id/extra_over"
+            android:layout_below="@id/over_title_wrapper"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="2dp"
             android:layout_marginLeft="4dp"/>
@@ -53,28 +53,46 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/extra_over"
+            android:layout_below="@id/over_title_wrapper"
             android:layout_toRightOf="@id/icon"
             android:layout_alignParentRight="true"
             android:layout_marginTop="2dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="6dp"
-            android:ellipsize="end"
             android:textColor="@color/rally_white"/>
 
         <LinearLayout
-            android:id="@+id/extra_details"
+            android:id="@+id/detail_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/title"
-            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:paddingBottom="5dp">
+            android:padding="4dp">
 
             <es.rafaco.compat.AppCompatTextView
-                android:id="@+id/extras_details"
+                android:id="@+id/detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/extra_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_wrapper"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/extra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
                 android:textColor="@color/rally_white"/>
 
         </LinearLayout>
@@ -83,7 +101,7 @@
             android:id="@+id/extra_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/extra_details"
+            android:layout_below="@id/extra_wrapper"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:minHeight="0dp"

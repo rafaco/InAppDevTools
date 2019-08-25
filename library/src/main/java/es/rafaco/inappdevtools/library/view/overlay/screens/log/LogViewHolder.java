@@ -43,10 +43,12 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     AppCompatTextView title;
 
     LinearLayout wrapper;
-    LinearLayout extra_over;
-    AppCompatTextView extras_over;
-    LinearLayout extra_details;
-    AppCompatTextView extras_details;
+    LinearLayout overTitleWrapper;
+    AppCompatTextView overTitle;
+    LinearLayout detailWrapper;
+    AppCompatTextView detail;
+    LinearLayout extra_wrapper;
+    AppCompatTextView extra;
     AppCompatButton extra_button;
 
     public LogViewHolder(View view, final LogAdapter.OnClickListener clickListener) {
@@ -60,10 +62,12 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         decorator = view.findViewById(R.id.decorator);
         title = view.findViewById(R.id.title);
         icon = view.findViewById(R.id.icon);
-        extra_over = view.findViewById(R.id.extra_over);
-        extras_over = view.findViewById(R.id.extras_over);
-        extra_details = view.findViewById(R.id.extra_details);
-        extras_details = view.findViewById(R.id.extras_details);
+        overTitleWrapper = view.findViewById(R.id.over_title_wrapper);
+        overTitle = view.findViewById(R.id.over_title);
+        detailWrapper = view.findViewById(R.id.detail_wrapper);
+        detail = view.findViewById(R.id.detail);
+        extra_wrapper = view.findViewById(R.id.extra_wrapper);
+        extra = view.findViewById(R.id.extra);
         extra_button = view.findViewById(R.id.extra_button);
     }
 
@@ -82,21 +86,6 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         decorator.setBackgroundColor(severityColor);
         decorator.setText(data.getSeverity());
 
-        if (isLogcat){
-            title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
-            title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
-        }else{
-            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
-            title.setTypeface(title.getTypeface(), Typeface.BOLD);
-            title.setTextColor(severityColor);
-        }
-
-        title.setVisibility(View.VISIBLE);
-        title.setText(data.getMessage());
-        title.setSingleLine(!isSelected);
-        title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
-        title.setBackgroundColor(Color.TRANSPARENT);
-
         int icon = FriendlyLog.getIcon(data);
         if (icon != -1){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -111,14 +100,41 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             this.icon.setVisibility(View.GONE);
         }
 
-        extra_details.setVisibility(isSelected ? View.VISIBLE : View.GONE);
-        extras_details.setText(!isSelected ? "" : data.getExtra());
+        if (isLogcat){
+            title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
+            title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
+        }else{
+            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
+            title.setTypeface(title.getTypeface(), Typeface.BOLD);
+            title.setTextColor(severityColor);
+        }
+        title.setVisibility(View.VISIBLE);
+        title.setText(data.getMessage());
+        title.setSingleLine(!isSelected);
+        //title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
+        title.setBackgroundColor(Color.TRANSPARENT);
 
-        extra_over.setVisibility(isSelected ? View.VISIBLE : View.GONE);
-        extras_over.setText(!isSelected ? "" :
+        overTitleWrapper.setVisibility(View.GONE);
+        /*overTitleWrapper.setVisibility(isSelected && !isLogcat ? View.VISIBLE : View.GONE);
+        overTitle.setText(!isSelected && !isLogcat ? "" :
                 String.format("%s [%s-%s]",
                         DateUtils.format(data.getDate()),
-                        data.getCategory(), data.getSubcategory()));
+                        data.getCategory(), data.getSubcategory()));*/
+
+        boolean showDetail = !isLogcat && isSelected;
+        detailWrapper.setVisibility( showDetail ? View.VISIBLE : View.GONE);
+        if (!isLogcat){
+            String extra = "";
+            extra += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
+            extra += "Source: " + "Iadt Event" + Humanizer.newLine();
+            extra += "Category: " + data.getCategory() + Humanizer.newLine();
+            extra += "Subcategory: " + data.getSubcategory() + Humanizer.newLine();
+            detail.setText(!isSelected ? "" : extra);
+        }
+
+        boolean showExtra = isSelected && !TextUtils.isEmpty(data.getExtra());
+        extra_wrapper.setVisibility(showExtra ? View.VISIBLE : View.GONE);
+        extra.setText(showExtra ? data.getExtra() : "");
 
         if(isSelected && getLink(data)!=null){
             extra_button.setOnClickListener(new View.OnClickListener() {
@@ -160,8 +176,8 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         icon.setVisibility(View.VISIBLE);
         icon.setBackgroundColor(color);
 
-        extra_details.setVisibility(View.GONE);
-        extra_over.setVisibility(View.GONE);
+        extra_wrapper.setVisibility(View.GONE);
+        overTitleWrapper.setVisibility(View.GONE);
         extra_button.setVisibility(View.GONE);
 
         if (Humanizer.isEven(position)){

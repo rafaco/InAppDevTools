@@ -33,13 +33,14 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogcatReaderService extends IntentService {
 
     public final static String START_ACTION = "start_action";
     public final static String CANCEL_ACTION = "cancel_action";
     public final static String PARAM_KEY = "param";
-    public static final String LOGCAT_COMMAND = "logcat -v time";
+    public static final String LOGCAT_COMMAND = "logcat -v long";
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
     private static final long LIVE_MAX_TIME = 2 * 1000;
@@ -221,11 +222,8 @@ public class LogcatReaderService extends IntentService {
                     && (line = reader.readLine())!= null) {
 
                 readCounter ++;
-
-                if (!checkEmptyLines(line)
-                        && !checkIgnored(line)
-                        && !checkStartDateDuplication(line)) {
-                    queue.add(line);
+                queue.add(line);
+                if (TextUtils.isEmpty(line)) {
                     processQueueIfNeeded();
                 }
             }
@@ -287,32 +285,78 @@ public class LogcatReaderService extends IntentService {
         isInjectorRunning = true;
         cancelUpdateTimer();
         List<Friendly> logsToInsert = new ArrayList<>();
+        Friendly lastInsertion = null;
+        String outputChannel = "";
+
+        LongLogcatParser parser = new LongLogcatParser();
         while (!isCancelled
                 && !(queue.isEmpty() || logsToInsert.size() > QUEUE_MAX_SIZE)) {
-            Friendly log = parseLine(queue.poll());
-            if (log!=null){
-                logsToInsert.add(log);
+
+            String line = queue.poll();
+            LogcatLine parse = parser.parse(line);
+            if (parse == null) {
+                continue;
+            }
+
+            /*if (!checkEmptyLines(line)
+                    && !checkIsIgnored(line)
+                    && !checkIsStartDateDuplication(line)) {
+
+            }*/
+            Friendly log = parse.parseToFriendly();
+            if (log != null){
+                if(!checkIsIgnored(log)
+                        && !checkIsStartDateDuplication(log)
+                        && !checkIsTabbedMultiline(log, lastInsertion)){
+                    lastInsertion = log;
+                    logsToInsert.add(log);
+                }
             }else{
-                //TODO: log not added
+                Log.w("LOGS", "LogcatLine not added");
             }
         }
 
         onQueueProcessed(logsToInsert);
     }
 
-    private Friendly parseLine(String newLine) {
-        if (checkEmptyLines(newLine)) return null;
-        //if (checkDuplicates(newLine)) return null;
-
-        lastLine = newLine;
-        LogcatLine logLine = LogcatLine.newLogLine(newLine, false);
-        return logLine.parseToFriendly();
-    }
-
-    private boolean checkIgnored(String line) {
-        if(line.contains("setTypeface with style") || line.startsWith("---------")) {
+    private boolean checkIsIgnored(Friendly newLog) {
+        if(newLog.getMessage().contains("setTypeface with style")) {
             ignoredCounter++;
             if (isDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected and ignored a line. Total is "+ ignoredCounter);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkIsStartDateDuplication(Friendly newLog) {
+        if(startDateDuplicationPassed){
+            return false;
+        }
+
+        if (previousStartDateLines.size()<1){
+            startDateDuplicationPassed = true;
+            return false;
+        }
+
+        for (Friendly line: previousStartDateLines) {
+            if (newLog.equalContent(line)){
+                startDateDiscardCounter++;
+                previousStartDateLines.remove(line);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Collapsed tabbed multiline like printed stacktrace into the initial line
+    private boolean checkIsTabbedMultiline(Friendly currentLog, Friendly previousLog) {
+        if (previousLog == null){
+            return false;
+        }
+
+        if (currentLog.equalContentForCollapsing(previousLog)
+                && currentLog.getMessage().startsWith("\t")){
+            previousLog.setMessage(previousLog.getMessage() + Humanizer.newLine() + currentLog.getMessage());
             return true;
         }
         return false;
@@ -335,26 +379,6 @@ public class LogcatReaderService extends IntentService {
             nullDiscardCounter++;
             if (isDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
             return true;
-        }
-        return false;
-    }
-
-    private boolean checkStartDateDuplication(String newLine) {
-        if(!startDateDuplicationPassed){
-            if (previousStartDateLines.size()<1){
-                startDateDuplicationPassed = true;
-                return false;
-            }
-
-            for (Friendly line: previousStartDateLines) {
-                if (newLine.contains(line.getMessage())){
-                    startDateDiscardCounter++;
-                    previousStartDateLines.remove(line);
-                    //if (isDebug())
-                        //Log.v(Iadt.TAG, "LogcatReaderService detected initial duplication. Total is " + startDateDiscardCounter);
-                    return true;
-                }
-            }
         }
         return false;
     }
