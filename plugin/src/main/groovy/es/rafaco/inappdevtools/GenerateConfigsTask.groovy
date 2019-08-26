@@ -36,31 +36,31 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         ]
 
         if (extension.enabled!=null)
-            propertiesMap.put("ENABLED", extension.enabled)
+            propertiesMap.put("enabled", extension.enabled)
 
         if (extension.debug!=null)
-            propertiesMap.put("DEBUG", extension.debug)
+            propertiesMap.put("debug", extension.debug)
 
         if (extension.email!=null)
-            propertiesMap.put("EMAIL", extension.email)
+            propertiesMap.put("email", extension.email)
 
         if (extension.overlayEnabled!=null)
-            propertiesMap.put("OVERLAY_ENABLED", extension.overlayEnabled)
+            propertiesMap.put("overlayEnabled", extension.overlayEnabled)
 
-        if (extension.overlayIconEnabled!=null)
-            propertiesMap.put("OVERLAY_ICON_ENABLED", extension.overlayIconEnabled)
+        if (extension.invocationByIcon!=null)
+            propertiesMap.put("invocationByIcon", extension.invocationByIcon)
 
-        if (extension.notificationEnabled!=null)
-            propertiesMap.put("NOTIFICATION_ENABLED", extension.notificationEnabled)
+        if (extension.invocationByShake!=null)
+            propertiesMap.put("invocationByShake", extension.invocationByShake)
 
-        if (extension.crashHandlerEnabled!=null)
-            propertiesMap.put("CRASH_HANDLER_ENABLED", extension.crashHandlerEnabled)
+        if (extension.invocationByNotification!=null)
+            propertiesMap.put("invocationByNotification", extension.invocationByNotification)
 
         if (extension.callDefaultCrashHandler!=null)
-            propertiesMap.put("CALL_DEFAULT_CRASH_HANDLER", extension.callDefaultCrashHandler)
+            propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 
         if (extension.stickyService!=null)
-            propertiesMap.put("STICKY_SERVICE", extension.stickyService)
+            propertiesMap.put("stickyService", extension.stickyService)
 
         File file = getFile(project, "${outputPath}/compile_config.json")
         saveConfigMap(propertiesMap, file)

@@ -145,7 +145,7 @@ public class LogFilterDialog {
 
         dialog = alertDialogBuilder.create();
         dialog.getWindow().setType(OverlayLayer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.widget_full_shape);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_main_middle);
 
         return dialog;
     }

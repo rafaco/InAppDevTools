@@ -2,6 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,18 +46,28 @@ public class IconOverlayLayer extends OverlayLayer {
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
-        params.x = 0;
-        params.y = 100;
+        Point szWindow = UiUtils.getDisplaySize(getView().getContext());
+        params.x = szWindow.x;
+        params.y = 120;
+
         return params;
     }
 
     @Override
     protected void beforeAttachView(View view) {
-        collapsedView = view.findViewById(R.id.collapsed_view);
-        ImageView collapsedIcon = view.findViewById(R.id.collapsed_icon);
+        collapsedView = view.findViewById(R.id.icon_wrapper);
+        ImageView collapsedIcon = view.findViewById(R.id.icon);
+
+        UiUtils.setAppIconAsBackground(collapsedIcon);
 
         collapsedView.setVisibility(View.VISIBLE);
-        UiUtils.setAppIconAsBackground(collapsedIcon);
+
+        /*Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            public void run() {
+                collapsedView.setAlpha((float) 0.65);
+            }
+        }, 5 * 1000);*/
     }
 
 

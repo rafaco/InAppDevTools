@@ -7,9 +7,9 @@ class InAppDevToolsExtension {
     String email
 
     Boolean overlayEnabled
-    Boolean overlayIconEnabled
-    Boolean notificationEnabled
-    Boolean crashHandlerEnabled
+    Boolean invocationByShake
+    Boolean invocationByIcon
+    Boolean invocationByNotification
     Boolean callDefaultCrashHandler
     Boolean stickyService
 }

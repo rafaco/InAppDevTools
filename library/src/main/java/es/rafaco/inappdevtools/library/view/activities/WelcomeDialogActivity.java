@@ -215,7 +215,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
             return;
 
         alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.widget_full_shape);
+        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_main_middle);
         alertDialog.show();
     }
 

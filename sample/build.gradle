@@ -114,4 +114,6 @@ inappdevtools {
     enabled = true
     debug = false
     email = 'inappdevtools@gmail.com'
+    invocationByNotification = false
+    invocationByIcon = true
 }

@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.layers.*;
@@ -32,6 +35,7 @@ public class OverlayLayersManager {
     private List<OverlayLayer> overlayLayers;
 
     private Point szWindow = new Point();
+    private static boolean isBouncing;
     private boolean isLeft = true;
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin;
 
@@ -133,11 +137,12 @@ public class OverlayLayersManager {
      *   Control Drag and move icon view using user's touch action.  */
     private void implementTouchListenerToIconWidgetView() {
         final View iconWidgetView = getView(OverlayLayer.Type.ICON);
-        final View removeWidgetView = getView(OverlayLayer.Type.REMOVE);
-        final ImageView remove_image_view = ((RemoveOverlayLayer) getLayer(OverlayLayer.Type.REMOVE)).remove_image_view;
+        final View removeLayerView = getView(OverlayLayer.Type.REMOVE);
 
-        View rootContainer = iconWidgetView.findViewById(R.id.root_container);
-        rootContainer.setOnTouchListener(new View.OnTouchListener() {
+        final ImageView removeImage = ((RemoveOverlayLayer) getLayer(OverlayLayer.Type.REMOVE)).remove_image_view;
+
+        View iconContainer = iconWidgetView.findViewById(R.id.icon_wrapper);
+        iconContainer.setOnTouchListener(new View.OnTouchListener() {
 
             long time_start = 0, time_end = 0;
 
@@ -146,18 +151,13 @@ public class OverlayLayersManager {
             int remove_img_width = 0, remove_img_height = 0;
 
             Handler handler_longClick = new Handler();
-            Runnable runnable_longClick = new Runnable() {
+            Runnable onIconLongClick = new Runnable() {
                 @Override
                 public void run() {
-                    //On Floating OverlayLayer Long Click
-
-                    //Set isLongClick as true
                     isLongClick = true;
 
-                    //Set remove widget view visibility to VISIBLE
-                    removeWidgetView.setVisibility(View.VISIBLE);
-
-                    onIconWidgetLongClick();
+                    updateRemoveToInitial();
+                    removeLayerView.setVisibility(View.VISIBLE);
                 }
             };
 
@@ -165,7 +165,7 @@ public class OverlayLayersManager {
             public boolean onTouch(View v, MotionEvent event) {
 
                 //Get Floating widget view params
-                WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
+                WindowManager.LayoutParams iconParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
                 //get the touch location coordinates
                 int x_cord = (int) event.getRawX();
@@ -177,25 +177,25 @@ public class OverlayLayersManager {
                     case MotionEvent.ACTION_DOWN:
                         time_start = System.currentTimeMillis();
 
-                        handler_longClick.postDelayed(runnable_longClick, 600);
+                        handler_longClick.postDelayed(onIconLongClick, 600);
 
-                        remove_img_width = remove_image_view.getLayoutParams().width;
-                        remove_img_height = remove_image_view.getLayoutParams().height;
+                        remove_img_width = removeImage.getLayoutParams().width;
+                        remove_img_height = removeImage.getLayoutParams().height;
 
                         x_init_cord = x_cord;
                         y_init_cord = y_cord;
 
                         //remember the initial position.
-                        x_init_margin = layoutParams.x;
-                        y_init_margin = layoutParams.y;
-
+                        x_init_margin = iconParams.x;
+                        y_init_margin = iconParams.y;
                         return true;
+
                     case MotionEvent.ACTION_UP:
                         isLongClick = false;
-                        removeWidgetView.setVisibility(View.GONE);
-                        remove_image_view.getLayoutParams().height = remove_img_height;
-                        remove_image_view.getLayoutParams().width = remove_img_width;
-                        handler_longClick.removeCallbacks(runnable_longClick);
+                        removeLayerView.setVisibility(View.GONE);
+                        removeImage.getLayoutParams().height = remove_img_height;
+                        removeImage.getLayoutParams().width = remove_img_width;
+                        handler_longClick.removeCallbacks(onIconLongClick);
 
                         //If user drag and drop the floating widget view into remove view then stop the service
                         if (inBounded) {
@@ -203,7 +203,6 @@ public class OverlayLayersManager {
                             inBounded = false;
                             break;
                         }
-
 
                         //Get the difference between initial coordinate and current coordinate
                         int x_diff = x_cord - x_init_cord;
@@ -228,14 +227,14 @@ public class OverlayLayersManager {
                             y_cord_Destination = szWindow.y - (iconWidgetView.getHeight() + barHeight);
                         }
 
-                        layoutParams.y = y_cord_Destination;
+                        iconParams.y = y_cord_Destination;
 
                         inBounded = false;
 
                         //reset position if user drags the floating view
                         resetPosition(x_cord);
-
                         return true;
+
                     case MotionEvent.ACTION_MOVE:
                         int x_diff_move = x_cord - x_init_cord;
                         int y_diff_move = y_cord - y_init_cord;
@@ -249,45 +248,54 @@ public class OverlayLayersManager {
                             int x_bound_right = szWindow.x / 2 + (int) (remove_img_width * 1.5);
                             int y_bound_top = szWindow.y - (int) (remove_img_height * 1.5);
 
-                            //If Floating view comes under Remove View update Window Manager
+                            //If icon go over removeImage
                             if ((x_cord >= x_bound_left && x_cord <= x_bound_right) && y_cord >= y_bound_top) {
                                 inBounded = true;
 
-                                int x_cord_remove = (int) ((szWindow.x - (remove_img_height * 1.5)) / 2);
-                                int y_cord_remove = (int) (szWindow.y - ((remove_img_width * 1.5) + getStatusBarHeight()));
+                                int xCordRemove = (int) ((szWindow.x - (remove_img_width * 1.5)) / 2)
+                                        - IconDrawable.dpToPx(context.getResources(), 10);
+                                int yCordRemove = (int) (szWindow.y - ((remove_img_height * 1.5) + getStatusBarHeight()))
+                                        - IconDrawable.dpToPx(context.getResources(), 10);
 
-                                if (remove_image_view.getLayoutParams().height == remove_img_height) {
-                                    remove_image_view.getLayoutParams().height = (int) (remove_img_height * 1.5);
-                                    remove_image_view.getLayoutParams().width = (int) (remove_img_width * 1.5);
+                                if (removeImage.getLayoutParams().height == remove_img_height) {
+                                    //Increase removeImage size
+                                    ViewGroup.LayoutParams removeImageParams = removeImage.getLayoutParams();
+                                    removeImageParams.height = (int) (remove_img_height * 1.5);
+                                    removeImageParams.width = (int) (remove_img_width * 1.5);
+                                    UiUtils.setBackgroundColorToDrawable(context, R.color.rally_orange, removeImage.getBackground());
 
-                                    WindowManager.LayoutParams param_remove = (WindowManager.LayoutParams) removeWidgetView.getLayoutParams();
-                                    param_remove.x = x_cord_remove;
-                                    param_remove.y = y_cord_remove;
-
-                                    windowManager.updateViewLayout(removeWidgetView, param_remove);
+                                    //Reposition removeImage for new size
+                                    WindowManager.LayoutParams param_remove = (WindowManager.LayoutParams) removeLayerView.getLayoutParams();
+                                    param_remove.x = xCordRemove;
+                                    param_remove.y = yCordRemove;
+                                    windowManager.updateViewLayout(removeLayerView, param_remove);
                                 }
 
-                                layoutParams.x = x_cord_remove + (Math.abs(removeWidgetView.getWidth() - iconWidgetView.getWidth())) / 2;
-                                layoutParams.y = y_cord_remove + (Math.abs(removeWidgetView.getHeight() - iconWidgetView.getHeight())) / 2;
-
-                                //Update the layout with new X & Y coordinate
-                                windowManager.updateViewLayout(iconWidgetView, layoutParams);
+                                //Put icon over remove image
+                                iconParams.x = xCordRemove + (Math.abs(removeLayerView.getWidth() - iconWidgetView.getWidth())) / 2;
+                                iconParams.y = yCordRemove + (Math.abs(removeLayerView.getHeight() - iconWidgetView.getHeight())) / 2;
+                                windowManager.updateViewLayout(iconWidgetView, iconParams);
                                 break;
-                            } else {
-                                //If Floating window gets out of the Remove view update Remove view again
+                            } else { //if (inBounded) {
+                                //Icon was in but get out of Remove
                                 inBounded = false;
-                                remove_image_view.getLayoutParams().height = remove_img_height;
-                                remove_image_view.getLayoutParams().width = remove_img_width;
-                                //onIconWidgetClick();
-                            }
 
+                                UiUtils.setBackgroundColorToDrawable(context, R.color.rally_bg_solid, removeImage.getBackground());
+                                removeImage.getLayoutParams().height = remove_img_height;
+                                removeImage.getLayoutParams().width = remove_img_width;
+                                updateRemoveToInitial();
+                                
+                                /*WindowManager.LayoutParams removeParams = (WindowManager.LayoutParams) removeLayerView.getLayoutParams();
+                                removeParams.x = (szWindow.x - removeLayerView.getWidth()) / 2;
+                                removeParams.y = szWindow.y - (removeLayerView.getHeight() + getStatusBarHeight());
+                                windowManager.updateViewLayout(removeLayerView, removeParams);*/
+                            }
                         }
 
-                        layoutParams.x = x_cord_Destination;
-                        layoutParams.y = y_cord_Destination;
-
-                        //Update the layout with new X & Y coordinate
-                        windowManager.updateViewLayout(iconWidgetView, layoutParams);
+                        //Update icon position
+                        iconParams.x = x_cord_Destination;
+                        iconParams.y = y_cord_Destination;
+                        windowManager.updateViewLayout(iconWidgetView, iconParams);
                         return true;
                 }
                 return false;
@@ -312,24 +320,21 @@ public class OverlayLayersManager {
         final View iconWidgetView = getView(OverlayLayer.Type.ICON);
 
         new CountDownTimer(500, 5) {
-            //get params of Floating OverlayLayer view
             WindowManager.LayoutParams mParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
             public void onTick(long t) {
                 long step = (500 - t) / 5;
 
-                //If you want bounce effect toogle following lines
-                mParams.x = 0 - (int) (double) bounceValue(step, x);
-                // mParams.x = 0 - (int) (current_x_cord * current_x_cord * step);
+                if (isBouncing)
+                    mParams.x = 0 - (int) (double) bounceValue(step, x);
+                else
+                    mParams.x = 0 - (int) (current_x_cord * current_x_cord * step);
 
-                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
 
             public void onFinish() {
                 mParams.x = 0;
-
-                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
         }.start();
@@ -340,24 +345,21 @@ public class OverlayLayersManager {
         final View iconWidgetView = getView(OverlayLayer.Type.ICON);
 
         new CountDownTimer(500, 5) {
-            //get params of Floating OverlayLayer view
             WindowManager.LayoutParams mParams = (WindowManager.LayoutParams) iconWidgetView.getLayoutParams();
 
             public void onTick(long t) {
                 long step = (500 - t) / 5;
 
-                //If you want bounce effect uncomment below line and comment above line
-                //mParams.x = szWindow.x + (int) (double) bounceValue(step, x_cord_now) - iconWidgetView.getWidth();
-                mParams.x = (int) (szWindow.x + (current_x_cord * current_x_cord * step) - iconWidgetView.getWidth());
+                if (isBouncing)
+                    mParams.x = szWindow.x + (int) (double) bounceValue(step, current_x_cord) - iconWidgetView.getWidth();
+                else
+                    mParams.x = (int) (szWindow.x + (current_x_cord * current_x_cord * step) - iconWidgetView.getWidth());
 
-                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
 
             public void onFinish() {
                 mParams.x = szWindow.x - iconWidgetView.getWidth();
-
-                //Update window manager for Floating OverlayLayer
                 windowManager.updateViewLayout(iconWidgetView, mParams);
             }
         }.start();
@@ -372,20 +374,12 @@ public class OverlayLayersManager {
         return (int) Math.ceil(25 * context.getApplicationContext().getResources().getDisplayMetrics().density);
     }
 
-    private void onIconWidgetLongClick() {
-        View removeWidgetView = getView(OverlayLayer.Type.REMOVE);
-        //Get remove Floating view params
-        WindowManager.LayoutParams removeParams = (WindowManager.LayoutParams) removeWidgetView.getLayoutParams();
-
-        //get x and y coordinates of remove view
-        int x_cord = (szWindow.x - removeWidgetView.getWidth()) / 2;
-        int y_cord = szWindow.y - (removeWidgetView.getHeight() + getStatusBarHeight());
-
-        removeParams.x = x_cord;
-        removeParams.y = y_cord;
-
-        //Update Remove view params
-        windowManager.updateViewLayout(removeWidgetView, removeParams);
+    private void updateRemoveToInitial() {
+        View removeLayer = getView(OverlayLayer.Type.REMOVE);
+        WindowManager.LayoutParams removeParams = (WindowManager.LayoutParams) removeLayer.getLayoutParams();
+        removeParams.x = (szWindow.x - removeLayer.getWidth()) / 2;
+        removeParams.y = szWindow.y - (removeLayer.getHeight() + getStatusBarHeight());
+        windowManager.updateViewLayout(removeLayer, removeParams);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

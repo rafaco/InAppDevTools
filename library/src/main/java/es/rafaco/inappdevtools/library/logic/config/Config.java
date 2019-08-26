@@ -4,15 +4,15 @@ public enum Config {
 
     BUILD_TIME("BUILD_TIME", long.class, null),
     BUILD_TIME_UTC("BUILD_TIME_UTC", String.class, null),
-    ENABLED("ENABLED", boolean.class, false),
-    DEBUG("DEBUG", boolean.class, false),
-    EMAIL("EMAIL", String.class, ""),
-    OVERLAY_ENABLED("OVERLAY_ENABLED", boolean.class, true),
-    INVOCATION_BY_SHAKE("INVOCATION_BY_SHAKE", boolean.class, true),
-    INVOCATION_BY_ICON("INVOCATION_BY_ICON", boolean.class, false),
-    INVOCATION_BY_NOTIFICATION("INVOCATION_BY_NOTIFICATION", boolean.class, true),
-    CALL_DEFAULT_CRASH_HANDLER("CALL_DEFAULT_CRASH_HANDLER", boolean.class, false),
-    STICKY_SERVICE("STICKY_SERVICE", boolean.class, false);
+    ENABLED("enabled", boolean.class, false),
+    DEBUG("debug", boolean.class, false),
+    EMAIL("email", String.class, ""),
+    OVERLAY_ENABLED("overlayEnabled", boolean.class, true),
+    INVOCATION_BY_SHAKE("invocationByShake", boolean.class, true),
+    INVOCATION_BY_ICON("invocationByIcon", boolean.class, false),
+    INVOCATION_BY_NOTIFICATION("invocationByNotification", boolean.class, true),
+    CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", boolean.class, false),
+    STICKY_SERVICE("stickyService", boolean.class, false);
 
     private final String key;
     private final Class<?> valueType;
