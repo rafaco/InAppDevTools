@@ -112,8 +112,9 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
-    debug = false
+    debug = true
     email = 'inappdevtools@gmail.com'
     invocationByNotification = false
     invocationByIcon = true
+    invocationByShake = true
 }

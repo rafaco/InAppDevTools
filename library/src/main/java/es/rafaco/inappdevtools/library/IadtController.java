@@ -223,13 +223,14 @@ public final class IadtController extends ContentProvider {
 
     //region [ METHODS FOR FEATURES ]
 
-    public void show() {
-        if (!isEnabled()) return;
+    private boolean checksBeforeShowOverlay() {
+        if (!isEnabled()) return true;
+        if (!AppUtils.isForegroundImportance(getAppContext())) return true;
 
         if (isPendingForegroundInit) {
             initForegroundIfPending();
             if (!isPendingForegroundInit)
-                return;
+                return true;
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
@@ -237,7 +238,7 @@ public final class IadtController extends ContentProvider {
                         new Runnable() {
                             @Override
                             public void run() {
-                                show();
+                                showMain();
                             }
                         },
                         new Runnable() {
@@ -247,22 +248,43 @@ public final class IadtController extends ContentProvider {
                             }
                         });
             }
-            return;
+            return true;
         }
+        return false;
+    }
 
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW, null);
+    public void showToggle() {
+        if (checksBeforeShowOverlay()) return;
+
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_TOGGLE, null);
+        getAppContext().startService(intent);
+    }
+    public void showMain() {
+        if (checksBeforeShowOverlay()) return;
+
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_MAIN, null);
         getAppContext().startService(intent);
     }
 
-    public boolean hide() {
-        if (!isEnabled()
-                || isPendingForegroundInit){
-            return false;
-        }
+    public void showIcon() {
+        if (checksBeforeShowOverlay()) return;
 
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE, null);
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_ICON, null);
         getAppContext().startService(intent);
-        return true;
+    }
+
+    public void hideAll() {
+        //if (checksBeforeShowOverlay()) return;
+
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE_ALL, null);
+        getAppContext().startService(intent);
+    }
+
+    public void restoreAll() {
+        //if (checksBeforeShowOverlay()) return;
+
+        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.RESTORE_ALL, null);
+        getAppContext().startService(intent);
     }
 
     public void takeScreenshot() {
@@ -272,7 +294,7 @@ public final class IadtController extends ContentProvider {
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayUIService.isInitialize()){
-            hide();
+            showIcon();
         }
         FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());
     }

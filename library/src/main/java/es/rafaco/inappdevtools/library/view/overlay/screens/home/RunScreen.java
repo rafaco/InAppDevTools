@@ -111,7 +111,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hide();
+                        IadtController.get().showIcon();
                         WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.DISABLE,
                                 new Runnable() {
                                     @Override
@@ -137,7 +137,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hide();
+                        IadtController.get().showIcon();
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
@@ -146,7 +146,7 @@ public class RunScreen extends OverlayScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().hide();
+                        IadtController.get().showIcon();
                         AppUtils.openDeveloperOptions(RunScreen.this.getContext());
                     }
                 }));

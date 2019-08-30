@@ -56,12 +56,12 @@ public class Iadt {
 
     public static void show() {
         if (!isEnabled()) return;
-        getController().show();
+        getController().showMain();
     }
 
     public static void hide() {
         if (!isEnabled()) return;
-        getController().hide();
+        getController().showIcon();
     }
 
     public static void takeScreenshot() {

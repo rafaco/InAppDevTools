@@ -292,7 +292,7 @@ public class MainOverlayLayerManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        IadtController.get().hide();
+        IadtController.get().showIcon();
     }
 
     private abstract class AnimationEndListener implements Animation.AnimationListener {

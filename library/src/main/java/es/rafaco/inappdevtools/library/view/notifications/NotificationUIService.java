@@ -104,7 +104,7 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();
-                    IadtController.get().show();
+                    IadtController.get().showMain();
                     break;
             }
         }
@@ -215,7 +215,7 @@ public class NotificationUIService extends Service {
             builder.setColor(getResources().getColor(R.color.rally_orange));
         }
 
-        // Make notification show big text.
+        // Make notification showMain big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(title);
         bigTextStyle.bigText(overview);
@@ -254,7 +254,7 @@ public class NotificationUIService extends Service {
                 //.setSubText("setSubText")           //Group second
                 .setWhen(System.currentTimeMillis()); //Group third
 
-        // Make notification show big text.
+        // Make notification showMain big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(title);
         bigTextStyle.bigText("Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.");
@@ -313,7 +313,7 @@ public class NotificationUIService extends Service {
             NotificationChannel channel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if(channel==null){
                 CharSequence name = "NotificationUIService";
-                String description = "To show Iadt report notification";
+                String description = "To showMain Iadt report notification";
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 channel = new NotificationChannel(CHANNEL_ID, name, importance);
                 channel.setDescription(description);

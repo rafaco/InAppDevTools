@@ -89,6 +89,10 @@ public class UiUtils {
         return sizes;
     }
 
+    public static int getStatusBarHeight(Context context) {
+        return (int) Math.ceil(25 * context.getApplicationContext().getResources().getDisplayMetrics().density);
+    }
+
     public static float getPixelsFromDp(Context context, float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
     }

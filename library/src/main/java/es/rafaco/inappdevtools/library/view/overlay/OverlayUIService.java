@@ -53,13 +53,16 @@ public class OverlayUIService extends Service {
         NAVIGATE_HOME,
         NAVIGATE_BACK,
         NAVIGATE_TO,
-        SHOW,
-        HIDE,
+        SHOW_MAIN,
+        SHOW_ICON,
+        SHOW_TOGGLE,
+        HIDE_ALL,
+        RESTORE_ALL,
         REPORT,
         SCREEN,
         TOOL,
         RESTART_APP,
-        CLOSE_APP,
+        CLOSE_APP,;
     }
 
     private OverlayLayersManager overlayLayersManager;
@@ -89,6 +92,7 @@ public class OverlayUIService extends Service {
             if (action != null){
                 processIntentAction(action, target, params);
             }else{
+                isInitialised();
                 if (IadtController.get().isDebug())
                     Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
             }
@@ -146,6 +150,7 @@ public class OverlayUIService extends Service {
         overlayLayersManager = new OverlayLayersManager(this);
         mainOverlayLayerManager = new MainOverlayLayerManager(this, overlayLayersManager.getMainLayer());
 
+        //Load screen definitions
         //TODO: delegate to ToolManager or delete
         mainOverlayLayerManager.registerScreen(HomeScreen.class);
         mainOverlayLayerManager.registerScreen(InfoScreen.class);
@@ -165,6 +170,13 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(SourcesScreen.class);
         mainOverlayLayerManager.registerScreen(SourceDetailScreen.class);
         mainOverlayLayerManager.registerScreen(AnalysisScreen.class);
+
+        //Load home screen
+        if (mainOverlayLayerManager.getCurrentScreen() == null){
+            navigateHome();
+        }
+        overlayLayersManager.toggleVisibility(true);
+        showIcon();
     }
 
     //endregion
@@ -185,15 +197,22 @@ public class OverlayUIService extends Service {
             String cleanName = target.replace(" Tool", "");
             navigateTo(cleanName, params);
         }
-        else if (action.equals(IntentAction.HIDE)){
-            hide();
+        else if (action.equals(IntentAction.SHOW_MAIN)) {
+            showMain();
         }
-        else if (action.equals(IntentAction.SHOW)) {
-            if (mainOverlayLayerManager.getCurrentScreen() == null){
-                navigateHome();
-            }
-            overlayLayersManager.setMainVisibility(true);
+        else if (action.equals(IntentAction.SHOW_ICON)){
+            showIcon();
         }
+        else if (action.equals(IntentAction.SHOW_TOGGLE)) {
+            showToggle();
+        }
+        else if (action.equals(IntentAction.HIDE_ALL)){
+            hideAll();
+        }
+        else if (action.equals(IntentAction.RESTORE_ALL)){
+            restoreAll();
+        }
+
         else if (action.equals(IntentAction.REPORT)){
             navigateTo(ReportScreen.class.getSimpleName());
         }
@@ -212,11 +231,27 @@ public class OverlayUIService extends Service {
 
     //region [ INTERNAL NAVIGATION ]
 
-    private void hide() {
-        overlayLayersManager.setMainVisibility(false);
+    private void showToggle() {
+        overlayLayersManager.toggleMainIconVisibility(null);
+    }
+
+    private void showMain() {
+        overlayLayersManager.toggleMainIconVisibility(true);
+    }
+
+    private void showIcon() {
+        overlayLayersManager.toggleMainIconVisibility(false);
         if (Iadt.isDebug()){
             IadtController.get().getEventManager().fire(Event.OVERLAY_HIDDEN, null);
         }
+    }
+
+    private void hideAll() {
+        overlayLayersManager.toggleVisibility(false);
+    }
+
+    private void restoreAll() {
+        overlayLayersManager.toggleVisibility(true);
     }
 
     public void navigateHome() {
@@ -228,7 +263,7 @@ public class OverlayUIService extends Service {
     }
 
     public void navigateTo(String name, String param) {
-        overlayLayersManager.setMainVisibility(true);
+        overlayLayersManager.toggleMainIconVisibility(true);
         mainOverlayLayerManager.goTo(name, param);
     }
 

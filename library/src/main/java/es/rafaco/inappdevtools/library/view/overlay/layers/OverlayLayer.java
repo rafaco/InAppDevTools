@@ -10,15 +10,9 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
 
 public abstract class OverlayLayer {
 
-    protected final OverlayLayersManager manager;
-
-    public void onConfigurationChange(Configuration newConfig) {
-
-    }
-
     public enum Type { ICON, REMOVE, MAIN}
 
-
+    protected final OverlayLayersManager manager;
     protected View view;
 
     public OverlayLayer(OverlayLayersManager manager) {
@@ -36,8 +30,6 @@ public abstract class OverlayLayer {
         manager.getWindowManager().addView(view, paramRemove);
         afterAttachView(view);
     }
-
-    protected void afterAttachView(View view) { }
 
     public View getView() {
         return view;
@@ -70,6 +62,10 @@ public abstract class OverlayLayer {
             return TYPE_APPLICATION_ATTACHED_DIALOG;
         }
     }*/
+
+
+    protected void afterAttachView(View view) {}
+    public void onConfigurationChange(Configuration newConfig) {}
 
     public abstract OverlayLayer.Type getType();
     protected abstract int getLayoutId();

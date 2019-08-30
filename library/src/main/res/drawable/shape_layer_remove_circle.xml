@@ -6,6 +6,6 @@
         android:width="1dp"
         android:color="@android:color/white" />
 
-    <solid android:color="@color/rally_bg_solid"/>
+    <solid android:color="@color/rally_gray"/>
 
 </shape>

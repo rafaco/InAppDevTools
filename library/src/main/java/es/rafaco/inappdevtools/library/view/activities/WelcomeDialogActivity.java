@@ -171,7 +171,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.button_open_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        IadtController.get().show();
+                        IadtController.get().showMain();
                         closeAll(true);
                     }
                 })
