@@ -213,10 +213,10 @@ public class MainOverlayLayer extends OverlayLayer {
     private void onToolbarButtonPressed(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_hide) {
-            IadtController.get().hide();
+            IadtController.get().showIcon();
         }
         else if (selected == R.id.action_half_position) {
-            toogleSizePosition(item);
+            toggleSizePosition(item);
         }
         else if (selected == R.id.action_close) {
             IadtController.get().forceCloseApp(false);
@@ -239,7 +239,7 @@ public class MainOverlayLayer extends OverlayLayer {
     public enum SizePosition { FULL, HALF_FIRST, HALF_SECOND}
     private SizePosition currentSizePosition = SizePosition.FULL;
 
-    public void toogleSizePosition(MenuItem item) {
+    public void toggleSizePosition(MenuItem item) {
 
         WindowManager.LayoutParams viewLayoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
         LinearLayout child = view.findViewById(R.id.main_container);
