@@ -91,8 +91,6 @@ public class ShakeEventDetector extends EventDetector {
                     return;
                 }
                 mShakeTimestamp = now;
-                Log.d(Iadt.TAG, "RAFA - Shake action detected!");
-
                 eventManager.fire(Event.SHAKE);
             }
         }

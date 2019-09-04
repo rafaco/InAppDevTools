@@ -2,9 +2,21 @@
 
     <string name="library_name">InAppDevTools</string>
 
+    <!-- Config description -->
+    <string name="config_build_time">Last compilation build time in milliseconds</string>
+    <string name="config_build_time_utc">Last compilation build time in utc format</string>
+    <string name="config_enable">Disable all and simulate the no-op library and plugin</string>
+    <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
+    <string name="config_email">Default email to use for reports</string>
+    <string name="config_overlay_enable">Disable our overlay interface</string>
+    <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
+    <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
+    <string name="config_invocation_by_notification">Disable showing our notification to open the UI</string>
+    <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
+
     <!-- Dialogs -->
     <string name="welcome_privacy_title">Developer Tools</string>
-    <string name="welcome_privacy_content">This compilation contains developer tools that are locally recording everything for us. We will never send it without your explicit consent and only you can do it by using our reporting feature.\n\nIf you are not a developer or you are not agree, tap disable.</string>
+    <string name="welcome_privacy_content">This compilation contains some tools that are locally recording your usage. Nothing will be send without your explicit consent, only you can do it by using our reporting feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
     <string name="welcome_permission_title">Overlay permission</string>
     <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen you have to accept it, then press back button.</string>
     <string name="welcome_enabled_title">Developer Tools enabled</string>

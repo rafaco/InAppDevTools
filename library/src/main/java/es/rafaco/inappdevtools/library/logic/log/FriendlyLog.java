@@ -285,6 +285,9 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("Exception")){
                 return R.drawable.ic_bug_report_white_24dp;
             }
+            else if (log.getSubcategory().equals("Config")){
+                return R.drawable.ic_settings_white_24dp;
+            }
             else if (log.getSubcategory().equals("Delete")){
                 return R.drawable.ic_delete_forever_white_24dp;
             }

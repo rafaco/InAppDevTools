@@ -24,6 +24,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
@@ -107,8 +108,7 @@ public class OverlayUIService extends Service {
             }
         }
 
-        return Iadt.getConfig().getBoolean(Config.STICKY_SERVICE) ?
-                START_STICKY : START_NOT_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -170,11 +170,10 @@ public class OverlayUIService extends Service {
         mainOverlayLayerManager.registerScreen(SourcesScreen.class);
         mainOverlayLayerManager.registerScreen(SourceDetailScreen.class);
         mainOverlayLayerManager.registerScreen(AnalysisScreen.class);
+        mainOverlayLayerManager.registerScreen(ConfigScreen.class);
 
-        //Load home screen
-        if (mainOverlayLayerManager.getCurrentScreen() == null){
-            navigateHome();
-        }
+        //Load home screen to be ready to switch
+        navigateHome();
         overlayLayersManager.toggleVisibility(true);
         showIcon();
     }

@@ -16,6 +16,33 @@ public class ConfigManager {
         compileConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
     }
 
+    public Object get(Config config) {
+        if (config.getValueType() == boolean.class){
+            return getBoolean(config);
+        }
+        else if (config.getValueType() == String.class){
+            return getString(config);
+        }
+        else if (config.getValueType() == long.class){
+            return getLong(config);
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void set(Config config, Object value) {
+        if (config.getValueType() == boolean.class){
+            setBoolean(config, (Boolean) value);
+        }
+        else if (config.getValueType() == String.class){
+            setString(config, (String) value);
+        }
+        else if (config.getValueType() == long.class){
+            setLong(config, (Long) value);
+        }
+    }
+
     public boolean getBoolean(Config config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getBoolean(config.getKey(), false);
@@ -30,7 +57,7 @@ public class ConfigManager {
 
     public void setBoolean(Config config, boolean value) {
         DevToolsPrefs.setBoolean(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public String getString(Config config) {
@@ -47,7 +74,7 @@ public class ConfigManager {
 
     public void setString(Config config, String value) {
         DevToolsPrefs.setString(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public long getLong(Config config) {
@@ -64,6 +91,6 @@ public class ConfigManager {
 
     public void setLong(Config config, long value) {
         DevToolsPrefs.setLong(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

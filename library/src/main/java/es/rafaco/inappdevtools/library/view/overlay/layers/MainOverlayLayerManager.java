@@ -32,12 +32,11 @@ public class MainOverlayLayerManager {
 
     protected Context context;
     private final MainOverlayLayer mainLayer;
+    private static OverlayScreen currentScreen = null;
     private final LayoutInflater inflater;
-
     private List<Class<? extends OverlayScreen>> registeredScreens;
     private List<NavigationStep> navigationHistory;
     private OverlayScreen loadedScreen = null;
-    private OverlayScreen currentScreen = null;
     private Toolbar screenToolbar;
 
     public MainOverlayLayerManager(Context context, MainOverlayLayer mainLayer) {
@@ -61,14 +60,25 @@ public class MainOverlayLayerManager {
     public ViewGroup getView() {
         return (ViewGroup) mainLayer.getView();
     }
-    public OverlayScreen getCurrentScreen(){
+
+    public static OverlayScreen getCurrentScreen(){
         return currentScreen;
     }
 
+    private static void setCurrentScreen(OverlayScreen screen) {
+        currentScreen = screen;
+    }
+
+    public static String getCurrent(){
+        if (getCurrentScreen() == null)
+            return null;
+        return currentScreen.getClass().getSimpleName();
+    }
+
     public void destroy() {
-        if (currentScreen != null){
+        if (getCurrentScreen() != null){
             currentScreen.destroy();
-            currentScreen = null;
+            setCurrentScreen(null);
         }
     }
 
@@ -104,15 +114,15 @@ public class MainOverlayLayerManager {
         if (getCurrentScreen() == null) {
             loadedScreen.toggleHeadVisibility(true);
             ExpandCollapseUtils.expand(loadedScreen.bodyView, null);
-            currentScreen = loadedScreen;
+            setCurrentScreen(loadedScreen);
         }
         else {
 
             //No animation
-            currentScreen.toggleVisibility(false);
+            getCurrentScreen().toggleVisibility(false);
             destroyPreviousScreen();
             loadedScreen.toggleVisibility(true);
-            currentScreen = loadedScreen;
+            setCurrentScreen(loadedScreen);
 
             /*
             ExpandCollapseUtils.collapse(mainLayer.getFullContainer(),
@@ -283,7 +293,7 @@ public class MainOverlayLayerManager {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        if (currentScreen != null)
+        if (getCurrentScreen() != null)
             currentScreen.onConfigurationChanged(newConfig);
         if (screenToolbar != null){
             screenToolbar.requestLayout();

@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -51,6 +50,10 @@ public class MoreScreen extends OverlayScreen {
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
+
+        data.add("Playgrounds and old screens (pending to remove):\n" +
+                " - Go to Log screen to see all items from Network, Screens, Errors and Logcat\n" +
+                " - Config is now on toolbar 'Settings'\n");
 
         data.add(new RunnableItem("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
@@ -97,8 +100,7 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {
-                        Iadt.showMessage("TODO");
+                    public void run() {OverlayUIService.performNavigation(ConfigScreen.class);
                     }
                 }));
 

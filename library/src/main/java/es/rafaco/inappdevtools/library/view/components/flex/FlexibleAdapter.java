@@ -36,6 +36,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     public static final String TYPE_TRACE = "TYPE_TRACE";
     public static final String TYPE_TRACE_GROUP = "TYPE_TRACE_GROUP";
     public static final String TYPE_ANALYSIS = "TYPE_ANALYSIS";
+    public static final String TYPE_CONFIG = "TYPE_CONFIG";
 
     public class FlexibleItemDescriptor {
         public final String name;
@@ -66,6 +67,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
         descriptors.add(new FlexibleItemDescriptor(TYPE_ANALYSIS, AnalysisItem.class,  AnalysisViewHolder.class, R.layout.flexible_item_analysis));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_CONFIG, ConfigItem.class,  ConfigViewHolder.class, R.layout.flexible_item_config));
     }
 
     @Override

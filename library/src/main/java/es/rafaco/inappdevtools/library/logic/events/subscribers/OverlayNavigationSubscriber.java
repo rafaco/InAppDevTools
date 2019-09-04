@@ -20,7 +20,7 @@ public class OverlayNavigationSubscriber extends EventSubscriber {
             @Override
             public void onEvent(Event event, Object param) {
                 NavigationStep step = (NavigationStep) param;
-                IadtController.get().setCurrentOverlay(step.getStringClassName());
+                //IadtController.get().setCurrentOverlay(step.getStringClassName());
                 FriendlyLog.log("D", "Iadt", "Navigation", "Overlay navigation to " + step.getStringClassName());
             }
         });
@@ -28,7 +28,7 @@ public class OverlayNavigationSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.OVERLAY_HIDDEN, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                IadtController.get().setCurrentOverlay(null);
+                //IadtController.get().setCurrentOverlay(null);
                 FriendlyLog.log("D", "Iadt", "Hidden", "Overlay hidden");
             }
         });

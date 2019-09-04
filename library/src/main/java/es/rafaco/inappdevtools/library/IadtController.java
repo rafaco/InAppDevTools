@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
@@ -50,7 +51,6 @@ public final class IadtController extends ContentProvider {
     private SourcesManager sourcesManager;
     private RunnablesManager runnablesManager;
     private boolean isPendingForegroundInit;
-    private String currentOverlayScreen;
 
     public IadtController() {
         if (INSTANCE != null) {
@@ -344,13 +344,8 @@ public final class IadtController extends ContentProvider {
         LogcatHelper.clearLogcatBuffer();
     }
 
-
-    public void setCurrentOverlay(String stringClassName) {
-        currentOverlayScreen = stringClassName;
-    }
-
     public String getCurrentOverlay() {
-        return currentOverlayScreen;
+        return MainOverlayLayerManager.getCurrent();
     }
 
     //endregion

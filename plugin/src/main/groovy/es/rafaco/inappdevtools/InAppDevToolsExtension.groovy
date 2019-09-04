@@ -11,5 +11,4 @@ class InAppDevToolsExtension {
     Boolean invocationByIcon
     Boolean invocationByNotification
     Boolean callDefaultCrashHandler
-    Boolean stickyService
 }

@@ -59,9 +59,6 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.callDefaultCrashHandler!=null)
             propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 
-        if (extension.stickyService!=null)
-            propertiesMap.put("stickyService", extension.stickyService)
-
         File file = getFile(project, "${outputPath}/compile_config.json")
         saveConfigMap(propertiesMap, file)
     }
