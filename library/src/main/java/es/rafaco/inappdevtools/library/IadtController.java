@@ -138,14 +138,14 @@ public final class IadtController extends ContentProvider {
         if (isDebug())
             Log.d(Iadt.TAG, "Initializing foreground services...");
 
-        if (PendingCrashUtil.isPending()){
-            // IsPendingCrash, we open crash details at overlay
-            Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
-            getAppContext().startService(intent);
-            PendingCrashUtil.clearPending();
-        }
-        else{
-            if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
+        if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
+            if (PendingCrashUtil.isPending()){
+                // IsPendingCrash, we open crash details at overlay
+                Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
+                getAppContext().startService(intent);
+                PendingCrashUtil.clearPending();
+            }
+            else {
                 //Start OverlayUIService
                 getAppContext().startService(new Intent(getAppContext(), OverlayUIService.class));
             }
