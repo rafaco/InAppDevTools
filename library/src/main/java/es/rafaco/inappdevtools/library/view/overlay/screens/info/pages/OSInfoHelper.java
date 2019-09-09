@@ -37,7 +37,8 @@ public class OSInfoHelper extends AbstractInfoHelper  {
 
     @Override
     public String getOverview() {
-        return "Android " + getOsCodename() + " (" + Build.VERSION.RELEASE + ")\n"
+
+        return "Android " + getAndroidVersionFull() + "\n"
                 + (deviceHelper.isDeviceRooted() ? "[Rooted] " : "")
                 + getDisplayLanguage() + " - " + getDisplayCountry();
     }
@@ -68,15 +69,27 @@ public class OSInfoHelper extends AbstractInfoHelper  {
 
     protected InfoGroup getAndroidGroup(EasyDeviceMod deviceHelper) {
         return new InfoGroup.Builder("")
-                .add("Android version", getOsCodename() + " (" + Build.VERSION.RELEASE + ")")
-                .add("Android SDK version",  getVersionCodeName()+ " (" + String.valueOf(Build.VERSION.SDK_INT) + ")")
+                .add("Android version", getAndroidVersionFull())
+                .add("Android SDK version",  getVersionCodeName()+ " (" + Build.VERSION.SDK_INT + ")")
                 .add("isRooted", deviceHelper.isDeviceRooted())
                     .build();
     }
 
+    private String getAndroidVersionFull() {
+        if (getOsCodename() != null){
+            return getOsCodename() + " (" + Build.VERSION.RELEASE + ")";
+        }
+        else{
+            return Build.VERSION.RELEASE;
+        }
+    }
+
     private String getOsCodename() {
-        //Parsing values not included in DeviceInfo
-        if (getVersionCodeName().equals("O")){
+        //Parsing modern values not included in DeviceInfo
+        if (Build.VERSION.SDK_INT >= 10){
+            return null;
+        }
+        else if (getVersionCodeName().equals("O")){
             return "Oreo";
         }else if (getVersionCodeName().equals("P")){
             return "Pie";

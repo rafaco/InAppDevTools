@@ -75,7 +75,7 @@ public class InitialEventDetector extends EventDetector {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart",
                             "App first start (no data)");
                 } else if (NewBuildUtil.isNewBuild()) {
-                    FriendlyLog.log(new Date().getTime(), "W", "App", "Start",
+                    FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started (new compilation over old data)");
                 } else {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",

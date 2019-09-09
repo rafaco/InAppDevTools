@@ -78,11 +78,24 @@ public final class IadtController extends ContentProvider {
 
     private void init(Context context) {
         appContext = context.getApplicationContext();
+
+        boolean backgroundIsUp = initBackground();
+        if (!backgroundIsUp)
+            return;
+
+        if (!AppUtils.isForegroundImportance(context)){
+            isPendingForegroundInit = true;
+        }else{
+            initForeground();
+        }
+    }
+
+    private boolean initBackground() {
         configManager = new ConfigManager(appContext);
 
         if (!isEnabled()){
             Log.w(Iadt.TAG, "Iadt DISABLED by configuration");
-            return;
+            return false;
         }else{
             Log.d(Iadt.TAG, "Iadt ENABLED");
         }
@@ -101,12 +114,7 @@ public final class IadtController extends ContentProvider {
                 }
             });
         }
-
-        if (!AppUtils.isForegroundImportance(context)){
-            isPendingForegroundInit = true;
-        }else{
-            initForeground();
-        }
+        return true;
     }
 
     public void initForegroundIfPending(){
@@ -126,6 +134,16 @@ public final class IadtController extends ContentProvider {
                     },
                     null);
             FirstStartUtil.saveFirstStart();
+        }
+        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            onInitForeground();
+                        }
+                    },
+                    null);
         }
         else{
             onInitForeground();

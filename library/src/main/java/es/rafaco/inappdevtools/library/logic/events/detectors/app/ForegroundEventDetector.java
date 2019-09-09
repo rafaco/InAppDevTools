@@ -6,6 +6,7 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 
 public class ForegroundEventDetector extends EventDetector {
 
@@ -20,6 +21,13 @@ public class ForegroundEventDetector extends EventDetector {
 
     @Override
     public void subscribe() {
+        eventManager.subscribe(Event.APP_START, new EventManager.Listener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                onAppStart();
+            }
+        });
+
         eventManager.subscribe(Event.ACTIVITY_ON_RESUME, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
@@ -37,14 +45,14 @@ public class ForegroundEventDetector extends EventDetector {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("I","App", "Foreground",
-                        "App to foreground");
+                        "App is foreground");
             }
         });
         eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("I","App", "Background",
-                        "App to background");
+                        "App is background");
             }
         });
     }
@@ -59,13 +67,23 @@ public class ForegroundEventDetector extends EventDetector {
 
     }
 
+    private void onAppStart() {
+        if (!AppUtils.isForegroundImportance(getContext())) {
+            mInBackground = true;
+            eventManager.fire(Event.IMPORTANCE_BACKGROUND);
+        }else{
+            mInBackground = false;
+            eventManager.fire(Event.IMPORTANCE_FOREGROUND);
+        }
+    }
+
     private void updateOnActivityResumed() {
         if (mBackgroundTransition != null) {
             mBackgroundDelayHandler.removeCallbacks(mBackgroundTransition);
             mBackgroundTransition = null;
         }
 
-        if (mInBackground) {
+        if (mInBackground && AppUtils.isForegroundImportance(getContext())) {
             mInBackground = false;
             eventManager.fire(Event.IMPORTANCE_FOREGROUND);
         }
