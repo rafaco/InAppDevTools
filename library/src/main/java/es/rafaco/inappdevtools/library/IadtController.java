@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
@@ -114,6 +115,10 @@ public final class IadtController extends ContentProvider {
                 }
             });
         }
+
+        Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
+        LogcatReaderService.enqueueWork(getContext(), intent);
+        
         return true;
     }
 
@@ -405,12 +410,17 @@ public final class IadtController extends ContentProvider {
         am.killBackgroundProcesses(getAppContext().getPackageName());*/
 
         if (isDebug())
-            Log.w(Iadt.TAG, "Stopping Foreground");
+            Log.w(Iadt.TAG, "Stopping Notification Service");
         NotificationUIService.stop();
 
         if (isDebug())
-            Log.w(Iadt.TAG, "Stopping Overlay");
+            Log.w(Iadt.TAG, "Stopping OverlayUI Service");
         OverlayUIService.stop();
+
+        if (isDebug())
+            Log.w(Iadt.TAG, "Stopping LogcatReaderService");
+        Intent intent = LogcatReaderService.getStopIntent(getContext());
+        LogcatReaderService.enqueueWork(getContext(), intent);
     }
 
     //endregion

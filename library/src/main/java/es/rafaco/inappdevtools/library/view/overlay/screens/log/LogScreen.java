@@ -1,11 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,10 +59,8 @@ public class LogScreen extends OverlayScreen {
 
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
-    private LogcatReaderService myService;
     private LogFilterHelper logFilterHelper;
     private LogFilterDialog filterDialog;
-    private boolean isBind;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -107,8 +101,6 @@ public class LogScreen extends OverlayScreen {
         initFilterHelper();
         initAdapter();
         initScroll();
-
-        //bindService();
     }
 
     private void initFilterHelper() {
@@ -118,15 +110,12 @@ public class LogScreen extends OverlayScreen {
     @Override
     protected void onStop() {
         //TODO: removeLifecycleObserver();
-        LogcatReaderService.start(getContext(), "Update");
+        Intent intent = LogcatReaderService.getStartIntent(getContext(), "Update timing");
+        LogcatReaderService.enqueueWork(getContext(), intent);
 
         //updateParams();
         if (filterDialog !=null && filterDialog.getDialog()!=null){
             filterDialog.getDialog().dismiss();
-        }
-
-        if (isBind) {
-            getContext().unbindService(serviceConnection);
         }
     }
 
@@ -143,34 +132,6 @@ public class LogScreen extends OverlayScreen {
 
         recyclerView = getView().findViewById(R.id.list);
     }
-
-    //region [ BINDING]
-
-    private void bindService() {
-        Intent intent = new Intent(getContext(), LogcatReaderService.class);
-        getContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LogcatReaderService.LocalService localService = (LogcatReaderService.LocalService) service;
-            myService = localService.getService();
-            onServiceBind(name, service);
-            isBind = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBind = false;
-        }
-    };
-
-    private void onServiceBind(ComponentName name, IBinder service) {
-        myService.performAction(LogcatReaderService.START_ACTION, "scanner");
-    }
-
-    //endregion
 
     //region [ ADAPTER ]
 
@@ -215,7 +176,8 @@ public class LogScreen extends OverlayScreen {
 
         adapter.notifyDataSetChanged();
 
-        LogcatReaderService.start(getContext(), "Initialize from LogScreen");
+        Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from LogScreen");
+        LogcatReaderService.enqueueWork(getContext(), intent);
     }
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {

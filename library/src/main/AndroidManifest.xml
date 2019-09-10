@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application>
 
@@ -25,7 +26,7 @@
         </provider>
 
         <service android:name=".logic.log.reader.LogcatReaderService"
-            android:exported="false"/>
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service android:name=".view.overlay.OverlayUIService"
             android:exported="false"/>
