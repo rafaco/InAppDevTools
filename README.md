@@ -1,9 +1,20 @@
-# InAppDevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
+# InAppDevTools 
 
-<p style="text-align: center;">
-<img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="200"></p>
+<table border="0">
+ <tr>
+    <td width="50%"><img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png"></td>
+    <td width="50%">
+        
+[![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) 
 
-**InAppDevTools is an library that make Android developers live easier and more productive. It allows to inspect, debug and report from within your own app, using the device screen!**
+[![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) 
+
+[![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
+    </td>
+ </tr>
+</table>
+
+**InAppDevTools is a library that make Android developers live easier and more productive. It allows to inspect, debug and report from within your own app, using the device screen!**
 
 
 **Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
@@ -118,7 +129,7 @@ inappdevtools {
 }
 ```
 
-You can override previous configurations at run time by using the ConfigScreen (Home, Config) or programmatically from your sources. Values will be lost after cleaning app's data. 
+You can also override build configurations at run time by using our Config Screen (Overlay toolbar > More > Setting) or programmatically from your sources. This values will be lost when cleaning your app data, restoring the build configuration. 
 ```java
 Iadt.getConfig().setBoolean(Config.ENABLED, false);
 Iadt.restartApp();
@@ -180,9 +191,10 @@ All artifacts are generated from [this GitHub repo](https://github.com/rafaco/In
 
 ### About the author
 
-I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. This is my first open source contribution and I'm looking forward to create a small community around.
+I'm a Senior Software Engineer who has always been working on proprietary software around Spain and UK. I started this project as a personal tool to support my daily duties but I realise it could be interesting for other Android developers. After 2 years of overnight coding fun, I've left my work position to make it flexible and polished for everyone joy. I hope to publish a fully functional version before Christmas 2019.
 
-I started this project as a playground to learn Android, then it become a personal tool to support my daily duties and then I realise it could be interesting for every Android developer. After 2 years of overnight coding fun, I've left a permanent work position to make it flexible and polished for everyone joy. I hope to publish a fully functional version at the end of this summer (2019).
+This is my first open source project and I'm looking forward to create a small community around. Please feel free to correct me, give me any advise or pointing me in the right direction. 
+
 
 ## Thanks <a name="thanks"/>
 - To [@whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
