@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
@@ -213,17 +214,20 @@ public class MainOverlayLayer extends OverlayLayer {
 
     private void onToolbarButtonPressed(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_hide) {
+        if (selected == R.id.action_close) {
             IadtController.get().showIcon();
         }
         else if (selected == R.id.action_half_position) {
             toggleSizePosition(item);
         }
-        else if (selected == R.id.action_settings) {
+        else if (selected == R.id.action_help) {
+            ExternalIntentUtils.viewReadme();
+        }
+        else if (selected == R.id.action_config) {
             OverlayUIService.performNavigation(ConfigScreen.class);
         }
-        else if (selected == R.id.action_close) {
-            IadtController.get().forceCloseApp(false);
+        else if (selected == R.id.action_share) {
+            ExternalIntentUtils.shareLibrary();
         }
     }
 

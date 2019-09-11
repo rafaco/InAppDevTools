@@ -22,6 +22,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.LinkItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
@@ -336,7 +337,7 @@ public class SourcesScreen extends OverlayScreen {
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_share) {
-            FileProviderUtils.shareText(Iadt.getAppContext(), getContentOverview());
+            ExternalIntentUtils.shareText(getContentOverview());
         }
         else if (selected == R.id.action_copy) {
             ClipboardUtils.save(getContext(), getContentOverview());
