@@ -1,7 +1,12 @@
-# In-App DevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
+# InAppDevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/inappdevtools/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
+
+<p style="text-align: center;">
+<img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="200"></p>
+
+**InAppDevTools is an library that make Android developers live easier and more productive. It allows to inspect, debug and report from within your own app, using the device screen!**
 
 
-**In-App DevTools is a set of developer tools that can be added to your debug compilation as a library. It's like Chrome DevTools but for Android apps and running on the same screen! (without cable and on the go). Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
+**Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
 
 - Inspectors: sources, logs, view layout, edit your storage (db, SharedPrefs and Files) and info panels
 - Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
@@ -123,15 +128,14 @@ Available properties:
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `enabled` | boolean | true | Disable all and simulate a no-op library and plugin |
-| `debug` | boolean | false | Refering to our library. Print extra logs and include our sources to your compilation  |
+| `enabled` | boolean | true | Disable all and simulate the no-op library and plugin |
 | `email` | String | null | Default email to use for reports |
-| `overlay_enabled` | boolean | true | Disable our overlay UI  |
-| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake  |
-| `invocation_by_icon` | boolean | false | Enable a permanent overlay icon to open our UI  |
-| `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI  |
-| `call_default_crash_handler` | boolean | false | Propagate unhandler exceptions to the default handler (Crashalitics)  |
-
+| `overlay_enabled` | boolean | true | Disable our overlay interface  |
+| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake |
+| `invocation_by_icon` | boolean | false | Enable a permanent overlay icon to open our UI |
+| `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI |
+| `call_default_crash_handler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
+| `debug` | boolean | false | Enable debug mode for the library. It print extra logs and include our sources to your compilation  |
 <!-- ## Customization <a name="customization"/> -->
 
 
@@ -154,7 +158,7 @@ All artifacts are generated from [this GitHub repo](https://github.com/rafaco/In
 | es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
 | es.rafaco.compat:support | compat | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
 | es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
-| es.rafaco.iadt.demo | sample | androidx | Demo app  | ~~[Google Play](https://play.google.com)~~ |
+| es.rafaco.iadt.demo | sample | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
 
 
 ### Continuous Integration <a name="ci"/>
