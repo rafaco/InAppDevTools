@@ -107,4 +107,8 @@ public class Iadt {
     public static boolean isNoop(){
         return true;
     }
+
+    public static void viewReadme() { }
+    public static void shareDemo() { }
+    public static void shareLibrary() { }
 }

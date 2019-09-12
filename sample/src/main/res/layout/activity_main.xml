@@ -21,7 +21,16 @@
 
     </es.rafaco.compat.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:fillViewport="true"
+        android:layout_marginTop="40dp">
+
+        <include layout="@layout/content_main" />
+
+    </ScrollView>
 
     <es.rafaco.compat.FloatingActionButton
         android:id="@+id/fab"

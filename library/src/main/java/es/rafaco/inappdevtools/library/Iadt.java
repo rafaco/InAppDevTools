@@ -17,6 +17,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import okhttp3.OkHttpClient;
 
 public class Iadt {
@@ -169,5 +170,16 @@ public class Iadt {
 
     public static boolean isNoop(){
         return false;
+    }
+
+
+    public static void viewReadme() {
+        ExternalIntentUtils.viewReadme();
+    }
+    public static void shareDemo() {
+        ExternalIntentUtils.shareDemo();
+    }
+    public static void shareLibrary() {
+        ExternalIntentUtils.shareLibrary();
     }
 }

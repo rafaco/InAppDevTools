@@ -30,4 +30,8 @@ public class ExternalIntentUtils {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         IadtController.get().getContext().startActivity(i);
     }
+
+    public static void shareDemo() {
+        //"TODO after publication on Play Store"
+    }
 }
