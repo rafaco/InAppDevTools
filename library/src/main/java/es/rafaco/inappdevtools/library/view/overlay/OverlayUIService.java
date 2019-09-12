@@ -22,25 +22,8 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
 
 public class OverlayUIService extends Service {
 
@@ -85,35 +68,9 @@ public class OverlayUIService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
-        String target = intent.getStringExtra(EXTRA_INTENT_TARGET);
-        String params = intent.getStringExtra(EXTRA_INTENT_PARAMS);
-        try {
-            if (action != null){
-                processIntentAction(action, target, params);
-            }else{
-                isInitialised();
-                if (IadtController.get().isDebug())
-                    Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
-            }
-        } catch (Exception e) {
-
-            if (IadtController.get().isDebug()){
-                throw e;
-            }else{
-                FriendlyLog.logException("OverlayUiService unable to start "
-                        + action + " " + target + " " + params,  e);
-                stopSelf();
-            }
-        }
-
-        return START_NOT_STICKY;
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
         if (overlayLayersManager != null){
             overlayLayersManager.onConfigurationChanged(newConfig);
         }
@@ -123,31 +80,66 @@ public class OverlayUIService extends Service {
         }
     }
 
-    //region [ INITIALIZE ]
+    //region [ STATIC ACCESSORS ]
+
+    public static void performNavigation(Class<? extends OverlayScreen> target) {
+        performNavigationStep(new NavigationStep(target, null));
+    }
+
+    public static void performNavigation(Class<? extends OverlayScreen> target, String param) {
+        performNavigationStep(new NavigationStep(target, param));
+    }
+
+    public static void performNavigationStep(NavigationStep step) {
+        if (step == null){
+            return;
+        }
+        Intent intent = buildScreenIntentAction(step.getClassName(), step.getParam());
+        Iadt.getAppContext().startService(intent);
+    }
+
+    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String params) {
+        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
+        if (screenClass!=null){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
+        }
+        if (!TextUtils.isEmpty(params)){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAMS, params);
+        }
+        return intent;
+    }
+
+    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
+        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
+        if (!TextUtils.isEmpty(property)){
+            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, property);
+        }
+        return intent;
+    }
+
+    public static void runAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = buildIntentAction(action, property);
+        Iadt.getAppContext().startService(intent);
+    }
+
+    //endregion
+
+    //region [ INIT ]
 
     public static boolean isInitialize() {
         return initialised;
     }
 
-    private boolean isInitialised() {
-        if (initialised)
-            return true;
-
-        if (false){ //!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            //TODO: remove
-            throw new UnsupportedOperationException("Alguien ha llamado a OverlayUIService desde fuera!!!");
-        }
-        else {
-            init();
-            return true;
-        }
-    }
-
     private void init() {
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "OverlayUIService - init()");
+
         overlayLayersManager = new OverlayLayersManager(this);
         mainOverlayLayerManager = new MainOverlayLayerManager(this, overlayLayersManager.getMainLayer());
-
         initialised = true;
+
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "OverlayUIService - initialised");
 
@@ -172,11 +164,39 @@ public class OverlayUIService extends Service {
 
     //endregion
 
-    //region [ PROCESS INTENT ACTION ]
+    //region [ ACTION CONTROLLER ]
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        IntentAction action = (IntentAction)intent.getSerializableExtra(EXTRA_INTENT_ACTION);
+        String target = intent.getStringExtra(EXTRA_INTENT_TARGET);
+        String params = intent.getStringExtra(EXTRA_INTENT_PARAMS);
+
+        try {
+            if (action != null){
+                processIntentAction(action, target, params);
+            }else{
+                init();
+            }
+        }
+        catch (Exception e) {
+
+            //IMPORTANT: This catch picks most of internal exceptions
+            if (IadtController.get().isDebug()){
+                throw e;
+            }
+            else{
+                FriendlyLog.logException("OverlayUiService unable to start "
+                        + action + " " + target + " " + params,  e);
+                stopSelf();
+            }
+        }
+
+        return START_NOT_STICKY;
+    }
 
     private void processIntentAction(IntentAction action, String target, String params) {
-        if (!isInitialised())
-            return;
+        if (!isInitialize()) init();
 
         if (action.equals(IntentAction.NAVIGATE_HOME)){
             navigateHome();
@@ -301,49 +321,4 @@ public class OverlayUIService extends Service {
 
     //endregion
 
-    //region [ STATIC ACCESSORS ]
-
-    public static void performNavigation(Class<? extends OverlayScreen> target) {
-        performNavigationStep(new NavigationStep(target, null));
-    }
-
-    public static void performNavigation(Class<? extends OverlayScreen> target, String param) {
-        performNavigationStep(new NavigationStep(target, param));
-    }
-
-    public static void performNavigationStep(NavigationStep step) {
-        if (step == null){
-            return;
-        }
-        Intent intent = buildScreenIntentAction(step.getClassName(), step.getParam());
-        Iadt.getAppContext().startService(intent);
-    }
-
-    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String params) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
-        if (screenClass!=null){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
-        }
-        if (!TextUtils.isEmpty(params)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAMS, params);
-        }
-        return intent;
-    }
-    
-    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
-        if (!TextUtils.isEmpty(property)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, property);
-        }
-        return intent;
-    }
-
-    public static void runAction(OverlayUIService.IntentAction action, String property) {
-        Intent intent = buildIntentAction(action, property);
-        Iadt.getAppContext().startService(intent);
-    }
-
-    //endregion
 }
