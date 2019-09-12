@@ -184,8 +184,8 @@ public class PermissionActivity extends AppCompatActivity {
             onGrantedCallback = null;
         }else{
             //TODO: remove
-            Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_TO, "Screen");
-            startService(intent);
+            //Intent intent = OverlayUIService.buildActionIntent(OverlayUIService.IntentAction.NAVIGATE_TO, "Screen");
+            //startService(intent);
         }
         finish();
     }

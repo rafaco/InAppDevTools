@@ -232,8 +232,7 @@ public class MainOverlayLayer extends OverlayLayer {
     }
 
     private void onBackButtonPressed() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.NAVIGATE_BACK,null);
-        IadtController.get().getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.NAVIGATE_BACK);
     }
 
     public View getFullContainer() {

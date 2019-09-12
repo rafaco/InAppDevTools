@@ -94,11 +94,11 @@ public class OverlayUIService extends Service {
         if (step == null){
             return;
         }
-        Intent intent = buildScreenIntentAction(step.getClassName(), step.getParam());
+        Intent intent = buildNavigationIntent(step.getClassName(), step.getParam());
         Iadt.getAppContext().startService(intent);
     }
 
-    public static Intent buildScreenIntentAction(Class<? extends OverlayScreen> screenClass, String params) {
+    private static Intent buildNavigationIntent(Class<? extends OverlayScreen> screenClass, String params) {
         Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
         intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
         if (screenClass!=null){
@@ -110,18 +110,22 @@ public class OverlayUIService extends Service {
         return intent;
     }
 
-    public static Intent buildIntentAction(OverlayUIService.IntentAction action, String property) {
+    public static void performAction(OverlayUIService.IntentAction action) {
+        performAction(action, null);
+    }
+
+    public static void performAction(OverlayUIService.IntentAction action, String property) {
+        Intent intent = buildActionIntent(action, property);
+        Iadt.getAppContext().startService(intent);
+    }
+
+    public static Intent buildActionIntent(OverlayUIService.IntentAction action, String property) {
         Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
         intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
             intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, property);
         }
         return intent;
-    }
-
-    public static void runAction(OverlayUIService.IntentAction action, String property) {
-        Intent intent = buildIntentAction(action, property);
-        Iadt.getAppContext().startService(intent);
     }
 
     //endregion

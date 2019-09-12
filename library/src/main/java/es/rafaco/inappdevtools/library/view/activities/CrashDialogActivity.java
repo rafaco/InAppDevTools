@@ -94,8 +94,7 @@ public class CrashDialogActivity extends AppCompatActivity {
 
     private void onCrashDetail(Crash crash) {
         if (Iadt.getConfig().getBoolean(Config.OVERLAY_ENABLED)){
-            Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, String.valueOf(crash.getUid()));
-            Iadt.getAppContext().startService(intent);
+            OverlayUIService.performNavigation(CrashDetailScreen.class, String.valueOf(crash.getUid()));
             destroyDialog();
         }
     }

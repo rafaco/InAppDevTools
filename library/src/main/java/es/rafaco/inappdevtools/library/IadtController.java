@@ -267,36 +267,26 @@ public final class IadtController extends ContentProvider {
 
     public void showToggle() {
         if (checksBeforeShowOverlay()) return;
-
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_TOGGLE, null);
-        getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_TOGGLE);
     }
     public void showMain() {
         if (checksBeforeShowOverlay()) return;
-
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_MAIN, null);
-        getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_MAIN);
     }
 
     public void showIcon() {
         if (checksBeforeShowOverlay()) return;
-
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_ICON, null);
-        getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_ICON);
     }
 
     public void hideAll() {
         //if (checksBeforeShowOverlay()) return;
-
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.HIDE_ALL, null);
-        getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.HIDE_ALL);
     }
 
     public void restoreAll() {
         //if (checksBeforeShowOverlay()) return;
-
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.RESTORE_ALL, null);
-        getAppContext().startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.RESTORE_ALL);
     }
 
     public void takeScreenshot() {

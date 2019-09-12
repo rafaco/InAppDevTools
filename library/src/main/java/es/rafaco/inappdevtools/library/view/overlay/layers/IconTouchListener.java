@@ -132,8 +132,7 @@ public class IconTouchListener implements View.OnTouchListener {
 
 
     private void onIconWidgetClick() {
-        Intent intent = OverlayUIService.buildIntentAction(OverlayUIService.IntentAction.SHOW_MAIN, null);
-        context.startService(intent);
+        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_MAIN);
     }
 
     private void onIconDroppedAtRemove() {
