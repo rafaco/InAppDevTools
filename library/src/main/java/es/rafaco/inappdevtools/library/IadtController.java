@@ -19,7 +19,6 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnablesManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
@@ -36,7 +35,6 @@ import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
@@ -162,20 +160,11 @@ public final class IadtController extends ContentProvider {
             Log.d(Iadt.TAG, "Initializing foreground services...");
 
         if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
-            if (PendingCrashUtil.isPending()){
-                // IsPendingCrash, we open crash details at overlay
-                Intent intent = OverlayUIService.buildScreenIntentAction(CrashDetailScreen.class, null);
-                getAppContext().startService(intent);
-                PendingCrashUtil.clearPending();
-            }
-            else {
-                //Start OverlayUIService
-                getAppContext().startService(new Intent(getAppContext(), OverlayUIService.class));
-            }
+            Intent intent = new Intent(getAppContext(), OverlayUIService.class);
+            getAppContext().startService(intent);
         }
 
         if (getConfig().getBoolean(Config.INVOCATION_BY_NOTIFICATION)){
-            // Start foreground notification service
             Intent intent = new Intent(getAppContext(), NotificationUIService.class);
             intent.setAction(NotificationUIService.ACTION_START_FOREGROUND_SERVICE);
             getAppContext().startService(intent);
@@ -368,7 +357,7 @@ public final class IadtController extends ContentProvider {
     }
 
     public String getCurrentOverlay() {
-        return MainOverlayLayerManager.getCurrent();
+        return MainOverlayLayerManager.getCurrentScreenString();
     }
 
     //endregion

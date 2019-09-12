@@ -264,7 +264,7 @@ public class ReportScreen extends OverlayScreen {
     }
 
     private void onManageScreensPressed() {
-        getScreenManager().goTo(ScreensScreen.class);
+        getScreenManager().goTo(ScreensScreen.class, null);
     }
 
     //endregion

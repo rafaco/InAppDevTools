@@ -18,6 +18,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
@@ -138,9 +139,6 @@ public class OverlayUIService extends Service {
         }
         else {
             init();
-            initialised = true;
-            if (IadtController.get().isDebug())
-                Log.d(Iadt.TAG, "OverlayUIService - initialised");
             return true;
         }
     }
@@ -149,32 +147,27 @@ public class OverlayUIService extends Service {
         overlayLayersManager = new OverlayLayersManager(this);
         mainOverlayLayerManager = new MainOverlayLayerManager(this, overlayLayersManager.getMainLayer());
 
-        //Load screen definitions
-        //TODO: delegate to ToolManager or delete
-        mainOverlayLayerManager.registerScreen(HomeScreen.class);
-        mainOverlayLayerManager.registerScreen(InfoScreen.class);
-        mainOverlayLayerManager.registerScreen(NetworkScreen.class);
-        mainOverlayLayerManager.registerScreen(ErrorsScreen.class);
-        mainOverlayLayerManager.registerScreen(LogScreen.class);
-        mainOverlayLayerManager.registerScreen(LogcatScreen.class);
-        mainOverlayLayerManager.registerScreen(ConsoleScreen.class);
-        mainOverlayLayerManager.registerScreen(ScreensScreen.class);
-        mainOverlayLayerManager.registerScreen(ReportScreen.class);
-        mainOverlayLayerManager.registerScreen(CrashDetailScreen.class);
-        mainOverlayLayerManager.registerScreen(AnrDetailScreen.class);
-        mainOverlayLayerManager.registerScreen(NetworkDetailScreen.class);
-        mainOverlayLayerManager.registerScreen(RunScreen.class);
-        mainOverlayLayerManager.registerScreen(MoreScreen.class);
-        mainOverlayLayerManager.registerScreen(InspectViewScreen.class);
-        mainOverlayLayerManager.registerScreen(SourcesScreen.class);
-        mainOverlayLayerManager.registerScreen(SourceDetailScreen.class);
-        mainOverlayLayerManager.registerScreen(AnalysisScreen.class);
-        mainOverlayLayerManager.registerScreen(ConfigScreen.class);
+        initialised = true;
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "OverlayUIService - initialised");
 
-        //Load home screen to be ready to switch
+        onInit();
+    }
+
+    private void onInit() {
+        //Load home screen (ready to show and for back navigation
         navigateHome();
-        overlayLayersManager.toggleVisibility(true);
-        showIcon();
+
+        if (PendingCrashUtil.isPending()){
+            navigateTo(CrashDetailScreen.class.getSimpleName(), null);
+            PendingCrashUtil.clearPending();
+            overlayLayersManager.toggleVisibility(true);
+            showMain();
+        }
+        else{
+            overlayLayersManager.toggleVisibility(true);
+            showIcon();
+        }
     }
 
     //endregion

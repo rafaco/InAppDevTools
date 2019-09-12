@@ -12,7 +12,7 @@ public enum Config {
     ENABLED("enabled", R.string.config_enable, boolean.class, false),
     OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
     INVOCATION_BY_SHAKE("invocationByShake", R.string.config_invocation_by_shake, boolean.class, true),
-    INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, false),
+    INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, true),
     INVOCATION_BY_NOTIFICATION("invocationByNotification", R.string.config_invocation_by_notification, boolean.class, true),
     CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
     DEBUG("debug", R.string.config_debug, boolean.class, false),

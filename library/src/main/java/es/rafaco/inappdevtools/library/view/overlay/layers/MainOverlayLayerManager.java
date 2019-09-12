@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.Toolbar;
@@ -22,6 +21,24 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.utils.ExpandCollapseUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
@@ -45,47 +62,65 @@ public class MainOverlayLayerManager {
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.registeredScreens = new ArrayList<>();
         this.navigationHistory = new ArrayList<>();
-        screenToolbar = getView().findViewById(R.id.tool_toolbar);
+        this.screenToolbar = getView().findViewById(R.id.tool_toolbar);
+
+        registerAllScreens();
     }
 
-    public Context getContext() {
-        return context;
-    }
-    public LayoutInflater getInflater() {
-        return inflater;
-    }
-    public MainOverlayLayer getMainLayer() {
-        return mainLayer;
-    }
-    public ViewGroup getView() {
-        return (ViewGroup) mainLayer.getView();
+    //region [ SCREENS MANAGER ]
+
+    private void registerAllScreens() {
+        //Load screen definitions
+        //TODO: think a better way to avoid this
+        registerScreen(HomeScreen.class);
+        registerScreen(InfoScreen.class);
+        registerScreen(NetworkScreen.class);
+        registerScreen(ErrorsScreen.class);
+        registerScreen(LogScreen.class);
+        registerScreen(LogcatScreen.class);
+        registerScreen(ConsoleScreen.class);
+        registerScreen(ScreensScreen.class);
+        registerScreen(ReportScreen.class);
+        registerScreen(CrashDetailScreen.class);
+        registerScreen(AnrDetailScreen.class);
+        registerScreen(NetworkDetailScreen.class);
+        registerScreen(RunScreen.class);
+        registerScreen(MoreScreen.class);
+        registerScreen(InspectViewScreen.class);
+        registerScreen(SourcesScreen.class);
+        registerScreen(SourceDetailScreen.class);
+        registerScreen(AnalysisScreen.class);
+        registerScreen(ConfigScreen.class);
     }
 
-    public static OverlayScreen getCurrentScreen(){
-        return currentScreen;
+    public void registerScreen(Class<? extends OverlayScreen> screenClass){
+        registeredScreens.add(screenClass);
+    }
+
+    public Class<? extends OverlayScreen> getScreenClass(String name){
+        for (Class<? extends OverlayScreen> screen : registeredScreens){
+            if (screen.getSimpleName().equals(name)){
+                return screen;
+            }
+        }
+        return null;
     }
 
     private static void setCurrentScreen(OverlayScreen screen) {
         currentScreen = screen;
     }
 
-    public static String getCurrent(){
+    public static OverlayScreen getCurrentScreen(){
+        return currentScreen;
+    }
+
+    public static String getCurrentScreenString(){
         if (getCurrentScreen() == null)
             return null;
         return currentScreen.getClass().getSimpleName();
     }
 
-    public void destroy() {
-        if (getCurrentScreen() != null){
-            currentScreen.destroy();
-            setCurrentScreen(null);
-        }
-    }
-
-    public void goTo(Class<? extends OverlayScreen> screenClass) {
-        goTo(screenClass.getSimpleName(), null);
-    }
-
+    //endregion
 
     //region [ NAVIGATION ]
 
@@ -125,6 +160,7 @@ public class MainOverlayLayerManager {
             setCurrentScreen(loadedScreen);
 
             /*
+            // Animations playground
             ExpandCollapseUtils.collapse(mainLayer.getFullContainer(),
                     new AnimationEndListener() {
                         @Override
@@ -136,7 +172,7 @@ public class MainOverlayLayerManager {
                             currentScreen = loadedScreen;
                         }
                     });
-*/
+            */
             /*
             if (currentScreen.haveHead()){
                 ExpandCollapseUtils.collapse(currentScreen.headView,
@@ -167,7 +203,7 @@ public class MainOverlayLayerManager {
                             currentScreen = loadedScreen;
                         }
                     });
-*/
+            */
             /* TODO: research which animation is better
             // This one depend on animateLayoutChanges flags but seems to perform poorly
 
@@ -200,6 +236,17 @@ public class MainOverlayLayerManager {
         }
     }
 
+    /*
+    private abstract class AnimationEndListener implements Animation.AnimationListener {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    }*/
+
     private void destroyPreviousScreen() {
         if (getCurrentScreen() != null) {
             getCurrentScreen().stop();
@@ -223,18 +270,6 @@ public class MainOverlayLayerManager {
         }
 
         navigationHistory.add(newStep);
-    }
-
-    public void setTitle(String title){
-        getMainLayer().setToolbarTitle(title);
-    }
-
-    private void updateToolbarTitle() {
-        getMainLayer().setToolbarTitle(loadedScreen.getTitle());
-    }
-
-    public void updateBackButton() {
-        getMainLayer().toggleBackButton(navigationHistory.size()>1);
     }
 
     public void goBack(){
@@ -262,6 +297,7 @@ public class MainOverlayLayerManager {
 
     //endregion
 
+    //region [ UPDATE VIEW ]
 
     private void loadScreenToolbar(OverlayScreen loadedScreen) {
         screenToolbar.getMenu().clear();
@@ -279,17 +315,36 @@ public class MainOverlayLayerManager {
         return screenToolbar;
     }
 
-    public void registerScreen(Class<? extends OverlayScreen> screenClass){
-        registeredScreens.add(screenClass);
+    public void setTitle(String title){
+        getMainLayer().setToolbarTitle(title);
     }
 
-    public Class<? extends OverlayScreen> getScreenClass(String name){
-        for (Class<? extends OverlayScreen> screen : registeredScreens){
-            if (screen.getSimpleName().equals(name)){
-                return screen;
-            }
-        }
-        return null;
+    private void updateToolbarTitle() {
+        getMainLayer().setToolbarTitle(loadedScreen.getTitle());
+    }
+
+    public void updateBackButton() {
+        getMainLayer().toggleBackButton(navigationHistory.size()>1);
+    }
+
+    public void hide() {
+        //TODO: refactor, it doesn't seems like the best way
+        IadtController.get().showIcon();
+    }
+
+    //endregion
+
+    public Context getContext() {
+        return context;
+    }
+    public LayoutInflater getInflater() {
+        return inflater;
+    }
+    public MainOverlayLayer getMainLayer() {
+        return mainLayer;
+    }
+    public ViewGroup getView() {
+        return (ViewGroup) mainLayer.getView();
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -300,18 +355,10 @@ public class MainOverlayLayerManager {
         }
     }
 
-    public void hide() {
-        //TODO: refactor, it doesn't seems like the best way
-        IadtController.get().showIcon();
-    }
-
-    private abstract class AnimationEndListener implements Animation.AnimationListener {
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
+    public void destroy() {
+        if (getCurrentScreen() != null){
+            currentScreen.destroy();
+            setCurrentScreen(null);
         }
     }
 }
