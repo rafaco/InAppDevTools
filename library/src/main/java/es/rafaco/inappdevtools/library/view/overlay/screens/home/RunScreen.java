@@ -73,7 +73,7 @@ public class RunScreen extends Screen {
     }
 
     private void addCustomItems(List<Object> data) {
-        data.add("Sample App");
+        data.add("Your App");
         data.addAll(IadtController.get().getRunnableManager().getAll());
     }
 

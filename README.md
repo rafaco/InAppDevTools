@@ -160,7 +160,7 @@ All artifacts are generated from [this GitHub repo](https://github.com/rafaco/In
 | es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
 | es.rafaco.compat:support | compat | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
 | es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
-| es.rafaco.iadt.demo | sample | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
+| es.rafaco.iadt.demo | demo | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
 
 
 ### Continuous Integration <a name="ci"/>

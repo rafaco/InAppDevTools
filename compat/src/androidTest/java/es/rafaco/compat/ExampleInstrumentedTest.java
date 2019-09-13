@@ -1,8 +1,14 @@
 package es.rafaco.compat;
 
 import android.content.Context;
+
+//#ifdef ANDROIDX
+//@import androidx.test.InstrumentationRegistry;
+//@import androidx.test.runner.AndroidJUnit4;
+//#else
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+//#endif
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
