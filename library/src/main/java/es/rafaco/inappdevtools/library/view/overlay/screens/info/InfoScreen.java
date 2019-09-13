@@ -18,10 +18,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class InfoScreen extends OverlayScreen {
+public class InfoScreen extends Screen {
 
     InfoPagerAdapter pagerAdapter;
     private ViewPager viewPager;
@@ -29,7 +29,7 @@ public class InfoScreen extends OverlayScreen {
     private int currentPosition;
     private Timer updateTimer;
 
-    public InfoScreen(MainOverlayLayerManager manager) {
+    public InfoScreen(ScreenManager manager) {
         super(manager);
     }
 

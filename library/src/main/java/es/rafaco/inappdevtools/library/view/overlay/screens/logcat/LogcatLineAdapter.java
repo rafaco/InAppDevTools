@@ -177,7 +177,7 @@ public class LogcatLineAdapter
             //notifyDataSetChanged();
             notifyItemInserted(filteredData.size()-1);
 
-            manager.getScreenManager().getMainLayer().scrollBottom();
+            manager.getScreenManager().getScreenLayer().scrollBottom();
         }
     }
 

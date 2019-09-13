@@ -14,12 +14,12 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class AnalysisScreen extends OverlayScreen {
+public class AnalysisScreen extends Screen {
 
-    public AnalysisScreen(MainOverlayLayerManager manager) {
+    public AnalysisScreen(ScreenManager manager) {
         super(manager);
     }
 

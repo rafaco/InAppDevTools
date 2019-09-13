@@ -1,22 +1,21 @@
 package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class IconTouchListener implements View.OnTouchListener {
 
     private final Context context;
-    private final OverlayLayersManager manager;
-    private IconOverlayLayer iconLayer;
+    private final LayerManager manager;
+    private IconLayer iconLayer;
 
     private Point displaySize;
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin;
@@ -35,7 +34,7 @@ public class IconTouchListener implements View.OnTouchListener {
     };
 
 
-    public IconTouchListener(IconOverlayLayer iconLayer, OverlayLayersManager manager) {
+    public IconTouchListener(IconLayer iconLayer, LayerManager manager) {
         this.iconLayer = iconLayer;
         this.manager = manager;
         context = manager.getContext();
@@ -132,10 +131,10 @@ public class IconTouchListener implements View.OnTouchListener {
 
 
     private void onIconWidgetClick() {
-        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_MAIN);
+        OverlayService.performAction(OverlayService.IntentAction.SHOW_MAIN);
     }
 
     private void onIconDroppedAtRemove() {
-        ((OverlayUIService)context).stopSelf();
+        ((OverlayService)context).stopSelf();
     }
 }

@@ -17,11 +17,11 @@ import android.support.v7.widget.Toolbar;
 
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 
-public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
+public abstract class Screen implements Toolbar.OnMenuItemClickListener {
 
-    private final MainOverlayLayerManager manager;
+    private final ScreenManager manager;
     private final ViewGroup bodyContainer2;
     public ViewGroup headView;
     public ViewGroup bodyView;
@@ -49,7 +49,7 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
     protected abstract void onStop();
     protected abstract void onDestroy();
 
-    public OverlayScreen(MainOverlayLayerManager manager) {
+    public Screen(ScreenManager manager) {
         this.manager = manager;
         headContainer = getView().findViewById(R.id.tool_head_container);
         bodyContainer = getView().findViewById(R.id.tool_body_container);
@@ -124,7 +124,7 @@ public abstract class OverlayScreen implements Toolbar.OnMenuItemClickListener {
         getScreenManager().updateCurrentStepParams(newParams);
     }
 
-    public MainOverlayLayerManager getScreenManager() {
+    public ScreenManager getScreenManager() {
         return manager;
     }
     public Context getContext() {

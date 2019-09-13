@@ -18,16 +18,16 @@ import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 import com.readystatesoftware.chuck.internal.data.LocalCupboard;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class NetworkDetailScreen extends OverlayScreen {
+public class NetworkDetailScreen extends Screen {
 
     private HttpTransaction transaction;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
-    public NetworkDetailScreen(MainOverlayLayerManager manager) {
+    public NetworkDetailScreen(ScreenManager manager) {
         super(manager);
     }
 

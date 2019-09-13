@@ -20,7 +20,7 @@ import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogAdapter;
 
 public class LogFilterDialog {
@@ -144,8 +144,8 @@ public class LogFilterDialog {
         });
 
         dialog = alertDialogBuilder.create();
-        dialog.getWindow().setType(OverlayLayer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_main_middle);
+        dialog.getWindow().setType(Layer.getLayoutType());
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
 
         return dialog;
     }

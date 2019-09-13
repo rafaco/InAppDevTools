@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.animation.LayoutTransition;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -28,32 +27,32 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
+import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public class MainOverlayLayer extends OverlayLayer {
+public class ScreenLayer extends Layer {
 
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
     private Toolbar toolbar;
     private LinearLayout fullContainer;
 
-    public MainOverlayLayer(OverlayLayersManager manager) {
+    public ScreenLayer(LayerManager manager) {
         super(manager);
     }
 
     @Override
     public Type getType() {
-        return Type.MAIN;
+        return Type.SCREEN;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.overlay_layer_main;
+        return R.layout.overlay_layer_screen;
     }
 
     @Override
@@ -156,7 +155,7 @@ public class MainOverlayLayer extends OverlayLayer {
         });
 
         toggleBackButton(false);
-        toolbar.inflateMenu(R.menu.main_overlay);
+        toolbar.inflateMenu(R.menu.overlay_screen);
     }
 
     public void setToolbarTitle(String title){
@@ -224,7 +223,7 @@ public class MainOverlayLayer extends OverlayLayer {
             ExternalIntentUtils.viewReadme();
         }
         else if (selected == R.id.action_config) {
-            OverlayUIService.performNavigation(ConfigScreen.class);
+            OverlayService.performNavigation(ConfigScreen.class);
         }
         else if (selected == R.id.action_share) {
             ExternalIntentUtils.shareLibrary();
@@ -232,7 +231,7 @@ public class MainOverlayLayer extends OverlayLayer {
     }
 
     private void onBackButtonPressed() {
-        OverlayUIService.performAction(OverlayUIService.IntentAction.NAVIGATE_BACK);
+        OverlayService.performAction(OverlayService.IntentAction.NAVIGATE_BACK);
     }
 
     public View getFullContainer() {

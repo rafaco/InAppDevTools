@@ -11,28 +11,28 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.config.Config;
-import es.rafaco.inappdevtools.library.view.overlay.layers.IconOverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.layers.RemoveOverlayLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.IconLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.RemoveLayer;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
 
-public class OverlayLayersManager {
+public class LayerManager {
 
     private Context context;
     private WindowManager windowManager;
     private LayoutInflater inflater;
-    private List<OverlayLayer> overlayLayers;
+    private List<Layer> layers;
     private boolean isVisible;
     private boolean isMainVisible;
 
-    public OverlayLayersManager(Context context) {
+    public LayerManager(Context context) {
         this.context = context;
         this.windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        this.overlayLayers = new ArrayList<>();
+        this.layers = new ArrayList<>();
 
         initLayers();
     }
@@ -41,43 +41,43 @@ public class OverlayLayersManager {
 
     private void initLayers() {
         if (isOverlayIconEnabled()){
-            addLayer(new RemoveOverlayLayer(this));
-            addLayer(new IconOverlayLayer(this));
+            addLayer(new RemoveLayer(this));
+            addLayer(new IconLayer(this));
         }
-        addLayer(new MainOverlayLayer(this));
+        addLayer(new ScreenLayer(this));
     }
 
-    public void addLayer(OverlayLayer overlayLayer){
-        overlayLayers.add(overlayLayer);
-        overlayLayer.addView();
+    public void addLayer(Layer layer){
+        layers.add(layer);
+        layer.addView();
     }
 
-    public View getView(OverlayLayer.Type widgetType){
-        OverlayLayer overlayLayer = getLayer(widgetType);
-        if (overlayLayer != null)
-            return overlayLayer.getView();
+    public View getView(Layer.Type widgetType){
+        Layer layer = getLayer(widgetType);
+        if (layer != null)
+            return layer.getView();
         return null;
     }
 
-    public OverlayLayer getLayer(OverlayLayer.Type widgetType){
-        for (OverlayLayer overlayLayer : overlayLayers) {
-            if (overlayLayer.getType().equals(widgetType)){
-                return overlayLayer;
+    public Layer getLayer(Layer.Type widgetType){
+        for (Layer layer : layers) {
+            if (layer.getType().equals(widgetType)){
+                return layer;
             }
         }
         return null;
     }
 
-    public MainOverlayLayer getMainLayer(){
-        return (MainOverlayLayer) getLayer(OverlayLayer.Type.MAIN);
+    public ScreenLayer getMainLayer(){
+        return (ScreenLayer) getLayer(Layer.Type.SCREEN);
     }
 
-    public IconOverlayLayer getIconLayer(){
-        return (IconOverlayLayer) getLayer(OverlayLayer.Type.ICON);
+    public IconLayer getIconLayer(){
+        return (IconLayer) getLayer(Layer.Type.ICON);
     }
 
-    public RemoveOverlayLayer getRemoveLayer(){
-        return (RemoveOverlayLayer) getLayer(OverlayLayer.Type.REMOVE);
+    public RemoveLayer getRemoveLayer(){
+        return (RemoveLayer) getLayer(Layer.Type.REMOVE);
     }
 
     public WindowManager getWindowManager() {
@@ -89,8 +89,8 @@ public class OverlayLayersManager {
     }
 
     public void destroy() {
-        for (OverlayLayer overlayLayer : overlayLayers) {
-            overlayLayer.destroy();
+        for (Layer layer : layers) {
+            layer.destroy();
         }
     }
 
@@ -104,14 +104,14 @@ public class OverlayLayersManager {
         }
 
         if (isMainVisible) {
-            getView(OverlayLayer.Type.MAIN).setVisibility(View.VISIBLE);
+            getView(Layer.Type.SCREEN).setVisibility(View.VISIBLE);
             if (isOverlayIconEnabled())
-                getView(OverlayLayer.Type.ICON).setVisibility(View.GONE);
+                getView(Layer.Type.ICON).setVisibility(View.GONE);
         }
         else {
-            getView(OverlayLayer.Type.MAIN).setVisibility(View.GONE);
+            getView(Layer.Type.SCREEN).setVisibility(View.GONE);
             if (isOverlayIconEnabled())
-                getView(OverlayLayer.Type.ICON).setVisibility(View.VISIBLE);
+                getView(Layer.Type.ICON).setVisibility(View.VISIBLE);
         }
         this.isMainVisible = isMainVisible;
     }
@@ -121,9 +121,9 @@ public class OverlayLayersManager {
             toggleMainIconVisibility(isMainVisible);
         } 
         else {
-            getView(OverlayLayer.Type.MAIN).setVisibility(View.GONE);
+            getView(Layer.Type.SCREEN).setVisibility(View.GONE);
             if (isOverlayIconEnabled())
-                getView(OverlayLayer.Type.ICON).setVisibility(View.GONE);
+                getView(Layer.Type.ICON).setVisibility(View.GONE);
         }
         this.isVisible = isVisible;
     }
@@ -131,8 +131,8 @@ public class OverlayLayersManager {
     //endregion
 
     public void onConfigurationChanged(Configuration newConfig) {
-        for (OverlayLayer overlayLayer : overlayLayers) {
-            overlayLayer.onConfigurationChange(newConfig);
+        for (Layer layer : layers) {
+            layer.onConfigurationChange(newConfig);
         }
     }
 

@@ -21,19 +21,19 @@ import java.util.ArrayList;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class ScreensScreen extends OverlayScreen {
+public class ScreenshotsScreen extends Screen {
 
     private Button shotButton;
     private RecyclerView recyclerView;
-    private ScreenAdapter adapter;
+    private ScreenshotAdapter adapter;
 
-    public ScreensScreen(MainOverlayLayerManager manager) {
+    public ScreenshotsScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -43,7 +43,7 @@ public class ScreensScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_screen; }
+    public int getBodyLayoutId() { return R.layout.tool_screenshots; }
 
     @Override
     protected void onCreate() {
@@ -91,7 +91,7 @@ public class ScreensScreen extends OverlayScreen {
 
 
     private void initAdapter(View toolView) {
-        adapter = new ScreenAdapter(getContext(), new ArrayList<Screen>());
+        adapter = new ScreenshotAdapter(getContext(), new ArrayList<Screenshot>());
 
         recyclerView = toolView.findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -107,26 +107,26 @@ public class ScreensScreen extends OverlayScreen {
         ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
-                ScreenDao screenDao = DevToolsDatabase.getInstance().screenDao();
-                final ArrayList<Screen> newScreenList = (ArrayList<Screen>) screenDao.getAll();
+                ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+                final ArrayList<Screenshot> newScreenshotList = (ArrayList<Screenshot>) screenshotDao.getAll();
                 ThreadUtils.runOnMain(new Runnable() {
                     @Override
                     public void run() {
-                        updateList(newScreenList);
+                        updateList(newScreenshotList);
                     }
                 });
-                //screenDao.getAllLive().observe(ScreensScreen.this, screens -> updateLive(screens));
+                //screenshotDao.getAllLive().observe(ScreenshotsScreen.this, screens -> updateLive(screens));
             }
         });
     }
 
-    /*private void updateLive(List<Screen> screens) {
+    /*private void updateLive(List<Screenshot> screens) {
         adapter.setData(screens);
     }*/
 
-    private void updateList(ArrayList<Screen> screens) {
-        adapter.setData(screens);
-        //screenList.addAll(screens);
+    private void updateList(ArrayList<Screenshot> screenshots) {
+        adapter.setData(screenshots);
+        //screenList.addAll(screenshots);
         //adapter.notifyDataSetChanged();
     }
 }

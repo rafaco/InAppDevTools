@@ -14,14 +14,14 @@ import android.support.annotation.NonNull;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
+import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class RemoveOverlayLayer extends OverlayLayer {
+public class RemoveLayer extends Layer {
 
     public ImageView removeImage;
 
-    public RemoveOverlayLayer(OverlayLayersManager manager) {
+    public RemoveLayer(LayerManager manager) {
         super(manager);
     }
 

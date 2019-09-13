@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
@@ -140,7 +140,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             extra_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OverlayUIService.performNavigationStep(LogViewHolder.this.getLink(data));
+                    OverlayService.performNavigationStep(LogViewHolder.this.getLink(data));
                 }
             });
             extra_button.getBackground().setColorFilter(severityColor, PorterDuff.Mode.MULTIPLY);

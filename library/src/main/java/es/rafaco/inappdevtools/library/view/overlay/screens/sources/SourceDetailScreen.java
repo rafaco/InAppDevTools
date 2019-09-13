@@ -31,21 +31,21 @@ import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
 import es.rafaco.inappdevtools.library.view.components.codeview.Language;
 import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 import static android.content.Context.SEARCH_SERVICE;
 
-public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHighlightListener {
+public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
     private TextView codeHeader;
     private CodeView codeViewer;
     private ToolBarHelper toolbarHelper;
     boolean[] tuneSelection;
 
-    public SourceDetailScreen(MainOverlayLayerManager manager) {
+    public SourceDetailScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -265,7 +265,7 @@ public class SourceDetailScreen extends OverlayScreen implements CodeView.OnHigh
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 

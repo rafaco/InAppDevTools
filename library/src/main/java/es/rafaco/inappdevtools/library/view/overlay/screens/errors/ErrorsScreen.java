@@ -41,16 +41,16 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.view.utils.RecyclerViewUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 import static es.rafaco.inappdevtools.library.view.utils.Humanizer.getElapsedTimeLowered;
 
-public class ErrorsScreen extends OverlayScreen {
+public class ErrorsScreen extends Screen {
 
     private DecoratedToolInfoAdapter adapter;
     private RecyclerView recyclerView;
@@ -65,7 +65,7 @@ public class ErrorsScreen extends OverlayScreen {
     private InvalidationTracker tracker;
     private TextView emptyView;
 
-    public ErrorsScreen(MainOverlayLayerManager manager) {
+    public ErrorsScreen(ScreenManager manager) {
         super(manager);
     }
 

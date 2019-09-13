@@ -28,11 +28,11 @@
         <service android:name=".logic.log.reader.LogcatReaderService"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
 
-        <service android:name=".view.overlay.OverlayUIService"
+        <service android:name=".view.overlay.OverlayService"
             android:exported="false"/>
 
         <service
-            android:name=".view.notifications.NotificationUIService"
+            android:name=".view.notifications.NotificationService"
             android:exported="false" />
 
 

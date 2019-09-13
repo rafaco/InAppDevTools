@@ -26,15 +26,14 @@ import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.LinkItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
-import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
-public class SourcesScreen extends OverlayScreen {
+public class SourcesScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
@@ -43,7 +42,7 @@ public class SourcesScreen extends OverlayScreen {
     private String contentOverview;
     private AsyncTask<Object, String, List<Object>> currentTask;
 
-    public SourcesScreen(MainOverlayLayerManager manager) {
+    public SourcesScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -350,7 +349,7 @@ public class SourcesScreen extends OverlayScreen {
 
     private void openSource(SourceEntry entry) {
         String params = SourceDetailScreen.buildParams(entry.getOrigin(), entry.getName(), -1);
-        OverlayUIService.performNavigation(SourceDetailScreen.class, params);
+        OverlayService.performNavigation(SourceDetailScreen.class, params);
     }
 
     private void goRoot() {

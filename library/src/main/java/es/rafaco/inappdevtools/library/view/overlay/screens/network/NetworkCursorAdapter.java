@@ -20,8 +20,8 @@ import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 import com.readystatesoftware.chuck.internal.data.LocalCupboard;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 
 /**
@@ -115,7 +115,7 @@ public class NetworkCursorAdapter extends CursorRecyclerViewAdapter<NetworkCurso
     private void onHolderClick(View v) {
         //Todo
         NavigationStep step = new NavigationStep(NetworkDetailScreen.class, String.valueOf(v.getTag()));
-        OverlayUIService.performNavigationStep(step);
+        OverlayService.performNavigationStep(step);
     }
 
     private void setStatusColor(ViewHolder holder, HttpTransaction transaction) {

@@ -1,17 +1,17 @@
-package es.rafaco.inappdevtools.library.view.overlay.layers;
+package es.rafaco.inappdevtools.library.view.overlay.navigation;
 
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class NavigationStep{
-    private final Class<? extends OverlayScreen> className;
+    private final Class<? extends Screen> className;
     private final String param;
 
-    public NavigationStep(Class<? extends OverlayScreen> className, String param) {
+    public NavigationStep(Class<? extends Screen> className, String param) {
         this.className = className;
         this.param = param;
     }
 
-    public Class<? extends OverlayScreen> getClassName() {
+    public Class<? extends Screen> getClassName() {
         return className;
     }
 

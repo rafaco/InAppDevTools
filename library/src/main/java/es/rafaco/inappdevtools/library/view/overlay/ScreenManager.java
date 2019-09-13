@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.layers;
+package es.rafaco.inappdevtools.library.view.overlay;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -21,6 +21,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
@@ -36,29 +38,29 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.utils.ExpandCollapseUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class MainOverlayLayerManager {
+public class ScreenManager {
 
     protected Context context;
-    private final MainOverlayLayer mainLayer;
-    private static OverlayScreen currentScreen = null;
+    private final ScreenLayer screenLayer;
+    private static Screen currentScreen = null;
     private final LayoutInflater inflater;
-    private List<Class<? extends OverlayScreen>> registeredScreens;
+    private List<Class<? extends Screen>> registeredScreens;
     private List<NavigationStep> navigationHistory;
-    private OverlayScreen loadedScreen = null;
+    private Screen loadedScreen = null;
     private Toolbar screenToolbar;
 
-    public MainOverlayLayerManager(Context context, MainOverlayLayer mainLayer) {
+    public ScreenManager(Context context, ScreenLayer screenLayer) {
         this.context = context;
-        this.mainLayer = mainLayer;
+        this.screenLayer = screenLayer;
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.registeredScreens = new ArrayList<>();
         this.navigationHistory = new ArrayList<>();
@@ -70,7 +72,7 @@ public class MainOverlayLayerManager {
     //region [ SCREENS MANAGER ]
 
     private void registerAllScreens() {
-        //Load screen definitions
+        //Load screenshots definitions
         //TODO: think a better way to avoid this
         registerScreen(HomeScreen.class);
         registerScreen(InfoScreen.class);
@@ -79,7 +81,7 @@ public class MainOverlayLayerManager {
         registerScreen(LogScreen.class);
         registerScreen(LogcatScreen.class);
         registerScreen(ConsoleScreen.class);
-        registerScreen(ScreensScreen.class);
+        registerScreen(ScreenshotsScreen.class);
         registerScreen(ReportScreen.class);
         registerScreen(CrashDetailScreen.class);
         registerScreen(AnrDetailScreen.class);
@@ -93,12 +95,12 @@ public class MainOverlayLayerManager {
         registerScreen(ConfigScreen.class);
     }
 
-    public void registerScreen(Class<? extends OverlayScreen> screenClass){
+    public void registerScreen(Class<? extends Screen> screenClass){
         registeredScreens.add(screenClass);
     }
 
-    public Class<? extends OverlayScreen> getScreenClass(String name){
-        for (Class<? extends OverlayScreen> screen : registeredScreens){
+    public Class<? extends Screen> getScreenClass(String name){
+        for (Class<? extends Screen> screen : registeredScreens){
             if (screen.getSimpleName().equals(name)){
                 return screen;
             }
@@ -106,11 +108,11 @@ public class MainOverlayLayerManager {
         return null;
     }
 
-    private static void setCurrentScreen(OverlayScreen screen) {
+    private static void setCurrentScreen(Screen screen) {
         currentScreen = screen;
     }
 
-    public static OverlayScreen getCurrentScreen(){
+    public static Screen getCurrentScreen(){
         return currentScreen;
     }
 
@@ -125,11 +127,11 @@ public class MainOverlayLayerManager {
     //region [ NAVIGATION ]
 
     public void goTo(String screenName, String param){
-        Class<? extends OverlayScreen> screenClass = getScreenClass(screenName);
+        Class<? extends Screen> screenClass = getScreenClass(screenName);
         goTo(screenClass, param);
     }
 
-    public void goTo(final Class<? extends OverlayScreen> screenClass, final String params){
+    public void goTo(final Class<? extends Screen> screenClass, final String params){
 
         NavigationStep newStep = new NavigationStep(screenClass, params);
         addNavigationStep(newStep);
@@ -139,8 +141,8 @@ public class MainOverlayLayerManager {
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "Requested overlay screen: " + screenClass.getSimpleName() + ": " + params);
         
-        loadedScreen = new ClassHelper<OverlayScreen>().createClass(screenClass,
-                MainOverlayLayerManager.class, this);
+        loadedScreen = new ClassHelper<Screen>().createClass(screenClass,
+                ScreenManager.class, this);
 
         updateBackButton();
         updateToolbarTitle();
@@ -161,14 +163,14 @@ public class MainOverlayLayerManager {
 
             /*
             // Animations playground
-            ExpandCollapseUtils.collapse(mainLayer.getFullContainer(),
+            ExpandCollapseUtils.collapse(screenLayer.getFullContainer(),
                     new AnimationEndListener() {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             currentScreen.toggleVisibility(false);
                             destroyPreviousScreen();
                             loadedScreen.toggleVisibility(true);
-                            ExpandCollapseUtils.expand(mainLayer.getFullContainer(), null);
+                            ExpandCollapseUtils.expand(screenLayer.getFullContainer(), null);
                             currentScreen = loadedScreen;
                         }
                     });
@@ -255,7 +257,7 @@ public class MainOverlayLayerManager {
     }
 
     private ViewGroup startScreen() {
-        mainLayer.scrollTop();
+        screenLayer.scrollTop();
         loadScreenToolbar(loadedScreen);
         loadedScreen.start();
         return loadedScreen.getView();
@@ -299,7 +301,7 @@ public class MainOverlayLayerManager {
 
     //region [ UPDATE VIEW ]
 
-    private void loadScreenToolbar(OverlayScreen loadedScreen) {
+    private void loadScreenToolbar(Screen loadedScreen) {
         screenToolbar.getMenu().clear();
         if (loadedScreen.getToolbarLayoutId() != -1){
             screenToolbar.setVisibility(View.VISIBLE);
@@ -316,15 +318,15 @@ public class MainOverlayLayerManager {
     }
 
     public void setTitle(String title){
-        getMainLayer().setToolbarTitle(title);
+        getScreenLayer().setToolbarTitle(title);
     }
 
     private void updateToolbarTitle() {
-        getMainLayer().setToolbarTitle(loadedScreen.getTitle());
+        getScreenLayer().setToolbarTitle(loadedScreen.getTitle());
     }
 
     public void updateBackButton() {
-        getMainLayer().toggleBackButton(navigationHistory.size()>1);
+        getScreenLayer().toggleBackButton(navigationHistory.size()>1);
     }
 
     public void hide() {
@@ -340,11 +342,11 @@ public class MainOverlayLayerManager {
     public LayoutInflater getInflater() {
         return inflater;
     }
-    public MainOverlayLayer getMainLayer() {
-        return mainLayer;
+    public ScreenLayer getScreenLayer() {
+        return screenLayer;
     }
     public ViewGroup getView() {
-        return (ViewGroup) mainLayer.getView();
+        return (ViewGroup) screenLayer.getView();
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

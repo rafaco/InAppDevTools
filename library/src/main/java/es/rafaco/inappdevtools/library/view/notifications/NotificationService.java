@@ -31,13 +31,13 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class NotificationUIService extends Service {
+public class NotificationService extends Service {
 
     private static final int NOTIFICATION_ID = 3002;
     private static final String CHANNEL_ID = "es.rafaco.iadt";
@@ -55,7 +55,7 @@ public class NotificationUIService extends Service {
     String testerText = "Speak to developer's team!\nFor bug reports try to reproduce it while grabbing screens, then press REPORT just after the issue happen. We are recording everything underneath to understand what went wrong.";
     String developerText = "Inspect your running app on the go and report your findings for further analysis";
 
-    public NotificationUIService() {
+    public NotificationService() {
     }
 
     @Override
@@ -94,7 +94,7 @@ public class NotificationUIService extends Service {
                     break;
                 case ACTION_REPORT:
                     bringAppToFront();
-                    OverlayUIService.performNavigation(ReportScreen.class);
+                    OverlayService.performNavigation(ReportScreen.class);
                     //Iadt.startReportDialog();
                     break;
                 case ACTION_CLEAN:
@@ -128,7 +128,7 @@ public class NotificationUIService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 (int)new Date().getTime(), intent, 0);*/
 
-        Intent intent = new Intent(this, NotificationUIService.class);
+        Intent intent = new Intent(this, NotificationService.class);
         intent.setAction(ACTION_TOOLS);
         PendingIntent pendingIntent = PendingIntent.getService(this,
                 (int)new Date().getTime(), intent, 0);
@@ -153,7 +153,7 @@ public class NotificationUIService extends Service {
     //region [ STATIC STOP ]
 
     //TODO: [LOW:Arch] Replace by bounded service
-    private static NotificationUIService instance;
+    private static NotificationService instance;
 
     public static void stop(){
         if (instance != null) instance.stopService();
@@ -162,7 +162,7 @@ public class NotificationUIService extends Service {
 
     private void stopService() {
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "Stopping NotificationUIService");
+            Log.d(Iadt.TAG, "Stopping NotificationService");
         stopForeground(true);
         stopSelf();
         instance = null;
@@ -296,7 +296,7 @@ public class NotificationUIService extends Service {
                 break;
         }
 
-        Intent intent = new Intent(this, NotificationUIService.class);
+        Intent intent = new Intent(this, NotificationService.class);
         intent.setAction(action);
         PendingIntent pendingPrevIntent = PendingIntent.getService(this,
                 (int)new Date().getTime(), intent, 0);
@@ -312,7 +312,7 @@ public class NotificationUIService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             NotificationChannel channel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if(channel==null){
-                CharSequence name = "NotificationUIService";
+                CharSequence name = "NotificationService";
                 String description = "To showMain Iadt report notification";
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 channel = new NotificationChannel(CHANNEL_ID, name, importance);

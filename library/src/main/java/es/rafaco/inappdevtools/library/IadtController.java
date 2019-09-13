@@ -18,26 +18,26 @@ import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnablesManager;
+import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
-import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
+import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -48,7 +48,7 @@ public final class IadtController extends ContentProvider {
     private ConfigManager configManager;
     private EventManager eventManager;
     private SourcesManager sourcesManager;
-    private RunnablesManager runnablesManager;
+    private RunnableManager runnableManager;
     private boolean isPendingForegroundInit;
 
     public IadtController() {
@@ -103,7 +103,7 @@ public final class IadtController extends ContentProvider {
             Log.d(Iadt.TAG, "Initializing background services...");
 
         eventManager = new EventManager(appContext);
-        runnablesManager = new RunnablesManager((appContext));
+        runnableManager = new RunnableManager((appContext));
 
         if (isDebug()){
             ThreadUtils.runOnBack(new Runnable() {
@@ -160,13 +160,13 @@ public final class IadtController extends ContentProvider {
             Log.d(Iadt.TAG, "Initializing foreground services...");
 
         if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
-            Intent intent = new Intent(getAppContext(), OverlayUIService.class);
+            Intent intent = new Intent(getAppContext(), OverlayService.class);
             getAppContext().startService(intent);
         }
 
         if (getConfig().getBoolean(Config.INVOCATION_BY_NOTIFICATION)){
-            Intent intent = new Intent(getAppContext(), NotificationUIService.class);
-            intent.setAction(NotificationUIService.ACTION_START_FOREGROUND_SERVICE);
+            Intent intent = new Intent(getAppContext(), NotificationService.class);
+            intent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
             getAppContext().startService(intent);
         }
     }
@@ -188,8 +188,8 @@ public final class IadtController extends ContentProvider {
         return eventManager;
     }
 
-    public RunnablesManager getRunnableManager() {
-        return runnablesManager;
+    public RunnableManager getRunnableManager() {
+        return runnableManager;
     }
 
     public SourcesManager getSourcesManager() {
@@ -267,38 +267,38 @@ public final class IadtController extends ContentProvider {
 
     public void showToggle() {
         if (checksBeforeShowOverlay()) return;
-        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_TOGGLE);
+        OverlayService.performAction(OverlayService.IntentAction.SHOW_TOGGLE);
     }
     public void showMain() {
         if (checksBeforeShowOverlay()) return;
-        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_MAIN);
+        OverlayService.performAction(OverlayService.IntentAction.SHOW_MAIN);
     }
 
     public void showIcon() {
         if (checksBeforeShowOverlay()) return;
-        OverlayUIService.performAction(OverlayUIService.IntentAction.SHOW_ICON);
+        OverlayService.performAction(OverlayService.IntentAction.SHOW_ICON);
     }
 
     public void hideAll() {
         //if (checksBeforeShowOverlay()) return;
-        OverlayUIService.performAction(OverlayUIService.IntentAction.HIDE_ALL);
+        OverlayService.performAction(OverlayService.IntentAction.HIDE_ALL);
     }
 
     public void restoreAll() {
         //if (checksBeforeShowOverlay()) return;
-        OverlayUIService.performAction(OverlayUIService.IntentAction.RESTORE_ALL);
+        OverlayService.performAction(OverlayService.IntentAction.RESTORE_ALL);
     }
 
     public void takeScreenshot() {
         if (!isEnabled()) return;
 
-        Screen screen = new ScreenHelper().takeAndSaveScreen();
+        Screenshot screenshot = new ScreenshotHelper().takeAndSaveScreen();
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
-        if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayUIService.isInitialize()){
+        if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayService.isInitialize()){
             showIcon();
         }
-        FileProviderUtils.openFileExternally(getAppContext(), screen.getPath());
+        FileProviderUtils.openFileExternally(getAppContext(), screenshot.getPath());
     }
 
     public void startReportDialog() {
@@ -347,7 +347,7 @@ public final class IadtController extends ContentProvider {
     }
 
     public String getCurrentOverlay() {
-        return MainOverlayLayerManager.getCurrentScreenString();
+        return ScreenManager.getCurrentScreenString();
     }
 
     //endregion
@@ -390,11 +390,11 @@ public final class IadtController extends ContentProvider {
 
         if (isDebug())
             Log.w(Iadt.TAG, "Stopping Notification Service");
-        NotificationUIService.stop();
+        NotificationService.stop();
 
         if (isDebug())
             Log.w(Iadt.TAG, "Stopping OverlayUI Service");
-        OverlayUIService.stop();
+        OverlayService.stop();
 
         if (isDebug())
             Log.w(Iadt.TAG, "Stopping LogcatReaderService");

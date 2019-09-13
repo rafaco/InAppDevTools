@@ -25,17 +25,17 @@ import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.HttpBinService;
 
-public class RunScreen extends OverlayScreen {
+public class RunScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public RunScreen(MainOverlayLayerManager manager) {
+    public RunScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -79,7 +79,7 @@ public class RunScreen extends OverlayScreen {
 
     private void addDevToolsItems(List<Object> data) {
         data.add("Iadt");
-        data.add(new RunnableItem( "Take Screen",
+        data.add(new RunnableItem( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -197,7 +197,7 @@ public class RunScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 

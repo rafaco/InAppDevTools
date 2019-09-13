@@ -10,20 +10,20 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.view.components.flex.ConfigItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;
 //#endif
 
-public class ConfigScreen extends OverlayScreen {
+public class ConfigScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public ConfigScreen(MainOverlayLayerManager manager) {
+    public ConfigScreen(ScreenManager manager) {
         super(manager);
     }
 

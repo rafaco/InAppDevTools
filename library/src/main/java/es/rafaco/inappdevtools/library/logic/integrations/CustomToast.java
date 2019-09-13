@@ -12,7 +12,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class CustomToast {
@@ -30,7 +30,7 @@ public class CustomToast {
                 int gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
                 int yOffset = context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset);
                 toast.setGravity(gravity, 0, yOffset);
-                //toast.getView().getParent().getWindow().setType(OverlayLayer.getLayoutType());
+                //toast.getView().getParent().getWindow().setType(Layer.getLayoutType());
                 toast.show();
 
                 List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
@@ -39,7 +39,7 @@ public class CustomToast {
                     for (Pair<String, View> rootView : rootViews){
                         if(rootView.first.contains("Toast")){
                             WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) rootView.second.getLayoutParams();
-                            layoutParams.type = OverlayLayer.getLayoutType();
+                            layoutParams.type = Layer.getLayoutType();
                             //((View)rootView.second).
                         }
                     }

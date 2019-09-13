@@ -23,12 +23,12 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
-public class CrashDetailScreen extends OverlayScreen {
+public class CrashDetailScreen extends Screen {
 
     private Crash crash;
     private TextView out;
@@ -57,7 +57,7 @@ public class CrashDetailScreen extends OverlayScreen {
     private RecyclerView recyclerView1;
     private RecyclerView recyclerView2;
 
-    public CrashDetailScreen(MainOverlayLayerManager manager) {
+    public CrashDetailScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -136,9 +136,9 @@ public class CrashDetailScreen extends OverlayScreen {
             @Override
             public void run() {
                 long screenId = crash.getScreenId();
-                Screen screen = IadtController.get().getDatabase().screenDao().findById(screenId);
-                if (screen!=null && !TextUtils.isEmpty(screen.getPath())){
-                    new ImageLoaderAsyncTask(thumbnail).execute(screen.getPath());
+                Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
+                if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
+                    new ImageLoaderAsyncTask(thumbnail).execute(screenshot.getPath());
                 }
             }
         });
@@ -190,13 +190,13 @@ public class CrashDetailScreen extends OverlayScreen {
         autologButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayUIService.performNavigation(LogScreen.class, null);
+                OverlayService.performNavigation(LogScreen.class, null);
             }
         });
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayUIService.performNavigation(LogcatScreen.class, null);
+                OverlayService.performNavigation(LogcatScreen.class, null);
             }
         });
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +204,7 @@ public class CrashDetailScreen extends OverlayScreen {
             public void onClick(View v) {
                 int newVisibility = (out.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
                 out.setVisibility(newVisibility);
-                getScreenManager().getMainLayer().scrollToView(out);
+                getScreenManager().getScreenLayer().scrollToView(out);
             }
         });
     }

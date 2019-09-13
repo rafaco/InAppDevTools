@@ -6,11 +6,11 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
-public abstract class OverlayScreenHelper {
+public abstract class ScreenHelper {
 
     public final Context context;
 
-    public OverlayScreenHelper() {
+    public ScreenHelper() {
         this.context = Iadt.getAppContext();
     }
 

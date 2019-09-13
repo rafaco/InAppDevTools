@@ -14,20 +14,20 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
-public class MoreScreen extends OverlayScreen {
+public class MoreScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public MoreScreen(MainOverlayLayerManager manager) {
+    public MoreScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -52,14 +52,14 @@ public class MoreScreen extends OverlayScreen {
         List<Object> data = new ArrayList<>();
 
         data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - Go to Log screen to see all items from Network, Screens, Errors and Logcat\n" +
+                " - Go to Log to see all items from Network, Screenshots, Errors and Logcat\n" +
                 " - Config is now on toolbar 'Settings'\n");
 
         data.add(new RunnableItem("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(NetworkScreen.class);
+                    public void run() { OverlayService.performNavigation(NetworkScreen.class);
                     }
                 }));
 
@@ -68,7 +68,7 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ScreensScreen.class);
+                    public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);
                     }
                 }));
 
@@ -76,7 +76,7 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);
+                    public void run() { OverlayService.performNavigation(ErrorsScreen.class);
                     }
                 }));
 
@@ -84,7 +84,7 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(AnalysisScreen.class);
+                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
                     }
                 }));*/
 
@@ -92,7 +92,7 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(LogcatScreen.class);
+                    public void run() { OverlayService.performNavigation(LogcatScreen.class);
                     }
                 }));
 
@@ -100,7 +100,8 @@ public class MoreScreen extends OverlayScreen {
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() {OverlayUIService.performNavigation(ConfigScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(ConfigScreen.class);
                     }
                 }));
 

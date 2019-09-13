@@ -5,7 +5,7 @@ import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 
 /**
  * Hide our overlay UI when the app goes to background and restore it when get foreground
@@ -33,7 +33,7 @@ public class OverlaySyncWithForegroundSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (OverlayUIService.isInitialize()
+                if (OverlayService.isInitialize()
                         && (controller.getCurrentOverlay() != null
                             || controller.getConfig().getBoolean(Config.INVOCATION_BY_ICON))){
                     controller.hideAll();

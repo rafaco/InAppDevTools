@@ -24,15 +24,15 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
-import es.rafaco.inappdevtools.library.view.notifications.NotificationUIService;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -91,9 +91,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     //TODO: Close our services before to prevent "Schedule restart"
     private void stopDevToolsServices() {
-        Intent in = new Intent(context, OverlayUIService.class);
+        Intent in = new Intent(context, OverlayService.class);
         context.stopService(in);
-        in = new Intent(context, NotificationUIService.class);
+        in = new Intent(context, NotificationService.class);
         context.stopService(in);
     }
 
@@ -143,10 +143,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveScreenshot(){
-        ScreenHelper helper = new ScreenHelper();
-        Screen screen = helper.takeScreenIntoFile(true);
-        if (screen != null){
-            long screenId = db.screenDao().insert(screen);
+        ScreenshotHelper helper = new ScreenshotHelper();
+        Screenshot screenshot = helper.takeScreenIntoFile(true);
+        if (screenshot != null){
+            long screenId = db.screenshotDao().insert(screenshot);
             if (screenId > 0){
                 Crash current = db.crashDao().getLast();
                 current.setScreenId(screenId);

@@ -17,14 +17,14 @@ import android.support.annotation.NonNull;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
+import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
-public class IconOverlayLayer extends OverlayLayer {
+public class IconLayer extends Layer {
 
     private View iconWrapper;
     private Point displaySize;
 
-    public IconOverlayLayer(OverlayLayersManager manager) {
+    public IconLayer(LayerManager manager) {
         super(manager);
     }
 

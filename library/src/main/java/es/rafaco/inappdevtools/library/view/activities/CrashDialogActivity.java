@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.view.activities;
 
 import android.content.ContextWrapper;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 
@@ -94,7 +93,7 @@ public class CrashDialogActivity extends AppCompatActivity {
 
     private void onCrashDetail(Crash crash) {
         if (Iadt.getConfig().getBoolean(Config.OVERLAY_ENABLED)){
-            OverlayUIService.performNavigation(CrashDetailScreen.class, String.valueOf(crash.getUid()));
+            OverlayService.performNavigation(CrashDetailScreen.class, String.valueOf(crash.getUid()));
             destroyDialog();
         }
     }

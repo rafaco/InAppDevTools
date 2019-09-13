@@ -15,15 +15,15 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class InspectViewScreen extends OverlayScreen {
+public class InspectViewScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public InspectViewScreen(MainOverlayLayerManager manager) {
+    public InspectViewScreen(ScreenManager manager) {
         super(manager);
     }
 

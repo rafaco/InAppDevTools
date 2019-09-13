@@ -14,15 +14,15 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.storage.db.entities.ScreenDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.storage.files.MediaScannerUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
-public class ScreenHelper extends OverlayScreenHelper {
+public class ScreenshotHelper extends ScreenHelper {
 
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
@@ -30,11 +30,11 @@ public class ScreenHelper extends OverlayScreenHelper {
     @Override
     public String getReportPath() {
         //TODO: ThreadUtils.runOnBack(new Runnable() {
-        ScreenDao screenDao = DevToolsDatabase.getInstance().screenDao();
-        final Screen lastScreen = screenDao.getLast();
+        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        final Screenshot lastScreenshot = screenshotDao.getLast();
 
-        if (lastScreen != null){
-            return lastScreen.getPath();
+        if (lastScreenshot != null){
+            return lastScreenshot.getPath();
         }else{
             return null;
         }
@@ -46,22 +46,22 @@ public class ScreenHelper extends OverlayScreenHelper {
     }
 
 
-    public Screen takeAndSaveScreen(){
+    public Screenshot takeAndSaveScreen(){
 
-        final Screen screen = takeScreenIntoFile(false);
-        if (screen != null){
-            Toast.makeText(context.getApplicationContext(), "Screen saved", Toast.LENGTH_LONG).show();
+        final Screenshot screenshot = takeScreenIntoFile(false);
+        if (screenshot != null){
+            Toast.makeText(context.getApplicationContext(), "Screenshot saved", Toast.LENGTH_LONG).show();
             ThreadUtils.runOnBack(new Runnable() {
                 @Override
                 public void run() {
-                    IadtController.get().getDatabase().screenDao().insertAll(screen);
+                    IadtController.get().getDatabase().screenshotDao().insertAll(screenshot);
                 }
             });
         }
-        return screen;
+        return screenshot;
     }
 
-    public Screen takeScreenIntoFile(boolean isFromCrash) {
+    public Screenshot takeScreenIntoFile(boolean isFromCrash) {
 
         List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
         Pair<String, View> selectedRootView = rootViews.get(0);
@@ -79,7 +79,7 @@ public class ScreenHelper extends OverlayScreenHelper {
 
             long fileId = isFromCrash ?
                     DevToolsDatabase.getInstance().crashDao().count() :
-                    DevToolsDatabase.getInstance().screenDao().count() + 1 ;
+                    DevToolsDatabase.getInstance().screenshotDao().count() + 1 ;
             File imageFile = DevToolsFiles.prepareScreen(fileId, isFromCrash);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
@@ -90,14 +90,14 @@ public class ScreenHelper extends OverlayScreenHelper {
 
             MediaScannerUtils.scan(imageFile);
 
-            Screen screen = new Screen();
-            screen.setSession(0);
-            screen.setRootViewName(selectedName);
-            screen.setActivityName(activityName);
-            screen.setDate(new Date().getTime());
-            screen.setPath(imageFile.getAbsolutePath());
+            Screenshot screenshot = new Screenshot();
+            screenshot.setSession(0);
+            screenshot.setRootViewName(selectedName);
+            screenshot.setActivityName(activityName);
+            screenshot.setDate(new Date().getTime());
+            screenshot.setPath(imageFile.getAbsolutePath());
 
-            return screen;
+            return screenshot;
 
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM

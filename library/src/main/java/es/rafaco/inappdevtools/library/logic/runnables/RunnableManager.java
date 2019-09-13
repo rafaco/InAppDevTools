@@ -5,14 +5,14 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunnablesManager {
+public class RunnableManager {
 
     Context context;
     private static Runnable onForceCloseRunnable;
     private List<RunnableItem> customRunnables;
 
 
-    public RunnablesManager(Context context) {
+    public RunnableManager(Context context) {
         this.context = context;
     }
 

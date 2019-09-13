@@ -19,7 +19,7 @@ import com.alorma.timeline.TimelineView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -105,7 +105,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        OverlayUIService.performNavigation(SourceDetailScreen.class,
+                        OverlayService.performNavigation(SourceDetailScreen.class,
                                 SourceDetailScreen.buildParams(null,
                                         data.getFullPath(),
                                         traces.getLineNumber()));

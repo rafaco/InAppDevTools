@@ -1,11 +1,10 @@
 package es.rafaco.inappdevtools.library.logic.events.subscribers;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
 
 public class OverlayNavigationSubscriber extends EventSubscriber {
 

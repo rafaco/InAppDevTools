@@ -19,13 +19,12 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 
-public class OverlayUIService extends Service {
+public class OverlayService extends Service {
 
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_TARGET = "EXTRA_INTENT_TARGET";
@@ -49,10 +48,10 @@ public class OverlayUIService extends Service {
         CLOSE_APP,;
     }
 
-    private OverlayLayersManager overlayLayersManager;
-    private MainOverlayLayerManager mainOverlayLayerManager;
+    private LayerManager layerManager;
+    private ScreenManager screenManager;
 
-    public OverlayUIService() {}
+    public OverlayService() {}
 
     @Override
     public void onCreate() {
@@ -71,22 +70,22 @@ public class OverlayUIService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (overlayLayersManager != null){
-            overlayLayersManager.onConfigurationChanged(newConfig);
+        if (layerManager != null){
+            layerManager.onConfigurationChanged(newConfig);
         }
 
-        if (mainOverlayLayerManager != null){
-            mainOverlayLayerManager.onConfigurationChanged(newConfig);
+        if (screenManager != null){
+            screenManager.onConfigurationChanged(newConfig);
         }
     }
 
     //region [ STATIC ACCESSORS ]
 
-    public static void performNavigation(Class<? extends OverlayScreen> target) {
+    public static void performNavigation(Class<? extends Screen> target) {
         performNavigationStep(new NavigationStep(target, null));
     }
 
-    public static void performNavigation(Class<? extends OverlayScreen> target, String param) {
+    public static void performNavigation(Class<? extends Screen> target, String param) {
         performNavigationStep(new NavigationStep(target, param));
     }
 
@@ -98,32 +97,32 @@ public class OverlayUIService extends Service {
         Iadt.getAppContext().startService(intent);
     }
 
-    private static Intent buildNavigationIntent(Class<? extends OverlayScreen> screenClass, String params) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
+    private static Intent buildNavigationIntent(Class<? extends Screen> screenClass, String params) {
+        Intent intent = new Intent(Iadt.getAppContext(), OverlayService.class);
+        intent.putExtra(OverlayService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
         if (screenClass!=null){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
+            intent.putExtra(OverlayService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
         }
         if (!TextUtils.isEmpty(params)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_PARAMS, params);
+            intent.putExtra(OverlayService.EXTRA_INTENT_PARAMS, params);
         }
         return intent;
     }
 
-    public static void performAction(OverlayUIService.IntentAction action) {
+    public static void performAction(OverlayService.IntentAction action) {
         performAction(action, null);
     }
 
-    public static void performAction(OverlayUIService.IntentAction action, String property) {
+    public static void performAction(OverlayService.IntentAction action, String property) {
         Intent intent = buildActionIntent(action, property);
         Iadt.getAppContext().startService(intent);
     }
 
-    public static Intent buildActionIntent(OverlayUIService.IntentAction action, String property) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayUIService.class);
-        intent.putExtra(OverlayUIService.EXTRA_INTENT_ACTION, action);
+    public static Intent buildActionIntent(OverlayService.IntentAction action, String property) {
+        Intent intent = new Intent(Iadt.getAppContext(), OverlayService.class);
+        intent.putExtra(OverlayService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
-            intent.putExtra(OverlayUIService.EXTRA_INTENT_TARGET, property);
+            intent.putExtra(OverlayService.EXTRA_INTENT_TARGET, property);
         }
         return intent;
     }
@@ -138,30 +137,30 @@ public class OverlayUIService extends Service {
 
     private void init() {
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "OverlayUIService - init()");
+            Log.d(Iadt.TAG, "OverlayService - init()");
 
-        overlayLayersManager = new OverlayLayersManager(this);
-        mainOverlayLayerManager = new MainOverlayLayerManager(this, overlayLayersManager.getMainLayer());
+        layerManager = new LayerManager(this);
+        screenManager = new ScreenManager(this, layerManager.getMainLayer());
         initialised = true;
 
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "OverlayUIService - initialised");
+            Log.d(Iadt.TAG, "OverlayService - initialised");
 
         onInit();
     }
 
     private void onInit() {
-        //Load home screen (ready to show and for back navigation
+        //Load home screenshots (ready to show and for back navigation
         navigateHome();
 
         if (PendingCrashUtil.isPending()){
             navigateTo(CrashDetailScreen.class.getSimpleName(), null);
             PendingCrashUtil.clearPending();
-            overlayLayersManager.toggleVisibility(true);
+            layerManager.toggleVisibility(true);
             showMain();
         }
         else{
-            overlayLayersManager.toggleVisibility(true);
+            layerManager.toggleVisibility(true);
             showIcon();
         }
     }
@@ -247,30 +246,30 @@ public class OverlayUIService extends Service {
     //region [ INTERNAL NAVIGATION ]
 
     private void showToggle() {
-        overlayLayersManager.toggleMainIconVisibility(null);
+        layerManager.toggleMainIconVisibility(null);
     }
 
     private void showMain() {
-        overlayLayersManager.toggleMainIconVisibility(true);
+        layerManager.toggleMainIconVisibility(true);
     }
 
     private void showIcon() {
-        overlayLayersManager.toggleMainIconVisibility(false);
+        layerManager.toggleMainIconVisibility(false);
         if (Iadt.isDebug()){
             IadtController.get().getEventManager().fire(Event.OVERLAY_HIDDEN, null);
         }
     }
 
     private void hideAll() {
-        overlayLayersManager.toggleVisibility(false);
+        layerManager.toggleVisibility(false);
     }
 
     private void restoreAll() {
-        overlayLayersManager.toggleVisibility(true);
+        layerManager.toggleVisibility(true);
     }
 
     public void navigateHome() {
-        mainOverlayLayerManager.goHome();
+        screenManager.goHome();
     }
 
     public void navigateTo(String name) {
@@ -278,12 +277,12 @@ public class OverlayUIService extends Service {
     }
 
     public void navigateTo(String name, String param) {
-        overlayLayersManager.toggleMainIconVisibility(true);
-        mainOverlayLayerManager.goTo(name, param);
+        layerManager.toggleMainIconVisibility(true);
+        screenManager.goTo(name, param);
     }
 
     public void navigateBack() {
-        mainOverlayLayerManager.goBack();
+        screenManager.goBack();
     }
 
     //endregion
@@ -291,7 +290,7 @@ public class OverlayUIService extends Service {
     //region [ STOP ]
 
     //TODO: [LOW:Arch] Replace by bounded service
-    private static OverlayUIService instance;
+    private static OverlayService instance;
 
     public static void stop(){
         if (instance != null) instance.stopService();
@@ -299,7 +298,7 @@ public class OverlayUIService extends Service {
 
     private void stopService() {
         if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "Stopping OverlayUIService");
+            Log.v(Iadt.TAG, "Stopping OverlayService");
         stopSelf();
         instance = null;
     }
@@ -315,9 +314,9 @@ public class OverlayUIService extends Service {
     @Override
     public void onDestroy() {
         if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "OverlayUIService - onDestroy");
-        if (mainOverlayLayerManager != null) mainOverlayLayerManager.destroy();
-        if (overlayLayersManager != null) overlayLayersManager.destroy();
+            Log.v(Iadt.TAG, "OverlayService - onDestroy");
+        if (screenManager != null) screenManager.destroy();
+        if (layerManager != null) layerManager.destroy();
         instance = null;
 
         super.onDestroy();

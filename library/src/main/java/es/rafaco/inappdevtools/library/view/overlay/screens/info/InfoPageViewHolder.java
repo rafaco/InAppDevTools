@@ -16,7 +16,7 @@ import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
 public class InfoPageViewHolder {
@@ -77,7 +77,7 @@ public class InfoPageViewHolder {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OverlayUIService.performNavigation(SourceDetailScreen.class,
+                    OverlayService.performNavigation(SourceDetailScreen.class,
                             SourceDetailScreen.buildParams("", "assets/inappdevtools/git.diff", -1));
                 }
             });

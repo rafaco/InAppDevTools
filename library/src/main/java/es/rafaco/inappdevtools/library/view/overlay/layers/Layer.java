@@ -6,16 +6,16 @@ import android.view.View;
 import android.view.WindowManager;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayLayersManager;
+import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
-public abstract class OverlayLayer {
+public abstract class Layer {
 
-    public enum Type { ICON, REMOVE, MAIN}
+    public enum Type { ICON, REMOVE, SCREEN}
 
-    protected final OverlayLayersManager manager;
+    protected final LayerManager manager;
     protected View view;
 
-    public OverlayLayer(OverlayLayersManager manager) {
+    public Layer(LayerManager manager) {
         this.manager = manager;
     }
 
@@ -67,7 +67,7 @@ public abstract class OverlayLayer {
     protected void afterAttachView(View view) {}
     public void onConfigurationChange(Configuration newConfig) {}
 
-    public abstract OverlayLayer.Type getType();
+    public abstract Layer.Type getType();
     protected abstract int getLayoutId();
     protected abstract WindowManager.LayoutParams getLayoutParams();
     protected abstract void beforeAttachView(View view);

@@ -12,8 +12,8 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "screen")
-public class Screen implements Serializable {
+@Entity(tableName = "screenshot")
+public class Screenshot implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long uid;

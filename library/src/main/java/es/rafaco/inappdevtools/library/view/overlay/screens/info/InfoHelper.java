@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 
-public class InfoHelper extends OverlayScreenHelper {
+public class InfoHelper extends ScreenHelper {
 
     @Override
     public String getReportPath() {

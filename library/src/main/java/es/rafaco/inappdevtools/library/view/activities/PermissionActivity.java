@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
 
 public class PermissionActivity extends AppCompatActivity {
 
@@ -97,7 +96,7 @@ public class PermissionActivity extends AppCompatActivity {
                 requestStoragePermission();
             }
         } else {
-            Log.d(Iadt.TAG, "OverlayUIService - onStartCommand without action");
+            Log.d(Iadt.TAG, "OverlayService - onStartCommand without action");
         }
     }
 
@@ -184,7 +183,7 @@ public class PermissionActivity extends AppCompatActivity {
             onGrantedCallback = null;
         }else{
             //TODO: remove
-            //Intent intent = OverlayUIService.buildActionIntent(OverlayUIService.IntentAction.NAVIGATE_TO, "Screen");
+            //Intent intent = OverlayService.buildActionIntent(OverlayService.IntentAction.NAVIGATE_TO, "Screenshot");
             //startService(intent);
         }
         finish();

@@ -8,13 +8,13 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 
-public class CrashHelper extends OverlayScreenHelper {
+public class CrashHelper extends ScreenHelper {
 
     public static final String CAUSED_BY = "Caused by:";
 
@@ -91,8 +91,8 @@ public class CrashHelper extends OverlayScreenHelper {
     }
 
     private void addScreenFile(Crash crash, List<String> filePaths) {
-        Screen screen = IadtController.get().getDatabase().screenDao().findById(crash.getScreenId());
-        String filePath = screen.getPath();
+        Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(crash.getScreenId());
+        String filePath = screenshot.getPath();
 
         if (!TextUtils.isEmpty(filePath)) {
             filePaths.add(filePath);

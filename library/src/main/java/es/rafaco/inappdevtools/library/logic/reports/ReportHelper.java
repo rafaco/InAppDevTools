@@ -17,14 +17,14 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.EmailUtils;
 
-public class ReportHelper extends OverlayScreenHelper {
+public class ReportHelper extends ScreenHelper {
 
     @Override
     public String getReportPath() {
@@ -67,7 +67,7 @@ public class ReportHelper extends OverlayScreenHelper {
             filePaths.add(new LogcatHelper().getReportPath());
 
             //Include only the last one
-            //filePaths.add(new ScreenHelper().getReportPath());
+            //filePaths.add(new ScreenshotHelper().getReportPath());
 
             try{
                 ArrayList<Uri> screens = (ArrayList<Uri>)target;

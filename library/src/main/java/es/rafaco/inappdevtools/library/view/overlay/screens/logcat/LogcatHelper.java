@@ -12,10 +12,10 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 
-public class LogcatHelper extends OverlayScreenHelper {
+public class LogcatHelper extends ScreenHelper {
 
     @Override
     public String getReportPath() {

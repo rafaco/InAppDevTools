@@ -43,14 +43,14 @@ import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
-public class LogScreen extends OverlayScreen {
+public class LogScreen extends Screen {
 
     private LogDataSourceFactory dataSourceFactory;
     private LogAdapter adapter;
@@ -65,7 +65,7 @@ public class LogScreen extends OverlayScreen {
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
 
-    public LogScreen(MainOverlayLayerManager manager) {
+    public LogScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -212,7 +212,7 @@ public class LogScreen extends OverlayScreen {
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_tune) {
-            //OverlayUIService.performNavigation(AnalysisScreen.class);
+            //OverlayService.performNavigation(AnalysisScreen.class);
             onTuneButton();
         }
         else if (selected == R.id.action_level) {
@@ -260,12 +260,12 @@ public class LogScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 
     private void onSaveButton() {
-        OverlayScreenHelper helper = new LogcatHelper();
+        ScreenHelper helper = new LogcatHelper();
         String path = (String) helper.getReportPath();
         Iadt.showMessage("Log stored to " + path);
     }
@@ -296,7 +296,7 @@ public class LogScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 

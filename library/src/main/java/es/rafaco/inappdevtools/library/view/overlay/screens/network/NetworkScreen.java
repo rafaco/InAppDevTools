@@ -27,10 +27,10 @@ import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public class NetworkScreen extends OverlayScreen {
+public class NetworkScreen extends Screen {
 
     ContentResolver contentResolver;
     private NetworkCursorAdapter adapter;
@@ -38,7 +38,7 @@ public class NetworkScreen extends OverlayScreen {
     private TextView welcome;
     private TextView emptyView;
 
-    public NetworkScreen(MainOverlayLayerManager manager) {
+    public NetworkScreen(ScreenManager manager) {
         super(manager);
     }
 

@@ -28,25 +28,25 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
-public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenViewHolder> {
+public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.ScreenViewHolder> {
 
     private Context mContext;
-    private List<Screen> screenList;
+    private List<Screenshot> screenshotList;
     private RecyclerView recycledView;
 
-    public ScreenAdapter(Context mContext, List<Screen> screenList) {
+    public ScreenshotAdapter(Context mContext, List<Screenshot> screenshotList) {
         this.mContext = mContext;
-        this.screenList = screenList;
+        this.screenshotList = screenshotList;
     }
 
     @Override
     public int getItemCount() {
-        return screenList.size();
+        return screenshotList.size();
     }
 
     //region [ VIEW HOLDER ]
@@ -54,7 +54,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
     @Override
     public ScreenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tool_screen_item, parent, false);
+                .inflate(R.layout.tool_screenshots_item, parent, false);
 
         return new ScreenViewHolder(itemView);
     }
@@ -63,14 +63,14 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
     public void onBindViewHolder(final ScreenViewHolder holder, int position) {
         holder.cardView.setRadius(R.dimen.card_radius);
 
-        Screen screen = screenList.get(position);
-        holder.title.setText(screen.getActivityName());
-        holder.count.setText(Humanizer.getElapsedTime(screen.getDate()));
+        Screenshot screenshot = screenshotList.get(position);
+        holder.title.setText(screenshot.getActivityName());
+        holder.count.setText(Humanizer.getElapsedTime(screenshot.getDate()));
 
         // loading album cover using Glide library
-        //Glide.with(mContext).load(screen.getThumbnail()).into(holder.thumbnail);
-        //ImageLoader.loadInto(screen.getPath(), holder.thumbnail);
-        new ImageLoaderAsyncTask(holder.thumbnail).execute(screen.getPath());
+        //Glide.with(mContext).load(screenshot.getThumbnail()).into(holder.thumbnail);
+        //ImageLoader.loadInto(screenshot.getPath(), holder.thumbnail);
+        new ImageLoaderAsyncTask(holder.thumbnail).execute(screenshot.getPath());
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,22 +99,22 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
 
     //region [ SET DATA ]
 
-    public void setData(List<Screen> newData) {
-        if (screenList != null) {
-            ScreenDiffCallback postDiffCallback = new ScreenDiffCallback(screenList, newData);
+    public void setData(List<Screenshot> newData) {
+        if (screenshotList != null) {
+            ScreenDiffCallback postDiffCallback = new ScreenDiffCallback(screenshotList, newData);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
 
-            screenList.clear();
-            screenList.addAll(newData);
+            screenshotList.clear();
+            screenshotList.addAll(newData);
             diffResult.dispatchUpdatesTo(this);
         }
     }
 
     class ScreenDiffCallback extends DiffUtil.Callback {
 
-        private final List<Screen> oldPosts, newPosts;
+        private final List<Screenshot> oldPosts, newPosts;
 
-        public ScreenDiffCallback(List<Screen> oldPosts, List<Screen> newPosts) {
+        public ScreenDiffCallback(List<Screenshot> oldPosts, List<Screenshot> newPosts) {
             this.oldPosts = oldPosts;
             this.newPosts = newPosts;
         }
@@ -149,7 +149,7 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.ScreenView
         Context wrapper = new ContextThemeWrapper(mContext, R.style.LibPopupMenuStyle);
         PopupMenu popup = new PopupMenu(wrapper, view);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.screen, popup.getMenu());
+        inflater.inflate(R.menu.screenshots, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
         popup.show();
     }

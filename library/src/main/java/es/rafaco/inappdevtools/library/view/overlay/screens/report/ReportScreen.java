@@ -34,14 +34,14 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
-public class ReportScreen extends OverlayScreen {
+public class ReportScreen extends Screen {
 
     private TextView out;
     private Button sendButton;
@@ -50,7 +50,7 @@ public class ReportScreen extends OverlayScreen {
     private TextView header;
     private Button manageScreensButton;
 
-    public ReportScreen(MainOverlayLayerManager manager) {
+    public ReportScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -251,7 +251,7 @@ public class ReportScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 
@@ -264,7 +264,7 @@ public class ReportScreen extends OverlayScreen {
     }
 
     private void onManageScreensPressed() {
-        getScreenManager().goTo(ScreensScreen.class, null);
+        getScreenManager().goTo(ScreenshotsScreen.class, null);
     }
 
     //endregion
