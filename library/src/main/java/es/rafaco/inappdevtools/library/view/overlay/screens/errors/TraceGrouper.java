@@ -15,6 +15,13 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHe
 
 public class TraceGrouper {
 
+    public static final String IADT_TAG = "InAppDevTools";
+    public static final String YOUR_APP_TAG = "Your App";
+    public static final String ANDROID_TAG = "Android Internals";
+    public static final String ANDROIDX_LIB_TAG = "AndroidX";
+    public static final String SUPPORT_LIB_TAG = "Android Support";
+    public static final String OTHER_TAG = "Other";
+
     HashMap<String, String> matcher;
     List<Object> traceData1;
     List<Object> traceData2;
@@ -106,7 +113,7 @@ public class TraceGrouper {
             }
         }
 
-        item.setTag( (classifier!=null) ? classifier : "Other");
+        item.setTag( (classifier!=null) ? classifier : OTHER_TAG);
         item.setColor(getColor(item));
         item.setFullPath(IadtController.get().getSourcesManager().getNodePathFromClassName(item.getSourcetrace().extractPath()));
     }
@@ -114,19 +121,20 @@ public class TraceGrouper {
     private void initMatcher() {
         matcher = new HashMap<>();
         AppInfoHelper infoHelper = new AppInfoHelper(IadtController.get().getAppContext());
-        matcher.put(BuildConfig.APPLICATION_ID, "InAppDevTools"); //Our library
-        matcher.put(infoHelper.getPackageName(), "Your App"); //Host app
-        matcher.put("androidx.", "AndroidX");
-        matcher.put("com.android.support", "Android Support");
-        matcher.put("com.android", "Android");
-        matcher.put("android.", "Android");
-        matcher.put("java.", "Java");
+        matcher.put(BuildConfig.APPLICATION_ID, IADT_TAG); //Our library
+        matcher.put(infoHelper.getPackageName(), YOUR_APP_TAG); //Host app
+        matcher.put(infoHelper.getInternalPackageName(), YOUR_APP_TAG); //Host app
+        matcher.put("androidx.", ANDROIDX_LIB_TAG);
+        matcher.put("com.android.support", SUPPORT_LIB_TAG);
+        matcher.put("com.android", ANDROID_TAG);
+        matcher.put("android.", ANDROID_TAG);
+        matcher.put("java.", ANDROID_TAG);
     }
 
     private int getColor(TraceItem item) {
-        if (item.getTag().equals("Your App"))
+        if (item.getTag().equals(YOUR_APP_TAG))
             return R.color.rally_green;
-        else if (item.getTag().equals("InAppDevTools"))
+        else if (item.getTag().equals(IADT_TAG))
             return R.color.rally_blue;
         else
             return R.color.rally_gray;

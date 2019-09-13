@@ -39,7 +39,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.logic.events.detectors.crash.SimulatedException;
+import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.view.utils.RecyclerViewUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
@@ -195,7 +195,7 @@ public class ErrorsScreen extends Screen {
         ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
-                throw new SimulatedException("Simulated crash on the UI thread", cause);
+                throw new ForcedRuntimeException("Simulated crash on the UI thread", cause);
             }
         });
     }
@@ -206,7 +206,7 @@ public class ErrorsScreen extends Screen {
         ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
-                throw new SimulatedException("Simulated crash on a background thread", cause);
+                throw new ForcedRuntimeException("Simulated crash on a background thread", cause);
             }
         });
     }

@@ -14,13 +14,11 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TooManyListenersException;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
-import es.rafaco.inappdevtools.library.logic.events.detectors.crash.SimulatedException;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
@@ -217,25 +215,11 @@ public class RunScreen extends Screen {
     }
 
     public void onCrashUiButton() {
-        Log.i(Iadt.TAG, "Simulated crash on the UI thread...");
-        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                throw new SimulatedException("Simulated crash on the UI thread", cause);
-            }
-        });
+        IadtController.get().crashUiThread();
     }
 
     public void onCrashBackButton() {
-        Log.i(Iadt.TAG, "Simulated crash on a background thread...");
-        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
-        ThreadUtils.runOnBack(new Runnable() {
-            @Override
-            public void run() {
-                throw new SimulatedException("Simulated crash on a background thread", cause);
-            }
-        });
+        IadtController.get().crashBackgroundThread();
     }
 
     @Override

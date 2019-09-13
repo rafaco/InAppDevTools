@@ -41,5 +41,7 @@
     <string name="chuck_response_size">Response size</string>
     <string name="chuck_response_time">Response time</string>
     <string name="chuck_total_size">Total size</string>
+    <string name="simulated_crash_cause">The scenic panic make you pressed that button :)</string>
+    <string name="simulated_crash">Simulated crash on a background thread</string>
 
 </resources>

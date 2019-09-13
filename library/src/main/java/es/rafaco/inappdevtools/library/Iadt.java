@@ -182,4 +182,11 @@ public class Iadt {
     public static void shareLibrary() {
         ExternalIntentUtils.shareLibrary();
     }
+
+    public static void crashUiThread() {
+        getController().crashUiThread();
+    }
+    public static void crashBackgroundThread() {
+        getController().crashBackgroundThread();
+    }
 }

@@ -14,9 +14,12 @@ import android.util.Log;
 import android.support.annotation.Nullable;
 //#endif
 
+import java.util.TooManyListenersException;
+
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
+import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
@@ -44,6 +47,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public final class IadtController extends ContentProvider {
 
     private static IadtController INSTANCE;
+
     private Context appContext;
     private ConfigManager configManager;
     private EventManager eventManager;
@@ -435,4 +439,28 @@ public final class IadtController extends ContentProvider {
     }
 
     //endregion
+
+
+    public void crashUiThread() {
+        Log.i(Iadt.TAG, "Crashing the UI thread...");
+        final Exception cause = new TooManyListenersException(getContext().getString(R.string.simulated_crash_cause));
+        ThreadUtils.runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                throw new ForcedRuntimeException(cause);
+            }
+        });
+    }
+
+    public void crashBackgroundThread() {
+        Log.i(Iadt.TAG, "Crashing a background thread...");
+        final Exception cause = new TooManyListenersException(getContext().getString(R.string.simulated_crash_cause));
+        ThreadUtils.runOnBack(new Runnable() {
+            @Override
+            public void run() {
+                throw new ForcedRuntimeException(cause);
+            }
+        });
+    }
 }
+

@@ -59,7 +59,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
         InfoGroup group = new InfoGroup.Builder("")
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())
-                .add("Internal Package", AppBuildConfig.getNamespace(context))
+                .add("Internal Package", getInternalPackageName())
                 //.add("Activity Name", easyAppMod.getActivityName())
                 .add("App version", easyAppMod.getAppVersion())
                 .add("App versioncode", easyAppMod.getAppVersionCode())
@@ -132,6 +132,10 @@ public class AppInfoHelper extends AbstractInfoHelper{
 
     public String getPackageName(){
         return context.getPackageName();
+    }
+
+    public String getInternalPackageName(){
+        return AppBuildConfig.getNamespace(context);
     }
 
     public String getAppNameAndVersions() {

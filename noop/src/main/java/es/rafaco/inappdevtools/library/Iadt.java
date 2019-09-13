@@ -40,11 +40,8 @@ public class Iadt {
     //region [ OVERLAY CONTROLLER ]
 
     public static void show() {}
-
     public static void hide() {}
-
     public static void takeScreenshot() {}
-
     public static void sendReport(final ReportHelper.ReportType type, final Object param){}
 
     //endregion
@@ -52,7 +49,6 @@ public class Iadt {
     //region [ APP CONTROLLER (RESTART AND FORCE CLOSE) ]
 
     public static void restartApp(){}
-
     public static void forceCloseApp(){}
 
     //endregion
@@ -73,9 +69,7 @@ public class Iadt {
     //region [ FEATURE: CUSTOM RUNNABLE ]
 
     public static void addCustomRunnable(RunnableItem runnable){}
-
     public static void addOnForceCloseRunnable(Runnable onForceClose){}
-
     public static Runnable getOnForceCloseRunnable(){
         return null;
     }
@@ -85,11 +79,8 @@ public class Iadt {
     //region [ FEATURE: FRIENDLY LOG ]
 
     public static void showMessage(int stringId) {}
-
     public static void showMessage(final String text) {}
-
     public static void showWarning(final String text) {}
-
     public static void showError(final String text) {}
 
     //endregion
@@ -99,16 +90,17 @@ public class Iadt {
     public static boolean isEnabled(){
         return false;
     }
-
     public static boolean isDebug(){
         return false;
     }
-
     public static boolean isNoop(){
         return true;
     }
 
-    public static void viewReadme() { }
-    public static void shareDemo() { }
-    public static void shareLibrary() { }
+    public static void viewReadme() {}
+    public static void shareDemo() {}
+    public static void shareLibrary() {}
+
+    public void crashUiThread() {}
+    public void crashBackgroundThread() {}
 }

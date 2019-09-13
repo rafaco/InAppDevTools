@@ -43,7 +43,8 @@ public class MainActivityFragment extends Fragment {
         crashButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new RuntimeException("Error simulated from MainActivity");
+                Iadt.crashBackgroundThread();
+
             }
         });
 
