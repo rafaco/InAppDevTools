@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
@@ -36,7 +37,8 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
+                .getEventDetectorsManager().get(ActivityEventDetector.class);
         String result = getTopActivity() + " on " + (activityWatcher.isInBackground() ? "Background" : "Foreground");
         return result;
     }
@@ -51,7 +53,8 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getActivityInfo() {
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
+                .getEventDetectorsManager().get(ActivityEventDetector.class);
         return new InfoGroup.Builder("")
                 .add("App on " + (activityWatcher.isInBackground() ? "Background" : "Foreground"))
                 .add("Top activity is " + getTopActivity())

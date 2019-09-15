@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.storage.files;
 
+import android.content.Context;
 import android.util.Log;
 
 //#ifdef ANDROIDX
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FileCreator {
@@ -65,7 +67,8 @@ public class FileCreator {
     }
 
     private static String getLibDir(){
-        return Iadt.getAppContext().getFilesDir() + "/" + FileProviderUtils.ROOT_FOLDER;
+        Context context = IadtController.get().getContext();
+        return context.getFilesDir() + "/" + FileProviderUtils.ROOT_FOLDER;
     }
 
     private static File createDirIfNotExist(String path){

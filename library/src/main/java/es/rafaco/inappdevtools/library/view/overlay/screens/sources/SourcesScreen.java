@@ -134,9 +134,9 @@ public class SourcesScreen extends Screen {
 
     private void updateFilter(SourceEntry entry) {
         if (entry == null)
-            updateParam(null);
+            updateParams(null);
         else
-            updateParam(buildParams("TODO", entry.getName()));
+            updateParams(buildParams("TODO", entry.getName()));
 
         if (currentTask != null){
             currentTask.cancel(true);

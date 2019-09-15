@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.Set;
 
+import es.rafaco.inappdevtools.library.Iadt;
+
 public class ThreadUtils {
 
     private ThreadUtils() { throw new IllegalStateException("Utility class"); }
@@ -44,6 +46,9 @@ public class ThreadUtils {
         handler.postDelayed(runnable, delay);
     }
 
+    public static void printOverview(String from){
+        Log.d(Iadt.TAG, formatOverview(from));
+    }
 
     public static String formatOverview(String from){
         String threadName = (isMain()) ? "MAIN" : "a background";

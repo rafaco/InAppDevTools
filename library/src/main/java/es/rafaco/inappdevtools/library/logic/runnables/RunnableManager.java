@@ -11,7 +11,6 @@ public class RunnableManager {
     private static Runnable onForceCloseRunnable;
     private List<RunnableItem> customRunnables;
 
-
     public RunnableManager(Context context) {
         this.context = context;
     }

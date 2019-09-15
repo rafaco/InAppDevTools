@@ -113,8 +113,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
             }
         }
-
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
+                .getEventDetectorsManager().get(ActivityEventDetector.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isMain(thread));

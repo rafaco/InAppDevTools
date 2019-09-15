@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 
 public class PermissionActivity extends AppCompatActivity {
 
@@ -52,9 +53,10 @@ public class PermissionActivity extends AppCompatActivity {
             onRevokeCallback = onFailCallback;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-            Intent intent = PermissionActivity.buildIntent(action, Iadt.getAppContext());
+            Context context = IadtController.get().getContext();
+            Intent intent = PermissionActivity.buildIntent(action, context);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Iadt.getAppContext().startActivity(intent, null);
+            context.startActivity(intent, null);
         }else{
             onSuccessCallback.run();
         }
@@ -68,7 +70,7 @@ public class PermissionActivity extends AppCompatActivity {
 
     private static boolean checkStandardPermission(String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            return ContextCompat.checkSelfPermission(Iadt.getAppContext(),
+            return ContextCompat.checkSelfPermission(IadtController.get().getContext(),
                     permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
@@ -76,7 +78,7 @@ public class PermissionActivity extends AppCompatActivity {
 
     private static boolean checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            return Settings.canDrawOverlays(Iadt.getAppContext());
+            return Settings.canDrawOverlays(IadtController.get().getContext());
         }
         return true;
     }

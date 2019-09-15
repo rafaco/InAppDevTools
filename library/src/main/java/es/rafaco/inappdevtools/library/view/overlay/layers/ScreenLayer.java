@@ -23,7 +23,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 //#endif
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
@@ -190,7 +189,8 @@ public class ScreenLayer extends Layer {
 
     private void addLogoAndResize() {
         int appIconResourceId = UiUtils.getAppIconResourceId();
-        Drawable logo =  Iadt.getAppContext().getResources().getDrawable(appIconResourceId);
+        Drawable logo =  IadtController.get().getContext()
+                .getResources().getDrawable(appIconResourceId);
         toolbar.setLogo(logo);
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             View child = toolbar.getChildAt(i);

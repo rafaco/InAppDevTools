@@ -4,14 +4,14 @@ import android.content.Context;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 
 public abstract class ScreenHelper {
 
     public final Context context;
 
     public ScreenHelper() {
-        this.context = Iadt.getAppContext();
+        this.context = IadtController.get().getContext();
     }
 
     public abstract String getReportPath();

@@ -18,8 +18,9 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
-import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
@@ -58,6 +59,7 @@ public class OverlayService extends Service {
         super.onCreate();
         initialised = false;
         instance = this;
+        ThreadUtils.printOverview("OverlayService");
     }
 
     @Nullable
@@ -93,12 +95,12 @@ public class OverlayService extends Service {
         if (step == null){
             return;
         }
-        Intent intent = buildNavigationIntent(step.getClassName(), step.getParam());
-        Iadt.getAppContext().startService(intent);
+        Intent intent = buildNavigationIntent(step.getClassName(), step.getParams());
+        IadtController.get().getContext().startService(intent);
     }
 
     private static Intent buildNavigationIntent(Class<? extends Screen> screenClass, String params) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayService.class);
+        Intent intent = new Intent(IadtController.get().getContext(), OverlayService.class);
         intent.putExtra(OverlayService.EXTRA_INTENT_ACTION, IntentAction.NAVIGATE_TO);
         if (screenClass!=null){
             intent.putExtra(OverlayService.EXTRA_INTENT_TARGET, screenClass.getSimpleName());
@@ -115,11 +117,11 @@ public class OverlayService extends Service {
 
     public static void performAction(OverlayService.IntentAction action, String property) {
         Intent intent = buildActionIntent(action, property);
-        Iadt.getAppContext().startService(intent);
+        IadtController.get().getContext().startService(intent);
     }
 
     public static Intent buildActionIntent(OverlayService.IntentAction action, String property) {
-        Intent intent = new Intent(Iadt.getAppContext(), OverlayService.class);
+        Intent intent = new Intent(IadtController.get().getContext(), OverlayService.class);
         intent.putExtra(OverlayService.EXTRA_INTENT_ACTION, action);
         if (!TextUtils.isEmpty(property)){
             intent.putExtra(OverlayService.EXTRA_INTENT_TARGET, property);
@@ -307,7 +309,8 @@ public class OverlayService extends Service {
     public void onTaskRemoved(Intent rootIntent){
         //TODO: relocate to eventmanager
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) Iadt.getEventDetector(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
+                .getEventDetectorsManager().get(ActivityEventDetector.class);
         activityWatcher.setLastActivityResumed("");
     }
 

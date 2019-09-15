@@ -120,7 +120,7 @@ public class TraceGrouper {
 
     private void initMatcher() {
         matcher = new HashMap<>();
-        AppInfoHelper infoHelper = new AppInfoHelper(IadtController.get().getAppContext());
+        AppInfoHelper infoHelper = new AppInfoHelper(IadtController.get().getContext());
         matcher.put(BuildConfig.APPLICATION_ID, IADT_TAG); //Our library
         matcher.put(infoHelper.getPackageName(), YOUR_APP_TAG); //Host app
         matcher.put(infoHelper.getInternalPackageName(), YOUR_APP_TAG); //Host app

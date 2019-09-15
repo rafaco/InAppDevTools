@@ -11,8 +11,8 @@
     <application>
 
         <provider
-            android:name=".IadtController"
-            android:authorities="${applicationId}.iadt.controller"
+            android:name=".IadtLauncher"
+            android:authorities="${applicationId}.iadt.launcher"
             android:exported="false"/>
 
         <provider

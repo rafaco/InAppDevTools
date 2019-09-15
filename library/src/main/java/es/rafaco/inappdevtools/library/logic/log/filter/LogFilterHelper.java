@@ -102,7 +102,7 @@ public class LogFilterHelper {
     }
 
     public List<String> getSeverityOptions() {
-        String[] levelsArray = IadtController.get().getAppContext().getResources()
+        String[] levelsArray = IadtController.get().getContext().getResources()
                 .getStringArray(R.array.log_levels);
         List<String> list = new ArrayList<>();
         for (String item : levelsArray) {
@@ -112,7 +112,7 @@ public class LogFilterHelper {
     }
 
     public String getSeverityLongString() {
-        String[] levelsArray = IadtController.get().getAppContext().getResources().getStringArray(R.array.log_levels);
+        String[] levelsArray = IadtController.get().getContext().getResources().getStringArray(R.array.log_levels);
         return Humanizer.toCapitalCase(levelsArray[uiFilter.getSeverityInt()]);
     }
 

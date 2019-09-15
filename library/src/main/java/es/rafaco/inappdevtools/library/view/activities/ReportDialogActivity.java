@@ -52,7 +52,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
@@ -184,7 +184,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         Uri screenFolderUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = FileProviderUtils.getAuthority(Iadt.getAppContext());
+            String authority = FileProviderUtils.getAuthority(IadtController.get().getContext());
             screenFolderUri = FileProvider.getUriForFile(getApplicationContext(), authority, screensFolder);
         } else {
             screenFolderUri = Uri.fromFile(screensFolder);

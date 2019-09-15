@@ -120,7 +120,7 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
         return getScreenManager().getCurrentStepParams();
     }
 
-    public void updateParam(String newParams) {
+    public void updateParams(String newParams) {
         getScreenManager().updateCurrentStepParams(newParams);
     }
 

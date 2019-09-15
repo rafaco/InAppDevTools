@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.logic.config;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
@@ -57,7 +58,7 @@ public class ConfigManager {
 
     public void setBoolean(Config config, boolean value) {
         DevToolsPrefs.setBoolean(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public String getString(Config config) {
@@ -74,7 +75,7 @@ public class ConfigManager {
 
     public void setString(Config config, String value) {
         DevToolsPrefs.setString(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public long getLong(Config config) {
@@ -91,6 +92,6 @@ public class ConfigManager {
 
     public void setLong(Config config, long value) {
         DevToolsPrefs.setLong(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config);
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

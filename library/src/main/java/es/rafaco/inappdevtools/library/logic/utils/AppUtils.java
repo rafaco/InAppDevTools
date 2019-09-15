@@ -14,7 +14,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 import static es.rafaco.inappdevtools.library.Iadt.TAG;
@@ -50,7 +50,7 @@ public class AppUtils {
     }
 
     public static void clearAppData() {
-        Context appContext = Iadt.getAppContext();
+        Context appContext = IadtController.get().getContext();
         try {
 
             if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {

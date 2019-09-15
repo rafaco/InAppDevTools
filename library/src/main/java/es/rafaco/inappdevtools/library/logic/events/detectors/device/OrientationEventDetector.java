@@ -1,12 +1,13 @@
 package es.rafaco.inappdevtools.library.logic.events.detectors.device;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -21,7 +22,7 @@ public class OrientationEventDetector extends EventDetector implements SensorEve
 
     public OrientationEventDetector(EventManager eventManager) {
         super(eventManager);
-        sm = (SensorManager) Iadt.getAppContext().getSystemService(SENSOR_SERVICE);
+        sm = (SensorManager) eventManager.getContext().getSystemService(SENSOR_SERVICE);
     }
 
     @Override
@@ -101,7 +102,8 @@ public class OrientationEventDetector extends EventDetector implements SensorEve
     }
 
     public static int getOrientation(){
-        return Iadt.getAppContext().getResources().getConfiguration().orientation;
+        Context context = IadtController.get().getContext();
+        return context.getResources().getConfiguration().orientation;
     }
 
     public static String getOrientationString(){

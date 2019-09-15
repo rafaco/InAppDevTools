@@ -10,9 +10,11 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 //#endif
 
+import android.content.Context;
 import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnrDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -44,8 +46,9 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
     public static DevToolsDatabase getInstance() {
         if (INSTANCE == null) {
+            Context context = IadtController.get().getContext();
             INSTANCE =
-                    Room.databaseBuilder(Iadt.getAppContext(), DevToolsDatabase.class, DB_NAME)
+                    Room.databaseBuilder(context, DevToolsDatabase.class, DB_NAME)
                             //TODO: Research alternatives, on crash we can't create new threads
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()

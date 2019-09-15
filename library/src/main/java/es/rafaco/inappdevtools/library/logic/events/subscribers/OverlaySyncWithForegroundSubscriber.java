@@ -34,7 +34,7 @@ public class OverlaySyncWithForegroundSubscriber extends EventSubscriber {
             @Override
             public void onEvent(Event event, Object param) {
                 if (OverlayService.isInitialize()
-                        && (controller.getCurrentOverlay() != null
+                        && (controller.getNavigationManager().getCurrent() != null
                             || controller.getConfig().getBoolean(Config.INVOCATION_BY_ICON))){
                     controller.hideAll();
                     pendingRestoration = true;

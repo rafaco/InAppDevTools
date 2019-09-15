@@ -25,6 +25,8 @@ import java.util.TimerTask;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -423,8 +425,9 @@ public class LogcatReaderService extends JobIntentService {
         ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
-                Intent intent = LogcatReaderService.getStartIntent(Iadt.getAppContext(), "Next execution");
-                LogcatReaderService.enqueueWork(Iadt.getAppContext(), intent);
+                Context context = IadtController.get().getContext();
+                Intent intent = LogcatReaderService.getStartIntent(context, "Next execution");
+                LogcatReaderService.enqueueWork(context, intent);
             }
         }, getMaxQueueTime());
     }
@@ -438,9 +441,10 @@ public class LogcatReaderService extends JobIntentService {
     }
 
     private long getMaxQueueTime(){
-        String currentOverlay = IadtController.get().getCurrentOverlay();
+        NavigationManager navigationManager = IadtController.get().getNavigationManager();
+        NavigationStep currentStep = navigationManager != null ? null : navigationManager.getCurrent();
         if (!AppUtils.isForegroundImportance(getApplicationContext())
-                || currentOverlay == null || !currentOverlay.equals(LogScreen.class.getSimpleName())){
+                || currentStep == null || !currentStep.getClassName().equals(LogScreen.class)){
             return BACKGROUND_MAX_TIME;
         }else{
             return LIVE_MAX_TIME;

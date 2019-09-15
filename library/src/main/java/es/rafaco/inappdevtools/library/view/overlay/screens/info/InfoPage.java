@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.lang.reflect.InvocationTargetException;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AbstractInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
@@ -47,8 +47,9 @@ public enum InfoPage {
         try {
             Class[] cArg = new Class[1];
             cArg[0] = Context.class;
+            Context context = IadtController.get().getContext();
             helper = helperClass.getDeclaredConstructor(cArg)
-                    .newInstance(Iadt.getAppContext());
+                    .newInstance(context);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

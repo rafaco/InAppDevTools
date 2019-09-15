@@ -1,17 +1,12 @@
 package es.rafaco.inappdevtools.library;
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.util.Log;
 
 //#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //#else
-import android.support.annotation.Nullable;
 //#endif
 
 import java.util.TooManyListenersException;
@@ -21,6 +16,7 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
@@ -37,50 +33,45 @@ import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public final class IadtController extends ContentProvider {
+public final class IadtController {
 
     private static IadtController INSTANCE;
 
-    private Context appContext;
+    private Context context;
     private ConfigManager configManager;
     private EventManager eventManager;
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
+    private NavigationManager navigationManager;
     private boolean isPendingForegroundInit;
 
-    public IadtController() {
+    protected IadtController(Context context) {
         if (INSTANCE != null) {
-            throw new RuntimeException();
+            throw new RuntimeException("IadtController is already initialized");
         }
+        INSTANCE = this;
+        init(context);
     }
 
     public static IadtController get() {
         if (INSTANCE == null) {
-            IadtController iadtController = new IadtController();
-            iadtController.onCreate();
+            return null;
         }
         return INSTANCE;
     }
 
-    @Override
-    public boolean onCreate() {
-        INSTANCE = this;
-        init(getContext());
-        return false;
-    }
-
-
     //region [ INITIALIZATION ]
 
     private void init(Context context) {
-        appContext = context.getApplicationContext();
+        this.context = context.getApplicationContext();
+
+        ThreadUtils.printOverview("IadtController init");
 
         boolean backgroundIsUp = initBackground();
         if (!backgroundIsUp)
@@ -94,20 +85,18 @@ public final class IadtController extends ContentProvider {
     }
 
     private boolean initBackground() {
-        configManager = new ConfigManager(appContext);
+        configManager = new ConfigManager(context);
 
         if (!isEnabled()){
             Log.w(Iadt.TAG, "Iadt DISABLED by configuration");
             return false;
-        }else{
-            Log.d(Iadt.TAG, "Iadt ENABLED");
         }
 
         if (isDebug())
             Log.d(Iadt.TAG, "Initializing background services...");
 
-        eventManager = new EventManager(appContext);
-        runnableManager = new RunnableManager((appContext));
+        eventManager = new EventManager(context);
+        runnableManager = new RunnableManager((context));
 
         if (isDebug()){
             ThreadUtils.runOnBack(new Runnable() {
@@ -131,6 +120,7 @@ public final class IadtController extends ContentProvider {
     }
 
     private void initForeground(){
+        ThreadUtils.printOverview("IadtController initForeground");
         if (FirstStartUtil.isFirstStart()){
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
                     new Runnable() {
@@ -164,14 +154,16 @@ public final class IadtController extends ContentProvider {
             Log.d(Iadt.TAG, "Initializing foreground services...");
 
         if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
-            Intent intent = new Intent(getAppContext(), OverlayService.class);
-            getAppContext().startService(intent);
+            navigationManager = new NavigationManager();
+
+            Intent intent = new Intent(getContext(), OverlayService.class);
+            getContext().startService(intent);
         }
 
         if (getConfig().getBoolean(Config.INVOCATION_BY_NOTIFICATION)){
-            Intent intent = new Intent(getAppContext(), NotificationService.class);
+            Intent intent = new Intent(getContext(), NotificationService.class);
             intent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
-            getAppContext().startService(intent);
+            getContext().startService(intent);
         }
     }
 
@@ -180,8 +172,8 @@ public final class IadtController extends ContentProvider {
 
     //region [ GETTERS ]
 
-    public Context getAppContext() {
-        return appContext;
+    public Context getContext() {
+        return context;
     }
 
     public ConfigManager getConfig() {
@@ -199,9 +191,13 @@ public final class IadtController extends ContentProvider {
     public SourcesManager getSourcesManager() {
         //TODO: Lazy initialisation is not working when permission needed
         if (sourcesManager == null){
-            sourcesManager = new SourcesManager(getAppContext());
+            sourcesManager = new SourcesManager(getContext());
         }
         return sourcesManager;
+    }
+
+    public NavigationManager getNavigationManager() {
+        return navigationManager;
     }
 
     public static DevToolsDatabase getDatabase() {
@@ -218,13 +214,9 @@ public final class IadtController extends ContentProvider {
 
 
     public OkHttpClient getOkHttpClient() {
-        if (!isEnabled()){
-            OkHttpClient client = new OkHttpClient.Builder().build();
-            return client;
-        }
 
         //TODO: relocate an create a unique interceptor, and a method to return it
-        CustomChuckInterceptor httpGrabberInterceptor = new CustomChuckInterceptor(getAppContext());
+        CustomChuckInterceptor httpGrabberInterceptor = new CustomChuckInterceptor(getContext());
         httpGrabberInterceptor.showNotification(false);
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -241,7 +233,7 @@ public final class IadtController extends ContentProvider {
 
     private boolean checksBeforeShowOverlay() {
         if (!isEnabled()) return true;
-        if (!AppUtils.isForegroundImportance(getAppContext())) return true;
+        if (!AppUtils.isForegroundImportance(getContext())) return true;
 
         if (isPendingForegroundInit) {
             initForegroundIfPending();
@@ -302,13 +294,13 @@ public final class IadtController extends ContentProvider {
         if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayService.isInitialize()){
             showIcon();
         }
-        FileProviderUtils.openFileExternally(getAppContext(), screenshot.getPath());
+        FileProviderUtils.openFileExternally(getContext(), screenshot.getPath());
     }
 
     public void startReportDialog() {
-        Intent intent = new Intent(getAppContext(), ReportDialogActivity.class);
+        Intent intent = new Intent(getContext(), ReportDialogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getAppContext().startActivity(intent);
+        getContext().startActivity(intent);
     }
 
     public void sendReport(ReportHelper.ReportType type, final Object param) {
@@ -350,17 +342,13 @@ public final class IadtController extends ContentProvider {
         LogcatHelper.clearLogcatBuffer();
     }
 
-    public String getCurrentOverlay() {
-        return ScreenManager.getCurrentScreenString();
-    }
-
     //endregion
 
     //region [ RESTART AND FORCE CLOSE ]
 
     public void restartApp(boolean isCrash){
         FriendlyLog.log( "I", "Run", "Restart", "Restart programmed");
-        AppUtils.programRestart(getAppContext(), isCrash);
+        AppUtils.programRestart(getContext(), isCrash);
 
         forceCloseApp(isCrash);
     }
@@ -389,8 +377,8 @@ public final class IadtController extends ContentProvider {
         eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-        ActivityManager am = (ActivityManager)getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses(getAppContext().getPackageName());*/
+        ActivityManager am = (ActivityManager)getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        am.killBackgroundProcesses(getContext().getPackageName());*/
 
         if (isDebug())
             Log.w(Iadt.TAG, "Stopping Notification Service");
@@ -404,38 +392,6 @@ public final class IadtController extends ContentProvider {
             Log.w(Iadt.TAG, "Stopping LogcatReaderService");
         Intent intent = LogcatReaderService.getStopIntent(getContext());
         LogcatReaderService.enqueueWork(getContext(), intent);
-    }
-
-    //endregion
-
-    //region [ LEGACY METHODS: from extending ContentProvider ]
-
-    @Nullable
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public String getType(Uri uri) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        return null;
-    }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
     }
 
     //endregion

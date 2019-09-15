@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.view.activities;
 
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,10 +40,11 @@ public class WelcomeDialogActivity extends AppCompatActivity {
             onFailure = onFailureCallback;
 
         if (true){ //TODO: pre-checks to avoid opening an unnecessary activity
-            Intent intent = new Intent(Iadt.getAppContext(), WelcomeDialogActivity.class);
+            Context context = IadtController.get().getContext();
+            Intent intent = new Intent(context, WelcomeDialogActivity.class);
             intent.putExtra(EXTRA_INTENT_ACTION, action);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Iadt.getAppContext().startActivity(intent, null);
+            context.startActivity(intent, null);
         }else{
             if (onSuccess !=null)
                 onSuccess.run();

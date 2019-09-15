@@ -285,7 +285,8 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                     Iadt.showMessage("Unable to get file path");
                     return;
                 }
-                FileProviderUtils.openFileExternally(Iadt.getAppContext(), path, Intent.ACTION_SEND);
+                FileProviderUtils.openFileExternally(IadtController.get().getContext(),
+                        path, Intent.ACTION_SEND);
             }
         }.execute();
     }

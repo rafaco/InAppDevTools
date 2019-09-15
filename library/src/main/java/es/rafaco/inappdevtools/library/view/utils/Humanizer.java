@@ -55,7 +55,7 @@ public class Humanizer {
         //TODO: FIX IT
         /*CharSequence absoluteDate =
                 android.text.format.DateUtils.formatDateRange(
-                        Iadt.getAppContext(),
+                        Iadt.getContext(),
                         oldTimeMillis,
                         newTimeMillis,
                         android.text.format.DateUtils.FORMAT_ABBREV_ALL);
