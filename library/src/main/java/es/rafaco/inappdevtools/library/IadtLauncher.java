@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 //#ifdef ANDROIDX
 //@import androidx.annotation.Nullable;
 //#else
 import android.support.annotation.Nullable;
-import android.util.Log;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.config.Config;
@@ -43,8 +43,8 @@ public class IadtLauncher extends ContentProvider {
     }
 
     private boolean isLibraryEnabled(){
-        // Hardcoded way to receive isEnabled without Controller initialized.
-        // reproduce IadtController.get().getConfig().get(Config.ENABLED);
+        // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
+        // It reproduce IadtController.get().getConfig().get(Config.ENABLED);
         String enableKey = Config.ENABLED.getKey();
         SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
         JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.COMPILE_CONFIG);

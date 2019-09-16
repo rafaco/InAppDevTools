@@ -2,14 +2,15 @@ package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.JobIntentService;
 import android.text.TextUtils;
 import android.util.Log;
 
 //#ifdef ANDROIDX
-//@import androidx.annotation.Nullable;
+//@import androidx.annotation.NonNull;
+//@import androidx.core.app.JobIntentService;
 //#else
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 //#endif
 
 import java.io.BufferedReader;
@@ -442,7 +443,7 @@ public class LogcatReaderService extends JobIntentService {
 
     private long getMaxQueueTime(){
         NavigationManager navigationManager = IadtController.get().getNavigationManager();
-        NavigationStep currentStep = navigationManager != null ? null : navigationManager.getCurrent();
+        NavigationStep currentStep = navigationManager == null ? null : navigationManager.getCurrent();
         if (!AppUtils.isForegroundImportance(getApplicationContext())
                 || currentStep == null || !currentStep.getClassName().equals(LogScreen.class)){
             return BACKGROUND_MAX_TIME;

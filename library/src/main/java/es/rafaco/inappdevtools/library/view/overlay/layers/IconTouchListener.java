@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools.library.view.overlay.layers;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,7 +25,7 @@ public class IconTouchListener implements View.OnTouchListener {
     boolean isLongClick = false;
     boolean isOverRemove = false;
 
-    Handler handler_longClick = new Handler();
+    Handler handler_longClick = new Handler(Looper.getMainLooper());
     Runnable onIconLongClick = new Runnable() {
         @Override
         public void run() {

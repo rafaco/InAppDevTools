@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import android.os.Handler;
+import android.os.Looper;
 
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
@@ -12,7 +13,7 @@ public class ForegroundEventDetector extends EventDetector {
 
     private boolean mInBackground = true;
     private static final long BACKGROUND_DELAY = 500;
-    private final Handler mBackgroundDelayHandler = new Handler();
+    private final Handler mBackgroundDelayHandler = new Handler(Looper.getMainLooper());
     private Runnable mBackgroundTransition;
 
     public ForegroundEventDetector(EventManager eventManager) {

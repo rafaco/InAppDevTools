@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (Iadt.getConfig().getBoolean(Config.ENABLED)) {
-            Iadt.getGestureDetector().onTouchEvent(ev);
+            //TODO: Work in progress
+            //Iadt.getGestureDetector().onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
     }

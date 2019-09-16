@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -85,7 +86,7 @@ public class InfoScreen extends Screen {
     }
 
     private void startUpdateTimer() {
-        final Handler handler = new Handler();
+        final Handler handler = new Handler(Looper.getMainLooper());
         updateTimer = new Timer(false);
         TimerTask updateTimerTask = new TimerTask() {
             @Override

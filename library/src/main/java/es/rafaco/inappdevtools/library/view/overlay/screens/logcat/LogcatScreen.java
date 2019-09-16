@@ -271,7 +271,7 @@ public class LogcatScreen extends Screen {
         outputContainer.setLayoutTransition(null);
         outputToast.setVisibility(View.VISIBLE);
 
-        removeToastHandler = new Handler();
+        removeToastHandler = new Handler(Looper.getMainLooper());
         removeToastHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
