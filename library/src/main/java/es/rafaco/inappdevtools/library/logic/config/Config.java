@@ -9,14 +9,20 @@ public enum Config {
 
     BUILD_TIME("BUILD_TIME", R.string.config_build_time, long.class, null),
     BUILD_TIME_UTC("BUILD_TIME_UTC", R.string.config_build_time_utc, String.class, null),
-    ENABLED("enabled", R.string.config_enable, boolean.class, false),
+
+    EMAIL("email", R.string.config_email, String.class, ""),
+
+    ENABLED("enabled", R.string.config_enabled, boolean.class, false),
+    ENABLED_ON_RELEASE("enabledOnRelease", R.string.config_enabled_on_release, boolean.class, false),
+    DEBUG("debug", R.string.config_debug, boolean.class, false),
+    SOURCE_INCLUSION("sourceInclusion", R.string.config_source_inclusion, boolean.class, true),
+    SOURCE_INSPECTION("sourceInspection", R.string.config_source_inspection, boolean.class, true),
+
     OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
     INVOCATION_BY_SHAKE("invocationByShake", R.string.config_invocation_by_shake, boolean.class, true),
     INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, true),
     INVOCATION_BY_NOTIFICATION("invocationByNotification", R.string.config_invocation_by_notification, boolean.class, true),
-    CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
-    DEBUG("debug", R.string.config_debug, boolean.class, false),
-    EMAIL("email", R.string.config_email, String.class, "");
+    CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false);
 
     private final String key;
     private final int desc;

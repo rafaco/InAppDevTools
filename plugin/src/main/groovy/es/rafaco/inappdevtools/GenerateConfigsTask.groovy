@@ -38,6 +38,9 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.enabled!=null)
             propertiesMap.put("enabled", extension.enabled)
 
+        if (extension.enabledOnRelease!=null)
+            propertiesMap.put("enabledOnRelease", extension.enabledOnRelease)
+
         if (extension.debug!=null)
             propertiesMap.put("debug", extension.debug)
 
@@ -46,6 +49,12 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         if (extension.overlayEnabled!=null)
             propertiesMap.put("overlayEnabled", extension.overlayEnabled)
+
+        if (extension.sourceInclusion!=null)
+            propertiesMap.put("sourceInclusion", extension.sourceInclusion)
+
+        if (extension.sourceInspection!=null)
+            propertiesMap.put("sourceInspection", extension.sourceInspection)
 
         if (extension.invocationByIcon!=null)
             propertiesMap.put("invocationByIcon", extension.invocationByIcon)

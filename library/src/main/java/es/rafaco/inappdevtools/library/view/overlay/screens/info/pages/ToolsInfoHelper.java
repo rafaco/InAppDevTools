@@ -9,6 +9,7 @@ import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class ToolsInfoHelper extends AbstractInfoHelper {
 
@@ -26,7 +27,7 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
         return new InfoReport.Builder("")
                 .add(getDevToolsInfo())
                 .add(getCompileConfig())
-                .add(IadtController.get().getDatabase().getOverview())
+                .add(Humanizer.newLine() + IadtController.get().getDatabase().getOverview())
                 .build();
     }
 
@@ -37,14 +38,10 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getDevToolsInfo() {
-        JsonAssetHelper compileConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
-        InfoGroup group = new InfoGroup.Builder("InAppDevTools")
+        InfoGroup group = new InfoGroup.Builder("InAppDevTools library")
                 .add("Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
-                .add(Config.ENABLED.getKey(), compileConfig.getString(Config.ENABLED.getKey()))
-                .add(Config.DEBUG.getKey(), compileConfig.getString(Config.DEBUG.getKey()))
-                .add(Config.EMAIL.getKey(), compileConfig.getString(Config.EMAIL.getKey()))
                 .build();
         return group;
     }

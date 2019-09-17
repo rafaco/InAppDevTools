@@ -52,8 +52,7 @@ public class MoreScreen extends Screen {
         List<Object> data = new ArrayList<>();
 
         data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - Go to Log to see all items from Network, Screenshots, Errors and Logcat\n" +
-                " - Config is now on toolbar 'Settings'\n");
+                " - All items has been mixed with logcat logs at Log Screen\n");
 
         data.add(new RunnableItem("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
@@ -93,15 +92,6 @@ public class MoreScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(LogcatScreen.class);
-                    }
-                }));
-
-        data.add(new RunnableItem("Config",
-                R.drawable.ic_settings_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(ConfigScreen.class);
                     }
                 }));
 

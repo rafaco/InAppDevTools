@@ -110,7 +110,7 @@ Iadt.hide();
 
 
 ### Configuration <a name="configuration"/>
-You can configure our library behaviour at build time by using our gradle extension on your app module's build.gradle. Our plugin get affected by this configuration and values will remain after cleaning app's data. 
+You can configure our library behaviour at build time by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values. 
 ```gradle
 apply plugin: 'es.rafaco.inappdevtools'
 
@@ -130,17 +130,45 @@ Available properties:
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `enabled` | boolean | true | Disable all and simulate the no-op library and plugin |
 | `email` | String | null | Default email to use for reports |
-| `overlay_enabled` | boolean | true | Disable our overlay interface  |
-| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake |
-| `invocation_by_icon` | boolean | false | Enable a permanent overlay icon to open our UI |
-| `invocation_by_notification` | boolean | true | Disable showing our notification to open the UI |
-| `call_default_crash_handler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
+| `enabled` | boolean | true | Disable all and simulate the no-op library and plugin |
+| `enabledOnRelease` | boolean | false | Force enabling our library for release builds of your app. Warning, read [Exposed sources disclaimer](#exposed_sources) |
 | `debug` | boolean | false | Enable debug mode for the library. It print extra logs and include our sources to your compilation  |
+| `sourceInclusion` | boolean | true | Disable including this module sources in your apk. Read [Exposed sources disclaimer](#exposed_sources) |
+| `sourceInspection` | boolean | true | Disable source features and source inclusion. Read [Exposed sources disclaimer](#exposed_sources) |
+| `overlayEnabled` | boolean | true | Disable our overlay interface  |
+| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake |
+| `invocationByIcon` | boolean | false | Enable a permanent overlay icon to open our UI |
+| `invocationByNotification` | boolean | true | Disable showing our notification to open the UI |
+| `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
 <!-- ## Customization <a name="customization"/> -->
 
+### Exposed sources disclaimer <a name="exposed_sources"/>
 
+When this library is enabled, **your source code can be view in our ui and they can also be extracted from your apk files**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use noop flavor for your release.
+
+If you don't want to show all your proprietary sources in all your debug builds, you have few options:
+
+* ~~(TODO) Exclude concrete source files by configuration. Useful for specific files with sensible information like passwords, api keys,...~~
+* Disable source inclusion by configuration (`sourceInclusion = false`). Your apk will not include your sources but assets inspection will be available in our overlay.
+* Disable source inspection by configuration (`sourceInspection = false`). Your apk will not include your sources and our interface will not show your assets.
+* ~~(TODO) Enable tester mode~~
+* Disable all our library by configuration (`enabled = false`). Your apk will not include your sources and all our features will be disabled but in your apk.
+* Disable all our library using the noop dependency. Same as before but with a minimal apk size increase.
+
+When source inclusion or source inspection get disabled you also lost the following features: browse your sources, view a source, share a source and navigation from stacktrace to source line.
+
+You can also enable our library and the source inclusion/inspection in your release builds. This is not recommended but can be useful for beta versions: 
+* Include `enabledOnRelease = true` in your configuration
+* Remove `sourceInclusion` and `sourceInspection` from your configuration or ensure both of them are `true`.
+* Stop using our noop flavor in your release dependencies. i.e. replace `releaseImplementation 'es.rafaco.inappdevtools:noop:...'` by `releaseImplementation 'es.rafaco.inappdevtools:androidx:...'`
+
+<!--This library work out of the box for developer compilations which include Source inspection, allowing users to view and share your source code. In order to provide this features, your apk contains your source code as well as you compiled code (a zip file asset). It's mean, 
+
+We can directly read your app's assets but we also include a a zip file in your apk with other source files:
+* Your Java source sets. Content of src/main/java plus dynamic inclusions.
+* Your resources: Content of src/main/res but excluding the raw folder.
+* Build time generated sources. Content of build/generated/ excluding assets and png. -->
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 

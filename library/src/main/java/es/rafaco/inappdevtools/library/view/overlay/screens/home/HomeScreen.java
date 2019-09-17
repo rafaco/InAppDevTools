@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
@@ -67,7 +69,8 @@ public class HomeScreen extends Screen {
 
         AppInfoHelper appHelper = new AppInfoHelper(getContext());
         DeviceInfoHelper deviceHelper = new DeviceInfoHelper(getContext());
-        String welcome = appHelper.getFormattedAppLong() + "\n" + deviceHelper.getFormattedDeviceLong();
+        String welcome = appHelper.getFormattedAppLong() + "\n"
+                + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);
 
         data.add(new RunnableItem("Info",
@@ -86,15 +89,24 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Sources",
+        RunnableItem sources = new RunnableItem("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(SourcesScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(SourcesScreen.class);
                     }
-                }));
-
-
+                });
+        if (!IadtController.get().getSourcesManager().canSourceInspection()){
+            sources.setColor(R.color.rally_gray);
+            sources.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    Iadt.showMessage("Source inspection is DISABLED");
+                }
+            });
+        }
+        data.add(sources);
 
         data.add(new RunnableItem("View",
                 R.drawable.ic_layers_white_24dp,

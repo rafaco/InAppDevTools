@@ -33,12 +33,15 @@ public class IadtLauncher extends ContentProvider {
         }
 
         Log.d(Iadt.TAG, "IadtLauncher: library is ENABLED, starting...");
+        new IadtController(getContext());
+        /*
+        //TODO: Run controller in Background thread
         ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
                 new IadtController(getContext());
             }
-        });
+        });*/
         return true;
     }
 

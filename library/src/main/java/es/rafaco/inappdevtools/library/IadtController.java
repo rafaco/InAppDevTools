@@ -106,11 +106,15 @@ public final class IadtController {
                 }
             });
         }
+        
+        return true;
+    }
+
+    public void initDelayedBackground() {
+        sourcesManager = new SourcesManager(getContext());
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
-        
-        return true;
     }
 
     public void initForegroundIfPending(){
@@ -120,6 +124,8 @@ public final class IadtController {
     }
 
     private void initForeground(){
+        initDelayedBackground();
+
         ThreadUtils.printOverview("IadtController initForeground");
         if (FirstStartUtil.isFirstStart()){
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
@@ -189,10 +195,6 @@ public final class IadtController {
     }
 
     public SourcesManager getSourcesManager() {
-        //TODO: Lazy initialisation is not working when permission needed
-        if (sourcesManager == null){
-            sourcesManager = new SourcesManager(getContext());
-        }
         return sourcesManager;
     }
 

@@ -5,6 +5,7 @@ public class RunnableItem {
     Runnable performer;
     Runnable callback;
     int icon;
+    int color;
 
     public RunnableItem(String title, Runnable performer) {
         this.title = title;
@@ -14,6 +15,11 @@ public class RunnableItem {
     public RunnableItem(String title, int icon, Runnable performer) {
         this(title, performer);
         this.icon = icon;
+    }
+
+    public RunnableItem(String title, int icon, int colorResId, Runnable performer) {
+        this(title, icon, performer);
+        this.color = colorResId;
     }
 
     public RunnableItem(String title, int icon, Runnable performer, Runnable callback) {
@@ -51,6 +57,14 @@ public class RunnableItem {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public void run(){

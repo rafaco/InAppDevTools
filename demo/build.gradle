@@ -53,10 +53,9 @@ android.applicationVariants.all { variant ->
         }
     }
     else */
-    if (variant.flavorName == 'androidx'){
+    if (variant.flavorName == 'androidx') {
         dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
-    }
-    else{
+    } else {
         dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
     }
 }
@@ -113,10 +112,20 @@ dependencies {
 apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
-    enabled = true
-    debug = true
+    //// User features fags
     email = 'inappdevtools@gmail.com'
-    invocationByNotification = false
-    invocationByIcon = true
-    invocationByShake = true
+
+    //// Build flags (affect plugin)
+    //enabled = true
+    //enabledOnRelease = true
+    debug = true
+    //sourceInclusion = false
+    //sourceInspection = false
+
+    //// Runtime flags (used later on)
+    //overlayEnabled = false
+    //invocationByShake = false
+    //invocationByIcon = false
+    //invocationByNotification = false
+    //callDefaultCrashHandler = true
 }

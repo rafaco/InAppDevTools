@@ -5,14 +5,17 @@
     <!-- Config description -->
     <string name="config_build_time">Last compilation build time in milliseconds</string>
     <string name="config_build_time_utc">Last compilation build time in utc format</string>
-    <string name="config_enable">Disable all and simulate the no-op library and plugin</string>
-    <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
-    <string name="config_email">Default email to use for reports</string>
+    <string name="config_enabled">Disable all and simulate the no-op library and plugin</string>
+    <string name="config_enabled_on_release">Force enabling our library for release builds of your app</string>
     <string name="config_overlay_enable">Disable our overlay interface</string>
+    <string name="config_source_inclusion">Disable including this module sources in your apk</string>
+    <string name="config_source_inspection">Disable source features and source inclusion</string>
     <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
     <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
     <string name="config_invocation_by_notification">Disable showing our notification to open the UI</string>
     <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
+    <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
+    <string name="config_email">Default email to use for reports</string>
 
     <!-- Dialogs -->
     <string name="welcome_privacy_title">Developer Tools</string>

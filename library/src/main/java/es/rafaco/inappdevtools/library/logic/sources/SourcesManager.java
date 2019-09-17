@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -24,17 +26,96 @@ public class SourcesManager {
 
     Context context;
     AbstractNode root;
+    private boolean initialized;
 
     public SourcesManager(Context context) {
         this.context = context;
         init();
     }
 
-    private void init() {
-        root = NodesHelper.populate(context);
+    public void init() {
+        if (canSourceInspection()) {
+            root = NodesHelper.populate(context);
+            initialized = true;
+        }
+    }
+
+    public boolean canSourceInspection() {
+        if (IadtController.get().isEnabled()
+                && IadtController.get().getConfig().getBoolean(Config.SOURCE_INSPECTION)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public String getContent(String path){
+        if (!canSourceInspection())
+            return null;
+
+        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
+        if (target == null || target.isDirectory()){
+            return null;
+        }
+
+        InputStream inputStream = getInputStream(target);
+        return readToString(inputStream);
+    }
+
+    public File getLocalFile(String path){
+        if (!canSourceInspection())
+            return null;
+
+        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
+        if (target == null || target.isDirectory()){
+            return null;
+        }
+
+        InputStream inputStream = getInputStream(target);
+        return readToLocalFile(path, inputStream);
+    }
+
+    public List<SourceEntry> getSearchItems(String searchText){
+        if (!canSourceInspection())
+            return new ArrayList<>();
+
+        List<AbstractNode> results = root.filterFilesName(searchText);
+        if (results == null){
+            return new ArrayList<>();
+        }
+
+        return NodesHelper.castToSourceEntry(results);
+    }
+
+
+    public boolean canOpenClassName(String fullClassName) {
+        String nodePath = getPathFromClassName(fullClassName);
+        return !TextUtils.isEmpty(nodePath);
+    }
+
+    public String getPathFromClassName(String fullClassName){
+        if (!canSourceInspection())
+            return null;
+
+        String filename = fullClassName.substring(fullClassName.lastIndexOf("/")+1);
+        String path = fullClassName.substring(0, fullClassName.lastIndexOf("/")+1);
+        path = path.replace(".", "/");
+
+        String[] prefixs = new String[]{"src/", "gen/"};
+        for (String prefix: prefixs){
+            AbstractNode target = NodesHelper.getNodeByFullPath(root, prefix + path + filename);
+            if (target != null){
+                return target.getPath();
+            }
+        }
+        return null;
     }
 
     public List<SourceEntry> getChildItems(String parentPath){
+        if (!canSourceInspection())
+            return new ArrayList<>();
+
         AbstractNode parent = NodesHelper.getNodeByFullPath(root, parentPath);
         if (parent == null){
             return new ArrayList<>();
@@ -48,14 +129,6 @@ public class SourcesManager {
         return NodesHelper.castToSourceEntry(children);
     }
 
-    public List<SourceEntry> getSearchItems(String searchText){
-        List<AbstractNode> results = root.filterFilesName(searchText);
-
-        if (results == null){
-            return new ArrayList<>();
-        }
-        return NodesHelper.castToSourceEntry(results);
-    }
 
     private AbstractNode flattenEmptyFolders(AbstractNode current) {
         if (current.getChildren().size() == 1){
@@ -65,26 +138,6 @@ public class SourcesManager {
             }
         }
         return current;
-    }
-
-    public String getContent(String path){
-        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
-        if (target == null || target.isDirectory()){
-            return null;
-        }
-
-        InputStream inputStream = getInputStream(target);
-        return readToString(inputStream);
-    }
-
-    public File getLocalFile(String path){
-        AbstractNode target = NodesHelper.getNodeByFullPath(root, path);
-        if (target == null || target.isDirectory()){
-            return null;
-        }
-
-        InputStream inputStream = getInputStream(target);
-        return readToLocalFile(path, inputStream);
     }
 
     private InputStream getInputStream(AbstractNode target) {
@@ -148,25 +201,5 @@ public class SourcesManager {
             }
         }
         return f;
-    }
-
-    public boolean canOpenClassName(String fullClassName) {
-        String nodePath = getNodePathFromClassName(fullClassName);
-        return !TextUtils.isEmpty(nodePath);
-    }
-
-    public String getNodePathFromClassName(String fullClassName){
-        String filename = fullClassName.substring(fullClassName.lastIndexOf("/")+1);
-        String path = fullClassName.substring(0, fullClassName.lastIndexOf("/")+1);
-        path = path.replace(".", "/");
-
-        String[] prefixs = new String[]{"src/", "gen/"};
-        for (String prefix: prefixs){
-            AbstractNode target = NodesHelper.getNodeByFullPath(root, prefix + path + filename);
-            if (target != null){
-                return target.getPath();
-            }
-        }
-        return null;
     }
 }
