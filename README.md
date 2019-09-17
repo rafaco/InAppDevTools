@@ -37,12 +37,12 @@ For extended feature description, visit our wiki: [Feature description](https://
 - minSdkVersion >= 16 (Jelly Bean). Check it at your app/build.gradle
 - Minimun Gradle version: //TODO
 
-### Basic set-up <a name="basic"/>
-For standard Android projects you only need to modify 2 gradle files and rebuild your app.
-
-On your root build.gradle, import our plugin (plugins closure must be just after buidscript). Then add the JitPack repository (TEMP, it's a transitive dependency):
+### Express setup <a name="basic"/>
+You only need to modify 2 gradle files. On your **root build.gradle file**, import our plugin (just after buidscript) and add JitPack repository:
 
 ```gradle
+buidscript {...}
+
 plugins {
     id "es.rafaco.inappdevtools" version "0.0.12"
 }
@@ -54,9 +54,7 @@ allprojects {
 }
 ```
 
-On your app build.gradle, you have to add targetCompatibility with Java8. You can keep smaller values for sourceCompatibility. 
-
-Then include our library artifacts in your dependencies. You can choose between AndroidX or Support flavor depending on the libraries you project use. Noop flavor is also available and recommended for release compilations.
+On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavor depending on the Android libraries used by you app. 
 
 ```gradle
 
@@ -66,14 +64,34 @@ android {
     }
 }
 dependencies {
+    implementation 'es.rafaco.inappdevtools:androidx:0.0.50'
+    //implementation 'es.rafaco.inappdevtools:support:0.0.50'
+}
+```
+Build your app and shake your device! 
+
+This express setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections:
+* Your release apk size will be unnecessarly increased. [Using noop flavor](#noop)
+* Your debug builds will expose your source code [Limiting sources exposition](#exposed_sources)
+* Start logging all communications with your servers. [Enable network inspection](#network)
+* Customize your experience [configuring our library](#configuration) and using our [coding helpers/integrations](#coding_helpers).
+
+
+
+
+### Using noop flavor <a name="noop"/>
+One side effects is that our library resources will increase your release apk size with never used code. We provide a tiny noop version, that also allow you to keep your source integrations/references with our library.
+
+Use conditional dependencies prepending to implementation your build type or flavor. 
+```gradle
+dependencies {
     debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.50'
     //debugImplementation 'es.rafaco.inappdevtools:support:0.0.50'
     
     releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.50'
 }
 ```
-
-
+Noop flavor is also available and recommended for release compilations.
 | Flavor | Version | Description |
 |---|---|---|
 |androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
@@ -82,7 +100,7 @@ dependencies {
 
 Don't include the "v" character in dependencies. 
 
-### Add network interceptor (optional) <a name="network"/>
+### Enable network inspection (optional) <a name="network"/>
 If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
 
 ```java
@@ -96,7 +114,7 @@ For extended installation instructions, visit our wiki: [Extended installation](
 
 ## Usage <a name="usage"/>
 
-After the [installation](#setup) you only need to rebuild your app and run it on a real device or emulator. 
+After the [installation](#setup) you only need to generate a debug build of your app and run it on a real device or emulator. 
 
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device
@@ -143,11 +161,11 @@ Available properties:
 | `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
 <!-- ## Customization <a name="customization"/> -->
 
-### Exposed sources disclaimer <a name="exposed_sources"/>
+### Limiting sources exposition <a name="exposed_sources"/>
 
 When this library is enabled, **your source code can be view in our ui and they can also be extracted from your apk files**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use noop flavor for your release.
 
-If you don't want to show all your proprietary sources in all your debug builds, you have few options:
+If you don't want to show all or some of your proprietary sources in your debug builds, you have few options:
 
 * ~~(TODO) Exclude concrete source files by configuration. Useful for specific files with sensible information like passwords, api keys,...~~
 * Disable source inclusion by configuration (`sourceInclusion = false`). Your apk will not include your sources but assets inspection will be available in our overlay.
@@ -163,8 +181,7 @@ You can also enable our library and the source inclusion/inspection in your rele
 * Remove `sourceInclusion` and `sourceInspection` from your configuration or ensure both of them are `true`.
 * Stop using our noop flavor in your release dependencies. i.e. replace `releaseImplementation 'es.rafaco.inappdevtools:noop:...'` by `releaseImplementation 'es.rafaco.inappdevtools:androidx:...'`
 
-<!--This library work out of the box for developer compilations which include Source inspection, allowing users to view and share your source code. In order to provide this features, your apk contains your source code as well as you compiled code (a zip file asset). It's mean, 
-
+<!--This library work out of the box for developer compilations which include Source inspection, allowing users to view and share your source code. In order to provide this features, your apk contains your source code as well as you compiled code (a zip file asset). 
 We can directly read your app's assets but we also include a a zip file in your apk with other source files:
 * Your Java source sets. Content of src/main/java plus dynamic inclusions.
 * Your resources: Content of src/main/res but excluding the raw folder.
