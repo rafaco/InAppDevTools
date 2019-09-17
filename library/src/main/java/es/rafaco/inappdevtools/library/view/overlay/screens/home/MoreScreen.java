@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -54,7 +54,7 @@ public class MoreScreen extends Screen {
         data.add("Playgrounds and old screens (pending to remove):\n" +
                 " - All items has been mixed with logcat logs at Log Screen\n");
 
-        data.add(new RunnableItem("Network",
+        data.add(new RunButton("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -63,7 +63,7 @@ public class MoreScreen extends Screen {
                 }));
 
 
-        data.add(new RunnableItem("Screens",
+        data.add(new RunButton("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -71,7 +71,7 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Errors",
+        data.add(new RunButton("Errors",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -79,7 +79,7 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
-        /*data.add(new RunnableItem("Analysis",
+        /*data.add(new RunButton("Analysis",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
@@ -87,7 +87,7 @@ public class MoreScreen extends Screen {
                     }
                 }));*/
 
-        data.add(new RunnableItem("Logcat",
+        data.add(new RunButton("Logcat",
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override

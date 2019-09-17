@@ -9,29 +9,29 @@ public class RunnableManager {
 
     Context context;
     private static Runnable onForceCloseRunnable;
-    private List<RunnableItem> customRunnables;
+    private List<RunButton> runButtonList;
 
     public RunnableManager(Context context) {
         this.context = context;
     }
 
-    public void add(RunnableItem config){
-        if (customRunnables == null)
-            customRunnables = new ArrayList<>();
-        customRunnables.add(config);
+    public void add(RunButton config){
+        if (runButtonList == null)
+            runButtonList = new ArrayList<>();
+        runButtonList.add(config);
     }
 
-    public boolean remove(RunnableItem target){
-        if (customRunnables !=null && customRunnables.contains(target)) {
-            return customRunnables.remove(target);
+    public boolean remove(RunButton target){
+        if (runButtonList !=null && runButtonList.contains(target)) {
+            return runButtonList.remove(target);
         }
         return false;
     }
 
-    public List<RunnableItem> getAll(){
-        if (customRunnables == null)
-            customRunnables = new ArrayList<>();
-        return customRunnables;
+    public List<RunButton> getAll(){
+        if (runButtonList == null)
+            runButtonList = new ArrayList<>();
+        return runButtonList;
     }
 
     public void addForceCloseRunnable(Runnable onForceClose){

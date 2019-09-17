@@ -5,7 +5,7 @@ import android.view.GestureDetector;
 
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import okhttp3.OkHttpClient;
 
 public class Iadt {
@@ -46,7 +46,7 @@ public class Iadt {
     public static OkHttpClient getOkHttpClient() {
         return new OkHttpClient();
     }
-    public static void addCustomRunnable(RunnableItem runnable){}
+    public static void addRunButton(RunButton runnable){}
     public static GestureDetector getGestureDetector() {
         return null;
     } //TODO

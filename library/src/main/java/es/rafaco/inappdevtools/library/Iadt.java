@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
@@ -77,7 +77,7 @@ public class Iadt {
         return getController().getOkHttpClient();
     }
 
-    public static void addCustomRunnable(RunnableItem runnable){
+    public static void addRunButton(RunButton runnable){
         if(!isEnabled()) return;
         getController().getRunnableManager().add(runnable);
     }

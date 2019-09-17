@@ -170,6 +170,20 @@ We can directly read your app's assets but we also include a a zip file in your 
 * Your resources: Content of src/main/res but excluding the raw folder.
 * Build time generated sources. Content of build/generated/ excluding assets and png. -->
 
+### Add run button
+Add your own buttons to our Run screen. You have to provide a title and Runnable object, when you can perform any logic or call any of your app methods. 
+```gradle
+Iadt.addRunButton(new RunButton("Your text",
+        new Runnable() {
+            @Override
+            public void run() {
+                YourClass.yourMethod();
+            }
+        }));
+```
+They are usually added on startup (i.e. YourApplication.onCreate) or dynamically at any point (i.e. after user log in). You can also specify an icon, a background color or a callback.
+
+
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
 I'm really looking forward to create a small community around this library! You can use the [issues tab](https://github.com/rafaco/InAppDevTools/issues) to report bugs, request a feature or just to give me your feedback. Pull request are more than welcome.

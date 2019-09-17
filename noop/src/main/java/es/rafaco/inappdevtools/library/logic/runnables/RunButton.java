@@ -1,12 +1,14 @@
 package es.rafaco.inappdevtools.library.logic.runnables;
 
-public class RunnableItem {
+public class RunButton {
 
-    public RunnableItem(String title, Runnable performer) {}
+    public RunButton(String title, Runnable performer) {}
 
-    public RunnableItem(String title, int icon, Runnable performer) {}
+    public RunButton(String title, int icon, Runnable performer) {}
 
-    public RunnableItem(String title, int icon, Runnable performer, Runnable callback) {}
+    public RunButton(String title, int icon, Runnable performer, Runnable callback) {}
+
+    public RunButton(String title, int icon, int color, Runnable performer, Runnable callback) {}
 
     public String getTitle() {
         return new String();
@@ -31,6 +33,12 @@ public class RunnableItem {
     }
 
     public void setIcon(int icon) {}
+
+    public int getColor() {
+        return 0;
+    }
+
+    public void setColor(int icon) {}
 
     public void run(){}
 }

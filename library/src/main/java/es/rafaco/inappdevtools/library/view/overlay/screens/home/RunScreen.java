@@ -18,7 +18,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
@@ -77,7 +77,7 @@ public class RunScreen extends Screen {
 
     private void addDevToolsItems(List<Object> data) {
         data.add("Iadt");
-        data.add(new RunnableItem( "Take Screenshot",
+        data.add(new RunButton( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -86,7 +86,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Codepoint",
+        data.add(new RunButton("Codepoint",
                 R.drawable.ic_pan_tool_white_24dp,
                 new Runnable() {
                     @Override
@@ -95,7 +95,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Simulate...",
+        data.add(new RunButton("Simulate...",
                 R.drawable.ic_input_white_24dp,
                 new Runnable() {
                     @Override
@@ -104,7 +104,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("DISABLE...",
+        data.add(new RunButton("DISABLE...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override
@@ -130,7 +130,7 @@ public class RunScreen extends Screen {
 
     private void addAndroidItems(List<Object> data) {
         data.add("Android");
-        data.add(new RunnableItem("App Info",
+        data.add(new RunButton("App Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
@@ -139,7 +139,7 @@ public class RunScreen extends Screen {
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
-        data.add(new RunnableItem("Dev Options",
+        data.add(new RunButton("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
                 new Runnable() {
                     @Override
@@ -149,7 +149,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Restart app",
+        data.add(new RunButton("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {
                     @Override
@@ -158,7 +158,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Force close",
+        data.add(new RunButton("Force close",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override

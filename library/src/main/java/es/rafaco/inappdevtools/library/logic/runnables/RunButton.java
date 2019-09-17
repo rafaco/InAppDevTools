@@ -1,28 +1,28 @@
 package es.rafaco.inappdevtools.library.logic.runnables;
 
-public class RunnableItem {
+public class RunButton {
     String title;
     Runnable performer;
     Runnable callback;
     int icon;
     int color;
 
-    public RunnableItem(String title, Runnable performer) {
+    public RunButton(String title, Runnable performer) {
         this.title = title;
         this.performer = performer;
     }
 
-    public RunnableItem(String title, int icon, Runnable performer) {
+    public RunButton(String title, int icon, Runnable performer) {
         this(title, performer);
         this.icon = icon;
     }
 
-    public RunnableItem(String title, int icon, int colorResId, Runnable performer) {
+    public RunButton(String title, int icon, int colorResId, Runnable performer) {
         this(title, icon, performer);
         this.color = colorResId;
     }
 
-    public RunnableItem(String title, int icon, Runnable performer, Runnable callback) {
+    public RunButton(String title, int icon, Runnable performer, Runnable callback) {
         this(title, icon, performer);
         this.callback = callback;
     }

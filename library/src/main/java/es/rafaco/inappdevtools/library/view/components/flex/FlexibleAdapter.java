@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
@@ -62,7 +62,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
         descriptors = new ArrayList<>();
         descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_item_header));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunnableItem.class,  RunnableViewHolder.class, R.layout.flexible_item_button));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunButton.class,  RunButtonViewHolder.class, R.layout.flexible_item_run_button));
         descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_item_link));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));

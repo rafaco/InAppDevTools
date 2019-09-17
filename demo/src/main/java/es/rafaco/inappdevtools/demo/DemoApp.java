@@ -3,7 +3,7 @@ package es.rafaco.inappdevtools.demo;
 import android.app.Application;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 
@@ -17,7 +17,7 @@ public class DemoApp extends Application {
 
         //Iadt.codePoint(this);
 
-        Iadt.addCustomRunnable(new RunnableItem("Show message",
+        Iadt.addRunButton(new RunButton("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
@@ -32,7 +32,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addCustomRunnable(new RunnableItem("Select API...",
+        Iadt.addRunButton(new RunButton("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
@@ -41,7 +41,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addCustomRunnable(new RunnableItem("Add dummy thread",
+        Iadt.addRunButton(new RunButton("Add dummy thread",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
@@ -56,7 +56,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addCustomRunnable(new RunnableItem("Add dummy async",
+        Iadt.addRunButton(new RunButton("Add dummy async",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override

@@ -17,7 +17,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -73,7 +73,7 @@ public class HomeScreen extends Screen {
                 + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);
 
-        data.add(new RunnableItem("Info",
+        data.add(new RunButton("Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
@@ -81,7 +81,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Log",
+        data.add(new RunButton("Log",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
@@ -89,7 +89,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        RunnableItem sources = new RunnableItem("Sources",
+        RunButton sources = new RunButton("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
@@ -108,7 +108,7 @@ public class HomeScreen extends Screen {
         }
         data.add(sources);
 
-        data.add(new RunnableItem("View",
+        data.add(new RunButton("View",
                 R.drawable.ic_layers_white_24dp,
                 new Runnable() {
                     @Override
@@ -116,7 +116,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Storage",
+        data.add(new RunButton("Storage",
                 R.drawable.ic_storage_white_24dp,
                 new Runnable() {
                     @Override
@@ -127,7 +127,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Console",
+        data.add(new RunButton("Console",
                 R.drawable.ic_computer_white_24dp,
                 new Runnable() {
                     @Override
@@ -136,7 +136,7 @@ public class HomeScreen extends Screen {
                 }));
         
         
-        data.add(new RunnableItem("Run",
+        data.add(new RunButton("Run",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
@@ -144,7 +144,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunnableItem("Report",
+        data.add(new RunButton("Report",
                 R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
@@ -153,7 +153,7 @@ public class HomeScreen extends Screen {
                 }));
 
 
-        data.add(new RunnableItem("More",
+        data.add(new RunButton("More",
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override
