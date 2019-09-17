@@ -152,18 +152,16 @@ public class OverlayService extends Service {
     }
 
     private void onInit() {
-        //Load home screenshots (ready to show and for back navigation
-        navigateHome();
-
         if (PendingCrashUtil.isPending()){
             navigateTo(CrashDetailScreen.class.getSimpleName(), null);
             PendingCrashUtil.clearPending();
-            layerManager.toggleVisibility(true);
+            layerManager.toggleAllLayerVisibility(true);
             showMain();
         }
         else{
-            layerManager.toggleVisibility(true);
-            showIcon();
+            //Show icon
+            layerManager.toggleAllLayerVisibility(true);
+            layerManager.toggleMainLayerVisibility(false);
         }
     }
 
@@ -248,26 +246,30 @@ public class OverlayService extends Service {
     //region [ INTERNAL NAVIGATION ]
 
     private void showToggle() {
-        layerManager.toggleMainIconVisibility(null);
+        layerManager.toggleMainLayerVisibility(null);
     }
 
     private void showMain() {
-        layerManager.toggleMainIconVisibility(true);
+        if (screenManager.getCurrentScreen() == null){
+            screenManager.goHome();
+        }
+
+        layerManager.toggleMainLayerVisibility(true);
     }
 
     private void showIcon() {
-        layerManager.toggleMainIconVisibility(false);
+        layerManager.toggleMainLayerVisibility(false);
         if (Iadt.isDebug()){
             IadtController.get().getEventManager().fire(Event.OVERLAY_HIDDEN, null);
         }
     }
 
     private void hideAll() {
-        layerManager.toggleVisibility(false);
+        layerManager.toggleAllLayerVisibility(false);
     }
 
     private void restoreAll() {
-        layerManager.toggleVisibility(true);
+        layerManager.toggleAllLayerVisibility(true);
     }
 
     public void navigateHome() {
@@ -279,7 +281,7 @@ public class OverlayService extends Service {
     }
 
     public void navigateTo(String name, String param) {
-        layerManager.toggleMainIconVisibility(true);
+        layerManager.toggleMainLayerVisibility(true);
         screenManager.goTo(name, param);
     }
 

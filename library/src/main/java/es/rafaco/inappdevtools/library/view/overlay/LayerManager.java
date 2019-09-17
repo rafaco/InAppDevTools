@@ -98,12 +98,12 @@ public class LayerManager {
 
     //region [ TOGGLE LAYER VISIBILITY ]
 
-    public void toggleMainIconVisibility(Boolean isMainVisible) {
-        if (isMainVisible == null){
-            isMainVisible = !this.isMainVisible;
+    public void toggleMainLayerVisibility(Boolean showMain) {
+        if (showMain == null){
+            showMain = !this.isMainVisible;
         }
 
-        if (isMainVisible) {
+        if (showMain) {
             getView(Layer.Type.SCREEN).setVisibility(View.VISIBLE);
             if (isOverlayIconEnabled())
                 getView(Layer.Type.ICON).setVisibility(View.GONE);
@@ -113,12 +113,12 @@ public class LayerManager {
             if (isOverlayIconEnabled())
                 getView(Layer.Type.ICON).setVisibility(View.VISIBLE);
         }
-        this.isMainVisible = isMainVisible;
+        this.isMainVisible = showMain;
     }
 
-    public void toggleVisibility(boolean isVisible) {
+    public void toggleAllLayerVisibility(boolean isVisible) {
         if (isVisible) {
-            toggleMainIconVisibility(isMainVisible);
+            toggleMainLayerVisibility(isMainVisible);
         } 
         else {
             getView(Layer.Type.SCREEN).setVisibility(View.GONE);

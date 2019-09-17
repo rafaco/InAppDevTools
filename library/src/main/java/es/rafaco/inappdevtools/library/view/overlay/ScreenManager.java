@@ -111,15 +111,15 @@ public class ScreenManager {
         return null;
     }
 
-    private static void setCurrentScreen(Screen screen) {
+    private void setCurrentScreen(Screen screen) {
         currentScreen = screen;
     }
 
-    public static Screen getCurrentScreen(){
+    public Screen getCurrentScreen(){
         return currentScreen;
     }
 
-    public static String getCurrentScreenString(){
+    public String getCurrentScreenString(){
         if (getCurrentScreen() == null)
             return null;
         return currentScreen.getClass().getSimpleName();
