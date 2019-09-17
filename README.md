@@ -54,7 +54,13 @@ allprojects {
 }
 ```
 
-On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavor depending on the Android libraries used by you app. 
+On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavor depending on the Android libraries used by you app. Don't include the "v" character in dependencies.
+
+| Flavor | Version | Description |
+|---|---|---|
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
+|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).| 
 
 ```gradle
 
@@ -80,9 +86,9 @@ This express setup enable InAppDevTools only for your debug builds but it have s
 
 
 ### Using noop flavor <a name="noop"/>
-One side effects is that our library resources will increase your release apk size with never used code. We provide a tiny noop version, that also allow you to keep your source integrations/references with our library.
+One side effects is that our library resources will increase your release apk size with never used code. We provide a tiny noop version and recommended it for release compilations. This also allow you to keep references to our library in your release soures.
 
-Use conditional dependencies prepending to implementation your build type or flavor. 
+To add conditional Gradle dependencies, prepend build type or your flavors to our dependency implementations. 
 ```gradle
 dependencies {
     debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.50'
@@ -91,14 +97,6 @@ dependencies {
     releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.50'
 }
 ```
-Noop flavor is also available and recommended for release compilations.
-| Flavor | Version | Description |
-|---|---|---|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
-|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).|
-
-Don't include the "v" character in dependencies. 
 
 ### Enable network inspection (optional) <a name="network"/>
 If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
