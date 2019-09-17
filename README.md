@@ -54,7 +54,7 @@ allprojects {
 }
 ```
 
-On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavor depending on the Android libraries used by you app. Don't include the "v" character in dependencies.
+On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavors and don't include the "v" character in dependencies.
 
 | Flavor | Version | Description |
 |---|---|---|
