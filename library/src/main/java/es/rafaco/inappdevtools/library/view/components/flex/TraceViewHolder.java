@@ -63,6 +63,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 return;
 
 
+            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
             timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
 
@@ -96,7 +97,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
             where3View.setText(traces.getFileName() + ":" + traces.getLineNumber());
 
             if (data.isOpenable()){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
@@ -114,7 +115,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 itemView.setClickable(false);
                 navIcon.setVisibility(View.VISIBLE);
             }else{
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_bg_new_alpha));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
                 cardView.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);

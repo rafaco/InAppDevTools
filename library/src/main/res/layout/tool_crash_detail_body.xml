@@ -182,7 +182,7 @@
             android:layout_weight="1"
             android:text="Reveal report"
             android:backgroundTint="@color/rally_white"
-            android:textColor="@color/rally_bg_solid"/>
+            android:textColor="@color/iadt_surface_top"/>
 
     </LinearLayout>
 

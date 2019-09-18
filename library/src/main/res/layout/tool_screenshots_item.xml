@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignTop="@id/title"
-                android:background="@color/rally_bg_blur_alpha"/>
+                android:background="@color/rally_bg_solid_alpha"/>
 
             <TextView
                 android:id="@+id/subtitle"

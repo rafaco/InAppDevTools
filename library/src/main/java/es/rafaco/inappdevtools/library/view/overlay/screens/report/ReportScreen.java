@@ -86,7 +86,7 @@ public class ReportScreen extends Screen {
 
     private void initView() {
 
-        //ICON text
+        //ICONs from font playground
         TextView icon = getView().findViewById(R.id.test_icon);
         IconUtils.markAsIconContainer(icon, IconUtils.MATERIAL);
         icon.setText(R.string.gmd_3d_rotation);

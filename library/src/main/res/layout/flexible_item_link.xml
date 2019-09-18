@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp">
 
     <es.rafaco.compat.AppCompatTextView
         android:id="@+id/icon"
@@ -18,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:textColor="@color/rally_white"/>
+        android:textColor="@color/rally_white"
+        style="@style/TextCondensedBig"/>
 
 </LinearLayout>

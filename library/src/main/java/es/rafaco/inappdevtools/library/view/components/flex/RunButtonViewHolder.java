@@ -27,7 +27,7 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
     @Override
     public void bindTo(Object abstractData, int position) {
         final RunButton data = (RunButton) abstractData;
-        int color = (data.getColor() >  0) ? data.getColor() : R.color.rally_bg_blur;
+        int color = (data.getColor() >  0) ? data.getColor() : R.color.iadt_surface_top;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), color);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
         if (data.getIcon()>0){

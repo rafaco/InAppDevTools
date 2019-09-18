@@ -70,7 +70,7 @@ public class InfoPageViewHolder {
         }else{
             button.setVisibility(View.VISIBLE);
             button.setText("View Diff file");
-            int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.rally_bg_blur);
+            int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.iadt_surface_top);
             button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
             Drawable icon = button.getContext().getResources().getDrawable(R.drawable.ic_code_white_24dp);
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);

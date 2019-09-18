@@ -8,7 +8,10 @@
     <es.rafaco.compat.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="@color/iadt_surface_medium"/>
 
     <es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.WrapContentViewPager
         android:id="@+id/viewpager"

@@ -14,7 +14,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:textAlignment="center"
-        android:textColor="@color/rally_bg_blur"
+        android:textColor="@color/iadt_background"
+        android:textStyle="bold"
         android:background="@color/rally_green"
         android:layout_marginLeft="4dp"/>
 

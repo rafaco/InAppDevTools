@@ -3,8 +3,8 @@
 
     <!-- Base application theme. -->
     <style name="LibTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorPrimary">@color/rally_bg_blur</item>
-        <item name="colorPrimaryDark">@color/rally_bg_solid</item>
+        <item name="colorPrimary">@color/iadt_surface_top</item>
+        <item name="colorPrimaryDark">@color/iadt_background</item>
         <item name="colorAccent">@color/rally_blue</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -50,7 +50,7 @@
     </style>
 
     <style name="LibPopupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:textColor">@color/rally_bg_solid</item>
+        <item name="android:textColor">@color/rally_bg_blur</item>
     </style>
 
     <!-- Custom toolbar

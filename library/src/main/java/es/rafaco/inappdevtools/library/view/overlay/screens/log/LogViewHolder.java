@@ -75,7 +75,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         uid = data.getUid();
         boolean isLogcat = data.getCategory().equals("Logcat");
 
-        int bgColorId = isSelected ? R.color.rally_bg_blur : R.color.rally_bg_solid;
+        int bgColorId = isSelected ? R.color.iadt_surface_top : R.color.iadt_background;
         int bgColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
         wrapper.setBackgroundColor(bgColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
