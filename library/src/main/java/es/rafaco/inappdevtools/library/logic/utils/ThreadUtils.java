@@ -65,52 +65,10 @@ public class ThreadUtils {
         return thread;
     }
 
-    public static String formatGroup(ThreadGroup group){
-        return String.format( "Group %s has %s groups and %s active threads",
-                group.getName(), group.activeGroupCount(), group.activeCount());
-    }
-
 
     public static Set<Thread> getAllStacktraces(){
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         return threadSet;
-    }
-
-
-    public static Thread[] getCurrentGroupThreads(){
-        ThreadGroup targetGroup = getCurrentGroup();
-        return getThreadsFromGroup(targetGroup);
-    }
-
-    public static Thread[] getAllThreads(){
-        ThreadGroup targetGroup = getRootGroup();
-        return getThreadsFromGroup(targetGroup);
-    }
-
-    private static ThreadGroup getCurrentGroup() {
-        return Thread.currentThread().getThreadGroup();
-    }
-
-    public static ThreadGroup getRootGroup(){
-        ThreadGroup rootGroup = getCurrentGroup();
-        ThreadGroup parentGroup;
-        while ((parentGroup = rootGroup.getParent()) != null) {
-            rootGroup = parentGroup;
-        }
-        return rootGroup;
-    }
-
-    public static Thread[] getThreadsFromGroup(ThreadGroup group){
-        int size = group.activeCount();
-        if (group.getParent() != null){
-            size++;
-        }
-
-        Thread[] threads = new Thread[size];
-        while (group.enumerate(threads, true ) == threads.length) {
-            threads = new Thread[threads.length * 2];
-        }
-        return threads;
     }
 
 

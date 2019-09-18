@@ -54,6 +54,9 @@ public class MainActivityFragment extends Fragment {
             public void onClick(View v) {
                 FriendlyLog.log("I", "User", "Touch", "User clicked on Browse Demo");
                 Intent intent = new Intent(getContext(), ItemListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
                 startActivity(intent);
             }
         });

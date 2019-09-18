@@ -5,6 +5,7 @@ import android.content.Context;
 import java.lang.reflect.InvocationTargetException;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AbstractInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
@@ -15,21 +16,23 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.ToolsInfo
 
 public enum InfoPage {
 
-    LIVE("Live", LiveInfoHelper.class),
-    CONFIG("Build", BuildInfoHelper.class),
-    APP("App", AppInfoHelper.class),
-    OS("OS", OSInfoHelper.class),
-    DEVICE("Device", DeviceInfoHelper.class),
-    LIBRARY("Tools", ToolsInfoHelper.class);
+    LIVE("Live", R.drawable.ic_live_tv_white_24dp, LiveInfoHelper.class),
+    APP("App", R.drawable.ic_application_white_24dp, AppInfoHelper.class),
+    BUILD("Build", R.drawable.ic_build_white_24dp, BuildInfoHelper.class),
+    LIBRARY("Iadt", R.drawable.ic_extension_white_24dp, ToolsInfoHelper.class),
+    OS("OS", R.drawable.ic_android_white_24dp, OSInfoHelper.class),
+    DEVICE("Device", R.drawable.ic_phone_android_white_24dp, DeviceInfoHelper.class);
 
     private AbstractInfoHelper helper;
     private InfoPageViewHolder viewHolder;
+    private final int icon;
     private String title;
     private String overview;
     private String content;
 
-    InfoPage(String title, Class<? extends AbstractInfoHelper> helperClass) {
+    InfoPage(String title, int icon, Class<? extends AbstractInfoHelper> helperClass) {
         this.title = title;
+        this.icon = icon;
 
         initHelper(helperClass);
         updateFromHelper();
@@ -61,6 +64,9 @@ public enum InfoPage {
         }
     }
 
+    public int getIcon() {
+        return icon;
+    }
     public String getTitle() {
         return title;
     }

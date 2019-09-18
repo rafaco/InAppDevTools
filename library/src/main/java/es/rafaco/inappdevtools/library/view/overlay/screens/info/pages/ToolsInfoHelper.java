@@ -1,10 +1,11 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
@@ -19,7 +20,8 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        return null;
+        return "Iadt v" + getVersionFormatted() + "\n"
+                + getFriendlyBuildType();
     }
 
     @Override
@@ -39,10 +41,23 @@ public class ToolsInfoHelper extends AbstractInfoHelper {
 
     public InfoGroup getDevToolsInfo() {
         InfoGroup group = new InfoGroup.Builder("InAppDevTools library")
-                .add("Version", BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+                .add("Version", getVersionFormatted())
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
                 .build();
         return group;
+    }
+
+    private String getVersionFormatted() {
+        return BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+    }
+
+    @NonNull
+    public String getFriendlyBuildType() {
+        String flavor = BuildConfig.FLAVOR;
+        String buildType = BuildConfig.BUILD_TYPE;
+        String build = TextUtils.isEmpty(flavor) ? Humanizer.toCapitalCase(buildType)
+                :  Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
+        return build;
     }
 }

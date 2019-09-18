@@ -2,6 +2,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,12 +61,32 @@ public class InfoScreen extends Screen {
     private void populateToolbar() {
         pagerAdapter = new InfoPagerAdapter(getContext());
         viewPager.setAdapter(pagerAdapter);
+
+        currentPosition = getInitialPosition();
+        viewPager.setCurrentItem(currentPosition);
         viewPager.addOnPageChangeListener(onPageChangeListener());
-        currentPosition = 0;
+
         startUpdateTimer();
 
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
+    }
+
+    private void setupTabIcons() {
+        InfoPage[] infoPages = InfoPage.values();
+        for (int i = 0 ; i<infoPages.length ; i++){
+            tabLayout.getTabAt(i).setIcon(infoPages[i].getIcon());
+        }
+    }
+
+    private int getInitialPosition() {
+        if (TextUtils.isEmpty(getParam())){
+            return 0;
+        }
+
+        int paramPosition = Integer.parseInt(getParam());
+        return paramPosition;
     }
 
     @NonNull

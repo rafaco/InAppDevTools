@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
@@ -77,7 +78,7 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(InfoScreen.class);
+                    public void run() { OverlayService.performNavigation(InfoOverviewScreen.class);
                     }
                 }));
 

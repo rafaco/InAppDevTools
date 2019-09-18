@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
+import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -38,9 +39,10 @@ public class OSInfoHelper extends AbstractInfoHelper  {
     @Override
     public String getOverview() {
 
-        return "Android " + getAndroidVersionFull() + "\n"
-                + (deviceHelper.isDeviceRooted() ? "[Rooted] " : "")
-                + getDisplayLanguage() + " - " + getDisplayCountry();
+        return "Android " + getAndroidVersionFull()
+                + (deviceHelper.isDeviceRooted() ? " [Rooted]" : "") + Humanizer.newLine()
+                + getDisplayLanguage() + " - " + getDisplayCountry() + Humanizer.newLine()
+                + InstalledAppsUtils.getCount() + " installed apps";
     }
 
     public String getDisplayLanguage(){
@@ -64,6 +66,7 @@ public class OSInfoHelper extends AbstractInfoHelper  {
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))
                 .add(getMemoryGroupGroup(configHelper, memoryHelper))
+                .add(getInstalledApps())
                 .build();
     }
 
@@ -117,6 +120,12 @@ public class OSInfoHelper extends AbstractInfoHelper  {
                             + "/" + Humanizer.parseByte(memoryHelper.getTotalExternalMemorySize()))
                     .add("hasSDCard", configHelper.hasSdCard())
                     .build();
+    }
+
+    protected InfoGroup getInstalledApps() {
+        return new InfoGroup.Builder("Installed Apps")
+                .add(InstalledAppsUtils.getString())
+                .build();
     }
 
 

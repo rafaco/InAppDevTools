@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.utils;
 
-public class BuildConfigFields {
+public class AppBuildConfigFields {
     public static final String DEBUG = "DEBUG";
     public static final String APPLICATION_ID = "APPLICATION_ID";
     public static final String BUILD_TYPE = "BUILD_TYPE";
@@ -8,7 +8,7 @@ public class BuildConfigFields {
     public static final String VERSION_CODE = "VERSION_CODE";
     public static final String VERSION_NAME = "VERSION_NAME";
 
-    private BuildConfigFields() {
+    private AppBuildConfigFields() {
         throw new IllegalStateException("Utility class");
     }
 }

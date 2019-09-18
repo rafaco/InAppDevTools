@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 
 import es.rafaco.inappdevtools.library.logic.config.Config;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
-import es.rafaco.inappdevtools.library.logic.utils.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
@@ -50,8 +50,8 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     public InfoGroup getBuildInfo() {
         InfoGroup group = new InfoGroup.Builder("Build")
                 .add("Build time", buildConfig.getString(Config.BUILD_TIME_UTC.getKey()))
-                .add("Build type", AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE))
-                .add("Flavor", AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR))
+                .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
+                .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
                 .build();
         return group;
     }
@@ -92,11 +92,10 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     @NonNull
     public String getFriendlyBuildType() {
-        String flavor = AppBuildConfig.getStringValue(context, BuildConfigFields.FLAVOR);
-        String buildType = AppBuildConfig.getStringValue(context, BuildConfigFields.BUILD_TYPE);
-        String build = TextUtils.isEmpty(flavor) ? buildType
-                :  flavor + Humanizer.toCapitalCase(buildType);
-        build = Humanizer.toCapitalCase(build);
+        String flavor = AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR);
+        String buildType = AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE);
+        String build = TextUtils.isEmpty(flavor) ? Humanizer.toCapitalCase(buildType)
+                :  Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
         return build;
     }
 

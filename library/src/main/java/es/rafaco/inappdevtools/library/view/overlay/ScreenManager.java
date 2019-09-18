@@ -32,6 +32,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
@@ -78,6 +79,7 @@ public class ScreenManager {
         //Load screenshots definitions
         //TODO: think a better way to avoid this
         registerScreen(HomeScreen.class);
+        registerScreen(InfoOverviewScreen.class);
         registerScreen(InfoScreen.class);
         registerScreen(NetworkScreen.class);
         registerScreen(ErrorsScreen.class);

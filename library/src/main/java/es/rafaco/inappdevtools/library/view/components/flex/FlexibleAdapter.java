@@ -32,6 +32,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
     public static final String TYPE_HEADER = "TYPE_HEADER";
     public static final String TYPE_BUTTON = "TYPE_BUTTON";
+    public static final String TYPE_CARD = "TYPE_CARD";
     public static final String TYPE_LINK = "TYPE_LINK";
     public static final String TYPE_TRACE = "TYPE_TRACE";
     public static final String TYPE_TRACE_GROUP = "TYPE_TRACE_GROUP";
@@ -63,6 +64,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors = new ArrayList<>();
         descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_item_header));
         descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunButton.class,  RunButtonViewHolder.class, R.layout.flexible_item_run_button));
+        descriptors.add(new FlexibleItemDescriptor(TYPE_CARD, CardData.class,  CardViewHolder.class, R.layout.flexible_item_card));
         descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_item_link));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
