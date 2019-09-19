@@ -16,14 +16,19 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final ASSETS_PATH = '/generated/assets'
     static final OUTPUT_PATH = ASSETS_PATH + '/' + TAG
 
-    final CONFIG_TASK = 'generateConfigs'
+    final PLUGINS_TASK = 'generatePluginList'
     final CLEAN_TASK = 'cleanGenerated'
+    final CONFIG_TASK = 'generateConfigs'
     final SOURCES_TASK = 'packSources'
     final RESOURCES_TASK = 'packResources'
 
     void apply(Project project) {
 
         if(!isAndroidApplication(project) && !isAndroidLibrary(project)){
+            if (isRoot(project))
+                println "IATD: Skipped root project"
+            else
+                println "IATD: Skipped NOT root project"
             return
         }
 
@@ -56,6 +61,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                         && isEnabled(project)
                         && isSourceInclusion(project)
                         && isSourceInspection(project)){
+
                     if (isDebug(project)){ println "IADT will include your sources in your apk before " + theTask.name }
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
@@ -81,6 +87,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
+    static boolean isRoot(Project project){
+        return project.name.equals(project.rootProject.name)
+    }
+
     private Task addCleanTask(Project project, outputFolder) {
         project.task(CLEAN_TASK,
                 description: 'Clean generated files',
@@ -91,7 +101,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 project.delete outputFolder
                 println "Deleted ${outputFolder} from ${project.name}"
             }
-
         }
     }
 

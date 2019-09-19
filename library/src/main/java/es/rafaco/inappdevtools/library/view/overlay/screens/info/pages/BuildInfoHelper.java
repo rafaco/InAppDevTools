@@ -15,6 +15,7 @@ import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
+import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -55,6 +56,9 @@ public class BuildInfoHelper extends AbstractInfoHelper {
                 .add("Build time", buildConfig.getString(Config.BUILD_TIME_UTC.getKey()))
                 .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
+                .add("Gradle version", PluginList.getGradleVersion())
+                .add("Android plugin", PluginList.getAndroidGradleVersion())
+                .add("Iadt plugin", PluginList.getIadtVersion())
                 .build();
         return group;
     }

@@ -20,6 +20,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         generateCompileConfig(project)
         if (extension.enabled){
+            generatePluginsList(project)
             generateGitConfig(project)
         }
 
@@ -72,6 +73,14 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         File file = getFile(project, "${outputPath}/compile_config.json")
         saveConfigMap(propertiesMap, file)
+    }
+
+    private void generatePluginsList(Project project) {
+        def plugins = ""
+        project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
+        println "RAFA: building gradle_plugins.txt from plugin"
+        File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
+        pluginsFile.text = plugins
     }
 
     private void generateGitConfig(Project project) {
