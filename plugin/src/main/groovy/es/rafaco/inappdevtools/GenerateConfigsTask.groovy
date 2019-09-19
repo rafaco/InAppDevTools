@@ -33,6 +33,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         Map propertiesMap = [
                 BUILD_TIME    : new Date().getTime(),
                 BUILD_TIME_UTC: new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
+                HOST_NAME    : InetAddress.localHost.hostName,
+                HOST_ADDRESS : InetAddress.localHost.hostAddress,
         ]
 
         if (extension.enabled!=null)
@@ -76,6 +78,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
+        def localCommitsLong
 
         if (gitDiff == null) {
             println TAG + ": " + "Unable to reach git command, check your PATH!"
@@ -83,31 +86,38 @@ class GenerateConfigsTask extends InAppDevToolsTask {
                     ENABLED: false
             ]
         } else {
+            def localBranch = shell("git name-rev --name-only HEAD")
+            def trackingRemote = shell('git config --get branch.' + localBranch + '.remote')
+            def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
+            def remoteUrl = shell('git config remote.' + trackingRemote + '.url')
+            def tag = shell('git describe --tags --abbrev=0')
+            localCommitsLong = shell('git log ' + trackingFull + '..HEAD')
+
             propertiesMap = [
                     ENABLED         : true,
-                    REMOTE          : shell('git config --get remote.origin.url'),
+                    REMOTE_NAME     : trackingRemote,
+                    REMOTE_URL      : remoteUrl,
+                    REMOTE_LAST     : shell('git log ' + trackingFull +' -1'),
+
+                    TAG             : tag,
                     INFO            : shell('git describe --tags --always --dirty'),
-                    BRANCH          : (shell('git branch') =~ /(?m)\* (.*)$/)[0][1],
-                    TAG             : shell('git describe --tags --abbrev=0'),
-                    TAG_DISTANCE    : shell('git rev-list ' + shell('git describe --tags --abbrev=0') + ' --count'),
-                    LAST_COMMIT     : [
-                            ISCLEAN : gitDiff == '',
-                            MESSAGE : shell('git log -1 --pretty=%B'),
-                            SHORT   : shell('git log --oneline -1'),
-                            LONG    : shell('git log -1')
-                    ],
-                    LOCAL_COMMITS   : shell('git cherry -v'),
-                    LOCAL_CHANGES: [
-                            ISDIRTY : gitDiff != '',
-                            STATUS  : shell('git status --short'),
-                    ]
+                    TAG_DISTANCE    : shell('git rev-list ' + tag + ' --count'),
+
+                    LOCAL_BRANCH    : localBranch,
+                    LOCAL_COMMITS : shell('git cherry -v'),
+
+                    HAS_LOCAL_CHANGES: gitDiff != '',
+                    LOCAL_CHANGES    : shell('git status --short'),
             ]
         }
 
         File file = getFile(project, "${outputPath}/git_config.json")
         saveConfigMap(propertiesMap, file)
 
-        File diffFile = new File("${outputPath}/git.diff")
+        File commitsFile = new File("${outputPath}/local_commits.txt")
+        commitsFile.text = localCommitsLong
+
+        File diffFile = new File("${outputPath}/local_changes.diff")
         if (gitDiff != null && gitDiff != '') {
             if (isDebug()) {  println "Generated: " + diffFile.getPath() }
             diffFile.text = gitDiff

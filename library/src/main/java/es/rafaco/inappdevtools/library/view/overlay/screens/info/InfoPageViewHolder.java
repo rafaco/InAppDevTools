@@ -1,21 +1,26 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
-//@import androidx.appcompat.widget.AppCompatButton;
-//@import androidx.core.content.ContextCompat;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.config.GitConfig;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
@@ -27,7 +32,7 @@ public class InfoPageViewHolder {
 
     TextView overviewView;
     TextView bodyView;
-    private AppCompatButton button;
+    private RecyclerView flexible;
 
     public InfoPageViewHolder(String title, String overview, String body) {
         this.title = title; //Not in use
@@ -37,8 +42,8 @@ public class InfoPageViewHolder {
 
     public View onCreatedView(ViewGroup view) {
         overviewView = view.findViewById(R.id.overview);
+        flexible = view.findViewById(R.id.flexible_buttons);
         bodyView = view.findViewById(R.id.body);
-        button = view.findViewById(R.id.button);
         return view;
     }
 
@@ -60,27 +65,59 @@ public class InfoPageViewHolder {
         }
 
         //TODO: improve, it depends on a hardcoded string
-        setDiffButton(title.equals("Build"));
+        updateButtons();
     }
 
-    private void setDiffButton(boolean isConfigPage) {
-        if (!isConfigPage){
-            button.setVisibility(View.GONE);
-            button.setOnClickListener(null);
+    private void updateButtons() {
+        List<Object> data = new ArrayList<>();
+        int spanCount = 0;
+
+        JsonAssetHelper gitConfig = new JsonAssetHelper(bodyView.getContext(), JsonAsset.GIT_CONFIG);
+        boolean gitEnabled = gitConfig.getBoolean(GitConfig.ENABLED);
+
+
+        if (title.equals("Build") && gitEnabled){
+            final String remoteUrl = gitConfig.getString(GitConfig.REMOTE_URL);
+            data.add(new RunButton("Remote",
+                    R.drawable.ic_public_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            ExternalIntentUtils.viewUrl(remoteUrl);
+                        }
+                    }));
+
+            data.add(new RunButton("Local Commits",
+                    R.drawable.ic_add_circle_outline_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(SourceDetailScreen.class,
+                                    SourceDetailScreen.buildParams("", "assets/inappdevtools/local_commits.txt", -1));
+                        }
+                    }));
+
+            data.add(new RunButton("Local Changes",
+                    R.drawable.ic_remove_circle_outline_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(SourceDetailScreen.class,
+                                    SourceDetailScreen.buildParams("", "assets/inappdevtools/local_changes.diff", -1));
+                        }
+                    }));
+            spanCount = 3;
+        }
+        else if (false){
+
+        }
+
+        if (data.isEmpty()){
+            flexible.setVisibility(View.GONE);
         }else{
-            button.setVisibility(View.VISIBLE);
-            button.setText("View Diff file");
-            int contextualizedColor = ContextCompat.getColor(button.getContext(), R.color.iadt_surface_top);
-            button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
-            Drawable icon = button.getContext().getResources().getDrawable(R.drawable.ic_code_white_24dp);
-            button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OverlayService.performNavigation(SourceDetailScreen.class,
-                            SourceDetailScreen.buildParams("", "assets/inappdevtools/git.diff", -1));
-                }
-            });
+            FlexibleAdapter adapter = new FlexibleAdapter(spanCount, data);
+            flexible.setAdapter(adapter);
+            flexible.setVisibility(View.VISIBLE);
         }
     }
 }

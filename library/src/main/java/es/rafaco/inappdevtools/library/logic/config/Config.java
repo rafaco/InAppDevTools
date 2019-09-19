@@ -9,6 +9,8 @@ public enum Config {
 
     BUILD_TIME("BUILD_TIME", R.string.config_build_time, long.class, null),
     BUILD_TIME_UTC("BUILD_TIME_UTC", R.string.config_build_time_utc, String.class, null),
+    HOST_NAME("HOST_NAME", R.string.config_build_time_utc, String.class, null),
+    HOST_ADDRESS("HOST_ADDRESS", R.string.config_build_time_utc, String.class, null),
 
     EMAIL("email", R.string.config_email, String.class, ""),
 

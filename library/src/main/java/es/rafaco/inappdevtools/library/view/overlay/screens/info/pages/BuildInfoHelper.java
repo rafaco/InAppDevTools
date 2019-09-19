@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.GitConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
@@ -49,6 +50,8 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
     public InfoGroup getBuildInfo() {
         InfoGroup group = new InfoGroup.Builder("Build")
+                .add("Host name", buildConfig.getString(Config.HOST_NAME.getKey()))
+                .add("Host IP", buildConfig.getString(Config.HOST_ADDRESS.getKey()))
                 .add("Build time", buildConfig.getString(Config.BUILD_TIME_UTC.getKey()))
                 .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
@@ -57,18 +60,19 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getRepositoryInfo() {
-        InfoGroup.Builder group = new InfoGroup.Builder("Repository");
+        InfoGroup.Builder group = new InfoGroup.Builder("Remote repository");
 
         if (!isGitEnabled()){
-            group.add("No git found at build folder");
+            group.add("No git repository found at build folder");
             return group.build();
         }
 
-        group.add("Git url", gitConfig.getString("REMOTE"))
-                .add("Branch", gitConfig.getString("BRANCH"))
-                .add("Tag", gitConfig.getString("INFO"))
-                .add()
-                .add(gitConfig.getChildString("LAST_COMMIT", "LONG").replace("\n\n", "\n-> "));
+        group.add("Git url", gitConfig.getString(GitConfig.REMOTE_URL))
+                .add("Branch", gitConfig.getString(GitConfig.LOCAL_BRANCH))
+                .add("Tag", gitConfig.getString(GitConfig.TAG))
+                .add("Tag Status", gitConfig.getString(GitConfig.INFO))
+                .add(" - Last commit:")
+                .add(gitConfig.getString(GitConfig.REMOTE_LAST).replace("\n\n", "\n-> "));
         return group.build();
     }
 
@@ -76,13 +80,17 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         if (!isGitEnabled()){
             return null;
         }
-        return gitConfig.getString("BRANCH") + " " + gitConfig.getString("INFO");
+        String build = getFriendlyBuildType();
+        String branch = gitConfig.getString(GitConfig.LOCAL_BRANCH);
+        String tag = gitConfig.getString(GitConfig.TAG);
+
+        return String.format("%s from %s %s", build, branch, tag);
     }
 
     public String getBuildOverview() {
-        String build = getFriendlyBuildType();
+        String host = buildConfig.getString(Config.HOST_NAME.getKey());
         String time = getFriendlyElapsedTime();
-        return String.format("%s build, %s", build, time);
+        return String.format("%s %s", host, time);
     }
 
     public String getFriendlyElapsedTime() {
@@ -100,11 +108,11 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public String getLocalOverview(){
-        String local_commits = gitConfig.getString("LOCAL_COMMITS");
+        String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
-        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
+        boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
+        String file_status = gitConfig.getString(GitConfig.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
@@ -113,7 +121,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
 
         String result = "";
         if (hasLocalCommits){
-            result += local_commits_count + " commit ahead ";
+            result += local_commits_count + " commit ahead";
         }
         if(hasLocalChanges){
             if (hasLocalCommits) result += " and ";
@@ -124,13 +132,13 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public InfoGroup getLocalChangesInfo() {
-        InfoGroup.Builder group = new InfoGroup.Builder("Local changes");
+        InfoGroup.Builder group = new InfoGroup.Builder("Local repository");
 
-        String local_commits = gitConfig.getString("LOCAL_COMMITS");
+        String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getChildBoolean("LOCAL_CHANGES", "ISDIRTY");
-        String file_status = gitConfig.getChildString("LOCAL_CHANGES", "STATUS");
+        boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
+        String file_status = gitConfig.getString(GitConfig.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
@@ -138,17 +146,17 @@ public class BuildInfoHelper extends AbstractInfoHelper {
             return group.build();
         }
 
-        group.add("Annotations", local_commits_count + " ahead"
+        group.add(local_commits_count + " commits ahead"
                 + "\n" + local_commits)
                 .add()
-                .add("Files", file_changes_count + " changed"
-                        + "\n" + gitConfig.getChildString("LOCAL_CHANGES", "STATUS"));
+                .add(file_changes_count + " files changed"
+                        + "\n" + file_status);
 
         return group.build();
     }
 
     public boolean isGitEnabled() {
-        return gitConfig.getBoolean("ENABLED");
+        return gitConfig.getBoolean(GitConfig.ENABLED);
     }
 
 }

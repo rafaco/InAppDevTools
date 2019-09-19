@@ -25,8 +25,12 @@ public class ExternalIntentUtils {
     }
 
     public static void viewReadme() {
+        viewUrl(README_URL);
+    }
+
+    public static void viewUrl(String url) {
         Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(README_URL));
+        i.setData(Uri.parse(url));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         IadtController.get().getContext().startActivity(i);
     }
