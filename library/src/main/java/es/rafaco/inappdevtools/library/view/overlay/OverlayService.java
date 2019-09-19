@@ -246,6 +246,10 @@ public class OverlayService extends Service {
     //region [ INTERNAL NAVIGATION ]
 
     private void showToggle() {
+        if (screenManager.getCurrentScreen() == null){
+            screenManager.goHome();
+        }
+
         layerManager.toggleMainLayerVisibility(null);
     }
 

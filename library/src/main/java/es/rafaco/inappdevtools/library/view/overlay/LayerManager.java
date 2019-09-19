@@ -105,8 +105,10 @@ public class LayerManager {
 
         if (showMain) {
             getView(Layer.Type.SCREEN).setVisibility(View.VISIBLE);
-            if (isOverlayIconEnabled())
+            if (isOverlayIconEnabled()) {
                 getView(Layer.Type.ICON).setVisibility(View.GONE);
+                getView(Layer.Type.REMOVE).setVisibility(View.GONE);
+            }
         }
         else {
             getView(Layer.Type.SCREEN).setVisibility(View.GONE);
@@ -122,8 +124,10 @@ public class LayerManager {
         } 
         else {
             getView(Layer.Type.SCREEN).setVisibility(View.GONE);
-            if (isOverlayIconEnabled())
+            if (isOverlayIconEnabled()) {
                 getView(Layer.Type.ICON).setVisibility(View.GONE);
+                getView(Layer.Type.REMOVE).setVisibility(View.GONE);
+            }
         }
         this.isVisible = isVisible;
     }
