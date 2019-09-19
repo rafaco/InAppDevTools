@@ -142,7 +142,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
-            group.add("No local changes");
+            group.add("No local commits or changes");
             return group.build();
         }
 

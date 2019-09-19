@@ -18,11 +18,13 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.GitConfig;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.storage.files.GitAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InfoPageViewHolder {
 
@@ -87,26 +89,35 @@ public class InfoPageViewHolder {
                         }
                     }));
 
-            data.add(new RunButton("Local Commits",
-                    R.drawable.ic_add_circle_outline_white_24dp,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            OverlayService.performNavigation(SourceDetailScreen.class,
-                                    SourceDetailScreen.buildParams("", "assets/inappdevtools/local_commits.txt", -1));
-                        }
-                    }));
+            String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
+            int local_commits_count = Humanizer.countLines(local_commits);
+            boolean hasLocalCommits = local_commits_count > 0;
+            boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
 
-            data.add(new RunButton("Local Changes",
-                    R.drawable.ic_remove_circle_outline_white_24dp,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            OverlayService.performNavigation(SourceDetailScreen.class,
-                                    SourceDetailScreen.buildParams("", "assets/inappdevtools/local_changes.diff", -1));
-                        }
-                    }));
-            spanCount = 3;
+            if (hasLocalCommits){
+                data.add(new RunButton("Local Commits",
+                        R.drawable.ic_add_circle_outline_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                OverlayService.performNavigation(SourceDetailScreen.class,
+                                        SourceDetailScreen.buildParams("", GitAsset.LOCAL_COMMITS, -1));
+                            }
+                        }));
+            }
+
+            if (hasLocalChanges) {
+                data.add(new RunButton("Local Changes",
+                        R.drawable.ic_remove_circle_outline_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                OverlayService.performNavigation(SourceDetailScreen.class,
+                                        SourceDetailScreen.buildParams("", GitAsset.LOCAL_CHANGES, -1));
+                            }
+                        }));
+            }
+            spanCount = data.size();
         }
         else if (false){
 
