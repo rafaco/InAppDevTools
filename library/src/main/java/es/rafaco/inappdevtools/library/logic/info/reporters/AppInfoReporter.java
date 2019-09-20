@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
+package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -17,20 +17,25 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
-public class AppInfoHelper extends AbstractInfoHelper{
+public class AppInfoReporter extends AbstractInfoReporter {
 
     EasyAppMod easyAppMod;
 
-    public AppInfoHelper(Context context) {
-        super(context);
+    public AppInfoReporter(Context context) {
+        this(context, InfoReport.APP);
+    }
+
+    public AppInfoReporter(Context context, InfoReport report) {
+        super(context, report);
         easyAppMod = new EasyAppMod(context);
     }
 
@@ -43,9 +48,10 @@ public class AppInfoHelper extends AbstractInfoHelper{
     }
 
     @Override
-    public InfoReport getInfoReport() {
-        return new InfoReport.Builder("")
-                .add(getAppInfo())
+    public InfoReportData getData() {
+        return new InfoReportData.Builder(getReport())
+                .setOverview(getOverview())
+                .add(getApkInfo())
                 .add(getInstallInfo())
                 .add()
                 .add(AppInfoUtils.getSigningInfo(context))
@@ -54,9 +60,9 @@ public class AppInfoHelper extends AbstractInfoHelper{
     }
 
 
-    public InfoGroup getAppInfo() {
+    public InfoGroupData getApkInfo() {
         PackageInfo pInfo = getPackageInfo();
-        InfoGroup group = new InfoGroup.Builder("")
+        InfoGroupData group = new InfoGroupData.Builder("APK")
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())
                 .add("Internal Package", getInternalPackageName())
@@ -70,10 +76,10 @@ public class AppInfoHelper extends AbstractInfoHelper{
         return group;
     }
 
-    public InfoGroup getInstallInfo() {
+    public InfoGroupData getInstallInfo() {
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        InfoGroup group = new InfoGroup.Builder("Installation")
+        InfoGroupData group = new InfoGroupData.Builder("Installation")
                 .add("Store", easyAppMod.getStore())
                 .add("Last Update", Humanizer.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Last Update Time", formatter.format(new Date(pInfo.lastUpdateTime)))
@@ -83,7 +89,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
         return group;
     }
 
-    public InfoGroup getPackageInfoInfo() {
+    public InfoGroupData getPackageInfoInfo() {
         PackageInfo pInfo = getPackageInfo();
         String activities = parsePackageInfoArray(pInfo.activities);
         String services = parsePackageInfoArray(pInfo.services);
@@ -95,7 +101,7 @@ public class AppInfoHelper extends AbstractInfoHelper{
         }
         String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
 
-        InfoGroup group = new InfoGroup.Builder("PackageInfo:")
+        InfoGroupData group = new InfoGroupData.Builder("PackageInfo:")
                 .add("Activities", activities)
                 .add("Services", services)
                 .add("Permissions", permissions)

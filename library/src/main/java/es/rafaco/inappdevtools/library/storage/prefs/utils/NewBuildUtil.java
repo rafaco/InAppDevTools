@@ -1,7 +1,11 @@
 package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
+import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class NewBuildUtil {
@@ -29,7 +33,8 @@ public class NewBuildUtil {
     private static void update(){
 
         long lastBuildTime = DevToolsPrefs.getLong(PREF_VALUE_KEY, -1);
-        long currentBuildTime = Iadt.getConfig().getLong(Config.BUILD_TIME);
+        JsonAssetHelper buildInfo = new JsonAssetHelper(IadtController.get().getContext(), JsonAsset.BUILD_INFO);
+        long currentBuildTime = buildInfo.getLong(BuildInfo.BUILD_TIME);
 
         if (lastBuildTime<0){
             //First start

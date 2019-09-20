@@ -1,21 +1,21 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.entries;
+package es.rafaco.inappdevtools.library.logic.info.data;
 
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoEntry {
+public class InfoEntryData {
 
     String label;
     List<String> values;
 
-    public InfoEntry(String label, List<String> values) {
+    public InfoEntryData(String label, List<String> values) {
         this.label = label;
         this.values = values;
     }
 
-    public InfoEntry(String label, String value) {
+    public InfoEntryData(String label, String value) {
         this.label = label;
         setValue(value);
     }

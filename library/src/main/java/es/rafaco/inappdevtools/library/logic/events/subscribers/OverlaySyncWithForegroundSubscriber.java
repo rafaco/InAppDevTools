@@ -1,7 +1,7 @@
 package es.rafaco.inappdevtools.library.logic.events.subscribers;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
@@ -35,7 +35,7 @@ public class OverlaySyncWithForegroundSubscriber extends EventSubscriber {
             public void onEvent(Event event, Object param) {
                 if (OverlayService.isInitialize()
                         && (controller.getNavigationManager().getCurrent() != null
-                            || controller.getConfig().getBoolean(Config.INVOCATION_BY_ICON))){
+                            || controller.getConfig().getBoolean(BuildConfig.INVOCATION_BY_ICON))){
                     controller.hideAll();
                     pendingRestoration = true;
                 }

@@ -28,12 +28,12 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.BuildInfoHelper;
+import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -176,8 +176,8 @@ public class NotificationService extends Service {
         String overview;
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
                 UiUtils.getAppIconResourceId());
-        AppInfoHelper appInfo = new AppInfoHelper(getApplicationContext());
-        BuildInfoHelper buildInfo = new BuildInfoHelper(getApplicationContext());
+        AppInfoReporter appInfo = new AppInfoReporter(getApplicationContext());
+        BuildInfoReporter buildInfo = new BuildInfoReporter(getApplicationContext());
         overview = appInfo.getAppNameAndVersions() + "\n"
                 + buildInfo.getFriendlyBuildType();
         if (buildInfo.isGitEnabled()){
@@ -234,7 +234,7 @@ public class NotificationService extends Service {
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
-        AppInfoHelper infoHelper = new AppInfoHelper(getApplicationContext());
+        AppInfoReporter infoHelper = new AppInfoReporter(getApplicationContext());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 

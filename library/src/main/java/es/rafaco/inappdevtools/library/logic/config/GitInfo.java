@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.config;
 
-public class GitConfig {
+public class GitInfo {
     public static final String ENABLED = "ENABLED";
     public static final String REMOTE_NAME = "REMOTE_NAME";
     public static final String REMOTE_URL = "REMOTE_URL";

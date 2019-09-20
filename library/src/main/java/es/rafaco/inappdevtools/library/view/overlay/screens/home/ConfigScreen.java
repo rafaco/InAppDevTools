@@ -7,7 +7,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.view.components.flex.ConfigItem;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -49,8 +49,8 @@ public class ConfigScreen extends Screen {
         data.add("You can change on runtime our configuration parameters.\n" +
                 "Temp: press back to apply changes and we will restart your app.");
 
-        List<Config> allConfigs = Config.getAll();
-        for (Config item : allConfigs) {
+        List<BuildConfig> allConfigs = BuildConfig.getAll();
+        for (BuildConfig item : allConfigs) {
             if (item.getDefaultValue() != null){
                 data.add(new ConfigItem(item));
             }

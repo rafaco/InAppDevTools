@@ -1,10 +1,10 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 
 
 public class AnrHelper extends ScreenHelper {
@@ -20,20 +20,20 @@ public class AnrHelper extends ScreenHelper {
         return null;
     }
 
-    public InfoReport parseToInfoGroup(Anr data){
-        InfoGroup basic = new InfoGroup.Builder("Anr info")
+    public InfoReportData parseToInfoGroup(Anr data){
+        InfoGroupData basic = new InfoGroupData.Builder("Anr info")
                 .add("AnrId", data.getUid())
                 .add("Date", DateUtils.format(data.getDate()))
                 .add("Message", data.getMessage())
                 .add("Cause", data.getCause())
                 .build();
 
-        InfoGroup stacktrace = new InfoGroup.Builder("Stacktrace")
+        InfoGroupData stacktrace = new InfoGroupData.Builder("Stacktrace")
                 .add("", "")
                 .add("", data.getStacktrace())
                 .build();
 
-        return new InfoReport.Builder("")
+        return new InfoReportData.Builder("")
                 .add(basic)
                 .add(stacktrace)
                 .build();

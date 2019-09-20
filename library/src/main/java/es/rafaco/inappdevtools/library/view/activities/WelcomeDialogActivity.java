@@ -20,7 +20,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 
 public class WelcomeDialogActivity extends AppCompatActivity {
 
@@ -191,7 +191,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.button_disable_all, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Iadt.getConfig().setBoolean(Config.ENABLED, false);
+                        Iadt.getConfig().setBoolean(BuildConfig.ENABLED, false);
                         IadtController.get().restartApp(false);
                         closeAll(false);
                     }

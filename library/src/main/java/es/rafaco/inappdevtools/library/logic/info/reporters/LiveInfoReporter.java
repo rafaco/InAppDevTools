@@ -1,22 +1,27 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
+package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
 
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class LiveInfoHelper extends AbstractInfoHelper {
+public class LiveInfoReporter extends AbstractInfoReporter {
 
-    public LiveInfoHelper(Context context) {
-        super(context);
+    public LiveInfoReporter(Context context) {
+        this(context, InfoReport.LIVE);
+    }
+
+    public LiveInfoReporter(Context context, InfoReport report) {
+        super(context, report);
     }
 
     @Override
@@ -29,23 +34,24 @@ public class LiveInfoHelper extends AbstractInfoHelper {
     }
 
     @Override
-    public InfoReport getInfoReport() {
-        return new InfoReport.Builder("")
+    public InfoReportData getData() {
+        return new InfoReportData.Builder(getReport())
+                .setOverview(getOverview())
                 .add(getActivityInfo())
                 .add()
                 .add(getRunningInfo())
                 .build();
     }
 
-    public InfoGroup getActivityInfo() {
-        return new InfoGroup.Builder("")
+    public InfoGroupData getActivityInfo() {
+        return new InfoGroupData.Builder("Status")
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
                 .build();
     }
 
-    public InfoGroup getRunningInfo() {
-        return new InfoGroup.Builder("")
+    public InfoGroupData getRunningInfo() {
+        return new InfoGroupData.Builder("")
                 .add("Tasks", RunningTasksUtils.getString())
                 .add("Services", RunningServicesUtils.getString())
                 .add("Providers", RunningProvidersUtils.getString())
@@ -86,7 +92,7 @@ public class LiveInfoHelper extends AbstractInfoHelper {
 
         //output += "--> Debug data: system wide" + "\n";
         String nativeHeapSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapSize(), true);
-        //String nativeHeapAllocatedSize = OSInfoHelper.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
+        //String nativeHeapAllocatedSize = OSInfoReporter.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
         String nativeHeapFreeSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 

@@ -25,9 +25,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
+import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
+import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
@@ -68,8 +67,8 @@ public class HomeScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        AppInfoHelper appHelper = new AppInfoHelper(getContext());
-        DeviceInfoHelper deviceHelper = new DeviceInfoHelper(getContext());
+        AppInfoReporter appHelper = new AppInfoReporter(getContext());
+        DeviceInfoReporter deviceHelper = new DeviceInfoReporter(getContext());
         String welcome = appHelper.getFormattedAppLong() + "\n"
                 + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);

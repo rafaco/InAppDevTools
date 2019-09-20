@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
+package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
 import android.os.Build;
@@ -14,23 +14,28 @@ import android.support.annotation.NonNull;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.RingerMode;
 
-public class OSInfoHelper extends AbstractInfoHelper  {
+public class OSInfoReporter extends AbstractInfoReporter {
 
     EasyConfigMod configHelper;
     EasyDeviceMod deviceHelper;
     EasyMemoryMod memoryHelper;
 
-    public OSInfoHelper(Context context) {
-        super(context);
+    public OSInfoReporter(Context context) {
+        super(context, InfoReport.OS);
+    }
+
+    public OSInfoReporter(Context context, InfoReport report) {
+        super(context, report);
         this.configHelper = new EasyConfigMod(context);
         this.deviceHelper = new EasyDeviceMod(context);
         this.memoryHelper = new EasyMemoryMod(context);
@@ -38,12 +43,23 @@ public class OSInfoHelper extends AbstractInfoHelper  {
 
     @Override
     public String getOverview() {
-
         return "Android " + getAndroidVersionFull()
                 + (deviceHelper.isDeviceRooted() ? " [Rooted]" : "") + Humanizer.newLine()
                 + getDisplayLanguage() + " - " + getDisplayCountry() + Humanizer.newLine()
                 + InstalledAppsUtils.getCount() + " installed apps";
     }
+
+    @Override
+    public InfoReportData getData() {
+        return new InfoReportData.Builder(getReport())
+                .setOverview(getOverview())
+                .add(getAndroidGroup(deviceHelper))
+                .add(getConfigGroup(configHelper, deviceHelper))
+                .add(getMemoryGroupGroup(configHelper, memoryHelper))
+                .add(getInstalledApps())
+                .build();
+    }
+
 
     public String getDisplayLanguage(){
         String langCode = deviceHelper.getLanguage();
@@ -59,21 +75,10 @@ public class OSInfoHelper extends AbstractInfoHelper  {
         return loc.getDisplayCountry();
     }
 
-
-    @Override
-    public InfoReport getInfoReport() {
-        return new InfoReport.Builder("")
-                .add(getAndroidGroup(deviceHelper))
-                .add(getConfigGroup(configHelper, deviceHelper))
-                .add(getMemoryGroupGroup(configHelper, memoryHelper))
-                .add(getInstalledApps())
-                .build();
-    }
-
-    protected InfoGroup getAndroidGroup(EasyDeviceMod deviceHelper) {
-        return new InfoGroup.Builder("")
-                .add("Android version", getAndroidVersionFull())
-                .add("Android SDK version",  getVersionCodeName()+ " (" + Build.VERSION.SDK_INT + ")")
+    protected InfoGroupData getAndroidGroup(EasyDeviceMod deviceHelper) {
+        return new InfoGroupData.Builder("Android OS")
+                .add("Version", getAndroidVersionFull())
+                .add("SDK version",  getVersionCodeName()+ " (" + Build.VERSION.SDK_INT + ")")
                 .add("isRooted", deviceHelper.isDeviceRooted())
                     .build();
     }
@@ -101,8 +106,8 @@ public class OSInfoHelper extends AbstractInfoHelper  {
         }
     }
 
-    protected InfoGroup getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
-        return new InfoGroup.Builder("Android")
+    protected InfoGroupData getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
+        return new InfoGroupData.Builder("Status")
                     .add("Local time", configHelper.getFormattedTime()
                             + " - " + configHelper.getFormattedDate())
                     .add("Up time", configHelper.getFormattedUpTime())
@@ -111,8 +116,8 @@ public class OSInfoHelper extends AbstractInfoHelper  {
                     .build();
     }
 
-    protected InfoGroup getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
-        return new InfoGroup.Builder("Memory & Storage")
+    protected InfoGroupData getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
+        return new InfoGroupData.Builder("Memory & Storage")
                     .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
                     .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
                             + "/" + Humanizer.parseByte(memoryHelper.getTotalInternalMemorySize()))
@@ -122,8 +127,8 @@ public class OSInfoHelper extends AbstractInfoHelper  {
                     .build();
     }
 
-    protected InfoGroup getInstalledApps() {
-        return new InfoGroup.Builder("Installed Apps")
+    protected InfoGroupData getInstalledApps() {
+        return new InfoGroupData.Builder("Installed Apps")
                 .add(InstalledAppsUtils.getString())
                 .build();
     }

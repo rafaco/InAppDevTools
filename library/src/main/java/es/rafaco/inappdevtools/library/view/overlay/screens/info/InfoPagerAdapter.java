@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.ObjectAtPositionPagerAdapter;
 
 public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
@@ -20,15 +23,17 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
     @Override
     public Object instantiateItemObject(ViewGroup container, int position) {
-        InfoPage page = InfoPage.values()[position];
 
         LayoutInflater inflater = LayoutInflater.from(context);
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.tool_info_page, container, false);
-        layout.setTag(position);
         container.addView(layout);
 
-        page.getViewHolder().onCreatedView(layout);
-        page.getViewHolder().populateUI();
+        InfoReport report = InfoReport.values()[position];
+        InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
+        InfoPageViewHolder viewHolder = new InfoPageViewHolder(reportData);
+        viewHolder.onCreatedView(layout);
+        viewHolder.populateUI();
+        layout.setTag(viewHolder);
 
         return layout;
     }
@@ -40,7 +45,7 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
     @Override
     public int getCount() {
-        return InfoPage.values().length;
+        return InfoReport.values().length;
     }
 
     @Override
@@ -51,24 +56,22 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return InfoPage.values()[position].getTitle();
+        return InfoReport.values()[position].getTitle();
     }
 
     public void updateView(final View pageView, int position){
-        final InfoPage page = InfoPage.values()[position];
+        final InfoReport report = InfoReport.values()[position];
 
-        new AsyncTask<InfoPage, InfoPage, InfoPage>() {
+        new AsyncTask<InfoReport, InfoReport, InfoReportData>() {
             @Override
-            protected InfoPage doInBackground(InfoPage... infoPages) {
-                page.updateFromHelper();
-                return page;
+            protected InfoReportData doInBackground(InfoReport... infoReports) {
+                return IadtController.get().getInfoManager().getReportData(report);
             }
 
             @Override
-            protected void onPostExecute(InfoPage result) {
-                result.getViewHolder().updateUI(
-                        result.getOverview(),
-                        result.getContent());
+            protected void onPostExecute(InfoReportData result) {
+                InfoPageViewHolder viewHolder = (InfoPageViewHolder) pageView.getTag();
+                viewHolder.update(result);
                 pageView.requestLayout();
             }
         }.execute();

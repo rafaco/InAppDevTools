@@ -15,7 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -42,7 +42,7 @@ public class SourcesManager {
 
     public boolean canSourceInspection() {
         if (IadtController.get().isEnabled()
-                && IadtController.get().getConfig().getBoolean(Config.SOURCE_INSPECTION)){
+                && IadtController.get().getConfig().getBoolean(BuildConfig.SOURCE_INSPECTION)){
             return true;
         }else{
             return false;

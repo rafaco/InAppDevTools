@@ -20,6 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
@@ -74,9 +75,9 @@ public class InfoScreen extends Screen {
     }
 
     private void setupTabIcons() {
-        InfoPage[] infoPages = InfoPage.values();
-        for (int i = 0 ; i<infoPages.length ; i++){
-            tabLayout.getTabAt(i).setIcon(infoPages[i].getIcon());
+        InfoReport[] infoReports = InfoReport.values();
+        for (int i = 0; i< infoReports.length ; i++){
+            tabLayout.getTabAt(i).setIcon(infoReports[i].getIcon());
         }
     }
 
@@ -129,7 +130,7 @@ public class InfoScreen extends Screen {
     }
 
     private void updatePage() {
-        final View pageView = viewPager.findViewWithTag(currentPosition);
+        final View pageView = viewPager.getChildAt(currentPosition);
         pagerAdapter.updateView(pageView, currentPosition);
     }
 

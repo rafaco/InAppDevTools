@@ -11,10 +11,11 @@ import android.util.Log;
 
 import java.util.TooManyListenersException;
 
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
+import es.rafaco.inappdevtools.library.logic.info.InfoManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -49,6 +50,7 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
+    private InfoManager infoManager;
     private boolean isPendingForegroundInit;
 
     protected IadtController(Context context) {
@@ -112,6 +114,7 @@ public final class IadtController {
 
     public void initDelayedBackground() {
         sourcesManager = new SourcesManager(getContext());
+        infoManager = new InfoManager(getContext());
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
@@ -159,14 +162,14 @@ public final class IadtController {
         if (isDebug())
             Log.d(Iadt.TAG, "Initializing foreground services...");
 
-        if (getConfig().getBoolean(Config.OVERLAY_ENABLED)){
+        if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();
 
             Intent intent = new Intent(getContext(), OverlayService.class);
             getContext().startService(intent);
         }
 
-        if (getConfig().getBoolean(Config.INVOCATION_BY_NOTIFICATION)){
+        if (getConfig().getBoolean(BuildConfig.INVOCATION_BY_NOTIFICATION)){
             Intent intent = new Intent(getContext(), NotificationService.class);
             intent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
             getContext().startService(intent);
@@ -202,16 +205,20 @@ public final class IadtController {
         return navigationManager;
     }
 
+    public InfoManager getInfoManager() {
+        return infoManager;
+    }
+
     public static DevToolsDatabase getDatabase() {
         return DevToolsDatabase.getInstance();
     }
 
     public boolean isEnabled() {
-        return getConfig().getBoolean(Config.ENABLED);
+        return getConfig().getBoolean(BuildConfig.ENABLED);
     }
 
     public boolean isDebug() {
-        return getConfig().getBoolean(Config.DEBUG);
+        return getConfig().getBoolean(BuildConfig.DEBUG);
     }
 
 
@@ -293,7 +300,7 @@ public final class IadtController {
         Screenshot screenshot = new ScreenshotHelper().takeAndSaveScreen();
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
-        if(getConfig().getBoolean(Config.OVERLAY_ENABLED) && OverlayService.isInitialize()){
+        if(getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED) && OverlayService.isInitialize()){
             showIcon();
         }
         FileProviderUtils.openFileExternally(getContext(), screenshot.getPath());

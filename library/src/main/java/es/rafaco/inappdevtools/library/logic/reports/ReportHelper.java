@@ -15,12 +15,12 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.EmailUtils;
 
@@ -99,11 +99,11 @@ public class ReportHelper extends ScreenHelper {
 
     @NonNull
     private String getEmailTo() {
-        return IadtController.get().getConfig().getString(Config.EMAIL);
+        return IadtController.get().getConfig().getString(BuildConfig.EMAIL);
     }
 
     private String getEmailSubject(){
-        AppInfoHelper helper = new AppInfoHelper(context);
+        AppInfoReporter helper = new AppInfoReporter(context);
         String formatter = "%s %s report from %s %s";
         String currentType = "";
         if(type.equals(ReportType.SESSION)){

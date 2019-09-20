@@ -20,11 +20,7 @@ public class PluginList {
         return getPluginVersion("inappdevtools-plugin");
     }
 
-    public static String getGradleVersion() {
-        return "";
-    }
-
-    public static String getAndroidGradleVersion() {
+    public static String getAndroidVersion() {
         return getPluginVersion("gradle-api");
     }
 

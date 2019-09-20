@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.config.GitConfig;
+import es.rafaco.inappdevtools.library.logic.config.GitInfo;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.GitAsset;
@@ -28,18 +29,14 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InfoPageViewHolder {
 
-    private String title;
-    private String overview;
-    private String content;
+    InfoReportData report;
 
     TextView overviewView;
     TextView bodyView;
     private RecyclerView flexible;
 
-    public InfoPageViewHolder(String title, String overview, String body) {
-        this.title = title; //Not in use
-        this.content = body;
-        this.overview = overview;
+    public InfoPageViewHolder(InfoReportData reportData) {
+        this.report = reportData;
     }
 
     public View onCreatedView(ViewGroup view) {
@@ -49,21 +46,20 @@ public class InfoPageViewHolder {
         return view;
     }
 
-    public void updateUI(String overview, String body) {
-        this.content = body;
-        this.overview = overview;
-
+    public void update(InfoReportData reportData) {
+        report = reportData;
         populateUI();
     }
 
     public void populateUI() {
-        overviewView.setVisibility((TextUtils.isEmpty(overview) ? View.GONE : View.VISIBLE));
-        overviewView.setText(overview);
+        overviewView.setVisibility((TextUtils.isEmpty(report.getOverview()) ? View.GONE : View.VISIBLE));
+        overviewView.setText(report.getOverview());
 
-        if (TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(report.getEntries().toString())) {
             bodyView.setText("\n\n\n\n"+"( NO INFO )"+ "\n\n\n\n");
         } else {
-            bodyView.setText(content);
+            //TODO: report.getEntries().toString()
+            bodyView.setText(report.toString());
         }
 
         //TODO: improve, it depends on a hardcoded string
@@ -75,11 +71,11 @@ public class InfoPageViewHolder {
         int spanCount = 0;
 
         JsonAssetHelper gitConfig = new JsonAssetHelper(bodyView.getContext(), JsonAsset.GIT_CONFIG);
-        boolean gitEnabled = gitConfig.getBoolean(GitConfig.ENABLED);
+        boolean gitEnabled = gitConfig.getBoolean(GitInfo.ENABLED);
 
 
-        if (title.equals("Build") && gitEnabled){
-            final String remoteUrl = gitConfig.getString(GitConfig.REMOTE_URL);
+        if (report.getTitle().equals("Build") && gitEnabled){
+            final String remoteUrl = gitConfig.getString(GitInfo.REMOTE_URL);
             data.add(new RunButton("Remote",
                     R.drawable.ic_public_white_24dp,
                     new Runnable() {
@@ -89,10 +85,10 @@ public class InfoPageViewHolder {
                         }
                     }));
 
-            String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
+            String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
             int local_commits_count = Humanizer.countLines(local_commits);
             boolean hasLocalCommits = local_commits_count > 0;
-            boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
+            boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
 
             if (hasLocalCommits){
                 data.add(new RunButton("Local Commits",

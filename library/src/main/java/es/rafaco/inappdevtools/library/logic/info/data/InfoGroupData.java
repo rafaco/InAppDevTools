@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.entries;
+package es.rafaco.inappdevtools.library.logic.info.data;
 
 import android.text.TextUtils;
 
@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class InfoGroup {
+public class InfoGroupData {
 
     private String name;
-    private List<InfoEntry> entries;
+    private List<InfoEntryData> entries;
 
-    public InfoGroup(Builder builder) {
+    public InfoGroupData(Builder builder) {
         this.name = builder.name;
         this.entries = builder.entries;
     }
@@ -21,15 +22,15 @@ public class InfoGroup {
         return name;
     }
 
-    public List<InfoEntry> getEntries() {
+    public List<InfoEntryData> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<InfoEntry> entries) {
+    public void setEntries(List<InfoEntryData> entries) {
         this.entries = entries;
     }
 
-    public void add(InfoEntry entry) {
+    public void add(InfoEntryData entry) {
         this.entries.add(entry);
     }
 
@@ -41,16 +42,14 @@ public class InfoGroup {
     public String toString(){
         String result = "";
         String formatTitle = "%s:";
-        String lineBreak = "\n";
 
         if (!TextUtils.isEmpty(getName())) {
-            result += lineBreak;
+            result += Humanizer.newLine();
             result += String.format(formatTitle, getName());
-            result += lineBreak;
-            result += lineBreak;
+            result += Humanizer.newLine();
         }
 
-        for (InfoEntry entry : entries){
+        for (InfoEntryData entry : entries){
             result += entry.toString();
         }
         return result;
@@ -61,7 +60,7 @@ public class InfoGroup {
 
     public static class Builder {
         private String name;
-        private List<InfoEntry> entries;
+        private List<InfoEntryData> entries;
 
         public Builder() {
             this("");
@@ -72,53 +71,53 @@ public class InfoGroup {
             this.entries = new ArrayList<>();
         }
 
-        public Builder add(InfoEntry entry) {
+        public Builder add(InfoEntryData entry) {
             this.entries.add(entry);
             return this;
         }
 
         public Builder add() {
-            add(new InfoEntry("", ""));
+            add(new InfoEntryData("", ""));
             return this;
         }
 
         public Builder add(String text) {
-            add(new InfoEntry("", text));
+            add(new InfoEntryData("", text));
             return this;
         }
 
         public Builder add(String label, List<String> values) {
-            add(new InfoEntry(label, values));
+            add(new InfoEntryData(label, values));
             return this;
         }
 
         public Builder add(String label, String value) {
-            add(new InfoEntry(label, value));
+            add(new InfoEntryData(label, value));
             return this;
         }
 
         public Builder add(String label, boolean value) {
-            add(new InfoEntry(label, String.valueOf(value)));
+            add(new InfoEntryData(label, String.valueOf(value)));
             return this;
         }
 
         public Builder add(String label, long value) {
-            add(new InfoEntry(label, String.valueOf(value)));
+            add(new InfoEntryData(label, String.valueOf(value)));
             return this;
         }
 
         public Builder addDate(String label, long date) {
-            add(new InfoEntry(label, DateUtils.format(date)));
+            add(new InfoEntryData(label, DateUtils.format(date)));
             return this;
         }
 
-        public Builder set(List<InfoEntry> entries) {
+        public Builder set(List<InfoEntryData> entries) {
             this.entries = entries;
             return this;
         }
 
-        public InfoGroup build() {
-            return new InfoGroup(this);
+        public InfoGroupData build() {
+            return new InfoGroupData(this);
         }
     }
 }

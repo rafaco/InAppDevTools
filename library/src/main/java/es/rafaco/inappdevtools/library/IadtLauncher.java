@@ -14,8 +14,7 @@ import android.util.Log;
 import android.support.annotation.Nullable;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.config.Config;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
@@ -47,10 +46,10 @@ public class IadtLauncher extends ContentProvider {
 
     private boolean isLibraryEnabled(){
         // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
-        // It reproduce IadtController.get().getConfig().get(Config.ENABLED);
-        String enableKey = Config.ENABLED.getKey();
+        // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
+        String enableKey = BuildConfig.ENABLED.getKey();
         SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-        JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.COMPILE_CONFIG);
+        JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.BUILD_CONFIG);
 
         if (iadtSharedPrefs.contains(enableKey)){
             return iadtSharedPrefs.getBoolean(enableKey, false);
@@ -59,7 +58,7 @@ public class IadtLauncher extends ContentProvider {
             return iadtCompileConfig.getBoolean(enableKey);
         }
         else{
-            return (boolean) Config.ENABLED.getDefaultValue();
+            return (boolean) BuildConfig.ENABLED.getDefaultValue();
         }
     }
 

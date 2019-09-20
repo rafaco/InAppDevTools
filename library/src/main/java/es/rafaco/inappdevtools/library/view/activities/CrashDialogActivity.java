@@ -21,7 +21,7 @@ import android.support.v7.widget.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -92,7 +92,7 @@ public class CrashDialogActivity extends AppCompatActivity {
     }
 
     private void onCrashDetail(Crash crash) {
-        if (Iadt.getConfig().getBoolean(Config.OVERLAY_ENABLED)){
+        if (Iadt.getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             OverlayService.performNavigation(CrashDetailScreen.class, String.valueOf(crash.getUid()));
             destroyDialog();
         }

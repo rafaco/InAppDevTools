@@ -7,6 +7,7 @@
     <string name="config_build_time_utc">Last compilation build time in utc format</string>
     <string name="config_host_name">Builder machine name</string>
     <string name="config_host_address">Builder machine IP address</string>
+    <string name="config_gradle_version">Builder machine Gradle version</string>
     <string name="config_enabled">Disable all and simulate the no-op library and plugin</string>
     <string name="config_enabled_on_release">Force enabling our library for release builds of your app</string>
     <string name="config_overlay_enable">Disable our overlay interface</string>

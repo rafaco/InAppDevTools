@@ -5,7 +5,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -46,18 +49,19 @@ public class InfoOverviewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        InfoPage[] infoPages = InfoPage.values();
+        InfoReport[] infoReports = InfoReport.values();
 
-        for (int i = 0 ; i<infoPages.length ; i++){
-            InfoPage page = infoPages[i];
-            final String pageParam = String.valueOf(i);
+        for (int i = 0; i< infoReports.length ; i++){
+            InfoReport page = infoReports[i];
+            InfoReportData reportData = IadtController.get().getInfoManager().getReportData(page);
+            final String pageIndexParam = String.valueOf(i);
 
-            data.add(new CardData(page.getTitle(),
-                    page.getOverview(),
-                    page.getIcon(),
+            data.add(new CardData(reportData.getTitle(),
+                    reportData.getOverview(),
+                    reportData.getIcon(),
                     new Runnable() {
                         @Override
-                        public void run() { OverlayService.performNavigation(InfoScreen.class, pageParam);
+                        public void run() { OverlayService.performNavigation(InfoScreen.class, pageIndexParam);
                         }
                     }));
         }

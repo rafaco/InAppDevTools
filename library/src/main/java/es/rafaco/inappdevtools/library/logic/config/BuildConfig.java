@@ -5,12 +5,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 
-public enum Config {
-
-    BUILD_TIME("BUILD_TIME", R.string.config_build_time, long.class, null),
-    BUILD_TIME_UTC("BUILD_TIME_UTC", R.string.config_build_time_utc, String.class, null),
-    HOST_NAME("HOST_NAME", R.string.config_build_time_utc, String.class, null),
-    HOST_ADDRESS("HOST_ADDRESS", R.string.config_build_time_utc, String.class, null),
+public enum BuildConfig {
 
     EMAIL("email", R.string.config_email, String.class, ""),
 
@@ -31,7 +26,7 @@ public enum Config {
     private final Class<?> valueType;
     private final Object defaultValue;
 
-    Config(String key, int desc, Class<?> valueType, Object defaultValue) {
+    BuildConfig(String key, int desc, Class<?> valueType, Object defaultValue) {
         this.key = key;
         this.desc = desc;
         this.valueType = valueType;
@@ -55,11 +50,11 @@ public enum Config {
     }
 
 
-    private static final List<Config> ITEMS = new ArrayList<>();
+    private static final List<BuildConfig> ITEMS = new ArrayList<>();
 
-    public static List<Config> getAll() {
+    public static List<BuildConfig> getAll() {
         if (ITEMS.isEmpty()){
-            for (Config item : values()) {
+            for (BuildConfig item : values()) {
                 ITEMS.add(item);
             }
         }

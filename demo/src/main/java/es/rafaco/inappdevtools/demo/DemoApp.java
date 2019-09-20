@@ -6,7 +6,6 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
-
 public class DemoApp extends Application {
 
     public static String TAG = "DemoApp";
@@ -14,8 +13,6 @@ public class DemoApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-
-        //Iadt.codePoint(this);
 
         Iadt.addRunButton(new RunButton("Show message",
                 R.drawable.ic_run_white_24dp,
@@ -70,7 +67,5 @@ public class DemoApp extends Application {
                         });
                     }
                 }));
-
-        //Log.i(TAG, new LiveInfoHelper(getApplicationContext()).getRunningThreads());
     }
 }

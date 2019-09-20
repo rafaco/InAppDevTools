@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools
 import groovy.json.JsonOutput
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
+import static org.apache.tools.ant.taskdefs.condition.Os.*
 
 import java.time.Duration
 import java.time.Instant
@@ -11,7 +12,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
 
     GenerateConfigsTask() {
-        this.description = "Generate config files (compile_config, git_config,...)"
+        this.description = "Generate config files (build_config, build_info, git_config,...)"
     }
 
     @TaskAction
@@ -21,7 +22,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         generateCompileConfig(project)
         if (extension.enabled){
             generatePluginsList(project)
-            generateGitConfig(project)
+            generateBuildInfo(project)
+            generateGitInfo(project)
         }
 
         if (isDebug()) {
@@ -31,12 +33,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private void generateCompileConfig(Project project) {
-        Map propertiesMap = [
-                BUILD_TIME    : new Date().getTime(),
-                BUILD_TIME_UTC: new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
-                HOST_NAME    : InetAddress.localHost.hostName,
-                HOST_ADDRESS : InetAddress.localHost.hostAddress,
-        ]
+        Map propertiesMap = [:]
 
         if (extension.enabled!=null)
             propertiesMap.put("enabled", extension.enabled)
@@ -71,7 +68,25 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.callDefaultCrashHandler!=null)
             propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 
-        File file = getFile(project, "${outputPath}/compile_config.json")
+        File file = getFile(project, "${outputPath}/build_config.json")
+        saveConfigMap(propertiesMap, file)
+    }
+
+    private void generateBuildInfo(Project project) {
+        Map propertiesMap = [
+                BUILD_TIME      : new Date().getTime(),
+                BUILD_TIME_UTC  : new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
+                HOST_NAME       : InetAddress.localHost.hostName,
+                HOST_ADDRESS    : InetAddress.localHost.hostAddress,
+                HOST_OS         : OS_NAME,
+                HOST_VERSION    : OS_VERSION,
+                HOST_ARCH       : OS_ARCH,
+                USER_NAME       : shell('git config user.name'),
+                USER_EMAIL      : shell('git config user.email'),
+                GRADLE_VERSION  : project.gradle.gradleVersion
+        ]
+
+        File file = getFile(project, "${outputPath}/build_info.json")
         saveConfigMap(propertiesMap, file)
     }
 
@@ -83,7 +98,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         pluginsFile.text = plugins
     }
 
-    private void generateGitConfig(Project project) {
+    private void generateGitInfo(Project project) {
 
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
@@ -120,7 +135,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
             ]
         }
 
-        File file = getFile(project, "${outputPath}/git_config.json")
+        File file = getFile(project, "${outputPath}/git_info.json")
         saveConfigMap(propertiesMap, file)
 
         File commitsFile = new File("${outputPath}/local_commits.txt")

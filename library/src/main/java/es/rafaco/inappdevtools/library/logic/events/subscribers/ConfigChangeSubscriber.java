@@ -1,8 +1,7 @@
 package es.rafaco.inappdevtools.library.logic.events.subscribers;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
@@ -20,12 +19,12 @@ public class ConfigChangeSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.CONFIG_CHANGED, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                Config target = (Config) param;
+                BuildConfig target = (BuildConfig) param;
 
-                FriendlyLog.log("D", "Iadt", "Config",
-                        "Config changed: " + target.getKey() + " to " + IadtController.get().getConfig().get(target));
+                FriendlyLog.log("D", "Iadt", "BuildConfig",
+                        "BuildConfig changed: " + target.getKey() + " to " + IadtController.get().getConfig().get(target));
 
-                /*if (target.getKey().equals(Config.ENABLED.getKey())){
+                /*if (target.getKey().equals(BuildConfig.ENABLED.getKey())){
                     //TODO: restart library instead of app
                     Iadt.showMessage("Restart needed");
                     IadtController.get().restartApp(false);

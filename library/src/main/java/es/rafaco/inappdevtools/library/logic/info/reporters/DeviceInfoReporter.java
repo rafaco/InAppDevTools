@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
+package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -14,9 +14,9 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.BatteryHealth;
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod;
@@ -29,14 +29,18 @@ import github.nisrulz.easydeviceinfo.common.EasyDeviceInfo;
 
 import static android.content.Context.WINDOW_SERVICE;
 
-public class DeviceInfoHelper extends AbstractInfoHelper {
+public class DeviceInfoReporter extends AbstractInfoReporter {
 
     EasyConfigMod configHelper;
     EasyDisplayMod displayHelper;
     EasyMemoryMod memoryHelper;
 
-    public DeviceInfoHelper(Context context) {
-        super(context);
+    public DeviceInfoReporter(Context context) {
+        this(context, InfoReport.DEVICE);
+    }
+
+    public DeviceInfoReporter(Context context, InfoReport report) {
+        super(context, report);
         configHelper = new EasyConfigMod(context);
         displayHelper = new EasyDisplayMod(context);
         memoryHelper = new EasyMemoryMod(context);
@@ -44,21 +48,22 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
     @Override
     public String getOverview() {
-        return configHelper.isRunningOnEmulator() ? "Emulated " : "Real "
-                + getDeviceType() + "\n"
-                + Build.BRAND + " " + Build.MODEL ;
+        String firstLine = (configHelper.isRunningOnEmulator() ? "Emulated " : "Real ")
+                + getDeviceType();
+        String secondLine = configHelper.isRunningOnEmulator() ? Build.MODEL : Build.BRAND + " " + Build.MODEL;
+        return firstLine + Humanizer.newLine() + secondLine;
     }
 
     @Override
-    public InfoReport getInfoReport() {
-        InfoGroup model = new InfoGroup.Builder("")
+    public InfoReportData getData() {
+        InfoGroupData model = new InfoGroupData.Builder("Description")
                 .add("Form factor", getDeviceType())
                 .add("Brand", Build.BRAND)
                 .add("Model", Build.MODEL)
                 .add("isEmulator", configHelper.isRunningOnEmulator())
                 .build();
 
-        InfoGroup hardware = new InfoGroup.Builder("Hardware")
+        InfoGroupData hardware = new InfoGroupData.Builder("Hardware")
                 .add("CPU", new EasyCpuMod().getStringSupportedABIS())
                 .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
                 .add("Screen", displayHelper.getResolution()
@@ -73,7 +78,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
         EasySensorMod sensorHelper = new EasySensorMod(context);
         List<Sensor> allSensors = sensorHelper.getAllSensors();
-        InfoGroup.Builder sensorBuilder = new InfoGroup.Builder("Sensors");
+        InfoGroupData.Builder sensorBuilder = new InfoGroupData.Builder("Sensors");
         if (allSensors != null && !allSensors.isEmpty()){
             for(Sensor sensor : allSensors){
                 String name = sensor.getName();
@@ -85,12 +90,12 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
                 sensorBuilder.add("", name);
             }
         }
-        InfoGroup sensor = sensorBuilder.build();
+        InfoGroupData sensor = sensorBuilder.build();
 
         /*
         //Network Mod
         EasyNetworkMod easyNetworkMod = new EasyNetworkMod(context);
-        InfoGroup network = new InfoGroup.Builder("App")
+        InfoGroupData network = new InfoGroupData.Builder("App")
             .add("WIFI MAC Address", easyNetworkMod.getWifiMAC())
             .add("WIFI LinkSpeed", easyNetworkMod.getWifiLinkSpeed())
             .add("WIFI SSID", easyNetworkMod.getWifiSSID())
@@ -133,7 +138,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
 
         // Battery Mod
         final EasyBatteryMod easyBatteryMod = new EasyBatteryMod(context);
-        InfoGroup.Builder batteryBuilder = new InfoGroup.Builder("Battery")
+        InfoGroupData.Builder batteryBuilder = new InfoGroupData.Builder("Battery")
             .add("Battery Percentage", String.valueOf(easyBatteryMod.getBatteryPercentage()) + '%')
             .add("Is device charging", String.valueOf(easyBatteryMod.isDeviceCharging()))
             .add("Battery present", String.valueOf(easyBatteryMod.isBatteryPresent()))
@@ -153,7 +158,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
                 batteryBuilder.add("Battery health", "Having issues");
                 break;
         }
-        InfoGroup battery = batteryBuilder.build();
+        InfoGroupData battery = batteryBuilder.build();
 
         /*
         @ChargingVia final int isChargingVia = easyBatteryMod.getChargingSource();
@@ -173,7 +178,7 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
                 break;
         }
 
-        InfoGroup.Builder othersBuilder = new InfoGroup.Builder("Others");
+        InfoGroupData.Builder othersBuilder = new InfoGroupData.Builder("Others");
 
         //Bluetooth Mod
         final EasyBluetoothMod easyBluetoothMod = new EasyBluetoothMod(context);
@@ -190,7 +195,8 @@ public class DeviceInfoHelper extends AbstractInfoHelper {
         */
 
 
-        return new InfoReport.Builder("")
+        return new InfoReportData.Builder(getReport())
+                .setOverview(getOverview())
                 .add(model)
                 .add(hardware)
                 .add(battery)

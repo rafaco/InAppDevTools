@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -184,7 +184,7 @@ public class CrashDetailScreen extends Screen {
     }
 
     private void initFooter() {
-        InfoReport report = helper.parseToInfoGroup(crash);
+        InfoReportData report = helper.parseToInfoGroup(crash);
         out.setText(report.toString());
 
         autologButton.setOnClickListener(new View.OnClickListener() {

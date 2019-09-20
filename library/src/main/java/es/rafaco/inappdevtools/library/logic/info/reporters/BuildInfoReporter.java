@@ -1,4 +1,4 @@
-package es.rafaco.inappdevtools.library.view.overlay.screens.info.pages;
+package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -9,26 +9,32 @@ import android.text.TextUtils;
 import android.support.annotation.NonNull;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.config.Config;
-import es.rafaco.inappdevtools.library.logic.config.GitConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
+import es.rafaco.inappdevtools.library.logic.config.GitInfo;
+import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class BuildInfoHelper extends AbstractInfoHelper {
+public class BuildInfoReporter extends AbstractInfoReporter {
 
+    JsonAssetHelper buildInfo;
     JsonAssetHelper buildConfig;
     JsonAssetHelper gitConfig;
 
-    public BuildInfoHelper(Context context) {
-        super(context);
+    public BuildInfoReporter(Context context) {
+        this(context, InfoReport.BUILD);
+    }
 
-        buildConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
+    public BuildInfoReporter(Context context, InfoReport report) {
+        super(context, report);
+        buildInfo = new JsonAssetHelper(context, JsonAsset.BUILD_INFO);
+        buildConfig = new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG);
         gitConfig = new JsonAssetHelper(context, JsonAsset.GIT_CONFIG);
     }
 
@@ -41,42 +47,57 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     @Override
-    public InfoReport getInfoReport() {
-        return new InfoReport.Builder("")
+    public InfoReportData getData() {
+        return new InfoReportData.Builder(getReport())
+                .setOverview(getOverview())
+                .add(getBuilderInfo())
                 .add(getBuildInfo())
                 .add(getRepositoryInfo())
                 .add(getLocalChangesInfo())
                 .build();
     }
 
-    public InfoGroup getBuildInfo() {
-        InfoGroup group = new InfoGroup.Builder("Build")
-                .add("Host name", buildConfig.getString(Config.HOST_NAME.getKey()))
-                .add("Host IP", buildConfig.getString(Config.HOST_ADDRESS.getKey()))
-                .add("Build time", buildConfig.getString(Config.BUILD_TIME_UTC.getKey()))
+
+
+    public InfoGroupData getBuilderInfo() {
+        InfoGroupData group = new InfoGroupData.Builder("Builder")
+                .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
+                .add("User email", buildInfo.getString(BuildInfo.USER_EMAIL))
+                .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
+                .add("Host OS", buildInfo.getString(BuildInfo.HOST_OS))
+                .add("Host version", buildInfo.getString(BuildInfo.HOST_VERSION))
+                .add("Host arch", buildInfo.getString(BuildInfo.HOST_ARCH))
+                .add("Host IP", buildInfo.getString(BuildInfo.HOST_ADDRESS))
+                .build();
+        return group;
+    }
+
+    public InfoGroupData getBuildInfo() {
+        InfoGroupData group = new InfoGroupData.Builder("Build")
+                .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
                 .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
-                .add("Gradle version", PluginList.getGradleVersion())
-                .add("Android plugin", PluginList.getAndroidGradleVersion())
+                .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
+                .add("Android plugin", PluginList.getAndroidVersion())
                 .add("Iadt plugin", PluginList.getIadtVersion())
                 .build();
         return group;
     }
 
-    public InfoGroup getRepositoryInfo() {
-        InfoGroup.Builder group = new InfoGroup.Builder("Remote repository");
+    public InfoGroupData getRepositoryInfo() {
+        InfoGroupData.Builder group = new InfoGroupData.Builder("Remote repository");
 
         if (!isGitEnabled()){
             group.add("No git repository found at build folder");
             return group.build();
         }
 
-        group.add("Git url", gitConfig.getString(GitConfig.REMOTE_URL))
-                .add("Branch", gitConfig.getString(GitConfig.LOCAL_BRANCH))
-                .add("Tag", gitConfig.getString(GitConfig.TAG))
-                .add("Tag Status", gitConfig.getString(GitConfig.INFO))
+        group.add("Git url", gitConfig.getString(GitInfo.REMOTE_URL))
+                .add("Branch", gitConfig.getString(GitInfo.LOCAL_BRANCH))
+                .add("Tag", gitConfig.getString(GitInfo.TAG))
+                .add("Tag Status", gitConfig.getString(GitInfo.INFO))
                 .add(" - Last commit:")
-                .add(gitConfig.getString(GitConfig.REMOTE_LAST).replace("\n\n", "\n-> "));
+                .add(gitConfig.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
         return group.build();
     }
 
@@ -85,21 +106,21 @@ public class BuildInfoHelper extends AbstractInfoHelper {
             return null;
         }
         String build = getFriendlyBuildType();
-        String branch = gitConfig.getString(GitConfig.LOCAL_BRANCH);
-        String tag = gitConfig.getString(GitConfig.TAG);
+        String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
+        String tag = gitConfig.getString(GitInfo.TAG);
 
         return String.format("%s from %s %s", build, branch, tag);
     }
 
     public String getBuildOverview() {
-        String host = buildConfig.getString(Config.HOST_NAME.getKey());
+        String host = buildInfo.getString(BuildInfo.HOST_NAME);
         String time = getFriendlyElapsedTime();
         return String.format("%s %s", host, time);
     }
 
     public String getFriendlyElapsedTime() {
         return Humanizer.getElapsedTimeLowered(
-                Long.parseLong(buildConfig.getString(Config.BUILD_TIME.getKey())));
+                Long.parseLong(buildInfo.getString(BuildInfo.BUILD_TIME)));
     }
 
     @NonNull
@@ -112,11 +133,11 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public String getLocalOverview(){
-        String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
+        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
-        String file_status = gitConfig.getString(GitConfig.LOCAL_CHANGES);
+        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
@@ -135,14 +156,14 @@ public class BuildInfoHelper extends AbstractInfoHelper {
         return result;
     }
 
-    public InfoGroup getLocalChangesInfo() {
-        InfoGroup.Builder group = new InfoGroup.Builder("Local repository");
+    public InfoGroupData getLocalChangesInfo() {
+        InfoGroupData.Builder group = new InfoGroupData.Builder("Local repository");
 
-        String local_commits = gitConfig.getString(GitConfig.LOCAL_COMMITS);
+        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getBoolean(GitConfig.HAS_LOCAL_CHANGES);
-        String file_status = gitConfig.getString(GitConfig.LOCAL_CHANGES);
+        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
@@ -160,7 +181,7 @@ public class BuildInfoHelper extends AbstractInfoHelper {
     }
 
     public boolean isGitEnabled() {
-        return gitConfig.getBoolean(GitConfig.ENABLED);
+        return gitConfig.getBoolean(GitInfo.ENABLED);
     }
 
 }

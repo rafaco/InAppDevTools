@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoGroup;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 
 public class CrashHelper extends ScreenHelper {
 
@@ -28,15 +28,15 @@ public class CrashHelper extends ScreenHelper {
         return null;
     }
 
-    public InfoReport parseToInfoGroup(Crash data){
+    public InfoReportData parseToInfoGroup(Crash data){
 
-        InfoGroup status = new InfoGroup.Builder("App status")
+        InfoGroupData status = new InfoGroupData.Builder("App status")
                 //.add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
                 .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
                 .add("LastActivity", data.getLastActivity())
                 .build();
 
-        InfoGroup basic = new InfoGroup.Builder("Crash info")
+        InfoGroupData basic = new InfoGroupData.Builder("Crash info")
                 .add("CrashId", data.getUid())
                 .add("Date", DateUtils.format(data.getDate()))
                 .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
@@ -49,24 +49,24 @@ public class CrashHelper extends ScreenHelper {
                 .add("CauseAt", data.getCauseExceptionAt())
                 .build();
 
-        InfoGroup thread = new InfoGroup.Builder("Thread info")
+        InfoGroupData thread = new InfoGroupData.Builder("Thread info")
                 .add("Thread ID", data.getThreadId())
                 .add("Name", data.getThreadName())
                 .add("Group", data.getThreadGroupName())
                 .add("isMain", data.isMainThread())
                 .build();
 
-        InfoGroup links = new InfoGroup.Builder("Linked info")
+        InfoGroupData links = new InfoGroupData.Builder("Linked info")
                 .add("ReportPath", String.valueOf(data.getReportPath()))
                 .add("LogcatId", String.valueOf(data.getLogcatId()))
                 .add("ScreenId", String.valueOf(data.getScreenId()))
                 .build();
 
-        InfoGroup stacktrace = new InfoGroup.Builder("Stacktrace")
+        InfoGroupData stacktrace = new InfoGroupData.Builder("Stacktrace")
                 .add("", data.getStacktrace())
                 .build();
 
-        return new InfoReport.Builder("")
+        return new InfoReportData.Builder("")
                 .add(status)
                 .add(basic)
                 .add(thread)
