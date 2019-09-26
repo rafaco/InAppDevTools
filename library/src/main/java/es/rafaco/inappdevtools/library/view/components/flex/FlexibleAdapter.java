@@ -21,32 +21,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
-    public static final String TYPE_HEADER = "TYPE_HEADER";
-    public static final String TYPE_BUTTON = "TYPE_BUTTON";
-    public static final String TYPE_CARD = "TYPE_CARD";
-    public static final String TYPE_LINK = "TYPE_LINK";
-    public static final String TYPE_TRACE = "TYPE_TRACE";
-    public static final String TYPE_TRACE_GROUP = "TYPE_TRACE_GROUP";
-    public static final String TYPE_ANALYSIS = "TYPE_ANALYSIS";
-    public static final String TYPE_CONFIG = "TYPE_CONFIG";
-
     public class FlexibleItemDescriptor {
-        public final String name;
+        
         public final Class<?> dataClass;
         public final Class<? extends FlexibleViewHolder> viewHolderClass;
         public final int layoutResourceId;
 
-        public FlexibleItemDescriptor(String name, Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
-            this.name = name;
+        public FlexibleItemDescriptor(Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
             this.dataClass = dataClass;
             this.viewHolderClass = viewHolderClass;
             this.layoutResourceId = layoutResourceId;
@@ -62,14 +52,15 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         this.items = data;
 
         descriptors = new ArrayList<>();
-        descriptors.add(new FlexibleItemDescriptor(TYPE_HEADER, String.class,  HeaderViewHolder.class, R.layout.flexible_item_header));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_BUTTON, RunButton.class,  RunButtonViewHolder.class, R.layout.flexible_item_run_button));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_CARD, CardData.class,  CardViewHolder.class, R.layout.flexible_item_card));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_LINK, LinkItem.class,  LinkViewHolder.class, R.layout.flexible_item_link));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE, TraceItem.class,  TraceViewHolder.class, R.layout.flexible_item_trace));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_TRACE_GROUP, TraceGroupItem.class,  TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_ANALYSIS, AnalysisItem.class,  AnalysisViewHolder.class, R.layout.flexible_item_analysis));
-        descriptors.add(new FlexibleItemDescriptor(TYPE_CONFIG, ConfigItem.class,  ConfigViewHolder.class, R.layout.flexible_item_config));
+        descriptors.add(new FlexibleItemDescriptor(String.class, HeaderViewHolder.class, R.layout.flexible_item_header));
+        descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
+        descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
+        descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
+        descriptors.add(new FlexibleItemDescriptor(TraceItem.class, TraceViewHolder.class, R.layout.flexible_item_trace));
+        descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
+        descriptors.add(new FlexibleItemDescriptor(AnalysisItem.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
+        descriptors.add(new FlexibleItemDescriptor(ConfigItem.class, ConfigViewHolder.class, R.layout.flexible_item_config));
+        descriptors.add(new FlexibleItemDescriptor(InfoGroupData.class, InfoGroupViewHolder.class, R.layout.flexible_item_info_group));
     }
 
     @Override
@@ -137,13 +128,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     }
 
     public void replaceItems(final List<Object> data){
-        ThreadUtils.runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                items.clear();
-                items.addAll(data);
-                notifyDataSetChanged();
-            }
-        });
+        items.clear();
+        items.addAll(data);
+        notifyDataSetChanged();
     }
 }

@@ -9,16 +9,22 @@ import android.text.TextUtils;
 import android.support.annotation.NonNull;
 //#endif
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.storage.files.GitAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class BuildInfoReporter extends AbstractInfoReporter {
@@ -51,8 +57,10 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return new InfoReportData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getBuilderInfo())
+                .add(getBuildHostInfo())
                 .add(getBuildInfo())
                 .add(getRepositoryInfo())
+                .add(getLocalRepositoryInfo())
                 .add(getLocalChangesInfo())
                 .build();
     }
@@ -61,8 +69,26 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
     public InfoGroupData getBuilderInfo() {
         InfoGroupData group = new InfoGroupData.Builder("Builder")
+                .setIcon(R.string.gmd_person)
+                .setOverview(buildInfo.getString(BuildInfo.USER_NAME))
                 .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
                 .add("User email", buildInfo.getString(BuildInfo.USER_EMAIL))
+                .addButton(new RunButton("Send Email",
+                    R.drawable.ic_message_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            ExternalIntentUtils.composeEmail(buildInfo.getString(BuildInfo.USER_EMAIL), "Email from IADT");
+                        }
+                    }))
+                .build();
+        return group;
+    }
+
+    public InfoGroupData getBuildHostInfo() {
+        InfoGroupData group = new InfoGroupData.Builder("Host")
+                .setIcon(R.string.gmd_desktop_windows)
+                .setOverview(buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host OS", buildInfo.getString(BuildInfo.HOST_OS))
                 .add("Host version", buildInfo.getString(BuildInfo.HOST_VERSION))
@@ -74,6 +100,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
     public InfoGroupData getBuildInfo() {
         InfoGroupData group = new InfoGroupData.Builder("Build")
+                .setIcon(R.string.gmd_history)
+                .setOverview(getFriendlyBuildType() + ", " + getFriendlyElapsedTime())
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
                 .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
@@ -85,19 +113,30 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     }
 
     public InfoGroupData getRepositoryInfo() {
-        InfoGroupData.Builder group = new InfoGroupData.Builder("Remote repository");
+        InfoGroupData.Builder group = new InfoGroupData.Builder("Remote repo")
+                .setIcon(R.string.gmd_assignment_turned_in);
 
         if (!isGitEnabled()){
+            group.setOverview("N/A");
             group.add("No git repository found at build folder");
             return group.build();
         }
 
+        group.setOverview(gitConfig.getString(GitInfo.LOCAL_BRANCH) + "-" + gitConfig.getString(GitInfo.TAG));
         group.add("Git url", gitConfig.getString(GitInfo.REMOTE_URL))
                 .add("Branch", gitConfig.getString(GitInfo.LOCAL_BRANCH))
                 .add("Tag", gitConfig.getString(GitInfo.TAG))
                 .add("Tag Status", gitConfig.getString(GitInfo.INFO))
                 .add(" - Last commit:")
                 .add(gitConfig.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
+        group.addButton(new RunButton("Remote",
+                R.drawable.ic_public_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ExternalIntentUtils.viewUrl(gitConfig.getString(GitInfo.REMOTE_URL));
+                    }
+                }));
         return group.build();
     }
 
@@ -156,26 +195,60 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return result;
     }
 
-    public InfoGroupData getLocalChangesInfo() {
-        InfoGroupData.Builder group = new InfoGroupData.Builder("Local repository");
-
+    public InfoGroupData getLocalRepositoryInfo() {
         String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
+
+        InfoGroupData.Builder group = new InfoGroupData.Builder("Local repo")
+                .setIcon(R.string.gmd_assignment_ind);
+
+        if (!hasLocalCommits){
+            group.setOverview("CLEAN");
+            group.add("No local commits");
+            return group.build();
+        }
+
+        group.setOverview(local_commits_count + " commits ahead");
+        group.add(local_commits);
+        group.addButton(new RunButton("View Commits",
+                R.drawable.ic_add_circle_outline_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_COMMITS, -1));
+                    }
+                }));
+
+        return group.build();
+    }
+
+    public InfoGroupData getLocalChangesInfo() {
         boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
         String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
-        if (!hasLocalCommits && !hasLocalChanges){
-            group.add("No local commits or changes");
+        InfoGroupData.Builder group = new InfoGroupData.Builder("Local changes")
+                .setIcon(R.string.gmd_assignment_late);
+
+        if (!hasLocalChanges){
+            group.setOverview("CLEAN");
+            group.add("No local changes");
             return group.build();
         }
 
-        group.add(local_commits_count + " commits ahead"
-                + "\n" + local_commits)
-                .add()
-                .add(file_changes_count + " files changed"
-                        + "\n" + file_status);
+        group.setOverview(file_changes_count + " files");
+        group.add(file_status);
+        group.addButton(new RunButton("View Changes",
+                R.drawable.ic_remove_circle_outline_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_CHANGES, -1));
+                    }
+                }));
 
         return group.build();
     }

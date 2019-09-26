@@ -17,6 +17,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -53,16 +54,25 @@ public class AppInfoReporter extends AbstractInfoReporter {
                 .setOverview(getOverview())
                 .add(getApkInfo())
                 .add(getInstallInfo())
-                .add()
-                .add(AppInfoUtils.getSigningInfo(context))
-                .add(getPackageInfoInfo().toString())
+                .add(getSigningInfo())
+                .add(getManifestInfo())
         .build();
+    }
+
+    private InfoGroupData getSigningInfo() {
+        InfoGroupData group = new InfoGroupData.Builder("Sign Certificate")
+                .setIcon(R.string.gmd_security)
+                .add(AppInfoUtils.getSigningInfo(context))
+                .build();
+        return group;
     }
 
 
     public InfoGroupData getApkInfo() {
         PackageInfo pInfo = getPackageInfo();
         InfoGroupData group = new InfoGroupData.Builder("APK")
+                .setIcon(R.string.gmd_apps)
+                .setOverview(easyAppMod.getAppName() + " " + easyAppMod.getAppVersion())
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())
                 .add("Internal Package", getInternalPackageName())
@@ -80,6 +90,8 @@ public class AppInfoReporter extends AbstractInfoReporter {
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         InfoGroupData group = new InfoGroupData.Builder("Installation")
+                .setIcon(R.string.gmd_cloud_download)
+                .setOverview(Humanizer.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Store", easyAppMod.getStore())
                 .add("Last Update", Humanizer.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Last Update Time", formatter.format(new Date(pInfo.lastUpdateTime)))
@@ -89,7 +101,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getPackageInfoInfo() {
+    public InfoGroupData getManifestInfo() {
         PackageInfo pInfo = getPackageInfo();
         String activities = parsePackageInfoArray(pInfo.activities);
         String services = parsePackageInfoArray(pInfo.services);
@@ -101,7 +113,8 @@ public class AppInfoReporter extends AbstractInfoReporter {
         }
         String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
 
-        InfoGroupData group = new InfoGroupData.Builder("PackageInfo:")
+        InfoGroupData group = new InfoGroupData.Builder("Manifest")
+                .setIcon(R.string.gmd_widgets)
                 .add("Activities", activities)
                 .add("Services", services)
                 .add("Permissions", permissions)

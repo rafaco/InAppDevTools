@@ -149,4 +149,15 @@ public class UiUtils {
     private static Context getContext() {
         return IadtController.get().getContext();
     }
+
+    public View findParentById(View view, int targetId) {
+        if (view.getId() == targetId) {
+            return (View)view;
+        }
+        View parent = (View) view.getParent();
+        if (parent == null) {
+            return null;
+        }
+        return findParentById(parent, targetId);
+    }
 }

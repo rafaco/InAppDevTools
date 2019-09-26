@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
@@ -77,6 +78,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
 
     protected InfoGroupData getAndroidGroup(EasyDeviceMod deviceHelper) {
         return new InfoGroupData.Builder("Android OS")
+                .setIcon(R.string.gmd_android)
+                .setOverview(getAndroidVersionFull())
                 .add("Version", getAndroidVersionFull())
                 .add("SDK version",  getVersionCodeName()+ " (" + Build.VERSION.SDK_INT + ")")
                 .add("isRooted", deviceHelper.isDeviceRooted())
@@ -108,6 +111,7 @@ public class OSInfoReporter extends AbstractInfoReporter {
 
     protected InfoGroupData getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
         return new InfoGroupData.Builder("Status")
+                    .setIcon(R.string.gmd_settings)
                     .add("Local time", configHelper.getFormattedTime()
                             + " - " + configHelper.getFormattedDate())
                     .add("Up time", configHelper.getFormattedUpTime())
@@ -118,6 +122,7 @@ public class OSInfoReporter extends AbstractInfoReporter {
 
     protected InfoGroupData getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
         return new InfoGroupData.Builder("Memory & Storage")
+                    .setIcon(R.string.gmd_disc_full)
                     .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
                     .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
                             + "/" + Humanizer.parseByte(memoryHelper.getTotalInternalMemorySize()))
@@ -129,6 +134,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
 
     protected InfoGroupData getInstalledApps() {
         return new InfoGroupData.Builder("Installed Apps")
+                .setIcon(R.string.gmd_apps)
+                .setOverview(InstalledAppsUtils.getCount() + "")
                 .add(InstalledAppsUtils.getString())
                 .build();
     }

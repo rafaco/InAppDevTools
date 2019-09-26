@@ -96,7 +96,8 @@
     <style name="horizontal_separator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/rally_blue</item>
+        <item name="android:background">@color/rally_white</item>
+        <item name="android:alpha">0.1</item>
     </style>
 
 

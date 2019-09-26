@@ -42,7 +42,7 @@ public class RunningThreadsUtils {
                 result  .append(formatThreadId(info))
                         .append(" ")
                         .append(formatThreadDescription(info))
-                        //.append(info.getName())
+                        //.append(info.getTitle())
                         .append(" ")
                         .append(info.getState())
                         .append(Humanizer.newLine());
@@ -68,7 +68,7 @@ public class RunningThreadsUtils {
         int groupCount = group.enumerate(new ThreadGroup[group.activeGroupCount()], false);
         int threadCount = group.enumerate(new Thread[group.activeCount()], false);
         return String.format( "Group %s has %s groups and %s active threads",
-                    group.getName(), groupCount, threadCount);
+                    Humanizer.toCapitalCase(group.getName()), groupCount, threadCount);
     }
 
     private static String formatThreadId(Thread info){

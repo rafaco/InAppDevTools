@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
@@ -38,26 +39,68 @@ public class LiveInfoReporter extends AbstractInfoReporter {
         return new InfoReportData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getActivityInfo())
-                .add()
-                .add(getRunningInfo())
+                .add(getTaskInfo())
+                .add(getServicesInfo())
+                .add(getProvidersInfo())
+                .add(getProcessesInfo())
+                .add(getThreadsInfo())
+                .add(getMemoryInfo())
                 .build();
     }
 
     public InfoGroupData getActivityInfo() {
-        return new InfoGroupData.Builder("Status")
+        return new InfoGroupData.Builder("View")
+                .setIcon(R.string.gmd_view_carousel)
+                .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
                 .build();
     }
 
-    public InfoGroupData getRunningInfo() {
-        return new InfoGroupData.Builder("")
-                .add("Tasks", RunningTasksUtils.getString())
-                .add("Services", RunningServicesUtils.getString())
-                .add("Providers", RunningProvidersUtils.getString())
-                .add("Memory", getRunningMemory())
-                .add("Processes", RunningProcessesUtils.getString())
-                .add("Threads", RunningThreadsUtils.getString())
+    public InfoGroupData getTaskInfo() {
+        return new InfoGroupData.Builder("Tasks")
+                .setIcon(R.string.gmd_layers)
+                .setOverview(RunningTasksUtils.getCount() + "")
+                .add(RunningTasksUtils.getString())
+                .build();
+    }
+
+    public InfoGroupData getServicesInfo() {
+        return new InfoGroupData.Builder("Services")
+                .setIcon(R.string.gmd_store)
+                .setOverview(RunningServicesUtils.getCount() + "")
+                .add(RunningServicesUtils.getString())
+                .build();
+    }
+
+    public InfoGroupData getProvidersInfo() {
+        return new InfoGroupData.Builder("Provider")
+                .setIcon(R.string.gmd_local_convenience_store)
+                .setOverview(RunningProvidersUtils.getCount() + "")
+                .add(RunningProvidersUtils.getString())
+                .build();
+    }
+
+    public InfoGroupData getProcessesInfo() {
+        return new InfoGroupData.Builder("Processes")
+                .setIcon(R.string.gmd_developer_board)
+                .setOverview(RunningProcessesUtils.getCount() + "")
+                .add(RunningProcessesUtils.getString())
+                .build();
+    }
+
+    public InfoGroupData getThreadsInfo() {
+        return new InfoGroupData.Builder("Threads")
+                .setIcon(R.string.gmd_line_style)
+                .setOverview(RunningThreadsUtils.getCount() + "")
+                .add(RunningThreadsUtils.getString())
+                .build();
+    }
+
+    public InfoGroupData getMemoryInfo() {
+        return new InfoGroupData.Builder("Memory")
+                .setIcon(R.string.gmd_memory)
+                .add(getRunningMemory())
                 .build();
     }
 

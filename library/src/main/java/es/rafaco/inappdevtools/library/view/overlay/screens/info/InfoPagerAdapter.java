@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
@@ -15,10 +18,15 @@ import es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.ObjectAtPo
 public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
     private final Context context;
+    private List<List<Boolean>> expandedStates;
 
     public InfoPagerAdapter(Context context) {
         super();
         this.context = context;
+        this.expandedStates = new ArrayList<>();
+        for (InfoReport report: InfoReport.values()) {
+            expandedStates.add(new ArrayList<Boolean>());
+        }
     }
 
     @Override
@@ -30,9 +38,11 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
         InfoReport report = InfoReport.values()[position];
         InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
-        InfoPageViewHolder viewHolder = new InfoPageViewHolder(reportData);
+        updateExpandedState(reportData, position);
+
+        InfoPageViewHolder viewHolder = new InfoPageViewHolder();
         viewHolder.onCreatedView(layout);
-        viewHolder.populateUI();
+        viewHolder.update(reportData);
         layout.setTag(viewHolder);
 
         return layout;
@@ -59,7 +69,7 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
         return InfoReport.values()[position].getTitle();
     }
 
-    public void updateView(final View pageView, int position){
+    public void updateView(final View pageView, final int position){
         final InfoReport report = InfoReport.values()[position];
 
         new AsyncTask<InfoReport, InfoReport, InfoReportData>() {
@@ -70,10 +80,32 @@ public class InfoPagerAdapter extends ObjectAtPositionPagerAdapter {
 
             @Override
             protected void onPostExecute(InfoReportData result) {
-                InfoPageViewHolder viewHolder = (InfoPageViewHolder) pageView.getTag();
-                viewHolder.update(result);
-                pageView.requestLayout();
+                if (pageView != null){
+                    InfoPageViewHolder viewHolder = (InfoPageViewHolder) pageView.getTag();
+                    updateExpandedState(result, position);
+                    viewHolder.update(result);
+                    //pageView.requestLayout();
+                }
             }
         }.execute();
+    }
+
+    private void updateExpandedState(InfoReportData reportData, int position) {
+        if (expandedStates!=null && position < expandedStates.size()){
+            List<Boolean> reportState = expandedStates.get(position);
+            if (reportState!=null && !reportState.isEmpty()){
+                for (int i = 0; i < reportState.size(); i++){
+                    reportData.getEntries().get(i).setExpanded(true);//TODO: reportState.get(i));
+                }
+            }
+        }
+    }
+
+    private void setExpandedState(int reportPosition, int groupPosition, boolean value) {
+        if (expandedStates!=null && reportPosition < expandedStates.size()) {
+            List<Boolean> reportState = expandedStates.get(reportPosition);
+        }
+        else{
+        }
     }
 }

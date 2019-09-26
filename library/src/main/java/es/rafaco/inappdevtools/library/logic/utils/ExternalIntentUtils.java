@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.utils;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -37,5 +38,18 @@ public class ExternalIntentUtils {
 
     public static void shareDemo() {
         //"TODO after publication on Play Store"
+    }
+
+    public static void composeEmail(String address, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        String[] addresses = new String[]{address};
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Context context = IadtController.get().getContext();
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
     }
 }

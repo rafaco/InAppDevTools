@@ -5,21 +5,41 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InfoGroupData {
 
-    private String name;
+    private String title;
+    private int icon;
+    private String overview;
     private List<InfoEntryData> entries;
+    private List<RunButton> buttons;
+    private Boolean isExpanded;
 
     public InfoGroupData(Builder builder) {
-        this.name = builder.name;
+        this.title = builder.name;
+        this.icon = builder.icon;
+        this.overview = builder.overview;
+        this.buttons = builder.buttons;
         this.entries = builder.entries;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public List<RunButton> getButtons() {
+        return buttons;
     }
 
     public List<InfoEntryData> getEntries() {
@@ -38,28 +58,42 @@ public class InfoGroupData {
         entries.clear();
     }
 
-    @Override
-    public String toString(){
+    public Boolean getExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(Boolean expanded) {
+        isExpanded = expanded;
+    }
+
+    public String entriesToString(){
         String result = "";
-        String formatTitle = "%s:";
-
-        if (!TextUtils.isEmpty(getName())) {
-            result += Humanizer.newLine();
-            result += String.format(formatTitle, getName());
-            result += Humanizer.newLine();
-        }
-
         for (InfoEntryData entry : entries){
             result += entry.toString();
         }
         return result;
     }
+    @Override
+    public String toString(){
+        String result = "";
+        String formatTitle = "%s:";
 
+        if (!TextUtils.isEmpty(getTitle())) {
+            result += Humanizer.newLine();
+            result += String.format(formatTitle, getTitle());
+            result += Humanizer.newLine();
+        }
+        result += entriesToString();
+        return result;
+    }
 
 
 
     public static class Builder {
         private String name;
+        private int icon;
+        private String overview;
+        private List<RunButton> buttons;
         private List<InfoEntryData> entries;
 
         public Builder() {
@@ -69,6 +103,22 @@ public class InfoGroupData {
         public Builder(String name) {
             this.name = name;
             this.entries = new ArrayList<>();
+            this.buttons = new ArrayList<>();
+        }
+
+        public Builder setIcon(int icon) {
+            this.icon = icon;
+            return this;
+        }
+
+        public Builder setOverview(String text) {
+            this.overview = text;
+            return this;
+        }
+
+        public Builder addButton(RunButton button) {
+            this.buttons.add(button);
+            return this;
         }
 
         public Builder add(InfoEntryData entry) {

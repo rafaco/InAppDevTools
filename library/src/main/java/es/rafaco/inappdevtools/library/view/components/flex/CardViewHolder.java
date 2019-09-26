@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
@@ -51,13 +52,7 @@ public class CardViewHolder extends FlexibleViewHolder {
             contentView.setText(data.getContent());
 
             if (data.getIcon()>0){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    iconView.setImageDrawable(itemView.getContext().getDrawable(data.getIcon()));
-                } else {
-                    iconView.setImageDrawable(itemView.getContext().getResources().getDrawable(data.getIcon()));
-                }
-                int contextualizedColor = ContextCompat.getColor(iconView.getContext(), R.color.rally_white);
-                iconView.setColorFilter(contextualizedColor);
+                IconUtils.applyToImageView(iconView, data.getIcon(), R.color.rally_white);
                 iconView.setVisibility(View.VISIBLE);
                 iconView.setBackgroundColor(Color.TRANSPARENT);
             }else{
