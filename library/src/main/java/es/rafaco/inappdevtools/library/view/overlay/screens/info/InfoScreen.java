@@ -2,35 +2,47 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 //#ifdef ANDROIDX
-//@import androidx.annotation.NonNull;
-//@import androidx.viewpager.widget.ViewPager;
-//@import com.google.android.material.tabs.TabLayout;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class InfoScreen extends Screen {
 
-    InfoPagerAdapter pagerAdapter;
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
-    private int currentPosition;
     private Timer updateTimer;
+    private boolean[] expandedState;
+
+    private RelativeLayout overviewView;
+    private TextView overviewTitleView;
+    private TextView overviewIconView;
+    private TextView overviewContentView;
+
+    private RecyclerView flexibleContents;
+    private FlexibleAdapter adapter;
+    private int infoReportIndex;
 
     public InfoScreen(ScreenManager manager) {
         super(manager);
@@ -50,34 +62,23 @@ public class InfoScreen extends Screen {
     }
 
     @Override
-    public int getHeadLayoutId() { return R.layout.tool_info_head; }
-
-    @Override
     protected void onStart(ViewGroup view) {
-        viewPager = getView().findViewById(R.id.viewpager);
-        tabLayout = getView().findViewById(R.id.sliding_tabs);
-        populateToolbar();
-    }
+        overviewView = view.findViewById(R.id.overview);
+        overviewContentView = view.findViewById(R.id.overview_content);
+        overviewIconView = view.findViewById(R.id.overview_icon);
+        overviewTitleView = view.findViewById(R.id.overview_title);
+        flexibleContents = view.findViewById(R.id.flexible_contents);
 
-    private void populateToolbar() {
-        pagerAdapter = new InfoPagerAdapter(getContext());
-        viewPager.setAdapter(pagerAdapter);
+        adapter = new FlexibleAdapter(1, new ArrayList<>());
+        adapter.setScreen(this);
+        flexibleContents.setAdapter(adapter);
 
-        currentPosition = getInitialPosition();
-        viewPager.setCurrentItem(currentPosition);
-        viewPager.addOnPageChangeListener(onPageChangeListener());
+        infoReportIndex = getInitialPosition();
 
-        startUpdateTimer();
+        updateView(getData(infoReportIndex));
 
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
-    }
-
-    private void setupTabIcons() {
-        InfoReport[] infoReports = InfoReport.values();
-        for (int i = 0; i< infoReports.length ; i++){
-            tabLayout.getTabAt(i).setIcon(infoReports[i].getIcon());
+        if (infoReportIndex == 0){
+            startUpdateTimer();
         }
     }
 
@@ -90,22 +91,59 @@ public class InfoScreen extends Screen {
         return paramPosition;
     }
 
-    @NonNull
-    private ViewPager.OnPageChangeListener onPageChangeListener() {
-        return new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
-            public void onPageSelected(int position) {
-                currentPosition = position;
-                if (position == 0){
-                    startUpdateTimer();
-                }else{
-                    stopUpdateTimer();
-                }
-            }
-        };
+    private InfoReportData getData(int reportPosition) {
+        InfoReport report = InfoReport.values()[reportPosition];
+        InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
+        if (expandedState == null){
+            initExpandedState(reportData.getGroups().size());
+        }
+        reportData = updateDataWithExpandedState(reportData);
+        return reportData;
     }
+
+    public void updateView(InfoReportData reportData) {
+        updateHeader(reportData);
+        updateContents(reportData);
+    }
+
+    private void updateHeader(InfoReportData data) {
+        getScreenManager().setTitle(data.getTitle() + " Info");
+        overviewTitleView.setText(data.getTitle());
+
+        if (data.getIcon()>0){
+            IconUtils.markAsIconContainer(overviewIconView, IconUtils.MATERIAL);
+            overviewIconView.setText(data.getIcon());
+            overviewIconView.setVisibility(View.VISIBLE);
+        }else{
+            overviewIconView.setVisibility(View.GONE);
+        }
+
+        overviewContentView.setText(data.getOverview());
+    }
+
+    private void updateContents(InfoReportData data) {
+        List<Object> objectList = new ArrayList<Object>(data.getGroups());
+        adapter.replaceItems(objectList);
+    }
+
+    private void initExpandedState(int size) {
+        expandedState = new boolean[size];
+        Arrays.fill(expandedState, false);
+    }
+
+    public boolean toggleExpandedState(int position){
+        boolean newState = !expandedState[position];
+        expandedState[position] = newState;
+        return newState;
+    }
+
+    private InfoReportData updateDataWithExpandedState(InfoReportData reportData) {
+        for (int i = 0; i < reportData.getGroups().size(); i++) {
+            reportData.getGroups().get(i).setExpanded(expandedState[i]);
+        }
+        return reportData;
+    }
+
 
     private void startUpdateTimer() {
         final Handler handler = new Handler(Looper.getMainLooper());
@@ -116,7 +154,7 @@ public class InfoScreen extends Screen {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        updatePage();
+                        updateView(getData(infoReportIndex));
                         startUpdateTimer();
                     }
                 });
@@ -126,12 +164,7 @@ public class InfoScreen extends Screen {
     }
 
     private void stopUpdateTimer() {
-        updateTimer.cancel();
-    }
-
-    private void updatePage() {
-        final View pageView = viewPager.getChildAt(currentPosition);
-        pagerAdapter.updateView(pageView, currentPosition);
+        if (updateTimer!=null) updateTimer.cancel();
     }
 
     @Override
@@ -141,6 +174,6 @@ public class InfoScreen extends Screen {
 
     @Override
     protected void onDestroy() {
-        updateTimer.cancel();
+        stopUpdateTimer();
     }
 }

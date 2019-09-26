@@ -152,9 +152,9 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     }
 
     public String getBuildOverview() {
-        String host = buildInfo.getString(BuildInfo.HOST_NAME);
         String time = getFriendlyElapsedTime();
-        return String.format("%s %s", host, time);
+        String user = buildInfo.getString(BuildInfo.USER_NAME);
+        return String.format("%s by %s", time, user);
     }
 
     public String getFriendlyElapsedTime() {
@@ -167,7 +167,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         String flavor = AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR);
         String buildType = AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE);
         String build = TextUtils.isEmpty(flavor) ? Humanizer.toCapitalCase(buildType)
-                :  Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
+                : Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
         return build;
     }
 

@@ -18,13 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <TextView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="5dp"
-                android:background="@drawable/ic_arrow_right_white_24dp"/>
+                android:textSize="24dp"/>
 
             <ImageView
                 android:id="@+id/nav_icon"
@@ -47,6 +47,7 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     style="@style/TextCondensedBig"/>
 
                 <TextView

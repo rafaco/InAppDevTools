@@ -2,6 +2,12 @@ package es.rafaco.inappdevtools.library.logic.info.data;
 
 import android.text.TextUtils;
 
+//#ifdef ANDROIDX
+//@import androidx.annotation.StringRes;
+//#else
+import android.support.annotation.StringRes;
+//#endif
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +112,7 @@ public class InfoGroupData {
             this.buttons = new ArrayList<>();
         }
 
-        public Builder setIcon(int icon) {
+        public Builder setIcon(@StringRes int icon) {
             this.icon = icon;
             return this;
         }

@@ -1,6 +1,5 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,7 +23,7 @@ public class CardViewHolder extends FlexibleViewHolder {
 
     private final LinearLayout itemContent;
     private final CardView cardView;
-    private final ImageView iconView;
+    private final TextView iconView;
     private final TextView titleView;
     private final TextView contentView;
     private final ImageView navIcon;
@@ -52,9 +51,9 @@ public class CardViewHolder extends FlexibleViewHolder {
             contentView.setText(data.getContent());
 
             if (data.getIcon()>0){
-                IconUtils.applyToImageView(iconView, data.getIcon(), R.color.rally_white);
+                IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
+                iconView.setText(data.getIcon());
                 iconView.setVisibility(View.VISIBLE);
-                iconView.setBackgroundColor(Color.TRANSPARENT);
             }else{
                 iconView.setVisibility(View.GONE);
             }

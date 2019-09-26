@@ -2,6 +2,12 @@ package es.rafaco.inappdevtools.library.logic.info.data;
 
 import android.text.TextUtils;
 
+//#ifdef ANDROIDX
+//@import androidx.annotation.StringRes;
+//#else
+import android.support.annotation.StringRes;
+//#endif
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +19,12 @@ public class InfoReportData {
     private String title;
     private int icon;
     private String overview;
-    private List<InfoGroupData> entries;
+    private List<InfoGroupData> groups;
 
     public InfoReportData(Builder builder) {
         this.title = builder.title;
         this.icon = builder.icon;
-        this.entries = builder.entries;
+        this.groups = builder.entries;
         this.overview = builder.overview;
     }
 
@@ -34,23 +40,23 @@ public class InfoReportData {
         return overview;
     }
 
-    public List<InfoGroupData> getEntries() {
-        return entries;
+    public List<InfoGroupData> getGroups() {
+        return groups;
     }
 
-    public void setEntries(List<InfoGroupData> entries) {
-        this.entries = entries;
+    public void setGroups(List<InfoGroupData> groups) {
+        this.groups = groups;
     }
 
     public void removeGroup(int index) {
-        if (index > 0 && index < entries.size()){
-            entries.remove(index);
+        if (index > 0 && index < groups.size()){
+            groups.remove(index);
         }
     }
 
     public void removeGroupEntries(int index) {
-        if (index > 0 && index < entries.size()){
-            entries.get(index).removeEntries();
+        if (index > 0 && index < groups.size()){
+            groups.get(index).removeEntries();
         }
     }
 
@@ -68,8 +74,8 @@ public class InfoReportData {
             result += Humanizer.newLine();
         }
 
-        if (entries.size()>0){
-            for (InfoGroupData entry : entries){
+        if (groups.size()>0){
+            for (InfoGroupData entry : groups){
                 result += entry.toString();
             }
         }
@@ -94,7 +100,7 @@ public class InfoReportData {
             this.entries = new ArrayList<>();
         }
 
-        public Builder setIcon(int icon) {
+        public Builder setIcon(@StringRes int icon) {
             this.icon = icon;
             return this;
         }

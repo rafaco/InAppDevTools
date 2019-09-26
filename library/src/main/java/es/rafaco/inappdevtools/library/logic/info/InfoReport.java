@@ -16,12 +16,12 @@ import es.rafaco.inappdevtools.library.logic.info.reporters.ToolsInfoReporter;
 
 public enum InfoReport {
 
-    LIVE("Live", R.drawable.ic_live_tv_white_24dp, LiveInfoReporter.class),
-    APP("App", R.drawable.ic_application_white_24dp, AppInfoReporter.class),
-    BUILD("Build", R.drawable.ic_build_white_24dp, BuildInfoReporter.class),
-    TOOLS("Iadt", R.drawable.ic_extension_white_24dp, ToolsInfoReporter.class),
-    OS("OS", R.drawable.ic_android_white_24dp, OSInfoReporter.class),
-    DEVICE("Device", R.drawable.ic_phone_android_white_24dp, DeviceInfoReporter.class);
+    LIVE("Live", R.string.gmd_live_tv, LiveInfoReporter.class),
+    APP("App", R.string.gmd_developer_board, AppInfoReporter.class),
+    BUILD("Build", R.string.gmd_build, BuildInfoReporter.class),
+    TOOLS("Iadt", R.string.gmd_extension, ToolsInfoReporter.class),
+    OS("OS", R.string.gmd_android, OSInfoReporter.class),
+    DEVICE("Device", R.string.gmd_phone_android, DeviceInfoReporter.class);
 
     private String title;
     private final int icon;

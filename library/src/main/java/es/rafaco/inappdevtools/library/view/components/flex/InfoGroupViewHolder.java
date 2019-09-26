@@ -12,6 +12,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
@@ -35,7 +36,6 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
     private final LinearLayout collapsedContentView;
     private final AppCompatButton button;
     private final View buttonSeparator;
-    private boolean isExpanded = false;
 
     public InfoGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
@@ -51,7 +51,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
     }
 
     @Override
-    public void bindTo(Object abstractData, int position) {
+    public void bindTo(Object abstractData, final int position) {
         final InfoGroupData data = (InfoGroupData) abstractData;
         if (data!=null){
 
@@ -69,7 +69,6 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
                 IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
                 iconView.setText(icon);
                 iconView.setVisibility(View.VISIBLE);
-                //iconView.setBackgroundColor(Color.TRANSPARENT);
             }else{
                 iconView.setVisibility(View.GONE);
             }
@@ -79,14 +78,11 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
 
                 navIcon.setBackground(null);
 
-                if (data.getExpanded() != null){
-                    isExpanded = data.getExpanded();
-                }
-                applyExpandedState(isExpanded);
+                applyExpandedState(data.getExpanded());
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        toggleExpandedState();
+                        toggleExpandedState(position);
                     }
                 });
                 
@@ -133,8 +129,8 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
         }
     }
 
-    private void toggleExpandedState() {
-        isExpanded = !isExpanded;
+    private void toggleExpandedState(int position) {
+        boolean isExpanded = ((InfoScreen)adapter.getScreen()).toggleExpandedState(position);
         applyExpandedState(isExpanded);
     }
 

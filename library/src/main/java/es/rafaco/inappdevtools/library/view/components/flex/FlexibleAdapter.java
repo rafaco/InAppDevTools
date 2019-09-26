@@ -25,6 +25,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
@@ -46,6 +47,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     private List<FlexibleItemDescriptor> descriptors;
     private final int spanCount;
     private List<Object> items;
+    private Screen screen;
 
     public FlexibleAdapter(int spanCount, List<Object> data) {
         this.spanCount = spanCount;
@@ -131,5 +133,13 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         items.clear();
         items.addAll(data);
         notifyDataSetChanged();
+    }
+
+    public void setScreen(Screen screen) {
+        this.screen = screen;
+    }
+
+    public Screen getScreen() {
+        return screen;
     }
 }
