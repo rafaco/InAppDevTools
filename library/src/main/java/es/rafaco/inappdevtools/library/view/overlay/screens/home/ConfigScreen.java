@@ -14,6 +14,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
@@ -52,8 +53,12 @@ public class ConfigScreen extends Screen {
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
-        data.add("You can change on runtime our configuration parameters.\n" +
-                "Press back to apply your changes.");
+        data.add("You can change your runtime configuration for our library."
+                + Humanizer.newLine()
+                + "Press back to apply your changes"
+                + Humanizer.newLine()
+                + "(Work in progress: not all changes should be allowed)"
+                + Humanizer.fullStop());
 
         List<BuildConfig> allConfigs = BuildConfig.getAll();
         for (BuildConfig item : allConfigs) {
