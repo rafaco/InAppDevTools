@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -13,8 +12,10 @@ import es.rafaco.inappdevtools.library.R;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatTextView;
+//@import androidx.core.content.ContextCompat;
 //#else
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v4.content.ContextCompat;
 //#endif
 
 public class ConfigViewHolder extends FlexibleViewHolder {
