@@ -5,17 +5,18 @@
 </p>
 
 
-**InAppDevTools is a library that make Android developers live easier and more productive. It allows to inspect, debug and report from within your own app, using the device screen!**
+**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows your app to report, inspect and debug itself from the test device's own screen. No cable needed, our UI shows over your running app.**
 
+- Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
+- View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
+- Inspect your standard logs, view layout, source code (original and generated) and storages (db, SharedPrefs and Files).
+- Modify your app behaviour on runtime editing values at your view layout, db or SharedPrefs.
+- Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
+- Send flexible reports by email or other apps. After a crash or at any time.
+- Easy installation and configuration. No Application class needed, all from Gradle.
+- Customize our tools to your needs, easily run your methods and use our dev helpers.
 
 **Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
-
-- Inspectors: sources, logs, view layout, edit your storage (db, SharedPrefs and Files) and info panels
-- Auto generate a FriendlyLog with basic reproduction steps as well as advanced entries (lifecycle events, network requests, errors, device events,...)
-- See a crash detail immediately and navigate to the causing source lines.
-- Send flexible reports by email or other apps
-- Customize your own tools, easily run your task and use our dev helpers.
-- Easy to install and configurable
 
 <p>
 <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg" width="200">
