@@ -47,16 +47,16 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screen;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
 public class ReportDialogActivity extends AppCompatActivity {
 
@@ -73,18 +73,18 @@ public class ReportDialogActivity extends AppCompatActivity {
             public void run() {
                 final List<Crash> crashes = IadtController.get().getDatabase().crashDao().getAll();
                 final List<Anr> anrs = IadtController.get().getDatabase().anrDao().getAll();
-                final List<Screen> screens = IadtController.get().getDatabase().screenDao().getAll();
+                final List<Screenshot> screenshots = IadtController.get().getDatabase().screenshotDao().getAll();
                 ThreadUtils.runOnMain(new Runnable() {
                     @Override
                     public void run() {
-                        buildDialog(crashes, anrs, screens);
+                        buildDialog(crashes, anrs, screenshots);
                     }
                 });
             }
         });
     }
 
-    private void buildDialog(List<Crash> crashes, List<Anr> anrs, List<Screen> screens) {
+    private void buildDialog(List<Crash> crashes, List<Anr> anrs, List<Screenshot> screenshots) {
 
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
@@ -96,7 +96,7 @@ public class ReportDialogActivity extends AppCompatActivity {
                 .setCancelable(false);
 
         initAdapter(dialogView);
-        loadData(adapter, crashes, anrs, screens);
+        loadData(adapter, crashes, anrs, screenshots);
 
 
         AppCompatButton crashCancelButton = dialogView.findViewById(R.id.dialog_cancel_button);
@@ -133,7 +133,7 @@ public class ReportDialogActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void loadData(DecoratedToolInfoAdapter adapter, List<Crash> crashes, List<Anr> anrs, List<Screen> screens) {
+    private void loadData(DecoratedToolInfoAdapter adapter, List<Crash> crashes, List<Anr> anrs, List<Screenshot> screenshots) {
 
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
 
@@ -153,10 +153,10 @@ public class ReportDialogActivity extends AppCompatActivity {
                 R.color.rally_orange,
                 step));
 
-        step = new NavigationStep(ScreensScreen.class, null);
+        step = new NavigationStep(ScreenshotsScreen.class, null);
         array.add(new DecoratedToolInfo(
                 "Screenshots",
-                screens.size() + " screens",
+                screenshots.size() + " screenshots",
                 5,
                 R.color.rally_purple,
                 step));
@@ -184,7 +184,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
         Uri screenFolderUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = FileProviderUtils.getAuthority(Iadt.getAppContext());
+            String authority = FileProviderUtils.getAuthority(IadtController.get().getContext());
             screenFolderUri = FileProvider.getUriForFile(getApplicationContext(), authority, screensFolder);
         } else {
             screenFolderUri = Uri.fromFile(screensFolder);

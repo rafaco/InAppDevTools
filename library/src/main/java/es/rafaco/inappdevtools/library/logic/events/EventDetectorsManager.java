@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.InitialEventDetector;
@@ -72,14 +73,16 @@ public class EventDetectorsManager {
 
     private void startAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(Iadt.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "EventDetector started " + eventDetector.getClass().getSimpleName());
             eventDetector.start();
         }
     }
 
     private void stopAll() {
         for (EventDetector eventDetector : eventDetectors) {
-            Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
             eventDetector.stop();
         }
     }
@@ -105,9 +108,10 @@ public class EventDetectorsManager {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
             Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
-            Log.d(Iadt.TAG, "Exception handler added");
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Exception handler added");
         }else{
-            Log.d(Iadt.TAG, "Exception handler already attach on thread");
+            Log.w(Iadt.TAG, "Exception handler already attach on thread");
         }
     }
 }

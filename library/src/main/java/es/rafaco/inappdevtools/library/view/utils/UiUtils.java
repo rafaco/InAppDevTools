@@ -28,9 +28,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-
 
 public class UiUtils {
 
@@ -42,13 +41,11 @@ public class UiUtils {
     }
 
     public static Drawable getAppIconDrawable() {
-        Context context = Iadt.getAppContext();
-        return context.getPackageManager().getApplicationIcon(context.getApplicationInfo());
+        return getContext().getPackageManager().getApplicationIcon(getContext().getApplicationInfo());
     }
 
     public static int getAppIconResourceId(){
-        Context context = Iadt.getAppContext();
-        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        ApplicationInfo applicationInfo = getContext().getApplicationInfo();
         return applicationInfo.icon;
     }
 
@@ -58,14 +55,12 @@ public class UiUtils {
     }
 
     private void showKeyboard(View target){
-        Context context = Iadt.getAppContext();
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(target.getContext().INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(target.getContext().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     private void hideKeyboard(View target){
-        Context context = Iadt.getAppContext();
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(target.getContext().INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(target.getContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(target.getWindowToken(),0);
     }
 
@@ -87,6 +82,10 @@ public class UiUtils {
             sizes.set(w, h);
         }
         return sizes;
+    }
+
+    public static int getStatusBarHeight(Context context) {
+        return (int) Math.ceil(25 * context.getApplicationContext().getResources().getDisplayMetrics().density);
     }
 
     public static float getPixelsFromDp(Context context, float value) {
@@ -145,5 +144,20 @@ public class UiUtils {
         }
 
         textView.setText(spannableString);
+    }
+
+    private static Context getContext() {
+        return IadtController.get().getContext();
+    }
+
+    public View findParentById(View view, int targetId) {
+        if (view.getId() == targetId) {
+            return (View)view;
+        }
+        View parent = (View) view.getParent();
+        if (parent == null) {
+            return null;
+        }
+        return findParentById(parent, targetId);
     }
 }

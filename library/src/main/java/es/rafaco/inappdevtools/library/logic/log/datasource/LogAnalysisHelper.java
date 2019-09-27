@@ -10,12 +10,12 @@ import android.arch.persistence.db.SimpleSQLiteQuery;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
 
 public class LogAnalysisHelper {
 
     public LogAnalysisHelper() {
-
     }
 
     public List<AnalysisItem> getSessionResult(){
@@ -42,7 +42,7 @@ public class LogAnalysisHelper {
         return analysisItems;
     }
 
-    public List<AnalysisItem> getCurrentFilterOverview(LogFilter config) {
+    public List<AnalysisItem> getCurrentFilterOverview(LogBackFilter config) {
         LogQueryHelper helper = new LogQueryHelper(config);
         SimpleSQLiteQuery currentFilterSize = helper.getCurrentFilterSize();
         List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);

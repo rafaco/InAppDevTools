@@ -49,10 +49,10 @@ public class DevToolsFiles {
     }
 
     public static File prepareScreen(long id, boolean fromCrash) {
-        String subfolder = fromCrash ? "crash" : "screen";
+        String subfolder = fromCrash ? "crash" : "screenshots";
         String filename = fromCrash ?
                 "crash_" + id + "_screen" :
-                "screen" + id;
+                "screenshots" + id;
 
         return FileCreator.prepare(
                 subfolder,

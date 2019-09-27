@@ -66,8 +66,9 @@ public class FriendlyLog {
 
     private static void logAtLogcat(Friendly log) {
 
-        //TODO: use a configuration
-        if (false){ //Iadt.isDebug()){
+        //TODO: use a configuration flag
+        // Or print always and filter at log screen
+        if (!Iadt.isDebug()){
             return;
         }
 
@@ -284,14 +285,17 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("Exception")){
                 return R.drawable.ic_bug_report_white_24dp;
             }
+            else if (log.getSubcategory().equals("Config")){
+                return R.drawable.ic_settings_white_24dp;
+            }
             else if (log.getSubcategory().equals("Delete")){
                 return R.drawable.ic_delete_forever_white_24dp;
             }
             return R.drawable.ic_developer_mode_white_24dp;
         }
-//        else if (log.getCategory().equals("Logcat")){
-//            return R.drawable.ic_android_white_24dp;
-//        }
+        /*else if (log.getCategory().equals("Logcat")){
+            return R.drawable.ic_android_white_24dp;
+        }*/
         return -1;
     }
 

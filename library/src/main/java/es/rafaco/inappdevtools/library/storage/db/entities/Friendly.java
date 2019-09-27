@@ -124,7 +124,6 @@ public class Friendly {
     public boolean equalContent(Object o) {
         if (this == o) return true;
         if (!(o instanceof Friendly)) return false;
-
         Friendly friendly = (Friendly) o;
 
         if (date != friendly.date) return false;
@@ -137,5 +136,22 @@ public class Friendly {
         if (message != null ? !message.equals(friendly.message) : friendly.message != null)
             return false;
         return extra != null ? extra.equals(friendly.extra) : friendly.extra == null;
+    }
+
+    public boolean equalContentForCollapsing(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Friendly)) return false;
+        Friendly previous = (Friendly) o;
+
+        //Date approx. and no message check
+        if (!((previous.date <= date) && (date < previous.date + 5L))) return false;
+
+        if (linkedId != previous.linkedId) return false;
+        if (severity != null ? !severity.equals(previous.severity) : previous.severity != null)
+            return false;
+        if (category != null ? !category.equals(previous.category) : previous.category != null)
+            return false;
+        if (subcategory != null ? !subcategory.equals(previous.subcategory) : previous.subcategory != null) return false;
+        return extra != null ? extra.equals(previous.extra) : previous.extra == null;
     }
 }

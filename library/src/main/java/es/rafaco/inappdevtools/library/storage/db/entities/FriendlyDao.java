@@ -32,6 +32,9 @@ public interface FriendlyDao {
     @Query("SELECT * FROM friendly ORDER BY date ASC")
     DataSource.Factory<Integer, Friendly> getAllProvider();
 
+    @Query("SELECT * FROM friendly WHERE date = :date ORDER BY uid ASC")
+    List<Friendly> filterByDate(long date);
+
     @Query("SELECT * FROM friendly WHERE"
             + " ( message LIKE :filter OR category LIKE :filter OR subcategory LIKE :filter OR extra LIKE :filter )"
             + " AND severity IN (:severities)"

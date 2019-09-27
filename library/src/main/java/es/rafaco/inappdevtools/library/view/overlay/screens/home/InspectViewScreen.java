@@ -13,17 +13,22 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class InspectViewScreen extends OverlayScreen {
+public class InspectViewScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public InspectViewScreen(MainOverlayLayerManager manager) {
+    public InspectViewScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -33,7 +38,7 @@ public class InspectViewScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_flexible; }
+    public int getBodyLayoutId() { return R.layout.flexible_container; }
 
     @Override
     protected void onCreate() {
@@ -47,7 +52,23 @@ public class InspectViewScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new RunnableItem("Select element",
+        String viewOverview = "";
+        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
+        viewOverview += Humanizer.newLine();
+        viewOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
+        viewOverview += Humanizer.newLine();
+        viewOverview += "Top activity is " + RunningTasksUtils.getTopActivity();
+
+        data.add(new CardData("Info",
+                viewOverview,
+                R.string.gmd_view_carousel,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(InfoScreen.class, "0");
+                    }
+                }));
+
+        data.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
                     @Override
@@ -57,7 +78,7 @@ public class InspectViewScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("Browse hierarchy",
+        data.add(new RunButton("Browse hierarchy",
                 R.drawable.ic_layers_white_24dp, new Runnable() {
             @Override
             public void run() {
@@ -66,7 +87,7 @@ public class InspectViewScreen extends OverlayScreen {
             }
         }));
 
-        data.add(new RunnableItem("Take Measure",
+        data.add(new RunButton("Take Measure",
                 R.drawable.ic_format_line_spacing_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,7 +97,7 @@ public class InspectViewScreen extends OverlayScreen {
                     }
                 }));
 
-        data.add(new RunnableItem("Show gridline",
+        data.add(new RunButton("Show gridline",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override

@@ -5,37 +5,29 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/root_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:id="@+id/icon_wrapper"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_layer_icon"
+        android:layout_margin="6dp"
+        android:padding="3dp"
+        style="@style/elevated">
 
-        <RelativeLayout
-            android:id="@+id/collapsed_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/widget_icon_shape"
-            android:layout_margin="8dp"
-            android:padding="3dp"
-            style="@style/elevated">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:ignore="ContentDescription"
+            android:layout_centerInParent="true"/>
 
-            <!--   ImageView of floating overlayLayer  -->
-            <ImageView
-                android:id="@+id/collapsed_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                tools:ignore="ContentDescription"
-                android:layout_centerInParent="true"/>
-
-            <!--<TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:text="Dev\nTools"
-                android:textColor="@color/charcoal"
-                android:textStyle="bold"
-                android:textSize="14dp"
-                android:textAlignment="center"
-                android:layout_centerInParent="true"/>-->
-        </RelativeLayout>
+        <!--<TextView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:text="Dev\nTools"
+            android:textColor="@color/charcoal"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"/>-->
     </RelativeLayout>
 </FrameLayout>

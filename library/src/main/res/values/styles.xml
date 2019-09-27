@@ -3,8 +3,8 @@
 
     <!-- Base application theme. -->
     <style name="LibTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorPrimary">@color/rally_bg_blur</item>
-        <item name="colorPrimaryDark">@color/rally_bg_solid</item>
+        <item name="colorPrimary">@color/iadt_surface_top</item>
+        <item name="colorPrimaryDark">@color/iadt_background</item>
         <item name="colorAccent">@color/rally_blue</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -13,23 +13,31 @@
         <item name="android:typeface">sans</item>
         <item name="android:fontFamily" tools:targetApi="16">sans-serif-condensed</item>
 
-        <item name="android:popupTheme" tools:targetApi="lollipop">@style/popupMenuStyle</item>
+        <item name="android:popupTheme" tools:targetApi="lollipop">@style/LibPopupMenuStyle</item>
+    </style>
 
-    <!--<item name="actionBarSize">20dp</item>
-        <item name="actionBarStyle">@style/MyActionBarStyle</item>
-        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>-->
+    <style name="LibTheme.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="LibTheme.Dialog">
+        <item name="android:textStyle">bold</item>
+        <!--<item name="android:background">@drawable/shape_layer_screen_middle</item>-->
+        <!--<item name="android:background">@color/rally_blue_dark</item>-->
     </style>
 
 
-    <!--<style name="MyActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="actionButtonStyle">@style/MyActionButtonStyle</item>
-        <item name="displayOptions">homeAsUp</item>
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">@color/rally_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:typeface">sans</item>
+        <!--<item name="android:background">@color/rally_bg_blur</item>-->
     </style>
-
-    <style name="MyActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
-        <item name="android:minWidth">20dp</item>
-        <item name="android:minHeight">20dp</item>
-    </style>-->
 
     <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="android:textColorPrimary">@color/rally_white</item>
@@ -41,39 +49,26 @@
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
     </style>
 
-
-    <style name="LibTheme.Dialog">
-        <item name="android:background">@color/rally_bg_solid</item>
+    <style name="LibPopupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/rally_bg_blur</item>
     </style>
 
-    <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:textColor">@color/rally_bg_solid</item>
-    </style>
+    <!-- Custom toolbar
+       <item name="actionBarSize">20dp</item>
+       <item name="actionBarStyle">@style/MyActionBarStyle</item>
+       <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
 
-    <style name="LibTheme.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:background">@color/rally_bg_solid</item>
-    </style>
+   <style name="MyActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+       <item name="actionButtonStyle">@style/MyActionButtonStyle</item>
+       <item name="displayOptions">homeAsUp</item>
+   </style>
 
-    <style name="LibTheme.Translucent" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-    </style>
+   <style name="MyActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
+       <item name="android:minWidth">20dp</item>
+       <item name="android:minHeight">20dp</item>
+   </style>-->
 
 
-    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
-        <item name="android:textColor">@color/rally_white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:headerDividersEnabled">true</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:background">@color/rally_bg_solid</item>
-    </style>
 
     <style name="content_margin">
         <item name="android:layout_marginBottom">5dp</item>
@@ -101,8 +96,10 @@
     <style name="horizontal_separator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/rally_blue</item>
+        <item name="android:background">@color/rally_white</item>
+        <item name="android:alpha">0.1</item>
     </style>
+
 
     <style name="TextCondensedSmall">
         <item name="android:typeface">sans</item>
@@ -119,14 +116,22 @@
         <item name="android:textSize">16dp</item>
     </style>
 
-    <style name="TextMonospace">
+    <style name="TextMonospaceSmall">
         <item name="android:typeface">monospace</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
-        <item name="android:textSize">13dp</item>
+        <item name="android:textSize">8dp</item>
         <item name="android:textColor">@color/rally_white</item>
     </style>
 
-    <!-- Fixing a AndroidX bug -->
+    <style name="TextMonospaceMedium" parent="TextMonospaceSmall">
+        <item name="android:textSize">10dp</item>
+    </style>
+
+    <style name="TextMonospaceBig" parent="TextMonospaceSmall">
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <!-- Fixing an AndroidX bug -->
     <style name="Widget.Support.CoordinatorLayout" parent="android:Widget">
         <item name="statusBarBackground">@null</item>
     </style>

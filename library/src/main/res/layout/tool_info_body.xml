@@ -4,12 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.WrapContentViewPager
-        android:id="@+id/viewpager"
+    <RelativeLayout
+        android:id="@+id/overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/overview_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textAlignment="textEnd"
+            android:layout_gravity="end"
+            android:layout_centerInParent="true"
+            android:textColor="@color/rally_white"
+            style="@style/TextCondensedBig" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/overview_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:layout_margin="5dp"/>
+
+            <TextView
+                android:id="@+id/overview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                style="@style/TextCondensedBig"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <es.rafaco.compat.RecyclerView
+        android:id="@+id/flexible_contents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_margin"/>
 
 </LinearLayout>

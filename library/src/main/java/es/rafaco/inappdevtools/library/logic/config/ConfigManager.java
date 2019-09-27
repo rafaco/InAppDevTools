@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 import android.content.Context;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
@@ -13,10 +13,37 @@ public class ConfigManager {
     private final JsonAssetHelper compileConfig;
 
     public ConfigManager(Context context) {
-        compileConfig = new JsonAssetHelper(context, JsonAsset.COMPILE_CONFIG);
+        compileConfig = new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG);
     }
 
-    public boolean getBoolean(Config config) {
+    public Object get(BuildConfig config) {
+        if (config.getValueType() == boolean.class){
+            return getBoolean(config);
+        }
+        else if (config.getValueType() == String.class){
+            return getString(config);
+        }
+        else if (config.getValueType() == long.class){
+            return getLong(config);
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void set(BuildConfig config, Object value) {
+        if (config.getValueType() == boolean.class){
+            setBoolean(config, (Boolean) value);
+        }
+        else if (config.getValueType() == String.class){
+            setString(config, (String) value);
+        }
+        else if (config.getValueType() == long.class){
+            setLong(config, (Long) value);
+        }
+    }
+
+    public boolean getBoolean(BuildConfig config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getBoolean(config.getKey(), false);
         }
@@ -28,12 +55,12 @@ public class ConfigManager {
         }
     }
 
-    public void setBoolean(Config config, boolean value) {
+    public void setBoolean(BuildConfig config, boolean value) {
         DevToolsPrefs.setBoolean(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
-    public String getString(Config config) {
+    public String getString(BuildConfig config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getString(config.getKey(), "");
         }
@@ -45,12 +72,12 @@ public class ConfigManager {
         }
     }
 
-    public void setString(Config config, String value) {
+    public void setString(BuildConfig config, String value) {
         DevToolsPrefs.setString(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
-    public long getLong(Config config) {
+    public long getLong(BuildConfig config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getLong(config.getKey(), 0);
         }
@@ -62,8 +89,8 @@ public class ConfigManager {
         }
     }
 
-    public void setLong(Config config, long value) {
+    public void setLong(BuildConfig config, long value) {
         DevToolsPrefs.setLong(config.getKey(), value);
-        Iadt.getEventManager().fire(Event.CONFIG_CHANGED, config.getKey());
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

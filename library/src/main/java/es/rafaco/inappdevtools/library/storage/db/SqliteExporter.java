@@ -17,7 +17,7 @@ import java.util.List;
 
 //import com.opencsv.CSVWriter;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.storage.files.MediaScannerUtils;
 
@@ -41,7 +41,7 @@ public class SqliteExporter {
     private static final String SEPARATOR = "\n";
 
     public static String[] getAllDatabases(){
-        return Iadt.getAppContext().databaseList();
+        return IadtController.get().getContext().databaseList();
     }
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{

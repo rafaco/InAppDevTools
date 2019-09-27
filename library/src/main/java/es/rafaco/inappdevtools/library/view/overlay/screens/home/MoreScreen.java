@@ -11,26 +11,23 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreensScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
-public class MoreScreen extends OverlayScreen {
+public class MoreScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public MoreScreen(MainOverlayLayerManager manager) {
+    public MoreScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -40,7 +37,7 @@ public class MoreScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_flexible; }
+    public int getBodyLayoutId() { return R.layout.flexible_container; }
 
     @Override
     protected void onCreate() {
@@ -54,53 +51,47 @@ public class MoreScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new RunnableItem("Network",
+        data.add("Playgrounds and old screens (pending to remove):\n" +
+                " - All items has been mixed with logcat logs at Log Screen\n");
+
+        data.add(new RunButton("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(NetworkScreen.class);
+                    public void run() { OverlayService.performNavigation(NetworkScreen.class);
                     }
                 }));
 
 
-        data.add(new RunnableItem("Screens",
+        data.add(new RunButton("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ScreensScreen.class);
+                    public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);
                     }
                 }));
 
-        data.add(new RunnableItem("Errors",
+        data.add(new RunButton("Errors",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ErrorsScreen.class);
+                    public void run() { OverlayService.performNavigation(ErrorsScreen.class);
                     }
                 }));
 
-        /*data.add(new RunnableItem("Analysis",
+        /*data.add(new RunButton("Analysis",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(AnalysisScreen.class);
+                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
                     }
                 }));*/
 
-        data.add(new RunnableItem("Logcat",
+        data.add(new RunButton("Logcat",
                 R.drawable.ic_android_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(LogcatScreen.class);
-                    }
-                }));
-
-        data.add(new RunnableItem("Config",
-                R.drawable.ic_settings_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        Iadt.showMessage("TODO");
+                    public void run() { OverlayService.performNavigation(LogcatScreen.class);
                     }
                 }));
 

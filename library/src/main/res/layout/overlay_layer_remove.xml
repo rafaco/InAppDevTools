@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/remove_relativelayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    style="@style/elevated">
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/remove_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/white_circle_shape"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_margin="10dp"
         android:padding="10dp"
-        android:src="@drawable/ic_close_white_24dp" />
+        android:background="@drawable/shape_layer_remove_circle"
+        android:src="@drawable/ic_close_white_24dp"
+        style="@style/elevated" />
 
-</RelativeLayout>
+</FrameLayout>
+
+

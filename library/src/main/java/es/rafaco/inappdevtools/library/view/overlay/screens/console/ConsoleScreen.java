@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ConsoleScreen extends OverlayScreen {
+public class ConsoleScreen extends Screen {
 
     private EditText input;
     private Spinner presets;
@@ -35,7 +35,7 @@ public class ConsoleScreen extends OverlayScreen {
     private String command;
     private Shell shell;
 
-    public ConsoleScreen(MainOverlayLayerManager manager) {
+    public ConsoleScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -123,7 +123,7 @@ public class ConsoleScreen extends OverlayScreen {
     private void setupButton(ImageButton button, int iconId, View.OnClickListener listener) {
         button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rounded_corner));
         UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
-        int contextualizedColor = ContextCompat.getColor(getContext(), R.color.rally_bg_blur);
+        //int contextualizedColor = ContextCompat.getColor(getContext(), R.color.rally_bg_solid);
         //button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
         if (iconId>0){
             //Drawable icon = button.getContext().getResources().getDrawable(iconId);

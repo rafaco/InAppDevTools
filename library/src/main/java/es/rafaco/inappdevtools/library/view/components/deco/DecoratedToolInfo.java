@@ -1,6 +1,6 @@
 package es.rafaco.inappdevtools.library.view.components.deco;
 
-import es.rafaco.inappdevtools.library.view.overlay.layers.NavigationStep;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 
 public class DecoratedToolInfo {
     String title;

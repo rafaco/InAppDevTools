@@ -18,7 +18,7 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 
 public class DecoratedViewHolder extends RecyclerView.ViewHolder {
 
@@ -97,7 +97,7 @@ public class DecoratedViewHolder extends RecyclerView.ViewHolder {
 
     protected void onItemClick(DecoratedToolInfo data) {
         if (data.getNavigationStep() != null)
-            OverlayUIService.performNavigationStep(data.getNavigationStep());
+            OverlayService.performNavigationStep(data.getNavigationStep());
         else
             data.getRunnable().run();
     }

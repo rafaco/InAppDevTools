@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="demo_blue_med">#007BE1</color>
+    <color name="demo_blue_dark">#0050ae</color>
+    <color name="demo_green">#1EB980</color>
+    <color name="demo_gray">#3C3D45</color>
+    <color name="demo_red">#B00020</color>
+    <color name="demo_orange">#FF665B</color>
+    <color name="demo_yellow">#FFCF44</color>
+    <color name="demo_white">#E7E7E7</color>
+
+</resources>

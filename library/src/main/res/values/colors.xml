@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="charcoal">#1A2732</color>
-    <color name="black">#000000</color>
+
+    <color name="iadt_background">@color/material_background</color>
+    <color name="iadt_surface_bottom">@color/material_surface_bottom</color>
+    <color name="iadt_surface_medium">@color/material_surface_medium</color>
+    <color name="iadt_surface_top">@color/material_surface_top</color>
+
+    <color name="material_background">#121212</color>
+    <color name="material_surface_bottom">#1D1D1D</color>
+    <color name="material_surface_medium">#2C2C2C</color>
+    <color name="material_surface_top">#373737</color>
+
+
+    <!--<color name="iadt_background">@color/rally_bg_solid</color>
+    <color name="iadt_surface">@color/rally_bg_blur</color>-->
 
     <color name="rally_bg_new">#23272E</color>
     <color name="rally_bg_new_alpha">#BF23272E</color>
     <color name="rally_bg_new_darker">#26262E</color>
-    <color name="rally_bg_solid">#3C3D45</color>
-    <color name="rally_bg_blur">#23272E</color><!--#32333C-->
-    <color name="rally_bg_blur_alpha">#cc32333c</color>
-
+    <color name="rally_bg_blur">#3C3D45</color>
+    <color name="rally_bg_solid">#23272E</color><!--#32333C-->
+    <color name="rally_bg_solid_alpha">#cc32333c</color>
     <color name="rally_green">#1EB980</color>
     <color name="rally_dark_green">#045D56</color>
     <color name="rally_yellow">#FFCF44</color>
@@ -23,6 +34,8 @@
     <color name="rally_white">#E7E7E7</color>
     <color name="rally_gray">#5E5F65</color>
 
+    <color name="charcoal">#1A2732</color>
+    <color name="black">#000000</color>
 
     <color name="chuck_colorAccent">#FF9800</color>
     <color name="chuck_colorPrimary">#00BCD4</color>

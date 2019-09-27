@@ -41,7 +41,7 @@ public class ViewHierarchyUtils {
 
             for(String viewName : rootViewNames) {
                 View rootView = (View)getRootView.invoke(wmgInstnace, viewName);
-                Log.i(Iadt.TAG, "Found root view: " + viewName + ": " + rootView);
+                //Log.i(Iadt.TAG, "Found root view: " + viewName + ": " + rootView);
                 rootViews.add(new Pair<>(viewName, rootView));
 
                 if(print)

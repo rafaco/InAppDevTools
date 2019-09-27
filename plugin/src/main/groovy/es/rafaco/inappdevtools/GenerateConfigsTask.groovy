@@ -3,6 +3,7 @@ package es.rafaco.inappdevtools
 import groovy.json.JsonOutput
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
+import static org.apache.tools.ant.taskdefs.condition.Os.*
 
 import java.time.Duration
 import java.time.Instant
@@ -11,7 +12,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
 
     GenerateConfigsTask() {
-        this.description = "Generate config files (compile_config, git_config,...)"
+        this.description = "Generate config files (build_config, build_info, git_config,...)"
     }
 
     @TaskAction
@@ -20,7 +21,9 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
         generateCompileConfig(project)
         if (extension.enabled){
-            generateGitConfig(project)
+            generatePluginsList(project)
+            generateBuildInfo(project)
+            generateGitInfo(project)
         }
 
         if (isDebug()) {
@@ -30,46 +33,76 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private void generateCompileConfig(Project project) {
-        Map propertiesMap = [
-                BUILD_TIME    : new Date().getTime(),
-                BUILD_TIME_UTC: new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
-        ]
+        Map propertiesMap = [:]
 
         if (extension.enabled!=null)
-            propertiesMap.put("ENABLED", extension.enabled)
+            propertiesMap.put("enabled", extension.enabled)
+
+        if (extension.enabledOnRelease!=null)
+            propertiesMap.put("enabledOnRelease", extension.enabledOnRelease)
 
         if (extension.debug!=null)
-            propertiesMap.put("DEBUG", extension.debug)
+            propertiesMap.put("debug", extension.debug)
 
         if (extension.email!=null)
-            propertiesMap.put("EMAIL", extension.email)
+            propertiesMap.put("email", extension.email)
 
         if (extension.overlayEnabled!=null)
-            propertiesMap.put("OVERLAY_ENABLED", extension.overlayEnabled)
+            propertiesMap.put("overlayEnabled", extension.overlayEnabled)
 
-        if (extension.overlayIconEnabled!=null)
-            propertiesMap.put("OVERLAY_ICON_ENABLED", extension.overlayIconEnabled)
+        if (extension.sourceInclusion!=null)
+            propertiesMap.put("sourceInclusion", extension.sourceInclusion)
 
-        if (extension.notificationEnabled!=null)
-            propertiesMap.put("NOTIFICATION_ENABLED", extension.notificationEnabled)
+        if (extension.sourceInspection!=null)
+            propertiesMap.put("sourceInspection", extension.sourceInspection)
 
-        if (extension.crashHandlerEnabled!=null)
-            propertiesMap.put("CRASH_HANDLER_ENABLED", extension.crashHandlerEnabled)
+        if (extension.invocationByIcon!=null)
+            propertiesMap.put("invocationByIcon", extension.invocationByIcon)
+
+        if (extension.invocationByShake!=null)
+            propertiesMap.put("invocationByShake", extension.invocationByShake)
+
+        if (extension.invocationByNotification!=null)
+            propertiesMap.put("invocationByNotification", extension.invocationByNotification)
 
         if (extension.callDefaultCrashHandler!=null)
-            propertiesMap.put("CALL_DEFAULT_CRASH_HANDLER", extension.callDefaultCrashHandler)
+            propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 
-        if (extension.stickyService!=null)
-            propertiesMap.put("STICKY_SERVICE", extension.stickyService)
-
-        File file = getFile(project, "${outputPath}/compile_config.json")
+        File file = getFile(project, "${outputPath}/build_config.json")
         saveConfigMap(propertiesMap, file)
     }
 
-    private void generateGitConfig(Project project) {
+    private void generateBuildInfo(Project project) {
+        Map propertiesMap = [
+                BUILD_TIME      : new Date().getTime(),
+                BUILD_TIME_UTC  : new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
+                HOST_NAME       : InetAddress.localHost.hostName,
+                HOST_ADDRESS    : InetAddress.localHost.hostAddress,
+                HOST_OS         : OS_NAME,
+                HOST_VERSION    : OS_VERSION,
+                HOST_ARCH       : OS_ARCH,
+                USER_NAME       : shell('git config user.name'),
+                USER_EMAIL      : shell('git config user.email'),
+                GRADLE_VERSION  : project.gradle.gradleVersion
+        ]
+
+        File file = getFile(project, "${outputPath}/build_info.json")
+        saveConfigMap(propertiesMap, file)
+    }
+
+    private void generatePluginsList(Project project) {
+        def plugins = ""
+        project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
+        println "Generated gradle_plugins.txt"
+        File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
+        pluginsFile.text = plugins
+    }
+
+    private void generateGitInfo(Project project) {
 
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
+        def localCommitsLong
 
         if (gitDiff == null) {
             println TAG + ": " + "Unable to reach git command, check your PATH!"
@@ -77,31 +110,38 @@ class GenerateConfigsTask extends InAppDevToolsTask {
                     ENABLED: false
             ]
         } else {
+            def localBranch = shell("git name-rev --name-only HEAD")
+            def trackingRemote = shell('git config --get branch.' + localBranch + '.remote')
+            def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
+            def remoteUrl = shell('git config remote.' + trackingRemote + '.url')
+            def tag = shell('git describe --tags --abbrev=0')
+            localCommitsLong = shell('git log ' + trackingFull + '..HEAD')
+
             propertiesMap = [
                     ENABLED         : true,
-                    REMOTE          : shell('git config --get remote.origin.url'),
+                    REMOTE_NAME     : trackingRemote,
+                    REMOTE_URL      : remoteUrl,
+                    REMOTE_LAST     : shell('git log ' + trackingFull +' -1'),
+
+                    TAG             : tag,
                     INFO            : shell('git describe --tags --always --dirty'),
-                    BRANCH          : (shell('git branch') =~ /(?m)\* (.*)$/)[0][1],
-                    TAG             : shell('git describe --tags --abbrev=0'),
-                    TAG_DISTANCE    : shell('git rev-list ' + shell('git describe --tags --abbrev=0') + ' --count'),
-                    LAST_COMMIT     : [
-                            ISCLEAN : gitDiff == '',
-                            MESSAGE : shell('git log -1 --pretty=%B'),
-                            SHORT   : shell('git log --oneline -1'),
-                            LONG    : shell('git log -1')
-                    ],
-                    LOCAL_COMMITS   : shell('git cherry -v'),
-                    LOCAL_CHANGES: [
-                            ISDIRTY : gitDiff != '',
-                            STATUS  : shell('git status --short'),
-                    ]
+                    TAG_DISTANCE    : shell('git rev-list ' + tag + ' --count'),
+
+                    LOCAL_BRANCH    : localBranch,
+                    LOCAL_COMMITS : shell('git cherry -v'),
+
+                    HAS_LOCAL_CHANGES: gitDiff != '',
+                    LOCAL_CHANGES    : shell('git status --short'),
             ]
         }
 
-        File file = getFile(project, "${outputPath}/git_config.json")
+        File file = getFile(project, "${outputPath}/git_info.json")
         saveConfigMap(propertiesMap, file)
 
-        File diffFile = new File("${outputPath}/git.diff")
+        File commitsFile = new File("${outputPath}/local_commits.txt")
+        commitsFile.text = localCommitsLong
+
+        File diffFile = new File("${outputPath}/local_changes.diff")
         if (gitDiff != null && gitDiff != '') {
             if (isDebug()) {  println "Generated: " + diffFile.getPath() }
             diffFile.text = gitDiff

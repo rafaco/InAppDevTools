@@ -15,16 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 
 public class LogQueryHelper {
 
-    private final LogFilter config;
+    private final LogBackFilter filter;
     private String queryString = new String();
     private List<Object> args = new ArrayList();
     private boolean containsCondition = false;
 
-    public LogQueryHelper(LogFilter config) {
-        this.config = config;
+    public LogQueryHelper(LogBackFilter filter) {
+        this.filter = filter;
     }
 
     public SupportSQLiteQuery getSelectedQuery() {
@@ -34,49 +36,51 @@ public class LogQueryHelper {
 
         queryString += "SELECT * FROM friendly";
 
-        if(!TextUtils.isEmpty(config.getText())){
+        if(!TextUtils.isEmpty(filter.getText())){
             addConjunction();
             queryString += " ( message LIKE ? OR category LIKE ? OR subcategory LIKE ? OR extra LIKE ? )";
-            String likeFilter = "%" + config.getText() + "%";
+            String likeFilter = "%" + filter.getText() + "%";
             multiplicateArg(likeFilter, 4);
         }
 
-        if(config.getSeverities().size() < 5) {
+        if(filter.getSeverities().size() < 5) {
             addConjunction();
-            addInWithList("severity", config.getSeverities(), true);
+            addInWithList("severity", filter.getSeverities(), true);
         }
 
-        if(!config.getCategories().isEmpty()){
+        if(!filter.getCategories().isEmpty()){
             addConjunction();
-            addInWithList("category", config.getCategories(), true);
+            addInWithList("category", filter.getCategories(), true);
         }
 
-        if(!config.getNotCategories().isEmpty()){
+        if(!filter.getNotCategories().isEmpty()){
             addConjunction();
-            addInWithList("category", config.getNotCategories(), false);
+            addInWithList("category", filter.getNotCategories(), false);
         }
 
-        if(!config.getSubcategories().isEmpty()){
+        if(!filter.getSubcategories().isEmpty()){
             addConjunction();
-            addInWithList("subcategory", config.getSubcategories(), true);
+            addInWithList("subcategory", filter.getSubcategories(), true);
         }
 
-        if(config.getFromDate()>0){
+        if(filter.getFromDate()>0){
             addConjunction();
             queryString += " date >= ?";
-            args.add(config.getFromDate());
+            args.add(filter.getFromDate());
         }
 
-        if(config.getToDate()>0){
+        if(filter.getToDate()>0){
             addConjunction();
             //TODO: replace by <= when using real finish date instead of next session date
             queryString += " date < ?";
-            args.add(config.getToDate());
+            args.add(filter.getToDate());
         }
 
         queryString += " ORDER BY date ASC";
 
-        Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 
@@ -119,7 +123,8 @@ public class LogQueryHelper {
         queryString = queryString.replace("ORDER BY date ASC", "");
                 //"GROUP BY " + columnName + "ORDER BY COUNT(*) DESC");
 
-        Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 }

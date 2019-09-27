@@ -14,25 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.runnables.RunnableItem;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.friendlylog.FriendlyLogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.AppInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.pages.DeviceInfoHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
+import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
-public class HomeScreen extends OverlayScreen {
+public class HomeScreen extends Screen {
 
-    public HomeScreen(MainOverlayLayerManager manager) {
+    public HomeScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -42,7 +42,7 @@ public class HomeScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_flexible; }
+    public int getBodyLayoutId() { return R.layout.flexible_container; }
 
     @Override
     protected void onCreate() {
@@ -59,7 +59,7 @@ public class HomeScreen extends OverlayScreen {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               getScreenManager().getMainLayer().toggleBackButton(false);
+               getScreenManager().getScreenLayer().toggleBackButton(false);
             }
         }, 100);
     }
@@ -67,87 +67,97 @@ public class HomeScreen extends OverlayScreen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        AppInfoHelper appHelper = new AppInfoHelper(getContext());
-        DeviceInfoHelper deviceHelper = new DeviceInfoHelper(getContext());
-        String welcome = appHelper.getFormattedAppLong() + "\n" + deviceHelper.getFormattedDeviceLong();
+        AppInfoReporter appHelper = new AppInfoReporter(getContext());
+        DeviceInfoReporter deviceHelper = new DeviceInfoReporter(getContext());
+        String welcome = appHelper.getFormattedAppLong() + "\n"
+                + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);
 
-        data.add(new RunnableItem("Info",
+        data.add(new RunButton("Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(InfoScreen.class);
+                    public void run() { OverlayService.performNavigation(InfoOverviewScreen.class);
                     }
                 }));
 
-        data.add(new RunnableItem("Log",
+        data.add(new RunButton("Log",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(FriendlyLogScreen.class);
+                    public void run() { OverlayService.performNavigation(LogScreen.class);
                     }
                 }));
 
-        data.add(new RunnableItem("Sources",
+        RunButton sources = new RunButton("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(SourcesScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(SourcesScreen.class);
                     }
-                }));
+                });
+        if (!IadtController.get().getSourcesManager().canSourceInspection()){
+            sources.setColor(R.color.rally_gray);
+            sources.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    Iadt.showMessage("Source inspection is DISABLED");
+                }
+            });
+        }
+        data.add(sources);
 
-
-
-        data.add(new RunnableItem("View",
+        data.add(new RunButton("View",
                 R.drawable.ic_layers_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(InspectViewScreen.class);
+                    public void run() { OverlayService.performNavigation(InspectViewScreen.class);
                     }
                 }));
 
-        data.add(new RunnableItem("Storage",
+        data.add(new RunButton("Storage",
                 R.drawable.ic_storage_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        //OverlayUIService.performNavigation(StorageScreen.class);
+                        //OverlayService.performNavigation(StorageScreen.class);
                         HomeScreen.this.getScreenManager().hide();
                         PandoraBridge.storage();
                     }
                 }));
 
-        data.add(new RunnableItem("Console",
+        data.add(new RunButton("Console",
                 R.drawable.ic_computer_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ConsoleScreen.class);
+                    public void run() { OverlayService.performNavigation(ConsoleScreen.class);
                     }
                 }));
         
         
-        data.add(new RunnableItem("Run",
+        data.add(new RunButton("Run",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(RunScreen.class);
+                    public void run() { OverlayService.performNavigation(RunScreen.class);
                     }
                 }));
 
-        data.add(new RunnableItem("Report",
+        data.add(new RunButton("Report",
                 R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(ReportScreen.class);
+                    public void run() { OverlayService.performNavigation(ReportScreen.class);
                     }
                 }));
 
 
-        data.add(new RunnableItem("More",
+        data.add(new RunButton("More",
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayUIService.performNavigation(MoreScreen.class);
+                    public void run() { OverlayService.performNavigation(MoreScreen.class);
                     }
                 }));
 

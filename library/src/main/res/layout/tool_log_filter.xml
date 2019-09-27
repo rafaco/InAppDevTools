@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/type_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Type: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/session_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Session: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/session_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/verbosity_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Severity: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/verbosity_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/category_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Event category: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/logcat_tag_label"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Logcat tag: "
+            android:textSize="18dp"
+            style="@style/content_margin"/>
+
+        <Spinner
+            android:id="@+id/logcat_tag_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/current_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current overview"
+        android:textSize="18dp"
+        android:textStyle="normal|italic"
+        style="@style/content_margin"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

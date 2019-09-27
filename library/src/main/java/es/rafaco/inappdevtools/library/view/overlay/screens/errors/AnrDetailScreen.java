@@ -9,12 +9,12 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.entries.InfoReport;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class AnrDetailScreen extends OverlayScreen {
+public class AnrDetailScreen extends Screen {
 
     private Anr anr;
     private TextView out;
@@ -22,7 +22,7 @@ public class AnrDetailScreen extends OverlayScreen {
     private TextView subtitle;
     private TextView console;
 
-    public AnrDetailScreen(MainOverlayLayerManager manager) {
+    public AnrDetailScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -72,7 +72,7 @@ public class AnrDetailScreen extends OverlayScreen {
 
     private void updateOutput() {
         AnrHelper helper = new AnrHelper();
-        InfoReport report = helper.parseToInfoGroup(anr);
+        InfoReportData report = helper.parseToInfoGroup(anr);
         report.removeGroupEntries(1);
 
         title.setText(anr.getMessage() + " " + Humanizer.getElapsedTimeLowered(anr.getDate()));

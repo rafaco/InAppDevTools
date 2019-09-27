@@ -1,27 +1,45 @@
 <resources>
+
     <string name="library_name">InAppDevTools</string>
 
-    <string name="floating_widget">DevTool: Floating Widget</string>
-    <string name="create_floating_widget">Create Floating Widget</string>
-    <string name="floating_widget_label">DevTool</string>
-    <string name="floating_widget_details">Just login by now</string>
-    <string name="draw_other_app_permission_denied">Draw over other app permission not available. App won\'t work without permission. Please try again.</string>
+    <!-- Config description -->
+    <string name="config_build_time">Last compilation build time in milliseconds</string>
+    <string name="config_build_time_utc">Last compilation build time in utc format</string>
+    <string name="config_host_name">Builder machine name</string>
+    <string name="config_host_address">Builder machine IP address</string>
+    <string name="config_gradle_version">Builder machine Gradle version</string>
+    <string name="config_enabled">Disable all and simulate the no-op library and plugin</string>
+    <string name="config_enabled_on_release">Force enabling our library for release builds of your app</string>
+    <string name="config_overlay_enable">Disable our overlay interface</string>
+    <string name="config_source_inclusion">Disable including this module sources in your apk</string>
+    <string name="config_source_inspection">Disable source features and source inclusion</string>
+    <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
+    <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
+    <string name="config_invocation_by_notification">Disable showing our notification to open the UI</string>
+    <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
+    <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
+    <string name="config_email">Default email to use for reports</string>
 
-    <string name="hard_soft_info">Hardware and Software Information</string>
-    <string name="serial">SERIAL</string>
-    <string name="brand">Device Brand</string>
-    <string name="model">Device Model</string>
-    <string name="id">ID</string>
-    <string name="type">TYPE</string>
-    <string name="user">USER</string>
-    <string name="base">BASE</string>
-    <string name="incremental">Incremental</string>
-    <string name="sdk">Version SDK</string>
-    <string name="board">BOARD</string>
-    <string name="host">HOST</string>
-    <string name="fingerprint">FINGERPRINT</string>
-    <string name="versioncode">Version code</string>
+    <!-- Dialogs -->
+    <string name="welcome_privacy_title">Developer Tools</string>
+    <string name="welcome_privacy_content">This compilation contains some tools that are locally recording your usage. Nothing will be send without your explicit consent, only you can do it by using our reporting feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
+    <string name="welcome_permission_title">Overlay permission</string>
+    <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen you have to accept it, then press back button.</string>
+    <string name="welcome_enabled_title">Developer Tools enabled</string>
+    <string name="welcome_enabled_content">Our interface will pop up if your app crash.\n\nYou can inspect your running app at any time by shaking your device, tapping our notification or programmatically using Iadt.show().\n\nYou can also open it now.</string>
+    <string name="welcome_disabled_title">Disable Developer Tools</string>
+    <string name="welcome_disabled_content">Your app need to be restarted for a clean startup without our tools.\n\nTip: You can re-enable them by cleaning this application data.</string>
+    <string name="draw_other_app_permission_denied">InApp DevTools require \'draw over other apps\' permission</string>
 
+    <!-- Dialogs buttons-->
+    <string name="button_continue">CONTINUE</string>
+    <string name="button_disable">DISABLE&#8230;</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="button_close">CLOSE</string>
+    <string name="button_open_now">OPEN NOW</string>
+    <string name="button_disable_all">DISABLE AND RESTART</string>
+
+    <!-- Chuck -->
     <string name="chuck_ssl">SSL</string>
     <string name="chuck_duration">Duration</string>
     <string name="chuck_request_size">Request size</string>
@@ -29,5 +47,7 @@
     <string name="chuck_response_size">Response size</string>
     <string name="chuck_response_time">Response time</string>
     <string name="chuck_total_size">Total size</string>
+    <string name="simulated_crash_cause">The scenic panic make you pressed that button :)</string>
+    <string name="simulated_crash">Simulated crash on a background thread</string>
 
 </resources>

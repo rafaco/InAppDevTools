@@ -6,12 +6,13 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application>
 
         <provider
-            android:name=".IadtController"
-            android:authorities="${applicationId}.iadt.controller"
+            android:name=".IadtLauncher"
+            android:authorities="${applicationId}.iadt.launcher"
             android:exported="false"/>
 
         <provider
@@ -21,23 +22,23 @@
             android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/iadt_files_paths" />
+                android:resource="@xml/iadt_paths" />
         </provider>
 
         <service android:name=".logic.log.reader.LogcatReaderService"
-            android:exported="false"/>
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
-        <service android:name=".view.overlay.OverlayUIService"
+        <service android:name=".view.overlay.OverlayService"
             android:exported="false"/>
 
         <service
-            android:name=".view.notifications.NotificationUIService"
+            android:name=".view.notifications.NotificationService"
             android:exported="false" />
 
 
         <activity
             android:name=".view.activities.PermissionActivity"
-            android:theme="@style/LibTheme.Dialog" />
+            android:theme="@style/LibTheme.Translucent" />
 
         <activity android:name=".view.activities.WelcomeDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>

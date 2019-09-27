@@ -53,7 +53,7 @@ public class AppInfoUtils {
                 try {
                     CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                     X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);
-                    sb.append(x509Cert.toString() + newLine);
+                    sb.append(x509Cert.toString());
 
                     //sb.append("Certificate subject: " + x509Cert.getSubjectDN() + newLine);
                     //sb.append("Certificate issuer: " + x509Cert.getIssuerDN() + newLine);

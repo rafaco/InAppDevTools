@@ -16,14 +16,19 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final ASSETS_PATH = '/generated/assets'
     static final OUTPUT_PATH = ASSETS_PATH + '/' + TAG
 
-    final CONFIG_TASK = 'generateConfigs'
+    final PLUGINS_TASK = 'generatePluginList'
     final CLEAN_TASK = 'cleanGenerated'
+    final CONFIG_TASK = 'generateConfigs'
     final SOURCES_TASK = 'packSources'
     final RESOURCES_TASK = 'packResources'
 
     void apply(Project project) {
 
         if(!isAndroidApplication(project) && !isAndroidLibrary(project)){
+            if (isRoot(project))
+                println "IATD: Skipped root project"
+            else
+                println "IATD: Skipped NOT root project"
             return
         }
 
@@ -52,21 +57,27 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
 
-                if (isEnabled(project)){
-                    if (isDebug(project)){ println "InAppDevTools: Added tasks before " + theTask.name }
+                if ((!isReleaseTask(theTask) || (isReleaseTask(theTask) && isEnabledOnRelease(project)))
+                        && isEnabled(project)
+                        && isSourceInclusion(project)
+                        && isSourceInspection(project)){
+
+                    if (isDebug(project)){ println "IADT will include your sources in your apk before " + theTask.name }
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
-                            project.tasks.getByName(RESOURCES_TASK),
-                            project.tasks.getByName(CONFIG_TASK)]
+                            project.tasks.getByName(RESOURCES_TASK)]
                 }
                 else{
-                    if (isDebug(project)){ println "InAppDevTools: Removed generated assets"}
+                    if (isDebug(project)){ println "IADT will not add your sources - Added clean sources tasks before " + theTask.name }
                     //project.android.sourceSets.main.assets.srcDirs -= "${project.buildDir}${ASSETS_PATH}"
                     //delete(project.file("${project.buildDir}\\generated\\assets\\inappdevtools"))
                     theTask.dependsOn += [
-                            project.tasks.getByName(CLEAN_TASK),
-                            project.tasks.getByName(CONFIG_TASK)]
+                            project.tasks.getByName(CLEAN_TASK)]
                 }
+
+                //Include CONFIG_TASK for all compilations
+                theTask.dependsOn += [
+                        project.tasks.getByName(CONFIG_TASK)]
             }
         }
 
@@ -74,6 +85,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.clean {
             delete getOutputPath(project)
         }
+    }
+
+    static boolean isRoot(Project project){
+        return project.name.equals(project.rootProject.name)
     }
 
     private Task addCleanTask(Project project, outputFolder) {
@@ -86,7 +101,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 project.delete outputFolder
                 println "Deleted ${outputFolder} from ${project.name}"
             }
-
         }
     }
 
@@ -167,11 +181,39 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         return false
     }
 
+    static boolean isReleaseTask(Task task){
+        return task.name.contains("Release")
+    }
+
+    static boolean isEnabledOnRelease(Project project){
+        InAppDevToolsExtension extension = getExtension(project)
+        if (extension!=null && extension.enabledOnRelease!=null){
+            return extension.enabledOnRelease
+        }
+        return false
+    }
+
     static boolean isEnabled(Project project){
         if (getExtension(project)!=null){
             return getExtension(project).enabled
         }
-        return false
+        return true
+    }
+
+    static boolean isSourceInclusion(Project project){
+        InAppDevToolsExtension extension = getExtension(project)
+        if (extension!=null && extension.sourceInclusion!=null){
+            return extension.sourceInclusion
+        }
+        return true
+    }
+
+    static boolean isSourceInspection(Project project){
+        InAppDevToolsExtension extension = getExtension(project)
+        if (extension!=null && extension.sourceInspection!=null){
+            return extension.sourceInspection
+        }
+        return true
     }
 
     static boolean isAndroidApplication(Project project){

@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -36,7 +37,7 @@ public class InitialEventDetector extends EventDetector {
                 int pid = ThreadUtils.myPid();
                 long detectionDate = (Long) param;
 
-                //TODO: delay after App started
+                //TODO: delayed after App started
                 long improveStartTime = improveStartTime(detectionDate, pid);
 
                 Session session = new Session();
@@ -74,7 +75,7 @@ public class InitialEventDetector extends EventDetector {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart",
                             "App first start (no data)");
                 } else if (NewBuildUtil.isNewBuild()) {
-                    FriendlyLog.log(new Date().getTime(), "W", "App", "Start",
+                    FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started (new compilation over old data)");
                 } else {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
@@ -86,7 +87,8 @@ public class InitialEventDetector extends EventDetector {
 
     @Override
     public void start() {
-        Log.w("SESSION", "New session start");
+        if (IadtController.get().isDebug())
+            Log.w("SESSION", "New session start");
         eventManager.fire(Event.APP_NEW_SESSION, DateUtils.getLong());
 
         if (NewBuildUtil.isNewBuild()){

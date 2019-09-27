@@ -5,11 +5,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.Config;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -35,8 +34,8 @@ public class ShakeEventDetector extends EventDetector {
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "User", "Shake", "Shake detected");
-                if (Iadt.getConfig().getBoolean(Config.INVOCATION_BY_SHAKE)){
-                    IadtController.get().show();
+                if (Iadt.getConfig().getBoolean(BuildConfig.INVOCATION_BY_SHAKE)){
+                    IadtController.get().showToggle();
                 }
             }
         });
@@ -91,8 +90,6 @@ public class ShakeEventDetector extends EventDetector {
                     return;
                 }
                 mShakeTimestamp = now;
-                Log.d(Iadt.TAG, "RAFA - Shake action detected!");
-
                 eventManager.fire(Event.SHAKE);
             }
         }

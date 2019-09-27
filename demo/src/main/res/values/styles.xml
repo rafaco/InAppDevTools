@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/demo_blue_med</item>
+        <item name="colorPrimaryDark">@color/demo_blue_dark</item>
+        <item name="colorAccent">@color/demo_green</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Header">
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/demo_blue_med</item>
+    </style>
+
+    <style name="Paragraph">
+        <item name="android:textSize">16sp</item>
+        <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
+    </style>
+
+</resources>

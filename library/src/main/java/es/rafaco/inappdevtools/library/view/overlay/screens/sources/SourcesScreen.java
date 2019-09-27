@@ -22,18 +22,18 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.LinkItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
-import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayUIService;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
-public class SourcesScreen extends OverlayScreen {
+public class SourcesScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
@@ -42,7 +42,7 @@ public class SourcesScreen extends OverlayScreen {
     private String contentOverview;
     private AsyncTask<Object, String, List<Object>> currentTask;
 
-    public SourcesScreen(MainOverlayLayerManager manager) {
+    public SourcesScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -52,7 +52,7 @@ public class SourcesScreen extends OverlayScreen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_flexible; }
+    public int getBodyLayoutId() { return R.layout.flexible_container; }
 
     @Override
     public int getToolbarLayoutId() {
@@ -134,9 +134,9 @@ public class SourcesScreen extends OverlayScreen {
 
     private void updateFilter(SourceEntry entry) {
         if (entry == null)
-            updateParam(null);
+            updateParams(null);
         else
-            updateParam(buildParams("TODO", entry.getName()));
+            updateParams(buildParams("TODO", entry.getName()));
 
         if (currentTask != null){
             currentTask.cancel(true);
@@ -336,7 +336,7 @@ public class SourcesScreen extends OverlayScreen {
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_share) {
-            FileProviderUtils.shareText(Iadt.getAppContext(), getContentOverview());
+            ExternalIntentUtils.shareText(getContentOverview());
         }
         else if (selected == R.id.action_copy) {
             ClipboardUtils.save(getContext(), getContentOverview());
@@ -349,7 +349,7 @@ public class SourcesScreen extends OverlayScreen {
 
     private void openSource(SourceEntry entry) {
         String params = SourceDetailScreen.buildParams(entry.getOrigin(), entry.getName(), -1);
-        OverlayUIService.performNavigation(SourceDetailScreen.class, params);
+        OverlayService.performNavigation(SourceDetailScreen.class, params);
     }
 
     private void goRoot() {

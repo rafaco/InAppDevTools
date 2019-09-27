@@ -17,13 +17,14 @@ import java.util.regex.Pattern;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogcatLine {
 
     private static final int TIMESTAMP_LENGTH = 19;
     public static final int LOG_WTF = 100;
 
-    private static Pattern logPattern = Pattern.compile(
+    private static Pattern defaultPattern = Pattern.compile(
             // Line sample: 2019-06-30 01:03:07.079 1090-1237/es.rafaco.inappdevtools.app D/OpenGLRenderer:
             // log level
             "(\\w)" +
@@ -43,15 +44,21 @@ public class LogcatLine {
     private String tag;
     private String logOutput;
     private int processId = -1;
+    private int threadId = -1;
     private String timestamp;
     private boolean expanded = false;
     private boolean highlighted = false;
+    private String channel;
 
     public static LogcatLine newLogLine(String originalLine, boolean expanded) {
 
+        if (originalLine.isEmpty()) {
+            return null;
+        }
+
         LogcatLine logLine = new LogcatLine();
         logLine.setOriginalLine(originalLine);
-        logLine.setExpanded(expanded);
+        logLine.setExpanded(expanded); //TODO: ???
 
         int startIdx = 0;
 
@@ -65,25 +72,33 @@ public class LogcatLine {
             startIdx = TIMESTAMP_LENGTH; // cut off timestamp
         }
 
-        Matcher matcher = logPattern.matcher(originalLine);
+        Matcher matcher = defaultPattern.matcher(originalLine);
 
         if (matcher.find(startIdx)) {
             logLine.setLogLevelChar(matcher.group(1).charAt(0));
             logLine.setLogLevel(convertCharToLogLevel(logLine.getLogLevelChar()));
-            logLine.setTag(matcher.group(2));
+            logLine.setTag(matcher.group(2).trim());
             logLine.setProcessId(Integer.parseInt(matcher.group(3)));
-            logLine.setLogOutput(originalLine.substring(matcher.end()));
+            logLine.setMessage(originalLine.substring(matcher.end()));
         } else {
             //Log.d(Iadt.TAG, String.format("Line doesn't match pattern: %s", originalLine));
-            logLine.setLogOutput(originalLine);
+            logLine.setMessage(originalLine);
             logLine.setLogLevel(-1);
         }
 
         return logLine;
-
     }
 
-    private static int convertCharToLogLevel(char logLevelChar) {
+    public static void addMessage(LogcatLine logcatLine, String message) {
+        if (TextUtils.isEmpty(logcatLine.getMessage())){
+            logcatLine.setMessage(message);
+        }
+        else{
+            logcatLine.setMessage(logcatLine.getMessage() + Humanizer.newLine() + message);
+        }
+    }
+
+    public static int convertCharToLogLevel(char logLevelChar) {
 
         switch (logLevelChar) {
             case 'V':
@@ -226,9 +241,15 @@ public class LogcatLine {
         return logOutput;
     }
 
-    public void setLogOutput(String logOutput) {
+    public void setMessage(String logOutput) {
         this.logOutput = logOutput;
     }
+
+    public String getMessage() {
+        return logOutput;
+    }
+
+
 
     public int getProcessId() {
         return processId;
@@ -236,6 +257,14 @@ public class LogcatLine {
 
     public void setProcessId(int processId) {
         this.processId = processId;
+    }
+
+    public int getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(int threadId) {
+        this.threadId = threadId;
     }
 
     public String getTimestamp() {
@@ -273,7 +302,15 @@ public class LogcatLine {
         }
         parsed.setSeverity(""+convertLogLevelToChar(logLevel));
         parsed.setMessage(getLogOutput());
-        //parsed.setExtra(getOriginalLine());
+
+        String extra = "";
+        extra += "Date: " + DateUtils.format(parsed.getDate()) + Humanizer.newLine();
+        extra += "Source: " + parsed.getCategory() + Humanizer.newLine();
+        extra += "Channel: " + channel + Humanizer.newLine();
+        extra += "Tag: " + tag + Humanizer.newLine();
+        extra += "Process: " + processId + Humanizer.newLine();
+        extra += "Thread: " + threadId + Humanizer.newLine();
+        parsed.setExtra(extra);
 
         return parsed;
     }
@@ -288,5 +325,13 @@ public class LogcatLine {
         else{
             return 0;
         }
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getChannel() {
+        return channel;
     }
 }

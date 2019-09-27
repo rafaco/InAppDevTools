@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/decorator"
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:textAlignment="center"
+        android:textColor="@color/iadt_background"
+        android:textStyle="bold"
+        android:background="@color/rally_green"
+        android:layout_marginLeft="4dp"/>
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/over_title_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:layout_marginLeft="2dp">
+
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/over_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_below="@id/over_title_wrapper"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="4dp"/>
+
+        <es.rafaco.compat.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/over_title_wrapper"
+            android:layout_toRightOf="@id/icon"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="6dp"
+            android:textColor="@color/rally_white"/>
+
+        <LinearLayout
+            android:id="@+id/detail_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/title"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/extra_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_wrapper"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/extra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textColor="@color/rally_white"/>
+
+        </LinearLayout>
+
+        <es.rafaco.compat.AppCompatButton
+            android:id="@+id/extra_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/extra_wrapper"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:minHeight="0dp"
+            android:text="Details"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

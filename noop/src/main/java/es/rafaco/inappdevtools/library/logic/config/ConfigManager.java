@@ -4,8 +4,13 @@ import android.content.Context;
 
 public class ConfigManager {
 
-
     public ConfigManager(Context context) {}
+
+    public Object get(Config config) {
+        return null;
+    }
+
+    public void set(Config config, Object value) {}
 
     public boolean getBoolean(Config config) {
         return false;

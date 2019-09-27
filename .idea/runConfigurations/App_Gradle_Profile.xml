@@ -2,7 +2,7 @@
   <configuration default="false" name="App Gradle Profile" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/sample" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="--profile --recompile-scripts --offline --rerun-tasks" />
       <option name="taskDescriptions">

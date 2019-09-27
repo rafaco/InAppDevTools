@@ -35,13 +35,13 @@ import java.util.ArrayList;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderTask;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreenHelper;
-import es.rafaco.inappdevtools.library.view.overlay.layers.MainOverlayLayerManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.OverlayLayer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.OverlayScreen;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
-public class LogcatScreen extends OverlayScreen {
+public class LogcatScreen extends Screen {
 
 
     protected LogcatLineAdapter adapter;
@@ -56,7 +56,7 @@ public class LogcatScreen extends OverlayScreen {
     private ToolBarHelper toolbarHelper;
 
 
-    public LogcatScreen(MainOverlayLayerManager manager) {
+    public LogcatScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -175,12 +175,12 @@ public class LogcatScreen extends OverlayScreen {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(OverlayLayer.getLayoutType());
+        alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
     }
 
     private void onSaveButton() {
-        OverlayScreenHelper helper = new LogcatHelper();
+        ScreenHelper helper = new LogcatHelper();
         String path = helper.getReportPath();
         Iadt.showMessage("Log stored to " + path);
     }
@@ -271,7 +271,7 @@ public class LogcatScreen extends OverlayScreen {
         outputContainer.setLayoutTransition(null);
         outputToast.setVisibility(View.VISIBLE);
 
-        removeToastHandler = new Handler();
+        removeToastHandler = new Handler(Looper.getMainLooper());
         removeToastHandler.postDelayed(new Runnable() {
             @Override
             public void run() {

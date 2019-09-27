@@ -32,14 +32,14 @@ public class ScreenChangeEventDetector extends EventDetector {
         eventManager.subscribe(Event.SCREEN_OFF, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "Device", "ScreenOn", "Screen went ON");
+                FriendlyLog.log("D", "Device", "ScreenOff", "Screen went OFF");
             }
         });
 
         eventManager.subscribe(Event.SCREEN_ON, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "Device", "ScreenOff", "Screen went OFF");
+                FriendlyLog.log("D", "Device", "ScreenOn", "Screen went ON");
             }
         });
 

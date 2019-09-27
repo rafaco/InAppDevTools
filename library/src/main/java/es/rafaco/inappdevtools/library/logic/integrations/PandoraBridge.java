@@ -2,7 +2,7 @@ package es.rafaco.inappdevtools.library.logic.integrations;
 
 import android.content.Context;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
@@ -13,8 +13,9 @@ import tech.linjiang.pandora.util.Utils;
 public class PandoraBridge {
 
     private static GridLineView gridLineView;
+
     private static Context getContext(){
-        return Iadt.getAppContext();
+        return IadtController.get().getContext();
     }
 
     public static void init() {
