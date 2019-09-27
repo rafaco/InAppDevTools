@@ -45,7 +45,7 @@ You only need to modify 2 gradle files. On your **root build.gradle file**, impo
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.12"
+    id "es.rafaco.inappdevtools" version "0.0.13"
 }
 
 allprojects {
@@ -59,9 +59,9 @@ On your **app build.gradle**, add targetCompatibility with Java8 and include our
 
 | Flavor | Version | Description |
 |---|---|---|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
-|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/inappdevtools/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).| 
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
+|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).| 
 
 ```gradle
 
@@ -71,8 +71,8 @@ android {
     }
 }
 dependencies {
-    implementation 'es.rafaco.inappdevtools:androidx:0.0.50'
-    //implementation 'es.rafaco.inappdevtools:support:0.0.50'
+    implementation 'es.rafaco.inappdevtools:androidx:0.0.51'
+    //implementation 'es.rafaco.inappdevtools:support:0.0.51'
 }
 ```
 Build your app and shake your device! 
@@ -92,10 +92,10 @@ One side effects is that our library resources will increase your release apk si
 To add conditional Gradle dependencies, prepend build type or your flavors to our dependency implementations. 
 ```gradle
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.50'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.50'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.51'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.51'
     
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.50'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.51'
 }
 ```
 
