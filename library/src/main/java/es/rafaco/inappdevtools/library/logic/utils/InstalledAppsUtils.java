@@ -8,7 +8,12 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
 import android.support.v4.content.ContextCompat;
+//#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;

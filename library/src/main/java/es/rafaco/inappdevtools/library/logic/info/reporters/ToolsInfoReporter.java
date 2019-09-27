@@ -1,7 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
@@ -80,7 +79,6 @@ public class ToolsInfoReporter extends AbstractInfoReporter {
         return BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
     }
 
-    @NonNull
     public String getFriendlyBuildType() {
         String flavor = BuildConfig.FLAVOR;
         String buildType = BuildConfig.BUILD_TYPE;

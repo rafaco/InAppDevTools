@@ -3,7 +3,6 @@ package es.rafaco.inappdevtools.library.logic.log.filter;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,8 +11,10 @@ import android.widget.Spinner;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //#else
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 //#endif
 
 import java.util.List;
