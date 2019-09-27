@@ -5,7 +5,7 @@
 </p>
 
 
-**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows your app to report, inspect and debug itself from the test device's own screen. No cable needed, our UI shows over your running app.**
+**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows your app to report, inspect and debug itself from the same screen when it's running. No cable needed, our UI shows over your running app.**
 
 - Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
 - View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
