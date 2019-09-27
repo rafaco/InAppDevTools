@@ -19,6 +19,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -178,6 +179,13 @@ public class ScreenManager {
 
 
     public void goBack(){
+
+        if (!currentScreen.canGoBack()){
+            FriendlyLog.log("D","Iadt", "Back",
+                    "Navigation back prevented by " + currentScreen.getTitle() + " screen");
+            return;
+        }
+
         // Discard current and retrieve previous
         navigationManager.removeStep();
         NavigationStep previousStep = navigationManager.removeStep();

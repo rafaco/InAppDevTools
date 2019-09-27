@@ -28,8 +28,15 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
     private ViewGroup headContainer;
     private ViewGroup bodyContainer;
 
-    //Abstract constants to define by implementation
+    //Abstract method, have to be define by implementation
     public abstract String getTitle();
+    public abstract int getBodyLayoutId();
+    protected abstract void onCreate();
+    protected abstract void onStart(ViewGroup toolHead);
+    protected abstract void onStop();
+    protected abstract void onDestroy();
+
+    //Default methods, can be redefine by implementation
     public boolean isMain() {
         return true;
     }
@@ -40,14 +47,7 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
         return -1;
     }
     public int getHeadLayoutId() { return -1;}
-
-    public abstract int getBodyLayoutId();
-
-    //Abstract logic to define by implementation
-    protected abstract void onCreate();
-    protected abstract void onStart(ViewGroup toolHead);
-    protected abstract void onStop();
-    protected abstract void onDestroy();
+    public boolean canGoBack() { return true; }
 
     public Screen(ScreenManager manager) {
         this.manager = manager;
