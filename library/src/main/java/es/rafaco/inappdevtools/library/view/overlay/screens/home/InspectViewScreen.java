@@ -14,9 +14,14 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InspectViewScreen extends Screen {
 
@@ -46,6 +51,22 @@ public class InspectViewScreen extends Screen {
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
+
+        String viewOverview = "";
+        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
+        viewOverview += Humanizer.newLine();
+        viewOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
+        viewOverview += Humanizer.newLine();
+        viewOverview += "Top activity is " + RunningTasksUtils.getTopActivity();
+
+        data.add(new CardData("Info",
+                viewOverview,
+                R.string.gmd_view_carousel,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(InfoScreen.class, "0");
+                    }
+                }));
 
         data.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,

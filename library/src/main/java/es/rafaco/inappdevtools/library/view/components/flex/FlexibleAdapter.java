@@ -72,16 +72,23 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch(getItemViewType(position)){
-                    case 0: //TODO: FlexibleAdapter.TYPE_HEADER:
-                        return manager.getSpanCount();
-                    default:
-                        return 1;
+                Class<?> itemDataClass = getItemDataClass(position);
+                if (itemDataClass.equals(String.class)
+                    || itemDataClass.equals(CardData.class)){
+                    return manager.getSpanCount();
+                }
+                else{
+                    return 1;
                 }
             }
         });
         recyclerView.setLayoutManager(manager);
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public Class<?> getItemDataClass(int position) {
+        Object item = items.get(position);
+        return item.getClass();
     }
 
     @Override

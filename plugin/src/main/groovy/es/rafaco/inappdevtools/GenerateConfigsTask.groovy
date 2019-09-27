@@ -93,7 +93,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     private void generatePluginsList(Project project) {
         def plugins = ""
         project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
-        println "RAFA: building gradle_plugins.txt from plugin"
+        println "Generated gradle_plugins.txt"
         File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
         pluginsFile.text = plugins
     }

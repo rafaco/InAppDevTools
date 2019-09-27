@@ -7,12 +7,15 @@ import android.os.Debug;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LiveInfoReporter extends AbstractInfoReporter {
@@ -54,6 +57,12 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
+                .addButton(new RunButton("Inspect View",
+                        new Runnable() {
+                            @Override
+                            public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                            }
+                        }))
                 .build();
     }
 
