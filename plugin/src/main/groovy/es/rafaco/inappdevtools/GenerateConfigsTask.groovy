@@ -110,7 +110,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
                     ENABLED: false
             ]
         } else {
-            def localBranch = shell("git name-rev --name-only HEAD")
+            //def localBranch = shell("git name-rev --name-only HEAD")
+            def localBranch = shell("git rev-parse --abbrev-ref HEAD")
             def trackingRemote = shell('git config --get branch.' + localBranch + '.remote')
             def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
             def remoteUrl = shell('git config remote.' + trackingRemote + '.url')

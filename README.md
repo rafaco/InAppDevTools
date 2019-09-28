@@ -1,20 +1,20 @@
-# InAppDevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue?style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
+# InAppDevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)
 
 <p align="center">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
 </p>
 
 
-**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows your app to report, inspect and debug itself from the same screen when it's running. No cable needed, our UI shows over your running app.**
+**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows to report, inspect and debug your app from the same screen when it's running. No cable needed, our UI shows over your app.**
 
 - Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
 - View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
-- Inspect your standard logs, view layout, source code (original and generated) and storages (db, SharedPrefs and Files).
+- Inspect your standard logs, view layout, source code (original and generated) and storage (db, SharedPrefs and Files).
 - Modify your app behaviour on runtime editing values at your view layout, db or SharedPrefs.
 - Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
-- Send flexible reports by email or other apps. After a crash or at any time.
-- Easy installation and configuration. No Application class needed, all from Gradle.
-- Customize our tools to your needs, easily run your methods and use our dev helpers.
+- Reports crashes or issues directly to developers, including a zip with logs, screenshots and other info.
+- Easy installation and configuration. No Application class override needed, all from Gradle.
+- Customize our tools to your needs, add buttons to run your methods and use our dev helpers.
 
 **Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
 
@@ -39,13 +39,13 @@ For extended feature description, visit our wiki: [Feature description](https://
 - Minimun Gradle version: //TODO
 
 ### Express setup <a name="basic"/>
-You only need to modify 2 gradle files. On your **root build.gradle file**, import our plugin (just after buidscript) and add JitPack repository:
+You only need to modify 2 gradle files. On your **root** build.gradle file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.13"
+    id "es.rafaco.inappdevtools" version "0.0.14"
 }
 
 allprojects {
@@ -55,7 +55,7 @@ allprojects {
 }
 ```
 
-On your **app build.gradle**, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavors and don't include the "v" character in dependencies.
+Then, on your **app** build.gradle, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavors and don't include the "v" character in dependencies.
 
 | Flavor | Version | Description |
 |---|---|---|
@@ -66,6 +66,7 @@ On your **app build.gradle**, add targetCompatibility with Java8 and include our
 ```gradle
 
 android {
+    ...
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -78,18 +79,18 @@ dependencies {
 Build your app and shake your device! 
 
 This express setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections:
-* Your release apk size will be unnecessarly increased. [Using noop flavor](#noop)
-* Your debug builds will expose your source code [Limiting sources exposition](#exposed_sources)
-* Start logging all communications with your servers. [Enable network inspection](#network)
-* Customize your experience [configuring our library](#configuration) and using our [coding helpers/integrations](#coding_helpers).
+* Your release apk size will be needlessly increased, [use our noop flavor](#noop)
+* Your debug builds will expose all your source code, [limit your sources exposition](#exposed_sources)
+* You can log all communications with your servers, [enable network inspection](#network)
+* You can also customize your experience [configuring our library](#configuration) or using our [coding helpers/integrations](#coding_helpers).
 
 
 
 
 ### Using noop flavor <a name="noop"/>
-One side effects is that our library resources will increase your release apk size with never used code. We provide a tiny noop version and recommended it for release compilations. This also allow you to keep references to our library in your release soures.
+Operational flavors (`androidx` or `support`) are disabled on your release builds but they increase your release apk size with never used code. We provide a tiny noop version and recommended it for your release compilations. This also allow you to keep references to our library and imports in your release sources.
 
-To add conditional Gradle dependencies, prepend build type or your flavors to our dependency implementations. 
+To add conditional Gradle dependencies, prepend build type or your flavors to implementation in your dependencies. 
 ```gradle
 dependencies {
     debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.51'
@@ -105,7 +106,7 @@ If your app use Retrofit, we can record all network network communications for y
 ```java
 Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(DevTools.getOkHttpClient())
+                .client(Iadt.getOkHttpClient())
                 .build();
 ```
 For extended installation instructions, visit our wiki: [Extended installation](https://github.com/rafaco/InAppDevTools/wiki/Extended-installation)
