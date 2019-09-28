@@ -39,13 +39,15 @@ For extended feature description, visit our wiki: [Feature description](https://
 - Minimun Gradle version: //TODO
 
 ### Express setup <a name="basic"/>
-You only need to modify 2 gradle files. On your **root** build.gradle file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
+You only need to modify 2 gradle files. 
+
+On your **root** build.gradle file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.14"
+    id "es.rafaco.inappdevtools" version "0.0.14" apply false
 }
 
 allprojects {
@@ -55,15 +57,11 @@ allprojects {
 }
 ```
 
-Then, on your **app** build.gradle, add targetCompatibility with Java8 and include our library in dependencies. Choose between `androidx` or `support` flavors and don't include the "v" character in dependencies.
-
-| Flavor | Version | Description |
-|---|---|---|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
-|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation flavor recommended for your release versions (androidx and support).| 
+Then, on your **app** build.gradle, add targetCompatibility with Java8, apply our plugin and include our library in dependencies. Latest version is [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=flat-square)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) 
 
 ```gradle
+apply plugin: 'com.android.application'
+apply plugin: 'es.rafaco.inappdevtools'
 
 android {
     ...
@@ -72,25 +70,22 @@ android {
     }
 }
 dependencies {
-    implementation 'es.rafaco.inappdevtools:androidx:0.0.51'
-    //implementation 'es.rafaco.inappdevtools:support:0.0.51'
+    implementation 'es.rafaco.inappdevtools:support:0.0.51'
 }
 ```
-Build your app and shake your device! 
+This setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections. You can already give a try to our library, just build a debug version of your app and shake it!
 
-This express setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections:
-* Your release apk size will be needlessly increased, [use our noop flavor](#noop)
-* Your debug builds will expose all your source code, [limit your sources exposition](#exposed_sources)
-* You can log all communications with your servers, [enable network inspection](#network)
-* You can also customize your experience [configuring our library](#configuration) or using our [coding helpers/integrations](#coding_helpers).
+### Source code exposition disclaimer <a name="sources_disclaimer"/>
+Using default configuration, on your debug builds **all your source code can be view in our UI, can be shared and can be extracted from your APK**. This could also include hardcoded API keys or passwords.
 
+You can limit this behaviour by using our [configuration](#exposed_sources).
 
+### Optimize your builds <a name="noop"/>
+If your app use AndroidX libraries, we provide an optimized artifact for you. It currently need Jettifier enabled due to a transitive dependency (WIP). 
 
+We also provide a `noop` artifact recommended for your release compilations. Operational artifacts (`androidx` or `support`) are automatically disabled for your release builds but they needlessly increase your release apk size.
 
-### Using noop flavor <a name="noop"/>
-Operational flavors (`androidx` or `support`) are disabled on your release builds but they increase your release apk size with never used code. We provide a tiny noop version and recommended it for your release compilations. This also allow you to keep references to our library and imports in your release sources.
-
-To add conditional Gradle dependencies, prepend build type or your flavors to implementation in your dependencies. 
+To add conditional Gradle dependencies, prepend build type or your flavor name when including our dependencies: 
 ```gradle
 dependencies {
     debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.51'
@@ -100,8 +95,16 @@ dependencies {
 }
 ```
 
+| Artifact | Version | Description |
+|---|---|---|
+|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation. Recommended for your release versions with AndroidX or Support libraries.| 
+
+Note: Don't include the "v" character in your dependencies.
+
 ### Enable network inspection (optional) <a name="network"/>
-If your app use Retrofit, we can record all network network communications for you, allowing you to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
+If your app use Retrofit, we can record all network communications for you, allowing to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
@@ -109,20 +112,27 @@ Retrofit retrofit = new Retrofit.Builder()
                 .client(Iadt.getOkHttpClient())
                 .build();
 ```
-For extended installation instructions, visit our wiki: [Extended installation](https://github.com/rafaco/InAppDevTools/wiki/Extended-installation)
+
+### Including additional gradle modules <a name="modules"/>
+You can easily include your sources from other submodules from your project. We only currently support Android modules: Application, Library or Feature. 
+
+To do so just apply our plugin to their build.gradle file:
+```gradle
+apply plugin: 'es.rafaco.inappdevtools'
+```
 
 
 ## Usage <a name="usage"/>
-
 After the [installation](#setup) you only need to generate a debug build of your app and run it on a real device or emulator. 
 
+### Invocation <a name="invocation"/>
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device
+- Tap our floating icon
 - Touch our notification
-- Tap our floating icon over your app (disabled by default)
-- Or programmatically using our public interface (Iadt):
+- Or programmatically calling `Iadt.show();`
 ```java
-Iadt.show();
+
 Iadt.hide();
 ```
 
@@ -163,7 +173,7 @@ Available properties:
 
 ### Limiting sources exposition <a name="exposed_sources"/>
 
-When this library is enabled, **your source code can be view in our ui and they can also be extracted from your apk files**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use noop flavor for your release.
+When this library is enabled, **your source code can be view in our ui and they can also be extracted from your apk files**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use `noop` artifact for your release.
 
 If you don't want to show all or some of your proprietary sources in your debug builds, you have few options:
 
@@ -179,7 +189,7 @@ When source inclusion or source inspection get disabled you also lost the follow
 You can also enable our library and the source inclusion/inspection in your release builds. This is not recommended but can be useful for beta versions: 
 * Include `enabledOnRelease = true` in your configuration
 * Remove `sourceInclusion` and `sourceInspection` from your configuration or ensure both of them are `true`.
-* Stop using our noop flavor in your release dependencies. i.e. replace `releaseImplementation 'es.rafaco.inappdevtools:noop:...'` by `releaseImplementation 'es.rafaco.inappdevtools:androidx:...'`
+* Stop using our `noop` artifact in your release dependencies. i.e. replace `releaseImplementation 'es.rafaco.inappdevtools:noop:...'` by `releaseImplementation 'es.rafaco.inappdevtools:androidx:...'`
 
 <!--This library work out of the box for developer compilations which include Source inspection, allowing users to view and share your source code. In order to provide this features, your apk contains your source code as well as you compiled code (a zip file asset). 
 We can directly read your app's assets but we also include a a zip file in your apk with other source files:
