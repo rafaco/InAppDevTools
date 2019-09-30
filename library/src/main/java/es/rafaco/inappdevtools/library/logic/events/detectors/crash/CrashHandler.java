@@ -58,31 +58,20 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         try {
             friendlyLogId = FriendlyLog.logCrash(ex.getMessage());
-            Log.v(Iadt.TAG, "CrashHandler: logCrash done");
             stopAnrDetector();
             Crash crash = buildCrash(thread, ex);
-            Log.v(Iadt.TAG, "CrashHandler: buildCrash done");
             printLogcatError(thread, crash);
-            Log.v(Iadt.TAG, "CrashHandler: printLogcatError done");
             long crashId = storeCrash(crash);
-            Log.v(Iadt.TAG, "CrashHandler: printLogcatError done");
             PendingCrashUtil.savePending();
-            Log.v(Iadt.TAG, "CrashHandler: savePending done");
 
             IadtController.get().beforeClose();
-            Log.v(Iadt.TAG, "CrashHandler: beforeClose done");
             saveLogcat(crashId);
-            Log.v(Iadt.TAG, "CrashHandler: saveLogcat done");
             saveScreenshot();
-            Log.v(Iadt.TAG, "CrashHandler: saveScreenshot done");
             saveDetailReport();
-            Log.v(Iadt.TAG, "CrashHandler: saveDetailReport done");
             saveStacktrace(crashId, ex);
-            Log.v(Iadt.TAG, "CrashHandler: saveStacktrace done");
 
-            Log.v(Iadt.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
+            Log.v(Iadt.TAG, "CrashHandler: processing finished on " + (new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex);
-            Log.v(Iadt.TAG, "CrashHandler: onCrashStored done");
         }
         catch (Exception e) {
             Log.e(Iadt.TAG, "CrashHandler: exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
@@ -120,19 +109,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @NonNull
     private Crash buildCrash(Thread thread, Throwable ex) {
         final Crash crash = new Crash();
-        Log.v(Iadt.TAG, "CrashHandler: 0.1 done");
         crash.setDate(new Date().getTime());
-        Log.v(Iadt.TAG, "CrashHandler: 0.2 done");
         crash.setException(ex.getClass().getSimpleName());
-        Log.v(Iadt.TAG, "CrashHandler: 0.3 done");
         if (ex.getStackTrace()!=null && ex.getStackTrace().length > 0) {
             // Some exceptions doesn't have stacktrace
             // i.e. Binary XML file ... You must supply a layout_height attribute.
             crash.setExceptionAt(ex.getStackTrace()[0].toString());
         }
-        Log.v(Iadt.TAG, "CrashHandler: 0.4 done");
         crash.setMessage(ex.getMessage());
-        Log.v(Iadt.TAG, "CrashHandler: 1 done");
         Throwable cause = ex.getCause();
         if (cause != null){
             crash.setCauseException(cause.getClass().getSimpleName());
@@ -141,7 +125,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
-        Log.v(Iadt.TAG, "CrashHandler: 2 done");
         ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
                 .getEventDetectorsManager().get(ActivityEventDetector.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
@@ -151,7 +134,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setThreadGroupName(thread.getThreadGroup().getName());
         crash.setForeground(!activityWatcher.isInBackground());
         crash.setLastActivity(activityWatcher.getLastActivityResumed());
-        Log.v(Iadt.TAG, "CrashHandler: 3 done");
         return crash;
     }
 
