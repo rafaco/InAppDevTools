@@ -31,6 +31,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
@@ -40,8 +41,10 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 public class NotificationService extends Service {
 
     private static final int NOTIFICATION_ID = 3002;
-    private static final String CHANNEL_ID = "es.rafaco.iadt";
     private static final String GROUP_ID = "es.rafaco.iadt.foreground_service";
+    private static final String CHANNEL_PRIORITY = "es.rafaco.iadt.priority";
+    private static final String CHANNEL_STANDARD = "es.rafaco.iadt.standard";
+    private static final String CHANNEL_SILENT = "es.rafaco.iadt.silent";
     private static final int SUMMARY_ID = 0;
 
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
@@ -122,7 +125,7 @@ public class NotificationService extends Service {
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "Start foreground service.");
 
-        createNotificationChannel();
+        createNotificationChannels();
 
         /*Intent intent = AppUtils.getAppLauncherIntent(getApplicationContext());
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -135,7 +138,7 @@ public class NotificationService extends Service {
 
 
         Notification notification = buildMainNotification(pendingIntent,
-                PendingCrashUtil.isPending() ? new Crash() : null);
+                PendingCrashUtil.isSessionFromPending() ? new Crash() : null);
 
         //createNotificationGroup();
         //createNotificationSummary();
@@ -190,14 +193,12 @@ public class NotificationService extends Service {
             title = "Open developer tools";
             subTitle = overview;
         }else{
-            title = "Ups, your app crashed";
+            title = "Restarted from crashed, please report";
             subTitle = "Expand me for options...";
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setGroup(GROUP_ID)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setOnlyAlertOnce(true)
                 .setSmallIcon(R.drawable.ic_bug_report_white_24dp)
@@ -209,9 +210,29 @@ public class NotificationService extends Service {
                 //.setSubText("setSubText")           //Group second
                 .setWhen(System.currentTimeMillis()); //Group third
 
+        builder.setChannelId(getCurrentChannel());
+        if (FirstStartUtil.isFirstStart()){
+            Log.w("RAFA", "Notification isFirstStart");
+            builder.setDefaults(Notification.DEFAULT_VIBRATE)
+                    .setPriority(Notification.PRIORITY_MAX);
+        }
+        else if (crash == null){
+            Log.w("RAFA", "Notification crash");
+            builder.setDefaults(Notification.DEFAULT_VIBRATE)
+                    .setPriority(Notification.PRIORITY_MIN);
+        }
+        else{
+            Log.w("RAFA", "Notification not isFirstStart");
+            builder.setDefaults(Notification.DEFAULT_LIGHTS)
+                    .setPriority(Notification.PRIORITY_MIN);
+        }
+        
         if (crash == null){
+            Log.w("RAFA", "Notification not crash");
             builder.setColor(getResources().getColor(R.color.rally_blue_med));
-        }else{
+        }
+        else{
+            Log.w("RAFA", "Notification crash");
             builder.setColor(getResources().getColor(R.color.rally_orange));
         }
 
@@ -231,6 +252,15 @@ public class NotificationService extends Service {
         return builder.build();
     }
 
+    private String getCurrentChannel() {
+        if (FirstStartUtil.isFirstStart())
+            return CHANNEL_PRIORITY;
+        else if (PendingCrashUtil.isSessionFromPending())
+            return CHANNEL_STANDARD;
+        else
+            return CHANNEL_SILENT;
+    }
+
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
@@ -238,7 +268,7 @@ public class NotificationService extends Service {
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getCurrentChannel())
                 .setGroup(GROUP_ID)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
@@ -305,17 +335,25 @@ public class NotificationService extends Service {
         return new NotificationCompat.Action(0, title, pendingPrevIntent);
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannels() {
+        createNotificationChannel(CHANNEL_PRIORITY, NotificationManager.IMPORTANCE_HIGH);
+        createNotificationChannel(CHANNEL_STANDARD, NotificationManager.IMPORTANCE_DEFAULT);
+        createNotificationChannel(CHANNEL_SILENT, NotificationManager.IMPORTANCE_LOW);
+    }
+
+    private void createNotificationChannel(String notificationId, int importance) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            NotificationChannel channel = notificationManager.getNotificationChannel(CHANNEL_ID);
+            NotificationChannel channel = notificationManager.getNotificationChannel(notificationId);
             if(channel==null){
                 CharSequence name = "NotificationService";
                 String description = "To showMain Iadt report notification";
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-                channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                channel = new NotificationChannel(notificationId, name, importance);
+                if (importance == NotificationManager.IMPORTANCE_LOW){
+                    channel.setSound(null, null);
+                }
                 channel.setDescription(description);
                 notificationManager.createNotificationChannel(channel);
             }
@@ -323,7 +361,7 @@ public class NotificationService extends Service {
     }
 
     private void createNotificationGroup() {
-        Notification summaryNotification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Notification summaryNotification = new NotificationCompat.Builder(this, getCurrentChannel())
                 .setSmallIcon(UiUtils.getAppIconResourceId())
                 .setContentTitle("Group Title")
                 .setContentText("Group text")
@@ -339,7 +377,7 @@ public class NotificationService extends Service {
 
     private void createNotificationSummary() {
         Notification summaryNotification =
-                new NotificationCompat.Builder(this, CHANNEL_ID)
+                new NotificationCompat.Builder(this, getCurrentChannel())
                         .setContentTitle("Summary Title")
                         .setContentText("Summary text")
                         .setSmallIcon(UiUtils.getAppIconResourceId())
