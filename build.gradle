@@ -36,7 +36,7 @@ allprojects {
 ext {
     pluginVersionName = '0.0.15'
 
-    libraryPublishedVersion = '0.0.51'
+    libraryPublishedVersion = '0.0.52'
     libraryWorkingVersion = '0.0.52'
     libraryVersionCode = 1
     libraryMinSdkVersion = 16
