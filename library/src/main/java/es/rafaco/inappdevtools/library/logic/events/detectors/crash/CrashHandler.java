@@ -17,6 +17,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.events.EventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -56,7 +58,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         try {
             friendlyLogId = FriendlyLog.logCrash(ex.getMessage());
-            //stopDevToolsServices();
+            stopAnrDetector();
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
             long crashId = storeCrash(crash);
@@ -68,7 +70,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             saveDetailReport();
             saveStacktrace(crashId, ex);
 
-            Log.v(Iadt.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
+            Log.v(Iadt.TAG, "CrashHandler: processing finished on " + (new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex);
         }
         catch (Exception e) {
@@ -77,6 +79,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
             FriendlyLog.logException("Exception", e);
         }
+    }
+
+    private void stopAnrDetector() {
+        // Early stop of AnrDetector, other get stopped later on by IadtController.beforeClose().
+        // Reason: AnrDetector start new threads which is currently forbidden.
+        EventDetector anrDetector = IadtController.get().getEventManager().getEventDetectorsManager().get(ErrorAnrEventDetector.class);
+        anrDetector.stop();
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
@@ -102,15 +111,18 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         final Crash crash = new Crash();
         crash.setDate(new Date().getTime());
         crash.setException(ex.getClass().getSimpleName());
-        crash.setExceptionAt(ex.getStackTrace()[1].toString());
+        if (ex.getStackTrace()!=null && ex.getStackTrace().length > 0) {
+            // Some exceptions doesn't have stacktrace
+            // i.e. Binary XML file ... You must supply a layout_height attribute.
+            crash.setExceptionAt(ex.getStackTrace()[0].toString());
+        }
         crash.setMessage(ex.getMessage());
-
         Throwable cause = ex.getCause();
         if (cause != null){
             crash.setCauseException(cause.getClass().getSimpleName());
             crash.setCauseMessage(cause.getMessage());
-            if (cause.getStackTrace() != null && cause.getStackTrace().length > 1){
-                crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+            if (cause.getStackTrace() != null && cause.getStackTrace().length > 0){
+                crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
         ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()

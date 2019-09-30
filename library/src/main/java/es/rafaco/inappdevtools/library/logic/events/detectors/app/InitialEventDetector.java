@@ -68,7 +68,7 @@ public class InitialEventDetector extends EventDetector {
         eventManager.subscribe(Event.APP_START, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                if (PendingCrashUtil.isPending()) {
+                if (PendingCrashUtil.isSessionFromPending()) {
                     FriendlyLog.log(new Date().getTime(), "W", "App", "Restart",
                             "App restarted after a crash");
                 } else if (FirstStartUtil.isFirstStart()) {

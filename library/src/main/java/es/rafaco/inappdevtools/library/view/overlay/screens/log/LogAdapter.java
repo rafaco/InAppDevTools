@@ -43,6 +43,11 @@ public class LogAdapter
         setClickListener();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).getDate();
+    }
+
     @NonNull
     @Override
     public LogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

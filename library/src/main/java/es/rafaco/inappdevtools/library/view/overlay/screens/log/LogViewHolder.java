@@ -168,13 +168,14 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     public void showPlaceholder(int position) {
         int color = ContextCompat.getColor(title.getContext(), R.color.rally_gray);
 
+        decorator.setVisibility(View.VISIBLE);
+        //decorator.setBackgroundColor(color);
+
         title.setVisibility(View.VISIBLE);
-        title.setText("");
-        title.setBackgroundColor(color);
-        decorator.setBackgroundColor(color);
+        //title.setBackgroundColor(color);
 
         icon.setVisibility(View.VISIBLE);
-        icon.setBackgroundColor(color);
+        //icon.setBackgroundColor(color);
 
         extra_wrapper.setVisibility(View.GONE);
         overTitleWrapper.setVisibility(View.GONE);

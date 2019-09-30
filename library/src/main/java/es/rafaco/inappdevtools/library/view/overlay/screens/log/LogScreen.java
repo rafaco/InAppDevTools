@@ -143,9 +143,6 @@ public class LogScreen extends Screen {
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
-                    //Log.v(Iadt.TAG, "Scrolling onItemRangeInserted( positionStart="+positionStart
-                    // +" itemCount="+itemCount+" size="+adapter.getItemCount()
-                    // +" isBottom="+!recyclerView.canScrollVertically(1) + ")");
                     scrollToBottom();
                 }
             }
@@ -153,9 +150,7 @@ public class LogScreen extends Screen {
 
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(4)
-                .setPageSize(20)
-                .setPrefetchDistance(60)
+                .setPageSize(25*2)
                 .build();
 
         initLiveDataWithFriendlyLog(myPagingConfig);
@@ -163,11 +158,9 @@ public class LogScreen extends Screen {
         logList.observe(ProcessLifecycleOwner.get(), new Observer<PagedList<Friendly>>() {
             @Override
             public void onChanged(PagedList<Friendly> pagedList) {
-                //FriendlyLog.log("V", "Iadt", "IadtLiveData", "Observer onChanged");
                 adapter.submitList(pagedList);
             }
         });
-        //Log.d("IadtLiveData", "Observer registered to PagedList from FriendlyDao");
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);

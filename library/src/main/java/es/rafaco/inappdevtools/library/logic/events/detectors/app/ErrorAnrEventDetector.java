@@ -35,7 +35,7 @@ public class ErrorAnrEventDetector extends EventDetector {
     @Override
     public void start() {
 
-        watchDog = new ANRWatchDog()
+        watchDog = new ANRWatchDog(2*1000)
                 .setANRListener(new ANRWatchDog.ANRListener() {
                     @Override
                     public void onAppNotResponding(ANRError error) {
