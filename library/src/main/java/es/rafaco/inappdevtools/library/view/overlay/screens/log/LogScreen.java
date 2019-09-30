@@ -152,34 +152,6 @@ public class LogScreen extends Screen {
             }
         });
 
-        /*adapter.setSelectedListener(new OnSelectedListener() {
-            @Override
-            public void onSelected(boolean isSelected, int position, int previousPosition) {
-                try{
-                    if (isSelected){
-                        recyclerView.removeItemDecorationAt(position - 1);
-                        adapter.notifyItemChanged(position - 1);
-                        recyclerView.removeItemDecorationAt(position + 1);
-                        adapter.notifyItemChanged(position + 1);
-                    }
-                    else{
-                        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()),
-                                previousPosition - 1);
-                        adapter.notifyItemChanged(previousPosition - 1);
-                        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()),
-                                previousPosition + 1);
-                        adapter.notifyItemChanged(previousPosition + 1);
-                    }
-                }
-                catch (Exception e){
-                    FriendlyLog.logException("No item at log recycler. "
-                            + isSelected + ", " + position + ", " + previousPosition
-                            + ". size " + recyclerView.getChildCount()
-                            , e);
-                }
-            }
-        });*/
-
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(true)
                 .setPageSize(25*2)
@@ -197,7 +169,6 @@ public class LogScreen extends Screen {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

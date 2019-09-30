@@ -36,7 +36,6 @@ public class LogAdapter
     private static long selectedItemId = -1;
     private static int selectedItemPosition = -1;
     private OnClickListener mClickListener;
-    private LogScreen.OnSelectedListener onSelectedListener;
 
     protected LogAdapter() {
         super(DIFF_CALLBACK);
@@ -64,10 +63,10 @@ public class LogAdapter
                                  int position) {
         Friendly item = getItem(position);
         if (item != null) {
-            //Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
-            holder.bindTo(item, selectedItemId == item.getUid());
+            holder.bindTo(item,
+                    selectedItemId == item.getUid(),
+                    selectedItemPosition - 1 == position);
         } else {
-            //Log.d("Friendly", "Placeholder for" + position);
             holder.showPlaceholder(position);
         }
     }
@@ -76,37 +75,38 @@ public class LogAdapter
         setClickListener(new OnClickListener() {
             @Override
             public void onClick(View itemView, int position, long id) {
+                int previousPosition = -1;
+
                 if (id == selectedItemId) {
-                    if (onSelectedListener!=null){
-                        onSelectedListener.onSelected(false, position, selectedItemPosition);
-                    }
+                    previousPosition = selectedItemPosition;
                     selectedItemId = -1;
                     selectedItemPosition = -1;
                 }
                 else {
-                    int previousPosition = -1;
                     if (selectedItemId > -1) {
                         previousPosition = selectedItemPosition;
-                        LogAdapter.this.notifyItemChanged(previousPosition);
-                    }
-                    if (onSelectedListener!=null){
-                        onSelectedListener.onSelected(true, position, previousPosition);
                     }
                     selectedItemId = id;
                     selectedItemPosition = position;
                 }
 
+                if (previousPosition != -1) {
+                    LogAdapter.this.notifyItemChanged(previousPosition);
+                    if (previousPosition>1){
+                        LogAdapter.this.notifyItemChanged(previousPosition - 1);
+                    }
+                }
+
                 LogAdapter.this.notifyItemChanged(position);
+                if (position>1){
+                    LogAdapter.this.notifyItemChanged(position - 1);
+                }
             }
         });
     }
 
     public void setClickListener(OnClickListener clickListener) {
         mClickListener = clickListener;
-    }
-
-    public void setSelectedListener(LogScreen.OnSelectedListener onSelectedListener) {
-        this.onSelectedListener = onSelectedListener;
     }
 
     public interface OnClickListener {

@@ -46,6 +46,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     LinearLayout wrapper;
     CardView card;
+    View logSeparator;
     View titleSeparator;
     LinearLayout detailWrapper;
     AppCompatTextView detail;
@@ -63,6 +64,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
         wrapper = view.findViewById(R.id.wrapper);
         card = view.findViewById(R.id.card_view);
+        logSeparator = view.findViewById(R.id.log_separator);
         decorator = view.findViewById(R.id.decorator);
         title = view.findViewById(R.id.title);
         icon = view.findViewById(R.id.icon);
@@ -75,7 +77,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         extra_button = view.findViewById(R.id.extra_button);
     }
 
-    public void bindTo(final Friendly data, boolean isSelected) {
+    public void bindTo(final Friendly data, boolean isSelected, boolean isBeforeSelected) {
         uid = data.getUid();
         boolean isLogcat = data.getCategory().equals("Logcat");
 
@@ -159,6 +161,9 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             extra_button.setVisibility(View.GONE);
             buttonsSeparator.setVisibility(View.GONE);
         }
+
+        logSeparator.setVisibility(isSelected || isBeforeSelected ? View.GONE
+                : View.VISIBLE);
     }
 
     private NavigationStep getLink(Friendly data) {
