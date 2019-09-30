@@ -15,8 +15,9 @@
         android:layout_gravity="left"
         android:textAlignment="center"
         android:textColor="@color/iadt_background"
+        android:text=" "
         android:textStyle="bold"
-        android:background="@color/rally_green"
+        android:background="@color/iadt_background"
         android:layout_marginLeft="4dp"/>
 
     <RelativeLayout
@@ -62,14 +63,20 @@
             android:layout_marginRight="6dp"
             android:textColor="@color/rally_white"/>
 
+        <View
+            android:id="@+id/separator"
+            android:layout_below="@id/title"
+            style="@style/horizontal_separator"/>
+
         <LinearLayout
             android:id="@+id/detail_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/title"
+            android:layout_below="@id/separator"
             android:orientation="horizontal"
-            android:padding="4dp">
+            android:padding="4dp"
+            android:visibility="gone">
 
             <es.rafaco.compat.AppCompatTextView
                 android:id="@+id/detail"
@@ -87,7 +94,8 @@
             android:layout_below="@id/detail_wrapper"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:padding="4dp">
+            android:padding="4dp"
+            android:visibility="gone">
 
             <es.rafaco.compat.AppCompatTextView
                 android:id="@+id/extra"
@@ -106,7 +114,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:minHeight="0dp"
-            android:text="Details"/>
+            android:text="Details"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
