@@ -24,11 +24,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     void apply(Project project) {
 
-        if(!isAndroidApplication(project) && !isAndroidLibrary(project)){
+        if(!isAndroidApplication(project) && !isAndroidLibrary(project) && !isAndroidFeature(project)){
             if (isRoot(project))
-                println "IATD: Skipped root project"
+                println "IATD skipped for root project"
             else
-                println "IATD: Skipped NOT root project"
+                println "IATD skipped for ${project.name} project. " +
+                        "Only Android application, library or feature project are currently allowed."
             return
         }
 
@@ -47,13 +48,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
         }
 
-        //Add tasks
-        project.task(CONFIG_TASK, type:GenerateConfigsTask)
+        // Add all our tasks to project
+        addGenerateConfigTask(project)
         addPackSourcesTask(project, outputFolder)
         addPackResourcesTask(project, outputFolder)
         addCleanTask(project, outputFolder)
 
-        // Link tasks on project
+        // Selectively link our tasks to each BuildVariant
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
 
@@ -62,20 +63,25 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                         && isSourceInclusion(project)
                         && isSourceInspection(project)){
 
-                    if (isDebug(project)){ println "IADT will include your sources in your apk before " + theTask.name }
+                    if (isDebug(project)){
+                        println "IADT will include your sources in your apk before " + theTask.name
+                    }
+
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
                             project.tasks.getByName(RESOURCES_TASK)]
                 }
                 else{
-                    if (isDebug(project)){ println "IADT will not add your sources - Added clean sources tasks before " + theTask.name }
-                    //project.android.sourceSets.main.assets.srcDirs -= "${project.buildDir}${ASSETS_PATH}"
-                    //delete(project.file("${project.buildDir}\\generated\\assets\\inappdevtools"))
+                    if (isDebug(project)){
+                        println "IADT will not add your sources - Added clean sources tasks before " + theTask.name
+                    }
+
                     theTask.dependsOn += [
                             project.tasks.getByName(CLEAN_TASK)]
                 }
 
-                //Include CONFIG_TASK for all compilations
+                //TODO: do we need it when disabled?
+                // Link CONFIG_TASK
                 theTask.dependsOn += [
                         project.tasks.getByName(CONFIG_TASK)]
             }
@@ -87,8 +93,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    static boolean isRoot(Project project){
-        return project.name.equals(project.rootProject.name)
+    private Task addGenerateConfigTask(Project project) {
+        project.task(CONFIG_TASK, type: GenerateConfigsTask)
     }
 
     private Task addCleanTask(Project project, outputFolder) {
@@ -214,6 +220,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             return extension.sourceInspection
         }
         return true
+    }
+
+    static boolean isRoot(Project project){
+        return project.name.equals(project.rootProject.name)
     }
 
     static boolean isAndroidApplication(Project project){
