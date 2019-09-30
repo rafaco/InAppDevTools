@@ -11,13 +11,9 @@ public class PendingCrashUtil {
         DevToolsPrefs.setBoolean(PREF_VALUE_KEY, true);
     }
 
-    public static void clearPending(){
-        DevToolsPrefs.setBoolean(PREF_VALUE_KEY, false);
-    }
-
     public static boolean isPending(){
         if (iSessionFromPending == null){
-            isSessionFromPending();
+            return isSessionFromPending();
         }
         return DevToolsPrefs.getBoolean(PREF_VALUE_KEY, false);
     }
@@ -27,5 +23,9 @@ public class PendingCrashUtil {
             iSessionFromPending = DevToolsPrefs.getBoolean(PREF_VALUE_KEY, false);
         }
         return iSessionFromPending;
+    }
+
+    public static void clearPending(){
+        DevToolsPrefs.setBoolean(PREF_VALUE_KEY, false);
     }
 }

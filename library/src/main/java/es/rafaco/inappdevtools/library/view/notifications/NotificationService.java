@@ -211,12 +211,13 @@ public class NotificationService extends Service {
                 .setWhen(System.currentTimeMillis()); //Group third
 
         builder.setChannelId(getCurrentChannel());
-        if (FirstStartUtil.isFirstStart()){
+        Log.w("RAFA", "Notification channel: " + getCurrentChannel());
+        if (FirstStartUtil.isSessionFromFirstStart()){
             Log.w("RAFA", "Notification isFirstStart");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MAX);
         }
-        else if (crash == null){
+        else if (crash != null){
             Log.w("RAFA", "Notification crash");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MIN);
@@ -253,7 +254,7 @@ public class NotificationService extends Service {
     }
 
     private String getCurrentChannel() {
-        if (FirstStartUtil.isFirstStart())
+        if (FirstStartUtil.isSessionFromFirstStart())
             return CHANNEL_PRIORITY;
         else if (PendingCrashUtil.isSessionFromPending())
             return CHANNEL_STANDARD;
