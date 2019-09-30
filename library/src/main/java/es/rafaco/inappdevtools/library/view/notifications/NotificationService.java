@@ -42,9 +42,6 @@ public class NotificationService extends Service {
 
     private static final int NOTIFICATION_ID = 3002;
     private static final String GROUP_ID = "es.rafaco.iadt.foreground_service";
-    private static final String CHANNEL_PRIORITY = "es.rafaco.iadt.priority";
-    private static final String CHANNEL_STANDARD = "es.rafaco.iadt.standard";
-    private static final String CHANNEL_SILENT = "es.rafaco.iadt.silent";
     private static final int SUMMARY_ID = 0;
 
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
@@ -210,7 +207,7 @@ public class NotificationService extends Service {
                 //.setSubText("setSubText")           //Group second
                 .setWhen(System.currentTimeMillis()); //Group third
 
-        builder.setChannelId(getCurrentChannel());
+        builder.setChannelId(getCurrentChannel().getId());
         Log.w("RAFA", "Notification channel: " + getCurrentChannel());
         if (FirstStartUtil.isSessionFromFirstStart()){
             Log.w("RAFA", "Notification isFirstStart");
@@ -253,13 +250,13 @@ public class NotificationService extends Service {
         return builder.build();
     }
 
-    private String getCurrentChannel() {
+    private IadtChannel getCurrentChannel() {
         if (FirstStartUtil.isSessionFromFirstStart())
-            return CHANNEL_PRIORITY;
+            return IadtChannel.CHANNEL_PRIORITY;
         else if (PendingCrashUtil.isSessionFromPending())
-            return CHANNEL_STANDARD;
+            return IadtChannel.CHANNEL_STANDARD;
         else
-            return CHANNEL_SILENT;
+            return IadtChannel.CHANNEL_SILENT;
     }
 
     //TODO: delete?
@@ -269,7 +266,7 @@ public class NotificationService extends Service {
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getCurrentChannel())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getCurrentChannel().getId())
                 .setGroup(GROUP_ID)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
@@ -337,32 +334,30 @@ public class NotificationService extends Service {
     }
 
     private void createNotificationChannels() {
-        createNotificationChannel(CHANNEL_PRIORITY, NotificationManager.IMPORTANCE_HIGH);
-        createNotificationChannel(CHANNEL_STANDARD, NotificationManager.IMPORTANCE_DEFAULT);
-        createNotificationChannel(CHANNEL_SILENT, NotificationManager.IMPORTANCE_LOW);
+        createNotificationChannel(IadtChannel.CHANNEL_PRIORITY);
+        createNotificationChannel(IadtChannel.CHANNEL_STANDARD);
+        createNotificationChannel(IadtChannel.CHANNEL_SILENT);
     }
 
-    private void createNotificationChannel(String notificationId, int importance) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+    private void createNotificationChannel(IadtChannel channelData) {
+        // Create the IadtChannel, but only on API 26+ because
+        // the IadtChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            NotificationChannel channel = notificationManager.getNotificationChannel(notificationId);
+            NotificationChannel channel = notificationManager.getNotificationChannel(channelData.getId());
             if(channel==null){
-                CharSequence name = "NotificationService";
-                String description = "To showMain Iadt report notification";
-                channel = new NotificationChannel(notificationId, name, importance);
-                if (importance == NotificationManager.IMPORTANCE_LOW){
+                channel = new NotificationChannel(channelData.getId(), channelData.getName(), channelData.getPriority());
+                if (channelData.getPriority() == NotificationManager.IMPORTANCE_LOW){
                     channel.setSound(null, null);
                 }
-                channel.setDescription(description);
+                channel.setDescription(channelData.getDescription());
                 notificationManager.createNotificationChannel(channel);
             }
         }
     }
 
     private void createNotificationGroup() {
-        Notification summaryNotification = new NotificationCompat.Builder(this, getCurrentChannel())
+        Notification summaryNotification = new NotificationCompat.Builder(this, getCurrentChannel().getId())
                 .setSmallIcon(UiUtils.getAppIconResourceId())
                 .setContentTitle("Group Title")
                 .setContentText("Group text")
@@ -378,7 +373,7 @@ public class NotificationService extends Service {
 
     private void createNotificationSummary() {
         Notification summaryNotification =
-                new NotificationCompat.Builder(this, getCurrentChannel())
+                new NotificationCompat.Builder(this, getCurrentChannel().getId())
                         .setContentTitle("Summary Title")
                         .setContentText("Summary text")
                         .setSmallIcon(UiUtils.getAppIconResourceId())

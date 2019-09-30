@@ -2,7 +2,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
