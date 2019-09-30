@@ -1,7 +1,10 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +52,7 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class LogScreen extends Screen {
 
@@ -148,6 +152,34 @@ public class LogScreen extends Screen {
             }
         });
 
+        /*adapter.setSelectedListener(new OnSelectedListener() {
+            @Override
+            public void onSelected(boolean isSelected, int position, int previousPosition) {
+                try{
+                    if (isSelected){
+                        recyclerView.removeItemDecorationAt(position - 1);
+                        adapter.notifyItemChanged(position - 1);
+                        recyclerView.removeItemDecorationAt(position + 1);
+                        adapter.notifyItemChanged(position + 1);
+                    }
+                    else{
+                        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()),
+                                previousPosition - 1);
+                        adapter.notifyItemChanged(previousPosition - 1);
+                        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()),
+                                previousPosition + 1);
+                        adapter.notifyItemChanged(previousPosition + 1);
+                    }
+                }
+                catch (Exception e){
+                    FriendlyLog.logException("No item at log recycler. "
+                            + isSelected + ", " + position + ", " + previousPosition
+                            + ". size " + recyclerView.getChildCount()
+                            , e);
+                }
+            }
+        });*/
+
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(true)
                 .setPageSize(25*2)
@@ -162,15 +194,46 @@ public class LogScreen extends Screen {
             }
         });
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new LogScreenDividerItemDecoration(getContext()));
         recyclerView.setAdapter(adapter);
-
         adapter.notifyDataSetChanged();
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from LogScreen");
         LogcatReaderService.enqueueWork(getContext(), intent);
+    }
+
+    public interface OnSelectedListener {
+        void onSelected(boolean isSelected, int position, int previousPosition);
+    }
+
+    public class LogScreenDividerItemDecoration extends RecyclerView.ItemDecoration {
+        private Drawable mDivider;
+
+        public LogScreenDividerItemDecoration(Context context) {
+            mDivider = context.getResources().getDrawable(R.drawable.card_divider);
+        }
+
+        @Override
+        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            int left = parent.getPaddingLeft() + UiUtils.dpToPx(getContext(), 20);
+            int right = parent.getWidth() - parent.getPaddingRight() - UiUtils.dpToPx(getContext(), 10);
+
+            int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View child = parent.getChildAt(i);
+
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+                int top = child.getBottom() + params.bottomMargin;
+                int bottom = top + mDivider.getIntrinsicHeight();
+
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
     }
 
     private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {

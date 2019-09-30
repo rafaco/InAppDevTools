@@ -14,7 +14,6 @@
 package es.rafaco.inappdevtools.library.view.icons;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -24,7 +23,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.util.TypedValue;
+
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class IconDrawable extends Drawable {
 
@@ -89,19 +89,7 @@ public class IconDrawable extends Drawable {
      * @return The current IconDrawable for chaining.
      */
     public IconDrawable sizeDp(int size) {
-        return sizePx(dpToPx(context.getResources(), size));
-    }
-
-    /**
-     * Dp to px.
-     *
-     * @param res the res
-     * @param dp  the dp
-     * @return the int
-     */
-    public static int dpToPx(Resources res, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                res.getDisplayMetrics());
+        return sizePx(UiUtils.dpToPx(context, size));
     }
 
     /**

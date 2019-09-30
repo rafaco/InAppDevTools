@@ -309,7 +309,7 @@ public class LogcatLine {
         extra += "Channel: " + channel + Humanizer.newLine();
         extra += "Tag: " + tag + Humanizer.newLine();
         extra += "Process: " + processId + Humanizer.newLine();
-        extra += "Thread: " + threadId + Humanizer.newLine();
+        extra += "Thread: " + threadId;
         parsed.setExtra(extra);
 
         return parsed;

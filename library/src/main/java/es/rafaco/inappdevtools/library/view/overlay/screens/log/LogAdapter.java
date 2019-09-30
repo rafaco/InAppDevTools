@@ -36,6 +36,7 @@ public class LogAdapter
     private static long selectedItemId = -1;
     private static int selectedItemPosition = -1;
     private OnClickListener mClickListener;
+    private LogScreen.OnSelectedListener onSelectedListener;
 
     protected LogAdapter() {
         super(DIFF_CALLBACK);
@@ -75,18 +76,26 @@ public class LogAdapter
         setClickListener(new OnClickListener() {
             @Override
             public void onClick(View itemView, int position, long id) {
-                if (selectedItemId == -1) {
-                    selectedItemId = id;
-                    selectedItemPosition = position;
-                } else if (id == selectedItemId) {
+                if (id == selectedItemId) {
+                    if (onSelectedListener!=null){
+                        onSelectedListener.onSelected(false, position, selectedItemPosition);
+                    }
                     selectedItemId = -1;
                     selectedItemPosition = -1;
-                } else if (selectedItemId != -1) {
-                    int previousPosition = selectedItemPosition;
+                }
+                else {
+                    int previousPosition = -1;
+                    if (selectedItemId > -1) {
+                        previousPosition = selectedItemPosition;
+                        LogAdapter.this.notifyItemChanged(previousPosition);
+                    }
+                    if (onSelectedListener!=null){
+                        onSelectedListener.onSelected(true, position, previousPosition);
+                    }
                     selectedItemId = id;
                     selectedItemPosition = position;
-                    LogAdapter.this.notifyItemChanged(previousPosition);
                 }
+
                 LogAdapter.this.notifyItemChanged(position);
             }
         });
@@ -94,6 +103,10 @@ public class LogAdapter
 
     public void setClickListener(OnClickListener clickListener) {
         mClickListener = clickListener;
+    }
+
+    public void setSelectedListener(LogScreen.OnSelectedListener onSelectedListener) {
+        this.onSelectedListener = onSelectedListener;
     }
 
     public interface OnClickListener {

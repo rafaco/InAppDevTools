@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -32,6 +33,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -43,12 +45,13 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     AppCompatTextView title;
 
     LinearLayout wrapper;
-    LinearLayout overTitleWrapper;
-    AppCompatTextView overTitle;
+    CardView card;
+    View titleSeparator;
     LinearLayout detailWrapper;
     AppCompatTextView detail;
     LinearLayout extra_wrapper;
     AppCompatTextView extra;
+    View buttonsSeparator;
     AppCompatButton extra_button;
 
     public LogViewHolder(View view, final LogAdapter.OnClickListener clickListener) {
@@ -59,11 +62,12 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         //itemView.setOnLongClickListener(this);
 
         wrapper = view.findViewById(R.id.wrapper);
+        card = view.findViewById(R.id.card_view);
         decorator = view.findViewById(R.id.decorator);
         title = view.findViewById(R.id.title);
         icon = view.findViewById(R.id.icon);
-        overTitleWrapper = view.findViewById(R.id.over_title_wrapper);
-        overTitle = view.findViewById(R.id.over_title);
+        titleSeparator = view.findViewById(R.id.title_separator);
+        buttonsSeparator = view.findViewById(R.id.buttons_separator);
         detailWrapper = view.findViewById(R.id.detail_wrapper);
         detail = view.findViewById(R.id.detail);
         extra_wrapper = view.findViewById(R.id.extra_wrapper);
@@ -75,11 +79,12 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         uid = data.getUid();
         boolean isLogcat = data.getCategory().equals("Logcat");
 
-        int bgColorId = isSelected ? R.color.iadt_surface_top : R.color.iadt_background;
-        int bgColor = ContextCompat.getColor(wrapper.getContext(), bgColorId);
-        wrapper.setBackgroundColor(bgColor);
+        int cardColorId = isSelected ? R.color.iadt_surface_top : android.R.color.transparent;
+        int cardColor = ContextCompat.getColor(wrapper.getContext(), cardColorId);
+        card.setCardBackgroundColor(cardColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            itemView.setElevation(isSelected ? 5 : 0);
+            card.setElevation(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
+            card.setRadius(isSelected ? UiUtils.dpToPx(card.getContext(), 12) : 0);
         }
 
         int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
@@ -111,30 +116,33 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         title.setVisibility(View.VISIBLE);
         title.setText(data.getMessage());
         title.setSingleLine(!isSelected);
-        //title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
+        title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
         title.setBackgroundColor(Color.TRANSPARENT);
 
-        overTitleWrapper.setVisibility(View.GONE);
-        /*overTitleWrapper.setVisibility(isSelected && !isLogcat ? View.VISIBLE : View.GONE);
-        overTitle.setText(!isSelected && !isLogcat ? "" :
-                String.format("%s [%s-%s]",
-                        DateUtils.format(data.getDate()),
-                        data.getCategory(), data.getSubcategory()));*/
+        titleSeparator.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
-        boolean showDetail = !isLogcat && isSelected;
-        detailWrapper.setVisibility( showDetail ? View.VISIBLE : View.GONE);
-        if (!isLogcat){
-            String extra = "";
-            extra += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
-            extra += "Source: " + "Iadt Event" + Humanizer.newLine();
-            extra += "Category: " + data.getCategory() + Humanizer.newLine();
-            extra += "Subcategory: " + data.getSubcategory() + Humanizer.newLine();
-            detail.setText(!isSelected ? "" : extra);
+        if (isSelected){
+            String details = "";
+            if (isLogcat){
+                details = data.getExtra();
+            }
+            else{
+                details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
+                details += "Source: " + "Iadt Event" + Humanizer.newLine();
+                details += "Category: " + data.getCategory() + Humanizer.newLine();
+                details += "Subcategory: " + data.getSubcategory();
+            }
+            detail.setText(details);
+            detailWrapper.setVisibility(View.VISIBLE);
+
+            boolean showExtra = !isLogcat && !TextUtils.isEmpty(data.getExtra());
+            extra_wrapper.setVisibility(showExtra ? View.VISIBLE : View.GONE);
+            extra.setText(showExtra ? data.getExtra() : "");
         }
-
-        boolean showExtra = isSelected && !TextUtils.isEmpty(data.getExtra());
-        extra_wrapper.setVisibility(showExtra ? View.VISIBLE : View.GONE);
-        extra.setText(showExtra ? data.getExtra() : "");
+        else{
+            detailWrapper.setVisibility( View.GONE);
+            extra_wrapper.setVisibility(View.GONE);
+        }
 
         if(isSelected && getLink(data)!=null){
             extra_button.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +153,11 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             });
             extra_button.getBackground().setColorFilter(severityColor, PorterDuff.Mode.MULTIPLY);
             extra_button.setVisibility(View.VISIBLE);
+            buttonsSeparator.setVisibility(View.VISIBLE);
         }else{
             extra_button.setOnClickListener(null);
             extra_button.setVisibility(View.GONE);
+            buttonsSeparator.setVisibility(View.GONE);
         }
     }
 
@@ -178,7 +188,6 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         //icon.setBackgroundColor(color);
 
         extra_wrapper.setVisibility(View.GONE);
-        overTitleWrapper.setVisibility(View.GONE);
         extra_button.setVisibility(View.GONE);
 
         if (Humanizer.isEven(position)){

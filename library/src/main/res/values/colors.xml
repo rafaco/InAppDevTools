@@ -33,6 +33,7 @@
     <color name="rally_blue_darker">#00297e</color>
     <color name="rally_white">#E7E7E7</color>
     <color name="rally_gray">#5E5F65</color>
+    <color name="rally_gray_alpha">#805E5F65</color>
 
     <color name="charcoal">#1A2732</color>
     <color name="black">#000000</color>

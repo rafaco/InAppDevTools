@@ -1,122 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp">
+    android:background="@color/iadt_background"
+    android:orientation="horizontal">
 
-    <es.rafaco.compat.AppCompatTextView
-        android:id="@+id/decorator"
-        android:layout_width="12dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:textAlignment="center"
-        android:textColor="@color/iadt_background"
-        android:text=" "
-        android:textStyle="bold"
-        android:background="@color/iadt_background"
-        android:layout_marginLeft="4dp"/>
-
-    <RelativeLayout
-        android:id="@+id/header"
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        app:cardBackgroundColor="@color/iadt_background"
+        android:elevation="0dp">
 
         <LinearLayout
-            android:id="@+id/over_title_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:paddingTop="5dp"
-            android:layout_marginLeft="2dp">
+            android:orientation="horizontal">
 
             <es.rafaco.compat.AppCompatTextView
-                android:id="@+id/over_title"
-                android:layout_width="wrap_content"
+                android:id="@+id/decorator"
+                android:layout_width="12dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center_vertical"
+                android:textAlignment="center"
+                android:paddingTop="2dp"
+                android:textColor="@color/iadt_background"
+                android:text=" "
+                android:textStyle="bold"
+                android:background="@color/iadt_background"/>
+
+            <RelativeLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/rally_white"/>
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp">
 
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="4dp"/>
+
+                <es.rafaco.compat.AppCompatTextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/icon"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="6dp"
+                    android:textColor="@color/rally_white"/>
+
+                <View
+                    android:id="@+id/title_separator"
+                    android:layout_below="@id/title"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    style="@style/horizontal_separator"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/detail_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_separator"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="vertical"
+                    android:padding="4dp"
+                    android:visibility="gone">
+
+                    <es.rafaco.compat.AppCompatTextView
+                        android:id="@+id/detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textStyle="italic"
+                        android:textColor="@color/rally_white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/extra_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/detail_wrapper"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:visibility="gone">
+
+                    <es.rafaco.compat.AppCompatTextView
+                        android:id="@+id/extra"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:textColor="@color/rally_white"/>
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/buttons_separator"
+                    android:layout_below="@id/extra_wrapper"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    style="@style/horizontal_separator"
+                    android:visibility="gone"/>
+
+                <es.rafaco.compat.AppCompatButton
+                    android:id="@+id/extra_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/buttons_separator"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:minHeight="0dp"
+                    android:text="Details"
+                    android:layout_gravity="end"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="19dp"
-            android:layout_height="19dp"
-            android:layout_below="@id/over_title_wrapper"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="4dp"/>
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/over_title_wrapper"
-            android:layout_toRightOf="@id/icon"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="6dp"
-            android:textColor="@color/rally_white"/>
-
-        <View
-            android:id="@+id/separator"
-            android:layout_below="@id/title"
-            style="@style/horizontal_separator"/>
-
-        <LinearLayout
-            android:id="@+id/detail_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/separator"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:visibility="gone">
-
-            <es.rafaco.compat.AppCompatTextView
-                android:id="@+id/detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                android:textColor="@color/rally_white"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/extra_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/detail_wrapper"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:visibility="gone">
-
-            <es.rafaco.compat.AppCompatTextView
-                android:id="@+id/extra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                android:textColor="@color/rally_white"/>
-
-        </LinearLayout>
-
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/extra_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/extra_wrapper"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:minHeight="0dp"
-            android:text="Details"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
+    </es.rafaco.compat.CardView>
 
 </LinearLayout>
