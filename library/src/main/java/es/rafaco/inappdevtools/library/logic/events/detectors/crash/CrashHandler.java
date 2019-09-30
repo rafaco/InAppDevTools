@@ -125,13 +125,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Log.v(Iadt.TAG, "CrashHandler: 0.2 done");
         crash.setException(ex.getClass().getSimpleName());
         Log.v(Iadt.TAG, "CrashHandler: 0.3 done");
-        if (ex.getStackTrace()!=null && ex.getStackTrace().length>0) {
-            crash.setExceptionAt(ex.getStackTrace()[1].toString());
-        }
-        else{
-            //TODO: REPORTS - Research why this happen, getExceptionAt and getCauseExceptionAt is only used by crash report
-            // i.e: InflateException -> Binary XML file ... You must supply a layout_height attribute.
-            Log.v(Iadt.TAG, "CrashHandler: 0.4 FIX!");
+        if (ex.getStackTrace()!=null && ex.getStackTrace().length > 0) {
+            // Some exceptions doesn't have stacktrace
+            // i.e. Binary XML file ... You must supply a layout_height attribute.
+            crash.setExceptionAt(ex.getStackTrace()[0].toString());
         }
         Log.v(Iadt.TAG, "CrashHandler: 0.4 done");
         crash.setMessage(ex.getMessage());
@@ -141,9 +138,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             crash.setCauseException(cause.getClass().getSimpleName());
             crash.setCauseMessage(cause.getMessage());
             if (cause.getStackTrace() != null && cause.getStackTrace().length > 0){
-                //TODO: REPORTS - Research why this happen, getExceptionAt and getCauseExceptionAt is only used by crash report
-                // i.e: InflateException -> Binary XML file ... You must supply a layout_height attribute.
-                crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
+                crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
         Log.v(Iadt.TAG, "CrashHandler: 2 done");
