@@ -70,7 +70,7 @@ android {
     }
 }
 dependencies {
-    implementation 'es.rafaco.inappdevtools:support:0.0.51'
+    implementation 'es.rafaco.inappdevtools:support:0.0.52'
 }
 ```
 This setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections. You can already give a try to our library, just build a debug version of your app and shake it!
@@ -88,10 +88,10 @@ We also provide a `noop` artifact recommended for your release compilations. Ope
 To add conditional Gradle dependencies, prepend build type or your flavor name when including our dependencies: 
 ```gradle
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.51'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.51'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.52'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.52'
     
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.51'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.52'
 }
 ```
 
