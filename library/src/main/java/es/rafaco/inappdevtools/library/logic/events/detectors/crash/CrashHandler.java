@@ -17,6 +17,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.events.EventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -56,20 +58,31 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         try {
             friendlyLogId = FriendlyLog.logCrash(ex.getMessage());
-            //stopDevToolsServices();
+            Log.v(Iadt.TAG, "CrashHandler: logCrash done");
+            stopAnrDetector();
             Crash crash = buildCrash(thread, ex);
+            Log.v(Iadt.TAG, "CrashHandler: buildCrash done");
             printLogcatError(thread, crash);
+            Log.v(Iadt.TAG, "CrashHandler: printLogcatError done");
             long crashId = storeCrash(crash);
+            Log.v(Iadt.TAG, "CrashHandler: printLogcatError done");
             PendingCrashUtil.savePending();
+            Log.v(Iadt.TAG, "CrashHandler: savePending done");
 
             IadtController.get().beforeClose();
+            Log.v(Iadt.TAG, "CrashHandler: beforeClose done");
             saveLogcat(crashId);
+            Log.v(Iadt.TAG, "CrashHandler: saveLogcat done");
             saveScreenshot();
+            Log.v(Iadt.TAG, "CrashHandler: saveScreenshot done");
             saveDetailReport();
+            Log.v(Iadt.TAG, "CrashHandler: saveDetailReport done");
             saveStacktrace(crashId, ex);
+            Log.v(Iadt.TAG, "CrashHandler: saveStacktrace done");
 
             Log.v(Iadt.TAG, "CrashHandler: process finished on " + (new Date().getTime() - startTime) + " ms");
             onCrashStored( thread, ex);
+            Log.v(Iadt.TAG, "CrashHandler: onCrashStored done");
         }
         catch (Exception e) {
             Log.e(Iadt.TAG, "CrashHandler: exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
@@ -77,6 +90,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
             FriendlyLog.logException("Exception", e);
         }
+    }
+
+    private void stopAnrDetector() {
+        // Early stop of AnrDetector, other get stopped later on by IadtController.beforeClose().
+        // Reason: AnrDetector start new threads which is currently forbidden.
+        EventDetector anrDetector = IadtController.get().getEventManager().getEventDetectorsManager().get(ErrorAnrEventDetector.class);
+        anrDetector.stop();
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
@@ -100,19 +120,33 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @NonNull
     private Crash buildCrash(Thread thread, Throwable ex) {
         final Crash crash = new Crash();
+        Log.v(Iadt.TAG, "CrashHandler: 0.1 done");
         crash.setDate(new Date().getTime());
+        Log.v(Iadt.TAG, "CrashHandler: 0.2 done");
         crash.setException(ex.getClass().getSimpleName());
-        crash.setExceptionAt(ex.getStackTrace()[1].toString());
+        Log.v(Iadt.TAG, "CrashHandler: 0.3 done");
+        if (ex.getStackTrace()!=null && ex.getStackTrace().length>0) {
+            crash.setExceptionAt(ex.getStackTrace()[1].toString());
+        }
+        else{
+            //TODO: REPORTS - Research why this happen, getExceptionAt and getCauseExceptionAt is only used by crash report
+            // i.e: InflateException -> Binary XML file ... You must supply a layout_height attribute.
+            Log.v(Iadt.TAG, "CrashHandler: 0.4 FIX!");
+        }
+        Log.v(Iadt.TAG, "CrashHandler: 0.4 done");
         crash.setMessage(ex.getMessage());
-
+        Log.v(Iadt.TAG, "CrashHandler: 1 done");
         Throwable cause = ex.getCause();
         if (cause != null){
             crash.setCauseException(cause.getClass().getSimpleName());
             crash.setCauseMessage(cause.getMessage());
-            if (cause.getStackTrace() != null && cause.getStackTrace().length > 1){
+            if (cause.getStackTrace() != null && cause.getStackTrace().length > 0){
+                //TODO: REPORTS - Research why this happen, getExceptionAt and getCauseExceptionAt is only used by crash report
+                // i.e: InflateException -> Binary XML file ... You must supply a layout_height attribute.
                 crash.setCauseExceptionAt(cause.getStackTrace()[1].toString());
             }
         }
+        Log.v(Iadt.TAG, "CrashHandler: 2 done");
         ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
                 .getEventDetectorsManager().get(ActivityEventDetector.class);
         crash.setStacktrace(Log.getStackTraceString(ex));
@@ -122,6 +156,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         crash.setThreadGroupName(thread.getThreadGroup().getName());
         crash.setForeground(!activityWatcher.isInBackground());
         crash.setLastActivity(activityWatcher.getLastActivityResumed());
+        Log.v(Iadt.TAG, "CrashHandler: 3 done");
         return crash;
     }
 
