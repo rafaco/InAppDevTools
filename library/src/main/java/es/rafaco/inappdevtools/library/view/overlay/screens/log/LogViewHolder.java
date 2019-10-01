@@ -136,13 +136,17 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             }
             detail.setText(details);
             detailWrapper.setVisibility(View.VISIBLE);
+        }
+        else{
+            detailWrapper.setVisibility(View.GONE);
+        }
 
+        if (isSelected){
             boolean showExtra = !isLogcat && !TextUtils.isEmpty(data.getExtra());
             extra_wrapper.setVisibility(showExtra ? View.VISIBLE : View.GONE);
             extra.setText(showExtra ? data.getExtra() : "");
         }
         else{
-            detailWrapper.setVisibility( View.GONE);
             extra_wrapper.setVisibility(View.GONE);
         }
 
@@ -203,5 +207,9 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     @Override
     public void onClick(View v) {
         clickListener.onClick(v, getAdapterPosition(), uid);
+    }
+
+    public void updateSelection() {
+
     }
 }

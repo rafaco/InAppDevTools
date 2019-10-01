@@ -166,6 +166,17 @@ public class LogScreen extends Screen {
             }
         });
 
+        adapter.setOnSelectedListener(new OnSelectedListener(){
+            @Override
+            public void onSelected(boolean isSelected, long id, long previousId) {
+                if (isSelected){
+                    LogViewHolder viewHolderForItemId = (LogViewHolder)recyclerView.findViewHolderForItemId(id);
+                    if (viewHolderForItemId!=null)
+                        viewHolderForItemId.updateSelection();
+                }
+            }
+        });
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -177,7 +188,7 @@ public class LogScreen extends Screen {
     }
 
     public interface OnSelectedListener {
-        void onSelected(boolean isSelected, int position, int previousPosition);
+        void onSelected(boolean isSelected, long id, long previousId);
     }
 
     public class LogScreenDividerItemDecoration extends RecyclerView.ItemDecoration {
