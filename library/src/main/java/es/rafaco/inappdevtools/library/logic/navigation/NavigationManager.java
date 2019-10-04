@@ -51,6 +51,14 @@ public class NavigationManager {
         return history.get(history.size() - 1);
     }
 
+    public boolean isCurrentScreen(Class<? extends Screen> screenClass){
+        if (getCurrent() != null
+                && getCurrent().getClassName().equals(screenClass)){
+            return true;
+        }
+        return false;
+    }
+
     public String getCurrentParams(){
         return getCurrent().getParams();
     }

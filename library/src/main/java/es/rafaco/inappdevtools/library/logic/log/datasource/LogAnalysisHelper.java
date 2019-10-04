@@ -42,9 +42,9 @@ public class LogAnalysisHelper {
         return analysisItems;
     }
 
-    public List<AnalysisItem> getCurrentFilterOverview(LogBackFilter config) {
-        LogQueryHelper helper = new LogQueryHelper(config);
-        SimpleSQLiteQuery currentFilterSize = helper.getCurrentFilterSize();
+    public List<AnalysisItem> getCurrentFilterOverview(LogBackFilter backFilter) {
+        LogQueryHelper helper = new LogQueryHelper(backFilter);
+        SimpleSQLiteQuery currentFilterSize = helper.getFilterSizeQuery();
         List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);
         return analysisItems;
     }

@@ -79,7 +79,7 @@ public class LogQueryHelper {
         queryString += " ORDER BY date ASC";
 
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
 
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
@@ -110,21 +110,17 @@ public class LogQueryHelper {
         }
     }
 
-    public SimpleSQLiteQuery getCurrentFilterSize(){
+    public SimpleSQLiteQuery getFilterSizeQuery(){
         getSelectedQuery();
 
         queryString = queryString.replace("SELECT *",
                 "SELECT 'Current filter' AS name,"
                         + " COUNT(*) AS count,"
                         + " (count(*) * 100.0 / (select count(*) from friendly)) AS percentage");
-
-        //args.add(0, columnName);
-
         queryString = queryString.replace("ORDER BY date ASC", "");
-                //"GROUP BY " + columnName + "ORDER BY COUNT(*) DESC");
 
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
+            Log.d(Iadt.TAG, "FILTER SIZE QUERY: " + queryString);
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 }

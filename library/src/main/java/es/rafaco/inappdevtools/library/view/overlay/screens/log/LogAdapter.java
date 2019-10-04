@@ -36,7 +36,6 @@ public class LogAdapter
     private static long selectedItemId = -1;
     private static int selectedItemPosition = -1;
     private OnClickListener mClickListener;
-    private LogScreen.OnSelectedListener mSelectedListener;
 
     protected LogAdapter() {
         super(DIFF_CALLBACK);
@@ -76,37 +75,31 @@ public class LogAdapter
         setClickListener(new OnClickListener() {
             @Override
             public void onClick(View itemView, int position, long id) {
-                long previousId = -1;
                 int previousPosition = -1;
 
                 boolean isDeselection = (id == selectedItemId);
                 if (isDeselection) {
-                    previousId = selectedItemId;
                     previousPosition = selectedItemPosition;
                     selectedItemId = -1;
                     selectedItemPosition = -1;
-                    //mSelectedListener.onSelected(false, selectedItemId, previousId);
                 }
                 else {
                     if (selectedItemId > -1) {
-                        previousId = selectedItemId;
                         previousPosition = selectedItemPosition;
                     }
                     selectedItemId = id;
                     selectedItemPosition = position;
-                    //mSelectedListener.onSelected(true, selectedItemId, previousId);
                 }
 
                 notifyItemChanged(position);
                 if (position>1) {
-                    //notifyItemChanged(position - 1);
+                    notifyItemChanged(position - 1);
                 }
 
                 if (!isDeselection && previousPosition != -1) {
-                    //notifyItemChanged(previousPosition);
-                    //mSelectedListener.onSelected(false, selectedItemId, previousId);
+                    notifyItemChanged(previousPosition);
                     if (previousPosition > 1) {
-                        //notifyItemChanged(previousPosition-1);
+                        notifyItemChanged(previousPosition-1);
                     }
                 }
             }
@@ -115,10 +108,6 @@ public class LogAdapter
 
     public void setClickListener(OnClickListener clickListener) {
         mClickListener = clickListener;
-    }
-
-    public void setOnSelectedListener(LogScreen.OnSelectedListener onSelectedListener) {
-        mSelectedListener = onSelectedListener;
     }
 
     public interface OnClickListener {

@@ -261,8 +261,8 @@ public class LogFilterHelper {
         }
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "Session changed to: " + uiFilter.getSessionInt()
-                    + " -> from " + backFilter.getFromDate() + ""
-                    + " to " + backFilter.getToDate() + "");
+                    + " (from " + backFilter.getFromDate() + ""
+                    + " to " + backFilter.getToDate() + ")");
     }
 
     public void populateBackSeverity(LogBackFilter backFilter){
@@ -296,8 +296,8 @@ public class LogFilterHelper {
         backFilter.setCategories(inSelection);
 
         if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "TypeInt changed to: " + uiFilter.getTypeInt() + " IN (" + inSelection
-                    + ") and NOT IN (" + notInSelection +")");
+            Log.v(Iadt.TAG, "TypeInt changed to: " + uiFilter.getTypeInt() + " (IN " + inSelection
+                    + " and NOT IN " + notInSelection +")");
     }
 
     public void populateBackCategory(LogBackFilter backFilter){
@@ -312,7 +312,7 @@ public class LogFilterHelper {
 
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "CategoryInt changed to: " + uiFilter.getCategoryInt()
-                    + " IN (" + inCats + ")");
+                    + " (IN " + inCats + ")");
     }
 
     public void populateBackTag(LogBackFilter backFilter){
@@ -329,7 +329,7 @@ public class LogFilterHelper {
 
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "TagInt changed to " + uiFilter.getTagInt()
-                    + " -> IN subcategory(" + subcats + ")");
+                    + " (IN subcategory " + subcats + ")");
     }
 
     //endregion

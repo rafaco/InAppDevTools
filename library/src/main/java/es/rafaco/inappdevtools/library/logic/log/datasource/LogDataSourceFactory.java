@@ -1,39 +1,40 @@
 package es.rafaco.inappdevtools.library.logic.log.datasource;
 
+import android.util.Log;
+
 //#ifdef ANDROIDX
 //@import androidx.paging.DataSource;
 //#else
 import android.arch.paging.DataSource;
 //#endif
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 
 public class LogDataSourceFactory extends DataSource.Factory {
 
-    private LogBackFilter config;
+    private LogBackFilter filter;
     private FriendlyDao dao;
 
-    public LogDataSourceFactory(FriendlyDao dao, LogBackFilter config) {
+    public LogDataSourceFactory(FriendlyDao dao, LogBackFilter filter) {
         this.dao = dao;
-        this.config = (config != null) ? config : new LogBackFilter();
+        this.filter = (filter != null) ? filter : new LogBackFilter();
     }
 
     @Override
     public DataSource<Integer, Friendly> create() {
-        //if (subcategories==null){
-        //return dao.filter(text, getSeverities()).create();
-
-        LogQueryHelper helper = new LogQueryHelper(getConfig());
+        Log.v(Iadt.TAG, "LogDataSource created");
+        LogQueryHelper helper = new LogQueryHelper(getFilter());
         return dao.filterWithQuery(helper.getSelectedQuery()).create();
     }
 
-    public LogBackFilter getConfig(){
-        return config;
+    public LogBackFilter getFilter(){
+        return filter;
     }
 
-    public void setConfig(LogBackFilter config){
-        this.config = config;
+    public void setFilter(LogBackFilter filter){
+        this.filter = filter;
     }
 }

@@ -1,10 +1,11 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.content.Context;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +29,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 //#endif
@@ -36,6 +36,7 @@ import android.arch.paging.PagedList;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterDialog;
@@ -52,18 +53,16 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class LogScreen extends Screen {
 
     private LogDataSourceFactory dataSourceFactory;
-    private LogAdapter adapter;
+    private final LogAdapter adapter = new LogAdapter();
     private RecyclerView recyclerView;
     private TextView welcome;
 
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
-    private LogFilterHelper logFilterHelper;
     private LogFilterDialog filterDialog;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
@@ -101,26 +100,22 @@ public class LogScreen extends Screen {
 
         initToolbar();
         initView(bodyView);
-
-        initFilterHelper();
+        initLiveData();
         initAdapter();
-        initScroll();
-    }
-
-    private void initFilterHelper() {
-        logFilterHelper = getParams();
+        observeData();
+        requestData("Started from LogScreen");
+        observeResume();
+        //initScroll();
     }
 
     @Override
     protected void onStop() {
-        //TODO: removeLifecycleObserver();
-        Intent intent = LogcatReaderService.getStartIntent(getContext(), "Update timing");
-        LogcatReaderService.enqueueWork(getContext(), intent);
-
-        //updateParams();
+        removeDataObserver();
+        removeResumeObserver();
         if (filterDialog !=null && filterDialog.getDialog()!=null){
             filterDialog.getDialog().dismiss();
         }
+        requestData("Update timing");
     }
 
     @Override
@@ -137,11 +132,67 @@ public class LogScreen extends Screen {
         recyclerView = getView().findViewById(R.id.list);
     }
 
+
+    //region [ DATA ]
+
+    private void initLiveData() {
+        PagedList.Config myPagingConfig = new PagedList.Config.Builder()
+                .setEnablePlaceholders(true)
+                .setPageSize(25*2)
+                .build();
+        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        dataSourceFactory = new LogDataSourceFactory(dao, getFilter().getBackFilter());
+        logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
+
+        removeDataObserver();
+    }
+
+    private void requestData(String s) {
+        Intent intent = LogcatReaderService.getStartIntent(getContext(), s);
+        LogcatReaderService.enqueueWork(getContext(), intent);
+    }
+
+    private Observer<PagedList<Friendly>> dataObserver = new Observer<PagedList<Friendly>>() {
+        @Override
+        public void onChanged(PagedList<Friendly> pagedList) {
+            Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
+            //adapter.getCurrentList().getDataSource().invalidate();
+            adapter.submitList(pagedList);
+            //adapter.notifyDataSetChanged();
+        }
+    };
+
+    private void observeData() {
+        logList.observe(ProcessLifecycleOwner.get(), dataObserver);
+        Log.v(Iadt.TAG, "Observer added");
+    }
+
+    private void removeDataObserver() {
+        logList.removeObservers(ProcessLifecycleOwner.get());
+        Log.v(Iadt.TAG, "Observer removed");
+    }
+
+    private LifecycleObserver resumeObserver = new LifecycleObserver() {
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        public void onResume() {
+            requestData("Update timer after process resumed");
+        }
+    };
+
+    private void observeResume() {
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(resumeObserver);
+    }
+
+    private void removeResumeObserver() {
+        ProcessLifecycleOwner.get().getLifecycle().removeObserver(resumeObserver);
+    }
+
+    //endregion
+
+
     //region [ ADAPTER ]
 
     private void initAdapter(){
-        adapter = new LogAdapter();
-
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -149,31 +200,7 @@ public class LogScreen extends Screen {
                 if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
                     scrollToBottom();
                 }
-            }
-        });
-
-        PagedList.Config myPagingConfig = new PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setPageSize(25*2)
-                .build();
-
-        initLiveDataWithFriendlyLog(myPagingConfig);
-
-        logList.observe(ProcessLifecycleOwner.get(), new Observer<PagedList<Friendly>>() {
-            @Override
-            public void onChanged(PagedList<Friendly> pagedList) {
-                adapter.submitList(pagedList);
-            }
-        });
-
-        adapter.setOnSelectedListener(new OnSelectedListener(){
-            @Override
-            public void onSelected(boolean isSelected, long id, long previousId) {
-                if (isSelected){
-                    LogViewHolder viewHolderForItemId = (LogViewHolder)recyclerView.findViewHolderForItemId(id);
-                    if (viewHolderForItemId!=null)
-                        viewHolderForItemId.updateSelection();
-                }
+                Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
             }
         });
 
@@ -182,46 +209,35 @@ public class LogScreen extends Screen {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
-        Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from LogScreen");
-        LogcatReaderService.enqueueWork(getContext(), intent);
     }
 
-    public interface OnSelectedListener {
-        void onSelected(boolean isSelected, long id, long previousId);
+    public LogFilterHelper getFilter(){
+        LogUiFilter logUiFilter = LogFilterStore.get();
+        if (logUiFilter == null){
+            return new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
+        }
+        return new LogFilterHelper(logUiFilter);
     }
 
-    public class LogScreenDividerItemDecoration extends RecyclerView.ItemDecoration {
-        private Drawable mDivider;
+    public void updateFilter(LogFilterHelper uiFilter){
+        LogFilterStore.store(uiFilter.getUiFilter());
 
-        public LogScreenDividerItemDecoration(Context context) {
-            mDivider = context.getResources().getDrawable(R.drawable.card_divider);
+        if(logList != null) {
+            removeDataObserver();
         }
 
-        @Override
-        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int left = parent.getPaddingLeft() + UiUtils.dpToPx(getContext(), 20);
-            int right = parent.getWidth() - parent.getPaddingRight() - UiUtils.dpToPx(getContext(), 10);
+        //initLiveData();
+        //initAdapter();
 
-            int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View child = parent.getChildAt(i);
-
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-                int top = child.getBottom() + params.bottomMargin;
-                int bottom = top + mDivider.getIntrinsicHeight();
-
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
-            }
-        }
-    }
-
-    private void initLiveDataWithFriendlyLog(PagedList.Config myPagingConfig) {
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
-        dataSourceFactory = new LogDataSourceFactory(dao, logFilterHelper.getBackFilter());
-        logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
+        //dataSourceFactory.setFilter(uiFilter.getBackFilter());
+        initLiveData();
+        observeData();
+        initAdapter();
+        /*adapter.notifyDataSetChanged();
+        if (adapter.getCurrentList().getDataSource() != null )
+            adapter.getCurrentList().getDataSource().invalidate();*/
+        //recyclerView.invalidate();
+        //recyclerView.requestLayout();
     }
 
     //endregion
@@ -238,7 +254,7 @@ public class LogScreen extends Screen {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                dataSourceFactory.getConfig().setText(newText);
+                dataSourceFactory.getFilter().setText(newText);
                 adapter.getCurrentList().getDataSource().invalidate();
                 return false;
             }
@@ -269,11 +285,12 @@ public class LogScreen extends Screen {
     }
 
     private void onTuneButton() {
-        filterDialog = new LogFilterDialog(getContext(), adapter, logFilterHelper);
+        final LogFilterHelper filter = getFilter();
+        filterDialog = new LogFilterDialog(getContext(),adapter, filter);
         filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                updateParams(logFilterHelper);
+                updateFilter(filter);
             }
         });
         filterDialog.getDialog().show();
@@ -281,17 +298,17 @@ public class LogScreen extends Screen {
 
     private void onLevelButton() {
         String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
-        final LogUiFilter filter = logFilterHelper.getUiFilter();
+        final LogFilterHelper filter = getFilter();
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("Select log level")
                 .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, filter.getSeverityInt(), new DialogInterface.OnClickListener(){
+                .setSingleChoiceItems(levelsArray, filter.getUiFilter().getSeverityInt(), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which != filter.getSeverityInt()) {
-                            filter.setSeverityInt(which);
-                            adapter.getCurrentList().getDataSource().invalidate();
+                        if (which != filter.getUiFilter().getSeverityInt()) {
+                            filter.getUiFilter().setSeverityInt(which);
+                            updateFilter(filter);
                         }
                         dialog.dismiss();
                     }
@@ -344,7 +361,11 @@ public class LogScreen extends Screen {
         }
         IadtController.get().getDatabase().friendlyDao().deleteAll();
         FriendlyLog.log("D", "Iadt", "Delete","Friendly log history deleted by user");
-        adapter.notifyDataSetChanged();
+
+        if(logList != null) {
+            removeDataObserver();
+        }
+        observeData();
     }
 
     //endregion
@@ -382,23 +403,6 @@ public class LogScreen extends Screen {
                 recyclerView.scrollToPosition(adapter.getItemCount() - 1);
             }
         });
-    }
-
-    //endregion
-
-    //region [ PARAMS ]
-
-    public LogFilterHelper getParams(){
-        LogUiFilter logUiFilter = LogFilterStore.get();
-        if (logUiFilter == null){
-            return new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
-        }
-        return new LogFilterHelper(logUiFilter);
-    }
-
-    public void updateParams(LogFilterHelper uiFilter){
-        LogFilterStore.store(uiFilter.getUiFilter());
-        dataSourceFactory.setConfig(uiFilter.getBackFilter());
     }
 
     //endregion
