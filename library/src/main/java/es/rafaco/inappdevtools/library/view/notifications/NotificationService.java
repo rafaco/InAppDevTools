@@ -108,7 +108,7 @@ public class NotificationService extends Service {
                     break;
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
     }
 
     private void bringAppToFront() {
