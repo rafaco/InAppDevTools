@@ -36,7 +36,6 @@ import android.arch.paging.PagedList;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterDialog;

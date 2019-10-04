@@ -18,7 +18,6 @@ public class RunningThreadsUtils {
     }
 
     public static String getString() {
-
         StringBuilder result = new StringBuilder(Humanizer.newLine());
         List<Thread> allThreads = getAllThreads();
 
