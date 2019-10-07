@@ -3,8 +3,8 @@
 
     <!-- Base application theme. -->
     <style name="LibTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorPrimary">@color/iadt_surface_top</item>
-        <item name="colorPrimaryDark">@color/iadt_background</item>
+        <item name="colorPrimary">@color/iadt_surface_bottom</item>
+        <item name="colorPrimaryDark">@color/iadt_surface_top</item>
         <item name="colorAccent">@color/rally_blue</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

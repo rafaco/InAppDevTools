@@ -109,7 +109,7 @@ public class HomeScreen extends Screen {
         data.add(sources);
 
         data.add(new RunButton("View",
-                R.drawable.ic_layers_white_24dp,
+                R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(InspectViewScreen.class);

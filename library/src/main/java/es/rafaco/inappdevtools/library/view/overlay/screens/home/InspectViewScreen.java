@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -21,6 +23,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InspectViewScreen extends Screen {
@@ -67,6 +70,33 @@ public class InspectViewScreen extends Screen {
                     public void run() { OverlayService.performNavigation(InfoScreen.class, "0");
                     }
                 }));
+
+
+        final String pathFromClassName = IadtController.get().getSourcesManager()
+                .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
+        if (!TextUtils.isEmpty(pathFromClassName)) {
+            data.add(new RunButton("View sources",
+                    R.drawable.ic_code_white_24dp, new Runnable() {
+                @Override
+                public void run() {
+                    OverlayService.performNavigation(SourceDetailScreen.class,
+                            SourceDetailScreen.buildParams(null,
+                                    pathFromClassName, 0));
+                }
+            }));
+        }
+
+        data.add(new RunButton( "Take Screenshot",
+                R.drawable.ic_add_a_photo_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().takeScreenshot();
+                    }
+                }));
+
+
+        data.add("Layout inspector");
 
         data.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,

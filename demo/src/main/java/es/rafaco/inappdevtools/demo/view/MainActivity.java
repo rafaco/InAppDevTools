@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Use 'Iadt.show();' to open our UI", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //throw new NullPointerException("A simulated exception from MainActivity fab button");
+                Iadt.show();
             }
         });
 
