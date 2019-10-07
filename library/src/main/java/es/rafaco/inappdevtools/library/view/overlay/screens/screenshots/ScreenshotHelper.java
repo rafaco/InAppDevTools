@@ -51,7 +51,8 @@ public class ScreenshotHelper extends ScreenHelper {
         final Screenshot screenshot = takeScreenIntoFile(false);
         if (screenshot != null){
             Toast.makeText(context.getApplicationContext(), "Screenshot saved", Toast.LENGTH_LONG).show();
-            ThreadUtils.runOnBack(new Runnable() {
+            ThreadUtils.runOnBack("Iadt-SaveScreenshot",
+                    new Runnable() {
                 @Override
                 public void run() {
                     IadtController.get().getDatabase().screenshotDao().insertAll(screenshot);

@@ -101,7 +101,8 @@ public final class IadtController {
         runnableManager = new RunnableManager((context));
 
         if (isDebug()){
-            ThreadUtils.runOnBack(new Runnable() {
+            ThreadUtils.runOnBack("Iadt-InitBack",
+                    new Runnable() {
                 @Override
                 public void run() {
                     DevToolsDatabase.getInstance().printOverview();
@@ -315,7 +316,8 @@ public final class IadtController {
     public void sendReport(ReportHelper.ReportType type, final Object param) {
         switch (type){
             case CRASH:
-                ThreadUtils.runOnBack(new Runnable() {
+                ThreadUtils.runOnBack("Iadt-CrashReport",
+                        new Runnable() {
                     @Override
                     public void run() {
                         Crash crash;
@@ -335,7 +337,8 @@ public final class IadtController {
                 break;
 
             case SESSION:
-                ThreadUtils.runOnBack(new Runnable() {
+                ThreadUtils.runOnBack("Iadt-SessionReport",
+                        new Runnable() {
                     @Override
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;

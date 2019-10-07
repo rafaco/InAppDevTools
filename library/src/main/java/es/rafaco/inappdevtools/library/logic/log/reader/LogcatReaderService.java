@@ -61,7 +61,7 @@ public class LogcatReaderService extends JobIntentService {
     private Queue<String> queue;
     private String lastLine;
     private Long lastInsertTime = DateUtils.getLong();
-    private Timer processQueueTimer = new Timer(false);
+    private Timer processQueueTimer;
     private TimerTask processQueueTimerTask;
 
     private int ignoredCounter = 0;
@@ -104,13 +104,15 @@ public class LogcatReaderService extends JobIntentService {
 
     @Override
     public void onCreate() {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService onCreate" );
-        Log.v(Iadt.TAG, "LogcatReaderService onCreate: restartRunnable is " + restartRunnable);
+        if (isReaderDebug()){
+            Log.v(Iadt.TAG, "LogcatReaderService onCreate" );
+        }
         super.onCreate();
     }
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
+        ThreadUtils.setName("Iadt.LogWork");
         String action = intent.getAction();
         String param = intent.getStringExtra(PARAM_KEY);
         if (isReaderDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService onHandleWork(" + action + ", " + param + ")"));
@@ -259,31 +261,45 @@ public class LogcatReaderService extends JobIntentService {
         if (queue.size() > QUEUE_MAX_SIZE || DateUtils.getLong() > (lastInsertTime + getMaxQueueTime()) ) {
             processQueue();
         }
-        else if (queue.size() > 0) {
-            startUpdateTimerIfNeeded();
-        }
+        /*else if (queue.size() > 0) {
+            startUpdateTimer();
+        }*/
     }
 
-    private void startUpdateTimerIfNeeded() {
-        if (processQueueTimerTask!=null){
-            return;
+    private void startUpdateTimer() {
+        if (processQueueTimer!=null){
+            destroyTimer();
         }
 
         processQueueTimerTask = new TimerTask() {
             @Override
             public void run() {
+                ThreadUtils.setName("Iadt.LogQueue");
+                if (isReaderDebug())
+                    Log.v(Iadt.TAG, "Log reader processQueueTimerTask running on "
+                            + ThreadUtils.formatThread());
                 processQueue();
-                cancelUpdateTimer();
             }
         };
-
+        if (isReaderDebug()) Log.v(Iadt.TAG, "Log reader processQueueTimer created from "
+                + ThreadUtils.formatThread());
+        processQueueTimer = new Timer("Iadt.LogReader-Timer", false);
         processQueueTimer.schedule(processQueueTimerTask, getMaxQueueTime());
     }
 
-    private void cancelUpdateTimer() {
+    private void cancelTimerTask() {
         if (processQueueTimerTask!=null){
             processQueueTimerTask.cancel();
             processQueueTimerTask = null;
+        }
+    }
+
+    private void destroyTimer() {
+        cancelTimerTask();
+        if (processQueueTimer!=null){
+            processQueueTimer.cancel();
+            processQueueTimer.purge();
+            processQueueTimer=null;
         }
     }
 
@@ -294,7 +310,7 @@ public class LogcatReaderService extends JobIntentService {
     private void processQueue() {
         if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue started with " +  queue.size() + " items");
         isInjectorRunning = true;
-        cancelUpdateTimer();
+        cancelTimerTask();
         List<Friendly> logsToInsert = new ArrayList<>();
         Friendly lastInsertion = null;
         String outputChannel = "";

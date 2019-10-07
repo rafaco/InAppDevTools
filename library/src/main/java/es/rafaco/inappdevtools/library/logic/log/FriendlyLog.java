@@ -117,7 +117,8 @@ public class FriendlyLog {
     }
 
     private static void insertOnBackground(final Friendly log) {
-        ThreadUtils.runOnBack(new Runnable() {
+        ThreadUtils.runOnBack("Iadt-AddFriendlyLog",
+                new Runnable() {
             @Override
             public void run() {
                 IadtController.get().getDatabase().friendlyDao().insert(log);
@@ -371,7 +372,8 @@ public class FriendlyLog {
         }
 
         logAtLogcat(log);
-        ThreadUtils.runOnBack(new Runnable() {
+        ThreadUtils.runOnBack("Iadt-NetworkLog",
+                new Runnable() {
             @Override
             public void run() {
                 IadtController.get().getDatabase().friendlyDao().update(log);

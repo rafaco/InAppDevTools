@@ -132,6 +132,13 @@ public class InfoGroupData {
             return this;
         }
 
+        public Builder add(List<InfoEntryData> entries) {
+            for (InfoEntryData entry : entries){
+                add(entry);
+            }
+            return this;
+        }
+
         public Builder add() {
             add(new InfoEntryData("", ""));
             return this;

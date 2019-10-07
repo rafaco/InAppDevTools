@@ -19,6 +19,9 @@ public class RunningProcessesUtils {
     }
 
     public static int getCount() {
+        if (getList() == null){
+            return 0;
+        }
         return getList().size();
     }
 

@@ -104,7 +104,8 @@ public class ScreenshotsScreen extends Screen {
     }
 
     private void requestData() {
-        ThreadUtils.runOnBack(new Runnable() {
+        ThreadUtils.runOnBack("Iadt-GetScreenshot",
+                new Runnable() {
             @Override
             public void run() {
                 ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();

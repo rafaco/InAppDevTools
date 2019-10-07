@@ -38,12 +38,7 @@ public class RunningThreadsUtils {
                     previousGroupStart = result.length();
                 }
 
-                result  .append(formatThreadId(info))
-                        .append(" ")
-                        .append(formatThreadDescription(info))
-                        //.append(info.getTitle())
-                        .append(" ")
-                        .append(info.getState())
+                result.append(ThreadUtils.formatThread(info))
                         .append(Humanizer.newLine());
             }
         }
@@ -56,8 +51,7 @@ public class RunningThreadsUtils {
 
     private static void insertPreviousGroupInfo(StringBuilder result, ThreadGroup previousGroup, int previousGroupStart) {
         if (previousGroup != null){
-            result.insert(previousGroupStart,
-                    Humanizer.newLine()
+            result.insert(previousGroupStart, Humanizer.newLine()
                             + formatGroup(previousGroup)
                             + Humanizer.newLine());
         }
@@ -68,19 +62,6 @@ public class RunningThreadsUtils {
         int threadCount = group.enumerate(new Thread[group.activeCount()], false);
         return String.format( "Group %s has %s groups and %s active threads",
                     Humanizer.toCapitalCase(group.getName()), groupCount, threadCount);
-    }
-
-    private static String formatThreadId(Thread info){
-        String id = String.valueOf(info.getId());
-        while(id.length()<4){
-            id = "  " + id;
-        }
-        return id;
-    }
-
-    private static String formatThreadDescription(Thread info){
-        String standard = info.toString();
-        return standard.replaceFirst("Thread", "");
     }
 
 

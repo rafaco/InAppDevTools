@@ -8,6 +8,9 @@ import android.os.Looper;
 import android.util.Log;
 
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
@@ -38,12 +41,57 @@ public class ThreadUtils {
         AsyncTask.execute(runnable);
     }
 
-    public static void runOnBack(Runnable runnable, long delay){
-        HandlerThread handlerThread = new HandlerThread("HandlerThread");
-        handlerThread.start();
-        Handler handler = new Handler(handlerThread.getLooper());
+    public static void runOnBack(final String threadName, final Runnable runnable){
+        //TODO: this keep threads open for a bit as TIMED_WAITING
+        /*ExecutorService executorservice = Executors.newCachedThreadPool(new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable arg0) {
+                return new Thread(arg0, threadName);
+            }
+        });
+        executorservice.submit(runnable);*/
+        AsyncTask.execute(runnable);
+    }
 
+    public static void runOnBack(Runnable runnable, long delay){
+        Handler handler = new Handler();
         handler.postDelayed(runnable, delay);
+    }
+
+
+    public static void setName(String name) {
+        Thread thread = Thread.currentThread();
+        if (isMain(thread)){
+            Log.w(Iadt.TAG, "Skipped setName(" + name + "). You are on MAIN thread.");
+            return;
+        }
+        if (!thread.getName().contains(name)){
+            thread.setName(name + "-" + thread.getName());
+        }
+    }
+
+
+    public static String formatThread() {
+        return formatThread(Thread.currentThread());
+    }
+
+    public static String formatThread(Thread thread){
+        return formatThreadId(thread) + " "
+                + formatThreadDescription(thread) + " "
+                + thread.getState();
+    }
+
+    private static String formatThreadId(Thread info){
+        String id = String.valueOf(info.getId());
+        while(id.length()<4){
+            id = "  " + id;
+        }
+        return id;
+    }
+
+    private static String formatThreadDescription(Thread info){
+        String standard = info.toString();
+        return standard.replaceFirst("Thread", "");
     }
 
     public static void printOverview(String from){

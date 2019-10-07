@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -175,6 +176,8 @@ public class InfoScreen extends Screen {
         updateTimerTask = new TimerTask() {
             @Override
             public void run() {
+                Log.v(Iadt.TAG, "InfoUpdateTimer running on "
+                            + ThreadUtils.formatThread());
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
@@ -185,7 +188,9 @@ public class InfoScreen extends Screen {
                 });
             }
         };
-        updateTimer = new Timer("Iadt.Info-Timer", false);
+        Log.v(Iadt.TAG, "InfoUpdateTimer create timer on "
+                + ThreadUtils.formatThread());
+        updateTimer = new Timer("Iadt-InfoUpdate-Timer", false);
         updateTimer.schedule(updateTimerTask, 5 * 1000);
     }
 

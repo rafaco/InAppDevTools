@@ -1,8 +1,10 @@
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
+import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
@@ -52,18 +54,22 @@ public class LiveInfoReporter extends AbstractInfoReporter {
     }
 
     public InfoGroupData getActivityInfo() {
-        return new InfoGroupData.Builder("View")
+        InfoGroupData.Builder builder = new InfoGroupData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
                 .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
+                .add()
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
-                .addButton(new RunButton("Inspect View",
-                        new Runnable() {
-                            @Override
-                            public void run() { OverlayService.performNavigation(InspectViewScreen.class);
-                            }
-                        }))
-                .build();
+                .add(RunningTasksUtils.getTopActivityInfo());
+
+        //TODO: when multiple buttons supported -> Add inspect source
+        builder.addButton(new RunButton("Inspect View",
+                new Runnable() {
+                        @Override
+                        public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                        }
+                    }));
+        return builder.build();
     }
 
     public InfoGroupData getTaskInfo() {
@@ -90,10 +96,14 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
+    @SuppressLint("NewApi")
     public InfoGroupData getProcessesInfo() {
         return new InfoGroupData.Builder("Processes")
                 .setIcon(R.string.gmd_developer_board)
                 .setOverview(RunningProcessesUtils.getCount() + "")
+                .add("myPid", Process.myPid())
+                .add("myTid", Process.myTid())
+                .add("myUid", Process.myUid())
                 .add(RunningProcessesUtils.getString())
                 .build();
     }
