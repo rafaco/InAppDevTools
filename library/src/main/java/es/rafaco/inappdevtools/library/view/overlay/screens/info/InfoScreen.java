@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
@@ -33,6 +35,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 public class InfoScreen extends Screen {
 
     private Timer updateTimer;
+    private TimerTask updateTimerTask;
     private boolean[] expandedState;
 
     private RelativeLayout overviewView;
@@ -75,11 +78,31 @@ public class InfoScreen extends Screen {
 
         infoReportIndex = getInitialPosition();
 
-        updateView(getData(infoReportIndex));
+        InfoReportData data = getData(infoReportIndex);
+        getScreenManager().setTitle(data.getTitle() + " Info");
+        updateView(data);
+    }
 
-        if (infoReportIndex == 0){
+    @Override
+    protected void onPause() {
+        cancelTimerTask();
+    }
+
+    @Override
+    protected void onResume() {
+        if (getInitialPosition() == 0){
             startUpdateTimer();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        //Deliberately empty
+    }
+
+    @Override
+    protected void onDestroy() {
+        cancelTimerTask();
     }
 
     private int getInitialPosition() {
@@ -107,7 +130,6 @@ public class InfoScreen extends Screen {
     }
 
     private void updateHeader(InfoReportData data) {
-        getScreenManager().setTitle(data.getTitle() + " Info");
         overviewTitleView.setText(data.getTitle());
 
         if (data.getIcon()>0){
@@ -146,11 +168,14 @@ public class InfoScreen extends Screen {
 
 
     private void startUpdateTimer() {
-        final Handler handler = new Handler(Looper.getMainLooper());
-        updateTimer = new Timer(false);
-        TimerTask updateTimerTask = new TimerTask() {
+        if (updateTimerTask!=null){
+            destroyTimer();
+        }
+        Log.w(Iadt.TAG, "startUpdateTimer");
+        updateTimerTask = new TimerTask() {
             @Override
             public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -160,20 +185,26 @@ public class InfoScreen extends Screen {
                 });
             }
         };
-        updateTimer.schedule(updateTimerTask, 2000);
+        updateTimer = new Timer("Iadt.Info-Timer", false);
+        updateTimer.schedule(updateTimerTask, 5 * 1000);
     }
 
-    private void stopUpdateTimer() {
-        if (updateTimer!=null) updateTimer.cancel();
+
+    private void cancelTimerTask() {
+        Log.w(Iadt.TAG, "cancelTimerTask");
+        if (updateTimerTask!=null){
+            updateTimerTask.cancel();
+            updateTimerTask = null;
+        }
     }
 
-    @Override
-    protected void onStop() {
-        //Deliberately empty
-    }
-
-    @Override
-    protected void onDestroy() {
-        stopUpdateTimer();
+    private void destroyTimer() {
+        cancelTimerTask();
+        Log.w(Iadt.TAG, "destroyTimer");
+        if (updateTimer!=null){
+            updateTimer.cancel();
+            updateTimer.purge();
+            updateTimer = null;
+        }
     }
 }

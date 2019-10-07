@@ -68,19 +68,6 @@ public class OverlayService extends Service {
         return null;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (layerManager != null){
-            layerManager.onConfigurationChanged(newConfig);
-        }
-
-        if (screenManager != null){
-            screenManager.onConfigurationChanged(newConfig);
-        }
-    }
-
     //region [ STATIC ACCESSORS ]
 
     public static void performNavigation(Class<? extends Screen> target) {
@@ -291,6 +278,23 @@ public class OverlayService extends Service {
 
     public void navigateBack() {
         screenManager.goBack();
+    }
+
+    //endregion
+
+    //region [ SCREEN LIFECYCLE ]
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (layerManager != null){
+            layerManager.onConfigurationChanged(newConfig);
+        }
+
+        if (screenManager != null){
+            screenManager.onConfigurationChanged(newConfig);
+        }
     }
 
     //endregion

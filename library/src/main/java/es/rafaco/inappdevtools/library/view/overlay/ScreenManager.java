@@ -19,6 +19,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.events.Event;
+import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
@@ -70,8 +72,34 @@ public class ScreenManager {
         this.navigationManager = IadtController.get().getNavigationManager();
 
         registerAllScreens();
+        registerEventListeners();
 
         ThreadUtils.printOverview("ScreenManager");
+    }
+
+    private EventManager.Listener onBackgroundListener = new EventManager.Listener() {
+        @Override
+        public void onEvent(Event event, Object param) {
+            if (getCurrentScreen() != null) getCurrentScreen().pause();
+        }
+    };
+    private EventManager.Listener onForegroundListener = new EventManager.Listener() {
+        @Override
+        public void onEvent(Event event, Object param) {
+            if (getCurrentScreen() != null) getCurrentScreen().resume();
+        }
+    };
+
+    private void registerEventListeners() {
+        EventManager eventManager = IadtController.get().getEventManager();
+        eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+        eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+    }
+
+    private void unRegisterEventListeners() {
+        EventManager eventManager = IadtController.get().getEventManager();
+        eventManager.unSubscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+        eventManager.unSubscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
     }
 
     //region [ SCREENS MANAGER ]
@@ -177,7 +205,6 @@ public class ScreenManager {
         return loadedScreen.getView();
     }
 
-
     public void goBack(){
 
         if (!currentScreen.canGoBack()){
@@ -272,6 +299,7 @@ public class ScreenManager {
     }
 
     public void destroy() {
+        unRegisterEventListeners();
         if (getCurrentScreen() != null){
             currentScreen.destroy();
             setCurrentScreen(null);

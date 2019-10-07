@@ -25,8 +25,20 @@ public class EventManager {
         if (!eventListeners.containsKey(event)){
             eventListeners.put(event, new ArrayList<Listener>());
         }
-        List<Listener> currentOnEventListeners = eventListeners.get(event);
-        currentOnEventListeners.add(listener);
+        List<Listener> listenerForEvent = eventListeners.get(event);
+        listenerForEvent.add(listener);
+    }
+
+    public void unSubscribe(Event event, Listener listener){
+        List<Listener> listeners = eventListeners.get(event);
+        if (listeners!=null && listeners.size()>0){
+            for (Listener existingListener : listeners) {
+                if (existingListener.equals(listener)){
+                    listeners.remove(listener);
+                    return;
+                }
+            }
+        }
     }
 
     public void fire(Event event){
