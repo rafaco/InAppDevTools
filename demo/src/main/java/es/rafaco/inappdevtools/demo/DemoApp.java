@@ -44,10 +44,10 @@ public class DemoApp extends Application {
                     @Override
                     public void run() {
                         threadCounter++;
-                        ThreadUtils.addDummy("RAFA" + threadCounter, 60000, new Runnable() {
+                        ThreadUtils.addDummy("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished RAFA" + threadCounter);
+                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
                             }
                         });
                     }
@@ -59,10 +59,10 @@ public class DemoApp extends Application {
                     @Override
                     public void run() {
                         threadCounter++;
-                        ThreadUtils.addDummyAsync("RAFAA" + threadCounter, 60000, new Runnable() {
+                        ThreadUtils.addDummyAsync("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished RAFAA" + threadCounter);
+                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
                             }
                         });
                     }

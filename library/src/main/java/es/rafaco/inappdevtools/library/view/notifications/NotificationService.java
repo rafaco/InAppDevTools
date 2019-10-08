@@ -208,29 +208,29 @@ public class NotificationService extends Service {
                 .setWhen(System.currentTimeMillis()); //Group third
 
         builder.setChannelId(getCurrentChannel().getId());
-        Log.w("RAFA", "Notification channel: " + getCurrentChannel());
+        //Log.w("RAFA", "Notification channel: " + getCurrentChannel());
         if (FirstStartUtil.isSessionFromFirstStart()){
-            Log.w("RAFA", "Notification isFirstStart");
+            //Log.w("RAFA", "Notification isFirstStart");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MAX);
         }
         else if (crash != null){
-            Log.w("RAFA", "Notification crash");
+            //Log.w("RAFA", "Notification crash");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MIN);
         }
         else{
-            Log.w("RAFA", "Notification not isFirstStart");
+            //Log.w("RAFA", "Notification not isFirstStart");
             builder.setDefaults(Notification.DEFAULT_LIGHTS)
                     .setPriority(Notification.PRIORITY_MIN);
         }
         
         if (crash == null){
-            Log.w("RAFA", "Notification not crash");
+            //Log.w("RAFA", "Notification not crash");
             builder.setColor(getResources().getColor(R.color.rally_blue_med));
         }
         else{
-            Log.w("RAFA", "Notification crash");
+            //Log.w("RAFA", "Notification crash");
             builder.setColor(getResources().getColor(R.color.rally_orange));
         }
 

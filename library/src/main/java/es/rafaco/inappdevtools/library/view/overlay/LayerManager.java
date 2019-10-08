@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.view.overlay.layers.IconLayer;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
@@ -99,8 +101,14 @@ public class LayerManager {
     //region [ TOGGLE LAYER VISIBILITY ]
 
     public void toggleMainLayerVisibility(Boolean showMain) {
+        boolean previousShowMain = this.isMainVisible;
+
         if (showMain == null){
-            showMain = !this.isMainVisible;
+            showMain = !previousShowMain;
+        }
+
+        if (previousShowMain == showMain){
+            return;
         }
 
         if (showMain) {
@@ -109,11 +117,13 @@ public class LayerManager {
                 getView(Layer.Type.ICON).setVisibility(View.GONE);
                 getView(Layer.Type.REMOVE).setVisibility(View.GONE);
             }
+            IadtController.get().getEventManager().fire(Event.OVERLAY_FOREGROUND, null);
         }
         else {
             getView(Layer.Type.SCREEN).setVisibility(View.GONE);
             if (isOverlayIconEnabled())
                 getView(Layer.Type.ICON).setVisibility(View.VISIBLE);
+            IadtController.get().getEventManager().fire(Event.OVERLAY_BACKGROUND, null);
         }
         this.isMainVisible = showMain;
     }

@@ -28,6 +28,10 @@ public class RunningProcessesUtils {
     public static String getString() {
         StringBuilder result = new StringBuilder("\n");
         List<ActivityManager.RunningAppProcessInfo> processes = getList();
+        if (processes == null){
+            return "";
+        }
+        
         for (ActivityManager.RunningAppProcessInfo info : processes) {
 
             String importance = info.importance + " ";

@@ -92,14 +92,14 @@ public class ScreenManager {
 
     private void registerEventListeners() {
         EventManager eventManager = IadtController.get().getEventManager();
-        eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
-        eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+        eventManager.subscribe(Event.OVERLAY_BACKGROUND, onBackgroundListener);
+        eventManager.subscribe(Event.OVERLAY_FOREGROUND, onForegroundListener);
     }
 
     private void unRegisterEventListeners() {
         EventManager eventManager = IadtController.get().getEventManager();
-        eventManager.unSubscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
-        eventManager.unSubscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+        eventManager.unSubscribe(Event.OVERLAY_BACKGROUND, onBackgroundListener);
+        eventManager.unSubscribe(Event.OVERLAY_FOREGROUND, onForegroundListener);
     }
 
     //region [ SCREENS MANAGER ]

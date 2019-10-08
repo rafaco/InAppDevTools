@@ -172,12 +172,9 @@ public class InfoScreen extends Screen {
         if (updateTimerTask!=null){
             destroyTimer();
         }
-        Log.w(Iadt.TAG, "startUpdateTimer");
         updateTimerTask = new TimerTask() {
             @Override
             public void run() {
-                Log.v(Iadt.TAG, "InfoUpdateTimer running on "
-                            + ThreadUtils.formatThread());
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
@@ -188,15 +185,12 @@ public class InfoScreen extends Screen {
                 });
             }
         };
-        Log.v(Iadt.TAG, "InfoUpdateTimer create timer on "
-                + ThreadUtils.formatThread());
         updateTimer = new Timer("Iadt-InfoUpdate-Timer", false);
         updateTimer.schedule(updateTimerTask, 5 * 1000);
     }
 
 
     private void cancelTimerTask() {
-        Log.w(Iadt.TAG, "cancelTimerTask");
         if (updateTimerTask!=null){
             updateTimerTask.cancel();
             updateTimerTask = null;
@@ -205,7 +199,6 @@ public class InfoScreen extends Screen {
 
     private void destroyTimer() {
         cancelTimerTask();
-        Log.w(Iadt.TAG, "destroyTimer");
         if (updateTimer!=null){
             updateTimer.cancel();
             updateTimer.purge();

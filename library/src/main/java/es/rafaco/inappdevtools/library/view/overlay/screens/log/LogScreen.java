@@ -101,20 +101,26 @@ public class LogScreen extends Screen {
         initView(bodyView);
         initLiveData();
         initAdapter();
-        observeData();
-        requestData("Started from LogScreen");
-        observeResume();
         //initScroll();
     }
 
     @Override
-    protected void onStop() {
+    protected void onResume() {
+        observeData();
+        requestData("Updated timer from onResume");
+    }
+
+    @Override
+    protected void onPause() {
         removeDataObserver();
-        removeResumeObserver();
+        requestData("Update timer onPause");
+    }
+
+    @Override
+    protected void onStop() {
         if (filterDialog !=null && filterDialog.getDialog()!=null){
             filterDialog.getDialog().dismiss();
         }
-        requestData("Update timing");
     }
 
     @Override
@@ -169,21 +175,6 @@ public class LogScreen extends Screen {
     private void removeDataObserver() {
         logList.removeObservers(ProcessLifecycleOwner.get());
         Log.v(Iadt.TAG, "Observer removed");
-    }
-
-    private LifecycleObserver resumeObserver = new LifecycleObserver() {
-        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        public void onResume() {
-            requestData("Update timer after process resumed");
-        }
-    };
-
-    private void observeResume() {
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(resumeObserver);
-    }
-
-    private void removeResumeObserver() {
-        ProcessLifecycleOwner.get().getLifecycle().removeObserver(resumeObserver);
     }
 
     //endregion

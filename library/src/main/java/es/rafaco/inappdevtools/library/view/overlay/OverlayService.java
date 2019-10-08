@@ -250,9 +250,6 @@ public class OverlayService extends Service {
 
     private void showIcon() {
         layerManager.toggleMainLayerVisibility(false);
-        if (Iadt.isDebug()){
-            IadtController.get().getEventManager().fire(Event.OVERLAY_HIDDEN, null);
-        }
     }
 
     private void hideAll() {
