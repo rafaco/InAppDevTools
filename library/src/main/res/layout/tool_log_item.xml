@@ -16,7 +16,10 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         app:cardBackgroundColor="@color/iadt_background"
-        android:elevation="0dp">
+        android:elevation="0dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,8 +89,6 @@
                         android:id="@+id/detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:layout_gravity="end"
                         android:textStyle="italic"
                         android:textColor="@color/rally_white" />
 
@@ -121,16 +122,30 @@
                     style="@style/horizontal_separator"
                     android:visibility="gone"/>
 
+                <ImageView
+                    android:id="@+id/overflow"
+                    android:layout_width="@dimen/card_overflow_width"
+                    android:layout_height="@dimen/card_overflow_height"
+                    android:layout_below="@id/buttons_separator"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_more_vert_white_24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
                 <es.rafaco.compat.AppCompatButton
                     android:id="@+id/extra_button"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/buttons_separator"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_toLeftOf="@id/overflow"
                     android:minHeight="0dp"
                     android:text="Details"
                     android:layout_gravity="end"
+                    android:textColor="@color/rally_blue_med"
                     style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:visibility="gone"/>
 

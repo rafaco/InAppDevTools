@@ -154,4 +154,8 @@ public class Friendly {
         if (subcategory != null ? !subcategory.equals(previous.subcategory) : previous.subcategory != null) return false;
         return extra != null ? extra.equals(previous.extra) : previous.extra == null;
     }
+
+    public boolean isLogcat() {
+        return getCategory().equals("Logcat");
+    }
 }

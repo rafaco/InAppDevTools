@@ -66,6 +66,7 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
 
             timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
+            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
 
             if (!data.isExpanded() && data.isLastOnCollapsed()){
                 timeline.setTimelineType(TimelineView.TYPE_END);

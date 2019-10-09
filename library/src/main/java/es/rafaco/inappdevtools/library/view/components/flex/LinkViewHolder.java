@@ -8,6 +8,7 @@ import android.view.View;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.widget.LinearLayout;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
@@ -15,11 +16,13 @@ import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
 public class LinkViewHolder extends FlexibleViewHolder {
 
+    private final LinearLayout wrapper;
     AppCompatTextView icon;
     AppCompatTextView title;
 
     public LinkViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
+        wrapper = view.findViewById(R.id.link_wrapper);
         icon = view.findViewById(R.id.icon);
         title = view.findViewById(R.id.title);
     }
@@ -34,8 +37,8 @@ public class LinkViewHolder extends FlexibleViewHolder {
         }
         title.setText(data.getTitle());
 
-        itemView.setClickable(true);
-        itemView.setOnClickListener(new View.OnClickListener() {
+        wrapper.setClickable(true);
+        wrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 data.onClick();

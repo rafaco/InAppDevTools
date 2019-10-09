@@ -96,28 +96,38 @@ public class UiUtils {
         if (drawable instanceof ShapeDrawable) {
             ShapeDrawable shapeDrawable = (ShapeDrawable) drawable;
             shapeDrawable.getPaint().setColor(ContextCompat.getColor(context, colorRes));
-        } else if (drawable instanceof GradientDrawable) {
+        }
+        else if (drawable instanceof GradientDrawable) {
             GradientDrawable gradientDrawable = (GradientDrawable) drawable;
             gradientDrawable.setColor(ContextCompat.getColor(context, colorRes));
-        } else if (drawable instanceof ColorDrawable) {
+        }
+        else if (drawable instanceof ColorDrawable) {
             ColorDrawable colorDrawable = (ColorDrawable) drawable;
             colorDrawable.setColor(ContextCompat.getColor(context, colorRes));
         }
     }
 
-    public static void setCardViewClickable(Context context, CardView cardView, boolean clickable){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (clickable){
-                int[] attrs = new int[]{R.attr.selectableItemBackground};
-                TypedArray typedArray = context.obtainStyledAttributes(attrs);
-                int selectableItemBackground = typedArray.getResourceId(0, 0);
-                typedArray.recycle();
-                cardView.setForeground(context.getDrawable(selectableItemBackground));
-            }else{
-                cardView.setForeground(null);
+    public static void setCardViewClickable(CardView cardView, boolean isClickable){
+        Context context = cardView.getContext();
+        Drawable drawable;
+        if(isClickable) {
+            TypedValue outValue = new TypedValue();
+            context.getTheme().resolveAttribute(
+                    android.R.attr.selectableItemBackground, outValue, true);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                drawable = context.getDrawable(outValue.resourceId);
+            } else {
+                drawable = context.getResources().getDrawable(outValue.resourceId);
             }
-            cardView.setClickable(clickable);
         }
+        else{
+            drawable = null;
+        }
+        cardView.setClickable(isClickable);
+        cardView.setFocusable(isClickable);
+        cardView.setActivated(isClickable);
+        cardView.setForeground(drawable);
     }
 
     public static void highlightString(Context context, CharSequence text, String keyword, TextView textView) {

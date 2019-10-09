@@ -97,12 +97,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
             where3View.setText(traces.getFileName() + ":" + traces.getLineNumber());
 
             if (data.isOpenable()){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
-                }
-                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
-                UiUtils.setCardViewClickable(itemView.getContext(), cardView, true);
+                UiUtils.setCardViewClickable(cardView, false);
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -112,18 +107,22 @@ public class TraceViewHolder extends FlexibleViewHolder {
                                         traces.getLineNumber()));
                     }
                 });
-                itemView.setClickable(false);
+                
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
+                }
+                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 navIcon.setVisibility(View.VISIBLE);
-            }else{
+            }
+            else{
+                UiUtils.setCardViewClickable(cardView, false);
+                cardView.setOnClickListener(null);
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
-                cardView.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
-                UiUtils.setCardViewClickable(itemView.getContext(), cardView, false);
-                cardView.setOnClickListener(null);
-                itemView.setClickable(false);
                 navIcon.setVisibility(View.GONE);
             }
         }

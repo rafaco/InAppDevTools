@@ -15,8 +15,8 @@
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_subtitle">12dp</dimen>
     <dimen name="card_count_padding_bottom">5dp</dimen>
-    <dimen name="card_overflow_width">20dp</dimen>
-    <dimen name="card_overflow_height">30dp</dimen>
+    <dimen name="card_overflow_width">25dp</dimen>
+    <dimen name="card_overflow_height">25dp</dimen>
     <dimen name="card_overflow_margin_top">10dp</dimen>
 
     <dimen name="overlay_dialog_margin">7dp</dimen>

@@ -35,10 +35,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.Netwo
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class LogViewHolder extends RecyclerView.ViewHolder {
 
-    private final LogAdapter.OnClickListener clickListener;
-
+    LogAdapter.OnLogClickListener adapterClickListener;
     long uid;
     ImageView icon;
     AppCompatTextView decorator;
@@ -54,13 +53,11 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     AppCompatTextView extra;
     View buttonsSeparator;
     AppCompatButton extra_button;
+    ImageView overflow;
 
-    public LogViewHolder(View view, final LogAdapter.OnClickListener clickListener) {
+    public LogViewHolder(View view, LogAdapter.OnLogClickListener adapterClickListener) {
         super(view);
-
-        this.clickListener = clickListener;
-        itemView.setOnClickListener(this);
-        //itemView.setOnLongClickListener(this);
+        this.adapterClickListener = adapterClickListener;
 
         wrapper = view.findViewById(R.id.wrapper);
         card = view.findViewById(R.id.card_view);
@@ -75,11 +72,19 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         extra_wrapper = view.findViewById(R.id.extra_wrapper);
         extra = view.findViewById(R.id.extra);
         extra_button = view.findViewById(R.id.extra_button);
+        overflow = view.findViewById(R.id.overflow);
     }
 
     public void bindTo(final Friendly data, boolean isSelected, boolean isBeforeSelected) {
         uid = data.getUid();
-        boolean isLogcat = data.getCategory().equals("Logcat");
+
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterClickListener.onItemClick(v, getAdapterPosition(), uid);
+            }
+        });
+        //itemView.setOnLongClickListener(this);
 
         int cardColorId = isSelected ? R.color.iadt_surface_top : android.R.color.transparent;
         int cardColor = ContextCompat.getColor(wrapper.getContext(), cardColorId);
@@ -107,6 +112,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             this.icon.setVisibility(View.GONE);
         }
 
+        boolean isLogcat = data.isLogcat();
         if (isLogcat){
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
@@ -124,16 +130,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         titleSeparator.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
         if (isSelected){
-            String details = "";
-            if (isLogcat){
-                details = data.getExtra();
-            }
-            else{
-                details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
-                details += "Source: " + "Iadt Event" + Humanizer.newLine();
-                details += "Category: " + data.getCategory() + Humanizer.newLine();
-                details += "Subcategory: " + data.getSubcategory();
-            }
+            String details = getFormattedDetails(data);
             detail.setText(details);
             detailWrapper.setVisibility(View.VISIBLE);
         }
@@ -166,8 +163,36 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             buttonsSeparator.setVisibility(View.GONE);
         }
 
+        if(isSelected){
+            overflow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapterClickListener.onOverflowClick(v, getAdapterPosition(), uid);
+                }
+            });
+        }
+        else{
+            overflow.setOnClickListener(null);
+        }
+        overflow.setVisibility(isSelected ? View.VISIBLE : View.GONE);
+
+
         logSeparator.setVisibility(isSelected || isBeforeSelected ? View.GONE
                 : View.VISIBLE);
+    }
+
+    public static String getFormattedDetails(Friendly data) {
+        String details = "";
+        if (data.isLogcat()){
+            details = data.getExtra();
+        }
+        else{
+            details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
+            details += "Source: " + "Iadt Event" + Humanizer.newLine();
+            details += "Category: " + data.getCategory() + Humanizer.newLine();
+            details += "Subcategory: " + data.getSubcategory();
+        }
+        return details;
     }
 
     private NavigationStep getLink(Friendly data) {
@@ -197,19 +222,12 @@ public class LogViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         //icon.setBackgroundColor(color);
 
         extra_wrapper.setVisibility(View.GONE);
+        buttonsSeparator.setVisibility(View.GONE);
         extra_button.setVisibility(View.GONE);
+        overflow.setVisibility(View.GONE);
 
         if (Humanizer.isEven(position)){
             title.setMaxWidth(title.getWidth()/2);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        clickListener.onClick(v, getAdapterPosition(), uid);
-    }
-
-    public void updateSelection() {
-
     }
 }

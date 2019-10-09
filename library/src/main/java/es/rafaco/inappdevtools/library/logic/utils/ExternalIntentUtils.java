@@ -1,5 +1,6 @@
 package es.rafaco.inappdevtools.library.logic.utils;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -51,5 +52,12 @@ public class ExternalIntentUtils {
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(intent);
         }
+    }
+
+    public static void search(String query) {
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent.putExtra(SearchManager.QUERY, query);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        IadtController.get().getContext().startActivity(intent);
     }
 }

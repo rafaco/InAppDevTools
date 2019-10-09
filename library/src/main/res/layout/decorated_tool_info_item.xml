@@ -5,7 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingTop="2dp"
-    android:paddingBottom="2dp">
+    android:paddingBottom="2dp"
+    android:background = "?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="6dp">
 
     <View
         android:id="@+id/decorator"

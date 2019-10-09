@@ -52,7 +52,7 @@ public class LogcatReaderService extends JobIntentService {
     public static final String BASH_PATH = "/system/bin/sh";
     public static final String BASH_ARGS = "-c";
 
-    private static boolean isReaderDebug = true;
+    private static boolean isReaderDebug = false;
     private boolean isReaderRunning = false;
     private boolean isInjectorRunning = false;
     private boolean isCancelled;

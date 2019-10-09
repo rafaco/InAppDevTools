@@ -68,7 +68,7 @@ public class LogFilterHelper {
     public void applyAllPreset() {
         uiFilter = new LogUiFilter();
         uiFilter.setText("");
-        uiFilter.setSessionInt(0);
+        uiFilter.setSessionInt(1);
         uiFilter.setSeverityInt(0);
         uiFilter.setTypeInt(0);
         uiFilter.setCategoryInt(0);
