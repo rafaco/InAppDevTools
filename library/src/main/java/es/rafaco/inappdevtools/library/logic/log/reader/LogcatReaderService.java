@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -49,8 +50,6 @@ public class LogcatReaderService extends JobIntentService {
     public final static String CANCEL_ACTION = "cancel_action";
     public final static String PARAM_KEY = "param";
     public static final String LOGCAT_COMMAND = "logcat -v long";
-    public static final String BASH_PATH = "/system/bin/sh";
-    public static final String BASH_ARGS = "-c";
 
     private static boolean isReaderDebug = false;
     private boolean isReaderRunning = false;
@@ -112,7 +111,7 @@ public class LogcatReaderService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        ThreadUtils.setName("Iadt.LogWork");
+        ThreadUtils.setName("Iadt-LogWork");
         String action = intent.getAction();
         String param = intent.getStringExtra(PARAM_KEY);
         if (isReaderDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService onHandleWork(" + action + ", " + param + ")"));
@@ -205,8 +204,15 @@ public class LogcatReaderService extends JobIntentService {
             previousStartDateLines = new ArrayList<>();
         }
 
-        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
+        String[] fullCommand = Shell.formatBashCommand(command);
+        if (isReaderDebug()){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < fullCommand.length; i++) {
+                stringBuilder.append(fullCommand[i] + " ");
+            }
+            ThreadUtils.printOverview("LogcatReaderService");
+            Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
+        }
 
         if (logcatProcess != null)
             logcatProcess.destroy();
@@ -274,7 +280,7 @@ public class LogcatReaderService extends JobIntentService {
         processQueueTimerTask = new TimerTask() {
             @Override
             public void run() {
-                ThreadUtils.setName("Iadt.LogQueue");
+                ThreadUtils.setName("Iadt-LogQueue");
                 if (isReaderDebug())
                     Log.v(Iadt.TAG, "Log reader processQueueTimerTask running on "
                             + ThreadUtils.formatThread());
@@ -283,7 +289,7 @@ public class LogcatReaderService extends JobIntentService {
         };
         if (isReaderDebug()) Log.v(Iadt.TAG, "Log reader processQueueTimer created from "
                 + ThreadUtils.formatThread());
-        processQueueTimer = new Timer("Iadt.LogReader-Timer", false);
+        processQueueTimer = new Timer("Iadt-LogReader-Timer", false);
         processQueueTimer.schedule(processQueueTimerTask, getMaxQueueTime());
     }
 

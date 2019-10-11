@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class Shell {
@@ -28,14 +29,17 @@ public class Shell {
     public String run(String[] command) {
         String response = "";
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "Shell running: " + command);
+        if (IadtController.get().isDebug()){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < command.length; i++) {
+                stringBuilder.append(command[i] + " ");
+            }
+            ThreadUtils.printOverview("Shell");
+            Log.v(Iadt.TAG, "Shell running: " + stringBuilder.toString());
+        }
 
         try {
             process = Runtime.getRuntime().exec(command);
-            //TODO: LOW - was waitFor() needed? prevent crash handler to work
-            //int waitResponse = process.waitFor();
-            //Log.w(Iadt.TAG, "waitResponse: " + waitResponse);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuffer output = new StringBuffer();
             String line;

@@ -54,7 +54,9 @@ public class ThreadUtils {
     }
 
     public static void runOnBack(Runnable runnable, long delay){
-        Handler handler = new Handler();
+        HandlerThread handlerThread = new HandlerThread("Iadt-RunOnBack");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(runnable, delay);
     }
 
