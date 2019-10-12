@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -23,7 +22,6 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 
 public class OverlayService extends Service {
 
@@ -32,25 +30,16 @@ public class OverlayService extends Service {
     private static final String EXTRA_INTENT_PARAMS = "EXTRA_INTENT_PARAMS";
     private static Boolean initialised = false;
 
+    private OverlayManager overlayManager;
+
     public enum IntentAction {
-        PERMISSION_GRANTED,
         NAVIGATE_HOME,
         NAVIGATE_BACK,
         NAVIGATE_TO,
         SHOW_MAIN,
         SHOW_ICON,
         SHOW_TOGGLE,
-        HIDE_ALL,
-        RESTORE_ALL,
-        REPORT,
-        SCREEN,
-        TOOL,
-        RESTART_APP,
-        CLOSE_APP,;
     }
-
-    private LayerManager layerManager;
-    private ScreenManager screenManager;
 
     public OverlayService() {}
 
@@ -67,6 +56,15 @@ public class OverlayService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (overlayManager != null){
+            overlayManager.onConfigurationChanged(newConfig);
+        }
+    }
+
 
     //region [ STATIC ACCESSORS ]
 
@@ -128,33 +126,27 @@ public class OverlayService extends Service {
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "OverlayService - init()");
 
-        layerManager = new LayerManager(this);
-        screenManager = new ScreenManager(this, layerManager.getMainLayer());
+        overlayManager = new OverlayManager(this);
         initialised = true;
-
-        if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "OverlayService - initialised");
 
         onInit();
     }
 
     private void onInit() {
         if (PendingCrashUtil.isPending()){
-            navigateTo(CrashDetailScreen.class.getSimpleName(), null);
+            overlayManager.navigateTo(CrashDetailScreen.class.getSimpleName(), null);
             PendingCrashUtil.clearPending();
-            layerManager.toggleAllLayerVisibility(true);
-            showMain();
+            //TODO: check if needed
+            //overlayManager.showMain();
         }
         else{
-            //Show icon
-            layerManager.toggleAllLayerVisibility(true);
-            layerManager.toggleMainLayerVisibility(false);
+            overlayManager.showIcon();
         }
     }
 
     //endregion
 
-    //region [ ACTION CONTROLLER ]
+    //region [ ACTIONS ]
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -171,7 +163,7 @@ public class OverlayService extends Service {
         }
         catch (Exception e) {
 
-            //IMPORTANT: This catch picks most of internal exceptions
+            //IMPORTANT: This line can picks most of us internal exceptions
             if (IadtController.get().isDebug()){
                 throw e;
             }
@@ -189,108 +181,22 @@ public class OverlayService extends Service {
         if (!isInitialize()) init();
 
         if (action.equals(IntentAction.NAVIGATE_HOME)){
-            navigateHome();
+            overlayManager.navigateHome();
         }
         else if (action.equals(IntentAction.NAVIGATE_BACK)){
-            navigateBack();
+            overlayManager.navigateBack();
         }
         else if (action.equals(IntentAction.NAVIGATE_TO)){
-            String cleanName = target.replace(" Tool", "");
-            navigateTo(cleanName, params);
+            overlayManager.navigateTo(target, params);
         }
         else if (action.equals(IntentAction.SHOW_MAIN)) {
-            showMain();
+            overlayManager.showMain();
         }
         else if (action.equals(IntentAction.SHOW_ICON)){
-            showIcon();
+            overlayManager.showIcon();
         }
         else if (action.equals(IntentAction.SHOW_TOGGLE)) {
-            showToggle();
-        }
-        else if (action.equals(IntentAction.HIDE_ALL)){
-            hideAll();
-        }
-        else if (action.equals(IntentAction.RESTORE_ALL)){
-            restoreAll();
-        }
-
-        else if (action.equals(IntentAction.REPORT)){
-            navigateTo(ReportScreen.class.getSimpleName());
-        }
-        else if (action.equals(IntentAction.SCREEN)){
-            navigateTo(ReportScreen.class.getSimpleName());
-        }
-        else if (action.equals(IntentAction.CLOSE_APP)){
-            IadtController.get().forceCloseApp(false);
-        }
-        else if (action.equals(IntentAction.RESTART_APP)){
-            IadtController.get().restartApp(false);
-        }
-    }
-
-    //endregion
-
-    //region [ INTERNAL NAVIGATION ]
-
-    private void showToggle() {
-        if (screenManager.getCurrentScreen() == null){
-            screenManager.goHome();
-        }
-
-        layerManager.toggleMainLayerVisibility(null);
-    }
-
-    private void showMain() {
-        if (screenManager.getCurrentScreen() == null){
-            screenManager.goHome();
-        }
-
-        layerManager.toggleMainLayerVisibility(true);
-    }
-
-    private void showIcon() {
-        layerManager.toggleMainLayerVisibility(false);
-    }
-
-    private void hideAll() {
-        layerManager.toggleAllLayerVisibility(false);
-    }
-
-    private void restoreAll() {
-        layerManager.toggleAllLayerVisibility(true);
-    }
-
-    public void navigateHome() {
-        screenManager.goHome();
-    }
-
-    public void navigateTo(String name) {
-        navigateTo(name, null);
-    }
-
-    public void navigateTo(String name, String param) {
-        layerManager.toggleMainLayerVisibility(true);
-        screenManager.goTo(name, param);
-    }
-
-    public void navigateBack() {
-        screenManager.goBack();
-    }
-
-    //endregion
-
-    //region [ SCREEN LIFECYCLE ]
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (layerManager != null){
-            layerManager.onConfigurationChanged(newConfig);
-        }
-
-        if (screenManager != null){
-            screenManager.onConfigurationChanged(newConfig);
+            overlayManager.showToggle();
         }
     }
 
@@ -318,6 +224,8 @@ public class OverlayService extends Service {
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
         ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
                 .getEventDetectorsManager().get(ActivityEventDetector.class);
+
+        //TODO: ???
         activityWatcher.setLastActivityResumed("");
     }
 
@@ -325,8 +233,7 @@ public class OverlayService extends Service {
     public void onDestroy() {
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "OverlayService - onDestroy");
-        if (screenManager != null) screenManager.destroy();
-        if (layerManager != null) layerManager.destroy();
+        if (overlayManager != null) overlayManager.destroy();
         instance = null;
 
         super.onDestroy();

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+
 public class EventManager {
 
     private final Context context;
@@ -26,6 +28,10 @@ public class EventManager {
             eventListeners.put(event, new ArrayList<Listener>());
         }
         List<Listener> listenerForEvent = eventListeners.get(event);
+        if (listenerForEvent.contains(listener)){
+            FriendlyLog.log("W", "Iadt", "EventManager", "Listener object already added!! "+listener.toString()+" skipped for " + event.getName());
+            return;
+        }
         listenerForEvent.add(listener);
     }
 

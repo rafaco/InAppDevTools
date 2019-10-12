@@ -11,7 +11,6 @@ public enum Event {
 
     CONFIG_CHANGED("ConfigChanged"),
     OVERLAY_NAVIGATION("OverlayNavigation"),
-    OVERLAY_HIDDEN("OverlayHidden"),
 
     ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
     ERROR_ANR("ErrorAnr"),

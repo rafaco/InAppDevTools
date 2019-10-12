@@ -54,7 +54,7 @@ public class Iadt {
 
     public static void show() {
         if (!isEnabled()) return;
-        getController().showMain();
+        getController().getOverlayHelper().showMain();
     }
 
     /*public static void show(String screenName) {
@@ -64,7 +64,7 @@ public class Iadt {
 
     public static void hide() {
         if (!isEnabled()) return;
-        getController().showIcon();
+        getController().getOverlayHelper().showIcon();
     }
 
     //endregion

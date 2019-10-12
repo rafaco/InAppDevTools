@@ -8,9 +8,6 @@ import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 
 public class OverlayNavigationSubscriber extends EventSubscriber {
 
-    private boolean isForeground = false;
-    private boolean isSuspended = false;
-
     public OverlayNavigationSubscriber(EventManager eventManager) {
         super(eventManager);
     }
@@ -23,45 +20,8 @@ public class OverlayNavigationSubscriber extends EventSubscriber {
             public void onEvent(Event event, Object param) {
                 NavigationStep step = (NavigationStep) param;
                 //IadtController.get().setCurrentOverlay(step.getStringClassName());
-                FriendlyLog.log("D", "Iadt", "Navigation", "Overlay navigation to " + step.getStringClassName());
-            }
-        });
-
-        eventManager.subscribe(Event.OVERLAY_BACKGROUND, new EventManager.Listener() {
-            @Override
-            public void onEvent(Event event, Object param) {
-                isForeground = false;
-                FriendlyLog.log("D", "Iadt", "Background", "Overlay to background");
-            }
-        });
-
-        eventManager.subscribe(Event.OVERLAY_FOREGROUND, new EventManager.Listener() {
-            @Override
-            public void onEvent(Event event, Object param) {
-                isForeground = true;
-                FriendlyLog.log("D", "Iadt", "Foreground", "Overlay to foreground");
-            }
-        });
-
-        eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
-            @Override
-            public void onEvent(Event event, Object param) {
-                if (!isForeground && isSuspended){
-                    isForeground = true;
-                    isSuspended = false;
-                    eventManager.fire(Event.OVERLAY_FOREGROUND);
-                }
-            }
-        });
-
-        eventManager.subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
-            @Override
-            public void onEvent(Event event, Object param) {
-                if (isForeground) {
-                    isForeground = false;
-                    isSuspended = true;
-                    eventManager.fire(Event.OVERLAY_BACKGROUND);
-                }
+                FriendlyLog.log("D", "Iadt", "Navigation",
+                        "Overlay navigation to " + step.getStringClassName());
             }
         });
     }

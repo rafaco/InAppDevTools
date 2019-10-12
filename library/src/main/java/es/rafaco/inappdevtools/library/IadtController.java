@@ -18,7 +18,10 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntim
 import es.rafaco.inappdevtools.library.logic.info.InfoManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
+import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
+import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
@@ -37,6 +40,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -51,7 +55,9 @@ public final class IadtController {
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
     private InfoManager infoManager;
-    private boolean isPendingForegroundInit;
+    public boolean isPendingForegroundInit;
+    private OverlayHelper overlayHelper;
+    private boolean sessionStartTimeImproved = false;
 
     protected IadtController(Context context) {
         if (INSTANCE != null) {
@@ -165,9 +171,7 @@ public final class IadtController {
 
         if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();
-
-            Intent intent = new Intent(getContext(), OverlayService.class);
-            getContext().startService(intent);
+            overlayHelper = new OverlayHelper(context);
         }
 
         if (getConfig().getBoolean(BuildConfig.INVOCATION_BY_NOTIFICATION)){
@@ -206,6 +210,10 @@ public final class IadtController {
         return navigationManager;
     }
 
+    public OverlayHelper getOverlayHelper() {
+        return overlayHelper;
+    }
+
     public InfoManager getInfoManager() {
         return infoManager;
     }
@@ -241,60 +249,6 @@ public final class IadtController {
 
     //region [ METHODS FOR FEATURES ]
 
-    private boolean checksBeforeShowOverlay() {
-        if (!isEnabled()) return true;
-        if (!AppUtils.isForegroundImportance(getContext())) return true;
-
-        if (isPendingForegroundInit) {
-            initForegroundIfPending();
-            if (!isPendingForegroundInit)
-                return true;
-        }
-        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-                WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                showMain();
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Iadt.showMessage(R.string.draw_other_app_permission_denied);
-                            }
-                        });
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public void showToggle() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_TOGGLE);
-    }
-    public void showMain() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_MAIN);
-    }
-
-    public void showIcon() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_ICON);
-    }
-
-    public void hideAll() {
-        //if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.HIDE_ALL);
-    }
-
-    public void restoreAll() {
-        //if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.RESTORE_ALL);
-    }
-
     public void takeScreenshot() {
         if (!isEnabled()) return;
 
@@ -302,7 +256,7 @@ public final class IadtController {
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED) && OverlayService.isInitialize()){
-            showIcon();
+            getOverlayHelper().showIcon();
         }
         FileProviderUtils.openFileExternally(getContext(), screenshot.getPath());
     }
@@ -429,6 +383,48 @@ public final class IadtController {
                 throw new ForcedRuntimeException(cause);
             }
         });
+    }
+
+    public void improveSessionStart() {
+        if (isEnabled() && !sessionStartTimeImproved){
+
+            int pid = ThreadUtils.myPid();
+            Session currentSession = IadtController.getDatabase().sessionDao().getLast();
+
+            if (currentSession.getDate() != currentSession.getDetectionDate()){
+                sessionStartTimeImproved = true;
+                return;
+            }
+
+            long detectionDate = currentSession.getDetectionDate();
+            String threadFilter = "%" + "Process: " + pid + "%";
+            Friendly firstSessionLog = IadtController.getDatabase().friendlyDao().getFirstSessionLog(threadFilter, detectionDate);
+
+            if (firstSessionLog != null
+                    && firstSessionLog.getDate()<detectionDate){
+
+                //Improve session item
+                long improvedDate = firstSessionLog.getDate();
+                currentSession.setDate(improvedDate);
+                IadtController.getDatabase().sessionDao().update(currentSession);
+
+                //Improve new session Log
+                String message = "Session " + currentSession.getUid() +" started";
+                Friendly newSessionLog = IadtController.getDatabase().friendlyDao().getNewSessionLog(message);
+                if (newSessionLog != null
+                        && improvedDate < newSessionLog.getDate()){
+                    newSessionLog.setDate(improvedDate);
+                    IadtController.getDatabase().friendlyDao().update(newSessionLog);
+                }
+
+                sessionStartTimeImproved = true;
+                Log.v(Iadt.TAG, "Improved session start time! "
+                        + Humanizer.getElapsedTime(improvedDate, detectionDate));
+            }
+            else{
+                Log.w(Iadt.TAG, "Unable to improve session start time");
+            }
+        }
     }
 }
 

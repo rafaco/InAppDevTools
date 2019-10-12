@@ -19,7 +19,6 @@ public class EventSubscribersManager {
     private void initItems() {
         initItem(OverlayNavigationSubscriber.class);
         initItem(ForegroundInitSubscriber.class);
-        initItem(OverlaySyncWithForegroundSubscriber.class);
         initItem(ConfigChangeSubscriber.class);
     }
 

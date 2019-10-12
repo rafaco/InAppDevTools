@@ -8,8 +8,6 @@ public enum Event {
 
     CONFIG_CHANGED("ConfigChanged"),
     OVERLAY_NAVIGATION("OverlayNavigation"),
-    OVERLAY_FOREGROUND("OverlayForeground"),
-    OVERLAY_BACKGROUND("OverlayBackground"),
 
     ERROR_HANDLED_EXCEPTION("ErrorHandledException"),
     ERROR_ANR("ErrorAnr"),

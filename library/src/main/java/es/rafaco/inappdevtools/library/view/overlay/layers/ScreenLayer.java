@@ -214,7 +214,7 @@ public class ScreenLayer extends Layer {
     private void onToolbarButtonPressed(MenuItem item) {
         int selected = item.getItemId();
         if (selected == R.id.action_close) {
-            IadtController.get().showIcon();
+            IadtController.get().getOverlayHelper().showIcon();
         }
         else if (selected == R.id.action_half_position) {
             toggleSizePosition(item);

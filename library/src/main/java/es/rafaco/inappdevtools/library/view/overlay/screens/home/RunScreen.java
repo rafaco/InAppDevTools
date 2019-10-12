@@ -109,7 +109,7 @@ public class RunScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().showIcon();
+                        IadtController.get().getOverlayHelper().showIcon();
                         WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.DISABLE,
                                 new Runnable() {
                                     @Override
@@ -135,7 +135,7 @@ public class RunScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().showIcon();
+                        IadtController.get().getOverlayHelper().showIcon();
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
@@ -144,7 +144,7 @@ public class RunScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().showIcon();
+                        IadtController.get().getOverlayHelper().showIcon();
                         AppUtils.openDeveloperOptions(RunScreen.this.getContext());
                     }
                 }));

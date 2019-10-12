@@ -104,7 +104,7 @@ public class NotificationService extends Service {
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();
-                    IadtController.get().showMain();
+                    IadtController.get().getOverlayHelper().showMain();
                     break;
             }
         }

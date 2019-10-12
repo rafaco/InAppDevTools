@@ -35,7 +35,7 @@ public class ShakeEventDetector extends EventDetector {
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "User", "Shake", "Shake detected");
                 if (Iadt.getConfig().getBoolean(BuildConfig.INVOCATION_BY_SHAKE)){
-                    IadtController.get().showToggle();
+                    IadtController.get().getOverlayHelper().showToggle();
                 }
             }
         });

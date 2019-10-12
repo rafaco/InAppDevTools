@@ -32,7 +32,7 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
     private boolean isStarted = false;
     private boolean isPaused = false;
 
-    //Lifecycle methods
+    //Lifecycle callback methods
     protected abstract void onCreate();
     protected abstract void onStart(ViewGroup toolHead);
     protected void onResume() {}
@@ -99,17 +99,6 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
         resume();
     }
 
-    public void pause() {
-        if (isStarted && !isPaused){
-            if (IadtController.get().isDebug())
-                FriendlyLog.log("D", "Iadt", "Screen",
-                        this.getClass().getSimpleName() + " pause");
-            
-            onPause();
-            isPaused = true;
-        }
-    }
-
     public void resume() {
         if (isStarted){
             if (IadtController.get().isDebug())
@@ -118,6 +107,17 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
 
             onResume();
             isPaused = false;
+        }
+    }
+
+    public void pause() {
+        if (isStarted && !isPaused){
+            if (IadtController.get().isDebug())
+                FriendlyLog.log("D", "Iadt", "Screen",
+                        this.getClass().getSimpleName() + " pause");
+            
+            onPause();
+            isPaused = true;
         }
     }
 

@@ -72,34 +72,8 @@ public class ScreenManager {
         this.navigationManager = IadtController.get().getNavigationManager();
 
         registerAllScreens();
-        registerEventListeners();
 
         ThreadUtils.printOverview("ScreenManager");
-    }
-
-    private EventManager.Listener onBackgroundListener = new EventManager.Listener() {
-        @Override
-        public void onEvent(Event event, Object param) {
-            if (getCurrentScreen() != null) getCurrentScreen().pause();
-        }
-    };
-    private EventManager.Listener onForegroundListener = new EventManager.Listener() {
-        @Override
-        public void onEvent(Event event, Object param) {
-            if (getCurrentScreen() != null) getCurrentScreen().resume();
-        }
-    };
-
-    private void registerEventListeners() {
-        EventManager eventManager = IadtController.get().getEventManager();
-        eventManager.subscribe(Event.OVERLAY_BACKGROUND, onBackgroundListener);
-        eventManager.subscribe(Event.OVERLAY_FOREGROUND, onForegroundListener);
-    }
-
-    private void unRegisterEventListeners() {
-        EventManager eventManager = IadtController.get().getEventManager();
-        eventManager.unSubscribe(Event.OVERLAY_BACKGROUND, onBackgroundListener);
-        eventManager.unSubscribe(Event.OVERLAY_FOREGROUND, onForegroundListener);
     }
 
     //region [ SCREENS MANAGER ]
@@ -272,7 +246,7 @@ public class ScreenManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        IadtController.get().showIcon();
+        IadtController.get().getOverlayHelper().showIcon();
     }
 
     //endregion
@@ -299,7 +273,6 @@ public class ScreenManager {
     }
 
     public void destroy() {
-        unRegisterEventListeners();
         if (getCurrentScreen() != null){
             currentScreen.destroy();
             setCurrentScreen(null);

@@ -77,6 +77,22 @@ public interface FriendlyDao {
             + " ORDER BY date DESC")
     List<AnalysisItem> analiseSession();
 
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE extra LIKE :extraContent"
+            + " AND date < :date"
+            + " AND category IN ('Logcat')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getFirstSessionLog(String extraContent, long date);
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE message LIKE :message"
+            + " AND category IN ('Iadt')"
+            + " AND subcategory IN ('Init')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getNewSessionLog(String message);
+
     @RawQuery(observedEntities = Friendly.class)
     List<AnalysisItem> analiseWithQuery(SupportSQLiteQuery query);
 

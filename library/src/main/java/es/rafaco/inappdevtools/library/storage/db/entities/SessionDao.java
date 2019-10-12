@@ -10,6 +10,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 //#endif
 import java.util.List;
 
@@ -33,6 +34,9 @@ public interface SessionDao {
 
     @Insert
     long[] insertAll(Session... sessions);
+
+    @Update
+    void update(Session session);
 
     @Delete
     void delete(Session session);
