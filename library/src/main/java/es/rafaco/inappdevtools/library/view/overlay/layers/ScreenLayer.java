@@ -119,6 +119,17 @@ public class ScreenLayer extends Layer {
         });
     }
 
+    public void scrollToPixel(final int targetPixel){
+        if (bodyContainer.getHeight() < targetPixel){
+            bodyScroll.post(new Runnable() {
+                @Override
+                public void run() {
+                    bodyScroll.scrollTo(0, targetPixel);
+                }
+            });
+        }
+    }
+
     public final void focusOnView(final View view){
         bodyScroll.post(new Runnable() {
             @Override

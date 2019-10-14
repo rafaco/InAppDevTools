@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
@@ -105,13 +106,24 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                                 .setWrapLine(false)
                                 .setZoomEnabled(false)
                                 .setCode(content)
-                                .setLanguage(parseLanguage())
-                                .apply();
+                                .setLanguage(parseLanguage());
 
                         if (getParams().lineNumber > 0){
-                            codeViewer.highlightLineNumber(getParams().lineNumber);
-                            codeViewer.scrollToLine(getParams().lineNumber);
+                            int lineNumber = getParams().lineNumber;
+                            codeViewer.highlightLineNumber(lineNumber);
+
+                            int scrollLine = lineNumber - 5;
+                            if (scrollLine < 1) scrollLine = 1;
+
+                            final int finalScrollLine = scrollLine;
+                            codeViewer.setWebViewClient(new WebViewClient() {
+                                @Override
+                                public void onPageFinished(WebView view, String url) {
+                                    codeViewer.scrollToLine(finalScrollLine);
+                                }
+                            });
                         }
+                        codeViewer.apply();
                     }
                 });
 

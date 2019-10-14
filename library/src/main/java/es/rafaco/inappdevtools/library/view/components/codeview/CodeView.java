@@ -350,6 +350,9 @@ public class CodeView extends WebView {
         //scripts
         sb.append("<script src='file:///android_asset/codeview/highlight.pack.js'></script>");
         sb.append("<script>hljs.initHighlightingOnLoad();</script>");
+        sb.append("<script>function scrollToLine(lineNumber){ " +
+                "var x = document.querySelectorAll(\"td.line[line='\"+lineNumber+\"']\");" +
+                "if(x && x.length > 0) x[0].parentElement.scrollIntoView();};</script>");
         sb.append("</head>");
         //code
         sb.append("<body>");
@@ -451,8 +454,7 @@ public class CodeView extends WebView {
 
     public void scrollToLine(int lineNumber){
         if (lineNumber >= 0) {
-            executeJavaScript(String.format(Locale.ENGLISH,
-                    "var x = document.querySelectorAll(\"td.line[line='%d']\"); if(x && x.length == 1) scrollTo(x[0]);", lineNumber));
+            executeJavaScript("scrollToLine('"+lineNumber+"');");
         }
     }
 }
