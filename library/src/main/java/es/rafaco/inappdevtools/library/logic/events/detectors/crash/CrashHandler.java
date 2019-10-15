@@ -214,7 +214,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             trace.setLinkedId(crashId);
             trace.setLinkedType("crash");
             trace.setLinkedIndex(i);
-            if (i==0) trace.setExtra("crash");
+            trace.setExtra("exception");
             traces.add(trace);
         }
 
@@ -230,7 +230,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 trace.setLinkedId(crashId);
                 trace.setLinkedType("crash");
                 trace.setLinkedIndex(i+j);
-                if (j==0) trace.setExtra("cause");
+                trace.setExtra("cause");
                 traces.add(trace);
             }
         }

@@ -107,19 +107,21 @@ public class SourcesManager {
         if (!canSourceInspection())
             return null;
 
-        String slashedPath = className.replace(".", "/");
+        String internalPath = className.replace(".", "/");
+        if (internalPath.contains("$"))
+            internalPath = internalPath.substring(0, internalPath.indexOf("$"));
 
         String[] prefixes = new String[]{"src/", "gen/"};
         for (String prefix: prefixes){
-            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + slashedPath);
+            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath);
             if (candidate != null){
                 return candidate.getPath();
             }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + slashedPath + ".java");
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath + ".java");
             if (candidate != null){
                 return candidate.getPath();
             }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + slashedPath + ".kt");
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath + ".kt");
             if (candidate != null){
                 return candidate.getPath();
             }

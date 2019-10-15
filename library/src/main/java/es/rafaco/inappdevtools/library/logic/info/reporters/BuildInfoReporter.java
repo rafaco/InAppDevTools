@@ -217,7 +217,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_COMMITS, -1));
+                                SourceDetailScreen.buildParams(GitAsset.LOCAL_COMMITS));
                     }
                 }));
 
@@ -246,7 +246,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_CHANGES, -1));
+                                SourceDetailScreen.buildParams(GitAsset.LOCAL_CHANGES));
                     }
                 }));
 

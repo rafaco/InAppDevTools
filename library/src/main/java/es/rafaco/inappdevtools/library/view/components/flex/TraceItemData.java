@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 
-public class TraceItem {
+public class TraceItemData {
 
     public enum Position { START, MIDDLE, END}
     private Sourcetrace sourcetrace;
@@ -18,7 +18,7 @@ public class TraceItem {
     private String fullPath;
     private int color;
 
-    public TraceItem(Sourcetrace sourcetrace) {
+    public TraceItemData(Sourcetrace sourcetrace) {
         this.sourcetrace = sourcetrace;
     }
 

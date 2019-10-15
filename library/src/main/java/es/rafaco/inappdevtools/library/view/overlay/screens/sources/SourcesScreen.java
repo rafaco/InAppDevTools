@@ -348,7 +348,7 @@ public class SourcesScreen extends Screen {
     //endregion
 
     private void openSource(SourceEntry entry) {
-        String params = SourceDetailScreen.buildParams(entry.getOrigin(), entry.getName(), -1);
+        String params = SourceDetailScreen.buildParams(entry.getName());
         OverlayService.performNavigation(SourceDetailScreen.class, params);
     }
 
