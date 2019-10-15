@@ -5,6 +5,7 @@ package es.rafaco.inappdevtools.library.storage.db.entities;
 //@import androidx.room.Delete;
 //@import androidx.room.Insert;
 //@import androidx.room.Query;
+//@import androidx.room.Update;
 //#else
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

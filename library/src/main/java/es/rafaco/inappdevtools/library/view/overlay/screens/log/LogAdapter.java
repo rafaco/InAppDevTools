@@ -1,8 +1,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.content.Context;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,10 +11,14 @@ import android.view.ViewGroup;
 //@import androidx.annotation.NonNull;
 //@import androidx.paging.PagedListAdapter;
 //@import androidx.recyclerview.widget.DiffUtil;
+//@import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.appcompat.widget.PopupMenu;
 //#else
 import android.support.annotation.NonNull;
 import android.arch.paging.PagedListAdapter;
 import  android.support.v7.util.DiffUtil;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;

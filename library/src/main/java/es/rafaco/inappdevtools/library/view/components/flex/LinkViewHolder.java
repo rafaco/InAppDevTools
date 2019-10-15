@@ -1,6 +1,7 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.view.View;
+import android.widget.LinearLayout;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
@@ -8,7 +9,6 @@ import android.view.View;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
-import android.widget.LinearLayout;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;

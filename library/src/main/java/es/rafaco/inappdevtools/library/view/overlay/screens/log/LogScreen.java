@@ -1,9 +1,5 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -19,6 +15,9 @@ import android.widget.TextView;
 //@import androidx.recyclerview.widget.LinearLayoutManager;
 //@import androidx.lifecycle.LiveData;
 //@import androidx.lifecycle.Observer;
+//@import androidx.lifecycle.Lifecycle;
+//@import androidx.lifecycle.LifecycleObserver;
+//@import androidx.lifecycle.OnLifecycleEvent;
 //@import androidx.lifecycle.ProcessLifecycleOwner;
 //@import androidx.paging.LivePagedListBuilder;
 //@import androidx.paging.PagedList;
@@ -29,6 +28,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 //#endif
