@@ -80,8 +80,7 @@ public class InspectViewScreen extends Screen {
                 @Override
                 public void run() {
                     OverlayService.performNavigation(SourceDetailScreen.class,
-                            SourceDetailScreen.buildParams(null,
-                                    pathFromClassName, 0));
+                            SourceDetailScreen.buildParams(pathFromClassName, -1));
                 }
             }));
         }

@@ -1,14 +1,14 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
@@ -23,28 +23,30 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Method;
 
+import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
 import es.rafaco.inappdevtools.library.view.components.codeview.Language;
-import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
-
-import static android.content.Context.SEARCH_SERVICE;
 
 public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
-    private TextView codeHeader;
-    private CodeView codeViewer;
-    private ToolBarHelper toolbarHelper;
+    CodeView codeViewer;
+    ToolBarHelper toolbarHelper;
     boolean[] tuneSelection;
+    RelativeLayout traceContainer;
+    TextView traceLabel;
+    AppCompatButton prevButton;
+    AppCompatButton nextButton;
+    TextView wideLabel;
 
     public SourceDetailScreen(ScreenManager manager) {
         super(manager);
@@ -71,78 +73,50 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     protected void onCreate() {
-        //TODO: subtitle
-        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
     }
 
     @Override
     protected void onStart(ViewGroup view) {
-        codeHeader = bodyView.findViewById(R.id.code_header);
+        traceContainer = bodyView.findViewById(R.id.trace_container);
+        prevButton = bodyView.findViewById(R.id.prev_trace);
+        traceLabel = bodyView.findViewById(R.id.trace_label);
+        wideLabel = bodyView.findViewById(R.id.wide_label);
+        nextButton = bodyView.findViewById(R.id.next_trace);
         codeViewer = bodyView.findViewById(R.id.code_view);
 
-        new AsyncTask<String, String, String>(){
-            @Override
-            protected String doInBackground(String... strings) {
-                return IadtController.get().getSourcesManager().getContent(getParams().path);
+        if (!getParams().isTrace){
+            traceContainer.setVisibility(View.GONE);
+            String message = getParams().path;
+            if (getParams().lineNumber>0){
+                message += Humanizer.newLine()
+                        + "Line: " + getParams().lineNumber;
             }
-
-            @Override
-            protected void onPostExecute(final String content) {
-                super.onPostExecute(content);
-                codeHeader.setText(getParams().path);
-
-                if (content == null){
-                    codeViewer.setCode("Unable to get content");
-                    return;
-                }
-
-                codeViewer.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        codeViewer.setOnHighlightListener(SourceDetailScreen.this)
-                                .setTheme(Theme.ANDROIDSTUDIO)
-                                .setFontSize(12)
-                                .setShowLineNumber(true)
-                                .setWrapLine(false)
-                                .setZoomEnabled(false)
-                                .setCode(content)
-                                .setLanguage(parseLanguage());
-
-                        if (getParams().lineNumber > 0){
-                            int lineNumber = getParams().lineNumber;
-                            codeViewer.highlightLineNumber(lineNumber);
-
-                            int scrollLine = lineNumber - 5;
-                            if (scrollLine < 1) scrollLine = 1;
-
-                            final int finalScrollLine = scrollLine;
-                            codeViewer.setWebViewClient(new WebViewClient() {
-                                @Override
-                                public void onPageFinished(WebView view, String url) {
-                                    codeViewer.scrollToLine(finalScrollLine);
-                                }
-                            });
-                        }
-                        codeViewer.apply();
-                    }
-                });
-
-                tuneSelection = new boolean[]{ true, false };
-            }
-        }.execute();
-
-        //initToolbar();
-    }
-
-    public Language parseLanguage() {
-        String extension = NodesHelper.getFileExtensionFromPath(getParams().path);
-        Language language = Language.getLanguageByName(extension.toLowerCase());
-        if (language != null){
-            return language;
+            wideLabel.setText(message);
+            loadSource(getParams().path, getParams().lineNumber + "");
         }
-        return Language.AUTO;
+        else{
+            getScreenManager().setTitle("Stacktrace");
+            loadTrace(getParams().traceId);
+        }
     }
 
+    protected void loadSource(String path, String line) {
+        new FillSourceAsyncTask(this).execute(path, line);
+    }
+
+    protected void loadTrace(long traceId) {
+        new FillTraceAsyncTask(this).execute(traceId);
+    }
+
+    @Override
+    protected void onStop() {
+        //Nothing needed
+    }
+
+    @Override
+    protected void onDestroy() {
+        //Nothing needed
+    }
 
     //region [ CodeView listener ]
 
@@ -173,23 +147,16 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     //endregion
 
-
     //region [ TOOL BAR ]
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //TODO: subtitle
-        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");
         toolbarHelper.showAllMenuItem();
         
         final SearchView searchView = (SearchView) menuItem.getActionView();
-
-        SearchManager searchManager = (SearchManager) getContext().getSystemService(SEARCH_SERVICE);
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -304,19 +271,22 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     }
     //endregion
 
+    //region [ PARAMS ]
 
-    @Override
-    protected void onStop() {
-        //Nothing needed
+    public static String buildParams(String path){
+        InnerParams paramObject = new InnerParams(path, -1);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
     }
 
-    @Override
-    protected void onDestroy() {
-        //Nothing needed
+    public static String buildParams(String path, int lineNumber){
+        InnerParams paramObject = new InnerParams(path, lineNumber);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
     }
 
-    public static String buildParams(String type, String path, int lineNumber){
-        InnerParams paramObject = new InnerParams(type, path, lineNumber);
+    public static String buildParams(long traceId){
+        InnerParams paramObject = new InnerParams(traceId);
         Gson gson = new Gson();
         return gson.toJson(paramObject);
     }
@@ -327,14 +297,23 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     }
 
     public static class InnerParams {
-        public String type;
-        public String path;
-        public int lineNumber;
+        long traceId;
+        boolean isTrace;
+        String path;
+        int lineNumber;
+        long crashId;
 
-        public InnerParams(String type, String path, int lineNumber) {
-            this.type = type;
+        public InnerParams(String path, int lineNumber) {
+            this.isTrace = false;
             this.path = path;
             this.lineNumber = lineNumber;
         }
+
+        public InnerParams(long traceId) {
+            this.isTrace = true;
+            this.traceId = traceId;
+        }
     }
+
+    //endregion
 }

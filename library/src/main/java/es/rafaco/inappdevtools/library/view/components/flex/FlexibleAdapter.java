@@ -58,7 +58,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
         descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
         descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
-        descriptors.add(new FlexibleItemDescriptor(TraceItem.class, TraceViewHolder.class, R.layout.flexible_item_trace));
+        descriptors.add(new FlexibleItemDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
         descriptors.add(new FlexibleItemDescriptor(AnalysisItem.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
         descriptors.add(new FlexibleItemDescriptor(ConfigItem.class, ConfigViewHolder.class, R.layout.flexible_item_config));
