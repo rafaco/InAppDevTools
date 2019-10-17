@@ -8,7 +8,7 @@
  * Modifications:
  *
  *     * Added this attribution notice
-*     * Conditional imports for AndroidX builds
+ *     * Conditional imports for AndroidX builds
  *
  *
  * Modifications copyright 2018-2019 Rafael Acosta Alvarez

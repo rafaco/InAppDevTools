@@ -4,6 +4,8 @@
       <element module="CodeView SOURCES" copyright="Codeview NOTICE" />
       <element module="MDToast SOURCES" copyright="MDToast NOTICE" />
       <element module="Inappdevtools SOURCES" copyright="Inappdevtools NOTICE" />
+      <element module="Chuck SOURCES" copyright="Chuck NOTICE" />
+      <element module="WCViewPager SOURCES" copyright="WCViewPager NOTICE" />
     </module2copyright>
   </settings>
 </component>

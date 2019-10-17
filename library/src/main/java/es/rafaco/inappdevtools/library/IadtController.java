@@ -23,7 +23,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
+import com.readystatesoftware.chuck.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;

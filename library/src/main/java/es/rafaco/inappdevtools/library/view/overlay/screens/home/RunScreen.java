@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.HttpBinService;
+import com.readystatesoftware.chuck.sample.HttpBinService;
 
 public class RunScreen extends Screen {
 

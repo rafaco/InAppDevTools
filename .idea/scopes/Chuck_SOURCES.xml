@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Chuck SOURCES" pattern="src[library]:com.readystatesoftware.chuck..*" />
+</component>
