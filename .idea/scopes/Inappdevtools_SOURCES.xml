@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Inappdevtools SOURCES" pattern="(src:es.rafaco.inappdevtools..*||src[compat]:es.rafaco.compat..*||src[demo]:layout..*||src[inappdevtools]:publisher)&amp;&amp;!src[library]:es.rafaco.inappdevtools.library.logic.integrations.cursoradapter..*" />
+  <scope name="Inappdevtools SOURCES" pattern="(src:es.rafaco.inappdevtools..*||src[compat]:es.rafaco.compat..*||src[demo]:layout..*||src[inappdevtools]:publisher)&amp;&amp;!src[library]:es.rafaco.inappdevtools.library.logic.integrations.cursoradapter..*||src[library]:layout..*" />
 </component>
