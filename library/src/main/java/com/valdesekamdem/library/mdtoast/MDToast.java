@@ -8,6 +8,7 @@
  * Modifications:
  *
  *     * Added this attribution notice
+ *     * Imports resources from es.rafaco.inappdevtools.library.R
  *
  *
  * Modifications copyright 2018-2019 Rafael Acosta Alvarez
@@ -40,6 +41,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import es.rafaco.inappdevtools.library.R;
 
 /**
  * Material Design Toast class

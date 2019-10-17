@@ -37,6 +37,13 @@
     <color name="charcoal">#1A2732</color>
     <color name="black">#000000</color>
 
+    <!-- MDToast colors. Pending review and merge with our colors -->
+    <color name="colorInfo">#29B6F6</color>
+    <color name="colorSuccess">#66BB6A</color>
+    <color name="colorWarning">#FFA726</color>
+    <color name="colorError">#EF5350</color>
+
+    <!-- Chuck colors. Pending replacement by Pandora networking -->
     <color name="chuck_colorAccent">#FF9800</color>
     <color name="chuck_colorPrimary">#00BCD4</color>
     <color name="chuck_colorPrimaryDark">#0097A7</color>
