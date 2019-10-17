@@ -9,6 +9,7 @@
  *
  *     * Added this attribution notice
  *     * Imports resources from es.rafaco.inappdevtools.library.R
+ *     * Conditional imports for AndroidX builds
  *
  *
  * Modifications copyright 2018-2019 Rafael Acosta Alvarez
@@ -33,9 +34,17 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+//#ifdef ANDROIDX
+//@import androidx.annotation.DrawableRes;
+//@import androidx.annotation.StringRes;
+//@import androidx.core.content.ContextCompat;
+//#else
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+//#endif
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
