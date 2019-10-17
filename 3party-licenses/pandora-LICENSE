@@ -186,7 +186,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2018-2019 Rafael Acosta Alvarez
+   Copyright [yyyy] [name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -199,20 +199,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
-=======================================================================
-
-This project contains subcomponents with separate copyright
-notices and license terms. Your use of the source code for the these
-subcomponents is subject to the terms and conditions of the following
-licenses.
-
-This product bundles Pandora by Linjiang, which is available under
-Apache License Version 2.0. For details, see 3party-licenses/pandora-LICENSE
-
-This product bundles highlight.js from Ivan Sagalaev, which is available under
-BSD3 License. For details, see 3party-licenses/highlight-js-LICENSE
-
-This product bundles Material Design icons by Google, which is available under
-Apache License Version 2.0. For details, see 3party-licenses/material-design-icons-LICENSE
