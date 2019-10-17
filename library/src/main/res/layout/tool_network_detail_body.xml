@@ -13,7 +13,7 @@
         android:layout_marginRight="1dp"
         android:background="@color/iadt_surface_medium"/>
 
-    <es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.WrapContentViewPager
+    <nevet.me.wcviewpager.WrapContentViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

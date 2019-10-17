@@ -216,6 +216,11 @@ This product bundles modified source of MaterialDesign-Toast from Valdese Kamdem
 which is available without license.
 Change log per sources at com.valdesekamdem namespace.
 
+This product bundles modified source of WCViewPager from rnevet, which is available under
+Apache License Version 2.0. For details, see 3party-licenses/wcviewpager-LICENSE
+Change log per sources at nevet.me namespace.
+
+
 This product bundles Pandora by Linjiang, which is available under
 Apache License Version 2.0. For details, see 3party-licenses/pandora-LICENSE
 

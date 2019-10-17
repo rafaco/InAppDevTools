@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 
 import com.readystatesoftware.chuck.internal.data.HttpTransaction;
 
-import es.rafaco.inappdevtools.library.logic.integrations.wcviewpager.ObjectAtPositionPagerAdapter;
+import nevet.me.wcviewpager.ObjectAtPositionPagerAdapter;
 
 public class NetworkPagerAdapter extends ObjectAtPositionPagerAdapter {
 
