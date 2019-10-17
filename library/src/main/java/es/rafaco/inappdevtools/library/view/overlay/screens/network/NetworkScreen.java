@@ -24,9 +24,11 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import com.readystatesoftware.chuck.internal.data.ChuckContentProvider;
+import com.readystatesoftware.chuck.sample.HttpBinService;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.integrations.cursoradapter.NetworkCursorAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
