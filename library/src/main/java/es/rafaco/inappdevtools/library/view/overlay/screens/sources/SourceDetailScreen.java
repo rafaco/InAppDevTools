@@ -23,14 +23,14 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Method;
 
+import br.tiagohm.CodeView;
+import br.tiagohm.Language;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
-import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;

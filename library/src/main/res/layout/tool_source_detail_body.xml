@@ -50,7 +50,7 @@
         style="@style/horizontal_separator"
         android:alpha="1"/>
 
-    <es.rafaco.inappdevtools.library.view.components.codeview.CodeView
+    <br.tiagohm.CodeView
         android:id="@+id/code_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

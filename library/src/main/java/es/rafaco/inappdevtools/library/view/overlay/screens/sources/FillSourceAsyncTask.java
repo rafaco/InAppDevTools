@@ -4,10 +4,10 @@ import android.os.AsyncTask;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import br.tiagohm.Theme;
+import br.tiagohm.Language;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
-import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
 
 public class FillSourceAsyncTask extends AsyncTask<String, String, String> {
 

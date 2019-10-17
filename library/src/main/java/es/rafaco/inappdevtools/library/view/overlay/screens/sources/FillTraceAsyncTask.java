@@ -7,10 +7,10 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.tiagohm.Theme;
+import br.tiagohm.Language;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
-import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FillTraceAsyncTask extends AsyncTask<Long, String, String> {
