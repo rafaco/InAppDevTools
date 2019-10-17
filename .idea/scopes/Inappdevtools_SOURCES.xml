@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Inappdevtools SOURCES" pattern="src[library]:*..*&amp;&amp;!src[library]:br.tiagohm..*" />
+</component>

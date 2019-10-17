@@ -1,0 +1,8 @@
+<component name="CopyrightManager">
+  <settings>
+    <module2copyright>
+      <element module="Inappdevtools SOURCES" copyright="Inappdevtools NOTICE" />
+      <element module="CodeView SOURCES" copyright="Codeview NOTICE" />
+    </module2copyright>
+  </settings>
+</component>

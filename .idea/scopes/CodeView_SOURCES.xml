@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="CodeView SOURCES" pattern="src[library]:br.tiagohm.*" />
+</component>
