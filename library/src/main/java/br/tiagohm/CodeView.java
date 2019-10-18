@@ -1,4 +1,55 @@
-package es.rafaco.inappdevtools.library.view.components.codeview;
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * This is a modified source from project CodeView, which is available under
+ * MIT License at https://github.com/tiagohm/CodeView
+ *
+ * Modifications:
+ *
+ *     * Added this attribution notice
+ *     * Comments clean up and translation to English
+ *     * Using VERSION.SDK_INT from OS instead of build
+ *     * Added scrollToLine feature
+ *
+ *
+ * Modifications copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ * Original copyright (c) 2016-2017 Tiago Melo
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package br.tiagohm;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -19,15 +70,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.rafaco.inappdevtools.library.R;
-
-// Adaptation of CodeView library by tiagohm
-// Extracted from: https://github.com/tiagohm/CodeView
-//
-// Highlight.js updated to v9.15.6 (shrink to 10%!!)
-// From https://highlightjs.org/download/ with following selection:
-//  Common: bash, cs, cpp, css, coffeescript, diff, xml, http, json, java, javascript, makefile, markdown, objectivec, php, perl, properties, python, ruby, sql, shell.
-//  Others: dart, go, gradle, groovy, kotlin, lua, scala, scheme, plaintext.
-//  Theme: Only androidstudio.css
 
 public class CodeView extends WebView {
 
@@ -82,7 +124,6 @@ public class CodeView extends WebView {
     private void init(Context context, AttributeSet attrs) {
         TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.CodeView, 0, 0);
-        //Define os atributos
         setWrapLine(attributes.getBoolean(R.styleable.CodeView_cv_wrap_line, false));
         setFontSize(attributes.getInt(R.styleable.CodeView_cv_font_size, 14));
         setZoomEnabled(attributes.getBoolean(R.styleable.CodeView_cv_zoom_enable, false));
@@ -348,11 +389,9 @@ public class CodeView extends WebView {
         sb.append("td.destacado span {background: #ffda11; color: #000;}");
         sb.append("</style>");
         //scripts
-        sb.append("<script src='file:///android_asset/codeview/highlight.pack.js'></script>");
+        sb.append("<script src='file:///android_asset/highlightjs/highlight.js'></script>");
         sb.append("<script>hljs.initHighlightingOnLoad();</script>");
-        sb.append("<script>function scrollToLine(lineNumber){ " +
-                "var x = document.querySelectorAll(\"td.line[line='\"+lineNumber+\"']\");" +
-                "if(x && x.length > 0) x[0].parentElement.scrollIntoView();};</script>");
+        sb.append(getHtmlScriptToScroll());
         sb.append("</head>");
         //code
         sb.append("<body>");
@@ -452,9 +491,20 @@ public class CodeView extends WebView {
         }
     }
 
+
+    //region [ SCROLL TO LINE ]
+
+    private String getHtmlScriptToScroll() {
+        return "<script>function scrollToLine(lineNumber){ " +
+                "var x = document.querySelectorAll(\"td.line[line='\"+lineNumber+\"']\");" +
+                "if(x && x.length > 0) x[0].parentElement.scrollIntoView();};</script>";
+    }
+
     public void scrollToLine(int lineNumber){
         if (lineNumber >= 0) {
             executeJavaScript("scrollToLine('"+lineNumber+"');");
         }
     }
+
+    //endregion
 }

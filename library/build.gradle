@@ -107,7 +107,6 @@ dependencies {
     api 'com.readystatesoftware.chuck:library:1.1.0'
     api 'com.github.alorma:timelineview:2.3.0'
     api 'com.github.anrwatchdog:anrwatchdog:1.3.0'
-    api 'com.valdesekamdem.library:md-toast:0.9.0'
     api "com.github.nisrulz:easydeviceinfo-base:2.4.1"
     //api 'com.opencsv:opencsv:4.2' // Using org.apache.commons
 

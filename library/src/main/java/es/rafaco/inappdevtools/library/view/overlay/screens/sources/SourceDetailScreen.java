@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.content.DialogInterface;
@@ -23,14 +42,14 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Method;
 
+import br.tiagohm.CodeView;
+import br.tiagohm.Language;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
-import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;

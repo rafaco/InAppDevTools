@@ -1,13 +1,24 @@
-package es.rafaco.inappdevtools.library.logic.integrations;
-
 /*
- * Copyright (C) 2015 Square, Inc, 2017 Jeff Gilfelt.
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * This is a modified source from project Chuck, which is available under
+ * Apache License, Version 2.0 at https://github.com/jgilfelt/chuck
+ *
+ * Modifications:
+ *
+ *     * Added this attribution notice
+ *     * (Warning: can contains un-tracked modifications)
+ *
+ *
+ * Modifications copyright 2018-2019 Rafael Acosta Alvarez
+ * Original copyright (C) 2017 Jeff Gilfelt.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +26,8 @@ package es.rafaco.inappdevtools.library.logic.integrations;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//package com.readystatesoftware.chuck;
+
+package com.readystatesoftware.chuck;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -256,18 +256,38 @@ I'm a Senior Software Engineer who has always been working on proprietary softwa
 This is my first open source project and I'm looking forward to create a small community around. Please feel free to correct me, give me any advise or pointing me in the right direction. 
 
 
-## Thanks <a name="thanks"/>
-- To [@whataa](https://github.com/whataa) for [pandora](https://github.com/whataa/pandora): library used for storage and view inspector.
-- To [@jgilfelt](https://github.com/jgilfelt) for [chuck](https://github.com/jgilfelt/chuck): library used for network inspector.
-- To [@alorma](https://github.com/alorma) for [timelineview](https://github.com/alorma/timelineview): library used at stacktrace.
-- To [@tiagohm](https://github.com/tiagohm) for [CodeView](https://github.com/tiagohm/CodeView): inspiration for my codeview.
-- To [@Zsolt Kocsi](https://github.com/zsoltk) for [paperwork](https://github.com/zsoltk/paperwork): inspiration for CompileConfig.
-- To [@valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast): inspiration for our CustomToast.
-- //TODO: add com.github.anrwatchdog:anrwatchdog?
-- //TODO: add replacement for com.opencsv:opencsvallo
-
 ## Apps using this library <a name="usages"/>
-- Your app linked here! Just ask me for it
+- Your app listed here! Just ask by an issue. 
+
+
+## Thanks <a name="thanks"/>
+- To [@whataa](https://github.com/whataa) for [Pandora](https://github.com/whataa/pandora), key for layout inspection and storage browser features :trophy:
+- To [@Zsolt Kocsi](https://github.com/zsoltk) for [Paperwork](https://github.com/zsoltk/paperwork), inspiration for CompileConfig
+- To [@jgilfelt](https://github.com/jgilfelt) for [Chuck](https://github.com/jgilfelt/chuck), used for network interception
+- To [@tiagohm](https://github.com/tiagohm) for [CodeView](https://github.com/tiagohm/CodeView)
+- To [@alorma](https://github.com/alorma) for [TimelineView](https://github.com/alorma/timelineview)
+- To [@valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast)
+- To [@rnevet](https://github.com/rnevet) for [WCViewPager](https://github.com/rnevet/WCViewPager)
+- To [@SalomonBrys](https://github.com/SalomonBrys) for [ANR-WatchDog](https://github.com/SalomonBrys/ANR-WatchDog)
+- To [@nisrulz](https://github.com/nisrulz) for [EasyDeviceInfo](https://github.com/nisrulz/easydeviceinfo)
+- To [Android Open Source Project](https://source.android.com/) for [Arch](https://developer.android.com/topic/libraries/architecture)
+
 
 ## License <a name="license"/>
-Apache-2.0
+```
+Copyright 2018-2019 Rafael Acosta Alvarez
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+This project modify, include and use products with separate copyright
+notices and license terms. For details, see [LICENSE](https://github.com/rafaco/InAppDevTools/blob/master/LICENSE)
