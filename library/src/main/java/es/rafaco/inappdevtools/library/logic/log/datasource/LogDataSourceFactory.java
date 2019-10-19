@@ -43,7 +43,7 @@ public class LogDataSourceFactory extends DataSource.Factory {
     public DataSource<Integer, Friendly> create() {
         //Log.v(Iadt.TAG, "LogDataSource created");
         LogQueryHelper helper = new LogQueryHelper(getFilter());
-        return dao.filterWithQuery(helper.getSelectedQuery()).create();
+        return dao.filterWithQuery(helper.getFilterQuery()).create();
     }
 
     public LogBackFilter getFilter(){

@@ -56,8 +56,9 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class LogViewHolder extends RecyclerView.ViewHolder {
 
-    LogAdapter.OnLogClickListener adapterClickListener;
+    Listener listener;
     long uid;
+
     ImageView icon;
     AppCompatTextView decorator;
     AppCompatTextView title;
@@ -74,9 +75,9 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     AppCompatButton extra_button;
     ImageView overflow;
 
-    public LogViewHolder(View view, LogAdapter.OnLogClickListener adapterClickListener) {
+    public LogViewHolder(View view, Listener listener) {
         super(view);
-        this.adapterClickListener = adapterClickListener;
+        this.listener = listener;
 
         wrapper = view.findViewById(R.id.wrapper);
         card = view.findViewById(R.id.card_view);
@@ -94,13 +95,22 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         overflow = view.findViewById(R.id.overflow);
     }
 
-    public void bindTo(final Friendly data, boolean isSelected, boolean isBeforeSelected) {
-        uid = data.getUid();
+    public interface Listener {
+        boolean isSelected(long id);
+        boolean isBeforeSelected(int position);
+        void onItemClick(View itemView, int position, long id);
+        void onOverflowClick(View itemView, int position, long id);
+    }
 
+    public void bindTo(final Friendly data, int position) {
+        boolean isSelected = listener.isSelected(data.getUid());
+        boolean isBeforeSelected = listener.isBeforeSelected(position);
+
+        uid = data.getUid();
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterClickListener.onItemClick(v, getAdapterPosition(), uid);
+                listener.onItemClick(v, getAdapterPosition(), uid);
             }
         });
         //itemView.setOnLongClickListener(this);
@@ -186,7 +196,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             overflow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterClickListener.onOverflowClick(v, getAdapterPosition(), uid);
+                    listener.onOverflowClick(v, getAdapterPosition(), uid);
                 }
             });
         }

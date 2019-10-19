@@ -48,7 +48,7 @@ public class LogQueryHelper {
         this.filter = filter;
     }
 
-    public SupportSQLiteQuery getSelectedQuery() {
+    public SupportSQLiteQuery getFilterQuery() {
         queryString = new String();
         args = new ArrayList();
         containsCondition = false;
@@ -104,9 +104,9 @@ public class LogQueryHelper {
     }
 
     public SupportSQLiteQuery getPositionQuery(long id) {
-        getSelectedQuery();
+        getFilterQuery();
 
-        queryString = "SELECT *" +
+        queryString = "SELECT COUNT(*) AS date" +
                 " FROM ( " + queryString + ")" +
                 " WHERE date < (SELECT date FROM friendly WHERE uid = ? )";
         args.add(id);
@@ -141,7 +141,7 @@ public class LogQueryHelper {
     }
 
     public SimpleSQLiteQuery getFilterSizeQuery(){
-        getSelectedQuery();
+        getFilterQuery();
 
         queryString = queryString.replace("SELECT *",
                 "SELECT 'Current filter' AS name,"

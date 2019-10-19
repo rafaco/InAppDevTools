@@ -128,7 +128,7 @@ public interface FriendlyDao {
     long findLogIdByCrashId(long crashId);
 
     @RawQuery(observedEntities = Friendly.class)
-    List<Friendly> findPositionByQuery(SupportSQLiteQuery query);
+    List<Friendly> findPositionAtFilter(SupportSQLiteQuery positionQuery);
 
     @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
     Friendly getLast();
