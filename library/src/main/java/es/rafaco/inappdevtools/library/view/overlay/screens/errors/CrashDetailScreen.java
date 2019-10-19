@@ -215,6 +215,7 @@ public class CrashDetailScreen extends Screen {
         long crashSessionId = sessionDao.findByCrashId(crash.getUid()).getUid();
         long sessionCount = sessionDao.getLast().getUid();
         int sessionUiPosition = (int)(1+sessionCount-crashSessionId);
+        final long logId = IadtController.getDatabase().friendlyDao().findLogIdByCrashId(crash.getUid());
 
         final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
         stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);
@@ -222,17 +223,17 @@ public class CrashDetailScreen extends Screen {
             @Override
             public void onClick(View v) {
                 OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(stepsFilter.getUiFilter()));
+                        LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
             }
         });
 
         final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.ALL);
-        logsFilter.getUiFilter().setSessionInt((int)(1+sessionCount-crashSessionId));
+        logsFilter.getUiFilter().setSessionInt(sessionUiPosition);
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(logsFilter.getUiFilter()));
+                        LogScreen.buildParams(logsFilter.getUiFilter(), logId));
             }
         });
         

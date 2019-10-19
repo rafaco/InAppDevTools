@@ -103,6 +103,17 @@ public class LogQueryHelper {
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 
+    public SupportSQLiteQuery getPositionQuery(long id) {
+        getSelectedQuery();
+
+        queryString = "SELECT *" +
+                " FROM ( " + queryString + ")" +
+                " WHERE date < (SELECT date FROM friendly WHERE uid = ? )";
+        args.add(id);
+
+        return new SimpleSQLiteQuery(queryString, args.toArray());
+    }
+
     private void addConjunction() {
         if (containsCondition)
             queryString += " AND";

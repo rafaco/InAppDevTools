@@ -225,4 +225,8 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
+
+    public boolean isDebug() {
+        return IadtController.get().isDebug();
+    }
 }

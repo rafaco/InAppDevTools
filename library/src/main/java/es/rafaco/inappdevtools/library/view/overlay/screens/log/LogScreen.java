@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
+import android.arch.persistence.db.SupportSQLiteQuery;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -47,9 +48,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
@@ -57,17 +55,19 @@ import android.arch.paging.PagedList;
 
 import com.google.gson.Gson;
 
+import java.util.List;
+
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterDialog;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
-import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -76,19 +76,19 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class LogScreen extends Screen {
 
     private LogDataSourceFactory dataSourceFactory;
-    private final LogAdapter adapter = new LogAdapter();
+    private LogAdapter adapter;
     private RecyclerView recyclerView;
     private TextView welcome;
 
     public LiveData logList;
     private ToolBarHelper toolbarHelper;
     private LogFilterDialog filterDialog;
+    private int pendingScrollPosition = -1;
 
     private enum ScrollStatus { TOP, MIDDLE, BOTTOM }
     private ScrollStatus currentScrollStatus;
@@ -124,10 +124,12 @@ public class LogScreen extends Screen {
     protected void onStart(ViewGroup toolHead) {
         initToolbar();
         initView(bodyView);
+
+        adapter = new LogAdapter();
         initFilterFromParams();
+        initSelectionFromParams();
         initLiveData();
         initAdapter();
-        //initScroll();
     }
 
     @Override
@@ -169,11 +171,16 @@ public class LogScreen extends Screen {
     private void initLiveData() {
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(true)
-                .setPageSize(25*2)
+                .setPageSize(25 * 2)
                 .build();
+
         FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
         dataSourceFactory = new LogDataSourceFactory(dao, getFilter().getBackFilter());
-        logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
+
+        LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig);
+        if (pendingScrollPosition > -1)
+            livePagedListBuilder.setInitialLoadKey(pendingScrollPosition);
+        logList = livePagedListBuilder.build();
 
         removeDataObserver();
     }
@@ -183,10 +190,20 @@ public class LogScreen extends Screen {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
+
+                if (isDebug())
+                    Log.v(Iadt.TAG, "LogScreen onItemRangeInserted("
+                            + positionStart + ", " + itemCount + ")");
+
+                if (pendingScrollPosition > -1){
+                    if (pendingScrollPosition >= positionStart
+                            && pendingScrollPosition <= positionStart + itemCount) {
+                        scrollToPendingPosition();
+                    }
+                }
+                else if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
                     scrollToBottom();
                 }
-                Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
             }
         });
 
@@ -205,7 +222,9 @@ public class LogScreen extends Screen {
     private Observer<PagedList<Friendly>> dataObserver = new Observer<PagedList<Friendly>>() {
         @Override
         public void onChanged(PagedList<Friendly> pagedList) {
-            Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
+            if (isDebug())
+                Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
+
             //adapter.getCurrentList().getDataSource().invalidate();
             adapter.submitList(pagedList);
             //adapter.notifyDataSetChanged();
@@ -214,30 +233,69 @@ public class LogScreen extends Screen {
 
     private void observeData() {
         logList.observe(ProcessLifecycleOwner.get(), dataObserver);
-        Log.v(Iadt.TAG, "Observer added");
+        if (isDebug()) Log.v(Iadt.TAG, "LogScreen observer added");
     }
 
     private void removeDataObserver() {
         logList.removeObservers(ProcessLifecycleOwner.get());
-        Log.v(Iadt.TAG, "Observer removed");
+        if (isDebug()) Log.v(Iadt.TAG, "LogScreen observer removed");
     }
 
     //endregion
 
-    //region [ FILTER ]
+    //region [ PARAMS: SELECTED & FILTER ]
 
     public static String buildParams(LogUiFilter filter){
         Gson gson = new Gson();
-        return gson.toJson(filter);
+        return gson.toJson(new InnerParams(filter));
     }
 
-    public LogUiFilter getParams(){
+    public static String buildParams(LogUiFilter filter, long selected){
         Gson gson = new Gson();
-        return gson.fromJson(getParam(), LogUiFilter.class);
+        return gson.toJson(new InnerParams(filter, selected));
     }
+
+    public InnerParams getParams(){
+        Gson gson = new Gson();
+        return gson.fromJson(getParam(), InnerParams.class);
+    }
+
+    public static class InnerParams {
+        LogUiFilter filter;
+        long selected;
+
+        public InnerParams(LogUiFilter filter) {
+            this.filter = filter;
+        }
+
+        public InnerParams(LogUiFilter filter, long selected) {
+            this(filter);
+            this.selected = selected;
+        }
+    }
+
+    private void initSelectionFromParams() {
+        InnerParams params = getParams();
+        if (params!= null && params.selected > -1){
+            long id = params.selected;
+            int position = calculatePositionAtFilter();
+            if (position > -1){
+                savePendingScrollPosition(position);
+                adapter.setInitialSelection(id, position);
+            }
+        }
+    }
+
+    private int calculatePositionAtFilter() {
+        LogQueryHelper logQueryHelper = new LogQueryHelper(getFilter().getBackFilter());
+        SupportSQLiteQuery positionQuery = logQueryHelper.getPositionQuery(getParams().selected);
+        List<Friendly> positionByQuery = IadtController.getDatabase().friendlyDao().findPositionByQuery(positionQuery);
+        return positionByQuery.size() - 1;
+    }
+    
 
     public void initFilterFromParams(){
-        LogUiFilter filter = getParams();
+        LogUiFilter filter = (getParams()!=null) ? getParams().filter : null;
         if (filter != null){
             LogFilterStore.store(filter);
         }
@@ -406,7 +464,34 @@ public class LogScreen extends Screen {
 
     //region [ SCROLL ]
 
-    private void initScroll() {
+    private void savePendingScrollPosition(int positionAtFilter) {
+        if (isDebug()){
+            Log.d(Iadt.TAG, "Log scroll to position " + pendingScrollPosition
+                    + " (" +getParams().selected + ")");
+        }
+        pendingScrollPosition = positionAtFilter;
+    }
+
+    private void scrollToPendingPosition() {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.smoothScrollToPosition(pendingScrollPosition);
+                savePendingScrollPosition(-1);
+            }
+        });
+    }
+
+    private void scrollToBottom() {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(adapter.getItemCount()-1);
+            }
+        });
+    }
+
+    /*private void initScroll() {
         //recyclerView.addOnScrollListener(scrollListener);
         //currentScrollStatus = ScrollStatus.BOTTOM;
     }
@@ -428,16 +513,7 @@ public class LogScreen extends Screen {
                 currentScrollStatus = ScrollStatus.MIDDLE;
             }
         }
-    };
-
-    private void scrollToBottom() {
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-            }
-        });
-    }
+    };*/
 
     //endregion
 }

@@ -19,15 +19,12 @@
 
 package es.rafaco.inappdevtools.library.logic.log.datasource;
 
-import android.util.Log;
-
 //#ifdef ANDROIDX
 //@import androidx.paging.DataSource;
 //#else
 import android.arch.paging.DataSource;
 //#endif
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -44,7 +41,7 @@ public class LogDataSourceFactory extends DataSource.Factory {
 
     @Override
     public DataSource<Integer, Friendly> create() {
-        Log.v(Iadt.TAG, "LogDataSource created");
+        //Log.v(Iadt.TAG, "LogDataSource created");
         LogQueryHelper helper = new LogQueryHelper(getFilter());
         return dao.filterWithQuery(helper.getSelectedQuery()).create();
     }

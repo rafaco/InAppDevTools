@@ -121,6 +121,15 @@ public interface FriendlyDao {
     @Query("SELECT * FROM friendly where linkedId LIKE :linkedId")
     Friendly findByLinkedId(long linkedId);
 
+    @Query("SELECT uid FROM friendly " +
+            "where category LIKE 'Error' " +
+            "AND linkedId LIKE :crashId " +
+            "ORDER BY uid ASC LIMIT 1")
+    long findLogIdByCrashId(long crashId);
+
+    @RawQuery(observedEntities = Friendly.class)
+    List<Friendly> findPositionByQuery(SupportSQLiteQuery query);
+
     @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
     Friendly getLast();
 

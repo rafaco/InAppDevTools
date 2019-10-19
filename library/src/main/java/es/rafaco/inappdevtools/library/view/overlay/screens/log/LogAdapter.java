@@ -93,13 +93,12 @@ public class LogAdapter
         Friendly item = getItem(position);
         if (item != null) {
             holder.bindTo(item,
-                    selectedItemId != -1 && selectedItemId == item.getUid(),
-                    selectedItemPosition - 1 == position);
+                    isSelected(item),
+                    isBeforeSelected(position, item));
         } else {
             holder.showPlaceholder(position);
         }
     }
-
 
     public interface OnLogClickListener {
         void onItemClick(View itemView, int position, long id);
@@ -109,7 +108,7 @@ public class LogAdapter
     private OnLogClickListener itemClickListener = new OnLogClickListener() {
         @Override
         public void onItemClick(View itemView, int position, long id) {
-            updatedExpandedItems(position, id);
+            updatedSelectionOnClick(position, id);
         }
 
         @Override
@@ -118,14 +117,36 @@ public class LogAdapter
         }
     };
 
-    private void updatedExpandedItems(int clickedPosition, long clickedId) {
+
+    //region [ SELECTION ]
+
+    public void setInitialSelection(long id, int position) {
+        selectedItemId = id;
+        selectedItemPosition = position;
+    }
+
+    public void clearSelection() {
+        selectedItemId = -1;
+        selectedItemPosition = -1;
+    }
+
+    private boolean isSelected(Friendly item) {
+        return selectedItemId != -1 && selectedItemId == item.getUid();
+    }
+
+    private boolean isBeforeSelected(int position, Friendly item) {
+        return !isSelected(item)
+                && selectedItemId != -1
+                && position +1 == selectedItemPosition;
+    }
+
+    private void updatedSelectionOnClick(int clickedPosition, long clickedId) {
         int previousPosition = -1;
 
         boolean isDeselection = (clickedId == selectedItemId);
         if (isDeselection) {
             previousPosition = selectedItemPosition;
-            selectedItemId = -1;
-            selectedItemPosition = -1;
+            clearSelection();
         }
         else {
             if (selectedItemId > -1) {
@@ -134,7 +155,6 @@ public class LogAdapter
             selectedItemId = clickedId;
             selectedItemPosition = clickedPosition;
         }
-
         notifyItemChanged(clickedPosition);
         if (clickedPosition>1) {
             notifyItemChanged(clickedPosition - 1);
@@ -148,7 +168,9 @@ public class LogAdapter
         }
     }
 
-    //region [ ACTIONS POP UP ]
+    //endregion
+
+    //region [ OVERFLOW MENU ]
 
     private void showPopupMenu(View view, int position, long id) {
         Context wrapper = new ContextThemeWrapper(view.getContext(), R.style.LibPopupMenuStyle);
