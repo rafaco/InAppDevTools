@@ -39,6 +39,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -81,6 +82,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
             long crashId = storeCrash(crash);
+            updateSession(crashId);
             PendingCrashUtil.savePending();
 
             IadtController.get().beforeClose();
@@ -171,6 +173,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         currentCrashId = db.crashDao().insert(crash);
         FriendlyLog.logCrashDetails(friendlyLogId, currentCrashId, crash);
         return currentCrashId;
+    }
+
+    private void updateSession(long crashId) {
+        Session session = db.sessionDao().getLast();
+        session.setCrashId(crashId);
+        db.sessionDao().update(session);
     }
 
     private Boolean saveScreenshot(){

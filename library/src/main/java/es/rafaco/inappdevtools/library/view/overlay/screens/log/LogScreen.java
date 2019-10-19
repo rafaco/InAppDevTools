@@ -55,6 +55,8 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 //#endif
 
+import com.google.gson.Gson;
+
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
@@ -65,6 +67,7 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
+import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -73,6 +76,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class LogScreen extends Screen {
@@ -118,9 +122,9 @@ public class LogScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup toolHead) {
-
         initToolbar();
         initView(bodyView);
+        initFilterFromParams();
         initLiveData();
         initAdapter();
         //initScroll();
@@ -160,7 +164,7 @@ public class LogScreen extends Screen {
     }
 
 
-    //region [ DATA ]
+    //region [ DATA & ADAPTER ]
 
     private void initLiveData() {
         PagedList.Config myPagingConfig = new PagedList.Config.Builder()
@@ -172,6 +176,25 @@ public class LogScreen extends Screen {
         logList = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig).build();
 
         removeDataObserver();
+    }
+
+    private void initAdapter(){
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
+                    scrollToBottom();
+                }
+                Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
+            }
+        });
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void requestData(String s) {
@@ -201,33 +224,32 @@ public class LogScreen extends Screen {
 
     //endregion
 
+    //region [ FILTER ]
 
-    //region [ ADAPTER ]
+    public static String buildParams(LogUiFilter filter){
+        Gson gson = new Gson();
+        return gson.toJson(filter);
+    }
 
-    private void initAdapter(){
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                if (positionStart != 0 && !recyclerView.canScrollVertically(1)){
-                    scrollToBottom();
-                }
-                Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
-            }
-        });
+    public LogUiFilter getParams(){
+        Gson gson = new Gson();
+        return gson.fromJson(getParam(), LogUiFilter.class);
+    }
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mLayoutManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    public void initFilterFromParams(){
+        LogUiFilter filter = getParams();
+        if (filter != null){
+            LogFilterStore.store(filter);
+        }
     }
 
     public LogFilterHelper getFilter(){
         LogUiFilter logUiFilter = LogFilterStore.get();
         if (logUiFilter == null){
+            // Fallback to default filter
             return new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
         }
+
         return new LogFilterHelper(logUiFilter);
     }
 

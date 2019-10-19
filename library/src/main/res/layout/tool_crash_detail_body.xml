@@ -165,7 +165,7 @@
         android:layout_marginRight="5dp">
 
         <es.rafaco.compat.AppCompatButton
-            android:id="@+id/autolog_button"
+            android:id="@+id/repro_steps_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

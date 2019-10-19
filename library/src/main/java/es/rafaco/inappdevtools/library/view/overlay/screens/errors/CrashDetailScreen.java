@@ -40,9 +40,14 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -70,7 +75,7 @@ public class CrashDetailScreen extends Screen {
     private ImageView thumbnail;
     private TextView thread;
     private AppCompatButton logcatButton;
-    private AppCompatButton autologButton;
+    private AppCompatButton reproStepsButton;
     private AppCompatButton revealDetailsButton;
 
     private RecyclerView recyclerView1;
@@ -120,7 +125,7 @@ public class CrashDetailScreen extends Screen {
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
         thread = view.findViewById(R.id.detail_thread);
 
-        autologButton = view.findViewById(R.id.autolog_button);
+        reproStepsButton = view.findViewById(R.id.repro_steps_button);
         logcatButton = view.findViewById(R.id.logcat_button);
         revealDetailsButton = view.findViewById(R.id.reveal_details_button);
         out = view.findViewById(R.id.out);
@@ -206,18 +211,31 @@ public class CrashDetailScreen extends Screen {
         InfoReportData report = helper.parseToInfoGroup(crash);
         out.setText(report.toString());
 
-        autologButton.setOnClickListener(new View.OnClickListener() {
+        SessionDao sessionDao = IadtController.getDatabase().sessionDao();
+        long crashSessionId = sessionDao.findByCrashId(crash.getUid()).getUid();
+        long sessionCount = sessionDao.getLast().getUid();
+        int sessionUiPosition = (int)(1+sessionCount-crashSessionId);
+
+        final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
+        stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);
+        reproStepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayService.performNavigation(LogScreen.class, null);
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(stepsFilter.getUiFilter()));
             }
         });
+
+        final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.ALL);
+        logsFilter.getUiFilter().setSessionInt((int)(1+sessionCount-crashSessionId));
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayService.performNavigation(LogcatScreen.class, null);
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(logsFilter.getUiFilter()));
             }
         });
+        
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

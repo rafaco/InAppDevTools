@@ -55,6 +55,9 @@ public class Session implements Serializable {
     @ColumnInfo(name = "compileConfig")
     private String compileConfig;
 
+    @ColumnInfo(name = "crashId")
+    private long crashId;
+
     public long getUid() {
         return uid;
     }
@@ -109,5 +112,13 @@ public class Session implements Serializable {
 
     public void setCompileConfig(String compileConfig) {
         this.compileConfig = compileConfig;
+    }
+
+    public long getCrashId() {
+        return crashId;
+    }
+
+    public void setCrashId(long crashId) {
+        this.crashId = crashId;
     }
 }

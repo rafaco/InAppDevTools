@@ -43,6 +43,9 @@ public interface SessionDao {
     @Query("SELECT * FROM session where uid LIKE :uid")
     Session findById(long uid);
 
+    @Query("SELECT * FROM session WHERE crashId LIKE :crashId ORDER BY uid DESC LIMIT 1")
+    Session findByCrashId(long crashId);
+
     @Query("SELECT * FROM session ORDER BY uid DESC LIMIT 1")
     Session getLast();
 
