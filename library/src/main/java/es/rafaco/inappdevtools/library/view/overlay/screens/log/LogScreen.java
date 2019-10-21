@@ -74,6 +74,7 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
@@ -97,7 +98,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     private long selectedItemId = -1;
     private int selectedItemPosition = -1;
-    private int pendingScrollPosition = -1;
+    private boolean pendingScrollToPosition;
+    private LogFilterHelper filterHelper;
 
     public LogScreen(ScreenManager manager) {
         super(manager);
@@ -135,8 +137,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         recyclerView = getView().findViewById(R.id.list);
 
         adapter = new LogAdapter(this);
-        initFilterFromParams();
-        initSelectionFromParams();
+        initFilter();
+        initSelected();
         initLiveData();
         initAdapter();
     }
@@ -165,7 +167,6 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         //Nothing needed
     }
 
-
     //region [ DATA & ADAPTER ]
 
     private void initLiveData() {
@@ -178,11 +179,14 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         dataSourceFactory = new LogDataSourceFactory(dao, getFilter().getBackFilter());
 
         LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig);
-        if (pendingScrollPosition > -1)
-            livePagedListBuilder.setInitialLoadKey(pendingScrollPosition);
-        logList = livePagedListBuilder.build();
+        if (pendingScrollToPosition){
+            if (isDebug()){
+                Log.d(Iadt.TAG, "LogScreen - setInitialLoadKey to " + selectedItemPosition);
+            }
+            livePagedListBuilder.setInitialLoadKey(selectedItemPosition);
+        }
 
-        removeDataObserver();
+        logList = livePagedListBuilder.build();
     }
 
     private void initAdapter(){
@@ -192,12 +196,11 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 super.onItemRangeInserted(positionStart, itemCount);
 
                 if (isDebug())
-                    Log.v(Iadt.TAG, "LogScreen onItemRangeInserted("
-                            + positionStart + ", " + itemCount + ")");
+                    //Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
 
-                if (pendingScrollPosition > -1){
-                    if (pendingScrollPosition >= positionStart
-                            && pendingScrollPosition <= positionStart + itemCount) {
+                if (pendingScrollToPosition){
+                    if (selectedItemPosition >= positionStart
+                            && selectedItemPosition <= positionStart + itemCount) {
                         scrollToPendingPosition();
                     }
                 }
@@ -223,7 +226,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         @Override
         public void onChanged(PagedList<Friendly> pagedList) {
             if (isDebug())
-                Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
+                //Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
 
             //adapter.getCurrentList().getDataSource().invalidate();
             adapter.submitList(pagedList);
@@ -276,7 +279,113 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     //endregion
 
+    //region [ FILTER ]
+
+    public void initFilter(){
+        if (getParams()!=null && getParams().filter != null){
+            filterHelper = new LogFilterHelper(getParams().filter);
+        }
+        else if (LogFilterStore.get() != null){
+            filterHelper = new LogFilterHelper(LogFilterStore.get());
+        }
+        else{
+            filterHelper = new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
+        }
+    }
+
+    public LogFilterHelper getFilter(){
+        return filterHelper;
+    }
+
+    public void updateFilter(LogFilterHelper newFilter){
+        if (newFilter.getUiFilter().equals(filterHelper.getUiFilter())){
+            return;
+        }
+        if(logList != null) removeDataObserver();
+        LogFilterStore.store(newFilter.getUiFilter());
+        filterHelper = new LogFilterHelper(newFilter.getUiFilter());
+        //dataSourceFactory.setFilter(uiFilter.getBackFilter());
+        updateSelectedById(selectedItemId);
+        recyclerView.invalidate();
+        recyclerView.requestLayout();
+
+        initLiveData();
+        observeData();
+        initAdapter();
+
+        ThreadUtils.runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                scrollToPendingPosition();
+            }
+        }, 500);
+
+        /*adapter.notifyDataSetChanged();
+        if (adapter.getCurrentList().getDataSource() != null )
+            adapter.getCurrentList().getDataSource().invalidate();*/
+        //recyclerView.invalidate();
+        //recyclerView.requestLayout();
+    }
+
+    //endregion
+
     //region [ SELECTED ITEM ]
+
+    private void initSelected() {
+        InnerParams params = getParams();
+        if (params!= null && params.selected > -1){
+            long id = params.selected;
+            if (updateSelectedById(id))
+                return;
+        }
+        clearSelected();
+    }
+
+    private boolean updateSelectedById(long id) {
+        if (id > -1){
+            if (isDebug()){
+                Log.d(Iadt.TAG, "LogScreen - updateSelectedById started");
+            }
+            int position = calculatePositionAtFilter(id);
+            if (position > -1){
+                if (isDebug()){
+                    Log.d(Iadt.TAG, "LogScreen - updateSelectedById for "
+                            + id + " at " + position);
+                }
+                savePendingScrollPosition(true);
+                setSelected(id, position);
+                return true;
+            }
+            if (isDebug()){
+                Log.d(Iadt.TAG, "LogScreen - updateSelectedById not found for " + id);
+            }
+        }
+        clearSelected();
+        return false;
+    }
+
+    private void setSelected(long id, int position) {
+        selectedItemId = id;
+        selectedItemPosition = position;
+    }
+
+    public void clearSelected() {
+        if (isDebug()) {
+            Log.d(Iadt.TAG, "LogScreen - cleared selection");
+        }
+        setSelected(-1, -1);
+    }
+
+    private int calculatePositionAtFilter(long id) {
+        LogQueryHelper logQueryHelper = new LogQueryHelper(getFilter().getBackFilter());
+        SupportSQLiteQuery positionQuery = logQueryHelper.getPositionQuery(id);
+        List<Friendly> positionResult = IadtController.getDatabase().friendlyDao().findPositionAtFilter(positionQuery);
+        if (positionResult != null
+                && positionResult.size() == 1){
+            return (int) positionResult.get(0).getDate();
+        }
+        return - 1;
+    }
 
     @Override
     public boolean isSelected(long id) {
@@ -288,113 +397,54 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         return selectedItemId != -1 && position + 1 == selectedItemPosition;
     }
 
-    public void clearSelection() {
-        selectedItemId = -1;
-        selectedItemPosition = -1;
-    }
-
     @Override
-    public void onItemClick(View itemView, int position, long id) {
+    public void onItemClick(View itemView, final int clickedPosition, long clickedId) {
         int previousPosition = -1;
-        int clickedPosition = position;
-        long clickedId = id;
 
-        boolean isSingleDeselection = (clickedId == selectedItemId);
-        if (isSingleDeselection) {
+        boolean isDeselectingSelected = (clickedId == selectedItemId);
+        if (isDeselectingSelected) {
+            if (isDebug()) {
+                Log.d(Iadt.TAG, "LogScreen - deselected " + clickedId + " at " + clickedPosition);
+            }
             previousPosition = selectedItemPosition;
-            clearSelection();
+            clearSelected();
         }
         else {
+            if (isDebug()) {
+                Log.d(Iadt.TAG, "LogScreen - selected " + clickedId + " at " + clickedPosition);
+            }
             if (selectedItemId > -1) {
                 previousPosition = selectedItemPosition;
             }
-            selectedItemId = clickedId;
-            selectedItemPosition = clickedPosition;
+            setSelected(clickedId, clickedPosition);
+            savePendingScrollPosition(false);
         }
 
-        //Notify change at clicked and the item before
-        adapter.notifyItemChanged(clickedPosition);
-        if (clickedPosition>1) {
-            adapter.notifyItemChanged(clickedPosition - 1);
-        }
-
-        //Notify change at previous and the item before
-        if (!isSingleDeselection && previousPosition != -1) {
+        //Notify previously selected and the item before
+        if (!isDeselectingSelected && previousPosition != -1) {
             adapter.notifyItemChanged(previousPosition);
             if (previousPosition > 1) {
                 adapter.notifyItemChanged(previousPosition-1);
             }
         }
-    }
 
-    private void initSelectionFromParams() {
-        InnerParams params = getParams();
-        if (params!= null && params.selected > -1){
-            long id = params.selected;
-            int position = calculatePositionAtFilter();
-            if (position > -1){
-                savePendingScrollPosition(position);
-                selectedItemId = id;
-                selectedItemPosition = position;
+        //Notify to clicked and the item before
+        adapter.notifyItemChanged(clickedPosition);
+        if (clickedPosition>1) {
+            adapter.notifyItemChanged(clickedPosition - 1);
+        }
+
+        //Scroll to clicked position
+        recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                recyclerView.scrollToPosition(clickedPosition);
             }
-        }
-    }
-
-    private int calculatePositionAtFilter() {
-        LogQueryHelper logQueryHelper = new LogQueryHelper(getFilter().getBackFilter());
-        SupportSQLiteQuery positionQuery = logQueryHelper.getPositionQuery(getParams().selected);
-        List<Friendly> positionResult = IadtController.getDatabase().friendlyDao().findPositionAtFilter(positionQuery);
-        if (positionResult != null
-                && positionResult.size() == 1){
-            return ((int) positionResult.get(0).getDate()) - 1;
-        }
-        return - 1;
+        });
     }
 
     //endregion
-
-    //region [ FILTER ]
-
-    public void initFilterFromParams(){
-        LogUiFilter filter = (getParams()!=null) ? getParams().filter : null;
-        if (filter != null){
-            LogFilterStore.store(filter);
-        }
-    }
-
-    public LogFilterHelper getFilter(){
-        LogUiFilter logUiFilter = LogFilterStore.get();
-        if (logUiFilter == null){
-            // Fallback to default filter
-            return new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
-        }
-
-        return new LogFilterHelper(logUiFilter);
-    }
-
-    public void updateFilter(LogFilterHelper uiFilter){
-        LogFilterStore.store(uiFilter.getUiFilter());
-
-        if(logList != null) {
-            removeDataObserver();
-        }
-
-        //initLiveData();
-        //initAdapter();
-
-        //dataSourceFactory.setFilter(uiFilter.getBackFilter());
-        initLiveData();
-        observeData();
-        initAdapter();
-        /*adapter.notifyDataSetChanged();
-        if (adapter.getCurrentList().getDataSource() != null )
-            adapter.getCurrentList().getDataSource().invalidate();*/
-        //recyclerView.invalidate();
-        //recyclerView.requestLayout();
-    }
-
-    //endregion
-
+    
     //region [ ITEM OVERFLOW MENU ]
 
     @Override
@@ -500,12 +550,12 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     private void onTuneButton() {
-        final LogFilterHelper filter = getFilter();
-        filterDialog = new LogFilterDialog(getContext(),adapter, filter);
+        final LogFilterHelper tempFilter = new LogFilterHelper(getFilter().getUiFilter());
+        filterDialog = new LogFilterDialog(getContext(),adapter, tempFilter);
         filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                updateFilter(filter);
+                updateFilter(tempFilter);
             }
         });
         filterDialog.getDialog().show();
@@ -587,22 +637,22 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     //region [ SCROLL ]
 
-    private void savePendingScrollPosition(int positionAtFilter) {
-        if (isDebug()){
-            Log.d(Iadt.TAG, "Log scroll to position " + pendingScrollPosition
-                    + " for id " +getParams().selected);
-        }
-        pendingScrollPosition = positionAtFilter;
+    private void savePendingScrollPosition(boolean value) {
+        pendingScrollToPosition = value;
     }
 
     private void scrollToPendingPosition() {
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.smoothScrollToPosition(pendingScrollPosition);
-                savePendingScrollPosition(-1);
-            }
-        });
+        if (selectedItemPosition != -1){
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (adapter.getCurrentList().size() > selectedItemPosition){
+                        recyclerView.smoothScrollToPosition(selectedItemPosition);
+                        savePendingScrollPosition(false);
+                    }
+                }
+            });
+        }
     }
 
     private void scrollToBottom() {

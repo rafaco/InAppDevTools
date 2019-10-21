@@ -93,4 +93,23 @@ public class LogUiFilter {
     public void setTagName(String tagName) {
         this.tagName = tagName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LogUiFilter)) return false;
+
+        LogUiFilter that = (LogUiFilter) o;
+
+        if (getSessionInt() != that.getSessionInt()) return false;
+        if (getSeverityInt() != that.getSeverityInt()) return false;
+        if (getTypeInt() != that.getTypeInt()) return false;
+        if (getCategoryInt() != that.getCategoryInt()) return false;
+        if (getTagInt() != that.getTagInt()) return false;
+        if (getText() != null ? !getText().equals(that.getText()) : that.getText() != null)
+            return false;
+        if (getCategoryName() != null ? !getCategoryName().equals(that.getCategoryName()) : that.getCategoryName() != null)
+            return false;
+        return getTagName() != null ? getTagName().equals(that.getTagName()) : that.getTagName() == null;
+    }
 }

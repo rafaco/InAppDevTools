@@ -37,11 +37,14 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import es.rafaco.compat.CardView;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -105,6 +108,10 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(final Friendly data, int position) {
         boolean isSelected = listener.isSelected(data.getUid());
         boolean isBeforeSelected = listener.isBeforeSelected(position);
+
+        if(IadtController.get().isDebug() && isSelected){
+            Log.d(Iadt.TAG, "LogScreen - bindTo selection " + data.getUid() + " at " + position);
+        }
 
         uid = data.getUid();
         card.setOnClickListener(new View.OnClickListener() {
