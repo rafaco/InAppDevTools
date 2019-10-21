@@ -196,7 +196,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 super.onItemRangeInserted(positionStart, itemCount);
 
                 if (isDebug())
-                    //Log.v(Iadt.TAG, "LogScreen onItemRangeInserted(" + positionStart + ", " + itemCount + ")");
+                    Log.v(Iadt.TAG, "LogScreen onItemRangeInserted("
+                            + positionStart + ", " + itemCount + ")");
 
                 if (pendingScrollToPosition){
                     if (selectedItemPosition >= positionStart
@@ -226,7 +227,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         @Override
         public void onChanged(PagedList<Friendly> pagedList) {
             if (isDebug())
-                //Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
+                Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
 
             //adapter.getCurrentList().getDataSource().invalidate();
             adapter.submitList(pagedList);
@@ -301,6 +302,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         if (newFilter.getUiFilter().equals(filterHelper.getUiFilter())){
             return;
         }
+        if (isDebug()) Log.v(Iadt.TAG, "LogScreen updateFilter");
         if(logList != null) removeDataObserver();
         LogFilterStore.store(newFilter.getUiFilter());
         filterHelper = new LogFilterHelper(newFilter.getUiFilter());
