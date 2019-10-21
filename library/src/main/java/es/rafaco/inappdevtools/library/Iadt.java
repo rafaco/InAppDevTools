@@ -206,12 +206,7 @@ public class Iadt {
 
     public static void addOnForceCloseRunnable(Runnable onForceClose){
         if (!isEnabled()) return;
-        getController().getRunnableManager().addForceCloseRunnable(onForceClose);
-    }
-
-    public static Runnable getOnForceCloseRunnable(){
-        if (!isEnabled()) return null;
-        return getController().getRunnableManager().getForceCloseRunnable();
+        getController().getRunnableManager().setForceCloseRunnable(onForceClose);
     }
 
     //endregion

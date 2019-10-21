@@ -62,12 +62,15 @@ public class ErrorAnrEventDetector extends EventDetector {
                         eventManager.fire(Event.ERROR_ANR, anr);
                     }
                 })
-                .setIgnoreDebugger(true);
+                .setIgnoreDebugger(false)
+                .setReportMainThreadOnly();
         watchDog.start();
     }
 
     @Override
     public void stop() {
+        //TODO:
+        //if (watchDog.isAlive())
         watchDog.interrupt();
     }
 

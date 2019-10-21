@@ -27,12 +27,15 @@ import java.util.List;
 public class RunnableManager {
 
     Context context;
-    private static Runnable onForceCloseRunnable;
-    private List<RunButton> runButtonList;
 
     public RunnableManager(Context context) {
         this.context = context;
     }
+
+
+    //region [ CUSTOM RUNNABLES ]
+
+    private List<RunButton> runButtonList;
 
     public void add(RunButton config){
         if (runButtonList == null)
@@ -53,11 +56,19 @@ public class RunnableManager {
         return runButtonList;
     }
 
-    public void addForceCloseRunnable(Runnable onForceClose){
+    //endregion
+
+    //region [ FORCE CLOSE RUNNABLE ]
+
+    private static Runnable onForceCloseRunnable;
+
+    public void setForceCloseRunnable(Runnable onForceClose){
         onForceCloseRunnable = onForceClose;
     }
 
     public Runnable getForceCloseRunnable(){
         return onForceCloseRunnable;
     }
+
+    //region
 }

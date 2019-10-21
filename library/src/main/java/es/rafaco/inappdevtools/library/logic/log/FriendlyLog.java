@@ -187,8 +187,7 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("FirstStart")) {
                 return R.drawable.ic_fiber_new_white_24dp;
             }
-            else if (log.getSubcategory().equals("Restart") ||
-                    log.getSubcategory().equals("Start")) {
+            else if (log.getSubcategory().equals("Start")) {
                 return R.drawable.ic_flag_white_24dp;
             }
             else if (log.getSubcategory().equals("Navigation")) {
@@ -196,6 +195,12 @@ public class FriendlyLog {
             }
             else if (log.getSubcategory().equals("TaskRemoved")) {
                 return R.drawable.ic_close_white_24dp;
+            }
+            else if (log.getSubcategory().equals("Restart")) {
+                return R.drawable.ic_replay_white_24dp;
+            }
+            else if (log.getSubcategory().equals("ForceStop")) {
+                return R.drawable.ic_warning_white_24dp;
             }
         }
         else if (log.getCategory().equals("Device")) {
@@ -278,7 +283,7 @@ public class FriendlyLog {
         }
         else if (log.getCategory().equals("Error")){
             if (log.getSubcategory().equals("Crash")){
-                return R.drawable.ic_error_white_24dp;
+                return R.drawable.ic_bug_report_white_24dp;
             }else{
                 return R.drawable.ic_block_white_24dp;
             }
@@ -303,7 +308,7 @@ public class FriendlyLog {
                 return R.drawable.ic_add_a_photo_white_24dp;
             }
             else if (log.getSubcategory().equals("Exception")){
-                return R.drawable.ic_bug_report_white_24dp;
+                return R.drawable.ic_error_white_24dp;
             }
             else if (log.getSubcategory().equals("Config")){
                 return R.drawable.ic_settings_white_24dp;

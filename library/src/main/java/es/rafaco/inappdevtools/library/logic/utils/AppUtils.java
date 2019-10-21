@@ -33,6 +33,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -98,7 +99,6 @@ public class AppUtils {
     }
 
     public static void programRestart(Context context, boolean isCrash) {
-        Log.e("Iadt", "Programming restart after 100ms");
         PackageManager pm = context.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
 
@@ -111,10 +111,11 @@ public class AppUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        FriendlyLog.log( "I", "App", "Restart", "Restart schedule in 100 ms");
     }
 
     public static void exit() {
-        Log.d("Iadt", "Killing application");
+        Log.d(TAG, "Killing application process");
         android.os.Process.killProcess(ThreadUtils.myPid());
         System.exit(10);
     }

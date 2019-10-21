@@ -170,19 +170,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Repro Steps"
-            android:drawableLeft="@drawable/ic_history_white_24dp"
-            android:backgroundTint="@color/rally_green"
-            android:textColor="@color/charcoal"/>
+            android:drawableLeft="@drawable/ic_history_white_24dp"/>
 
         <es.rafaco.compat.AppCompatButton
             android:id="@+id/logcat_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="LogCat"
-            android:drawableLeft="@drawable/ic_android_white_24dp"
-            android:backgroundTint="@color/rally_green"
-            android:textColor="@color/charcoal"/>
+            android:text="Full Log"
+            android:drawableLeft="@drawable/ic_format_align_left_white_24dp"/>
 
     </LinearLayout>
 
@@ -190,18 +186,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_margin="5dp">
 
         <es.rafaco.compat.AppCompatButton
             android:id="@+id/reveal_details_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Reveal report"
-            android:backgroundTint="@color/rally_white"
-            android:textColor="@color/iadt_surface_top"/>
+            android:text="View report"
+            android:backgroundTint="@color/iadt_surface_top"/>
 
     </LinearLayout>
 

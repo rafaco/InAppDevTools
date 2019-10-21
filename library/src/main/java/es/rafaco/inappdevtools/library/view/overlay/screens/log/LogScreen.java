@@ -300,6 +300,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     public void updateFilter(LogFilterHelper newFilter){
         if (newFilter.getUiFilter().equals(filterHelper.getUiFilter())){
+            if (isDebug()) Log.w(Iadt.TAG, "LogScreen skipped updateFilter");
             return;
         }
         if (isDebug()) Log.v(Iadt.TAG, "LogScreen updateFilter");
@@ -552,7 +553,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     private void onTuneButton() {
-        final LogFilterHelper tempFilter = new LogFilterHelper(getFilter().getUiFilter());
+        LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
+        final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
         filterDialog = new LogFilterDialog(getContext(),adapter, tempFilter);
         filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

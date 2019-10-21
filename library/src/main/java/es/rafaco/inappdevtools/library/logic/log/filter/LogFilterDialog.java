@@ -65,7 +65,6 @@ public class LogFilterDialog {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 })
@@ -73,7 +72,6 @@ public class LogFilterDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         helper.applyPreset(LogFilterHelper.Preset.ALL);
-                        //adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
@@ -93,7 +91,6 @@ public class LogFilterDialog {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         filter.setSessionInt(position);
                         updateOverview();
-                        //adapter.notifyDataSetChanged();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
@@ -106,9 +103,6 @@ public class LogFilterDialog {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filter.setTypeInt(position);
                 updateOverview();
-                if (adapter != null && adapter.getCurrentList() != null){
-                    //adapter.notifyDataSetChanged();
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -121,7 +115,6 @@ public class LogFilterDialog {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filter.setSeverityInt(position);
                 updateOverview();
-                //adapter.notifyDataSetChanged();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -139,7 +132,6 @@ public class LogFilterDialog {
                 filter.setCategoryInt(position);
                 filter.setCategoryName(realCategory);
                 updateOverview();
-                //adapter.notifyDataSetChanged();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -157,7 +149,6 @@ public class LogFilterDialog {
                 filter.setTagInt(position);
                 filter.setTagName(realCategory);
                 updateOverview();
-                //adapter.notifyDataSetChanged();
             }
 
             @Override

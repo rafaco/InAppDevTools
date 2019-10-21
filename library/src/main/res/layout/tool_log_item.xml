@@ -143,11 +143,14 @@
 
                 <ImageView
                     android:id="@+id/overflow"
-                    android:layout_width="@dimen/card_overflow_width"
-                    android:layout_height="@dimen/card_overflow_height"
+                    android:layout_width="37dp"
+                    android:layout_height="31dp"
                     android:layout_below="@id/buttons_separator"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="10dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_more_vert_white_24dp"
                     android:background="?android:attr/selectableItemBackground"

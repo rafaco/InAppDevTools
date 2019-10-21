@@ -364,7 +364,7 @@ public class LogcatReaderService extends JobIntentService {
                     logsToInsert.add(log);
                 }
             }else{
-                Log.w("LOGS", "LogcatLine not added");
+                Log.w(Iadt.TAG, "LogcatLine not added");
             }
         }
 
@@ -501,7 +501,7 @@ public class LogcatReaderService extends JobIntentService {
 
     private void removeRestartHandler() {
         if (restartRunnable != null) {
-            Log.d(Iadt.TAG, "LogcatReaderService removed restartHandler" );
+            if (isReaderDebug()) Log.d(Iadt.TAG, "LogcatReaderService removed restartHandler" );
             restartHandler.removeCallbacks(restartRunnable);
             restartRunnable = null;
         }
@@ -511,8 +511,10 @@ public class LogcatReaderService extends JobIntentService {
 
 
     private static boolean isReaderDebug() {
+        return IadtController.get().isDebug() && isReaderDebug;
+
         //WARNING: it output too much noise at log
-        return isReaderDebug; //IadtController.get().isDebug();
+        //return IadtController.get().isDebug();
     }
 
     private long getMaxQueueTime(){

@@ -112,4 +112,17 @@ public class LogUiFilter {
             return false;
         return getTagName() != null ? getTagName().equals(that.getTagName()) : that.getTagName() == null;
     }
+
+    public LogUiFilter clone() {
+        LogUiFilter filter = new LogUiFilter();
+        filter.setSessionInt(this.getSessionInt());
+        filter.setSeverityInt(this.getSeverityInt());
+        filter.setTypeInt(this.getTypeInt());
+        filter.setCategoryInt(this.getCategoryInt());
+        filter.setCategoryName(this.getCategoryName());
+        filter.setTagInt(this.getTagInt());
+        filter.setTagName(this.getTagName());
+        filter.setText(this.getText());
+        return filter;
+    }
 }

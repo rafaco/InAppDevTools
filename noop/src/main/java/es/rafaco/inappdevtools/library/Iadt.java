@@ -105,9 +105,6 @@ public class Iadt {
     public static void restartApp(){}
     public static void forceCloseApp(){}
     public static void addOnForceCloseRunnable(Runnable onForceClose){}
-    public static Runnable getOnForceCloseRunnable(){
-        return null;
-    }
 
     //endregion
 }

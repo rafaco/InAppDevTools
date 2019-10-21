@@ -332,14 +332,13 @@ public final class IadtController {
     //region [ RESTART AND FORCE CLOSE ]
 
     public void restartApp(boolean isCrash){
-        FriendlyLog.log( "I", "Run", "Restart", "Restart programmed");
         AppUtils.programRestart(getContext(), isCrash);
 
         forceCloseApp(isCrash);
     }
 
     public void forceCloseApp(boolean isCrash){
-        FriendlyLog.log( "I", "Run", "ForceClose", "Force Close");
+        FriendlyLog.log( "I", "App", "ForceStop", "Force Stop");
 
         if (!isCrash)
             beforeClose(); //on crash is performed by CrashHandler
@@ -354,27 +353,27 @@ public final class IadtController {
 
     public void beforeClose(){
 
-        if(getRunnableManager().getForceCloseRunnable() != null)
-            getRunnableManager().getForceCloseRunnable().run();
+        if (isDebug()) Log.d(Iadt.TAG, "Before force close");
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping watchers");
+        if(getRunnableManager().getForceCloseRunnable() != null){
+            Log.i(Iadt.TAG, "Calling custom ForceCloseRunnable");
+            getRunnableManager().getForceCloseRunnable().run();
+        }
+
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
         eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getContext().getPackageName());*/
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping Notification Service");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping Notification Service");
         NotificationService.stop();
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping OverlayUI Service");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping OverlayUI Service");
         OverlayService.stop();
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping LogcatReaderService");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping LogcatReaderService");
         Intent intent = LogcatReaderService.getStopIntent(getContext());
         LogcatReaderService.enqueueWork(getContext(), intent);
     }
@@ -437,7 +436,7 @@ public final class IadtController {
                 }
 
                 sessionStartTimeImproved = true;
-                Log.v(Iadt.TAG, "Improved session start time! "
+                if (isDebug()) Log.i(Iadt.TAG, "Improved session start time! "
                         + Humanizer.getElapsedTime(improvedDate, detectionDate));
             }
             else{

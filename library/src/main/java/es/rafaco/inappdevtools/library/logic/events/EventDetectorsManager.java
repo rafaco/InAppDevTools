@@ -99,9 +99,9 @@ public class EventDetectorsManager {
     }
 
     private void stopAll() {
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "EventDetector stopping all detectors");
         for (EventDetector eventDetector : eventDetectors) {
-            if (IadtController.get().isDebug())
-                Log.d(Iadt.TAG, "EventDetector stopped " + eventDetector.getClass().getSimpleName());
             eventDetector.stop();
         }
     }

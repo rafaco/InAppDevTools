@@ -60,7 +60,7 @@ public class ConsoleScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return "Console";
+        return "Terminal";
     }
 
     @Override
