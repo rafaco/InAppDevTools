@@ -26,6 +26,8 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.Iadt;
+
 import static es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode.FOLDER_SEP;
 
 /**
@@ -59,7 +61,13 @@ public class ZipNodeReader extends AbstractNodeReader {
     public AbstractNode populate() {
         for(Enumeration<? extends ZipEntry> entries = file.entries();
             entries.hasMoreElements(); ) {
-            addEntry(entries.nextElement());
+            ZipEntry entry = entries.nextElement();
+            if (entry.getName().startsWith("META-INF/")){
+                Log.w(Iadt.TAG, "Excluded: " + entry.getName());
+                continue;
+            }
+            //Log.w(Iadt.TAG, "Entry: " + entry.getName());
+            addEntry(entry);
         }
         return root;
     }

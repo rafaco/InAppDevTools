@@ -77,13 +77,14 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.whenTaskAdded { theTask ->
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
 
+                def buildVariant = extractBuildVariantFromResValuesTaskName(theTask)
                 if ((!isReleaseTask(theTask) || (isReleaseTask(theTask) && isEnabledOnRelease(project)))
                         && isEnabled(project)
                         && isSourceInclusion(project)
                         && isSourceInspection(project)){
 
                     if (isDebug(project)){
-                        println "IADT will include your sources in your apk before " + theTask.name
+                        println "${buildVariant} include sources"
                     }
 
                     theTask.dependsOn += [
@@ -92,7 +93,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 }
                 else{
                     if (isDebug(project)){
-                        println "IADT will not add your sources - Added clean sources tasks before " + theTask.name
+                        println "${buildVariant} exclude sources"
                     }
 
                     theTask.dependsOn += [
@@ -135,9 +136,22 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 group: TAG,
                 type: Zip) {
 
+            if (isAndroidApplication(project)){
+                from ('src/main/') {
+                    include 'AndroidManifest.xml'
+                    into 'manifest'
+                    //rename { 'manifest/AndroidManifest.xml' }
+                }
+                from ("${project.buildDir}/intermediates/merged_manifests/${getCurrentBuildVariant(project).uncapitalize()}") {
+                    include 'AndroidManifest.xml'
+                    into 'merged_manifest'
+                }
+            }
+            from ('src/main/res') {
+                excludes = ["raw/**"]
+            }
+
             def outputName = "${project.name}_resources.zip"
-            from 'src/main/res'
-            excludes = ["raw/**"]
             destinationDir project.file(outputFolder)
             archiveName = outputName
             includeEmptyDirs = false
@@ -149,7 +163,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
             doLast {
                 println "Packed ${counter} files into ${outputName}"
-                println "Variant: " + getVariantName(project)
+                //println "Variant: ${getVariantName(project)}"
+                //println "Flavor: ${getCurrentFlavor(project)}"
             }
         }
     }
@@ -172,7 +187,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug(project)) println "PROCESSED: " + filePath
                 if (filePath.contains(currentVariant)) {
                     fileDetails.path = filePath.substring(filePath.indexOf(currentVariant), filePath.length())
-                    if (isDebug(project))  println "RENAMED into " + fileDetails.path
+                    if (isDebug(project)) println "RENAMED into " + fileDetails.path
                 }
             }
 
@@ -257,38 +272,59 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         return project.plugins.hasPlugin('com.android.feature')
     }
 
-    static String getVariantName(Project project){
-        String buildType
-        if (isAndroidApplication(project)){
-            project.android.applicationVariants.all { variant ->
-                    buildType = variant.buildType.name
-                    println "variant: " + buildType + " dir: " + variant.dirName
-            }
+    static String getCurrentBuildType(Project project) {
+        Matcher matcher = getBuildVariantMatcher(project)
+
+        if (matcher.find()) {
+            String flavor = matcher.group(1)
+            return flavor
+        } else {
+            println "getCurrentFlavor: cannot_find"
+            return ""
         }
-        return buildType
     }
 
     static String getCurrentFlavor(Project project) {
+        Matcher matcher = getBuildVariantMatcher(project)
+
+        if (matcher.find()) {
+            String flavor = matcher.group(1)
+            return flavor
+        } else {
+            println "getCurrentFlavor: cannot_find"
+            return ""
+        }
+    }
+
+    static String getCurrentBuildVariant(Project project) {
+        Matcher matcher = getBuildVariantMatcher(project)
+
+        if (matcher.find()) {
+            String flavor = matcher.group(1)
+            String buildType = matcher.group(2)
+            String buildVariant = flavor + buildType
+            return buildVariant
+        } else {
+            println "getCurrentBuildVariant: cannot_find"
+            return ""
+        }
+    }
+
+    private static Matcher getBuildVariantMatcher(Project project) {
         Gradle gradle = project.getGradle()
-        String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+        String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
         Pattern pattern
 
-        if( tskReqStr.contains( "assemble" ) )
+        if (tskReqStr.contains("assemble"))
             pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
         else
             pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
 
-        Matcher matcher = pattern.matcher( tskReqStr )
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1).toLowerCase()
-            println "getCurrentFlavor: " + flavor
-            return flavor
-        } else {
-            println "getCurrentFlavor: cannot_find_current_flavor"
-            return ""
-        }
+        Matcher matcher = pattern.matcher(tskReqStr)
+        matcher
     }
+
+
 
     static String getCurrentApplicationId(Project project) {
         def outStr = ''
@@ -299,5 +335,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
 
         return outStr
+    }
+
+    static String extractBuildVariantFromResValuesTaskName(Task task) {
+        def buildName = task.name.drop(8)       //Remove head "generate"
+                .reverse().drop(9).reverse()    //Remove tail "ResValues"
     }
 }
