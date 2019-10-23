@@ -37,8 +37,7 @@ import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.storage.files.GitAsset;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
@@ -58,9 +57,9 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
     public BuildInfoReporter(Context context, InfoReport report) {
         super(context, report);
-        buildInfo = new JsonAssetHelper(context, JsonAsset.BUILD_INFO);
-        buildConfig = new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG);
-        gitConfig = new JsonAssetHelper(context, JsonAsset.GIT_CONFIG);
+        buildInfo = new JsonAssetHelper(context, IadtPath.BUILD_INFO);
+        buildConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
+        gitConfig = new JsonAssetHelper(context, IadtPath.GIT_CONFIG);
     }
 
     @Override
@@ -236,7 +235,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(GitAsset.LOCAL_COMMITS));
+                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_COMMITS));
                     }
                 }));
 
@@ -265,7 +264,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(GitAsset.LOCAL_CHANGES));
+                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_CHANGES));
                     }
                 }));
 

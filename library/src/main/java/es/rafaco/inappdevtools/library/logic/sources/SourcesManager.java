@@ -38,11 +38,9 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 
 public class SourcesManager {
-
-    public static final String ASSETS = "assets";
 
     Context context;
     AbstractNode root;
@@ -130,17 +128,17 @@ public class SourcesManager {
         if (internalPath.contains("$"))
             internalPath = internalPath.substring(0, internalPath.indexOf("$"));
 
-        String[] prefixes = new String[]{"src/", "gen/"};
+        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
         for (String prefix: prefixes){
-            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath);
+            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath);
             if (candidate != null){
                 return candidate.getPath();
             }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath + ".java");
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".java");
             if (candidate != null){
                 return candidate.getPath();
             }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + internalPath + ".kt");
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".kt");
             if (candidate != null){
                 return candidate.getPath();
             }

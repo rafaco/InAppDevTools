@@ -23,7 +23,7 @@ import android.content.Context;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
@@ -32,7 +32,7 @@ public class ConfigManager {
     private final JsonAssetHelper compileConfig;
 
     public ConfigManager(Context context) {
-        compileConfig = new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG);
+        compileConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
     }
 
     public Object get(BuildConfig config) {

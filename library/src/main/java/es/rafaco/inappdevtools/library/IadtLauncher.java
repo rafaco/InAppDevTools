@@ -34,7 +34,7 @@ import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
@@ -69,7 +69,7 @@ public class IadtLauncher extends ContentProvider {
             // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
             String enableKey = BuildConfig.ENABLED.getKey();
             SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-            JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.BUILD_CONFIG);
+            JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), IadtPath.BUILD_CONFIG);
 
             if (iadtSharedPrefs.contains(enableKey)){
                 return iadtSharedPrefs.getBoolean(enableKey, false);

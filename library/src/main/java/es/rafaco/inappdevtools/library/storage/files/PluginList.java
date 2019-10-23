@@ -33,8 +33,6 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class PluginList {
 
-    public static final String PLUGIN_LIST = "inappdevtools/gradle_plugins.txt";
-
     public static String getIadtVersion() {
         return getPluginVersion("inappdevtools-plugin");
     }
@@ -44,7 +42,7 @@ public class PluginList {
     }
 
     private static String getPluginVersion(String pluginName) {
-        String fileContents = getFileContents(PLUGIN_LIST);
+        String fileContents = getFileContents(IadtPath.PLUGIN_LIST);
         String[] lines = fileContents.split(Humanizer.newLine());
         for (String line : lines) {
             if (line.startsWith(pluginName + "-")){
