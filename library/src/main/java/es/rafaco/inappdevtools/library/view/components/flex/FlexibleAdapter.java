@@ -41,6 +41,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
@@ -50,7 +51,7 @@ import static tech.linjiang.pandora.util.Utils.getContext;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
-    public class FlexibleItemDescriptor {
+    public static class FlexibleItemDescriptor {
         
         public final Class<?> dataClass;
         public final Class<? extends FlexibleViewHolder> viewHolderClass;
@@ -75,6 +76,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors = new ArrayList<>();
         descriptors.add(new FlexibleItemDescriptor(String.class, HeaderViewHolder.class, R.layout.flexible_item_header));
         descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
+        descriptors.add(new FlexibleItemDescriptor(ButtonGroupData.class, ButtonGroupViewHolder.class, R.layout.flexible_item_button_group));
         descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
         descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
         descriptors.add(new FlexibleItemDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
@@ -93,7 +95,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
             public int getSpanSize(int position) {
                 Class<?> itemDataClass = getItemDataClass(position);
                 if (itemDataClass.equals(String.class)
-                    || itemDataClass.equals(CardData.class)){
+                        || itemDataClass.equals(ButtonGroupData.class)
+                        || itemDataClass.equals(CardData.class)){
                     return manager.getSpanCount();
                 }
                 else{

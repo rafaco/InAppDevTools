@@ -32,8 +32,14 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class FlexibleViewHolder extends RecyclerView.ViewHolder {
 
+    //TODO: remove refactoring usages at traces
     FlexibleAdapter adapter;
 
+    public FlexibleViewHolder(@NonNull View itemView) {
+        super(itemView);
+    }
+
+    @Deprecated
     public FlexibleViewHolder(@NonNull View itemView,@NonNull FlexibleAdapter adapter) {
         super(itemView);
         this.adapter = adapter;
