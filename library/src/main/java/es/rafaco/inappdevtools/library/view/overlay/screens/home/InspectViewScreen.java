@@ -26,16 +26,21 @@ import android.view.ViewGroup;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 //#endif
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -74,14 +79,16 @@ public class InspectViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
+        data.add("Activity");
+
         String viewOverview = "";
-        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
+        viewOverview += "Top activity is " + RunningTasksUtils.getTopActivity();
         viewOverview += Humanizer.newLine();
         viewOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
         viewOverview += Humanizer.newLine();
-        viewOverview += "Top activity is " + RunningTasksUtils.getTopActivity();
+        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
 
-        data.add(new CardData("Info",
+        data.add(new CardData(RunningTasksUtils.getTopActivity(),
                 viewOverview,
                 R.string.gmd_view_carousel,
                 new Runnable() {
@@ -91,28 +98,35 @@ public class InspectViewScreen extends Screen {
                 }));
 
 
-        final String pathFromClassName = IadtController.get().getSourcesManager()
+        String topActivityName = RunningTasksUtils.getTopActivity();
+        final String pathToActivitySource = IadtController.get().getSourcesManager()
                 .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
-        if (!TextUtils.isEmpty(pathFromClassName)) {
-            data.add(new RunButton("View sources",
+        if (!TextUtils.isEmpty(pathToActivitySource)) {
+
+            data.add(new RunButton("SRC", //topActivityName,
                     R.drawable.ic_code_white_24dp, new Runnable() {
                 @Override
                 public void run() {
                     OverlayService.performNavigation(SourceDetailScreen.class,
-                            SourceDetailScreen.buildParams(pathFromClassName, -1));
+                            SourceDetailScreen.buildParams(pathToActivitySource, -1));
+                }
+            }));
+
+            String layoutName = getActivityLayoutName(pathToActivitySource);
+            final String pathToLayout = getActivityLayoutPath(layoutName);
+            data.add(new RunButton("RES", //TextUtils.isEmpty(layoutName) ? "Layout" : layoutName,
+                    R.drawable.ic_code_white_24dp, new Runnable() {
+                @Override
+                public void run() {
+
+                    if (TextUtils.isEmpty(pathToLayout))
+                        Iadt.showMessage("Layout xml not found");
+                    else
+                        OverlayService.performNavigation(SourceDetailScreen.class,
+                            SourceDetailScreen.buildParams(pathToLayout, -1));
                 }
             }));
         }
-
-        data.add(new RunButton( "Take Screenshot",
-                R.drawable.ic_add_a_photo_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().takeScreenshot();
-                    }
-                }));
-
 
         data.add("Layout inspector");
 
@@ -154,6 +168,20 @@ public class InspectViewScreen extends Screen {
                     }
                 }));
 
+
+
+        data.add("Others");
+
+        data.add(new RunButton( "Take Screenshot",
+                R.drawable.ic_add_a_photo_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().takeScreenshot();
+                    }
+                }));
+
+
         return data;
     }
 
@@ -169,5 +197,25 @@ public class InspectViewScreen extends Screen {
 
     @Override
     protected void onDestroy() {
+    }
+
+    public String getActivityLayoutName(String pathToActivitySource) {
+        String content = IadtController.get().getSourcesManager().getContent(pathToActivitySource);
+        if (TextUtils.isEmpty(content))
+            return "";
+
+        Pattern pattern = Pattern.compile("setContentView\\(R\\.layout\\.(\\w+)\\)");
+        Matcher matcher = pattern.matcher(content);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    public String getActivityLayoutPath(String layoutName) {
+        if (TextUtils.isEmpty(layoutName))
+            return "";
+
+        return IadtPath.RESOURCES + "/" + "layout" + "/" + layoutName + ".xml";
     }
 }
