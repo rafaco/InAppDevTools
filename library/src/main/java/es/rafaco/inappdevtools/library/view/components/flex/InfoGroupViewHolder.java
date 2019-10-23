@@ -123,21 +123,6 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
                             ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
                     ButtonGroupData buttonGroupData = new ButtonGroupData(data.getButtons());
                     desc.addToView(desc, buttonGroupData, buttonGroupContainer);
-/*
-
-                    //TODO: add more buttons dynamically
-                    final RunButton buttonData = data.getButtons().get(0);
-                    buttonGroupContainer.setText(buttonData.getTitle());
-                    buttonGroupContainer.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            buttonData.getPerformer().run();
-                        }
-                    });
-                    if (buttonData.getIcon()>0){
-                        Drawable buttonIcon = buttonGroupContainer.getContext().getResources().getDrawable(buttonData.getIcon());
-                        buttonGroupContainer.setCompoundDrawablesWithIntrinsicBounds( buttonIcon, null, null, null);
-                    }*/
                     buttonSeparator.setVisibility(View.VISIBLE);
                     buttonGroupContainer.setVisibility(View.VISIBLE);
                 }

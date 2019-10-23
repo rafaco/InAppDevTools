@@ -19,12 +19,19 @@
 
 package es.rafaco.inappdevtools.library.logic.runnables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ButtonGroupData {
 
     String title;
     List<RunButton> buttons;
+
+    public ButtonGroupData(RunButton button) {
+        ArrayList<RunButton> buttons = new ArrayList<>();
+        buttons.add(button);
+        this.buttons = buttons;
+    }
 
     public ButtonGroupData(List<RunButton> buttons) {
         this.buttons = buttons;

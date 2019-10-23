@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
 
@@ -31,7 +30,6 @@ import android.os.Build;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 //#endif
@@ -39,6 +37,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -46,9 +45,13 @@ import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupViewHolder;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
@@ -75,7 +78,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     LinearLayout extra_wrapper;
     AppCompatTextView extra;
     View buttonsSeparator;
-    AppCompatButton extra_button;
+    FrameLayout buttonGroupContainer;
     ImageView overflow;
 
     public LogViewHolder(View view, Listener listener) {
@@ -94,7 +97,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         detail = view.findViewById(R.id.detail);
         extra_wrapper = view.findViewById(R.id.extra_wrapper);
         extra = view.findViewById(R.id.extra);
-        extra_button = view.findViewById(R.id.extra_button);
+        buttonGroupContainer = view.findViewById(R.id.button_group_container);
         overflow = view.findViewById(R.id.overflow);
     }
 
@@ -183,19 +186,22 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             extra_wrapper.setVisibility(View.GONE);
         }
 
-        if(isSelected && getLink(data)!=null){
-            extra_button.setOnClickListener(new View.OnClickListener() {
+        if(isSelected && getNextStep(data)!=null){
+            FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
+                    ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
+            ButtonGroupData buttonGroupData = new ButtonGroupData(new RunButton(
+                    "Details", new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    OverlayService.performNavigationStep(LogViewHolder.this.getLink(data));
+                public void run() {
+                    OverlayService.performNavigationStep(LogViewHolder.this.getNextStep(data));
                 }
-            });
-            extra_button.getBackground().setColorFilter(severityColor, PorterDuff.Mode.MULTIPLY);
-            extra_button.setVisibility(View.VISIBLE);
+            }));
+            desc.addToView(desc, buttonGroupData, buttonGroupContainer);
+
+            buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);
         }else{
-            extra_button.setOnClickListener(null);
-            extra_button.setVisibility(View.GONE);
+            buttonGroupContainer.setVisibility(View.GONE);
             buttonsSeparator.setVisibility(View.GONE);
         }
 
@@ -231,7 +237,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         return details;
     }
 
-    private NavigationStep getLink(Friendly data) {
+    private NavigationStep getNextStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
@@ -259,7 +265,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
 
         extra_wrapper.setVisibility(View.GONE);
         buttonsSeparator.setVisibility(View.GONE);
-        extra_button.setVisibility(View.GONE);
+        buttonGroupContainer.setVisibility(View.GONE);
         overflow.setVisibility(View.GONE);
 
         if (Humanizer.isEven(position)){

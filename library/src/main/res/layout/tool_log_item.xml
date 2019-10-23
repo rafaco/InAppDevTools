@@ -157,19 +157,14 @@
                     android:clickable="true"
                     android:focusable="true"/>
 
-                <es.rafaco.compat.AppCompatButton
-                    android:id="@+id/extra_button"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:id="@+id/button_group_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/buttons_separator"
                     android:layout_alignParentBottom="true"
-                    android:layout_toLeftOf="@id/overflow"
-                    android:minHeight="0dp"
-                    android:text="Details"
-                    android:layout_gravity="end"
-                    android:textColor="@color/rally_blue_med"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                    android:visibility="gone"/>
+                    android:layout_toLeftOf="@id/overflow">
+                </FrameLayout>
 
             </RelativeLayout>
         </LinearLayout>
