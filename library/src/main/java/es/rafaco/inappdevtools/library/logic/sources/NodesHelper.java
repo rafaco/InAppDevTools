@@ -37,12 +37,14 @@ import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNodeReader;
 
 public class NodesHelper {
 
-    private static final String SRC_TAIL = "_sources.jar";
+    private static final String SRC_TAIL = "_sources.zip";
     private static final String RES_TAIL = "_resources.zip";
+    private static final String GEN_TAIL = "_generated.zip";
 
     public static final String ASSETS = "assets";
-    public static final String SOURCES = "src";
-    public static final String RESOURCES = "res";
+    public static final String SOURCES = "Sources";
+    public static final String RESOURCES = "Resources";
+    public static final String GENERATED = "Generated";
 
 
     public static AbstractNode populate(Context context) {
@@ -52,22 +54,27 @@ public class NodesHelper {
 
         //Prepare first level
         nodeReader = new RootNodeReader();
-        ((RootNodeReader) nodeReader).addNode(ASSETS);
         ((RootNodeReader) nodeReader).addNode(SOURCES);
+        ((RootNodeReader) nodeReader).addNode(GENERATED);
         ((RootNodeReader) nodeReader).addNode(RESOURCES);
+        ((RootNodeReader) nodeReader).addNode(ASSETS);
 
         //Populate ASSETS
         nodeReader = new AssetsNodeReader(context, nodeReader, ASSETS);
         AbstractNode root = nodeReader.populate();
 
         //Populate SRC and RES
-        AbstractNode ourAssetsNode = getNodeByFullPath(root,"assets/inappdevtools/");
+        AbstractNode ourAssetsNode = getNodeByFullPath(root,ASSETS + "/iadt/");
         for (AbstractNode node: ourAssetsNode.getChildren().values()) {
             String prefix = null;
             if (node.getName().endsWith(RES_TAIL)) {
                 prefix = RESOURCES;
-            }else if (node.getName().endsWith(SRC_TAIL)) {
+            }
+            else if (node.getName().endsWith(SRC_TAIL)) {
                 prefix = SOURCES;
+            }
+            else if (node.getName().endsWith(GEN_TAIL)) {
+                prefix = GENERATED;
             }
 
             if (!TextUtils.isEmpty(prefix)){

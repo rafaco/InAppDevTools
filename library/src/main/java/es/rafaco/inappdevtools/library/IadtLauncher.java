@@ -64,20 +64,26 @@ public class IadtLauncher extends ContentProvider {
     }
 
     private boolean isLibraryEnabled(){
-        // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
-        // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
-        String enableKey = BuildConfig.ENABLED.getKey();
-        SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-        JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.BUILD_CONFIG);
+        try {
+            // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
+            // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
+            String enableKey = BuildConfig.ENABLED.getKey();
+            SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+            JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.BUILD_CONFIG);
 
-        if (iadtSharedPrefs.contains(enableKey)){
-            return iadtSharedPrefs.getBoolean(enableKey, false);
+            if (iadtSharedPrefs.contains(enableKey)){
+                return iadtSharedPrefs.getBoolean(enableKey, false);
+            }
+            else if (iadtCompileConfig.contains(enableKey)){
+                return iadtCompileConfig.getBoolean(enableKey);
+            }
+            else{
+                return (boolean) BuildConfig.ENABLED.getDefaultValue();
+            }
         }
-        else if (iadtCompileConfig.contains(enableKey)){
-            return iadtCompileConfig.getBoolean(enableKey);
-        }
-        else{
-            return (boolean) BuildConfig.ENABLED.getDefaultValue();
+        catch (Exception e){
+            Log.e(Iadt.TAG, "IadtLauncher: exception checking isEnabled. Nothing started");
+            return false;
         }
     }
 

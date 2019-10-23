@@ -33,12 +33,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     static final TAG = 'inappdevtools'
     static final ASSETS_PATH = '/generated/assets'
-    static final OUTPUT_PATH = ASSETS_PATH + '/' + TAG
+    static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
 
     final PLUGINS_TASK = 'generatePluginList'
     final CLEAN_TASK = 'cleanGenerated'
     final CONFIG_TASK = 'generateConfigs'
     final SOURCES_TASK = 'packSources'
+    final GENERATED_TASK = 'packGenerated'
     final RESOURCES_TASK = 'packResources'
 
     void apply(Project project) {
@@ -71,39 +72,39 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         addGenerateConfigTask(project)
         addPackSourcesTask(project, outputFolder)
         addPackResourcesTask(project, outputFolder)
+        addPackGeneratedTask(project, outputFolder)
         addCleanTask(project, outputFolder)
 
         // Selectively link our tasks to each BuildVariant
         project.tasks.whenTaskAdded { theTask ->
+
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-
                 def buildVariant = extractBuildVariantFromResValuesTaskName(theTask)
-                if ((!isReleaseTask(theTask) || (isReleaseTask(theTask) && isEnabledOnRelease(project)))
-                        && isEnabled(project)
-                        && isSourceInclusion(project)
-                        && isSourceInspection(project)){
-
-                    if (isDebug(project)){
-                        println "${buildVariant} include sources"
-                    }
-
+                if (shouldIncludeSources(theTask, project)){
+                    if (isDebug(project)) println "${buildVariant} include sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
                             project.tasks.getByName(RESOURCES_TASK)]
                 }
-                else{
-                    if (isDebug(project)){
-                        println "${buildVariant} exclude sources"
-                    }
 
+                // Link CONFIG_TASK
+                // Always performed, if disabled it add a static config enabled=false
+                theTask.dependsOn += [
+                        project.tasks.getByName(CONFIG_TASK)]
+            }
+
+            if (theTask.name.contains("assemble")) {
+                def buildVariant = theTask.name.drop(8)
+                if(shouldIncludeSources(theTask, project)){
+                    if (isDebug(project))println "${buildVariant} include generated sources"
+                    theTask.dependsOn += [
+                            project.tasks.getByName(GENERATED_TASK)]
+                }
+                else{
+                    if (isDebug(project)) println "${buildVariant} without any sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(CLEAN_TASK)]
                 }
-
-                //TODO: do we need it when disabled?
-                // Link CONFIG_TASK
-                theTask.dependsOn += [
-                        project.tasks.getByName(CONFIG_TASK)]
             }
         }
 
@@ -111,6 +112,11 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.clean {
             delete getOutputPath(project)
         }
+    }
+
+    private boolean shouldIncludeSources(Task theTask, Project project) {
+        return (!isReleaseTask(theTask) || (isReleaseTask(theTask) && isEnabledOnRelease(project))) &&
+                isEnabled(project) && isSourceInclusion(project) && isSourceInspection(project)
     }
 
     private Task addGenerateConfigTask(Project project) {
@@ -136,17 +142,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 group: TAG,
                 type: Zip) {
 
-            if (isAndroidApplication(project)){
-                from ('src/main/') {
-                    include 'AndroidManifest.xml'
-                    into 'manifest'
-                    //rename { 'manifest/AndroidManifest.xml' }
-                }
-                from ("${project.buildDir}/intermediates/merged_manifests/${getCurrentBuildVariant(project).uncapitalize()}") {
-                    include 'AndroidManifest.xml'
-                    into 'merged_manifest'
-                }
-            }
             from ('src/main/res') {
                 excludes = ["raw/**"]
             }
@@ -163,37 +158,78 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
             doLast {
                 println "Packed ${counter} files into ${outputName}"
-                //println "Variant: ${getVariantName(project)}"
-                //println "Flavor: ${getCurrentFlavor(project)}"
             }
         }
     }
 
     private Task addPackSourcesTask(Project project, outputFolder) {
         project.task(SOURCES_TASK,
-                description: 'Generate a Jar file with all java sources, including generated ones',
+                description: 'Generate a Zip file with all java sources',
                 group: TAG,
-                type: Jar) {
+                type: Zip) {
 
-            def currentVariant = 'debug' //getVariantName(project)
-            def outputName = "${project.name}_sources.jar"
+            def outputName = "${project.name}_sources.zip"
             from project.android.sourceSets.main.java.srcDirs
+
+            if (isAndroidApplication(project)){
+                from project.android.sourceSets.main.manifest.srcFile
+            }
+
+            destinationDir project.file(outputFolder)
+            archiveName = outputName
+            includeEmptyDirs = true
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (isDebug(project)) { println it.path }
+            }
+            doLast {
+                println "Packed ${counter} files into ${outputName}"
+            }
+        }
+    }
+
+    private Task addPackGeneratedTask(Project project, outputFolder) {
+        project.task(GENERATED_TASK,
+                description: 'Generate a Zip file with generated sources',
+                group: TAG,
+                type: Zip) {
+
+            def outputName = "${project.name}_generated.zip"
+
             from("${project.buildDir}/generated/") {
-                excludes = ["assets/**", "**/res/pngs/**"]
+                excludes = ["Assets/**", "**/res/pngs/**"]
+            }
+
+            if (isAndroidApplication(project)){
+                from ("${project.buildDir}/intermediates/merged_manifests/${getCurrentBuildVariant(project).uncapitalize()}") {
+                    include 'AndroidManifest.xml'
+                }
             }
 
             eachFile { fileDetails ->
                 def filePath = fileDetails.path
                 if (isDebug(project)) println "PROCESSED: " + filePath
-                if (filePath.contains(currentVariant)) {
-                    fileDetails.path = filePath.substring(filePath.indexOf(currentVariant), filePath.length())
+
+                /* Simplify folders of generated sources.
+                // Seems brokening nodes, could be empty folders
+                def currentVariantFolders = getBuildVariantFolders(project)
+                if (filePath.contains('/r/')) {
+                    fileDetails.path = filePath.substring(filePath.indexOf('/r/')
+                            + '/r/'.size(), filePath.length())
                     if (isDebug(project)) println "RENAMED into " + fileDetails.path
                 }
+                else if (filePath.contains(currentVariantFolders)) {
+                    fileDetails.path = filePath.substring(filePath.indexOf(currentVariantFolders)
+                            + currentVariantFolders.size(), filePath.length())
+                    if (isDebug(project)) println "RENAMED into " + fileDetails.path
+                }*/
             }
 
             destinationDir project.file(outputFolder)
             archiveName = outputName
-            includeEmptyDirs = false
+            includeEmptyDirs = true
 
             def counter = 0
             eachFile {
@@ -306,6 +342,20 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             return buildVariant
         } else {
             println "getCurrentBuildVariant: cannot_find"
+            return ""
+        }
+    }
+
+    static String getBuildVariantFolders(Project project) {
+        Matcher matcher = getBuildVariantMatcher(project)
+
+        if (matcher.find()) {
+            String flavor = matcher.group(1).toLowerCase()
+            String buildType = matcher.group(2).toLowerCase()
+            String buildVariantFolder = buildType + '/' + flavor + '/'
+            return buildVariantFolder
+        } else {
+            println "getBuildVariantFolders: cannot_find"
             return ""
         }
     }
