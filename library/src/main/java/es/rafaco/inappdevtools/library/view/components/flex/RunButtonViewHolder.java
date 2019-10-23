@@ -29,7 +29,6 @@ import android.view.View;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
-import android.view.ViewGroup;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
@@ -66,11 +65,5 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
                 data.run();
             }
         });
-
-        if (position == -1){
-            ViewGroup.LayoutParams params = button.getLayoutParams();
-            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            button.setLayoutParams(params);
-        }
     }
 }

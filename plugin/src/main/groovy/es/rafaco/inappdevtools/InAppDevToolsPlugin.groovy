@@ -199,12 +199,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def outputName = "${project.name}_generated.zip"
 
             from("${project.buildDir}/generated/") {
-                excludes = ["Assets/**", "**/res/pngs/**"]
+                excludes = ["assets/**", "**/res/pngs/**"]
             }
 
             if (isAndroidApplication(project)){
                 from ("${project.buildDir}/intermediates/merged_manifests/${getCurrentBuildVariant(project).uncapitalize()}") {
                     include 'AndroidManifest.xml'
+                    into 'merged_manifests'
                 }
             }
 

@@ -102,12 +102,13 @@
                     android:layout_marginLeft="10dp"
                     style="@style/horizontal_separator"/>
 
-                <es.rafaco.compat.AppCompatButton
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+                <FrameLayout
+                    android:id="@+id/button_group_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                </FrameLayout>
 
             </LinearLayout>
 

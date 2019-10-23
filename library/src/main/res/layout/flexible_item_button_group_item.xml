@@ -18,10 +18,11 @@
   ~ limitations under the License.
   -->
 
-<TextView
+<es.rafaco.compat.AppCompatButton
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/title"
-    android:layout_width="match_parent"
+    android:id="@+id/button"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    style="@style/TextCondensedBig"/>
+    android:textColor="@color/rally_white"
+    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+

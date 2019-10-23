@@ -51,19 +51,6 @@ import static tech.linjiang.pandora.util.Utils.getContext;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
-    public static class FlexibleItemDescriptor {
-        
-        public final Class<?> dataClass;
-        public final Class<? extends FlexibleViewHolder> viewHolderClass;
-        public final int layoutResourceId;
-
-        public FlexibleItemDescriptor(Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
-            this.dataClass = dataClass;
-            this.viewHolderClass = viewHolderClass;
-            this.layoutResourceId = layoutResourceId;
-        }
-    }
-
     private List<FlexibleItemDescriptor> descriptors;
     private final int spanCount;
     private List<Object> items;
@@ -130,7 +117,12 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     public FlexibleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         FlexibleItemDescriptor desc = descriptors.get(viewType);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(desc.layoutResourceId, viewGroup, false);
+        FlexibleViewHolder holder = constructViewHolder(desc, view);
+        holder.onCreate(viewGroup, viewType);
+        return holder;
+    }
 
+    private FlexibleViewHolder constructViewHolder(FlexibleItemDescriptor desc, View view) {
         FlexibleViewHolder holder = null;
         try {
             Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class, FlexibleAdapter.class);
@@ -138,7 +130,6 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
         }
-        holder.onCreate(viewGroup, viewType);
         return holder;
     }
 

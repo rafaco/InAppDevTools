@@ -23,12 +23,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
@@ -53,7 +55,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
     private final TextView contentView;
     private final ImageView navIcon;
     private final LinearLayout collapsedContentView;
-    private final AppCompatButton button;
+    private final FrameLayout buttonGroupContainer;
     private final View buttonSeparator;
 
     public InfoGroupViewHolder(View view, FlexibleAdapter adapter) {
@@ -65,7 +67,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
         this.collapsedContentView = view.findViewById(R.id.collapsedContent);
         this.contentView = view.findViewById(R.id.content);
         this.navIcon = view.findViewById(R.id.nav_icon);
-        this.button = view.findViewById(R.id.button);
+        this.buttonGroupContainer = view.findViewById(R.id.button_group_container);
         this.buttonSeparator = view.findViewById(R.id.button_separator);
     }
 
@@ -114,24 +116,30 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
 
                 if (data.getButtons() == null || data.getButtons().isEmpty()){
                     buttonSeparator.setVisibility(View.GONE);
-                    button.setVisibility(View.GONE);
+                    buttonGroupContainer.setVisibility(View.GONE);
                 }
                 else{
+                    FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
+                            ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
+                    ButtonGroupData buttonGroupData = new ButtonGroupData(data.getButtons());
+                    desc.addToView(desc, buttonGroupData, buttonGroupContainer);
+/*
+
                     //TODO: add more buttons dynamically
                     final RunButton buttonData = data.getButtons().get(0);
-                    button.setText(buttonData.getTitle());
-                    button.setOnClickListener(new View.OnClickListener() {
+                    buttonGroupContainer.setText(buttonData.getTitle());
+                    buttonGroupContainer.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             buttonData.getPerformer().run();
                         }
                     });
                     if (buttonData.getIcon()>0){
-                        Drawable buttonIcon = button.getContext().getResources().getDrawable(buttonData.getIcon());
-                        button.setCompoundDrawablesWithIntrinsicBounds( buttonIcon, null, null, null);
-                    }
+                        Drawable buttonIcon = buttonGroupContainer.getContext().getResources().getDrawable(buttonData.getIcon());
+                        buttonGroupContainer.setCompoundDrawablesWithIntrinsicBounds( buttonIcon, null, null, null);
+                    }*/
                     buttonSeparator.setVisibility(View.VISIBLE);
-                    button.setVisibility(View.VISIBLE);
+                    buttonGroupContainer.setVisibility(View.VISIBLE);
                 }
             }
             else{

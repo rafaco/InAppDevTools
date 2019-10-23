@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -29,13 +28,18 @@ import android.widget.TextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter.FlexibleItemDescriptor;
 
 public class ButtonGroupViewHolder extends FlexibleViewHolder {
 
     private final TextView groupTitle;
     LinearLayout groupContainer;
     private ViewGroup viewGroup;
+
+    public ButtonGroupViewHolder(View view) {
+        super(view);
+        groupTitle = view.findViewById(R.id.group_title);
+        groupContainer = view.findViewById(R.id.group_container);
+    }
 
     public ButtonGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
@@ -63,13 +67,9 @@ public class ButtonGroupViewHolder extends FlexibleViewHolder {
         if (data.getButtons() != null && data.getButtons().size()>0){
             for (int i=0; i<data.getButtons().size(); i++){
                 RunButton buttonData = data.getButtons().get(i);
-                FlexibleItemDescriptor desc = new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button);
-
-                View buttonView = LayoutInflater.from(groupContainer.getContext()).inflate(desc.layoutResourceId, groupContainer, false);
-                FlexibleViewHolder buttonHolder = new RunButtonViewHolder(buttonView);
-                buttonHolder.onCreate(viewGroup, -1);
-                buttonHolder.bindTo(buttonData, -1);
-                groupContainer.addView(buttonView);
+                FlexibleItemDescriptor desc = new FlexibleItemDescriptor(RunButton.class,
+                        RunButtonViewHolder.class, R.layout.flexible_item_button_group_item);
+                desc.addToView(desc, buttonData, groupContainer);
             }
         }
     }

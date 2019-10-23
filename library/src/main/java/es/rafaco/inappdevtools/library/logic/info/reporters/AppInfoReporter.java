@@ -39,10 +39,15 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
@@ -140,6 +145,26 @@ public class AppInfoReporter extends AbstractInfoReporter {
                 .add("Features", features)
                 .add("Instrumentations", instrumentations)
                 .add("Libraries", "Coming soon")
+                .addButton(new RunButton("Original",
+                        R.drawable.ic_code_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                String params = SourceDetailScreen.buildParams(IadtPath.SOURCES
+                                        + "/AndroidManifest.xml");
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
+                            }
+                        }))
+                .addButton(new RunButton("Merged",
+                        R.drawable.ic_code_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                String params = SourceDetailScreen.buildParams(IadtPath.GENERATED
+                                        + "/merged_manifests/AndroidManifest.xml");
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
+                            }
+                        }))
                 .build();
         return group;
     }
