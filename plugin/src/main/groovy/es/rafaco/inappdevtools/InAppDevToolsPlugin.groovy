@@ -79,7 +79,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.whenTaskAdded { theTask ->
 
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                def buildVariant = extractBuildVariantFromResValuesTaskName(theTask)
+                def buildVariant = theTask.name.drop(8).reverse().drop(9).reverse()
                 if (shouldIncludeSources(theTask, project)){
                     if (isDebug(project)) println "${buildVariant} include sources"
                     theTask.dependsOn += [
@@ -93,8 +93,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                         project.tasks.getByName(CONFIG_TASK)]
             }
 
-            if (theTask.name.contains("assemble")) {
-                def buildVariant = theTask.name.drop(8)
+            if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
+                def buildVariant = theTask.name.drop(8).reverse().drop(6).reverse()
                 if(shouldIncludeSources(theTask, project)){
                     if (isDebug(project))println "${buildVariant} include generated sources"
                     theTask.dependsOn += [
@@ -386,10 +386,5 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
 
         return outStr
-    }
-
-    static String extractBuildVariantFromResValuesTaskName(Task task) {
-        def buildName = task.name.drop(8)       //Remove head "generate"
-                .reverse().drop(9).reverse()    //Remove tail "ResValues"
     }
 }

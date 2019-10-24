@@ -40,10 +40,12 @@ import android.support.v7.widget.SearchView;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import br.tiagohm.CodeView;
 import br.tiagohm.Language;
+import br.tiagohm.Theme;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
@@ -66,6 +68,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     AppCompatButton prevButton;
     AppCompatButton nextButton;
     TextView wideLabel;
+    private boolean isSourceUnavailable;
 
     public SourceDetailScreen(ScreenManager manager) {
         super(manager);
@@ -121,6 +124,10 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     protected void loadSource(String path, String line) {
         new FillSourceAsyncTask(this).execute(path, line);
+    }
+
+    private void loadSourceUnavailable() {
+        isSourceUnavailable = true;
     }
 
     protected void loadTrace(long traceId) {
@@ -237,8 +244,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
             onShareButton();
         }
         else if (selected == R.id.action_copy) {
-            ClipboardUtils.save(getContext(), codeViewer.getCode());
-            Iadt.showMessage("Content copied to clipboard");
+            onCopyButton();
         }
         return super.onMenuItemClick(item);
     }
@@ -268,26 +274,37 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     }
 
     private void onShareButton() {
-        new AsyncTask<String, String, String>(){
-            @Override
-            protected String doInBackground(String... strings) {
-                return IadtController.get().getSourcesManager().getLocalFile(getParams().path)
-                        .getAbsolutePath();
-            }
+        final IadtController controller = IadtController.get();
+        File localFile = controller.getSourcesManager().getLocalFile(getParams().path);
 
-            @Override
-            protected void onPostExecute(final String path) {
-                super.onPostExecute(path);
-
-                if (path == null){
-                    Iadt.showMessage("Unable to get file path");
-                    return;
-                }
-                FileProviderUtils.openFileExternally(IadtController.get().getContext(),
-                        path, Intent.ACTION_SEND);
+        if (isSourceUnavailable){
+            Iadt.showMessage("Nothing to share");
+        }
+        else if (localFile==null) {
+            Iadt.showMessage("Unable to get file path");
+            return;
+        }
+        else{
+            String path = localFile.getAbsolutePath();
+            if (path == null){
+                Iadt.showMessage("Unable to get file path");
+                return;
             }
-        }.execute();
+            FileProviderUtils.openFileExternally(controller.getContext(),
+                    path, Intent.ACTION_SEND);
+        }
     }
+
+    private void onCopyButton() {
+        if (isSourceUnavailable){
+            Iadt.showMessage("Nothing to copy");
+        }
+        else{
+            ClipboardUtils.save(getContext(), codeViewer.getCode());
+            Iadt.showMessage("Content copied to clipboard");
+        }
+    }
+
     //endregion
 
     //region [ PARAMS ]
@@ -313,6 +330,10 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     public InnerParams getParams(){
         Gson gson = new Gson();
         return gson.fromJson(getParam(), InnerParams.class);
+    }
+
+    public void setSourceUnavailable(boolean notAvailable) {
+        isSourceUnavailable = notAvailable;
     }
 
     public static class InnerParams {
