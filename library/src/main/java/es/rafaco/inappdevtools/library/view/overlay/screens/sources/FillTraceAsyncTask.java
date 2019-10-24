@@ -123,22 +123,7 @@ public class FillTraceAsyncTask extends AsyncTask<Long, String, String> {
 
         if (currentTrace != null){
             String path = IadtController.get().getSourcesManager().getPathFromClassName(currentTrace.getClassName());
-
-            if (TextUtils.isEmpty(path)) {
-                String noSources = Humanizer.fullStop() + "Source code not available." + Humanizer.fullStop();
-
-                screen.codeViewer.setTheme(Theme.ANDROIDSTUDIO)
-                        .setFontSize(12)
-                        .setShowLineNumber(false)
-                        .setWrapLine(false)
-                        .setZoomEnabled(false)
-                        .setCode(noSources)
-                        .setLanguage(Language.PLAINTEXT)
-                        .apply();
-            }
-            else{
-                screen.loadSource(path, currentTrace.getLineNumber() + "");
-            }
+            screen.loadSource(path, currentTrace.getLineNumber() + "");
         }
     }
 }

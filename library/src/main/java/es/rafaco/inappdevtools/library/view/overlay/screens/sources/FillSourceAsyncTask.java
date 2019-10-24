@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -27,6 +28,7 @@ import br.tiagohm.Theme;
 import br.tiagohm.Language;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FillSourceAsyncTask extends AsyncTask<String, String, String> {
 
@@ -46,6 +48,8 @@ public class FillSourceAsyncTask extends AsyncTask<String, String, String> {
     protected String doInBackground(String... strings) {
         path = strings[0];
         lineNumber = Integer.parseInt(strings[1]);
+        if (TextUtils.isEmpty(path))
+            return null;
         return IadtController.get().getSourcesManager().getContent(path);
     }
 
@@ -54,13 +58,28 @@ public class FillSourceAsyncTask extends AsyncTask<String, String, String> {
         super.onPostExecute(content);
 
         if (content == null) {
-            screen.codeViewer.setCode("Unable to get content");
+            final String noSources = Humanizer.fullStop() + "Source code not available." + Humanizer.fullStop();
+            screen.codeViewer.post(new Runnable() {
+                @Override
+                public void run() {
+                    screen.setSourceUnavailable(true);
+                    screen.codeViewer.setTheme(Theme.ANDROIDSTUDIO)
+                            .setFontSize(12)
+                            .setShowLineNumber(false)
+                            .setWrapLine(false)
+                            .setZoomEnabled(false)
+                            .setCode(noSources)
+                            .setLanguage(Language.PLAINTEXT)
+                            .apply();
+                }
+            });
             return;
         }
 
         screen.codeViewer.post(new Runnable() {
             @Override
             public void run() {
+                screen.setSourceUnavailable(false);
                 screen.codeViewer.setOnHighlightListener(screen)
                         .setTheme(Theme.ANDROIDSTUDIO)
                         .setFontSize(12)
