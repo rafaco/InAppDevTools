@@ -103,7 +103,7 @@ public class LogFilterHelper {
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisItem> sessions = analysis.getSessionResult();
-        list.add("All 100%");
+        list.add("All");
         String sessionOrdinal;
         for (AnalysisItem item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
@@ -146,7 +146,7 @@ public class LogFilterHelper {
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
         List<AnalysisItem> categoryResult = analysis.getCategoryResult();
-        list.add("All 100%");
+        list.add("All");
         for (AnalysisItem item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -157,7 +157,7 @@ public class LogFilterHelper {
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
-        list.add("All 100%");
+        list.add("All");
         for (AnalysisItem item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -178,11 +178,10 @@ public class LogFilterHelper {
                 && uiFilter.getSeverityInt() == 0
                 && uiFilter.getCategoryInt() == 0
                 && uiFilter.getTagInt() == 0){
-            result += "All from all sessions." + Humanizer.newLine();
-            result += String.format("Showing %s%% of %s",
-                    currentAnalysisItem.getPercentage(),
-                    analysis.getTotalLogSize());
-            result += Humanizer.fullStop();
+            result += "All from all sessions.";
+            result += String.format(" %s%% of %s",
+            currentAnalysisItem.getPercentage(),
+            analysis.getTotalLogSize());
             return result;
         }
 
@@ -230,12 +229,12 @@ public class LogFilterHelper {
                     result.substring(lastCommaPosition + 2);
         }
 
-        result += ". " + Humanizer.newLine();
-        result += String.format("Showing %s%% of total (%s/%s)",
+        result.trim();
+        result += ". ";
+        result += String.format(" %s%% of total (%s/%s)",
                 currentAnalysisItem.getPercentage(),
                 currentAnalysisItem.getCount(),
                 analysis.getTotalLogSize());
-        //result += Humanizer.fullStop();
 
         return result;
     }
