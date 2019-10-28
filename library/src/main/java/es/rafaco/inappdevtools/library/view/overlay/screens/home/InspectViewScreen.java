@@ -19,7 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
+import android.support.v7.widget.OrientationHelper;
 import android.text.TextUtils;
+import android.view.OrientationEventListener;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -37,6 +39,8 @@ import java.util.regex.Pattern;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -49,6 +53,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+
+import static es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils.getTopActivityInfo;
 
 public class InspectViewScreen extends Screen {
 
@@ -82,11 +88,16 @@ public class InspectViewScreen extends Screen {
         data.add("Activity");
 
         String viewOverview = "";
-        viewOverview += "Top activity is " + RunningTasksUtils.getTopActivity();
+        List<InfoEntryData> topActivityInfo = getTopActivityInfo();
+        for (InfoEntryData info : topActivityInfo) {
+            viewOverview += info.getLabel() + ": " + info.getValues().get(0);
+            viewOverview += Humanizer.newLine();
+        }
+        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
+        viewOverview += " in " + OrientationEventDetector.getOrientationString();
         viewOverview += Humanizer.newLine();
         viewOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
         viewOverview += Humanizer.newLine();
-        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
 
         data.add(new CardData(RunningTasksUtils.getTopActivity(),
                 viewOverview,
@@ -97,13 +108,12 @@ public class InspectViewScreen extends Screen {
                     }
                 }));
 
-
-        String topActivityName = RunningTasksUtils.getTopActivity();
+        
         final String pathToActivitySource = IadtController.get().getSourcesManager()
                 .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
         if (!TextUtils.isEmpty(pathToActivitySource)) {
 
-            data.add(new RunButton("SRC", //topActivityName,
+            data.add(new RunButton("View SRC",
                     R.drawable.ic_code_white_24dp, new Runnable() {
                 @Override
                 public void run() {
@@ -114,7 +124,7 @@ public class InspectViewScreen extends Screen {
 
             String layoutName = getActivityLayoutName(pathToActivitySource);
             final String pathToLayout = getActivityLayoutPath(layoutName);
-            data.add(new RunButton("RES", //TextUtils.isEmpty(layoutName) ? "Layout" : layoutName,
+            data.add(new RunButton("View RES",
                     R.drawable.ic_code_white_24dp, new Runnable() {
                 @Override
                 public void run() {

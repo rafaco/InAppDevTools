@@ -111,10 +111,6 @@ public class RunningTasksUtils {
         return getActivityInfo(0, true);
     }
 
-    public static List<InfoEntryData> getBaseActivityInfo() {
-        return getActivityInfo(0, true);
-    }
-
     private static List<InfoEntryData> getActivityInfo(int taskPosition, boolean isTop) {
         ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(taskPosition+1);

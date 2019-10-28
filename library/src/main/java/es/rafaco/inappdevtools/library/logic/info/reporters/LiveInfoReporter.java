@@ -26,6 +26,7 @@ import android.os.Debug;
 import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -77,6 +78,7 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .setIcon(R.string.gmd_view_carousel)
                 .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
+                .add("Orientation is " + OrientationEventDetector.getOrientationString())
                 .add()
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
                 .add(RunningTasksUtils.getTopActivityInfo());
