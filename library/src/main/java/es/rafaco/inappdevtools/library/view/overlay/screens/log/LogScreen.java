@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,7 +121,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     @Override
     public int getToolbarLayoutId() {
-        return R.menu.friendlylog;
+        return R.menu.screen_log;
     }
 
     @Override
@@ -141,6 +142,10 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         initSelected();
         initLiveData();
         initAdapter();
+
+        if (LogFilterStore.get() == null){
+            onProfilesButton();
+        }
     }
 
     @Override
@@ -290,7 +295,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             filterHelper = new LogFilterHelper(LogFilterStore.get());
         }
         else{
-            filterHelper = new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
+            filterHelper = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         }
     }
 
@@ -300,8 +305,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     public void updateFilter(LogFilterHelper newFilter){
         if (newFilter.getUiFilter().equals(filterHelper.getUiFilter())){
-            if (isDebug()) Log.w(Iadt.TAG, "LogScreen skipped updateFilter");
-            return;
+            if (isDebug()) Log.w(Iadt.TAG, "LogScreen updateFilter without filter changed");
         }
         if (isDebug()) Log.v(Iadt.TAG, "LogScreen updateFilter");
         if(logList != null) removeDataObserver();
@@ -531,17 +535,37 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_level){
+                menu.getItem(i).setVisible(false);
+                menu.getItem(i).setEnabled(false);
+            }
+        }
+        return true;
+    }
+
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_tune) {
-            //OverlayService.performNavigation(AnalysisScreen.class);
+        //OverlayService.performNavigation(AnalysisScreen.class);
+
+        if (selected == R.id.action_profile) {
+            onProfilesButton();
+        }
+        else if (selected == R.id.action_tune) {
             onTuneButton();
         }
-        else if (selected == R.id.action_level) {
-            onLevelButton();
+        else if (selected == R.id.action_wrap_lines) {
+            onWrapLinesButton();
         }
         else if (selected == R.id.action_save) {
             //onSaveButton();
+            Iadt.showMessage("Currently disabled, sorry");
         }
         else if (selected == R.id.action_delete) {
             onClearButton();
@@ -552,40 +576,39 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         return super.onMenuItemClick(item);
     }
 
-    private void onTuneButton() {
+    private void onProfilesButton() {
         LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
         final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
-        filterDialog = new LogFilterDialog(getContext(),adapter, tempFilter);
-        filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+        filterDialog = new LogFilterDialog(getContext(), tempFilter, new Runnable() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void run() {
                 updateFilter(tempFilter);
             }
         });
-        filterDialog.getDialog().show();
+        filterDialog.showStandardDialog();
     }
 
-    private void onLevelButton() {
-        String[] levelsArray = getContext().getResources().getStringArray(R.array.log_levels);
-        final LogFilterHelper filter = getFilter();
+    private void onTuneButton() {
+        LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
+        final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
+        filterDialog = new LogFilterDialog(getContext(), tempFilter, new Runnable() {
+            @Override
+            public void run() {
+                updateFilter(tempFilter);
+            }
+        });
+        filterDialog.showAdvancedDialog();
+    }
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
-                .setTitle("Select log level")
-                .setCancelable(true)
-                .setSingleChoiceItems(levelsArray, filter.getUiFilter().getSeverityInt(), new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which != filter.getUiFilter().getSeverityInt()) {
-                            filter.getUiFilter().setSeverityInt(which);
-                            updateFilter(filter);
-                        }
-                        dialog.dismiss();
-                    }
-                });
+    private void onWrapLinesButton() {
+        LogUiFilter uiFilter = getFilter().getUiFilter();
+        uiFilter.setWrapLines(!uiFilter.isWrapLines());
+        updateFilter(getFilter());
+    }
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setType(Layer.getLayoutType());
-        alertDialog.show();
+    @Override
+    public boolean isWrapLines() {
+        return filterHelper.getUiFilter().isWrapLines();
     }
 
     private void onSaveButton() {

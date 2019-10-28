@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.view.icons;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,6 +32,8 @@ import android.widget.TextView;
 //#else
 import android.support.v4.content.ContextCompat;
 //#endif
+
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class IconUtils {
 
@@ -78,11 +79,7 @@ public class IconUtils {
     }
 
     public static void applyToImageView(ImageView view, int icon, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view.setImageDrawable(view.getContext().getDrawable(icon));
-        } else {
-            view.setImageDrawable(view.getContext().getResources().getDrawable(icon));
-        }
+        view.setImageDrawable(UiUtils.getDrawable(icon));
         if (color>0){
             int contextualizedColor = ContextCompat.getColor(view.getContext(), color);
             view.setColorFilter(contextualizedColor);

@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.view.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -134,11 +133,7 @@ public class UiUtils {
             context.getTheme().resolveAttribute(
                     android.R.attr.selectableItemBackground, outValue, true);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                drawable = context.getDrawable(outValue.resourceId);
-            } else {
-                drawable = context.getResources().getDrawable(outValue.resourceId);
-            }
+            drawable = getDrawable(outValue.resourceId);
         }
         else{
             drawable = null;
@@ -193,5 +188,13 @@ public class UiUtils {
     public static int dpToPx(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 context.getResources().getDisplayMetrics());
+    }
+
+    public static Drawable getDrawable(int icon) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return getContext().getDrawable(icon);
+        } else {
+            return getContext().getResources().getDrawable(icon);
+        }
     }
 }

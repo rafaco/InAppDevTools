@@ -37,7 +37,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterHelper {
 
-    public enum Preset { ALL, EVENTS_ALL, EVENTS_INFO, LOGCAT_ALL, LOGCAT_INFO, CUSTOM}
+    public enum Preset { REPRO_STEPS, DEBUG, CRASHES, NETWORK, CUSTOM, ALL }
     private LogUiFilter uiFilter;
 
     private LogAnalysisHelper analysis;
@@ -64,36 +64,76 @@ public class LogFilterHelper {
     //TODO: custom presets defined from host app
 
     public void applyPreset(Preset preset) {
-        if (preset.equals(Preset.EVENTS_INFO)){
-            applyEventsInfoPreset();
+        if (preset.equals(Preset.REPRO_STEPS)){
+            applyReproStepsPreset();
+        }
+        else if (preset.equals(Preset.NETWORK)){
+            applyNetworkPreset();
+        }
+        else if (preset.equals(Preset.DEBUG)){
+            applyDebugPreset();
+        }
+        else if (preset.equals(Preset.CRASHES)){
+            applyCrashPreset();
         }
         else if (preset.equals(Preset.ALL)){
             applyAllPreset();
         }
+        else if (preset.equals(Preset.CUSTOM)){
+            applyCustomPreset();
+        }
     }
 
-    private void applyEventsInfoPreset() {
-        uiFilter = new LogUiFilter();
-        uiFilter.setText("");
+    private void applyReproStepsPreset() {
+        applyAllPreset();
+        uiFilter.setSessionInt(1);   //Current
+        uiFilter.setSeverityInt(2);  //Info
+        uiFilter.setTypeInt(1);      //Events
+    }
+
+    private void applyNetworkPreset() {
+        applyAllPreset();
         uiFilter.setSessionInt(1);   //Current
         uiFilter.setSeverityInt(2);  //Info
         uiFilter.setTypeInt(1);      //Events
         uiFilter.setCategoryInt(0);
-        uiFilter.setCategoryName("All");
-        uiFilter.setTagInt(0);
-        uiFilter.setTagName("All");
+        uiFilter.setCategoryName("Network");
+    }
+
+    private void applyDebugPreset() {
+        applyAllPreset();
+        uiFilter.setWrapLines(true);
+        uiFilter.setSessionInt(1);   //Current
+    }
+
+    private void applyCrashPreset() {
+        applyAllPreset();
+        uiFilter.setTypeInt(1);      //Events
+        uiFilter.setSeverityInt(4);  //Error
+        uiFilter.setCategoryInt(0);
+        uiFilter.setCategoryName("Error");
     }
 
     public void applyAllPreset() {
         uiFilter = new LogUiFilter();
+        uiFilter.setWrapLines(false);
         uiFilter.setText("");
-        uiFilter.setSessionInt(1);
+        uiFilter.setSessionInt(0);
         uiFilter.setSeverityInt(0);
         uiFilter.setTypeInt(0);
         uiFilter.setCategoryInt(0);
         uiFilter.setCategoryName("All");
         uiFilter.setTagInt(0);
         uiFilter.setTagName("All");
+    }
+
+    private void applyCustomPreset() {
+        if (LogFilterStore.get() != null){
+            uiFilter = LogFilterStore.get();
+        }
+        else{
+            applyDebugPreset();
+        }
     }
 
     //endregion
@@ -103,7 +143,7 @@ public class LogFilterHelper {
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisItem> sessions = analysis.getSessionResult();
-        list.add("All 100%");
+        list.add("All");
         String sessionOrdinal;
         for (AnalysisItem item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
@@ -146,7 +186,7 @@ public class LogFilterHelper {
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
         List<AnalysisItem> categoryResult = analysis.getCategoryResult();
-        list.add("All 100%");
+        list.add("All");
         for (AnalysisItem item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -157,7 +197,7 @@ public class LogFilterHelper {
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
-        list.add("All 100%");
+        list.add("All");
         for (AnalysisItem item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -178,11 +218,10 @@ public class LogFilterHelper {
                 && uiFilter.getSeverityInt() == 0
                 && uiFilter.getCategoryInt() == 0
                 && uiFilter.getTagInt() == 0){
-            result += "All from all sessions." + Humanizer.newLine();
-            result += String.format("Showing %s%% of %s",
-                    currentAnalysisItem.getPercentage(),
-                    analysis.getTotalLogSize());
-            result += Humanizer.fullStop();
+            result += "All from all sessions.";
+            result += String.format(" %s%% of %s",
+            currentAnalysisItem.getPercentage(),
+            analysis.getTotalLogSize());
             return result;
         }
 
@@ -230,12 +269,12 @@ public class LogFilterHelper {
                     result.substring(lastCommaPosition + 2);
         }
 
-        result += ". " + Humanizer.newLine();
-        result += String.format("Showing %s%% of total (%s/%s)",
+        result.trim();
+        result += ". ";
+        result += String.format(" %s%% of total (%s/%s)",
                 currentAnalysisItem.getPercentage(),
                 currentAnalysisItem.getCount(),
                 analysis.getTotalLogSize());
-        //result += Humanizer.fullStop();
 
         return result;
     }
