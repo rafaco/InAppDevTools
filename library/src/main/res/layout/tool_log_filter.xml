@@ -227,9 +227,9 @@
                 android:text="Event category: "
                 android:layout_marginBottom="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                style="@style/TextCondensedBig"/>
+                style="@style/TextCondensedMedium"/>
 
             <Spinner
                 android:id="@+id/category_spinner"
@@ -254,9 +254,9 @@
                 android:text="Logcat tag: "
                 android:layout_marginBottom="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                style="@style/TextCondensedBig"/>
+                style="@style/TextCondensedMedium"/>
 
             <Spinner
                 android:id="@+id/logcat_tag_spinner"

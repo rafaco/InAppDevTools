@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -28,6 +27,7 @@ import android.widget.Switch;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatTextView;
@@ -80,11 +80,8 @@ public class ConfigViewHolder extends FlexibleViewHolder {
             editButton.setVisibility(View.VISIBLE);
             textValue.setVisibility(View.VISIBLE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                editButton.setImageDrawable(editButton.getContext().getDrawable(R.drawable.pd_edit));
-            } else {
-                editButton.setImageDrawable(editButton.getContext().getResources().getDrawable(R.drawable.pd_edit));
-            }
+            editButton.setImageDrawable(UiUtils.getDrawable(R.drawable.pd_edit));
+
             int contextualizedColor = ContextCompat.getColor(editButton.getContext(), R.color.rally_white);
             editButton.setColorFilter(contextualizedColor);
             editButton.setOnClickListener(new View.OnClickListener() {

@@ -102,6 +102,7 @@ public class LogFilterDialog {
         ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
                 .setTitle("Log profiles")
+                .setIcon(R.drawable.ic_format_list_bulleted_white_24dp)
                 .setCancelable(true);
 
         LayoutInflater inflater = LayoutInflater.from(ctw);
@@ -173,6 +174,7 @@ public class LogFilterDialog {
         ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
                 .setTitle("Advanced filter")
+                .setIcon(R.drawable.ic_tune_white_24dp)
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

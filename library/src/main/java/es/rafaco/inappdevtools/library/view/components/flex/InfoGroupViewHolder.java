@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -39,11 +37,9 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //@import androidx.cardview.widget.CardView;
-//@import androidx.appcompat.widget.AppCompatButton;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.AppCompatButton;
 //#endif
 
 public class InfoGroupViewHolder extends FlexibleViewHolder {

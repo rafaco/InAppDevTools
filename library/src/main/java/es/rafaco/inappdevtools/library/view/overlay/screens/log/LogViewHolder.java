@@ -102,6 +102,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     }
 
     public interface Listener {
+        boolean isWrapLines();
         boolean isSelected(long id);
         boolean isBeforeSelected(int position);
         void onItemClick(View itemView, int position, long id);
@@ -139,11 +140,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
 
         int icon = FriendlyLog.getIcon(data);
         if (icon != -1){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                this.icon.setImageDrawable(itemView.getContext().getDrawable(icon));
-            } else {
-                this.icon.setImageDrawable(itemView.getContext().getResources().getDrawable(icon));
-            }
+            this.icon.setImageDrawable(UiUtils.getDrawable(icon));
             this.icon.setColorFilter(severityColor);
             this.icon.setVisibility(View.VISIBLE);
             this.icon.setBackgroundColor(Color.TRANSPARENT);
@@ -161,10 +158,11 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             title.setTextColor(severityColor);
         }
         title.setVisibility(View.VISIBLE);
-        title.setText(data.getMessage());
-        title.setSingleLine(!isSelected);
-        title.setEllipsize(!isSelected ? TextUtils.TruncateAt.END : null);
         title.setBackgroundColor(Color.TRANSPARENT);
+        boolean wrapMessage = isSelected || listener.isWrapLines();
+        title.setSingleLine(!wrapMessage);
+        title.setEllipsize(!wrapMessage ? TextUtils.TruncateAt.END : null);
+        title.setText(data.getMessage());
 
         titleSeparator.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
