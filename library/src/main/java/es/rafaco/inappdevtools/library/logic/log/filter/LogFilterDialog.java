@@ -77,7 +77,7 @@ public class LogFilterDialog {
     }
 
     public void showAdvancedDialog() {
-        dialog = buildAdvanceDialog();
+        dialog = buildCustomDialog();
         dialog.getWindow().setType(Layer.getLayoutType());
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
         dialog.show();
@@ -101,7 +101,7 @@ public class LogFilterDialog {
     private AlertDialog buildPresetDialog() {
         ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
-                .setTitle("Log profiles")
+                .setTitle("Filter profiles")
                 .setIcon(R.drawable.ic_format_list_bulleted_white_24dp)
                 .setCancelable(true);
 
@@ -152,7 +152,7 @@ public class LogFilterDialog {
                 }));
 
         data.add("");
-        data.add(new CardData("Advanced",
+        data.add(new CardData("Custom",
                 "Fine tune your filter",
                 R.string.gmd_tune,
                 new Runnable() {
@@ -170,10 +170,10 @@ public class LogFilterDialog {
         return alertDialogBuilder.create();
     }
 
-    private AlertDialog buildAdvanceDialog() {
+    private AlertDialog buildCustomDialog() {
         ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
-                .setTitle("Advanced filter")
+                .setTitle("Custom filter")
                 .setIcon(R.drawable.ic_tune_white_24dp)
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

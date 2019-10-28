@@ -102,6 +102,7 @@ public class LogFilterHelper {
 
     private void applyDebugPreset() {
         applyAllPreset();
+        uiFilter.setWrapLines(true);
         uiFilter.setSessionInt(1);   //Current
     }
 
@@ -115,6 +116,7 @@ public class LogFilterHelper {
 
     public void applyAllPreset() {
         uiFilter = new LogUiFilter();
+        uiFilter.setWrapLines(false);
         uiFilter.setText("");
         uiFilter.setSessionInt(0);
         uiFilter.setSeverityInt(0);
@@ -130,7 +132,7 @@ public class LogFilterHelper {
             uiFilter = LogFilterStore.get();
         }
         else{
-            applyReproStepsPreset();
+            applyDebugPreset();
         }
     }
 

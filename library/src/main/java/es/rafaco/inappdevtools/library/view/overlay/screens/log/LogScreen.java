@@ -101,7 +101,6 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     private int selectedItemPosition = -1;
     private boolean pendingScrollToPosition;
     private LogFilterHelper filterHelper;
-    private boolean wrapLines = false;
 
     public LogScreen(ScreenManager manager) {
         super(manager);
@@ -602,14 +601,14 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     private void onWrapLinesButton() {
-        wrapLines = !isWrapLines();
+        LogUiFilter uiFilter = getFilter().getUiFilter();
+        uiFilter.setWrapLines(!uiFilter.isWrapLines());
         updateFilter(getFilter());
     }
 
-
     @Override
     public boolean isWrapLines() {
-        return wrapLines;
+        return filterHelper.getUiFilter().isWrapLines();
     }
 
     private void onSaveButton() {

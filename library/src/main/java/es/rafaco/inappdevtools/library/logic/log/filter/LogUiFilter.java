@@ -30,6 +30,9 @@ public class LogUiFilter {
     private int tagInt;
     private String tagName;
 
+    //Only affect ui
+    private boolean wrapLines;
+
     public String getText() {
         return text;
     }
@@ -94,6 +97,14 @@ public class LogUiFilter {
         this.tagName = tagName;
     }
 
+    public boolean isWrapLines() {
+        return wrapLines;
+    }
+
+    public void setWrapLines(boolean wrapLines) {
+        this.wrapLines = wrapLines;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,6 +121,8 @@ public class LogUiFilter {
             return false;
         if (getCategoryName() != null ? !getCategoryName().equals(that.getCategoryName()) : that.getCategoryName() != null)
             return false;
+        if (isWrapLines() != that.isWrapLines())
+            return false;
         return getTagName() != null ? getTagName().equals(that.getTagName()) : that.getTagName() == null;
     }
 
@@ -123,6 +136,7 @@ public class LogUiFilter {
         filter.setTagInt(this.getTagInt());
         filter.setTagName(this.getTagName());
         filter.setText(this.getText());
+        filter.setWrapLines(this.isWrapLines());
         return filter;
     }
 }
