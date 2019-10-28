@@ -141,6 +141,10 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         initSelected();
         initLiveData();
         initAdapter();
+
+        if (LogFilterStore.get() == null){
+            onTuneButton();
+        }
     }
 
     @Override
@@ -290,7 +294,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             filterHelper = new LogFilterHelper(LogFilterStore.get());
         }
         else{
-            filterHelper = new LogFilterHelper(LogFilterHelper.Preset.EVENTS_INFO);
+            filterHelper = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         }
     }
 
@@ -555,14 +559,13 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     private void onTuneButton() {
         LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
         final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
-        filterDialog = new LogFilterDialog(getContext(),adapter, tempFilter);
-        filterDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+        filterDialog = new LogFilterDialog(getContext(), tempFilter, new Runnable() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void run() {
                 updateFilter(tempFilter);
             }
         });
-        filterDialog.getDialog().show();
+        filterDialog.show();
     }
 
     private void onLevelButton() {

@@ -37,7 +37,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterHelper {
 
-    public enum Preset { ALL, EVENTS_ALL, EVENTS_INFO, LOGCAT_ALL, LOGCAT_INFO, CUSTOM}
+    public enum Preset { REPRO_STEPS, DEBUG, CRASHES, NETWORK, CUSTOM, ALL }
     private LogUiFilter uiFilter;
 
     private LogAnalysisHelper analysis;
@@ -64,36 +64,74 @@ public class LogFilterHelper {
     //TODO: custom presets defined from host app
 
     public void applyPreset(Preset preset) {
-        if (preset.equals(Preset.EVENTS_INFO)){
-            applyEventsInfoPreset();
+        if (preset.equals(Preset.REPRO_STEPS)){
+            applyReproStepsPreset();
+        }
+        else if (preset.equals(Preset.NETWORK)){
+            applyNetworkPreset();
+        }
+        else if (preset.equals(Preset.DEBUG)){
+            applyDebugPreset();
+        }
+        else if (preset.equals(Preset.CRASHES)){
+            applyCrashPreset();
         }
         else if (preset.equals(Preset.ALL)){
             applyAllPreset();
         }
+        else if (preset.equals(Preset.CUSTOM)){
+            applyCustomPreset();
+        }
     }
 
-    private void applyEventsInfoPreset() {
-        uiFilter = new LogUiFilter();
-        uiFilter.setText("");
+    private void applyReproStepsPreset() {
+        applyAllPreset();
+        uiFilter.setSessionInt(1);   //Current
+        uiFilter.setSeverityInt(2);  //Info
+        uiFilter.setTypeInt(1);      //Events
+    }
+
+    private void applyNetworkPreset() {
+        applyAllPreset();
         uiFilter.setSessionInt(1);   //Current
         uiFilter.setSeverityInt(2);  //Info
         uiFilter.setTypeInt(1);      //Events
         uiFilter.setCategoryInt(0);
-        uiFilter.setCategoryName("All");
-        uiFilter.setTagInt(0);
-        uiFilter.setTagName("All");
+        uiFilter.setCategoryName("Network");
+    }
+
+    private void applyDebugPreset() {
+        applyAllPreset();
+        uiFilter.setSessionInt(1);   //Current
+    }
+
+    private void applyCrashPreset() {
+        applyAllPreset();
+        uiFilter.setTypeInt(1);      //Events
+        uiFilter.setSeverityInt(4);  //Error
+        uiFilter.setCategoryInt(0);
+        uiFilter.setCategoryName("Error");
     }
 
     public void applyAllPreset() {
         uiFilter = new LogUiFilter();
         uiFilter.setText("");
-        uiFilter.setSessionInt(1);
+        uiFilter.setSessionInt(0);
         uiFilter.setSeverityInt(0);
         uiFilter.setTypeInt(0);
         uiFilter.setCategoryInt(0);
         uiFilter.setCategoryName("All");
         uiFilter.setTagInt(0);
         uiFilter.setTagName("All");
+    }
+
+    private void applyCustomPreset() {
+        if (LogFilterStore.get() != null){
+            uiFilter = LogFilterStore.get();
+        }
+        else{
+            applyReproStepsPreset();
+        }
     }
 
     //endregion

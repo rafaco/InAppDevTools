@@ -22,15 +22,11 @@ package es.rafaco.inappdevtools.library.logic.log.filter;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.support.annotation.IdRes;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.PopupMenu;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -40,51 +36,155 @@ import android.widget.Spinner;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.widget.Toast;
 //#endif
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogAdapter;
 
 public class LogFilterDialog {
 
     private final Context context;
-    LogAdapter adapter;
+    private final Runnable updateLister;
     LogFilterHelper helper;
     private AlertDialog dialog;
     private AppCompatTextView currentOverview;
 
-    public LogFilterDialog(Context context, LogAdapter adapter, LogFilterHelper helper) {
+    public LogFilterDialog(Context context, LogFilterHelper helper, Runnable updateListener) {
         this.context = context;
-        this.adapter = adapter;
         this.helper = helper;
+        this.updateLister = updateListener;
     }
 
-    public AlertDialog prepare() {
+    public void show() {
+        if (LogFilterStore.get() == null){
+            showStandardDialog();
+        }else{
+            showAdvancedDialog();
+        }
+    }
+
+    public void showStandardDialog() {
+        dialog = buildPresetDialog();
+        dialog.getWindow().setType(Layer.getLayoutType());
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.show();
+    }
+
+    public void showAdvancedDialog() {
+        dialog = buildAdvanceDialog();
+        dialog.getWindow().setType(Layer.getLayoutType());
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.show();
+    }
+
+    private void onPresetSelected(LogFilterHelper.Preset preset) {
+        helper.applyPreset(preset);
+        dialog.dismiss();
+        updateLister.run();
+    }
+
+    private void onBackToPresets() {
+        dialog.dismiss();
+
+        dialog = buildPresetDialog();
+        dialog.getWindow().setType(Layer.getLayoutType());
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.show();
+    }
+
+    private AlertDialog buildPresetDialog() {
         ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
-                .setTitle("Log filter")
+                .setTitle("Log profiles")
+                .setCancelable(true);
+
+        LayoutInflater inflater = LayoutInflater.from(ctw);
+        View dialogView = inflater.inflate(R.layout.flexible_container, null);
+        alertDialogBuilder.setView(dialogView);
+
+        List<Object> data = new ArrayList<>();
+
+        data.add(new CardData("Repro Steps",
+                "Important events from current session",
+                R.string.gmd_history,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onPresetSelected(LogFilterHelper.Preset.REPRO_STEPS);
+                    }
+                }));
+
+        /*data.add(new CardData("Network",
+                "Data request from current session",
+                R.string.gmd_cloud,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onPresetSelected(LogFilterHelper.Preset.NETWORK);
+                    }
+                }));*/
+
+        data.add(new CardData("Debug",
+                "Full logs from current session",
+                R.string.gmd_android,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onPresetSelected(LogFilterHelper.Preset.DEBUG);
+                    }
+                }));
+
+        data.add(new CardData("Crashes",
+                "Crash events from all session",
+                R.string.gmd_bug_report,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onPresetSelected(LogFilterHelper.Preset.CRASHES);
+                    }
+                }));
+
+        data.add("");
+        data.add(new CardData("Advanced",
+                "Fine tune your filter",
+                R.string.gmd_tune,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onPresetSelected(LogFilterHelper.Preset.CUSTOM);
+                        showAdvancedDialog();
+                    }
+                }));
+
+        FlexibleAdapter presetAdapter = new FlexibleAdapter(1, data);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(presetAdapter);
+
+        return alertDialogBuilder.create();
+    }
+
+    private AlertDialog buildAdvanceDialog() {
+        ContextWrapper ctw = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
+                .setTitle("Advanced filter")
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        updateLister.run();
                     }
                 })
-                .setNegativeButton("Show all", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Profiles", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        helper.applyPreset(LogFilterHelper.Preset.ALL);
+                        onBackToPresets();
                         dialog.dismiss();
                     }
                 });
@@ -186,11 +286,7 @@ public class LogFilterDialog {
             }
         });
 
-        dialog = alertDialogBuilder.create();
-        dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
-        
-        return dialog;
+        return alertDialogBuilder.create();
     }
 
     private void updateOverview() {
@@ -198,9 +294,6 @@ public class LogFilterDialog {
     }
 
     public AlertDialog getDialog() {
-        if (dialog == null){
-            prepare();
-        }
         return dialog;
     }
 
