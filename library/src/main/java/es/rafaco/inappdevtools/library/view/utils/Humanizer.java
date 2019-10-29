@@ -157,4 +157,30 @@ public class Humanizer {
     }
 
     //endregion
+
+    public static String removeHead(String text, String head) {
+        if (text.startsWith(head)) {
+            return text.substring(head.length());
+        }
+        return text;
+    }
+
+    public static String removeTail(String text, String tail) {
+        if (text.endsWith(tail)) {
+            return text.substring(0, text.length() - tail.length());
+        }
+        return text;
+    }
+
+    public static String trimNewlines(String text) {
+        String result = text;
+        String newLine = newLine();
+        while (result.startsWith(newLine)) {
+            result = removeHead(result, newLine);
+        }
+        while (result.endsWith(newLine)) {
+            result = removeTail(result, newLine);
+        }
+        return result;
+    }
 }

@@ -211,6 +211,11 @@ public class AppInfoReporter extends AbstractInfoReporter {
         return getAppName() + " "  + getPackageInfo().versionName;
     }
 
+    public String getFormattedVersionLong() {
+        PackageInfo packageInfo = getPackageInfo();
+        return String.format("Version %s (%s)", packageInfo.versionName, packageInfo.versionCode);
+    }
+
 
     @NonNull
     private String getMinSdkVersion(PackageInfo pInfo) {

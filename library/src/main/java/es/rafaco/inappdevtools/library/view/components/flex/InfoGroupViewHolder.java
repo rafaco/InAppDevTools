@@ -32,6 +32,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
@@ -48,6 +49,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
     private final TextView iconView;
     private final TextView titleView;
     private final TextView overviewView;
+    private final View contentSeparator;
     private final TextView contentView;
     private final ImageView navIcon;
     private final LinearLayout collapsedContentView;
@@ -61,6 +63,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
         this.titleView = view.findViewById(R.id.title);
         this.overviewView = view.findViewById(R.id.overview);
         this.collapsedContentView = view.findViewById(R.id.collapsedContent);
+        this.contentSeparator = view.findViewById(R.id.content_separator);
         this.contentView = view.findViewById(R.id.content);
         this.navIcon = view.findViewById(R.id.nav_icon);
         this.buttonGroupContainer = view.findViewById(R.id.button_group_container);
@@ -78,6 +81,8 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
             overviewView.setText(data.getOverview());
 
             String content = data.entriesToString();
+            //TODO: improve entriesToString to avoid next line
+            content = Humanizer.trimNewlines(content);
             contentView.setVisibility(TextUtils.isEmpty(content) ? View.GONE : View.VISIBLE);
             contentView.setText(content);
 
@@ -90,52 +95,49 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
                 iconView.setVisibility(View.GONE);
             }
 
-            boolean isExpandable = true;
-            if (isExpandable){
-
-                navIcon.setBackground(null);
-
-                applyExpandedState(data.getExpanded());
+            if (data.isExpandable()) {
+                contentSeparator.setVisibility(View.VISIBLE);
+                applyExpandedState(data.isExpanded());
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         toggleExpandedState(position);
                     }
                 });
-                
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
-                }
-                itemView.setClickable(true);
-                navIcon.setVisibility(View.VISIBLE);
 
-                if (data.getButtons() == null || data.getButtons().isEmpty()){
-                    buttonSeparator.setVisibility(View.GONE);
-                    buttonGroupContainer.setVisibility(View.GONE);
-                }
-                else{
-                    FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
-                            ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
-                    ButtonGroupData buttonGroupData = new ButtonGroupData(data.getButtons());
-                    desc.addToView(desc, buttonGroupData, buttonGroupContainer);
-                    buttonSeparator.setVisibility(View.VISIBLE);
-                    buttonGroupContainer.setVisibility(View.VISIBLE);
-                }
+            }else {
+                contentSeparator.setVisibility(View.GONE);
+                collapsedContentView.setVisibility(View.VISIBLE);
+                cardView.setOnClickListener(null);
+            }
+            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
+            }
+            itemView.setClickable(true);
+            navIcon.setBackground(null);
+            navIcon.setVisibility(View.VISIBLE);
+
+            if (!data.isExpandable() || data.getButtons() == null || data.getButtons().isEmpty()){
+                buttonSeparator.setVisibility(View.GONE);
+            }
+            else {
+                buttonSeparator.setVisibility(View.VISIBLE);
+            }
+
+            if (data.getButtons() == null || data.getButtons().isEmpty()){
+                buttonGroupContainer.setVisibility(View.GONE);
             }
             else{
-                //TODO: never used code
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
-                cardView.setClickable(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(0);
-                }
-                navIcon.setVisibility(View.GONE);
-                cardView.setOnClickListener(null);
-                itemView.setClickable(false);
+                FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
+                        ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
+                ButtonGroupData buttonGroupData = new ButtonGroupData(data.getButtons());
+                desc.addToView(desc, buttonGroupData, buttonGroupContainer);
+                buttonGroupContainer.setVisibility(View.VISIBLE);
             }
         }
-    }
+}
 
     private void toggleExpandedState(int position) {
         boolean isExpanded = ((InfoScreen)adapter.getScreen()).toggleExpandedState(position);

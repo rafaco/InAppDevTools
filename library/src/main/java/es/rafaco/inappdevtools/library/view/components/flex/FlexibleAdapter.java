@@ -83,6 +83,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
                 Class<?> itemDataClass = getItemDataClass(position);
                 if (itemDataClass.equals(String.class)
                         || itemDataClass.equals(ButtonGroupData.class)
+                        || itemDataClass.equals(InfoGroupData.class)
                         || itemDataClass.equals(CardData.class)){
                     return manager.getSpanCount();
                 }

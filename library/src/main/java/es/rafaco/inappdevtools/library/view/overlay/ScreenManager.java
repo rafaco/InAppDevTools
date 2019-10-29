@@ -38,8 +38,6 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.Event;
-import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
@@ -51,6 +49,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
@@ -66,7 +66,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.Screensh
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -101,6 +100,7 @@ public class ScreenManager {
         //Load screenshots definitions
         //TODO: think a better way to avoid this
         registerScreen(HomeScreen.class);
+        registerScreen(Home2Screen.class);
         registerScreen(InfoOverviewScreen.class);
         registerScreen(InfoScreen.class);
         registerScreen(NetworkScreen.class);
@@ -147,6 +147,10 @@ public class ScreenManager {
         if (getCurrentScreen() == null)
             return null;
         return currentScreen.getClass().getSimpleName();
+    }
+
+    public static Class<? extends Screen> getHomeClass() {
+        return HomeScreen.class;
     }
 
     //endregion
@@ -220,7 +224,7 @@ public class ScreenManager {
 
     public void goHome(){
         navigationManager.clearSteps();
-        goTo(HomeScreen.class.getSimpleName(), null);
+        goTo(getHomeClass().getSimpleName(), null);
     }
 
     public String getCurrentStepParams(){

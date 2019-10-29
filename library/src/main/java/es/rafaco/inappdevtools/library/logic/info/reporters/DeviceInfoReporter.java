@@ -68,10 +68,18 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
 
     @Override
     public String getOverview() {
-        String firstLine = (configHelper.isRunningOnEmulator() ? "Emulated " : "Real ")
-                + getDeviceType();
-        String secondLine = configHelper.isRunningOnEmulator() ? Build.MODEL : Build.BRAND + " " + Build.MODEL;
+        String firstLine = getFirstLineOverview();
+        String secondLine = getSecondLineOverview();
         return firstLine + Humanizer.newLine() + secondLine;
+    }
+
+    public String getFirstLineOverview() {
+        return (configHelper.isRunningOnEmulator() ? "Emulated " : "Real ")
+                + getDeviceType();
+    }
+
+    public String getSecondLineOverview() {
+        return configHelper.isRunningOnEmulator() ? Build.MODEL : Build.BRAND + " " + Build.MODEL;
     }
 
     @Override

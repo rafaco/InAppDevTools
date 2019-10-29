@@ -112,9 +112,9 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         toggleBodyVisibility(false);
         container.addView(bodyView);
-
+        //container.getChildAt(container.getChildCount()-1);
         isStarted = true;
-        onStart(getView());
+        onStart(bodyView);
         resume();
     }
 

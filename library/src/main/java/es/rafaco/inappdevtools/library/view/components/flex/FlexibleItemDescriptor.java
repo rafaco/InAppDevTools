@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FlexibleItemDescriptor {
@@ -40,8 +41,8 @@ public class FlexibleItemDescriptor {
     }
 
     public View addToView(FlexibleItemDescriptor descriptor, Object data, ViewGroup container) {
-        View view = LayoutInflater.from(container.getContext()) 
-                .inflate(descriptor.layoutResourceId, container, false);
+        LayoutInflater inflater = LayoutInflater.from(container.getContext());
+        View view =  inflater.inflate(descriptor.layoutResourceId, container, false);
         FlexibleViewHolder holder = constructViewHolder(descriptor, view);
         holder.onCreate(container, -1);
         holder.bindTo(data, -1);
@@ -53,9 +54,9 @@ public class FlexibleItemDescriptor {
     private FlexibleViewHolder constructViewHolder(FlexibleItemDescriptor desc, View view) {
         FlexibleViewHolder holder = null;
         try {
-            Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass
+            Constructor<? extends FlexibleViewHolder> constructor = desc.viewHolderClass
                     .getConstructor(View.class);
-            holder = ctor.newInstance(new Object[] { view });
+            holder = constructor.newInstance(new Object[] { view });
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
         }

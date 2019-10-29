@@ -41,7 +41,8 @@ public class InfoGroupData {
     private String overview;
     private List<InfoEntryData> entries;
     private List<RunButton> buttons;
-    private Boolean isExpanded;
+    private boolean isExpandable;
+    private boolean isExpanded;
 
     public InfoGroupData(Builder builder) {
         this.title = builder.name;
@@ -49,6 +50,8 @@ public class InfoGroupData {
         this.overview = builder.overview;
         this.buttons = builder.buttons;
         this.entries = builder.entries;
+        this.isExpandable = builder.isExpandable;
+        this.isExpanded = builder.isExpanded;
     }
 
     public String getTitle() {
@@ -83,11 +86,19 @@ public class InfoGroupData {
         entries.clear();
     }
 
-    public Boolean getExpanded() {
+    public boolean isExpandable() {
+        return isExpandable;
+    }
+
+    public void setExpandable(boolean expandable) {
+        isExpandable = expandable;
+    }
+
+    public boolean isExpanded() {
         return isExpanded;
     }
 
-    public void setExpanded(Boolean expanded) {
+    public void setExpanded(boolean expanded) {
         isExpanded = expanded;
     }
 
@@ -120,6 +131,8 @@ public class InfoGroupData {
         private String overview;
         private List<RunButton> buttons;
         private List<InfoEntryData> entries;
+        private boolean isExpandable = true;
+        private boolean isExpanded;
 
         public Builder() {
             this("");
@@ -195,6 +208,16 @@ public class InfoGroupData {
 
         public Builder set(List<InfoEntryData> entries) {
             this.entries = entries;
+            return this;
+        }
+
+        public Builder setExpandable(boolean isExpandable) {
+            this.isExpandable = isExpandable;
+            return this;
+        }
+
+        public Builder setExpanded(boolean isExpanded) {
+            this.isExpanded = isExpanded;
             return this;
         }
 

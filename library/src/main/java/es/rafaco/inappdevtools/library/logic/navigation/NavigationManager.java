@@ -24,8 +24,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 
 public class NavigationManager {
 
@@ -43,8 +43,8 @@ public class NavigationManager {
     public void addStep(NavigationStep newStep) {
         //Ensure home screen is always at the the first for backward navigation
         if (history.isEmpty() &&
-                !newStep.getClassName().equals(HomeScreen.class)){
-            NavigationStep homeStep = new NavigationStep(HomeScreen.class, null);
+                !newStep.getClassName().equals(ScreenManager.getHomeClass())){
+            NavigationStep homeStep = new NavigationStep(ScreenManager.getHomeClass(), null);
             history.add(homeStep);
         }
 
