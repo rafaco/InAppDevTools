@@ -19,16 +19,13 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import android.support.v7.widget.OrientationHelper;
 import android.text.TextUtils;
-import android.view.OrientationEventListener;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 //#endif
 
 import java.util.ArrayList;
@@ -41,16 +38,15 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -85,58 +81,70 @@ public class InspectViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
+
         data.add("Activity");
 
-        String viewOverview = "";
+        String activityOverview = "";
         List<InfoEntryData> topActivityInfo = getTopActivityInfo();
         for (InfoEntryData info : topActivityInfo) {
-            viewOverview += info.getLabel() + ": " + info.getValues().get(0);
-            viewOverview += Humanizer.newLine();
+            activityOverview += info.getLabel() + ": " + info.getValues().get(0);
+            activityOverview += Humanizer.newLine();
         }
-        viewOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
-        viewOverview += " in " + OrientationEventDetector.getOrientationString();
-        viewOverview += Humanizer.newLine();
-        viewOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
-        viewOverview += Humanizer.newLine();
+        activityOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
+        activityOverview += " in " + OrientationEventDetector.getOrientationString();
+        activityOverview += Humanizer.newLine();
+        activityOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
+        activityOverview += Humanizer.newLine();
 
-        data.add(new CardData(RunningTasksUtils.getTopActivity(),
-                viewOverview,
-                R.string.gmd_view_carousel,
+        InfoGroupData.Builder activityDataBuilder = new InfoGroupData.Builder(RunningTasksUtils.getTopActivity())
+                .setIcon(R.string.gmd_view_carousel)
+                .setOverview("Activity")
+                .setExpandable(false)
+                .add(activityOverview);
+
+        final String pathToActivitySource = IadtController.get().getSourcesManager()
+                .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
+
+        activityDataBuilder.addButton(new RunButton("ACTIVITY SRC",
+                R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(InfoScreen.class, "0");
+                    public void run() {
+                        if (TextUtils.isEmpty(pathToActivitySource))
+                            Iadt.showMessage("Activity source not found");
+                        else
+                        OverlayService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams(pathToActivitySource, -1));
                     }
                 }));
 
-        
-        final String pathToActivitySource = IadtController.get().getSourcesManager()
-                .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
-        if (!TextUtils.isEmpty(pathToActivitySource)) {
+        String layoutName = getActivityLayoutName(pathToActivitySource);
+        final String pathToLayout = getActivityLayoutPath(layoutName);
+        activityDataBuilder.addButton(new RunButton("LAYOUT RES",
+                R.drawable.ic_local_library_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.isEmpty(pathToLayout))
+                            Iadt.showMessage("Layout xml not found");
+                        else
+                            OverlayService.performNavigation(SourceDetailScreen.class,
+                                    SourceDetailScreen.buildParams(pathToLayout, -1));
+                    }
+                })
+        );
+        data.add(activityDataBuilder.build());
 
-            data.add(new RunButton("View SRC",
-                    R.drawable.ic_code_white_24dp, new Runnable() {
-                @Override
-                public void run() {
-                    OverlayService.performNavigation(SourceDetailScreen.class,
-                            SourceDetailScreen.buildParams(pathToActivitySource, -1));
-                }
-            }));
+        data.add("Fragments");
 
-            String layoutName = getActivityLayoutName(pathToActivitySource);
-            final String pathToLayout = getActivityLayoutPath(layoutName);
-            data.add(new RunButton("View RES",
-                    R.drawable.ic_code_white_24dp, new Runnable() {
-                @Override
-                public void run() {
+        InfoGroupData.Builder fragmentsDataBuilder = new InfoGroupData.Builder("Fragments")
+                .setIcon(R.string.gmd_extension)
+                .setOverview("(count)")
+                .setExpandable(false)
+                .add("Coming soon");
 
-                    if (TextUtils.isEmpty(pathToLayout))
-                        Iadt.showMessage("Layout xml not found");
-                    else
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                            SourceDetailScreen.buildParams(pathToLayout, -1));
-                }
-            }));
-        }
+        data.add(fragmentsDataBuilder.build());
+
 
         data.add("Layout inspector");
 
@@ -169,7 +177,7 @@ public class InspectViewScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Show gridline",
+        data.add(new RunButton("Show grid",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override

@@ -118,7 +118,7 @@ public class HomeScreen extends Screen {
 
         
         RunButton sources = new RunButton("Sources",
-                R.drawable.ic_code_white_24dp,
+                R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {

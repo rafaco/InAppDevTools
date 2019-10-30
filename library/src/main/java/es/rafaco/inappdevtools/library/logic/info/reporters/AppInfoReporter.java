@@ -145,7 +145,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
                 .add("Instrumentations", instrumentations)
                 .add("Libraries", "Coming soon")
                 .addButton(new RunButton("Original",
-                        R.drawable.ic_code_white_24dp,
+                        R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override
                             public void run() {
@@ -155,7 +155,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
                             }
                         }))
                 .addButton(new RunButton("Merged",
-                        R.drawable.ic_code_white_24dp,
+                        R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override
                             public void run() {
