@@ -81,9 +81,6 @@ public class InspectViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-
-        data.add("Activity");
-
         String activityOverview = "";
         List<InfoEntryData> topActivityInfo = getTopActivityInfo();
         for (InfoEntryData info : topActivityInfo) {
@@ -135,13 +132,11 @@ public class InspectViewScreen extends Screen {
         );
         data.add(activityDataBuilder.build());
 
-        data.add("Fragments");
-
         InfoGroupData.Builder fragmentsDataBuilder = new InfoGroupData.Builder("Fragments")
                 .setIcon(R.string.gmd_extension)
-                .setOverview("(count)")
+                .setOverview("Fragments")
                 .setExpandable(false)
-                .add("Coming soon");
+                .add("Coming soon: list, states and navigation to sources");
 
         data.add(fragmentsDataBuilder.build());
 

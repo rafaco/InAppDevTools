@@ -234,7 +234,11 @@ public class LogFilterHelper {
         if (uiFilter.getSessionInt() != 0){
             if(uiFilter.getSessionInt()==1){
                 result += "from current session" + ", ";
-            }else{
+            }
+            else if(uiFilter.getSessionInt()==2){
+                result += "from previous session" + ", ";
+            }
+            else{
                 long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
                 Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
