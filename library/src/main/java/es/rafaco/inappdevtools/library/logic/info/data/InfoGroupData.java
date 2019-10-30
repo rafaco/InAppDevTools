@@ -40,6 +40,8 @@ public class InfoGroupData {
     private int icon;
     private String overview;
     private List<InfoEntryData> entries;
+
+    //Extract to ComplexCardData
     private List<RunButton> buttons;
     private boolean isExpandable;
     private boolean isExpanded;

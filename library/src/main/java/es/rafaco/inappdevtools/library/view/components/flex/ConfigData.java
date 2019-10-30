@@ -22,13 +22,13 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 
-public class ConfigItem {
+public class ConfigData {
 
     private final BuildConfig config;
     private Object initialValue;
     private Object newValue;
 
-    public ConfigItem(BuildConfig config) {
+    public ConfigData(BuildConfig config) {
         this.config = config;
         this.initialValue = IadtController.get().getConfig().get(config);
     }

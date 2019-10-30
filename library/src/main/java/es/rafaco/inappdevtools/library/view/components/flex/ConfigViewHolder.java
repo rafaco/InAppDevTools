@@ -56,22 +56,22 @@ public class ConfigViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final ConfigItem configItem = (ConfigItem) abstractData;
+        final ConfigData configData = (ConfigData) abstractData;
         Context context = title.getContext();
-        title.setText(configItem.getConfig().getKey());
-        subtitle.setText(context.getText(configItem.getConfig().getDesc()));
+        title.setText(configData.getConfig().getKey());
+        subtitle.setText(context.getText(configData.getConfig().getDesc()));
 
-        if (configItem.getConfig().getValueType() == boolean.class){
+        if (configData.getConfig().getValueType() == boolean.class){
             switchButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.GONE);
             textValue.setVisibility(View.GONE);
 
-            Boolean value = (Boolean) configItem.getInitialValue();
+            Boolean value = (Boolean) configData.getInitialValue();
             switchButton.setChecked(value);
             switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    configItem.setNewValue(isChecked);
+                    configData.setNewValue(isChecked);
                 }
             });
         }
@@ -90,7 +90,7 @@ public class ConfigViewHolder extends FlexibleViewHolder {
                     Iadt.showMessage("TODO: Not already implemented");
                 }
             });
-            textValue.setText((String) configItem.getInitialValue());
+            textValue.setText((String) configData.getInitialValue());
         }
     }
 }

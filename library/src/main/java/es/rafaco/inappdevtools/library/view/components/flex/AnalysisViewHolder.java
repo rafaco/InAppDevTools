@@ -23,7 +23,7 @@ import android.view.View;
 
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 
 public class AnalysisViewHolder extends FlexibleViewHolder {
 
@@ -40,7 +40,7 @@ public class AnalysisViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        AnalysisItem data = (AnalysisItem) abstractData;
+        AnalysisData data = (AnalysisData) abstractData;
         nameView.setText(data.getName());
         countView.setText(String.valueOf(data.getCount()));
         percentageView.setText(String.valueOf(data.getPercentage()) + "% ");

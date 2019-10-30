@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -142,10 +142,10 @@ public class LogFilterHelper {
 
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> sessions = analysis.getSessionResult();
+        List<AnalysisData> sessions = analysis.getSessionResult();
         list.add("All");
         String sessionOrdinal;
-        for (AnalysisItem item : sessions) {
+        for (AnalysisData item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
             if (list.size() == 1){
                 list.add("Current (" + sessionOrdinal + ")");
@@ -185,9 +185,9 @@ public class LogFilterHelper {
 
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
-        List<AnalysisItem> categoryResult = analysis.getCategoryResult();
+        List<AnalysisData> categoryResult = analysis.getCategoryResult();
         list.add("All");
-        for (AnalysisItem item : categoryResult) {
+        for (AnalysisData item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -196,9 +196,9 @@ public class LogFilterHelper {
     // At UI, a dialog selector with checkboxes could work
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
+        List<AnalysisData> subcategoryResult = analysis.getLogcatTagResult();
         list.add("All");
-        for (AnalysisItem item : subcategoryResult) {
+        for (AnalysisData item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -209,7 +209,7 @@ public class LogFilterHelper {
     //region [ OVERVIEW ]
 
     public String getOverview(){
-        AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
+        AnalysisData currentAnalysisData = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
         String result = "";
 
         if (TextUtils.isEmpty(uiFilter.getText())
@@ -220,7 +220,7 @@ public class LogFilterHelper {
                 && uiFilter.getTagInt() == 0){
             result += "All from all sessions.";
             result += String.format(" %s%% of %s",
-            currentAnalysisItem.getPercentage(),
+            currentAnalysisData.getPercentage(),
             analysis.getTotalLogSize());
             return result;
         }
@@ -272,8 +272,8 @@ public class LogFilterHelper {
         result.trim();
         result += ". ";
         result += String.format(" %s%% of total (%s/%s)",
-                currentAnalysisItem.getPercentage(),
-                currentAnalysisItem.getCount(),
+                currentAnalysisData.getPercentage(),
+                currentAnalysisData.getCount(),
                 analysis.getTotalLogSize());
 
         return result;

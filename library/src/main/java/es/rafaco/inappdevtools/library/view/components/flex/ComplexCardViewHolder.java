@@ -43,7 +43,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
 
-public class InfoGroupViewHolder extends FlexibleViewHolder {
+public class ComplexCardViewHolder extends FlexibleViewHolder {
 
     private final CardView cardView;
     private final TextView iconView;
@@ -56,7 +56,7 @@ public class InfoGroupViewHolder extends FlexibleViewHolder {
     private final FrameLayout buttonGroupContainer;
     private final View buttonSeparator;
 
-    public InfoGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public ComplexCardViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         this.cardView = view.findViewById(R.id.card_view);
         this.iconView = view.findViewById(R.id.icon);

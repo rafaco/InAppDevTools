@@ -19,13 +19,13 @@
 
 package es.rafaco.inappdevtools.library.storage.db.entities;
 
-public class AnalysisItem {
+public class AnalysisData {
 
     String name;
     int count;
     long percentage;
 
-    public AnalysisItem(String name, int count, long percentage) {
+    public AnalysisData(String name, int count, long percentage) {
         this.name = name;
         this.count = count;
         this.percentage = percentage;
