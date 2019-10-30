@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -223,10 +225,11 @@ public class LogFilterDialog {
         sessions.add(R.id.session_current);
         sessions.add(R.id.session_previous);
         sessions.add(R.id.session_other);
+        lastSelectedSessionId = (filter.getSessionInt() < 3)? sessions.get(filter.getSessionInt())
+            : R.id.session_other;
 
-
-        lastSelectedSessionId = (filter.getSessionInt() < 3) ? sessions.get(filter.getSessionInt())
-                : R.id.session_other;
+        final boolean isFirstSession = IadtController.getDatabase().sessionDao().count()==1;
+        if (isFirstSession) sessionGroup.findViewById(R.id.session_previous).setVisibility(View.GONE);
         sessionGroup.check(lastSelectedSessionId);
         sessionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -246,7 +249,7 @@ public class LogFilterDialog {
                 new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position<3) {
+                if (position < 3) {
                     RadioButton button = sessionGroup.findViewById(sessions.get(position));
                     button.setChecked(true);
                 }

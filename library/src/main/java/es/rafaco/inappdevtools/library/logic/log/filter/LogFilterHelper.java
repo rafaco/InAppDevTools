@@ -313,13 +313,12 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else{ //Previous and others
-            //TODO: better selection
             long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
             Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
-            backFilter.setFromDate(selected.getDate());
-            //TODO: filter toDate properly
+            if (selected != null) backFilter.setFromDate(selected.getDate());
+            
             Session next = DevToolsDatabase.getInstance().sessionDao().findById(target + 1);
-            backFilter.setToDate(next.getDate());
+            if (next != null) backFilter.setToDate(next.getDate());
         }
         if (isDebug())
             Log.v(Iadt.TAG, "BackFilter Session " + uiFilter.getSessionInt()
