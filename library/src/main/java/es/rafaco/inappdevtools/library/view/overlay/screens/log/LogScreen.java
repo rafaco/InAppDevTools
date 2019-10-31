@@ -19,12 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.arch.persistence.db.SupportSQLiteQuery;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,12 +37,12 @@ import android.widget.TextView;
 //@import androidx.recyclerview.widget.LinearLayoutManager;
 //@import androidx.lifecycle.LiveData;
 //@import androidx.lifecycle.Observer;
-//@import androidx.lifecycle.Lifecycle;
-//@import androidx.lifecycle.LifecycleObserver;
-//@import androidx.lifecycle.OnLifecycleEvent;
 //@import androidx.lifecycle.ProcessLifecycleOwner;
 //@import androidx.paging.LivePagedListBuilder;
 //@import androidx.paging.PagedList;
+//@import androidx.sqlite.db.SupportSQLiteQuery;
+//@import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.appcompat.widget.PopupMenu;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
@@ -56,6 +53,9 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.arch.persistence.db.SupportSQLiteQuery;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 //#endif
 
 import com.google.gson.Gson;

@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -48,6 +47,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 public class Home2Screen extends Screen {
