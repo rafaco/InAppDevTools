@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 
 //#ifdef ANDROIDX
@@ -33,6 +34,7 @@ import android.support.v7.widget.AppCompatButton;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class RunButtonViewHolder extends FlexibleViewHolder {
 
@@ -65,5 +67,8 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
                 data.run();
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            button.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
+        }
     }
 }

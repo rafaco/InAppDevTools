@@ -38,15 +38,14 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
@@ -146,7 +145,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
                 .add("Instrumentations", instrumentations)
                 .add("Libraries", "Coming soon")
                 .addButton(new RunButton("Original",
-                        R.drawable.ic_code_white_24dp,
+                        R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override
                             public void run() {
@@ -156,7 +155,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
                             }
                         }))
                 .addButton(new RunButton("Merged",
-                        R.drawable.ic_code_white_24dp,
+                        R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override
                             public void run() {
@@ -209,6 +208,11 @@ public class AppInfoReporter extends AbstractInfoReporter {
     @NonNull
     public String getFormattedAppLong() {
         return getAppName() + " "  + getPackageInfo().versionName;
+    }
+
+    public String getFormattedVersionLong() {
+        PackageInfo packageInfo = getPackageInfo();
+        return String.format("Version %s (%s)", packageInfo.versionName, packageInfo.versionCode);
     }
 
 

@@ -51,7 +51,7 @@ public class OSInfoReporter extends AbstractInfoReporter {
     EasyMemoryMod memoryHelper;
 
     public OSInfoReporter(Context context) {
-        super(context, InfoReport.OS);
+        this(context, InfoReport.OS);
     }
 
     public OSInfoReporter(Context context, InfoReport report) {
@@ -63,10 +63,14 @@ public class OSInfoReporter extends AbstractInfoReporter {
 
     @Override
     public String getOverview() {
-        return "Android " + getAndroidVersionFull()
-                + (deviceHelper.isDeviceRooted() ? " [Rooted]" : "") + Humanizer.newLine()
+        return getFirstLineOverview() + Humanizer.newLine()
                 + getDisplayLanguage() + " - " + getDisplayCountry() + Humanizer.newLine()
                 + InstalledAppsUtils.getCount() + " installed apps";
+    }
+
+    public String getFirstLineOverview() {
+        return "Android " + getAndroidVersionFull()
+                + (deviceHelper.isDeviceRooted() ? " [Rooted]" : "");
     }
 
     @Override

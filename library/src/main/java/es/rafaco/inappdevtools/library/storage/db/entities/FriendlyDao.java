@@ -69,7 +69,7 @@ public interface FriendlyDao {
             + " FROM friendly"
             + " GROUP BY severity"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseSeverity();
+    List<AnalysisData> analiseSeverity();
 
     @Query("SELECT category AS name,"
             + " COUNT(*) AS count,"
@@ -78,7 +78,7 @@ public interface FriendlyDao {
             + " WHERE category NOT IN ('Logcat')"
             + " GROUP BY category"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseEventCategory();
+    List<AnalysisData> analiseEventCategory();
 
     @Query("SELECT subcategory AS name,"
             + " COUNT(*) AS count,"
@@ -87,14 +87,14 @@ public interface FriendlyDao {
             + " WHERE category IN ('Logcat')"
             + " GROUP BY subcategory"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseLogcatTag();
+    List<AnalysisData> analiseLogcatTag();
 
     @Query("SELECT uid AS name,"
             + " 1 AS count,"
             + " (100.0 / (select count(*) from session)) AS percentage"
             + " FROM session"
             + " ORDER BY date DESC")
-    List<AnalysisItem> analiseSession();
+    List<AnalysisData> analiseSession();
 
     @Query("SELECT *"
             + " FROM friendly"
@@ -113,7 +113,7 @@ public interface FriendlyDao {
     Friendly getNewSessionLog(String message);
 
     @RawQuery(observedEntities = Friendly.class)
-    List<AnalysisItem> analiseWithQuery(SupportSQLiteQuery query);
+    List<AnalysisData> analiseWithQuery(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM friendly where uid LIKE :uid")
     Friendly findById(long uid);

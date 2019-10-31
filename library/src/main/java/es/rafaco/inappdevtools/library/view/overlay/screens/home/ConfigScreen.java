@@ -28,7 +28,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.view.components.flex.ConfigItem;
+import es.rafaco.inappdevtools.library.view.components.flex.ConfigData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -82,7 +82,7 @@ public class ConfigScreen extends Screen {
         List<BuildConfig> allConfigs = BuildConfig.getAll();
         for (BuildConfig item : allConfigs) {
             if (item.getDefaultValue() != null){
-                data.add(new ConfigItem(item));
+                data.add(new ConfigData(item));
             }
         }
 
@@ -99,9 +99,9 @@ public class ConfigScreen extends Screen {
         List<Object> adapterItems = adapter.getItems();
         boolean anyChange = false;
         for (Object item : adapterItems) {
-            if (item instanceof ConfigItem){
-                ConfigItem configItem = (ConfigItem) item;
-                if (configItem.getNewValue() != null && configItem.getNewValue() != configItem.getInitialValue()){
+            if (item instanceof ConfigData){
+                ConfigData configData = (ConfigData) item;
+                if (configData.getNewValue() != null && configData.getNewValue() != configData.getInitialValue()){
                     anyChange = true;
                 }
             }
@@ -112,10 +112,10 @@ public class ConfigScreen extends Screen {
     private void saveAnyChange() {
         List<Object> adapterItems = adapter.getItems();
         for (Object item : adapterItems) {
-            if (item instanceof ConfigItem){
-                ConfigItem configItem = (ConfigItem) item;
-                if (configItem.getNewValue() != null && configItem.getNewValue() != configItem.getInitialValue()){
-                    IadtController.get().getConfig().set(configItem.getConfig(), configItem.getNewValue());
+            if (item instanceof ConfigData){
+                ConfigData configData = (ConfigData) item;
+                if (configData.getNewValue() != null && configData.getNewValue() != configData.getInitialValue()){
+                    IadtController.get().getConfig().set(configData.getConfig(), configData.getNewValue());
                 }
             }
         }

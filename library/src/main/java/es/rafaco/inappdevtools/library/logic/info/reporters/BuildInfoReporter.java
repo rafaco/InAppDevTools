@@ -92,7 +92,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                 .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
                 .add("User email", buildInfo.getString(BuildInfo.USER_EMAIL))
                 .addButton(new RunButton("Send Email",
-                    R.drawable.ic_message_white_24dp,
+                    R.drawable.ic_email_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -258,8 +258,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
         group.setOverview(file_changes_count + " files");
         group.add(file_status);
-        group.addButton(new RunButton("View Changes",
-                R.drawable.ic_remove_circle_outline_white_24dp,
+        group.addButton(new RunButton("View Diff",
+                R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {

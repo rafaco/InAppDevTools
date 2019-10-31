@@ -113,7 +113,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         boolean isSelected = listener.isSelected(data.getUid());
         boolean isBeforeSelected = listener.isBeforeSelected(position);
 
-        if(IadtController.get().isDebug() && isSelected){
+        if(LogScreen.isLogDebug() && isSelected){
             Log.d(Iadt.TAG, "LogScreen - bindTo selection " + data.getUid() + " at " + position);
         }
 

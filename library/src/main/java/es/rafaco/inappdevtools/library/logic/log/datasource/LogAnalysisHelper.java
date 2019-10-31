@@ -30,42 +30,42 @@ import android.arch.persistence.db.SimpleSQLiteQuery;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 
 public class LogAnalysisHelper {
 
     public LogAnalysisHelper() {
     }
 
-    public List<AnalysisItem> getSessionResult(){
-        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseSession();
-        return analysisItems;
+    public List<AnalysisData> getSessionResult(){
+        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseSession();
+        return analysisData;
     }
 
-    public List<AnalysisItem> getSeverityResult(){
-        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseSeverity();
-        for (AnalysisItem item: analysisItems) {
+    public List<AnalysisData> getSeverityResult(){
+        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseSeverity();
+        for (AnalysisData item: analysisData) {
             String name = item.getName();
             item.setName(FriendlyLog.convertCharToLongString(name) + " (" + name + ")");
         }
-        return analysisItems;
+        return analysisData;
     }
 
-    public List<AnalysisItem> getCategoryResult(){
-        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseEventCategory();
-        return analysisItems;
+    public List<AnalysisData> getCategoryResult(){
+        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseEventCategory();
+        return analysisData;
     }
 
-    public List<AnalysisItem> getLogcatTagResult(){
-        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseLogcatTag();
-        return analysisItems;
+    public List<AnalysisData> getLogcatTagResult(){
+        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseLogcatTag();
+        return analysisData;
     }
 
-    public List<AnalysisItem> getCurrentFilterOverview(LogBackFilter backFilter) {
+    public List<AnalysisData> getCurrentFilterOverview(LogBackFilter backFilter) {
         LogQueryHelper helper = new LogQueryHelper(backFilter);
         SimpleSQLiteQuery currentFilterSize = helper.getFilterSizeQuery();
-        List<AnalysisItem> analysisItems = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);
-        return analysisItems;
+        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);
+        return analysisData;
     }
 
     public int getTotalLogSize() {

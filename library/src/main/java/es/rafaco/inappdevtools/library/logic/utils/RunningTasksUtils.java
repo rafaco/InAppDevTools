@@ -26,8 +26,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningTasksUtils {
@@ -108,10 +108,6 @@ public class RunningTasksUtils {
     }
 
     public static List<InfoEntryData> getTopActivityInfo() {
-        return getActivityInfo(0, true);
-    }
-
-    public static List<InfoEntryData> getBaseActivityInfo() {
         return getActivityInfo(0, true);
     }
 

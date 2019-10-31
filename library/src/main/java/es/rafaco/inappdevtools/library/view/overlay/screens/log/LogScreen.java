@@ -19,12 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.arch.persistence.db.SupportSQLiteQuery;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,12 +37,12 @@ import android.widget.TextView;
 //@import androidx.recyclerview.widget.LinearLayoutManager;
 //@import androidx.lifecycle.LiveData;
 //@import androidx.lifecycle.Observer;
-//@import androidx.lifecycle.Lifecycle;
-//@import androidx.lifecycle.LifecycleObserver;
-//@import androidx.lifecycle.OnLifecycleEvent;
 //@import androidx.lifecycle.ProcessLifecycleOwner;
 //@import androidx.paging.LivePagedListBuilder;
 //@import androidx.paging.PagedList;
+//@import androidx.sqlite.db.SupportSQLiteQuery;
+//@import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.appcompat.widget.PopupMenu;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
@@ -56,6 +53,9 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.arch.persistence.db.SupportSQLiteQuery;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 //#endif
 
 import com.google.gson.Gson;
@@ -185,7 +185,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
         LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig);
         if (pendingScrollToPosition){
-            if (isDebug()){
+            if (isLogDebug()){
                 Log.d(Iadt.TAG, "LogScreen - setInitialLoadKey to " + selectedItemPosition);
             }
             livePagedListBuilder.setInitialLoadKey(selectedItemPosition);
@@ -200,7 +200,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
 
-                if (isDebug())
+                if (isLogDebug())
                     Log.v(Iadt.TAG, "LogScreen onItemRangeInserted("
                             + positionStart + ", " + itemCount + ")");
 
@@ -231,7 +231,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     private Observer<PagedList<Friendly>> dataObserver = new Observer<PagedList<Friendly>>() {
         @Override
         public void onChanged(PagedList<Friendly> pagedList) {
-            if (isDebug())
+            if (isLogDebug())
                 Log.v(Iadt.TAG, "LogScreen observer OnChange (" + pagedList.size() + ")");
 
             //adapter.getCurrentList().getDataSource().invalidate();
@@ -242,12 +242,12 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     private void observeData() {
         logList.observe(ProcessLifecycleOwner.get(), dataObserver);
-        if (isDebug()) Log.v(Iadt.TAG, "LogScreen observer added");
+        if (isLogDebug()) Log.v(Iadt.TAG, "LogScreen observer added");
     }
 
     private void removeDataObserver() {
         logList.removeObservers(ProcessLifecycleOwner.get());
-        if (isDebug()) Log.v(Iadt.TAG, "LogScreen observer removed");
+        if (isLogDebug()) Log.v(Iadt.TAG, "LogScreen observer removed");
     }
 
     //endregion
@@ -307,7 +307,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         if (newFilter.getUiFilter().equals(filterHelper.getUiFilter())){
             if (isDebug()) Log.w(Iadt.TAG, "LogScreen updateFilter without filter changed");
         }
-        if (isDebug()) Log.v(Iadt.TAG, "LogScreen updateFilter");
+        if (isLogDebug()) Log.v(Iadt.TAG, "LogScreen updateFilter");
         if(logList != null) removeDataObserver();
         LogFilterStore.store(newFilter.getUiFilter());
         filterHelper = new LogFilterHelper(newFilter.getUiFilter());
@@ -350,12 +350,12 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
     private boolean updateSelectedById(long id) {
         if (id > -1){
-            if (isDebug()){
+            if (isLogDebug()){
                 Log.d(Iadt.TAG, "LogScreen - updateSelectedById started");
             }
             int position = calculatePositionAtFilter(id);
             if (position > -1){
-                if (isDebug()){
+                if (isLogDebug()){
                     Log.d(Iadt.TAG, "LogScreen - updateSelectedById for "
                             + id + " at " + position);
                 }
@@ -363,7 +363,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 setSelected(id, position);
                 return true;
             }
-            if (isDebug()){
+            if (isLogDebug()){
                 Log.d(Iadt.TAG, "LogScreen - updateSelectedById not found for " + id);
             }
         }
@@ -377,7 +377,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     public void clearSelected() {
-        if (isDebug()) {
+        if (isLogDebug()) {
             Log.d(Iadt.TAG, "LogScreen - cleared selection");
         }
         setSelected(-1, -1);
@@ -410,14 +410,14 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
 
         boolean isDeselectingSelected = (clickedId == selectedItemId);
         if (isDeselectingSelected) {
-            if (isDebug()) {
+            if (isLogDebug()) {
                 Log.d(Iadt.TAG, "LogScreen - deselected " + clickedId + " at " + clickedPosition);
             }
             previousPosition = selectedItemPosition;
             clearSelected();
         }
         else {
-            if (isDebug()) {
+            if (isLogDebug()) {
                 Log.d(Iadt.TAG, "LogScreen - selected " + clickedId + " at " + clickedPosition);
             }
             if (selectedItemId > -1) {
@@ -692,4 +692,13 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     //endregion
+
+
+    //TODO: relocate to a better place... DebugMode by categories?
+    // Used by Screen, ReaderService, QueryHelper, LogViewHolder...
+    // WARNING: enabling it produce too much log noise
+    public static boolean isLogDebug() {
+        boolean isLogDebug = false;
+        return IadtController.get().isDebug() && isLogDebug;
+    }
 }

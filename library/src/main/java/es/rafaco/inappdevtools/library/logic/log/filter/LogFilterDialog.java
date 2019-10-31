@@ -22,26 +22,30 @@ package es.rafaco.inappdevtools.library.logic.log.filter;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //@import androidx.appcompat.view.ContextThemeWrapper;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -54,6 +58,7 @@ public class LogFilterDialog {
     LogFilterHelper helper;
     private AlertDialog dialog;
     private AppCompatTextView currentOverview;
+    private int lastSelectedSessionId;
 
     public LogFilterDialog(Context context, LogFilterHelper helper, Runnable updateListener) {
         this.context = context;
@@ -213,28 +218,54 @@ public class LogFilterDialog {
             }
         });
 
-        RadioGroup sessionGroup = dialogView.findViewById(R.id.session_group);
+        final RadioGroup sessionGroup = dialogView.findViewById(R.id.session_group);
+        final Spinner sessionSpinner = dialogView.findViewById(R.id.session_spinner);
         final List<Integer> sessions = new ArrayList<>();
         sessions.add(R.id.session_all);
         sessions.add(R.id.session_current);
         sessions.add(R.id.session_previous);
         sessions.add(R.id.session_other);
-        //TODO: show session chooser: get(24) will crash
-        sessionGroup.check(sessions.get(filter.getSessionInt()));
+        lastSelectedSessionId = (filter.getSessionInt() < 3)? sessions.get(filter.getSessionInt())
+            : R.id.session_other;
+
+        final boolean isFirstSession = IadtController.getDatabase().sessionDao().count()==1;
+        if (isFirstSession) sessionGroup.findViewById(R.id.session_previous).setVisibility(View.GONE);
+        sessionGroup.check(lastSelectedSessionId);
         sessionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.session_other){
-                    //TODO: show session chooser
-                    filter.setSessionInt(3);
+                    sessionSpinner.performClick();
                     return;
                 }
                 else {
+                    lastSelectedSessionId = checkedId;
                     filter.setSessionInt(sessions.indexOf(checkedId));
                 }
                 updateOverview();
             }
         });
+        addFilterLine(dialogView, R.id.session_spinner, helper.getSessionOptions(), filter.getSessionInt(),
+                new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 3) {
+                    RadioButton button = sessionGroup.findViewById(sessions.get(position));
+                    button.setChecked(true);
+                }
+                else{
+                    filter.setSessionInt(position);
+                    updateOverview();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //TODO: PopUp dismiss should restore previous selection
+                RadioButton button = sessionGroup.findViewById(lastSelectedSessionId);
+                button.setChecked(true);
+            }
+        });
+
 
         RadioGroup severityGroup = dialogView.findViewById(R.id.severity_group);
         final List<Integer> severities = new ArrayList<>();

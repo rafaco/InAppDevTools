@@ -36,6 +36,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
 public class LogQueryHelper {
 
@@ -97,7 +98,7 @@ public class LogQueryHelper {
 
         queryString += " ORDER BY date ASC";
 
-        if (IadtController.get().isDebug())
+        if (LogScreen.isLogDebug())
             Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
 
         return new SimpleSQLiteQuery(queryString, args.toArray());
@@ -149,8 +150,9 @@ public class LogQueryHelper {
                         + " (count(*) * 100.0 / (select count(*) from friendly)) AS percentage");
         queryString = queryString.replace("ORDER BY date ASC", "");
 
-        if (IadtController.get().isDebug())
+        if (LogScreen.isLogDebug())
             Log.d(Iadt.TAG, "FILTER SIZE QUERY: " + queryString);
+
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 }

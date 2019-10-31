@@ -24,25 +24,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <es.rafaco.compat.AppCompatTextView
-        android:id="@+id/current_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Current overview"
-        android:textSize="18dp"
-        android:textStyle="normal|italic"
-        style="@style/content_margin"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"/>
-
-
     <es.rafaco.compat.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Type: "
         android:layout_marginBottom="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         style="@style/TextCondensedMedium"/>
@@ -124,6 +111,12 @@
                 android:width="0dp"
                 android:text="Other"
                 style="@style/ToggleButton"/>
+
+            <Spinner
+                android:id="@+id/session_spinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="invisible"/>
 
             <RadioButton
                 android:id="@+id/session_previous"
@@ -244,7 +237,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginBottom="40dp"
             android:orientation="vertical">
 
             <es.rafaco.compat.AppCompatTextView
@@ -268,5 +260,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/current_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Current overview"
+        android:textSize="18dp"
+        android:textStyle="normal|italic"
+        android:minLines="3"/>
 
 </LinearLayout>

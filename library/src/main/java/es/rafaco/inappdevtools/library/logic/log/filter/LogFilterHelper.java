@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -142,10 +142,10 @@ public class LogFilterHelper {
 
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> sessions = analysis.getSessionResult();
+        List<AnalysisData> sessions = analysis.getSessionResult();
         list.add("All");
         String sessionOrdinal;
-        for (AnalysisItem item : sessions) {
+        for (AnalysisData item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
             if (list.size() == 1){
                 list.add("Current (" + sessionOrdinal + ")");
@@ -185,9 +185,9 @@ public class LogFilterHelper {
 
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
-        List<AnalysisItem> categoryResult = analysis.getCategoryResult();
+        List<AnalysisData> categoryResult = analysis.getCategoryResult();
         list.add("All");
-        for (AnalysisItem item : categoryResult) {
+        for (AnalysisData item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -196,9 +196,9 @@ public class LogFilterHelper {
     // At UI, a dialog selector with checkboxes could work
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
+        List<AnalysisData> subcategoryResult = analysis.getLogcatTagResult();
         list.add("All");
-        for (AnalysisItem item : subcategoryResult) {
+        for (AnalysisData item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -209,7 +209,7 @@ public class LogFilterHelper {
     //region [ OVERVIEW ]
 
     public String getOverview(){
-        AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
+        AnalysisData currentAnalysisData = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
         String result = "";
 
         if (TextUtils.isEmpty(uiFilter.getText())
@@ -220,7 +220,7 @@ public class LogFilterHelper {
                 && uiFilter.getTagInt() == 0){
             result += "All from all sessions.";
             result += String.format(" %s%% of %s",
-            currentAnalysisItem.getPercentage(),
+            currentAnalysisData.getPercentage(),
             analysis.getTotalLogSize());
             return result;
         }
@@ -234,7 +234,11 @@ public class LogFilterHelper {
         if (uiFilter.getSessionInt() != 0){
             if(uiFilter.getSessionInt()==1){
                 result += "from current session" + ", ";
-            }else{
+            }
+            else if(uiFilter.getSessionInt()==2){
+                result += "from previous session" + ", ";
+            }
+            else{
                 long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
                 Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
@@ -272,8 +276,8 @@ public class LogFilterHelper {
         result.trim();
         result += ". ";
         result += String.format(" %s%% of total (%s/%s)",
-                currentAnalysisItem.getPercentage(),
-                currentAnalysisItem.getCount(),
+                currentAnalysisData.getPercentage(),
+                currentAnalysisData.getCount(),
                 analysis.getTotalLogSize());
 
         return result;
@@ -309,26 +313,25 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else{ //Previous and others
-            //TODO: better selection
             long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
             Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
-            backFilter.setFromDate(selected.getDate());
-            //TODO: filter toDate properly
+            if (selected != null) backFilter.setFromDate(selected.getDate());
+            
             Session next = DevToolsDatabase.getInstance().sessionDao().findById(target + 1);
-            backFilter.setToDate(next.getDate());
+            if (next != null) backFilter.setToDate(next.getDate());
         }
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "Session changed to: " + uiFilter.getSessionInt()
-                    + " (from " + backFilter.getFromDate() + ""
-                    + " to " + backFilter.getToDate() + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter Session " + uiFilter.getSessionInt()
+                    + " --> from " + backFilter.getFromDate() + ""
+                    + " to " + backFilter.getToDate());
     }
 
     public void populateBackSeverity(LogBackFilter backFilter){
         backFilter.setSeverities(getFilterSeverities(uiFilter.getSeverityInt()));
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "SeverityInt changed to: " + uiFilter.getSeverityInt()
-                    + " (" + getSeverityShortString() + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter SeverityInt " + uiFilter.getSeverityInt()
+                    + " --> " + getSeverityShortString());
     }
 
     protected List<String> getFilterSeverities(int selected) {
@@ -343,8 +346,12 @@ public class LogFilterHelper {
 
     public void populateBackType(LogBackFilter backFilter){
 
-        List<String> inSelection = new ArrayList<>();
         List<String> notInSelection = new ArrayList<>();
+        List<String> inSelection = new ArrayList<>();
+        if (backFilter.getCategories()!= null && !backFilter.getCategories().isEmpty()){
+            inSelection = backFilter.getCategories();
+        }
+
         if(uiFilter.getTypeInt() == 1){
             notInSelection.add("Logcat");
         }else if (uiFilter.getTypeInt() == 2){
@@ -353,24 +360,27 @@ public class LogFilterHelper {
         backFilter.setNotCategories(notInSelection);
         backFilter.setCategories(inSelection);
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "TypeInt changed to: " + uiFilter.getTypeInt() + " (IN " + inSelection
-                    + " and NOT IN " + notInSelection +")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter TypeInt: " + uiFilter.getTypeInt()
+                    + " --> IN " + inSelection
+                    + " and NOT IN " + notInSelection);
     }
 
     public void populateBackCategory(LogBackFilter backFilter){
-
-        List<String> inCats = new ArrayList<>();
+        List<String> inSelection = new ArrayList<>();
+        if (backFilter.getCategories()!= null && !backFilter.getCategories().isEmpty()){
+            inSelection = backFilter.getCategories();
+        }
         if (uiFilter.getCategoryInt() == 0){ //All
-            backFilter.setCategories(inCats);
+            backFilter.setCategories(inSelection);
         }else{
-            inCats.add(uiFilter.getCategoryName());
-            backFilter.setCategories(inCats);
+            inSelection.add(uiFilter.getCategoryName());
+            backFilter.setCategories(inSelection);
         }
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "CategoryInt changed to: " + uiFilter.getCategoryInt()
-                    + " (IN " + inCats + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter CategoryInt " + uiFilter.getCategoryInt()
+                    + " --> IN " + inSelection);
     }
 
     public void populateBackTag(LogBackFilter backFilter){
@@ -385,9 +395,13 @@ public class LogFilterHelper {
             //filter.setCategories(cats);
         }
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "TagInt changed to " + uiFilter.getTagInt()
-                    + " (IN subcategory " + subcats + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter TagInt " + uiFilter.getTagInt()
+                    + " --> IN subcategory " + subcats);
+    }
+
+    private boolean isDebug() {
+        return false;
     }
 
     //endregion

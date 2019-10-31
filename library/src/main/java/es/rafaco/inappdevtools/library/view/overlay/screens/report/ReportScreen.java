@@ -50,7 +50,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -203,8 +203,8 @@ public class ReportScreen extends Screen {
         ArrayList<DecoratedToolInfo> array = new ArrayList<>();
 
         LogAnalysisHelper helper = new LogAnalysisHelper();
-        List<AnalysisItem> sessionOptions = helper.getSessionResult();
-        for (final AnalysisItem item : sessionOptions) {
+        List<AnalysisData> sessionOptions = helper.getSessionResult();
+        for (final AnalysisData item : sessionOptions) {
             array.add(new DecoratedToolInfo(
                     "Session " + item.getName(),
                     item.getCount() + " log items " + item.getPercentage() + " %",

@@ -44,7 +44,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
@@ -65,12 +65,12 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
         descriptors.add(new FlexibleItemDescriptor(ButtonGroupData.class, ButtonGroupViewHolder.class, R.layout.flexible_item_button_group));
         descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
+        descriptors.add(new FlexibleItemDescriptor(InfoGroupData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
         descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
         descriptors.add(new FlexibleItemDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
-        descriptors.add(new FlexibleItemDescriptor(AnalysisItem.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
-        descriptors.add(new FlexibleItemDescriptor(ConfigItem.class, ConfigViewHolder.class, R.layout.flexible_item_config));
-        descriptors.add(new FlexibleItemDescriptor(InfoGroupData.class, InfoGroupViewHolder.class, R.layout.flexible_item_info_group));
+        descriptors.add(new FlexibleItemDescriptor(AnalysisData.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
+        descriptors.add(new FlexibleItemDescriptor(ConfigData.class, ConfigViewHolder.class, R.layout.flexible_item_config));
     }
 
     @Override
@@ -83,6 +83,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
                 Class<?> itemDataClass = getItemDataClass(position);
                 if (itemDataClass.equals(String.class)
                         || itemDataClass.equals(ButtonGroupData.class)
+                        || itemDataClass.equals(InfoGroupData.class)
                         || itemDataClass.equals(CardData.class)){
                     return manager.getSpanCount();
                 }
