@@ -120,7 +120,7 @@ public final class IadtController {
         }
 
         if (isDebug())
-            Log.d(Iadt.TAG, "Initializing background services...");
+            Log.d(Iadt.TAG, "IadtController initBackground");
 
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
@@ -139,6 +139,9 @@ public final class IadtController {
     }
 
     public void initDelayedBackground() {
+        if (isDebug())
+            Log.d(Iadt.TAG, "IadtController initDelayedBackground");
+
         sourcesManager = new SourcesManager(getContext());
         infoManager = new InfoManager(getContext());
 
@@ -147,15 +150,25 @@ public final class IadtController {
     }
 
     public void initForegroundIfPending(){
+        if (!AppUtils.isForegroundImportance(getContext()))
+            return;
+
         if (isPendingForegroundInit){
             initForeground();
+        }
+        else if (!OverlayService.isRunning){
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
+            overlayHelper = new OverlayHelper(getContext());
         }
     }
 
     private void initForeground(){
         initDelayedBackground();
 
-        ThreadUtils.printOverview("IadtController initForeground");
+        if (isDebug())
+            Log.d(Iadt.TAG, "IadtController initForeground");
+
         if (FirstStartUtil.isFirstStart()){
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
                     new Runnable() {
@@ -186,7 +199,7 @@ public final class IadtController {
         isPendingForegroundInit = false;
 
         if (isDebug())
-            Log.d(Iadt.TAG, "Initializing foreground services...");
+            Log.d(Iadt.TAG, "IadtController onInitForeground");
 
         if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();

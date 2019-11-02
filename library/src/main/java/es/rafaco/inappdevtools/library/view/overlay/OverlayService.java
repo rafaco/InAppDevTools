@@ -47,6 +47,7 @@ public class OverlayService extends Service {
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_TARGET = "EXTRA_INTENT_TARGET";
     private static final String EXTRA_INTENT_PARAMS = "EXTRA_INTENT_PARAMS";
+    public static Boolean isRunning = false;
     private static Boolean initialised = false;
 
     private OverlayManager overlayManager;
@@ -65,9 +66,11 @@ public class OverlayService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        isRunning = true;
         initialised = false;
         instance = this;
-        ThreadUtils.printOverview("OverlayService");
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "OverlayService - onCreate");
     }
 
     @Nullable
@@ -143,7 +146,7 @@ public class OverlayService extends Service {
 
     private void init() {
         if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "OverlayService - init()");
+            Log.d(Iadt.TAG, "OverlayService - init");
 
         overlayManager = new OverlayManager(this);
         initialised = true;
@@ -173,6 +176,9 @@ public class OverlayService extends Service {
         String target = intent.getStringExtra(EXTRA_INTENT_TARGET);
         String params = intent.getStringExtra(EXTRA_INTENT_PARAMS);
 
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "OverlayService - onStartCommand: " + action + " " + target + " " + params);
+
         try {
             if (action != null){
                 processIntentAction(action, target, params);
@@ -187,7 +193,7 @@ public class OverlayService extends Service {
                 throw e;
             }
             else{
-                FriendlyLog.logException("OverlayUiService unable to start "
+                FriendlyLog.logException("OverlayUiService crash catcher: "
                         + action + " " + target + " " + params,  e);
                 stopSelf();
             }
@@ -254,7 +260,7 @@ public class OverlayService extends Service {
             Log.v(Iadt.TAG, "OverlayService - onDestroy");
         if (overlayManager != null) overlayManager.destroy();
         instance = null;
-
+        isRunning = false;
         super.onDestroy();
     }
 
