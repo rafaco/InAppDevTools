@@ -21,10 +21,13 @@ package es.rafaco.inappdevtools.library.view.overlay;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 
 public class OverlayManager {
 
@@ -36,7 +39,6 @@ public class OverlayManager {
         this.context = context;
         this.layerManager = new LayerManager(context);
         this.screenManager = new ScreenManager(context, layerManager.getMainLayer());
-
 
         subscribeNewSyncWithAppImportance();
     }
@@ -55,7 +57,11 @@ public class OverlayManager {
 
     protected void showMain() {
         if (screenManager.getCurrentScreen() == null){
-            screenManager.goHome();
+            NavigationStep currentStep = IadtController.get().getNavigationManager().getCurrent();
+            if (currentStep !=null)
+                screenManager.goTo(currentStep.getClassName(), currentStep.getParams());
+            else
+                screenManager.goHome();
         }
 
         layerManager.toggleMainLayerVisibility(true);
@@ -83,12 +89,16 @@ public class OverlayManager {
     }
 
     private void resume() {
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "OverlayManager - resume");
         if (screenManager.getCurrentScreen() != null)
             screenManager.getCurrentScreen().resume();
         layerManager.toggleAllLayerVisibility(true);
     }
 
     private void pause() {
+        if (IadtController.get().isDebug())
+            Log.v(Iadt.TAG, "OverlayManager - pause");
         if (screenManager.getCurrentScreen() != null)
             screenManager.getCurrentScreen().pause();
         layerManager.toggleAllLayerVisibility(false);
@@ -121,6 +131,8 @@ public class OverlayManager {
         getController().getEventManager().subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
+                if (IadtController.get().isDebug())
+                    Log.v(Iadt.TAG, "OverlayManager - IMPORTANCE_FOREGROUND received: " + isForeground + ", " + isSuspended);
                 if (!isForeground && isSuspended) {
                     isForeground = true;
                     isSuspended = false;
@@ -132,6 +144,8 @@ public class OverlayManager {
         getController().getEventManager().subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
+                if (IadtController.get().isDebug())
+                    Log.v(Iadt.TAG, "OverlayManager - IMPORTANCE_BACKGROUND received: " + isForeground + ", " + isSuspended);
                 if (isForeground) {
                     isForeground = false;
                     isSuspended = true;
