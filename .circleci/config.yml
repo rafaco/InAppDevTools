@@ -15,14 +15,14 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
     - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
     - save_cache:
         paths:
         - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
     - run: ./gradlew build
     - run: echo "Build job called"
@@ -34,14 +34,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
       - run:
           name: Run Lint report on library
@@ -52,12 +52,12 @@ jobs:
           destination: library/reports
 
       - run:
-          name: Run Lint report on sample
-          command: ./gradlew :sample:lint
+          name: Run Lint report on demo
+          command: ./gradlew :demo:lint
       - store_artifacts:
-          name: Save Lint report on sample
-          path: sample/build/reports
-          destination: sample/reports
+          name: Save Lint report on demo
+          path: demo/build/reports
+          destination: demo/reports
 
       - run: 
           name: Run Sonar report and upload to SonarCloud
@@ -71,14 +71,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
       - run: echo "Release job called"
       #- run: ./gradlew -Prelease.useLastTag=true final
