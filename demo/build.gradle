@@ -125,7 +125,6 @@ inappdevtools {
     //// Runtime flags (used later on)
     //overlayEnabled = false
     //invocationByShake = false
-    //invocationByIcon = false
-    //invocationByNotification = false
+    //invocationByIcon = true
     //callDefaultCrashHandler = true
 }

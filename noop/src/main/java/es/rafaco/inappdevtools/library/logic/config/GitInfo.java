@@ -19,17 +19,16 @@
 
 package es.rafaco.inappdevtools.library.logic.config;
 
-public enum Config {
-
-    BUILD_TIME(),
-    BUILD_TIME_UTC(),
-    ENABLED(),
-    DEBUG(),
-    EMAIL(),
-    OVERLAY_ENABLED(),
-    INVOCATION_BY_SHAKE(),
-    INVOCATION_BY_ICON(),
-    INVOCATION_BY_NOTIFICATION(),
-    CALL_DEFAULT_CRASH_HANDLER(),
-    STICKY_SERVICE();
+public class GitInfo {
+    public static final String ENABLED = "";
+    public static final String REMOTE_NAME = "";
+    public static final String REMOTE_URL = "";
+    public static final String REMOTE_LAST = "";
+    public static final String TAG = "";
+    public static final String INFO = "";
+    public static final String TAG_DISTANCE = "";
+    public static final String LOCAL_BRANCH = "";
+    public static final String LOCAL_COMMITS = "";
+    public static final String HAS_LOCAL_CHANGES = "";
+    public static final String LOCAL_CHANGES = "";
 }

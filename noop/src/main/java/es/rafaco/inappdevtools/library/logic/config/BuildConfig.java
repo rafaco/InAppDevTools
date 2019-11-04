@@ -19,33 +19,17 @@
 
 package es.rafaco.inappdevtools.library.logic.config;
 
-import android.content.Context;
+public enum BuildConfig {
 
-public class ConfigManager {
-
-    public ConfigManager(Context context) {}
-
-    public Object get(BuildConfig config) {
-        return null;
-    }
-
-    public void set(BuildConfig config, Object value) {}
-
-    public boolean getBoolean(BuildConfig config) {
-        return false;
-    }
-
-    public void setBoolean(BuildConfig config, boolean value) {}
-
-    public String getString(BuildConfig config) {
-        return "";
-    }
-
-    public void setString(BuildConfig config, String value) {}
-
-    public long getLong(BuildConfig config) {
-        return -1;
-    }
-
-    public void setLong(BuildConfig config, long value) {}
+    EMAIL(),
+    ENABLED(),
+    ENABLED_ON_RELEASE(),
+    DEBUG(),
+    SOURCE_INCLUSION(),
+    SOURCE_INSPECTION(),
+    OVERLAY_ENABLED(),
+    INVOCATION_BY_SHAKE(),
+    INVOCATION_BY_ICON(),
+    INVOCATION_BY_NOTIFICATION(),
+    CALL_DEFAULT_CRASH_HANDLER();
 }

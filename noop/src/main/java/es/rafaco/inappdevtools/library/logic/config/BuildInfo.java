@@ -19,33 +19,15 @@
 
 package es.rafaco.inappdevtools.library.logic.config;
 
-import android.content.Context;
-
-public class ConfigManager {
-
-    public ConfigManager(Context context) {}
-
-    public Object get(BuildConfig config) {
-        return null;
-    }
-
-    public void set(BuildConfig config, Object value) {}
-
-    public boolean getBoolean(BuildConfig config) {
-        return false;
-    }
-
-    public void setBoolean(BuildConfig config, boolean value) {}
-
-    public String getString(BuildConfig config) {
-        return "";
-    }
-
-    public void setString(BuildConfig config, String value) {}
-
-    public long getLong(BuildConfig config) {
-        return -1;
-    }
-
-    public void setLong(BuildConfig config, long value) {}
+public class BuildInfo {
+    public static final String BUILD_TIME = "";
+    public static final String BUILD_TIME_UTC = "";
+    public static final String HOST_NAME = "";
+    public static final String HOST_ADDRESS = "";
+    public static final String HOST_OS = "";
+    public static final String HOST_VERSION = "";
+    public static final String HOST_ARCH = "";
+    public static final String GRADLE_VERSION = "";
+    public static final String USER_NAME = "";
+    public static final String USER_EMAIL = "";
 }

@@ -127,14 +127,10 @@ After the [installation](#setup) you only need to generate a debug build of your
 
 ### Invocation <a name="invocation"/>
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
-- Shake your device
+- Shake your device with your app on foreground
 - Tap our floating icon
-- Touch our notification
+- Tap our notification (disabled by default, enable it with configuration)
 - Or programmatically calling `Iadt.show();`
-```java
-
-Iadt.hide();
-```
 
 
 ### Configuration <a name="configuration"/>
@@ -166,8 +162,8 @@ Available properties:
 | `sourceInspection` | boolean | true | Disable source features and source inclusion. Read [Exposed sources disclaimer](#exposed_sources) |
 | `overlayEnabled` | boolean | true | Disable our overlay interface  |
 | `invocation_by_shake` | boolean | true | Disable opening our UI on device shake |
-| `invocationByIcon` | boolean | false | Enable a permanent overlay icon to open our UI |
-| `invocationByNotification` | boolean | true | Disable showing our notification to open the UI |
+| `invocationByIcon` | boolean | true | Enable a permanent overlay icon to open our UI |
+| `invocationByNotification` | boolean | false | Show a permanent notification to open the UI. Warning: it currently use a foreground service so your app will not be killed on background |
 | `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
 <!-- ## Customization <a name="customization"/> -->
 
