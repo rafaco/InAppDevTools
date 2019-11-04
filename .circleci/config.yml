@@ -24,13 +24,13 @@ jobs:
         - ~/.gradle
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
-    - run: ./gradlew :plugin:publishToMavenLocal
+    - run: ./gradlew :inappdevtools-plugin:publishToMavenLocal
     - run: echo "Plugin publish to local job called"
 
     - run: ./gradlew :compat:assembleSupport
     - run: echo "Compat Support build job called"
 
-    - run: ./gradlew :inappdevtools:assembleSupport
+    - run: ./gradlew :library:assembleSupport
     - run: echo "Library Support build job called"
 
     - run: ./gradlew :demo:assembleSupport
