@@ -30,12 +30,12 @@ jobs:
     - run:
         name: Assemble Compat Support
         command: ./gradlew :compat:assembleSupport
-  - run:
-      name: Assemble Library Support
-      command: ./gradlew :library:assembleSupport
-  - run:
-      name: Assemble Demo Support
-      command: ./gradlew :demo:assembleSupport
+    - run:
+        name: Assemble Library Support
+        command: ./gradlew :library:assembleSupport
+    - run:
+        name: Assemble Demo Support
+        command: ./gradlew :demo:assembleSupport
 
   analize:
     <<: *defaults
