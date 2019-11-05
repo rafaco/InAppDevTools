@@ -11,19 +11,19 @@ There are many ways to contribute, starting from telling your coworkers or in yo
 You can start right now by giving this repo a GitHub start or telling your developer friends about us at work or in your social networks. It would be awesome if you write a tutorial or a blog post. Please notify us about publications and we will link it.
 
 ## Feedback
-In this early stage your feedback is so valuable for us. Share us any thoughts or experiences you have had using our library, what did you like, what annoy you, what would you change... Open a [Feedback issues](https://github.com/rafaco/InAppDevTools/issues) or mail us privately.
+In this early stage your feedback is so valuable for us. Share us any thoughts or experiences you have had using our library, what did you like, what annoy you, what would you change... Open a [Feedback issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or mail us privately.
 
 ## Bug report
-Open a [Bug Report issues](https://github.com/rafaco/InAppDevTools/issues) to let us know about any failure.
+Open a [Bug Report issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) to let us know about any failure.
 
 ## Security issues and private requests:
 If you find a security vulnerability, do NOT open a public issue. Email [inappdevtools@gmail.com](mailto:inappdevtools@gmail.com) instead.
 
 ## Feature request
-Open a [Feature Request issues](https://github.com/rafaco/InAppDevTools/issues) to suggest any idea for this project.
+Open a [Feature Request issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) to suggest any idea for this project.
 
 ## Support
-Work in progress: We have to setup a proper support channel. Meanwhile you can open a [Support issues](https://github.com/rafaco/InAppDevTools/issues) or mail us with any question you may have.
+Work in progress: We have to setup a proper support channel. Meanwhile you can open a [Support issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or mail us with any question you may have.
 
 ## Private contact
 If you prefer to contact us directly in a private way, you can always send us an email to [inappdevtools@gmail.com](mailto:inappdevtools@gmail.com).
@@ -33,21 +33,21 @@ If you prefer to contact us directly in a private way, you can always send us an
 
 ## Building our project
 
-Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](https://github.com/rafaco/InAppDevTools/README.md#setup) and rebuild your project.
+Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project.
 
 ### Building artifacts
 
-All artifacts are generated from [this GitHub repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of module and variant.[Readme](https://github.com/rafaco/InAppDevTools/Readme.md#setup) 
+All artifacts are generated from [this GitHub repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of module and variant.
 
 | Artifact | Module | Variant | Description | Publication |
 | --- | --- | --- | --- | --- |
-| es.rafaco.inappdevtools | plugin | - | IADT plugin for Gradle| [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) |
-| es.rafaco.inappdevtools:support | library | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
-| es.rafaco.inappdevtools:androidx | library | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
-| es.rafaco.inappdevtools:noop | noop | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
-| es.rafaco.compat:support | compat | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
-| es.rafaco.compat:androidx | compat | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
-| es.rafaco.iadt.demo | demo | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
+| es.rafaco.inappdevtools | [plugin](/plugin) | - | IADT plugin for Gradle| [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) |
+| es.rafaco.inappdevtools:support | [library](/library) | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
+| es.rafaco.inappdevtools:androidx | [library](/library) | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
+| es.rafaco.inappdevtools:noop | [noop](/noop) | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
+| es.rafaco.compat:support | [compat](/compat) | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
+| es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
+| es.rafaco.iadt.demo | [demo](/demo) | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
 
 ## Continuous Integration <a name="ci"/>
 Work in progress: We currently build our Support flavor and perform lint analisys. Unit test not implemented.
