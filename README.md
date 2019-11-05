@@ -147,7 +147,7 @@ Available properties:
 | `sourceInclusion` | boolean | true | Disable including this module sources in your apk. Read [Exposed sources disclaimer](#exposed_sources) |
 | `sourceInspection` | boolean | true | Disable source features and source inclusion. Read [Exposed sources disclaimer](#exposed_sources) |
 | `overlayEnabled` | boolean | true | Disable our overlay interface  |
-| `invocation_by_shake` | boolean | true | Disable opening our UI on device shake |
+| `invocationByShake` | boolean | true | Disable opening our UI on device shake |
 | `invocationByIcon` | boolean | true | Enable a permanent overlay icon to open our UI |
 | `invocationByNotification` | boolean | false | Show a permanent notification to open the UI. Warning: it currently use a foreground service so your app will not be killed on background |
 | `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
