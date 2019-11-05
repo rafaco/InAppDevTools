@@ -38,7 +38,7 @@ For extended feature description, visit our wiki: [Feature description](https://
 - minSdkVersion >= 16 (Jelly Bean). Check it at your app/build.gradle
 - Minimun Gradle version: //TODO
 
-### Express setup <a name="basic"/>
+### Setup <a name="basic"/>
 You only need to modify 2 gradle files. 
 
 On your **root build.gradle** file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
@@ -57,7 +57,13 @@ allprojects {
 }
 ```
 
-Then, on your **app build.gradle**, apply our plugin, add targetCompatibility with Java8, and include our library in dependencies. Latest version is [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=flat-square)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) 
+Then, on your **app build.gradle**, apply our plugin, add targetCompatibility with Java8, and include our library in dependencies. You have to choose between `androidx` or `support` artifact according to your Android libraries and `noop` artifact is recommended for your release compilations. 
+
+| Artifact | Version | Description |
+|---|---|---|
+|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operational, for your release compilations. Compatible with AndroidX and Support libraries.| 
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -70,7 +76,10 @@ android {
     }
 }
 dependencies {
-    implementation 'es.rafaco.inappdevtools:support:0.0.52'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.52'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.52'
+    
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.52'
 }
 ```
 
@@ -79,29 +88,6 @@ That could also compromise hardcoded API keys, passwords and other confidencial 
 
 Ready to go. Just run a debug build and shake your app!
 
-
-### Optimize your builds <a name="noop"/>
-If your app use AndroidX libraries, we provide an optimized artifact for you. It currently need Jettifier enabled due to a transitive dependency (WIP). 
-
-We also provide a `noop` artifact recommended for your release compilations. Operational artifacts (`androidx` or `support`) are automatically disabled for your release builds but they needlessly increase your release apk size.
-
-To add conditional Gradle dependencies, prepend build type or your flavor name when including our dependencies: 
-```gradle
-dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.52'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.52'
-    
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.52'
-}
-```
-
-| Artifact | Version | Description |
-|---|---|---|
-|support | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier enabled is curretly needed.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operation. Recommended for your release versions with AndroidX or Support libraries.| 
-
-Note: Don't include the "v" character in your dependencies.
 
 ### Enable network inspection (optional) <a name="network"/>
 If your app use Retrofit, we can record all network communications for you, allowing to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
