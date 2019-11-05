@@ -73,7 +73,8 @@ dependencies {
     implementation 'es.rafaco.inappdevtools:support:0.0.52'
 }
 ```
-Our default configuration will enable InAppDevTools only for your debug builds. When enabled **all your source code is exposed at our UI and can be extracted from your APK**, including hardcoded API keys, passwords or confidencial data. You have few ways to [limit your source code exposition](#exposed_sources).
+Our plugin gather build information and sources, and include them in your apk. 
+:warning: From now on, on your debug compilations **your source code will be exposed on our UI and it could be extracted from your APK** wich could include hardcoded API keys, passwords or other confidencial data. Check out [limit your app source code exposition](#exposed_sources) :warning:
 
 You can already use our library in your app: just run a debug build and shake your app!
 
@@ -110,7 +111,7 @@ Retrofit retrofit = new Retrofit.Builder()
                 .build();
 ```
 
-### Including additional gradle modules <a name="modules"/>
+### Including additional gradle modules (optional)  <a name="modules"/>
 You can easily include your sources from other submodules from your project. We only currently support Android modules: Application, Library or Feature. 
 
 To do so just apply our plugin to their build.gradle file:
@@ -223,7 +224,7 @@ Add them on startup (i.e. onCreate of your app or main activity) or dynamically 
 
 ## Contributing and building instructions [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
 
-First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving a star to this repo on github or recommending this library to your friends or sending us your feedback. Check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving us a :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:. Check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
 
 ## About the author
