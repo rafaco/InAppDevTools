@@ -41,7 +41,7 @@ For extended feature description, visit our wiki: [Feature description](https://
 ### Express setup <a name="basic"/>
 You only need to modify 2 gradle files. 
 
-On your **root** build.gradle file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
+On your **root build.gradle** file, import our plugin and add the JitPack repository. Plugin closure should be just after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
 
 ```gradle
 buidscript {...}
@@ -57,7 +57,7 @@ allprojects {
 }
 ```
 
-Then, on your **app** build.gradle, add targetCompatibility with Java8, apply our plugin and include our library in dependencies. Latest version is [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=flat-square)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) 
+Then, on your **app build.gradle**, apply our plugin, add targetCompatibility with Java8, and include our library in dependencies. Latest version is [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=flat-square)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) 
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -73,12 +73,9 @@ dependencies {
     implementation 'es.rafaco.inappdevtools:support:0.0.52'
 }
 ```
-This setup enable InAppDevTools only for your debug builds but it have some side effects solved in following sections. You can already give a try to our library, just build a debug version of your app and shake it!
+Our default configuration will enable InAppDevTools only for your debug builds. When enabled **all your source code is exposed at our UI and can be extracted from your APK**, including hardcoded API keys, passwords or confidencial data. You have few ways to [limit your source code exposition](#exposed_sources).
 
-### Source code exposition disclaimer <a name="sources_disclaimer"/>
-Using default configuration, on your debug builds **all your source code can be view in our UI, can be shared and can be extracted from your APK**. This could also include hardcoded API keys or passwords.
-
-You can limit this behaviour by using our [configuration](#exposed_sources).
+You can already use our library in your app: just run a debug build and shake your app!
 
 ### Optimize your builds <a name="noop"/>
 If your app use AndroidX libraries, we provide an optimized artifact for you. It currently need Jettifier enabled due to a transitive dependency (WIP). 
@@ -169,7 +166,7 @@ Available properties:
 
 ### Limiting sources exposition <a name="exposed_sources"/>
 
-When this library is enabled, **your source code can be view in our ui and they can also be extracted from your apk files**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use `noop` artifact for your release.
+When this library is enabled, **your source code can be accessed at our UI and they can also be extracted from your APK**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use `noop` artifact for your release.
 
 If you don't want to show all or some of your proprietary sources in your debug builds, you have few options:
 
