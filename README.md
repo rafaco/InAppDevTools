@@ -207,20 +207,6 @@ Iadt.addRunButton(new RunButton("Your text",
 Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in). You can also specify an icon, a background color or a callback.
 
 
-## Contributing and building instructions [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
-
-First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool.
-
-There are many ways to contribute starting from recommending this library to your friends or sending us your feedback. Check out our [CONTRIBUTING](https://github.com/rafaco/InAppDevTools/CONTRIBUTING.md) reference with instructions to build our project.
-
-
-### About the author
-
-I'm a Senior Software Engineer and I started this project as a personal tool to support my daily duties. I have always worked on proprietary software around Spain and UK, this is my first open source endeavour and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
- 
-After 2 years of overnight coding fun, I've left my work position to fully focus on this. I hope to publish a fully functional version before Christmas 2019.
-
-
 ## Apps using this library <a name="usages"/>
 - Your app can be listed here, just ask me for it! 
 
@@ -236,6 +222,18 @@ After 2 years of overnight coding fun, I've left my work position to fully focus
 - To [@SalomonBrys](https://github.com/SalomonBrys) for [ANR-WatchDog](https://github.com/SalomonBrys/ANR-WatchDog)
 - To [@nisrulz](https://github.com/nisrulz) for [EasyDeviceInfo](https://github.com/nisrulz/easydeviceinfo)
 - To [Android Open Source Project](https://source.android.com/) for [Arch](https://developer.android.com/topic/libraries/architecture)
+
+
+## Contributing and building instructions [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+
+First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving a star to this repo on github or recommending this library to your friends or sending us your feedback. Check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+
+
+## About the author
+
+I'm a Senior Software Engineer and I started this project as a personal tool to support my daily duties. I have always worked on proprietary software around Spain and UK, this is my first open source endeavour and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
+ 
+After 2 years of overnight coding fun, I've left my work position to fully focus on this. I hope to publish a fully functional version before Christmas 2019.
 
 
 ## License <a name="license"/>
@@ -255,4 +253,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 This project modify, include and use products with separate copyright
-notices and license terms. For details, see [LICENSE](https://github.com/rafaco/InAppDevTools/blob/master/LICENSE)
+notices and license terms. For details, see [LICENSE](LICENSE)
