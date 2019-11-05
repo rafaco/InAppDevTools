@@ -73,10 +73,12 @@ dependencies {
     implementation 'es.rafaco.inappdevtools:support:0.0.52'
 }
 ```
-Our plugin gather build information and sources, and include them in your apk. 
-:warning: From now on, on your debug compilations **your source code will be exposed on our UI and it could be extracted from your APK** wich could include hardcoded API keys, passwords or other confidencial data. Check out [limit your app source code exposition](#exposed_sources) :warning:
 
-You can already use our library in your app: just run a debug build and shake your app!
+:warning: **Your source code will be exposed on your debug compilations** :warning: 
+That could also compromise hardcoded API keys, passwords and other confidencial data. Our plugin include your sources in your debug APKs for our Source Inspection feature, but you can [disable or limit your source code exposition](#exposed_sources).
+
+Ready to go. Just run a debug build and shake your app!
+
 
 ### Optimize your builds <a name="noop"/>
 If your app use AndroidX libraries, we provide an optimized artifact for you. It currently need Jettifier enabled due to a transitive dependency (WIP). 
