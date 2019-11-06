@@ -28,6 +28,9 @@ jobs:
         name: Publish plugin to local
         command: ./gradlew :inappdevtools-plugin:publishToMavenLocal
     - run:
+        name: Assemble Noop
+        command: ./gradlew :noop:assembleDebug
+    - run:
         name: Assemble Compat Support
         command: ./gradlew :compat:assembleSupport
     - run:
@@ -54,7 +57,7 @@ jobs:
 
       - run:
           name: Run Lint report on library
-          command: ./gradlew :library:lint
+          command: ./gradlew :library:lintSupport
       - store_artifacts:
           name: Save Lint report on library
           path: library/build/reports
@@ -62,7 +65,7 @@ jobs:
 
       - run:
           name: Run Lint report on demo
-          command: ./gradlew :demo:lint
+          command: ./gradlew :demo:lintSupport
       - store_artifacts:
           name: Save Lint report on demo
           path: demo/build/reports
