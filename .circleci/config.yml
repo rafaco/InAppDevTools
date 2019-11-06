@@ -54,7 +54,7 @@ jobs:
 
       - run:
           name: Run Lint report on library
-          command: ./gradlew :inappdevtools:lint
+          command: ./gradlew :library:lint
       - store_artifacts:
           name: Save Lint report on library
           path: library/build/reports
