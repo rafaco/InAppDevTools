@@ -25,17 +25,17 @@ android {
 
     flavorDimensions "compatibility"
     productFlavors {
-        androidx {
-            dimension "compatibility"
-            processor.symbols "ANDROIDX"
-            matchingFallbacks = ['debug', 'release']
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        }
         support {
             dimension "compatibility"
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+        androidx {
+            dimension "compatibility"
+            processor.symbols "ANDROIDX"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
     }
 
