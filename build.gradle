@@ -93,6 +93,7 @@ subprojects {
 
 
 sonarqube {
+    androidVariant 'supportDebug'
     properties {
         property "sonar.projectKey", "rafaco_InAppDevTools"
         property "sonar.organization", "rafaco-github"
