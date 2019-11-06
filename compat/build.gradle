@@ -3,17 +3,16 @@ apply from: '../compat/compat.gradle'
 apply from: 'publish.gradle'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion rootProject.ext.libraryCompileSdkVersion
+    buildToolsVersion rootProject.ext.libraryBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 1
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.libraryMinSdkVersion
+        targetSdkVersion rootProject.ext.libraryTargetSdkVersion
+        versionCode rootProject.ext.libraryVersionCode
+        versionName rootProject.ext.libraryWorkingVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
