@@ -25,20 +25,20 @@ jobs:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
     - run:
-        name: Publish plugin to local
+        name: Assemble PLUGIN and publish to local
         command: ./gradlew :inappdevtools-plugin:publishToMavenLocal
     - run:
-        name: Assemble Noop
+        name: Assemble NOOP
         command: ./gradlew :noop:assembleDebug
     - run:
-        name: Assemble Compat Support
-        command: ./gradlew :compat:assembleSupport
+        name: Assemble COMPAT Support
+        command: ./gradlew :compat:assembleSupportDebug
     - run:
-        name: Assemble Library Support
-        command: ./gradlew :library:assembleSupport
+        name: Assemble LIBRARY Support
+        command: ./gradlew :library:assembleSupportDebug
     - run:
-        name: Assemble Demo Support
-        command: ./gradlew :demo:assembleSupport
+        name: Assemble DEMO Support
+        command: ./gradlew :demo:assembleSupportDebug
 
   analize:
     <<: *defaults
@@ -57,7 +57,7 @@ jobs:
 
       - run:
           name: Run Lint report on library
-          command: ./gradlew :library:lintSupport
+          command: ./gradlew :library:lintSupportDebug
       - store_artifacts:
           name: Save Lint report on library
           path: library/build/reports
@@ -65,7 +65,7 @@ jobs:
 
       - run:
           name: Run Lint report on demo
-          command: ./gradlew :demo:lintSupport
+          command: ./gradlew :demo:lintSupportDebug
       - store_artifacts:
           name: Save Lint report on demo
           path: demo/build/reports
