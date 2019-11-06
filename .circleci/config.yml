@@ -28,19 +28,19 @@ jobs:
         name: Assemble PLUGIN and publish to local
         command: ./gradlew :inappdevtools-plugin:publishToMavenLocal
     - run:
-        name: Assemble NOOP
+        name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
     - run:
-        name: Assemble COMPAT Support
+        name: Assemble COMPAT SupportDebug
         command: ./gradlew :compat:assembleSupportDebug
     - run:
-        name: Assemble LIBRARY Support
+        name: Assemble LIBRARY SupportDebug
         command: ./gradlew :library:assembleSupportDebug
     - run:
-        name: Assemble DEMO Support
+        name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug
 
-  analize:
+  report:
     <<: *defaults
     steps:
       - checkout
@@ -56,28 +56,28 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
       - run:
-          name: Run Lint report on library
+          name: Lint report LIBRARY SupportDebug
           command: ./gradlew :library:lintSupportDebug
       - store_artifacts:
-          name: Save Lint report on library
+          name: Saving Lint report
           path: library/build/reports
           destination: library/reports
 
       - run:
-          name: Run Lint report on demo
+          name: Lint report DEMO SupportDebug
           command: ./gradlew :demo:lintSupportDebug
       - store_artifacts:
-          name: Save Lint report on demo
+          name: Saving Lint report
           path: demo/build/reports
           destination: demo/reports
 
       - run: 
-          name: Run Sonar report and upload to SonarCloud
+          name: Sonar report ALL SupportDebug and upload to SonarCloud
           command: ./gradlew sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
-      
+
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
-  release:
+  deploy:
     <<: *defaults
     steps:
       - checkout
@@ -92,8 +92,11 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
-      - run: echo "Release job called"
-      #- run: ./gradlew -Prelease.useLastTag=true final
+      - run: echo "Deploy job DISABLED"
+#      - run:
+#          name: Deploying...
+#          command: ./gradlew -Prelease.useLastTag=true final
+
 
 
 workflows:
@@ -105,16 +108,16 @@ workflows:
           tags:
             only: /.*/
 
-    - analize:      # Fired by commit on any branch (default) plus any tag
+    - report:      # Fired by commit on any branch (default) plus any tag
         requires:
         - build
         filters:
           tags:
             only: /.*/
 
-    - release:      # Fired by tags only
+    - deploy:      # Fired by Github releases (tags starting with 'v.')
         requires:
-          - analize
+          - report
         filters:
           tags:
             only: /^v.*/

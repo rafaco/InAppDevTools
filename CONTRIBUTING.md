@@ -31,13 +31,13 @@ If you prefer to contact us directly in a private way, you can always send us an
 
 # Coding contributions
 
-## Building our project
+Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project. 
 
-Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project.
+Following instructions are for user that want build their own version of InAppDevTools with changes. Remember to contribute your changes to the community using a PR.
 
-### Building artifacts
+### Artifacts
 
-All artifacts are generated from [this GitHub repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of module and variant.
+All artifacts are generated from a single project [hosted in this repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of Gradle module and variant.
 
 | Artifact | Module | Variant | Description | Publication |
 | --- | --- | --- | --- | --- |
@@ -49,26 +49,9 @@ All artifacts are generated from [this GitHub repo](https://github.com/rafaco/In
 | es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
 | es.rafaco.iadt.demo | [demo](/demo) | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
 
-## Continuous Integration <a name="ci"/>
-Work in progress: We currently build our Support flavor and perform lint analisys. Unit test not implemented.
-
-[![CircleCI](https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=svg)](https://circleci.com/gh/rafaco/InAppDevTools/tree/master) 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=alert_status)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools) 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=security_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=bugs)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=code_smells)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=coverage)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
 ### Build configurations
-We have added 23 shared build configurations to the project. Browse their categories on Android Studio for a quick usage of build tasks.
+We have added 23 shared build configurations to the project. Browse their categories on Android Studio for our custom build tasks.
+//TODO: document build configurations.
 
 ### Switching Androidx/Support build
 
@@ -86,9 +69,37 @@ android.enableJetifier=false
 
 Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other side around. Test your build switching to Androidx but perform a last build using a support build type to restore support sources before your PR.
 
-### Coding standard
-//TODO
+## Continuous Integration <a name="ci"/>
 
+We use CircleCi to automatise tests for commit and for PR. We currently only test support builds and generate some reports. Unit test are not implemented.
+
+1. Build
+    1. Assemble PLUGIN and publish to local
+    2. Assemble NOOP Debug
+    3. Assemble COMPAT SupportDebug
+    4. Assemble LIBRARY SupportDebug
+    5. Assemble DEMO SupportDebug
+2. Report:
+    1. Lint report LIBRARY SupportDebug
+    2. Lint report DEMO SupportDebug
+    3. Sonar report ALL SupportDebug and upload to SonarCloud
+
+Following badges are related to master branch. For other branches check at [https://circleci.com/gh/rafaco/InAppDevTools/](https://circleci.com/gh/rafaco/InAppDevTools/) after committing your branch and before sending your Pull Request.
+
+[![CircleCI](https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=svg)](https://circleci.com/gh/rafaco/InAppDevTools/tree/master) 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=alert_status)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools) 
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=security_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=bugs)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=code_smells)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=coverage)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
 
 ### Pull requests
 
@@ -97,5 +108,7 @@ Use a Pull Request to send us your changes and we will integrate them as soon as
 Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github). Feel free to ask for help; everyone is a beginner at first 😸
 
 
+## Coding standards
+//TODO
 
 _Ideas extracted from the following [template] (https://github.com/nayafia/contributing-template)._
