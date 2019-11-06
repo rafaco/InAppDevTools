@@ -128,3 +128,7 @@ inappdevtools {
     //invocationByIcon = true
     //callDefaultCrashHandler = true
 }
+
+sonarqube {
+    androidVariant 'supportDebug'
+}

@@ -122,3 +122,8 @@ dependencies {
     testSupportImplementation "android.arch.core:core-testing:$rootProject.ext.librarySupportArchVersion"
     testSupportImplementation "android.arch.paging:common:$rootProject.ext.librarySupportPagingVersion"
 }
+
+
+sonarqube {
+    androidVariant 'supportDebug'
+}
