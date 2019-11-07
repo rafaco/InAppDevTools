@@ -6,13 +6,16 @@ ext {
 
     bintrayDynamicPkg = true
 
-    /*bintrayPkg = "androidx"
-    projectName = 'IADT-AndroidX'
-    projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'*/
-
-    bintrayPkg = "support"
-    projectName = 'IADT-Support'
-    projectDesc = 'Support flavor of es.rafaco.inappdevtools'
+    def isAndroidX = project.rootProject.properties['android.useAndroidX'] == 'true'
+    if (isAndroidX){
+        bintrayPkg = "androidx"
+        projectName = 'IADT-AndroidX'
+        projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'
+    }else{
+        bintrayPkg = "support"
+        projectName = 'IADT-Support'
+        projectDesc = 'Support flavor of es.rafaco.inappdevtools'
+    }
 }
 
 //Publish to bintray

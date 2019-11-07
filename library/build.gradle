@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'es.rafaco.inappdevtools'
+//apply plugin: 'es.rafaco.inappdevtools'
 apply from: '../compat/compat.gradle'
 apply from: 'publish.gradle'
 
@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.libraryMinSdkVersion
         targetSdkVersion rootProject.ext.libraryTargetSdkVersion
         versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryWorkingVersion
+        versionName rootProject.ext.libraryVersionName
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -65,10 +65,10 @@ android.libraryVariants.all { variant ->
     }
     else */
     if (variant.flavorName == 'androidx'){
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
     }
     else{
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
     }
 }
 
@@ -122,6 +122,24 @@ dependencies {
     testSupportImplementation "android.arch.core:core-testing:$rootProject.ext.librarySupportArchVersion"
     testSupportImplementation "android.arch.paging:common:$rootProject.ext.librarySupportPagingVersion"
 }
+
+/*inappdevtools {
+    //// User features fags
+    //email = 'inappdevtools@gmail.com'
+
+    //// Build flags (affect plugin)
+    //enabled = true
+    //enabledOnRelease = true
+    debug = true
+    //sourceInclusion = false
+    //sourceInspection = false
+
+    //// Runtime flags (used later on)
+    //overlayEnabled = false
+    //invocationByShake = false
+    //invocationByIcon = true
+    //callDefaultCrashHandler = true
+}*/
 
 
 sonarqube {

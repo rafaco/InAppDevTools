@@ -54,9 +54,9 @@ android.applicationVariants.all { variant ->
     }
     else */
     if (variant.flavorName == 'androidx') {
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryPublishedVersion"
+        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
     } else {
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryPublishedVersion"
+        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
     }
 }
 

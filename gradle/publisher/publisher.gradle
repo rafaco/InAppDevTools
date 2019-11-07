@@ -26,7 +26,7 @@ ext {
 }
 
 group = groupId
-version = libraryWorkingVersion
+version = libraryVersionName
 
 def publicationNames = []
 def pomConfig = {
@@ -56,13 +56,14 @@ publishing.publications {
 
         // Prevents publishing debug library
         if (variant.buildType.name == "debug") {
-            println("- Skipped publication of ${variant.flavorName} ${variant.buildType.name}")
+            //println("- Skipped publication for ${variant.flavorName} ${variant.buildType.name}")
             return
         }
 
         //Prevent other variants when using DynamicPkgName
         if (flavored && bintrayDynamicPkg == true && variant.flavorName != bintrayPkg){
-            println("- Skipped publication of ${variant.flavorName} ${variant.buildType.name}")
+            //def isAndroidX = project.rootProject.properties['android.useAndroidX'] == 'true'
+            //println("- Skipped publication for ${variant.flavorName} ${variant.buildType.name}")
             return
         }
 
@@ -106,12 +107,12 @@ publishing.publications {
         //def publicationName = "Iadt_${variant.name.capitalize()}"
         publicationNames.add(publicationName)
 
-        println "+ Preparing publication: ${publicationName}"
+        println "Publication candidate: ${publicationName}"
 
         "$publicationName"(MavenPublication) {
             group groupId
             artifactId variantArtifactId
-            version libraryWorkingVersion
+            version libraryVersionName
 
             artifact variant.packageLibraryProvider.get()
             //Was deprecated: variant.outputs[0].packageLibrary
@@ -166,7 +167,7 @@ publishing.publications {
 afterEvaluate {
     bintray {
         dryRun = false      //[Default: false] Skip deployment
-        publish = true     //[Default: false] Skip publication after deployment
+        publish = false     //[Default: false] Skip publication after deployment
         override = false    //[Default: false] Override artifacts already published
 
         publications = publicationNames
@@ -175,7 +176,7 @@ afterEvaluate {
             repo = bintrayRepo
             name = bintrayPkg  //Was project.name
             version {
-                name = libraryWorkingVersion
+                name = libraryVersionName
                 desc = projectDesc //TODO: versionDesc
                 gpg {
                     sign = true

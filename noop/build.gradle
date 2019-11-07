@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.libraryMinSdkVersion
         targetSdkVersion rootProject.ext.libraryTargetSdkVersion
         versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryWorkingVersion
+        versionName rootProject.ext.libraryVersionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

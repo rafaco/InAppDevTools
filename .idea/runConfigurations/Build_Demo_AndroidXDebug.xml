@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Compat publish to local (x2)" type="GradleRunConfiguration" factoryName="Gradle" folderName="Publish to Local">
+  <configuration default="false" name="Build Demo AndroidXDebug" type="GradleRunConfiguration" factoryName="Gradle" folderName="demo">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/compat" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="" />
+      <option name="scriptParameters" value="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="publishToMavenLocal" />
+          <option value="assembleAndroidxDebug" />
         </list>
       </option>
       <option name="vmOptions" value="" />
