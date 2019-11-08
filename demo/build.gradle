@@ -132,3 +132,13 @@ inappdevtools {
 sonarqube {
     androidVariant 'supportDebug'
 }
+
+task startApp(type: Exec) {
+    def NAMESPACE_AND_ACTIVITY = 'es.rafaco.inappdevtools.demo/.view.MainActivity'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'adb', 'shell', 'am', 'start', '-n', NAMESPACE_AND_ACTIVITY
+    } else {
+        commandLine 'adb', 'shell', 'am', 'start', '-n', NAMESPACE_AND_ACTIVITY
+    }
+}

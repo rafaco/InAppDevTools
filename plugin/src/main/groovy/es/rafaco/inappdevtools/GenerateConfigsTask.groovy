@@ -118,7 +118,6 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private void generateGitInfo(Project project) {
-
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
         def localCommitsLong
@@ -183,9 +182,12 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private String shell(String cmd) {
+        //TODO: print output error
+        //TODO: research why it lock the builds sometimes, like with long diffs or paged result.
         String result = null
         try {
-            result = cmd.execute([], project.rootDir).text.trim()
+            println ("Shell on: " + project.rootProject.rootDir)
+            result = cmd.execute([], project.rootProject.rootDir).text.trim()
         }
         catch (java.io.IOException e) {
             println TAG + "[WARNING]: " + "Unable to reach git command, check your PATH!"

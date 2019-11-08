@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ANDROIDX Demo" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="Deploy SUPPORT" type="AndroidRunConfigurationType" factoryName="Android App">
     <module name="demo" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -51,9 +51,9 @@
     <method v="2">
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/plugin" vmOptions="" scriptParameters="" />
-      <option name="Gradle.BeforeRunTask" enabled="false" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/noop" vmOptions="" scriptParameters="" />
-      <option name="Gradle.BeforeRunTask" enabled="false" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/compat" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
-      <option name="Gradle.BeforeRunTask" enabled="false" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/library" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/noop" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/compat" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/library" vmOptions="" scriptParameters="" />
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
     </method>
   </configuration>
