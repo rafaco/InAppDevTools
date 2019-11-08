@@ -44,24 +44,11 @@ android {
     }
 }
 
-
-// Dynamic dependencies for Compat module (AndroidX/Support)
-android.applicationVariants.all { variant ->
-    /*if (variant.buildType.name == "debug") {
-        dependencies {
-            debugApi project(path: ':compat')
-        }
-    }
-    else */
-    if (variant.flavorName == 'androidx') {
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
-    } else {
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
-    }
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Compat module from from sources
+    api project(path: ':compat')
 
     // AndroidX/Support view components are added by compat module:
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
@@ -71,7 +58,6 @@ dependencies {
     //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
     //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
     //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
-
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'

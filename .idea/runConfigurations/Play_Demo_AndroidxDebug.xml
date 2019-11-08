@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Play Demo Support" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Play Demo AndroidxDebug" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
@@ -17,7 +17,7 @@
     </ExternalSystemSettings>
     <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="installSupportDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
     </method>
   </configuration>
 </component>

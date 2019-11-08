@@ -49,32 +49,40 @@ android {
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
     }
-
-    //Allow direct import from app module, without local or bintray repos:
-    // implementation project(path: ':inappdevtools')
-    //defaultPublishConfig 'supportDebug'
 }
 
-
 // Dynamic dependencies for Compat module (AndroidX/Support)
-android.libraryVariants.all { variant ->
-    /*if (variant.buildType.name == "debug") {
+/*android.libraryVariants.all { variant ->
+    println ( "RAFA: " + variant.buildType.name)
+    if (variant.buildType.name == "debug") {
         dependencies{
             debugApi project(path: ':compat')
         }
     }
-    else */
-    if (variant.flavorName == 'androidx'){
-        dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    else {
+        if (variant.flavorName == 'androidx') {
+            dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+        } else {
+            dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+        }
     }
-    else{
-        dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
-    }
-}
+}*/
 
 dependencies {
 
-    // AndroidX/Support view components are added by compat module
+    // Compat module from local/remote repo
+    //TODO: restore Compat from sources
+    androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+
+    // AndroidX/Support view components from compat module:
+    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
+    //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
+    //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
+    //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
+    //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
     // AndroidX logic components
     androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"
