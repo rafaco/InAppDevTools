@@ -72,8 +72,8 @@ dependencies {
 
     // Compat module from local/remote repo
     //TODO: restore Compat from sources
-    androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
-    supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    androidxImplementation "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    supportImplementation "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
 
     // AndroidX/Support view components from compat module:
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"

@@ -48,7 +48,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Compat module from from sources
-    api project(path: ':compat')
+    //implementation project(path: ':compat')
+    androidxImplementation "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+    supportImplementation "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
 
     // AndroidX/Support view components are added by compat module:
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
