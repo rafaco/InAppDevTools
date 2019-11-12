@@ -156,7 +156,7 @@ public final class IadtController {
         if (isPendingForegroundInit){
             initForeground();
         }
-        else if (!OverlayService.isRunning){
+        else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             if (IadtController.get().isDebug())
                 Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
             overlayHelper = new OverlayHelper(getContext());
