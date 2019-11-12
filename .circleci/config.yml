@@ -20,6 +20,9 @@ jobs:
         name: Assemble COMPAT SupportDebug
         command: ./gradlew :compat:assembleSupportDebug
     - run:
+        name: Assemble COMPAT AndroidXDebug
+        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+    - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
     - save_cache:
