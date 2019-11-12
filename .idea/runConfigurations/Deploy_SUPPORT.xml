@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Deploy SUPPORT" type="AndroidRunConfigurationType" factoryName="Android App">
+  <configuration default="false" name="Deploy SUPPORT" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
     <module name="demo" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -16,8 +16,6 @@
     <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
     <option name="USE_LAST_SELECTED_DEVICE" value="false" />
     <option name="PREFERRED_AVD" value="" />
-    <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-    <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
     <option name="DEBUGGER_TYPE" value="Auto" />
     <Auto>
       <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />

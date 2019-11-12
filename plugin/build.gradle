@@ -7,6 +7,9 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
+ext {
+    pluginVersionName = '0.0.17'
+}
 dependencies {
     compile gradleApi()
     compile localGroovy()
@@ -16,7 +19,7 @@ dependencies {
 
 //PLUGIN DEFINITION
 group 'es.rafaco.inappdevtools'
-version rootProject.ext.pluginVersionName
+version ext.pluginVersionName
 
 gradlePlugin {
     plugins {
