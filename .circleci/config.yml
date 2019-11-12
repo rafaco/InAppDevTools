@@ -17,11 +17,11 @@ jobs:
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
     - run:
-        name: Assemble COMPAT SupportDebug
-        command: ./gradlew :compat:assembleSupportDebug
+        name: Local publish COMPAT SupportDebug
+        command: ./gradlew :compat:publishToMavenLocal
     - run:
-        name: Assemble COMPAT AndroidXDebug
-        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+        name: Local publish COMPAT AndroidXDebug
+        command: ./gradlew :compat:publishToMavenLocal -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
     - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
@@ -36,9 +36,6 @@ jobs:
     - run:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
-    - run:
-        name: Assemble COMPAT SupportDebug
-        command: ./gradlew :compat:assembleSupportDebug
     - run:
         name: Assemble LIBRARY SupportDebug
         command: ./gradlew :library:assembleSupportDebug
