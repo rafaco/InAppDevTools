@@ -17,6 +17,9 @@ jobs:
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
     - run:
+        name: Assemble COMPAT SupportDebug
+        command: ./gradlew :compat:assembleSupportDebug
+    - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
     - save_cache:
