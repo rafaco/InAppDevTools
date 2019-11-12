@@ -18,11 +18,4 @@ ext {
     }
 }
 
-//Publish to bintray
-//TODO: safe-remove this conditions
-if (project.rootProject.file('local.properties').exists()
-        && !(project.getGradle().startParameter.isOffline())) {
-
-}
-
 apply from: '../gradle/publisher/publisher.gradle'

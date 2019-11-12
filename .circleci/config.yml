@@ -16,6 +16,7 @@ jobs:
 
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}
+
     - run:
         name: Local publish COMPAT SupportDebug
         command: ./gradlew :compat:publishToMavenLocal
@@ -25,23 +26,29 @@ jobs:
     - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
-    - save_cache:
-        paths:
-        - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
-    - run:
-        name: Assemble PLUGIN and publish to local
-        command: ./gradlew :inappdevtools-plugin:publishToMavenLocal
     - run:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
+
     - run:
         name: Assemble LIBRARY SupportDebug
         command: ./gradlew :library:assembleSupportDebug
     - run:
         name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug
+
+    - run:
+        name: Assemble LIBRARY AndroidxDebug
+        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+    - run:
+        name: Assemble DEMO AndroidxDebug
+        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+
+    - save_cache:
+        paths:
+          - ~/.gradle
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}
 
   report:
     <<: *defaults
