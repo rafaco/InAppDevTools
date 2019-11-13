@@ -1,5 +1,5 @@
 ext {
-    groupId = 'es.rafaco.inappdevtools'
+    groupId = PROJECT_ARTIFACT_GROUP
     bintrayRepo = "InAppDevTools"
     bintrayRepoDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
     vcsUrl = 'https://github.com/rafaco/InAppDevTools/tree/master/library'
@@ -18,4 +18,4 @@ ext {
     }
 }
 
-apply from: '../gradle/publisher/publisher.gradle'
+apply from: '../gradle/publisher.gradle'

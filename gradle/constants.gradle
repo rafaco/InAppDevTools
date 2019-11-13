@@ -1,0 +1,36 @@
+ext{
+    PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
+    PROJECT_MIN_SDK = 16
+    PROJECT_TARGET_SDK = 28
+    PROJECT_COMPILE_SDK = 28
+    PROJECT_BUILD_TOOLS = '28.0.3'
+
+    PLUGIN_VERSION_NAME = '0.0.17'
+    LIBRARY_VERSION = '0.0.53'
+    LIBRARY_VERSION_CODE = 1
+    DEMO_VERSION = '0.0.01'
+    DEMO_VERSION_CODE = 45
+
+    //TODO: we don't need preprocessor, migrate to properties per variant
+    libraryAndroidxMaterialVersion = "1.0.0-rc01"
+    libraryAndroidxVersion = "1.0.0"
+    libraryAndroidx2Version = "2.0.0"
+    librarySupportVersion = '28.0.0'
+    librarySupportArchVersion = "1.1.0"
+    librarySupportPagingVersion = "1.0.1"
+
+    //OLD support
+    // appTargetSdkVersion = 26
+    // appCompileSdkVersion = 26
+    // appBuildToolsVersion = '26.0.2'
+    // appSupportVersion = '26.0.2'
+    // libraryTargetSdkVersion = 27
+    // libraryCompileSdkVersion = 27
+    // libraryBuildToolsVersion = '27.0.3'
+    // librarySupportVersion = '27.1.1'
+    //API 23 -> gradleToolVersion = '2.1.0'
+    // appTargetSdkVersion = 23
+    // appCompileSdkVersion = 23
+    // appBuildToolsVersion = '23.0.2'
+    // appSupportVersion = '23.0.2'
+}

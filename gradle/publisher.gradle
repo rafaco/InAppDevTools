@@ -26,7 +26,7 @@ ext {
 }
 
 group = groupId
-version = libraryVersionName
+version = LIBRARY_VERSION
 
 def publicationNames = []
 def pomConfig = {
@@ -112,7 +112,7 @@ publishing.publications {
         "$publicationName"(MavenPublication) {
             group groupId
             artifactId variantArtifactId
-            version libraryVersionName
+            version LIBRARY_VERSION
 
             artifact variant.packageLibraryProvider.get()
             //Was deprecated: variant.outputs[0].packageLibrary
@@ -133,12 +133,20 @@ publishing.publications {
                         if (it.group == null) return // Avoid empty dependency nodes
                         def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
+                        //TODO: Remapping COMPAT, project dependency
+                        def artifact = it.name
+                        if (it.group == 'es.rafaco.compat'){
+                            if (project.rootProject.properties['android.useAndroidX'] == 'true')
+                                artifact = 'androidx'
+                            else
+                                artifact = 'support'
+                        }
+                        dependencyNode.appendNode('artifactId', artifact)
                         dependencyNode.appendNode('version', it.version)
                         if (it.hasProperty('optional') && it.optional) {
                             dependencyNode.appendNode('optional', 'true')
                         }
-                        println(" - Added ${it.group}:${it.name}:${it.version}")
+                        println(" - Added ${it.group}:${artifact}:${it.version}")
                     }
 
                     // Add general dependencies
@@ -176,7 +184,7 @@ afterEvaluate {
             repo = bintrayRepo
             name = bintrayPkg  //Was project.name
             version {
-                name = libraryVersionName
+                name = LIBRARY_VERSION
                 desc = projectDesc //TODO: versionDesc
                 gpg {
                     sign = true

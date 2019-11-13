@@ -1,17 +1,18 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'es.rafaco.inappdevtools'
-apply from: '../compat/compat.gradle'
+apply from: '../gradle/constants.gradle'
 apply from: 'publish.gradle'
+//apply plugin: 'es.rafaco.inappdevtools'
+apply from: '../compat/preprocess.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.libraryCompileSdkVersion
-    buildToolsVersion rootProject.ext.libraryBuildToolsVersion
+    compileSdkVersion PROJECT_COMPILE_SDK
+    buildToolsVersion PROJECT_BUILD_TOOLS
 
     defaultConfig {
-        minSdkVersion rootProject.ext.libraryMinSdkVersion
-        targetSdkVersion rootProject.ext.libraryTargetSdkVersion
-        versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryVersionName
+        minSdkVersion PROJECT_MIN_SDK
+        targetSdkVersion PROJECT_TARGET_SDK
+        versionCode LIBRARY_VERSION_CODE
+        versionName LIBRARY_VERSION
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -61,46 +62,47 @@ android {
     }
     else {
         if (variant.flavorName == 'androidx') {
-            dependencies.androidxApi "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
+            dependencies.androidxApi "es.rafaco.compat:androidx:$LIBRARY_VERSION"
         } else {
-            dependencies.supportApi "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+            dependencies.supportApi "es.rafaco.compat:support:$LIBRARY_VERSION"
         }
     }
 }*/
 
 dependencies {
 
+    api project(path: ':compat')
     // Compat module from local/remote repo
     //TODO: restore Compat from sources
-    androidxImplementation "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
-    supportImplementation "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
+    //androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
+    //supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
 
     // AndroidX/Support view components from compat module:
-    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
-    //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
-    //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
-    //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
-    //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
+    //    androidxApi "androidx.appcompat:appcompat:$libraryAndroidxVersion"
+    //    supportApi "com.android.support:appcompat-v7:$appSupportVersion"
+    //    androidxApi "com.google.android.material:material:$libraryAndroidxMaterialVersion"
+    //    supportApi "com.android.support:design:$appSupportVersion"
+    //    supportApi "com.android.support:support-v4:$appSupportVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$libraryAndroidxVersion"
+    //    supportApi "com.android.support:recyclerview-v7:$appSupportVersion"
 
     // AndroidX logic components
-    androidxApi "androidx.annotation:annotation:$rootProject.ext.libraryAndroidxVersion"
-    androidxApi "androidx.room:room-runtime:$rootProject.ext.libraryAndroidx2Version"
-    androidxAnnotationProcessor "androidx.room:room-compiler:$rootProject.ext.libraryAndroidx2Version"
-    androidxApi "androidx.lifecycle:lifecycle-runtime:$rootProject.ext.libraryAndroidx2Version"
-    androidxApi "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.libraryAndroidx2Version"
-    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.ext.libraryAndroidx2Version"
-    androidxApi "androidx.paging:paging-runtime:$rootProject.ext.libraryAndroidx2Version"
+    androidxApi "androidx.annotation:annotation:$libraryAndroidxVersion"
+    androidxApi "androidx.room:room-runtime:$libraryAndroidx2Version"
+    androidxAnnotationProcessor "androidx.room:room-compiler:$libraryAndroidx2Version"
+    androidxApi "androidx.lifecycle:lifecycle-runtime:$libraryAndroidx2Version"
+    androidxApi "androidx.lifecycle:lifecycle-extensions:$libraryAndroidx2Version"
+    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$libraryAndroidx2Version"
+    androidxApi "androidx.paging:paging-runtime:$libraryAndroidx2Version"
 
     // Support logic components
-    supportApi "com.android.support:support-annotations:$rootProject.ext.librarySupportVersion"
-    supportApi "android.arch.persistence.room:runtime:$rootProject.ext.librarySupportArchVersion"
-    supportAnnotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.librarySupportArchVersion"
-    supportApi "android.arch.lifecycle:extensions:$rootProject.ext.librarySupportArchVersion"
-    supportApi "android.arch.lifecycle:runtime:$rootProject.ext.librarySupportArchVersion"
-    supportAnnotationProcessor "android.arch.lifecycle:compiler:$rootProject.ext.librarySupportArchVersion"
-    supportApi "android.arch.paging:runtime:$rootProject.ext.librarySupportPagingVersion"
+    supportApi "com.android.support:support-annotations:$librarySupportVersion"
+    supportApi "android.arch.persistence.room:runtime:$librarySupportArchVersion"
+    supportAnnotationProcessor "android.arch.persistence.room:compiler:$librarySupportArchVersion"
+    supportApi "android.arch.lifecycle:extensions:$librarySupportArchVersion"
+    supportApi "android.arch.lifecycle:runtime:$librarySupportArchVersion"
+    supportAnnotationProcessor "android.arch.lifecycle:compiler:$librarySupportArchVersion"
+    supportApi "android.arch.paging:runtime:$librarySupportPagingVersion"
 
     // Pandora
     androidxApi "com.github.whataa:pandora:androidx_v2.0.2"
@@ -126,9 +128,9 @@ dependencies {
     androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testSupportImplementation "android.arch.persistence.room:testing:$rootProject.ext.librarySupportArchVersion"
-    testSupportImplementation "android.arch.core:core-testing:$rootProject.ext.librarySupportArchVersion"
-    testSupportImplementation "android.arch.paging:common:$rootProject.ext.librarySupportPagingVersion"
+    testSupportImplementation "android.arch.persistence.room:testing:$librarySupportArchVersion"
+    testSupportImplementation "android.arch.core:core-testing:$librarySupportArchVersion"
+    testSupportImplementation "android.arch.paging:common:$librarySupportPagingVersion"
 }
 
 /*inappdevtools {

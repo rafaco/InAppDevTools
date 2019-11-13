@@ -18,4 +18,4 @@ ext {
     }
 }
 
-apply from: '../gradle/publisher/publisher.gradle'
+apply from: '../gradle/publisher.gradle'

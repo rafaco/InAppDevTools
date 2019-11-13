@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
-apply from: '../compat/compat.gradle'
+apply from: '../compat/preprocess.gradle'
+apply from: '../gradle/constants.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.appCompileSdkVersion
-    buildToolsVersion rootProject.ext.appBuildToolsVersion
+    compileSdkVersion PROJECT_COMPILE_SDK
+    buildToolsVersion PROJECT_BUILD_TOOLS
     defaultConfig {
         applicationId "es.rafaco.inappdevtools.demo"
-        minSdkVersion rootProject.ext.appMinSdkVersion
-        targetSdkVersion rootProject.ext.appTargetSdkVersion
-        versionCode rootProject.ext.appVersionCode
-        versionName rootProject.ext.appVersionName
+        minSdkVersion PROJECT_MIN_SDK
+        targetSdkVersion PROJECT_TARGET_SDK
+        versionCode DEMO_VERSION_CODE
+        versionName DEMO_VERSION
 
         //TODO: remove
         multiDexEnabled false
@@ -47,11 +48,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // Compat module from from sources
-    //implementation project(path: ':compat')
-    androidxImplementation "es.rafaco.compat:androidx:$rootProject.ext.libraryVersionName"
-    supportImplementation "es.rafaco.compat:support:$rootProject.ext.libraryVersionName"
-
     // AndroidX/Support view components are added by compat module:
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
     //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
@@ -75,30 +71,44 @@ dependencies {
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     /*
-     *  IADT library import directly from modules. For development.
+     *  Iadt LIBRARY: import directly from modules. For development.
      */
-    api project(path: ':library')
-    //api project(path: ':noop')
+    debugApi project(path: ':library')
+    releaseApi project(path: ':noop')
 
     /*
-     *  IADT library import from repository (jCenter or localMaven). Standard usage
+     *  Iadt LIBRARY: import from repository (jCenter or localMaven). Standard usage
      */
-    //supportImplementation "es.rafaco.inappdevtools:support:$rootProject.ext.libraryPublishedVersion"
-    //androidxImplementation "es.rafaco.inappdevtools:androidx:$rootProject.ext.libraryPublishedVersion"
-    //releaseImplementation "es.rafaco.inappdevtools:noop:$rootProject.ext.libraryPublishedVersion"
+    //supportImplementation "es.rafaco.inappdevtools:support:$libraryPublishedVersion"
+    //androidxImplementation "es.rafaco.inappdevtools:androidx:$libraryPublishedVersion"
+    //releaseImplementation "es.rafaco.inappdevtools:noop:$libraryPublishedVersion"
+
+    /*
+     *  Iadt COMPAT: import directly from modules. For release, debug have it from library
+     */
+    releaseApi project(path: ':compat')
+
+    /*
+     *  Iadt COMPAT: import from repository (jCenter or localMaven). Standard usage
+     */
+    //androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
+    //supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
 }
 
 
 /*
- *  IADT plugin import directly from modules. For development.
+ *  Iadt PLUGIN: import directly from modules. For development.
  */
 //apply from: '../plugin/build.gradle'
 
 /*
- *  IADT plugin import from repository (jCenter or localMaven). Standard usage
+ *  Iadt PLUGIN: import from repository (jCenter or localMaven). Standard usage
  */
 apply plugin: 'es.rafaco.inappdevtools'
 
+/*
+ *  Iadt CONFIGURATION
+ */
 inappdevtools {
     //// User features fags
     email = 'inappdevtools@gmail.com'
