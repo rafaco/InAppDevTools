@@ -37,14 +37,12 @@ android {
     productFlavors {
         support {
             dimension "compatibility"
-            buildConfigField "String", "MY_FLAVOR", "\"support\""
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
         androidx {
             dimension "compatibility"
-            buildConfigField "String", "MY_FLAVOR", "\"androidx\""
             processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
