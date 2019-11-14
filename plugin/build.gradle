@@ -16,7 +16,7 @@ apply from: '../gradle/constants.gradle'
 
 //PLUGIN DEFINITION
 group PROJECT_ARTIFACT_GROUP
-version PLUGIN_VERSION_NAME
+version PLUGIN_VERSION
 
 gradlePlugin {
     plugins {
