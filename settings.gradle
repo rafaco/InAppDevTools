@@ -13,4 +13,4 @@ enableFeaturePreview('STABLE_PUBLISHING')
 includeBuild ('./plugin')
 
 //Include other modules as sources
-include ':noop', ':compat', ':library', ':demo'
+include ':noop', ':compat', ':library', ':demo', ':website'

@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+repositories{
+    mavenCentral()
+}
+
+configurations {
+    ftpAntTask
+}
+
+dependencies {
+    ftpAntTask("org.apache.ant:ant-commons-net:1.8.4") {
+        module("commons-net:commons-net:1.4.1") {
+            dependencies "oro:oro:2.0.8:jar"
+        }
+    }
+}
+
+def captureAntOutput(ant, Closure command) {
+    def buffer = new ByteArrayOutputStream()
+    def captureStream = new PrintStream(buffer, true, "UTF-8")
+    def listener = new org.apache.tools.ant.DefaultLogger(
+            errorPrintStream: captureStream,
+            outputPrintStream: captureStream,
+            messageOutputLevel: org.apache.tools.ant.Project.MSG_INFO
+    )
+
+    ant.project.addBuildListener(listener)
+    project.configure(ant, command)
+    ant.project.removeBuildListener(listener)
+
+    return buffer.toString("UTF-8")
+}
+
+task publishToServer {
+    doLast{
+        String result = captureAntOutput(ant) {
+            taskdef(name: 'ftp',
+                    classname: 'org.apache.tools.ant.taskdefs.optional.net.FTP',
+                    classpath: configurations.ftpAntTask.asPath)
+
+            Properties properties = new Properties()
+            def propertiesFile = rootProject.file('local.properties')
+            if (!propertiesFile.exists()) {
+                throw new GradleException('local.properties with WEBSITE config is reqired')
+            }
+            properties.load(propertiesFile.newDataInputStream())
+            if (!properties.getProperty('WEBSITE_URL')) {
+                throw new GradleException('WEBSITE_URL property not found at local.properties')
+            }
+            if (!properties.getProperty('WEBSITE_USER')) {
+                throw new GradleException('WEBSITE_USER property not found at local.properties')
+            }
+            if (!properties.getProperty('WEBSITE_PASS')) {
+                throw new GradleException('WEBSITE_PASS property not found at local.properties')
+            }
+            if (!properties.getProperty('WEBSITE_REMOTE_PATH')) {
+                throw new GradleException('WEBSITE_REMOTE_PATH property not found at local.properties')
+            }
+
+            ftp(server: properties.getProperty('WEBSITE_URL'),
+                    userid: properties.getProperty('WEBSITE_USER'),
+                    password: properties.getProperty('WEBSITE_PASS'),
+                    remoteDir: properties.getProperty('WEBSITE_REMOTE_PATH'),
+                    passive: "yes",
+                    newer: "yes",
+                    verbose: "yes",
+                    retriesAllowed: "5") {
+
+                fileset(dir: "src")
+            }
+
+        }
+        println(result)
+    }
+}
