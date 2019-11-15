@@ -55,30 +55,27 @@ We have added 23 shared build configurations to the project. Browse their catego
 
 ### Switching Androidx/Support build
 
-Work in progress: We use a gradle preprocessor to switch between AndroidX or Support libraries in our modules for each variant. This affect our java source and gradle build files but we are not able to dynamically changes lines on gradle.properties. Comment/uncomment of a couple of lines is required at our root folder gradle.properties when changing the variant.
+Work in progress: We use a gradle preprocessor to switch between AndroidX or Support libraries in our modules for each variant. This affect our java source and gradle build files. AndroidX build also require 'android.useAndroidX' properties but we set it dynamically passing following command line args: -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true. 
 
-```gradle
-# gradle.properties for AndroidX variant:
-android.useAndroidX=true
-android.enableJetifier=true
+Our Android Studio project have "Run Configurations" for AndroidX an Support builds per each module and with correct command line args already set.
 
-# gradle.properties for Support variant:
-android.useAndroidX=false
-android.enableJetifier=false
-```
+This params override selections on Android Studio "Build Variant" panel. To manually build AndroidX variants of any submodule, remove command line args and restore properties android.useAndroidX=true and android.enableJetifier=true at gradle.properties.
 
-Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other side around. Test your build switching to Androidx but perform a last build using a support build type to restore support sources before your PR.
+Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other side around. Test your build switching to Androidx but perform a last build using a support build before committing, to restore support sources.
 
 ## Continuous Integration <a name="ci"/>
 
 We use CircleCi to automatise tests for commit and for PR. We currently only test support builds and generate some reports. Unit test are not implemented.
 
 1. Build
-    1. Assemble PLUGIN and publish to local
-    2. Assemble NOOP Debug
-    3. Assemble COMPAT SupportDebug
-    4. Assemble LIBRARY SupportDebug
-    5. Assemble DEMO SupportDebug
+    1. Assemble and include PLUGIN
+    2. Assemble and local publish COMPAT SupportDebug
+    3. Assemble and local publish COMPAT AndroidXDebug
+    4. Assemble NOOP Debug
+    5. Assemble LIBRARY SupportDebug
+    6. Assemble DEMO SupportDebug
+    7. Assemble LIBRARY AndroidxDebug
+    8. Assemble DEMO AndroidxDebug
 2. Report:
     1. Lint report LIBRARY SupportDebug
     2. Lint report DEMO SupportDebug
