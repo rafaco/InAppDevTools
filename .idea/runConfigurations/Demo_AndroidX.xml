@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Plugin Playground" type="AndroidRunConfigurationType" factoryName="Android App">
+  <configuration default="false" name="Demo AndroidX" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
     <module name="demo" />
-    <option name="DEPLOY" value="true" />
+    <option name="DEPLOY" value="false" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
     <option name="ARTIFACT_NAME" value="" />
-    <option name="PM_INSTALL_OPTIONS" value="" />
+    <option name="PM_INSTALL_OPTIONS" value="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
     <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
     <option name="ACTIVITY_EXTRA_FLAGS" value="" />
     <option name="MODE" value="default_activity" />
@@ -16,8 +16,6 @@
     <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
     <option name="USE_LAST_SELECTED_DEVICE" value="false" />
     <option name="PREFERRED_AVD" value="" />
-    <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-    <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
     <option name="DEBUGGER_TYPE" value="Auto" />
     <Auto>
       <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -49,9 +47,8 @@
     <option name="DEEP_LINK" value="" />
     <option name="ACTIVITY_CLASS" value="" />
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="publishToMavenLocal" externalProjectPath="$PROJECT_DIR$/plugin" vmOptions="" scriptParameters="" />
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
     </method>
   </configuration>
 </component>

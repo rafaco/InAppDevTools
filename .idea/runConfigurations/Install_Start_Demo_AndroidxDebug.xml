@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start Demo (Installed apk)" type="GradleRunConfiguration" factoryName="Gradle" folderName="demo">
+  <configuration default="false" name="Install&amp;Start Demo AndroidxDebug" type="GradleRunConfiguration" factoryName="Gradle" folderName="demo">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="" />
+      <option name="scriptParameters" value="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
       <option name="taskDescriptions">
         <list />
       </option>
@@ -16,6 +16,8 @@
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
     <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-    <method v="2" />
+    <method v="2">
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
+    </method>
   </configuration>
 </component>

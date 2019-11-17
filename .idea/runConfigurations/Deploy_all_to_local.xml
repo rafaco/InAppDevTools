@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Full Local Deployment" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Deploy all to local" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
