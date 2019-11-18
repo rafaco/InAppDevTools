@@ -47,7 +47,7 @@ On your **root build.gradle** file, import our plugin and add the JitPack reposi
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.15" apply false
+    id "es.rafaco.inappdevtools" version "0.0.16" apply false
 }
 
 allprojects {
@@ -76,10 +76,10 @@ android {
     }
 }
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.52'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.52'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.53'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.53'
     
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.52'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.53'
 }
 ```
 
