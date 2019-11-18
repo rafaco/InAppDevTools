@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "6b47c08051b33e3ab9c3d5c041afa582",
+    "identityHash": "44b2882ab0d0b4244b76ecfacd8c985b",
     "entities": [
       {
         "tableName": "crash",
@@ -390,7 +390,7 @@
       },
       {
         "tableName": "session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `pid` INTEGER NOT NULL, `detectionDate` INTEGER NOT NULL, `finishDate` INTEGER NOT NULL, `appVersion` TEXT, `compileConfig` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `pid` INTEGER NOT NULL, `detectionDate` INTEGER NOT NULL, `finishDate` INTEGER NOT NULL, `appVersion` TEXT, `compileConfig` TEXT, `crashId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -433,6 +433,12 @@
             "columnName": "compileConfig",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "crashId",
+            "columnName": "crashId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -447,7 +453,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6b47c08051b33e3ab9c3d5c041afa582\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"44b2882ab0d0b4244b76ecfacd8c985b\")"
     ]
   }
 }

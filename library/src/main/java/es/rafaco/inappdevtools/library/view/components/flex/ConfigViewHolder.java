@@ -1,7 +1,25 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -9,6 +27,7 @@ import android.widget.Switch;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatTextView;
@@ -37,22 +56,22 @@ public class ConfigViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final ConfigItem configItem = (ConfigItem) abstractData;
+        final ConfigData configData = (ConfigData) abstractData;
         Context context = title.getContext();
-        title.setText(configItem.getConfig().getKey());
-        subtitle.setText(context.getText(configItem.getConfig().getDesc()));
+        title.setText(configData.getConfig().getKey());
+        subtitle.setText(context.getText(configData.getConfig().getDesc()));
 
-        if (configItem.getConfig().getValueType() == boolean.class){
+        if (configData.getConfig().getValueType() == boolean.class){
             switchButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.GONE);
             textValue.setVisibility(View.GONE);
 
-            Boolean value = (Boolean) configItem.getInitialValue();
+            Boolean value = (Boolean) configData.getInitialValue();
             switchButton.setChecked(value);
             switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    configItem.setNewValue(isChecked);
+                    configData.setNewValue(isChecked);
                 }
             });
         }
@@ -61,11 +80,8 @@ public class ConfigViewHolder extends FlexibleViewHolder {
             editButton.setVisibility(View.VISIBLE);
             textValue.setVisibility(View.VISIBLE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                editButton.setImageDrawable(editButton.getContext().getDrawable(R.drawable.pd_edit));
-            } else {
-                editButton.setImageDrawable(editButton.getContext().getResources().getDrawable(R.drawable.pd_edit));
-            }
+            editButton.setImageDrawable(UiUtils.getDrawable(R.drawable.pd_edit));
+
             int contextualizedColor = ContextCompat.getColor(editButton.getContext(), R.color.rally_white);
             editButton.setColorFilter(contextualizedColor);
             editButton.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +90,7 @@ public class ConfigViewHolder extends FlexibleViewHolder {
                     Iadt.showMessage("TODO: Not already implemented");
                 }
             });
-            textValue.setText((String) configItem.getInitialValue());
+            textValue.setText((String) configData.getInitialValue());
         }
     }
 }

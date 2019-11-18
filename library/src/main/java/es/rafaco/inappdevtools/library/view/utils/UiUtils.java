@@ -1,9 +1,27 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -96,28 +114,34 @@ public class UiUtils {
         if (drawable instanceof ShapeDrawable) {
             ShapeDrawable shapeDrawable = (ShapeDrawable) drawable;
             shapeDrawable.getPaint().setColor(ContextCompat.getColor(context, colorRes));
-        } else if (drawable instanceof GradientDrawable) {
+        }
+        else if (drawable instanceof GradientDrawable) {
             GradientDrawable gradientDrawable = (GradientDrawable) drawable;
             gradientDrawable.setColor(ContextCompat.getColor(context, colorRes));
-        } else if (drawable instanceof ColorDrawable) {
+        }
+        else if (drawable instanceof ColorDrawable) {
             ColorDrawable colorDrawable = (ColorDrawable) drawable;
             colorDrawable.setColor(ContextCompat.getColor(context, colorRes));
         }
     }
 
-    public static void setCardViewClickable(Context context, CardView cardView, boolean clickable){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (clickable){
-                int[] attrs = new int[]{R.attr.selectableItemBackground};
-                TypedArray typedArray = context.obtainStyledAttributes(attrs);
-                int selectableItemBackground = typedArray.getResourceId(0, 0);
-                typedArray.recycle();
-                cardView.setForeground(context.getDrawable(selectableItemBackground));
-            }else{
-                cardView.setForeground(null);
-            }
-            cardView.setClickable(clickable);
+    public static void setCardViewClickable(CardView cardView, boolean isClickable){
+        Context context = cardView.getContext();
+        Drawable drawable;
+        if(isClickable) {
+            TypedValue outValue = new TypedValue();
+            context.getTheme().resolveAttribute(
+                    android.R.attr.selectableItemBackground, outValue, true);
+
+            drawable = getDrawable(outValue.resourceId);
         }
+        else{
+            drawable = null;
+        }
+        cardView.setClickable(isClickable);
+        cardView.setFocusable(isClickable);
+        cardView.setActivated(isClickable);
+        cardView.setForeground(drawable);
     }
 
     public static void highlightString(Context context, CharSequence text, String keyword, TextView textView) {
@@ -159,5 +183,18 @@ public class UiUtils {
             return null;
         }
         return findParentById(parent, targetId);
+    }
+
+    public static int dpToPx(Context context, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                context.getResources().getDisplayMetrics());
+    }
+
+    public static Drawable getDrawable(int icon) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return getContext().getDrawable(icon);
+        } else {
+            return getContext().getResources().getDrawable(icon);
+        }
     }
 }

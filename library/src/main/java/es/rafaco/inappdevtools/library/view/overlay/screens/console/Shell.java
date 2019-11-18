@@ -1,13 +1,34 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.console;
 
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class Shell {
@@ -28,22 +49,37 @@ public class Shell {
     public String run(String[] command) {
         String response = "";
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "Shell running: " + command);
+        if (IadtController.get().isDebug()){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < command.length; i++) {
+                stringBuilder.append(command[i] + " ");
+            }
+            ThreadUtils.printOverview("Shell");
+            Log.v(Iadt.TAG, "Shell running: " + stringBuilder.toString());
+        }
 
         try {
             process = Runtime.getRuntime().exec(command);
-            //TODO: LOW - was waitFor() needed? prevent crash handler to work
-            //int waitResponse = process.waitFor();
-            //Log.w(Iadt.TAG, "waitResponse: " + waitResponse);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuffer output = new StringBuffer();
             String line;
             while (!isCancelled && (line = reader.readLine())!= null) {
                 output.append(line + Humanizer.newLine());
             }
-            if (IadtController.get().isDebug())
+            if (IadtController.get().isDebug()){
                 Log.v(Iadt.TAG, "Shell result: " + output.length() + " lines.");
+                if (output.length() == 0){
+                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    StringBuffer errorOutput = new StringBuffer();
+                    String errorLine;
+                    while (!isCancelled && (errorLine = errorReader.readLine())!= null) {
+                        errorOutput.append(errorLine + Humanizer.newLine());
+                    }
+                    if (errorOutput.length() != 0) {
+                        Log.w(Iadt.TAG, "Shell error: " + errorOutput.toString());
+                    }
+                }
+            }
             response = output.toString();
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);

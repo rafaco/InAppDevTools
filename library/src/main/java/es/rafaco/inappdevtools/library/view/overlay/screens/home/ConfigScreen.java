@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.content.DialogInterface;
@@ -9,7 +28,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.view.components.flex.ConfigItem;
+import es.rafaco.inappdevtools.library.view.components.flex.ConfigData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -63,7 +82,7 @@ public class ConfigScreen extends Screen {
         List<BuildConfig> allConfigs = BuildConfig.getAll();
         for (BuildConfig item : allConfigs) {
             if (item.getDefaultValue() != null){
-                data.add(new ConfigItem(item));
+                data.add(new ConfigData(item));
             }
         }
 
@@ -80,9 +99,9 @@ public class ConfigScreen extends Screen {
         List<Object> adapterItems = adapter.getItems();
         boolean anyChange = false;
         for (Object item : adapterItems) {
-            if (item instanceof ConfigItem){
-                ConfigItem configItem = (ConfigItem) item;
-                if (configItem.getNewValue() != null && configItem.getNewValue() != configItem.getInitialValue()){
+            if (item instanceof ConfigData){
+                ConfigData configData = (ConfigData) item;
+                if (configData.getNewValue() != null && configData.getNewValue() != configData.getInitialValue()){
                     anyChange = true;
                 }
             }
@@ -93,10 +112,10 @@ public class ConfigScreen extends Screen {
     private void saveAnyChange() {
         List<Object> adapterItems = adapter.getItems();
         for (Object item : adapterItems) {
-            if (item instanceof ConfigItem){
-                ConfigItem configItem = (ConfigItem) item;
-                if (configItem.getNewValue() != null && configItem.getNewValue() != configItem.getInitialValue()){
-                    IadtController.get().getConfig().set(configItem.getConfig(), configItem.getNewValue());
+            if (item instanceof ConfigData){
+                ConfigData configData = (ConfigData) item;
+                if (configData.getNewValue() != null && configData.getNewValue() != configData.getInitialValue()){
+                    IadtController.get().getConfig().set(configData.getConfig(), configData.getNewValue());
                 }
             }
         }

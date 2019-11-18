@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.view.LayoutInflater;
@@ -17,8 +36,7 @@ import  android.support.v7.util.DiffUtil;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
-public class LogAdapter
-        extends PagedListAdapter<Friendly, LogViewHolder> {
+public class LogAdapter extends PagedListAdapter<Friendly, LogViewHolder> {
 
     private static DiffUtil.ItemCallback<Friendly> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Friendly>() {
@@ -33,14 +51,11 @@ public class LogAdapter
                 }
             };
 
-    private static long selectedItemId = -1;
-    private static int selectedItemPosition = -1;
-    private OnClickListener mClickListener;
+    private final LogViewHolder.Listener listener;
 
-    protected LogAdapter() {
+    protected LogAdapter(LogViewHolder.Listener listener) {
         super(DIFF_CALLBACK);
-
-        setClickListener();
+        this.listener = listener;
     }
 
     @Override
@@ -53,50 +68,19 @@ public class LogAdapter
     public LogViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.tool_log_item, viewGroup, false);
-        LogViewHolder logViewHolder = new LogViewHolder(itemView, mClickListener);
+        LogViewHolder logViewHolder = new LogViewHolder(itemView, listener);
 
         return logViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LogViewHolder holder,
-                                 int position) {
-        Friendly item = getItem(position);
-        if (item != null) {
-            //Log.d("Friendly", "bindTo()" + position + ":" + item.getUid());
-            holder.bindTo(item, selectedItemId == item.getUid());
+    public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
+        Friendly data = getItem(position);
+        if (data != null) {
+            holder.bindTo(data, position);
         } else {
-            //Log.d("Friendly", "Placeholder for" + position);
             holder.showPlaceholder(position);
         }
     }
 
-    public void setClickListener(){
-        setClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View itemView, int position, long id) {
-                if (selectedItemId == -1) {
-                    selectedItemId = id;
-                    selectedItemPosition = position;
-                } else if (id == selectedItemId) {
-                    selectedItemId = -1;
-                    selectedItemPosition = -1;
-                } else if (selectedItemId != -1) {
-                    int previousPosition = selectedItemPosition;
-                    selectedItemId = id;
-                    selectedItemPosition = position;
-                    LogAdapter.this.notifyItemChanged(previousPosition);
-                }
-                LogAdapter.this.notifyItemChanged(position);
-            }
-        });
-    }
-
-    public void setClickListener(OnClickListener clickListener) {
-        mClickListener = clickListener;
-    }
-
-    public interface OnClickListener {
-        void onClick(View itemView, int position, long id);
-    }
 }

@@ -1,23 +1,21 @@
 ext {
-    groupId = 'es.rafaco.inappdevtools'
+    groupId = PROJECT_ARTIFACT_GROUP
     bintrayRepo = "InAppDevTools"
     bintrayRepoDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
     vcsUrl = 'https://github.com/rafaco/InAppDevTools/tree/master/library'
 
     bintrayDynamicPkg = true
 
-    /*bintrayPkg = "androidx"
-    projectName = 'IADT-AndroidX'
-    projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'*/
-
-    bintrayPkg = "support"
-    projectName = 'IADT-Support'
-    projectDesc = 'Support flavor of es.rafaco.inappdevtools'
+    def isAndroidX = project.rootProject.properties['android.useAndroidX'] == 'true'
+    if (isAndroidX){
+        bintrayPkg = "androidx"
+        projectName = 'IADT-AndroidX'
+        projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'
+    }else{
+        bintrayPkg = "support"
+        projectName = 'IADT-Support'
+        projectDesc = 'Support flavor of es.rafaco.inappdevtools'
+    }
 }
 
-//Publish to bintray
-//TODO: safe-remove this conditions
-if (project.rootProject.file('local.properties').exists()
-        && !(project.getGradle().startParameter.isOffline())) {
-    apply from: '../gradle/publisher/publisher.gradle'
-}
+apply from: '../gradle/publisher.gradle'

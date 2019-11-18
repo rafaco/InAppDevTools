@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.utils;
 
 import android.os.AsyncTask;
@@ -8,6 +27,9 @@ import android.os.Looper;
 import android.util.Log;
 
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
@@ -38,12 +60,59 @@ public class ThreadUtils {
         AsyncTask.execute(runnable);
     }
 
+    public static void runOnBack(final String threadName, final Runnable runnable){
+        //TODO: this keep threads open for a bit as TIMED_WAITING
+        /*ExecutorService executorservice = Executors.newCachedThreadPool(new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable arg0) {
+                return new Thread(arg0, threadName);
+            }
+        });
+        executorservice.submit(runnable);*/
+        AsyncTask.execute(runnable);
+    }
+
     public static void runOnBack(Runnable runnable, long delay){
-        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        HandlerThread handlerThread = new HandlerThread("Iadt-RunOnBack");
         handlerThread.start();
         Handler handler = new Handler(handlerThread.getLooper());
-
         handler.postDelayed(runnable, delay);
+    }
+
+
+    public static void setName(String name) {
+        Thread thread = Thread.currentThread();
+        if (isMain(thread)){
+            Log.w(Iadt.TAG, "Skipped setName(" + name + "). You are on MAIN thread.");
+            return;
+        }
+        if (!thread.getName().contains(name)){
+            thread.setName(name + "-" + thread.getName());
+        }
+    }
+
+
+    public static String formatThread() {
+        return formatThread(Thread.currentThread());
+    }
+
+    public static String formatThread(Thread thread){
+        return formatThreadId(thread) + " "
+                + formatThreadDescription(thread) + " "
+                + thread.getState();
+    }
+
+    private static String formatThreadId(Thread info){
+        String id = String.valueOf(info.getId());
+        while(id.length()<4){
+            id = "  " + id;
+        }
+        return id;
+    }
+
+    private static String formatThreadDescription(Thread info){
+        String standard = info.toString();
+        return standard.replaceFirst("Thread", "");
     }
 
     public static void printOverview(String from){

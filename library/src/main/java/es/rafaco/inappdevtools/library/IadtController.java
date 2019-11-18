@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
@@ -18,9 +37,12 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntim
 import es.rafaco.inappdevtools.library.logic.info.InfoManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
+import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
+import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.logic.integrations.CustomChuckInterceptor;
+import com.readystatesoftware.chuck.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -37,6 +59,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -51,7 +74,9 @@ public final class IadtController {
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
     private InfoManager infoManager;
-    private boolean isPendingForegroundInit;
+    public boolean isPendingForegroundInit;
+    private OverlayHelper overlayHelper;
+    private boolean sessionStartTimeImproved = false;
 
     protected IadtController(Context context) {
         if (INSTANCE != null) {
@@ -95,13 +120,14 @@ public final class IadtController {
         }
 
         if (isDebug())
-            Log.d(Iadt.TAG, "Initializing background services...");
+            Log.d(Iadt.TAG, "IadtController initBackground");
 
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
 
         if (isDebug()){
-            ThreadUtils.runOnBack(new Runnable() {
+            ThreadUtils.runOnBack("Iadt-InitBack",
+                    new Runnable() {
                 @Override
                 public void run() {
                     DevToolsDatabase.getInstance().printOverview();
@@ -113,6 +139,9 @@ public final class IadtController {
     }
 
     public void initDelayedBackground() {
+        if (isDebug())
+            Log.d(Iadt.TAG, "IadtController initDelayedBackground");
+
         sourcesManager = new SourcesManager(getContext());
         infoManager = new InfoManager(getContext());
 
@@ -121,15 +150,25 @@ public final class IadtController {
     }
 
     public void initForegroundIfPending(){
+        if (!AppUtils.isForegroundImportance(getContext()))
+            return;
+
         if (isPendingForegroundInit){
             initForeground();
+        }
+        else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
+            overlayHelper = new OverlayHelper(getContext());
         }
     }
 
     private void initForeground(){
         initDelayedBackground();
 
-        ThreadUtils.printOverview("IadtController initForeground");
+        if (isDebug())
+            Log.d(Iadt.TAG, "IadtController initForeground");
+
         if (FirstStartUtil.isFirstStart()){
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
                     new Runnable() {
@@ -160,13 +199,11 @@ public final class IadtController {
         isPendingForegroundInit = false;
 
         if (isDebug())
-            Log.d(Iadt.TAG, "Initializing foreground services...");
+            Log.d(Iadt.TAG, "IadtController onInitForeground");
 
         if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();
-
-            Intent intent = new Intent(getContext(), OverlayService.class);
-            getContext().startService(intent);
+            overlayHelper = new OverlayHelper(context);
         }
 
         if (getConfig().getBoolean(BuildConfig.INVOCATION_BY_NOTIFICATION)){
@@ -205,6 +242,10 @@ public final class IadtController {
         return navigationManager;
     }
 
+    public OverlayHelper getOverlayHelper() {
+        return overlayHelper;
+    }
+
     public InfoManager getInfoManager() {
         return infoManager;
     }
@@ -240,60 +281,6 @@ public final class IadtController {
 
     //region [ METHODS FOR FEATURES ]
 
-    private boolean checksBeforeShowOverlay() {
-        if (!isEnabled()) return true;
-        if (!AppUtils.isForegroundImportance(getContext())) return true;
-
-        if (isPendingForegroundInit) {
-            initForegroundIfPending();
-            if (!isPendingForegroundInit)
-                return true;
-        }
-        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-                WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                showMain();
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Iadt.showMessage(R.string.draw_other_app_permission_denied);
-                            }
-                        });
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public void showToggle() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_TOGGLE);
-    }
-    public void showMain() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_MAIN);
-    }
-
-    public void showIcon() {
-        if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.SHOW_ICON);
-    }
-
-    public void hideAll() {
-        //if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.HIDE_ALL);
-    }
-
-    public void restoreAll() {
-        //if (checksBeforeShowOverlay()) return;
-        OverlayService.performAction(OverlayService.IntentAction.RESTORE_ALL);
-    }
-
     public void takeScreenshot() {
         if (!isEnabled()) return;
 
@@ -301,7 +288,7 @@ public final class IadtController {
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED) && OverlayService.isInitialize()){
-            showIcon();
+            getOverlayHelper().showIcon();
         }
         FileProviderUtils.openFileExternally(getContext(), screenshot.getPath());
     }
@@ -315,7 +302,8 @@ public final class IadtController {
     public void sendReport(ReportHelper.ReportType type, final Object param) {
         switch (type){
             case CRASH:
-                ThreadUtils.runOnBack(new Runnable() {
+                ThreadUtils.runOnBack("Iadt-CrashReport",
+                        new Runnable() {
                     @Override
                     public void run() {
                         Crash crash;
@@ -335,7 +323,8 @@ public final class IadtController {
                 break;
 
             case SESSION:
-                ThreadUtils.runOnBack(new Runnable() {
+                ThreadUtils.runOnBack("Iadt-SessionReport",
+                        new Runnable() {
                     @Override
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;
@@ -356,14 +345,13 @@ public final class IadtController {
     //region [ RESTART AND FORCE CLOSE ]
 
     public void restartApp(boolean isCrash){
-        FriendlyLog.log( "I", "Run", "Restart", "Restart programmed");
         AppUtils.programRestart(getContext(), isCrash);
 
         forceCloseApp(isCrash);
     }
 
     public void forceCloseApp(boolean isCrash){
-        FriendlyLog.log( "I", "Run", "ForceClose", "Force Close");
+        FriendlyLog.log( "I", "App", "ForceStop", "Force Stop");
 
         if (!isCrash)
             beforeClose(); //on crash is performed by CrashHandler
@@ -378,27 +366,27 @@ public final class IadtController {
 
     public void beforeClose(){
 
-        if(getRunnableManager().getForceCloseRunnable() != null)
-            getRunnableManager().getForceCloseRunnable().run();
+        if (isDebug()) Log.d(Iadt.TAG, "Before force close");
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping watchers");
+        if(getRunnableManager().getForceCloseRunnable() != null){
+            Log.i(Iadt.TAG, "Calling custom ForceCloseRunnable");
+            getRunnableManager().getForceCloseRunnable().run();
+        }
+
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
         eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
         ActivityManager am = (ActivityManager)getContext().getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(getContext().getPackageName());*/
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping Notification Service");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping Notification Service");
         NotificationService.stop();
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping OverlayUI Service");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping OverlayUI Service");
         OverlayService.stop();
 
-        if (isDebug())
-            Log.w(Iadt.TAG, "Stopping LogcatReaderService");
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping LogcatReaderService");
         Intent intent = LogcatReaderService.getStopIntent(getContext());
         LogcatReaderService.enqueueWork(getContext(), intent);
     }
@@ -426,6 +414,48 @@ public final class IadtController {
                 throw new ForcedRuntimeException(cause);
             }
         });
+    }
+
+    public void improveSessionStart() {
+        if (isEnabled() && !sessionStartTimeImproved){
+
+            int pid = ThreadUtils.myPid();
+            Session currentSession = IadtController.getDatabase().sessionDao().getLast();
+
+            if (currentSession.getDate() != currentSession.getDetectionDate()){
+                sessionStartTimeImproved = true;
+                return;
+            }
+
+            long detectionDate = currentSession.getDetectionDate();
+            String threadFilter = "%" + "Process: " + pid + "%";
+            Friendly firstSessionLog = IadtController.getDatabase().friendlyDao().getFirstSessionLog(threadFilter, detectionDate);
+
+            if (firstSessionLog != null
+                    && firstSessionLog.getDate()<detectionDate){
+
+                //Improve session item
+                long improvedDate = firstSessionLog.getDate();
+                currentSession.setDate(improvedDate);
+                IadtController.getDatabase().sessionDao().update(currentSession);
+
+                //Improve new session Log
+                String message = "Session " + currentSession.getUid() +" started";
+                Friendly newSessionLog = IadtController.getDatabase().friendlyDao().getNewSessionLog(message);
+                if (newSessionLog != null
+                        && improvedDate < newSessionLog.getDate()){
+                    newSessionLog.setDate(improvedDate);
+                    IadtController.getDatabase().friendlyDao().update(newSessionLog);
+                }
+
+                sessionStartTimeImproved = true;
+                if (isDebug()) Log.i(Iadt.TAG, "Improved session start time! "
+                        + Humanizer.getElapsedTime(improvedDate, detectionDate));
+            }
+            else{
+                Log.w(Iadt.TAG, "Unable to improve session start time");
+            }
+        }
     }
 }
 

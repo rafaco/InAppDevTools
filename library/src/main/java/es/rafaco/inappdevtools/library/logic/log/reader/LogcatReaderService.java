@@ -1,7 +1,28 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -27,12 +48,12 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
-import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
+import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -48,8 +69,6 @@ public class LogcatReaderService extends JobIntentService {
     public final static String CANCEL_ACTION = "cancel_action";
     public final static String PARAM_KEY = "param";
     public static final String LOGCAT_COMMAND = "logcat -v long";
-    public static final String BASH_PATH = "/system/bin/sh";
-    public static final String BASH_ARGS = "-c";
 
     private static boolean isReaderDebug = false;
     private boolean isReaderRunning = false;
@@ -60,7 +79,7 @@ public class LogcatReaderService extends JobIntentService {
     private Queue<String> queue;
     private String lastLine;
     private Long lastInsertTime = DateUtils.getLong();
-    private Timer processQueueTimer = new Timer(false);
+    private Timer processQueueTimer;
     private TimerTask processQueueTimerTask;
 
     private int ignoredCounter = 0;
@@ -76,12 +95,12 @@ public class LogcatReaderService extends JobIntentService {
     //region [ PUBLIC STATIC ACCESS ]
 
     public static void enqueueWork(Context context, Intent intent) {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService enqueueWork" );
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService enqueueWork" );
         enqueueWork(context, LogcatReaderService.class, JOB_ID, intent);
     }
 
     public static Intent getStartIntent(Context context, String param) {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService prepared start intent" );
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService prepared start intent" );
         Intent intent =  new Intent();
         intent.setClass(context, LogcatReaderService.class);
         intent.setAction(START_ACTION);
@@ -90,7 +109,7 @@ public class LogcatReaderService extends JobIntentService {
     }
 
     public static Intent getStopIntent(Context context) {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService prepared stop intent" );
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService prepared stop intent" );
         Intent intent =  new Intent();
         intent.setClass(context, LogcatReaderService.class);
         intent.setAction(CANCEL_ACTION);
@@ -103,15 +122,18 @@ public class LogcatReaderService extends JobIntentService {
 
     @Override
     public void onCreate() {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService onCreate" );
+        if (LogScreen.isLogDebug()){
+            Log.v(Iadt.TAG, "LogcatReaderService onCreate" );
+        }
         super.onCreate();
     }
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
+        ThreadUtils.setName("Iadt-LogWork");
         String action = intent.getAction();
         String param = intent.getStringExtra(PARAM_KEY);
-        if (isReaderDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService " + action + "-" + param));
+        if (LogScreen.isLogDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService onHandleWork(" + action + ", " + param + ")"));
 
         if (action != null && action.equals(CANCEL_ACTION)) {
             onStop(param);
@@ -121,8 +143,21 @@ public class LogcatReaderService extends JobIntentService {
     }
 
     private void onStart(String param) {
+        if (LogScreen.isLogDebug()) Log.d(Iadt.TAG, ThreadUtils.formatOverview("LogcatReaderService onStart"));
+
+        if (restartRunnable!= null){
+            removeRestartHandler();
+            //exit();
+            //return;
+        }
+
         if (isReaderRunning){
-            if (isReaderDebug()) Log.w(Iadt.TAG, "LogcatReaderService start skipped, already running" );
+            if (LogScreen.isLogDebug()) Log.w(Iadt.TAG, "LogcatReaderService start skipped, reader already running" );
+            return;
+        }
+
+        if (isInjectorRunning){
+            if (LogScreen.isLogDebug()) Log.w(Iadt.TAG, "LogcatReaderService start skipped, injector already running" );
             return;
         }
 
@@ -133,7 +168,7 @@ public class LogcatReaderService extends JobIntentService {
         isReaderRunning = false;
         isCancelled = true;
 
-        if (isReaderDebug()){
+        if (LogScreen.isLogDebug()){
             Log.v(Iadt.TAG, "LogcatReaderService onStop");
             Log.v(Iadt.TAG, String.format("LogcatReaderService cancelled but inserted %s of %s read"
                     + " lines (ignored %s, filtered %s nulls and %s duplicated)",
@@ -157,13 +192,8 @@ public class LogcatReaderService extends JobIntentService {
 
     @Override
     public void onDestroy() {
-        if (isReaderDebug()){
-            Log.v(Iadt.TAG, "LogcatReaderService onDestroy" );
-            Log.v(Iadt.TAG, "LogcatReaderService isReaderRunning = " + (isReaderRunning ==true ? "true" : "false"));
-            Log.v(Iadt.TAG, "LogcatReaderService isInjectorRunning = " + (isInjectorRunning ==true ? "true" : "false"));
-        }
-        if (Iadt.isDebug()){
-            Log.d(Iadt.TAG, String.format("LogcatReaderService inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
+        if (LogScreen.isLogDebug()){
+            Log.d(Iadt.TAG, String.format("LogcatReaderService Inserted %s of %s read lines (ignored %s, filtered %s nulls and %s duplicated)",
                     insertedCounter, readCounter, ignoredCounter, nullDiscardCounter, sameDiscardCounter));
         }
         super.onDestroy();
@@ -193,11 +223,19 @@ public class LogcatReaderService extends JobIntentService {
             previousStartDateLines = new ArrayList<>();
         }
 
-        String[] fullCommand = new String[] { BASH_PATH, BASH_ARGS, command};
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
+        String[] fullCommand = Shell.formatBashCommand(command);
+        if (LogScreen.isLogDebug()){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < fullCommand.length; i++) {
+                stringBuilder.append(fullCommand[i] + " ");
+            }
+            ThreadUtils.printOverview("LogcatReaderService");
+            Log.v(Iadt.TAG, "LogcatReaderService executing command: " + command);
+        }
 
         if (logcatProcess != null)
             logcatProcess.destroy();
+        
         try {
             logcatProcess = Runtime.getRuntime().exec(fullCommand);
         }
@@ -233,9 +271,9 @@ public class LogcatReaderService extends JobIntentService {
             isReaderRunning = false;
         }
 
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService reader finished. Read: " + readCounter);
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService reader finished. Read: " + readCounter);
         isReaderRunning = false;
-        logcatProcess.destroy();
+        if (logcatProcess!=null) logcatProcess.destroy();
 
         onPartFinished();
     }
@@ -248,31 +286,45 @@ public class LogcatReaderService extends JobIntentService {
         if (queue.size() > QUEUE_MAX_SIZE || DateUtils.getLong() > (lastInsertTime + getMaxQueueTime()) ) {
             processQueue();
         }
-        else if (queue.size() > 0) {
-            startUpdateTimerIfNeeded();
-        }
+        /*else if (queue.size() > 0) {
+            startUpdateTimer();
+        }*/
     }
 
-    private void startUpdateTimerIfNeeded() {
-        if (processQueueTimerTask!=null){
-            return;
+    private void startUpdateTimer() {
+        if (processQueueTimer!=null){
+            destroyTimer();
         }
 
         processQueueTimerTask = new TimerTask() {
             @Override
             public void run() {
+                ThreadUtils.setName("Iadt-LogQueue");
+                if (LogScreen.isLogDebug())
+                    Log.v(Iadt.TAG, "Log reader processQueueTimerTask running on "
+                            + ThreadUtils.formatThread());
                 processQueue();
-                cancelUpdateTimer();
             }
         };
-
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "Log reader processQueueTimer created from "
+                + ThreadUtils.formatThread());
+        processQueueTimer = new Timer("Iadt-LogReader-Timer", false);
         processQueueTimer.schedule(processQueueTimerTask, getMaxQueueTime());
     }
 
-    private void cancelUpdateTimer() {
+    private void cancelTimerTask() {
         if (processQueueTimerTask!=null){
             processQueueTimerTask.cancel();
             processQueueTimerTask = null;
+        }
+    }
+
+    private void destroyTimer() {
+        cancelTimerTask();
+        if (processQueueTimer!=null){
+            processQueueTimer.cancel();
+            processQueueTimer.purge();
+            processQueueTimer=null;
         }
     }
 
@@ -281,9 +333,9 @@ public class LogcatReaderService extends JobIntentService {
     //region [ STEP 2: PROCESS QUEUE ]
 
     private void processQueue() {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue started with " +  queue.size() + " items");
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue started with " +  queue.size() + " items");
         isInjectorRunning = true;
-        cancelUpdateTimer();
+        cancelTimerTask();
         List<Friendly> logsToInsert = new ArrayList<>();
         Friendly lastInsertion = null;
         String outputChannel = "";
@@ -312,7 +364,7 @@ public class LogcatReaderService extends JobIntentService {
                     logsToInsert.add(log);
                 }
             }else{
-                Log.w("LOGS", "LogcatLine not added");
+                Log.w(Iadt.TAG, "LogcatLine not added");
             }
         }
 
@@ -322,7 +374,7 @@ public class LogcatReaderService extends JobIntentService {
     private boolean checkIsIgnored(Friendly newLog) {
         if(newLog.getMessage().contains("setTypeface with style")) {
             ignoredCounter++;
-            if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected and ignored a line. Total is "+ ignoredCounter);
+            if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected and ignored a line. Total is "+ ignoredCounter);
             return true;
         }
         return false;
@@ -367,7 +419,7 @@ public class LogcatReaderService extends JobIntentService {
             if(newLine.equals(lastLine)){
                 //TODO: Add a multiplicity counter to LogcatLine and increment it
                 sameDiscardCounter++;
-                if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a duplicated line. Total is " + sameDiscardCounter);
+                if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a duplicated line. Total is " + sameDiscardCounter);
                 return true;
             }
         }
@@ -377,7 +429,7 @@ public class LogcatReaderService extends JobIntentService {
     private boolean checkEmptyLines(String newLine) {
         if(TextUtils.isEmpty(newLine)) {
             nullDiscardCounter++;
-            if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
+            if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService detected a null line ("+ nullDiscardCounter +")");
             return true;
         }
         return false;
@@ -398,13 +450,17 @@ public class LogcatReaderService extends JobIntentService {
                 long lastLogcatData = logsToInsert.get(logsToInsert.size()-1).getDate();
                 LastLogcatUtil.set(lastLogcatData);
 
-                if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue Inserted " + logsToInsert.size() + " lines");
+                if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue Inserted " + logsToInsert.size() + " lines");
             }
             else{
-                if (isReaderDebug()) Log.w(Iadt.TAG, "LogcatReaderService processQueue No lines inserted");
+                if (LogScreen.isLogDebug()) Log.w(Iadt.TAG, "LogcatReaderService processQueue No lines inserted");
             }
         }
         isInjectorRunning = false;
+
+        if (insertedCounter>0){
+            IadtController.get().improveSessionStart();
+        }
         onPartFinished();
     }
 
@@ -421,34 +477,46 @@ public class LogcatReaderService extends JobIntentService {
         }
     }
 
+    //endregion
+
+    //region [ PROGRAM NEXT ]
+
+    private Handler restartHandler = new Handler(Looper.getMainLooper());
+    private static Runnable restartRunnable = null;
+
     private void programNextExecution() {
-        if (isReaderDebug()) Log.v(Iadt.TAG, "LogcatReaderService programNextExecution() on " + getMaxQueueTime() + " ms");
-        ThreadUtils.runOnMain(new Runnable() {
+        if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService programNextExecution() on " + getMaxQueueTime() + " ms");
+        removeRestartHandler();
+        restartRunnable = new Runnable() {
             @Override
             public void run() {
+                restartRunnable = null;
                 Context context = IadtController.get().getContext();
                 Intent intent = LogcatReaderService.getStartIntent(context, "Next execution");
                 LogcatReaderService.enqueueWork(context, intent);
             }
-        }, getMaxQueueTime());
+        };
+        restartHandler.postDelayed(restartRunnable, getMaxQueueTime());
+    }
+
+    private void removeRestartHandler() {
+        if (restartRunnable != null) {
+            if (LogScreen.isLogDebug()) Log.d(Iadt.TAG, "LogcatReaderService removed restartHandler" );
+            restartHandler.removeCallbacks(restartRunnable);
+            restartRunnable = null;
+        }
     }
 
     //endregion
 
-
-    private static boolean isReaderDebug() {
-        //WARNING: it output too much noise at log
-        return isReaderDebug;
-    }
-
     private long getMaxQueueTime(){
         NavigationManager navigationManager = IadtController.get().getNavigationManager();
-        NavigationStep currentStep = navigationManager == null ? null : navigationManager.getCurrent();
-        if (!AppUtils.isForegroundImportance(getApplicationContext())
-                || currentStep == null || !currentStep.getClassName().equals(LogScreen.class)){
-            return BACKGROUND_MAX_TIME;
-        }else{
+        if (navigationManager != null
+                && AppUtils.isForegroundImportance(getApplicationContext())
+                && navigationManager.isCurrentScreen(LogScreen.class)){
             return LIVE_MAX_TIME;
+        }else{
+            return BACKGROUND_MAX_TIME;
         }
     }
 

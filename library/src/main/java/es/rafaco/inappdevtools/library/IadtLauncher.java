@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library;
 
 import android.content.ContentProvider;
@@ -15,7 +34,7 @@ import android.support.annotation.Nullable;
 //#endif
 
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
@@ -45,20 +64,26 @@ public class IadtLauncher extends ContentProvider {
     }
 
     private boolean isLibraryEnabled(){
-        // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
-        // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
-        String enableKey = BuildConfig.ENABLED.getKey();
-        SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-        JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), JsonAsset.BUILD_CONFIG);
+        try {
+            // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
+            // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
+            String enableKey = BuildConfig.ENABLED.getKey();
+            SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+            JsonAssetHelper iadtCompileConfig = new JsonAssetHelper(getContext(), IadtPath.BUILD_CONFIG);
 
-        if (iadtSharedPrefs.contains(enableKey)){
-            return iadtSharedPrefs.getBoolean(enableKey, false);
+            if (iadtSharedPrefs.contains(enableKey)){
+                return iadtSharedPrefs.getBoolean(enableKey, false);
+            }
+            else if (iadtCompileConfig.contains(enableKey)){
+                return iadtCompileConfig.getBoolean(enableKey);
+            }
+            else{
+                return (boolean) BuildConfig.ENABLED.getDefaultValue();
+            }
         }
-        else if (iadtCompileConfig.contains(enableKey)){
-            return iadtCompileConfig.getBoolean(enableKey);
-        }
-        else{
-            return (boolean) BuildConfig.ENABLED.getDefaultValue();
+        catch (Exception e){
+            Log.e(Iadt.TAG, "IadtLauncher: exception checking isEnabled. Nothing started");
+            return false;
         }
     }
 

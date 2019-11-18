@@ -1,3 +1,4 @@
+//Allow using plugin from local maven
 pluginManagement {
     repositories {
         mavenLocal()
@@ -7,18 +8,9 @@ pluginManagement {
 enableFeaturePreview('STABLE_PUBLISHING')
 
 
-//Include modules using folder names
-include ':demo', ':library', ':noop', ':compat', ':plugin'
+//Includes a build of plugin module (Composite build)
+// Required to develop and test the plugin in the same project
+includeBuild ('./plugin')
 
-//Remap module names, used as artifactId when publishing
-ext.remapper = [
-        //'root'      : 'inappdevtools-project',
-        //'demo'    : 'inappdevtools-demo',
-        //'library'   : 'inappdevtools'
-        //TODO: remove
-        'plugin'    : 'inappdevtools-plugin'
-]
-//rootProject.name = remapper.root
-rootProject.children.each {
-    it.name = remapper.containsKey(it.name) ? remapper[it.name] : it.name
-}
+//Include other modules as sources
+include ':noop', ':compat', ':library', ':demo', ':website'

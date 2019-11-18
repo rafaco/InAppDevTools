@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="3party SOURCES" pattern="src[library]:fonts..*||src[library]:highlightjs.styles..*||src[library]:highlightjs..*" />
+</component>

@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.storage.db.entities;
 
 //#ifdef ANDROIDX
@@ -50,7 +69,7 @@ public interface FriendlyDao {
             + " FROM friendly"
             + " GROUP BY severity"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseSeverity();
+    List<AnalysisData> analiseSeverity();
 
     @Query("SELECT category AS name,"
             + " COUNT(*) AS count,"
@@ -59,7 +78,7 @@ public interface FriendlyDao {
             + " WHERE category NOT IN ('Logcat')"
             + " GROUP BY category"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseEventCategory();
+    List<AnalysisData> analiseEventCategory();
 
     @Query("SELECT subcategory AS name,"
             + " COUNT(*) AS count,"
@@ -68,23 +87,48 @@ public interface FriendlyDao {
             + " WHERE category IN ('Logcat')"
             + " GROUP BY subcategory"
             + " ORDER BY COUNT(*) DESC")
-    List<AnalysisItem> analiseLogcatTag();
+    List<AnalysisData> analiseLogcatTag();
 
     @Query("SELECT uid AS name,"
             + " 1 AS count,"
             + " (100.0 / (select count(*) from session)) AS percentage"
             + " FROM session"
             + " ORDER BY date DESC")
-    List<AnalysisItem> analiseSession();
+    List<AnalysisData> analiseSession();
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE extra LIKE :extraContent"
+            + " AND date < :date"
+            + " AND category IN ('Logcat')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getFirstSessionLog(String extraContent, long date);
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE message LIKE :message"
+            + " AND category IN ('Iadt')"
+            + " AND subcategory IN ('Init')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getNewSessionLog(String message);
 
     @RawQuery(observedEntities = Friendly.class)
-    List<AnalysisItem> analiseWithQuery(SupportSQLiteQuery query);
+    List<AnalysisData> analiseWithQuery(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM friendly where uid LIKE :uid")
     Friendly findById(long uid);
 
     @Query("SELECT * FROM friendly where linkedId LIKE :linkedId")
     Friendly findByLinkedId(long linkedId);
+
+    @Query("SELECT uid FROM friendly " +
+            "where category LIKE 'Error' " +
+            "AND linkedId LIKE :crashId " +
+            "ORDER BY uid ASC LIMIT 1")
+    long findLogIdByCrashId(long crashId);
+
+    @RawQuery(observedEntities = Friendly.class)
+    List<Friendly> findPositionAtFilter(SupportSQLiteQuery positionQuery);
 
     @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
     Friendly getLast();

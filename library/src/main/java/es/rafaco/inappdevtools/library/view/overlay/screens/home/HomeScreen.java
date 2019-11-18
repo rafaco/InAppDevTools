@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.os.Handler;
@@ -81,16 +100,25 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Log",
-                R.drawable.ic_history_white_24dp,
+        data.add(new RunButton("View",
+                R.drawable.ic_view_carousel_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Logs",
+                R.drawable.ic_format_align_left_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(LogScreen.class);
                     }
                 }));
 
+        
         RunButton sources = new RunButton("Sources",
-                R.drawable.ic_code_white_24dp,
+                R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -108,14 +136,6 @@ public class HomeScreen extends Screen {
         }
         data.add(sources);
 
-        data.add(new RunButton("View",
-                R.drawable.ic_layers_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(InspectViewScreen.class);
-                    }
-                }));
-
         data.add(new RunButton("Storage",
                 R.drawable.ic_storage_white_24dp,
                 new Runnable() {
@@ -127,7 +147,7 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Console",
+        data.add(new RunButton("Terminal",
                 R.drawable.ic_computer_white_24dp,
                 new Runnable() {
                     @Override

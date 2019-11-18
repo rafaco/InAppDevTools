@@ -1,116 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This source file is part of InAppDevTools, which is available under
+  ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+  ~
+  ~ Copyright 2018-2019 Rafael Acosta Alvarez
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <es.rafaco.compat.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type: "
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        style="@style/TextCondensedMedium"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_margin"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp">
+
+        <RadioGroup
+            android:id="@+id/type_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/type_event"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Event"
+                android:tag="event"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/type_mixed"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="All"
+                android:checked="true"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/type_logcat"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Logcat"
+                style="@style/ToggleButton"/>
+
+        </RadioGroup>
+
+    </android.support.v7.widget.CardView>
+
+
+    <es.rafaco.compat.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Session: "
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        style="@style/TextCondensedMedium"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_margin"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp">
+
+        <RadioGroup
+            android:id="@+id/session_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/session_all"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="All"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/session_other"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Other"
+                style="@style/ToggleButton"/>
+
+            <Spinner
+                android:id="@+id/session_spinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="invisible"/>
+
+            <RadioButton
+                android:id="@+id/session_previous"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Previous"
+                android:checked="true"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/session_current"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Current"
+                style="@style/ToggleButton"/>
+
+        </RadioGroup>
+
+    </android.support.v7.widget.CardView>
+
+
+    <es.rafaco.compat.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Severity: "
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        style="@style/TextCondensedMedium"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/content_margin"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp">
+
+        <RadioGroup
+            android:id="@+id/severity_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/severity_v"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="All"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/severity_d"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Debug"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/severity_i"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Info"
+                android:checked="true"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/severity_w"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Warn"
+                style="@style/ToggleButton"/>
+
+            <RadioButton
+                android:id="@+id/severity_e"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:text="Error"
+                style="@style/ToggleButton"/>
+
+        </RadioGroup>
+
+    </android.support.v7.widget.CardView>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:orientation="horizontal">
 
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/type_label"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Type: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/type_spinner"
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/category_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Event category: "
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                style="@style/TextCondensedMedium"/>
+
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="18dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/session_label"
-            android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Session: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/session_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"/>
+            <es.rafaco.compat.AppCompatTextView
+                android:id="@+id/logcat_tag_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logcat tag: "
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                style="@style/TextCondensedMedium"/>
 
-    </LinearLayout>
+            <Spinner
+                android:id="@+id/logcat_tag_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/verbosity_label"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Severity: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
-
-        <Spinner
-            android:id="@+id/verbosity_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/category_label"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Event category: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
-
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <es.rafaco.compat.AppCompatTextView
-            android:id="@+id/logcat_tag_label"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Logcat tag: "
-            android:textSize="18dp"
-            style="@style/content_margin"/>
-
-        <Spinner
-            android:id="@+id/logcat_tag_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -118,10 +265,11 @@
         android:id="@+id/current_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
         android:text="Current overview"
         android:textSize="18dp"
         android:textStyle="normal|italic"
-        style="@style/content_margin"
-        android:layout_marginTop="10dp"/>
+        android:minLines="3"/>
 
 </LinearLayout>

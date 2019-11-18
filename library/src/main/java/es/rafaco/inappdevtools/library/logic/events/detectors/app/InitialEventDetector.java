@@ -1,10 +1,28 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import android.util.Log;
 
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
@@ -18,8 +36,6 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.CacheUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InitialEventDetector extends EventDetector {
@@ -37,11 +53,8 @@ public class InitialEventDetector extends EventDetector {
                 int pid = ThreadUtils.myPid();
                 long detectionDate = (Long) param;
 
-                //TODO: delayed after App started
-                long improveStartTime = improveStartTime(detectionDate, pid);
-
                 Session session = new Session();
-                session.setDate(improveStartTime);
+                session.setDate(detectionDate);
                 session.setDetectionDate(detectionDate);
                 session.setPid(pid);
 
@@ -50,7 +63,7 @@ public class InitialEventDetector extends EventDetector {
 
                 long id = DevToolsDatabase.getInstance().sessionDao().insert(session);
 
-                FriendlyLog.log(improveStartTime, "I", "Iadt", "Init",
+                FriendlyLog.log("I", "Iadt", "Init",
                         "Session " + id + " started");
             }
         });
@@ -88,7 +101,7 @@ public class InitialEventDetector extends EventDetector {
     @Override
     public void start() {
         if (IadtController.get().isDebug())
-            Log.w("SESSION", "New session start");
+            Log.d("SESSION", "New session start");
         eventManager.fire(Event.APP_NEW_SESSION, DateUtils.getLong());
 
         if (NewBuildUtil.isNewBuild()){
@@ -106,28 +119,5 @@ public class InitialEventDetector extends EventDetector {
     @Override
     public void stop() {
         //Intentionally empty
-    }
-
-    public long improveStartTime(long detectionDate, int pid){
-        Shell exe = new Shell();
-        String command = "logcat -v time -m 5 --pid=" + pid + " *:V";
-        String output = exe.run(exe.formatBashCommand(command));
-        String[] lines = output.split("[" + Humanizer.newLine() + "]");
-        long firstLogcatLineTime = 0;
-        if (lines.length>0) {
-            for (String line : lines) {
-                firstLogcatLineTime = LogcatLine.extractDate(line);
-                if (firstLogcatLineTime != 0)
-                    break;
-            }
-        }
-        if (firstLogcatLineTime != 0 && firstLogcatLineTime < detectionDate){
-            //Real start is for sure before the first logcat line
-            //LogScreen will show before the first line
-            return firstLogcatLineTime - 1;
-        }else{
-            Log.w(Iadt.TAG, "Unable to improve start session time");
-            return detectionDate;
-        }
     }
 }

@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay;
 
 import android.content.Context;
@@ -30,6 +49,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
@@ -45,7 +66,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.Screensh
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -80,6 +100,7 @@ public class ScreenManager {
         //Load screenshots definitions
         //TODO: think a better way to avoid this
         registerScreen(HomeScreen.class);
+        registerScreen(Home2Screen.class);
         registerScreen(InfoOverviewScreen.class);
         registerScreen(InfoScreen.class);
         registerScreen(NetworkScreen.class);
@@ -126,6 +147,10 @@ public class ScreenManager {
         if (getCurrentScreen() == null)
             return null;
         return currentScreen.getClass().getSimpleName();
+    }
+
+    public static Class<? extends Screen> getHomeClass() {
+        return HomeScreen.class;
     }
 
     //endregion
@@ -177,7 +202,6 @@ public class ScreenManager {
         return loadedScreen.getView();
     }
 
-
     public void goBack(){
 
         if (!currentScreen.canGoBack()){
@@ -200,7 +224,7 @@ public class ScreenManager {
 
     public void goHome(){
         navigationManager.clearSteps();
-        goTo(HomeScreen.class.getSimpleName(), null);
+        goTo(getHomeClass().getSimpleName(), null);
     }
 
     public String getCurrentStepParams(){
@@ -245,7 +269,7 @@ public class ScreenManager {
 
     public void hide() {
         //TODO: refactor, it doesn't seems like the best way
-        IadtController.get().showIcon();
+        IadtController.get().getOverlayHelper().showIcon();
     }
 
     //endregion

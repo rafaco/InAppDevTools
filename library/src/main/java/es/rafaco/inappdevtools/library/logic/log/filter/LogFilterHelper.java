@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.log.filter;
 
 import android.text.TextUtils;
@@ -12,13 +31,13 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisItem;
+import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterHelper {
 
-    public enum Preset { ALL, EVENTS_ALL, EVENTS_INFO, LOGCAT_ALL, LOGCAT_INFO, CUSTOM}
+    public enum Preset { REPRO_STEPS, DEBUG, CRASHES, NETWORK, CUSTOM, ALL }
     private LogUiFilter uiFilter;
 
     private LogAnalysisHelper analysis;
@@ -45,28 +64,59 @@ public class LogFilterHelper {
     //TODO: custom presets defined from host app
 
     public void applyPreset(Preset preset) {
-        if (preset.equals(Preset.EVENTS_INFO)){
-            applyEventsInfoPreset();
+        if (preset.equals(Preset.REPRO_STEPS)){
+            applyReproStepsPreset();
+        }
+        else if (preset.equals(Preset.NETWORK)){
+            applyNetworkPreset();
+        }
+        else if (preset.equals(Preset.DEBUG)){
+            applyDebugPreset();
+        }
+        else if (preset.equals(Preset.CRASHES)){
+            applyCrashPreset();
         }
         else if (preset.equals(Preset.ALL)){
             applyAllPreset();
         }
+        else if (preset.equals(Preset.CUSTOM)){
+            applyCustomPreset();
+        }
     }
 
-    private void applyEventsInfoPreset() {
-        uiFilter = new LogUiFilter();
-        uiFilter.setText("");
+    private void applyReproStepsPreset() {
+        applyAllPreset();
+        uiFilter.setSessionInt(1);   //Current
+        uiFilter.setSeverityInt(2);  //Info
+        uiFilter.setTypeInt(1);      //Events
+    }
+
+    private void applyNetworkPreset() {
+        applyAllPreset();
         uiFilter.setSessionInt(1);   //Current
         uiFilter.setSeverityInt(2);  //Info
         uiFilter.setTypeInt(1);      //Events
         uiFilter.setCategoryInt(0);
-        uiFilter.setCategoryName("All");
-        uiFilter.setTagInt(0);
-        uiFilter.setTagName("All");
+        uiFilter.setCategoryName("Network");
+    }
+
+    private void applyDebugPreset() {
+        applyAllPreset();
+        uiFilter.setWrapLines(true);
+        uiFilter.setSessionInt(1);   //Current
+    }
+
+    private void applyCrashPreset() {
+        applyAllPreset();
+        uiFilter.setTypeInt(1);      //Events
+        uiFilter.setSeverityInt(4);  //Error
+        uiFilter.setCategoryInt(0);
+        uiFilter.setCategoryName("Error");
     }
 
     public void applyAllPreset() {
         uiFilter = new LogUiFilter();
+        uiFilter.setWrapLines(false);
         uiFilter.setText("");
         uiFilter.setSessionInt(0);
         uiFilter.setSeverityInt(0);
@@ -77,16 +127,25 @@ public class LogFilterHelper {
         uiFilter.setTagName("All");
     }
 
+    private void applyCustomPreset() {
+        if (LogFilterStore.get() != null){
+            uiFilter = LogFilterStore.get();
+        }
+        else{
+            applyDebugPreset();
+        }
+    }
+
     //endregion
 
     //region [ OPTIONS ]
 
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> sessions = analysis.getSessionResult();
-        list.add("All 100%");
+        List<AnalysisData> sessions = analysis.getSessionResult();
+        list.add("All");
         String sessionOrdinal;
-        for (AnalysisItem item : sessions) {
+        for (AnalysisData item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
             if (list.size() == 1){
                 list.add("Current (" + sessionOrdinal + ")");
@@ -126,9 +185,9 @@ public class LogFilterHelper {
 
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
-        List<AnalysisItem> categoryResult = analysis.getCategoryResult();
-        list.add("All 100%");
-        for (AnalysisItem item : categoryResult) {
+        List<AnalysisData> categoryResult = analysis.getCategoryResult();
+        list.add("All");
+        for (AnalysisData item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -137,9 +196,9 @@ public class LogFilterHelper {
     // At UI, a dialog selector with checkboxes could work
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
-        List<AnalysisItem> subcategoryResult = analysis.getLogcatTagResult();
-        list.add("All 100%");
-        for (AnalysisItem item : subcategoryResult) {
+        List<AnalysisData> subcategoryResult = analysis.getLogcatTagResult();
+        list.add("All");
+        for (AnalysisData item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
         return list;
@@ -150,7 +209,7 @@ public class LogFilterHelper {
     //region [ OVERVIEW ]
 
     public String getOverview(){
-        AnalysisItem currentAnalysisItem = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
+        AnalysisData currentAnalysisData = analysis.getCurrentFilterOverview(getBackFilter()).get(0);
         String result = "";
 
         if (TextUtils.isEmpty(uiFilter.getText())
@@ -159,11 +218,10 @@ public class LogFilterHelper {
                 && uiFilter.getSeverityInt() == 0
                 && uiFilter.getCategoryInt() == 0
                 && uiFilter.getTagInt() == 0){
-            result += "All from all sessions." + Humanizer.newLine();
-            result += String.format("Showing %s%% of %s",
-                    currentAnalysisItem.getPercentage(),
-                    analysis.getTotalLogSize());
-            result += Humanizer.fullStop();
+            result += "All from all sessions.";
+            result += String.format(" %s%% of %s",
+            currentAnalysisData.getPercentage(),
+            analysis.getTotalLogSize());
             return result;
         }
 
@@ -176,7 +234,11 @@ public class LogFilterHelper {
         if (uiFilter.getSessionInt() != 0){
             if(uiFilter.getSessionInt()==1){
                 result += "from current session" + ", ";
-            }else{
+            }
+            else if(uiFilter.getSessionInt()==2){
+                result += "from previous session" + ", ";
+            }
+            else{
                 long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
                 Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
@@ -211,12 +273,12 @@ public class LogFilterHelper {
                     result.substring(lastCommaPosition + 2);
         }
 
-        result += ". " + Humanizer.newLine();
-        result += String.format("Showing %s%% of total (%s/%s)",
-                currentAnalysisItem.getPercentage(),
-                currentAnalysisItem.getCount(),
+        result.trim();
+        result += ". ";
+        result += String.format(" %s%% of total (%s/%s)",
+                currentAnalysisData.getPercentage(),
+                currentAnalysisData.getCount(),
                 analysis.getTotalLogSize());
-        //result += Humanizer.fullStop();
 
         return result;
     }
@@ -251,26 +313,25 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else{ //Previous and others
-            //TODO: better selection
             long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
             Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
-            backFilter.setFromDate(selected.getDate());
-            //TODO: filter toDate properly
+            if (selected != null) backFilter.setFromDate(selected.getDate());
+            
             Session next = DevToolsDatabase.getInstance().sessionDao().findById(target + 1);
-            backFilter.setToDate(next.getDate());
+            if (next != null) backFilter.setToDate(next.getDate());
         }
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "Session changed to: " + uiFilter.getSessionInt()
-                    + " -> from " + backFilter.getFromDate() + ""
-                    + " to " + backFilter.getToDate() + "");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter Session " + uiFilter.getSessionInt()
+                    + " --> from " + backFilter.getFromDate() + ""
+                    + " to " + backFilter.getToDate());
     }
 
     public void populateBackSeverity(LogBackFilter backFilter){
         backFilter.setSeverities(getFilterSeverities(uiFilter.getSeverityInt()));
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "SeverityInt changed to: " + uiFilter.getSeverityInt()
-                    + " (" + getSeverityShortString() + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter SeverityInt " + uiFilter.getSeverityInt()
+                    + " --> " + getSeverityShortString());
     }
 
     protected List<String> getFilterSeverities(int selected) {
@@ -285,8 +346,12 @@ public class LogFilterHelper {
 
     public void populateBackType(LogBackFilter backFilter){
 
-        List<String> inSelection = new ArrayList<>();
         List<String> notInSelection = new ArrayList<>();
+        List<String> inSelection = new ArrayList<>();
+        if (backFilter.getCategories()!= null && !backFilter.getCategories().isEmpty()){
+            inSelection = backFilter.getCategories();
+        }
+
         if(uiFilter.getTypeInt() == 1){
             notInSelection.add("Logcat");
         }else if (uiFilter.getTypeInt() == 2){
@@ -295,24 +360,27 @@ public class LogFilterHelper {
         backFilter.setNotCategories(notInSelection);
         backFilter.setCategories(inSelection);
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "TypeInt changed to: " + uiFilter.getTypeInt() + " IN (" + inSelection
-                    + ") and NOT IN (" + notInSelection +")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter TypeInt: " + uiFilter.getTypeInt()
+                    + " --> IN " + inSelection
+                    + " and NOT IN " + notInSelection);
     }
 
     public void populateBackCategory(LogBackFilter backFilter){
-
-        List<String> inCats = new ArrayList<>();
+        List<String> inSelection = new ArrayList<>();
+        if (backFilter.getCategories()!= null && !backFilter.getCategories().isEmpty()){
+            inSelection = backFilter.getCategories();
+        }
         if (uiFilter.getCategoryInt() == 0){ //All
-            backFilter.setCategories(inCats);
+            backFilter.setCategories(inSelection);
         }else{
-            inCats.add(uiFilter.getCategoryName());
-            backFilter.setCategories(inCats);
+            inSelection.add(uiFilter.getCategoryName());
+            backFilter.setCategories(inSelection);
         }
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "CategoryInt changed to: " + uiFilter.getCategoryInt()
-                    + " IN (" + inCats + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter CategoryInt " + uiFilter.getCategoryInt()
+                    + " --> IN " + inSelection);
     }
 
     public void populateBackTag(LogBackFilter backFilter){
@@ -327,9 +395,13 @@ public class LogFilterHelper {
             //filter.setCategories(cats);
         }
 
-        if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "TagInt changed to " + uiFilter.getTagInt()
-                    + " -> IN subcategory(" + subcats + ")");
+        if (isDebug())
+            Log.v(Iadt.TAG, "BackFilter TagInt " + uiFilter.getTagInt()
+                    + " --> IN subcategory " + subcats);
+    }
+
+    private boolean isDebug() {
+        return false;
     }
 
     //endregion

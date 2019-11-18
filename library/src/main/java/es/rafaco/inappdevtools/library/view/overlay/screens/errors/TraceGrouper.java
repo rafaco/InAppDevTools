@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 import java.util.ArrayList;
@@ -10,7 +29,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
-import es.rafaco.inappdevtools.library.view.components.flex.TraceItem;
+import es.rafaco.inappdevtools.library.view.components.flex.TraceItemData;
 import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 
 public class TraceGrouper {
@@ -48,8 +67,8 @@ public class TraceGrouper {
         boolean firstOpenableFound = false;
         for (int i = 0; i < traceData.size(); i++){
             Object firstItem = traceData.get(i);
-            if (firstItem instanceof TraceItem){
-                TraceItem current = (TraceItem)firstItem;
+            if (firstItem instanceof TraceItemData){
+                TraceItemData current = (TraceItemData)firstItem;
                 if (!firstTraceFound){
                     current.setAlwaysExpanded(true);
                     firstTraceFound = true;
@@ -87,7 +106,7 @@ public class TraceGrouper {
 
         boolean causeFound = false;
         for(int i=0;i<traces.size();i++){
-            TraceItem item = new TraceItem(traces.get(i));
+            TraceItemData item = new TraceItemData(traces.get(i));
             fillClassifier(item);
 
             if (item.getSourcetrace().getExtra()!=null &&
@@ -100,7 +119,7 @@ public class TraceGrouper {
         }
     }
 
-    private void fillClassifier(TraceItem item) {
+    private void fillClassifier(TraceItemData item) {
         if (matcher == null)
             initMatcher();
 
@@ -115,7 +134,7 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : OTHER_TAG);
         item.setColor(getColor(item));
-        item.setFullPath(IadtController.get().getSourcesManager().getPathFromClassName(item.getSourcetrace().extractPath()));
+        item.setFullPath(IadtController.get().getSourcesManager().getPathFromClassName(item.getSourcetrace().getClassName()));
     }
 
     private void initMatcher() {
@@ -131,7 +150,7 @@ public class TraceGrouper {
         matcher.put("java.", ANDROID_TAG);
     }
 
-    private int getColor(TraceItem item) {
+    private int getColor(TraceItemData item) {
         if (item.getTag().equals(YOUR_APP_TAG))
             return R.color.rally_green;
         else if (item.getTag().equals(IADT_TAG))
@@ -145,8 +164,8 @@ public class TraceGrouper {
         int end = start + group.getCount() + 1;
         for(int i = start + 1; i < end ; i++) {
             Object item = data.get(i);
-            if (item instanceof TraceItem ){
-                TraceItem current = (TraceItem) item;
+            if (item instanceof TraceItemData){
+                TraceItemData current = (TraceItemData) item;
                 current.setGrouped(true);
                 current.setExpanded(group.isExpanded());
             }
@@ -157,9 +176,9 @@ public class TraceGrouper {
     private void injectGroups(List<Object> traceData, int from) {
         TraceGroupItem group = null;
         for (int i = from; i<traceData.size();i++){
-            TraceItem current;
-            if (traceData.get(i) instanceof TraceItem) {
-                current = (TraceItem) traceData.get(i);
+            TraceItemData current;
+            if (traceData.get(i) instanceof TraceItemData) {
+                current = (TraceItemData) traceData.get(i);
                 String currentGroupKey = current.getTag();
 
                 if (!current.isAlwaysExpanded()) {
@@ -204,14 +223,14 @@ public class TraceGrouper {
         
         for (int i = 0; i < traceData.size(); i++){
             Object firstItem = traceData.get(i);
-            if (firstItem instanceof TraceItem){
-                ((TraceItem)firstItem).setPosition(TraceItem.Position.START);
+            if (firstItem instanceof TraceItemData){
+                ((TraceItemData)firstItem).setPosition(TraceItemData.Position.START);
                 break;
             }
         }
         Object lastItem = traceData.get(traceData.size()-1);
-        if (lastItem instanceof TraceItem){
-            ((TraceItem)lastItem).setPosition(TraceItem.Position.END);
+        if (lastItem instanceof TraceItemData){
+            ((TraceItemData)lastItem).setPosition(TraceItemData.Position.END);
         }
 
         for (int i = traceData.size()-1; i >= 0; i--){

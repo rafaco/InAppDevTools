@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools
 
 import groovy.json.JsonOutput
@@ -99,7 +118,6 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private void generateGitInfo(Project project) {
-
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
         def localCommitsLong
@@ -164,9 +182,12 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     }
 
     private String shell(String cmd) {
+        //TODO: print output error
+        //TODO: research why it lock the builds sometimes, like with long diffs or paged result.
         String result = null
         try {
-            result = cmd.execute([], project.rootDir).text.trim()
+            println ("Shell on: " + project.rootProject.rootDir)
+            result = cmd.execute([], project.rootProject.rootDir).text.trim()
         }
         catch (java.io.IOException e) {
             println TAG + "[WARNING]: " + "Unable to reach git command, check your PATH!"

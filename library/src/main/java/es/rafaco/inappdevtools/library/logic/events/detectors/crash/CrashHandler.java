@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.events.detectors.crash;
 
 import android.content.Context;
@@ -20,6 +39,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -50,11 +70,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         this.previousHandle = previousHandler;
     }
 
+    private boolean isDebug(){
+        return IadtController.get().isDebug();
+    }
+
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         long startTime = new Date().getTime();
-        db = IadtController.get().getDatabase();
         Log.v(Iadt.TAG, "CrashHandler: processing uncaughtException");
+        db = IadtController.get().getDatabase();
 
         try {
             friendlyLogId = FriendlyLog.logCrash(ex.getMessage());
@@ -62,6 +86,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
             long crashId = storeCrash(crash);
+            long sessionId = updateSession(crashId);
+
             PendingCrashUtil.savePending();
 
             IadtController.get().beforeClose();
@@ -70,11 +96,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             saveDetailReport();
             saveStacktrace(crashId, ex);
 
-            Log.v(Iadt.TAG, "CrashHandler: processing finished on " + (new Date().getTime() - startTime) + " ms");
+            if (isDebug())
+                Log.v(Iadt.TAG, "CrashHandler: processing finished on "
+                        + (new Date().getTime() - startTime) + " ms");
+
             onCrashStored( thread, ex);
         }
         catch (Exception e) {
-            Log.e(Iadt.TAG, "CrashHandler: exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
+            Log.e(Iadt.TAG, "CrashHandler CRASHED! exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
             Log.e(Iadt.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
             Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
             FriendlyLog.logException("Exception", e);
@@ -84,16 +113,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void stopAnrDetector() {
         // Early stop of AnrDetector, other get stopped later on by IadtController.beforeClose().
         // Reason: AnrDetector start new threads which is currently forbidden.
-        EventDetector anrDetector = IadtController.get().getEventManager().getEventDetectorsManager().get(ErrorAnrEventDetector.class);
+        EventDetector anrDetector = IadtController.get().getEventManager()
+                .getEventDetectorsManager().get(ErrorAnrEventDetector.class);
         anrDetector.stop();
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
         if (IadtController.get().getConfig().getBoolean(BuildConfig.CALL_DEFAULT_CRASH_HANDLER)){
-            Log.i(Iadt.TAG, "CrashHandler: Let the exception propagate to default handler");
+            if (isDebug()) Log.d(Iadt.TAG, "CrashHandler finish. Calling default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{
-            Log.e(Iadt.TAG, "CrashHandler: Restarting app");
+            if (isDebug()) Log.d(Iadt.TAG, "CrashHandler finish. Restarting app");
             IadtController.get().restartApp(true);
         }
     }
@@ -138,20 +168,31 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void printLogcatError(Thread thread, Crash crash) {
-        Log.e(Iadt.TAG, "EXCEPTION: " + crash.getException() + " -> " + crash.getMessage());
-        Log.e(Iadt.TAG, crash.getStacktrace());
-        Log.e(Iadt.TAG, String.format("Thread %s [%s] is %s. Main: %s",
+        Log.e(Iadt.TAG, "EXCEPTION: " + crash.getException());
+        Log.e(Iadt.TAG, "MESSAGE: " + crash.getMessage());
+        Log.e(Iadt.TAG, String.format("THREAD: %s [%s] is %s. Main: %s",
                 thread.getName(),
                 thread.getId(),
                 thread.getState().name(),
                 String.valueOf(ThreadUtils.isMain(thread))));
+        Log.e(Iadt.TAG, "STACKTRACE: " + crash.getStacktrace());
     }
 
     //TODO: currentCrashId never get used, why?
+    //TODO: double get sessionId
     private long storeCrash(final Crash crash) {
+        long sessionId = IadtController.get().getDatabase().sessionDao().getLast().getUid();
+        crash.setMessage("Session " + sessionId + " crashed: " + crash.getMessage());
         currentCrashId = db.crashDao().insert(crash);
         FriendlyLog.logCrashDetails(friendlyLogId, currentCrashId, crash);
         return currentCrashId;
+    }
+
+    private long updateSession(long crashId) {
+        Session session = db.sessionDao().getLast();
+        session.setCrashId(crashId);
+        db.sessionDao().update(session);
+        return session.getUid();
     }
 
     private Boolean saveScreenshot(){
@@ -170,8 +211,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveLogcat(long crashId){
+        //TODO: REPORT - Review if this is currently needed
+        // It doesn't work on Android P
         LogcatHelper helper = new LogcatHelper();
-        Log.d(Iadt.TAG, "Extracting logcat");
+        if (isDebug()) Log.d(Iadt.TAG, "Extracting logcat");
 
         Logcat logcat = helper.buildCrashReport(crashId);
         if (logcat != null){
@@ -199,7 +242,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveStacktrace(long crashId, Throwable ex){
-        Log.d(Iadt.TAG, "Storing stacktrace");
+        if (isDebug()) Log.d(Iadt.TAG, "Storing stacktrace");
         SourcetraceDao stacktraceDao = db.sourcetraceDao();
         List<Sourcetrace> traces = new ArrayList<>();
         StackTraceElement[] stackTrace = ex.getStackTrace();
@@ -214,7 +257,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             trace.setLinkedId(crashId);
             trace.setLinkedType("crash");
             trace.setLinkedIndex(i);
-            if (i==0) trace.setExtra("crash");
+            trace.setExtra("exception");
             traces.add(trace);
         }
 
@@ -230,13 +273,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 trace.setLinkedId(crashId);
                 trace.setLinkedType("crash");
                 trace.setLinkedIndex(i+j);
-                if (j==0) trace.setExtra("cause");
+                trace.setExtra("cause");
                 traces.add(trace);
             }
         }
 
         stacktraceDao.insertAll(traces);
-        Log.d(Iadt.TAG, "Stored " + traces.size() + " traces");
+        if (isDebug()) Log.d(Iadt.TAG, "Stored " + traces.size() + " traces");
         return true;
     }
 }

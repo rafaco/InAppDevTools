@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /** Embed an icon into a Drawable that can be used as TextView icons, or ActionBar icons.
  *
  * new IconDrawable(context, IconValue.icon_star)
@@ -14,7 +33,6 @@
 package es.rafaco.inappdevtools.library.view.icons;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -24,7 +42,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.util.TypedValue;
+
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class IconDrawable extends Drawable {
 
@@ -89,19 +108,7 @@ public class IconDrawable extends Drawable {
      * @return The current IconDrawable for chaining.
      */
     public IconDrawable sizeDp(int size) {
-        return sizePx(dpToPx(context.getResources(), size));
-    }
-
-    /**
-     * Dp to px.
-     *
-     * @param res the res
-     * @param dp  the dp
-     * @return the int
-     */
-    public static int dpToPx(Resources res, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                res.getDisplayMetrics());
+        return sizePx(UiUtils.dpToPx(context, size));
     }
 
     /**

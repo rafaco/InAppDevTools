@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
 import android.view.ViewGroup;
@@ -52,7 +71,25 @@ public class MoreScreen extends Screen {
         List<Object> data = new ArrayList<>();
 
         data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - All items has been mixed with logcat logs at Log Screen\n");
+                " - Home 2 is a test\n" +
+                " - All other items has been mixed at Log Screen\n");
+
+        data.add(new RunButton("Home 2",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(Home2Screen.class);
+                    }
+                }));
+
+        /*data.add(new RunButton("Analysis",
+                R.drawable.ic_settings_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
+                    }
+                }));*/
+
 
         data.add(new RunButton("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
@@ -78,14 +115,6 @@ public class MoreScreen extends Screen {
                     public void run() { OverlayService.performNavigation(ErrorsScreen.class);
                     }
                 }));
-
-        /*data.add(new RunButton("Analysis",
-                R.drawable.ic_settings_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
-                    }
-                }));*/
 
         data.add(new RunButton("Logcat",
                 R.drawable.ic_android_white_24dp,

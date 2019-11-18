@@ -1,13 +1,33 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
@@ -20,30 +40,35 @@ import android.support.v7.widget.SearchView;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
+import br.tiagohm.CodeView;
+import br.tiagohm.Language;
+import br.tiagohm.Theme;
+import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
-import es.rafaco.inappdevtools.library.view.components.codeview.CodeView;
-import es.rafaco.inappdevtools.library.view.components.codeview.Language;
-import es.rafaco.inappdevtools.library.view.components.codeview.Theme;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
-
-import static android.content.Context.SEARCH_SERVICE;
 
 public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
-    private TextView codeHeader;
-    private CodeView codeViewer;
-    private ToolBarHelper toolbarHelper;
+    CodeView codeViewer;
+    ToolBarHelper toolbarHelper;
     boolean[] tuneSelection;
+    RelativeLayout traceContainer;
+    TextView traceLabel;
+    AppCompatButton prevButton;
+    AppCompatButton nextButton;
+    TextView wideLabel;
+    private boolean isSourceUnavailable;
 
     public SourceDetailScreen(ScreenManager manager) {
         super(manager);
@@ -70,67 +95,54 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     protected void onCreate() {
-        //TODO: subtitle
-        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
     }
 
     @Override
     protected void onStart(ViewGroup view) {
-        codeHeader = bodyView.findViewById(R.id.code_header);
+        traceContainer = bodyView.findViewById(R.id.trace_container);
+        prevButton = bodyView.findViewById(R.id.prev_trace);
+        traceLabel = bodyView.findViewById(R.id.trace_label);
+        wideLabel = bodyView.findViewById(R.id.wide_label);
+        nextButton = bodyView.findViewById(R.id.next_trace);
         codeViewer = bodyView.findViewById(R.id.code_view);
 
-        new AsyncTask<String, String, String>(){
-            @Override
-            protected String doInBackground(String... strings) {
-                return IadtController.get().getSourcesManager().getContent(getParams().path);
+        if (!getParams().isTrace){
+            traceContainer.setVisibility(View.GONE);
+            String message = getParams().path;
+            if (getParams().lineNumber>0){
+                message += Humanizer.newLine()
+                        + "Line: " + getParams().lineNumber;
             }
-
-            @Override
-            protected void onPostExecute(final String content) {
-                super.onPostExecute(content);
-                codeHeader.setText(getParams().path);
-
-                if (content == null){
-                    codeViewer.setCode("Unable to get content");
-                    return;
-                }
-
-                codeViewer.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        codeViewer.setOnHighlightListener(SourceDetailScreen.this)
-                                .setTheme(Theme.ANDROIDSTUDIO)
-                                .setFontSize(12)
-                                .setShowLineNumber(true)
-                                .setWrapLine(false)
-                                .setZoomEnabled(false)
-                                .setCode(content)
-                                .setLanguage(parseLanguage())
-                                .apply();
-
-                        if (getParams().lineNumber > 0){
-                            codeViewer.highlightLineNumber(getParams().lineNumber);
-                            codeViewer.scrollToLine(getParams().lineNumber);
-                        }
-                    }
-                });
-
-                tuneSelection = new boolean[]{ true, false };
-            }
-        }.execute();
-
-        //initToolbar();
-    }
-
-    public Language parseLanguage() {
-        String extension = NodesHelper.getFileExtensionFromPath(getParams().path);
-        Language language = Language.getLanguageByName(extension.toLowerCase());
-        if (language != null){
-            return language;
+            wideLabel.setText(message);
+            loadSource(getParams().path, getParams().lineNumber + "");
         }
-        return Language.AUTO;
+        else{
+            getScreenManager().setTitle("Stacktrace");
+            loadTrace(getParams().traceId);
+        }
     }
 
+    protected void loadSource(String path, String line) {
+        new FillSourceAsyncTask(this).execute(path, line);
+    }
+
+    private void loadSourceUnavailable() {
+        isSourceUnavailable = true;
+    }
+
+    protected void loadTrace(long traceId) {
+        new FillTraceAsyncTask(this).execute(traceId);
+    }
+
+    @Override
+    protected void onStop() {
+        //Nothing needed
+    }
+
+    @Override
+    protected void onDestroy() {
+        //Nothing needed
+    }
 
     //region [ CodeView listener ]
 
@@ -161,23 +173,16 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     //endregion
 
-
     //region [ TOOL BAR ]
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //TODO: subtitle
-        //getToolbar().setSubtitle(PathUtils.getFileNameWithExtension(getParams().path));
 
         toolbarHelper = new ToolBarHelper(getToolbar());
         MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");
         toolbarHelper.showAllMenuItem();
         
         final SearchView searchView = (SearchView) menuItem.getActionView();
-
-        SearchManager searchManager = (SearchManager) getContext().getSystemService(SEARCH_SERVICE);
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -239,8 +244,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
             onShareButton();
         }
         else if (selected == R.id.action_copy) {
-            ClipboardUtils.save(getContext(), codeViewer.getCode());
-            Iadt.showMessage("Content copied to clipboard");
+            onCopyButton();
         }
         return super.onMenuItemClick(item);
     }
@@ -270,41 +274,55 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     }
 
     private void onShareButton() {
-        new AsyncTask<String, String, String>(){
-            @Override
-            protected String doInBackground(String... strings) {
-                return IadtController.get().getSourcesManager().getLocalFile(getParams().path)
-                        .getAbsolutePath();
-            }
+        final IadtController controller = IadtController.get();
+        File localFile = controller.getSourcesManager().getLocalFile(getParams().path);
 
-            @Override
-            protected void onPostExecute(final String path) {
-                super.onPostExecute(path);
-
-                if (path == null){
-                    Iadt.showMessage("Unable to get file path");
-                    return;
-                }
-                FileProviderUtils.openFileExternally(IadtController.get().getContext(),
-                        path, Intent.ACTION_SEND);
+        if (isSourceUnavailable){
+            Iadt.showMessage("Nothing to share");
+        }
+        else if (localFile==null) {
+            Iadt.showMessage("Unable to get file path");
+            return;
+        }
+        else{
+            String path = localFile.getAbsolutePath();
+            if (path == null){
+                Iadt.showMessage("Unable to get file path");
+                return;
             }
-        }.execute();
+            FileProviderUtils.openFileExternally(controller.getContext(),
+                    path, Intent.ACTION_SEND);
+        }
     }
+
+    private void onCopyButton() {
+        if (isSourceUnavailable){
+            Iadt.showMessage("Nothing to copy");
+        }
+        else{
+            ClipboardUtils.save(getContext(), codeViewer.getCode());
+            Iadt.showMessage("Content copied to clipboard");
+        }
+    }
+
     //endregion
 
+    //region [ PARAMS ]
 
-    @Override
-    protected void onStop() {
-        //Nothing needed
+    public static String buildParams(String path){
+        InnerParams paramObject = new InnerParams(path, -1);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
     }
 
-    @Override
-    protected void onDestroy() {
-        //Nothing needed
+    public static String buildParams(String path, int lineNumber){
+        InnerParams paramObject = new InnerParams(path, lineNumber);
+        Gson gson = new Gson();
+        return gson.toJson(paramObject);
     }
 
-    public static String buildParams(String type, String path, int lineNumber){
-        InnerParams paramObject = new InnerParams(type, path, lineNumber);
+    public static String buildParams(long traceId){
+        InnerParams paramObject = new InnerParams(traceId);
         Gson gson = new Gson();
         return gson.toJson(paramObject);
     }
@@ -314,15 +332,28 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         return gson.fromJson(getParam(), InnerParams.class);
     }
 
-    public static class InnerParams {
-        public String type;
-        public String path;
-        public int lineNumber;
+    public void setSourceUnavailable(boolean notAvailable) {
+        isSourceUnavailable = notAvailable;
+    }
 
-        public InnerParams(String type, String path, int lineNumber) {
-            this.type = type;
+    public static class InnerParams {
+        long traceId;
+        boolean isTrace;
+        String path;
+        int lineNumber;
+        long crashId;
+
+        public InnerParams(String path, int lineNumber) {
+            this.isTrace = false;
             this.path = path;
             this.lineNumber = lineNumber;
         }
+
+        public InnerParams(long traceId) {
+            this.isTrace = true;
+            this.traceId = traceId;
+        }
     }
+
+    //endregion
 }

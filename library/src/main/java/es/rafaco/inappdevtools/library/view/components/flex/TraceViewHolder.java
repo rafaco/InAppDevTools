@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.os.Build;
@@ -51,8 +70,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
     }
 
     @Override
-    public void bindTo(Object abstractData, int position) {
-        final TraceItem data = (TraceItem) abstractData;
+    public void bindTo(Object abstractData, final int position) {
+        final TraceItemData data = (TraceItemData) abstractData;
         if (data!=null){
 
             itemView.setActivated(data.isExpanded());
@@ -68,12 +87,12 @@ public class TraceViewHolder extends FlexibleViewHolder {
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
 
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
-            if (data.getPosition().equals(TraceItem.Position.START)){
+            if (data.getPosition().equals(TraceItemData.Position.START)){
                 whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));
                 timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
                 timeline.setTimelineType(TimelineView.TYPE_START);
             }
-            else if (data.getPosition().equals(TraceItem.Position.END)){
+            else if (data.getPosition().equals(TraceItemData.Position.END)){
                 whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_END);
             }else{
@@ -85,45 +104,42 @@ public class TraceViewHolder extends FlexibleViewHolder {
             messageView.setVisibility(TextUtils.isEmpty(data.getMessage()) ? View.GONE : View.VISIBLE);
             messageView.setText(data.getMessage());
 
-            final Sourcetrace traces = data.getSourcetrace();
-            whereView.setText(traces.getShortClassName() + "." + traces.getMethodName() + "()");
-            where2View.setText(traces.getPackageName());
+            final Sourcetrace trace = data.getSourcetrace();
+            whereView.setText(trace.getShortClassName() + "." + trace.getMethodName() + "()");
+            where2View.setText(trace.getPackageName());
             where2View.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
 
             tag.setText(data.getTag());
             tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
 
-            where3View.setText(traces.getFileName() + ":" + traces.getLineNumber());
+            where3View.setText(trace.getFileName() + ":" + trace.getLineNumber());
 
             if (data.isOpenable()){
+                UiUtils.setCardViewClickable(cardView, false);
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OverlayService.performNavigation(SourceDetailScreen.class,
+                                SourceDetailScreen.buildParams(trace.getUid()));
+                    }
+                });
+                
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
-                UiUtils.setCardViewClickable(itemView.getContext(), cardView, true);
-                cardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(null,
-                                        data.getFullPath(),
-                                        traces.getLineNumber()));
-                    }
-                });
-                itemView.setClickable(false);
                 navIcon.setVisibility(View.VISIBLE);
-            }else{
+            }
+            else{
+                UiUtils.setCardViewClickable(cardView, false);
+                cardView.setOnClickListener(null);
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
-                cardView.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);
                 }
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
-                UiUtils.setCardViewClickable(itemView.getContext(), cardView, false);
-                cardView.setOnClickListener(null);
-                itemView.setClickable(false);
                 navIcon.setVisibility(View.GONE);
             }
         }

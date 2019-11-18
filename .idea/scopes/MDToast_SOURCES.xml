@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="MDToast SOURCES" pattern="src[library]:com.valdesekamdem.library.mdtoast..*" />
+</component>

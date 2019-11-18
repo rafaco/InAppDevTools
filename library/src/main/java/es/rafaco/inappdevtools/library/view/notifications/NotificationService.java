@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.notifications;
 
 import android.app.Notification;
@@ -104,11 +123,11 @@ public class NotificationService extends Service {
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();
-                    IadtController.get().showMain();
+                    IadtController.get().getOverlayHelper().showMain();
                     break;
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
     }
 
     private void bringAppToFront() {
@@ -208,29 +227,29 @@ public class NotificationService extends Service {
                 .setWhen(System.currentTimeMillis()); //Group third
 
         builder.setChannelId(getCurrentChannel().getId());
-        Log.w("RAFA", "Notification channel: " + getCurrentChannel());
+        //Log.w("RAFA", "Notification channel: " + getCurrentChannel());
         if (FirstStartUtil.isSessionFromFirstStart()){
-            Log.w("RAFA", "Notification isFirstStart");
+            //Log.w("RAFA", "Notification isFirstStart");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MAX);
         }
         else if (crash != null){
-            Log.w("RAFA", "Notification crash");
+            //Log.w("RAFA", "Notification crash");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MIN);
         }
         else{
-            Log.w("RAFA", "Notification not isFirstStart");
+            //Log.w("RAFA", "Notification not isFirstStart");
             builder.setDefaults(Notification.DEFAULT_LIGHTS)
                     .setPriority(Notification.PRIORITY_MIN);
         }
         
         if (crash == null){
-            Log.w("RAFA", "Notification not crash");
+            //Log.w("RAFA", "Notification not crash");
             builder.setColor(getResources().getColor(R.color.rally_blue_med));
         }
         else{
-            Log.w("RAFA", "Notification crash");
+            //Log.w("RAFA", "Notification crash");
             builder.setColor(getResources().getColor(R.color.rally_orange));
         }
 

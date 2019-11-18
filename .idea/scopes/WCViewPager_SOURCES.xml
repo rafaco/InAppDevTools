@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="WCViewPager SOURCES" pattern="src[library]:nevet.me.wcviewpager..*" />
+</component>

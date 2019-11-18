@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
@@ -8,7 +27,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
@@ -52,14 +71,14 @@ public class ToolsInfoReporter extends AbstractInfoReporter {
     private InfoGroupData getBuildInfo() {
         return new InfoGroupData.Builder("Generated BuildInfo")
                 .setIcon(R.string.gmd_settings_system_daydream)
-                .add(new JsonAssetHelper(context, JsonAsset.BUILD_INFO).getAll())
+                .add(new JsonAssetHelper(context, IadtPath.BUILD_INFO).getAll())
                 .build();
     }
 
     private InfoGroupData getBuildConfig() {
         return new InfoGroupData.Builder("Generated BuildConfig")
                 .setIcon(R.string.gmd_settings_applications)
-                .add(new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG).getAll())
+                .add(new JsonAssetHelper(context, IadtPath.BUILD_CONFIG).getAll())
                 .build();
     }
 

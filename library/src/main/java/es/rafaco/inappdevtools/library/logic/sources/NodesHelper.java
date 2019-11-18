@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
@@ -15,15 +34,9 @@ import es.rafaco.inappdevtools.library.storage.files.AssetFileReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetsNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.RootNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNodeReader;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 
 public class NodesHelper {
-
-    private static final String SRC_TAIL = "_sources.jar";
-    private static final String RES_TAIL = "_resources.zip";
-
-    public static final String ASSETS = "assets";
-    public static final String SOURCES = "src";
-    public static final String RESOURCES = "res";
 
 
     public static AbstractNode populate(Context context) {
@@ -33,22 +46,28 @@ public class NodesHelper {
 
         //Prepare first level
         nodeReader = new RootNodeReader();
-        ((RootNodeReader) nodeReader).addNode(ASSETS);
-        ((RootNodeReader) nodeReader).addNode(SOURCES);
-        ((RootNodeReader) nodeReader).addNode(RESOURCES);
+        ((RootNodeReader) nodeReader).addNode(IadtPath.SOURCES);
+        ((RootNodeReader) nodeReader).addNode(IadtPath.GENERATED);
+        ((RootNodeReader) nodeReader).addNode(IadtPath.RESOURCES);
+        ((RootNodeReader) nodeReader).addNode(IadtPath.ASSETS);
 
         //Populate ASSETS
-        nodeReader = new AssetsNodeReader(context, nodeReader, ASSETS);
+        nodeReader = new AssetsNodeReader(context, nodeReader, IadtPath.ASSETS);
         AbstractNode root = nodeReader.populate();
 
         //Populate SRC and RES
-        AbstractNode ourAssetsNode = getNodeByFullPath(root,"assets/inappdevtools/");
+        AbstractNode ourAssetsNode = getNodeByFullPath(root,
+                IadtPath.ASSETS + "/" + IadtPath.SUBFOLDER + "/");
         for (AbstractNode node: ourAssetsNode.getChildren().values()) {
             String prefix = null;
-            if (node.getName().endsWith(RES_TAIL)) {
-                prefix = RESOURCES;
-            }else if (node.getName().endsWith(SRC_TAIL)) {
-                prefix = SOURCES;
+            if (node.getName().endsWith(IadtPath.RESOURCES_TAIL)) {
+                prefix = IadtPath.RESOURCES;
+            }
+            else if (node.getName().endsWith(IadtPath.SOURCES_TAIL)) {
+                prefix = IadtPath.SOURCES;
+            }
+            else if (node.getName().endsWith(IadtPath.GENERATED_TAIL)) {
+                prefix = IadtPath.GENERATED;
             }
 
             if (!TextUtils.isEmpty(prefix)){

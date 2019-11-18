@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This source file is part of InAppDevTools, which is available under
+  ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+  ~
+  ~ Copyright 2018-2019 Rafael Acosta Alvarez
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_content"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal">
+
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/card_margin"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="24dp"
+                    android:layout_margin="4dp"/>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="4dp"
+                    style="@style/TextCondensedBig" />
+
+
+                <ImageView
+                    android:id="@+id/nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="4dp"/>
+
+                <TextView
+                    android:id="@+id/overview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/nav_icon"
+                    android:layout_toRightOf="@id/title"
+                    android:layout_centerVertical="true"
+                    android:textAlignment="textEnd"
+                    android:layout_gravity="end"
+                    android:layout_margin="4dp"
+                    style="@style/TextCondensedMedium"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/collapsedContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/title">
+
+                <View
+                    android:id="@+id/content_separator"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    style="@style/horizontal_separator"/>
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/card_margin"
+                    style="@style/TextCondensedMedium" />
+
+                <View
+                    android:id="@+id/button_separator"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    style="@style/horizontal_separator"/>
+
+                <FrameLayout
+                    android:id="@+id/button_group_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </es.rafaco.compat.CardView>
+</LinearLayout>

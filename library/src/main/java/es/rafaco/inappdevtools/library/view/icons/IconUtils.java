@@ -1,9 +1,27 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.icons;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +32,8 @@ import android.widget.TextView;
 //#else
 import android.support.v4.content.ContextCompat;
 //#endif
+
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class IconUtils {
 
@@ -59,11 +79,7 @@ public class IconUtils {
     }
 
     public static void applyToImageView(ImageView view, int icon, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view.setImageDrawable(view.getContext().getDrawable(icon));
-        } else {
-            view.setImageDrawable(view.getContext().getResources().getDrawable(icon));
-        }
+        view.setImageDrawable(UiUtils.getDrawable(icon));
         if (color>0){
             int contextualizedColor = ContextCompat.getColor(view.getContext(), color);
             view.setColorFilter(contextualizedColor);

@@ -1,4 +1,0 @@
-// IADT: Dummy module asset
-//
-// To check source inclusion features
-// from this module

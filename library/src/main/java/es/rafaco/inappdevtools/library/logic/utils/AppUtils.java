@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.utils;
 
 import android.app.ActivityManager;
@@ -14,6 +33,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -79,7 +99,6 @@ public class AppUtils {
     }
 
     public static void programRestart(Context context, boolean isCrash) {
-        Log.e("Iadt", "Programming restart after 100ms");
         PackageManager pm = context.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
 
@@ -92,10 +111,11 @@ public class AppUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        FriendlyLog.log( "I", "App", "Restart", "Restart schedule in 100 ms");
     }
 
     public static void exit() {
-        Log.d("Iadt", "Killing application");
+        Log.d(TAG, "Killing application process");
         android.os.Process.killProcess(ThreadUtils.myPid());
         System.exit(10);
     }

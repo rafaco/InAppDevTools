@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
@@ -19,11 +38,15 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
@@ -121,6 +144,26 @@ public class AppInfoReporter extends AbstractInfoReporter {
                 .add("Features", features)
                 .add("Instrumentations", instrumentations)
                 .add("Libraries", "Coming soon")
+                .addButton(new RunButton("Original",
+                        R.drawable.ic_local_library_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                String params = SourceDetailScreen.buildParams(IadtPath.SOURCES
+                                        + "/AndroidManifest.xml");
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
+                            }
+                        }))
+                .addButton(new RunButton("Merged",
+                        R.drawable.ic_local_library_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                String params = SourceDetailScreen.buildParams(IadtPath.GENERATED
+                                        + "/merged_manifests/AndroidManifest.xml");
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
+                            }
+                        }))
                 .build();
         return group;
     }
@@ -165,6 +208,11 @@ public class AppInfoReporter extends AbstractInfoReporter {
     @NonNull
     public String getFormattedAppLong() {
         return getAppName() + " "  + getPackageInfo().versionName;
+    }
+
+    public String getFormattedVersionLong() {
+        PackageInfo packageInfo = getPackageInfo();
+        return String.format("Version %s (%s)", packageInfo.versionName, packageInfo.versionCode);
     }
 
 

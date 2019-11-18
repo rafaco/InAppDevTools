@@ -1,15 +1,16 @@
 apply plugin: 'com.android.library'
+apply from: '../gradle/constants.gradle'
 apply from: 'publish.gradle'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion PROJECT_COMPILE_SDK
+    buildToolsVersion PROJECT_BUILD_TOOLS
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion PROJECT_MIN_SDK
+        targetSdkVersion PROJECT_TARGET_SDK
+        versionCode LIBRARY_VERSION_CODE
+        versionName LIBRARY_VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -29,4 +30,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+
+sonarqube {
+    androidVariant 'debug'
 }

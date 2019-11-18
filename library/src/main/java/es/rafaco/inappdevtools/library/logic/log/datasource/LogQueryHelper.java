@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.log.datasource;
 
 import android.text.TextUtils;
@@ -17,6 +36,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
 public class LogQueryHelper {
 
@@ -29,7 +49,7 @@ public class LogQueryHelper {
         this.filter = filter;
     }
 
-    public SupportSQLiteQuery getSelectedQuery() {
+    public SupportSQLiteQuery getFilterQuery() {
         queryString = new String();
         args = new ArrayList();
         containsCondition = false;
@@ -78,8 +98,19 @@ public class LogQueryHelper {
 
         queryString += " ORDER BY date ASC";
 
-        if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "ROOM QUERY: " + queryString);
+        if (LogScreen.isLogDebug())
+            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
+
+        return new SimpleSQLiteQuery(queryString, args.toArray());
+    }
+
+    public SupportSQLiteQuery getPositionQuery(long id) {
+        getFilterQuery();
+
+        queryString = "SELECT COUNT(*) AS date" +
+                " FROM ( " + queryString + ")" +
+                " WHERE date < (SELECT date FROM friendly WHERE uid = ? )";
+        args.add(id);
 
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
@@ -110,21 +141,18 @@ public class LogQueryHelper {
         }
     }
 
-    public SimpleSQLiteQuery getCurrentFilterSize(){
-        getSelectedQuery();
+    public SimpleSQLiteQuery getFilterSizeQuery(){
+        getFilterQuery();
 
         queryString = queryString.replace("SELECT *",
                 "SELECT 'Current filter' AS name,"
                         + " COUNT(*) AS count,"
                         + " (count(*) * 100.0 / (select count(*) from friendly)) AS percentage");
-
-        //args.add(0, columnName);
-
         queryString = queryString.replace("ORDER BY date ASC", "");
-                //"GROUP BY " + columnName + "ORDER BY COUNT(*) DESC");
 
-        if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "FILTER QUERY: " + queryString);
+        if (LogScreen.isLogDebug())
+            Log.d(Iadt.TAG, "FILTER SIZE QUERY: " + queryString);
+
         return new SimpleSQLiteQuery(queryString, args.toArray());
     }
 }

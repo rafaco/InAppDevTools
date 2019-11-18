@@ -1,10 +1,32 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
+import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -52,18 +74,23 @@ public class LiveInfoReporter extends AbstractInfoReporter {
     }
 
     public InfoGroupData getActivityInfo() {
-        return new InfoGroupData.Builder("View")
+        InfoGroupData.Builder builder = new InfoGroupData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
                 .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
+                .add("Orientation is " + OrientationEventDetector.getOrientationString())
+                .add()
                 .add("Top activity is " + RunningTasksUtils.getTopActivity())
-                .addButton(new RunButton("Inspect View",
-                        new Runnable() {
-                            @Override
-                            public void run() { OverlayService.performNavigation(InspectViewScreen.class);
-                            }
-                        }))
-                .build();
+                .add(RunningTasksUtils.getTopActivityInfo());
+
+        //TODO: when multiple buttons supported -> Add inspect source
+        builder.addButton(new RunButton("Inspect View",
+                new Runnable() {
+                        @Override
+                        public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                        }
+                    }));
+        return builder.build();
     }
 
     public InfoGroupData getTaskInfo() {
@@ -90,10 +117,14 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
+    @SuppressLint("NewApi")
     public InfoGroupData getProcessesInfo() {
         return new InfoGroupData.Builder("Processes")
                 .setIcon(R.string.gmd_developer_board)
                 .setOverview(RunningProcessesUtils.getCount() + "")
+                .add("myPid", Process.myPid())
+                .add("myTid", Process.myTid())
+                .add("myUid", Process.myUid())
                 .add(RunningProcessesUtils.getString())
                 .build();
     }

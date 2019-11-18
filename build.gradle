@@ -1,17 +1,21 @@
-
 buildscript {
+
     repositories {
         google()
         jcenter()
     }
+
+    apply from: './gradle/constants.gradle'
+
     dependencies {
-
-        //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
         classpath 'com.android.tools.build:gradle:3.4.1'
-        //#else
-        //classpath 'com.android.tools.build:gradle:3.0.0'
-        //#endif
 
+        /*
+         *  Iadt PLUGIN: import using legacy plugin application, with dynamic version.
+         */
+        classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PLUGIN_VERSION}"
+
+        // Internal Iadt plugins for build and publication
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'wang.dannyhe.tools:plugin:0.0.7'
@@ -19,8 +23,13 @@ buildscript {
 }
 
 plugins {
-    // Declare our plugin (make it available at subprojects)
-    id "es.rafaco.inappdevtools" version "0.0.15" apply false
+    /*
+     *  Iadt PLUGIN: Standard usage using plugins DSL.
+     *  NOTE: Replace "X.X.X" for latest version.
+     *  TODO: Upgrade to Gradle 5.6, it allow dynamic version
+     *
+     * id "es.rafaco.inappdevtools" version "X.X.X" apply false
+     */
     id "org.sonarqube" version "2.7"
 }
 
@@ -31,54 +40,6 @@ allprojects {
         google()
         jcenter()
     }
-}
-
-ext {
-    pluginVersionName = '0.0.15'
-
-    libraryPublishedVersion = '0.0.52'
-    libraryWorkingVersion = '0.0.52'
-    libraryVersionCode = 1
-    libraryMinSdkVersion = 16
-
-    appVersionName = '0.0.01'
-    appVersionCode = 45
-    appMinSdkVersion = 16
-
-    //#ifdef ANDROIDX  //TODO: Gradle pre-processor: manual toggle comment is needed
-    appTargetSdkVersion = 28
-    appCompileSdkVersion = 28
-    appBuildToolsVersion = '28.0.3'
-    libraryTargetSdkVersion = 28
-    libraryCompileSdkVersion = 28
-    libraryBuildToolsVersion = '28.0.3'
-
-    //TEMP without preprocessor
-    //TODO: we don't need preprocessor, migrate to properties per variant
-    libraryAndroidxMaterialVersion = "1.0.0-rc01"
-    libraryAndroidxVersion = "1.0.0"
-    libraryAndroidx2Version = "2.0.0"
-    librarySupportVersion = '28.0.0'
-    librarySupportArchVersion = "1.1.0"
-    librarySupportPagingVersion = "1.0.1"
-
-    //#else
-//    appTargetSdkVersion = 26
-//    appCompileSdkVersion = 26
-//    appBuildToolsVersion = '26.0.2'
-//    appSupportVersion = '26.0.2'
-//    libraryTargetSdkVersion = 27
-//    libraryCompileSdkVersion = 27
-//    libraryBuildToolsVersion = '27.0.3'
-//    librarySupportVersion = '27.1.1'
-    //#endif
-
-    /*WIP: API 23 -> gradleToolVersion = '2.1.0'
-    appTargetSdkVersion = 23
-    appCompileSdkVersion = 23
-    appBuildToolsVersion = '23.0.2'
-    appSupportVersion = '23.0.2'
-    */
 }
 
 
@@ -93,6 +54,7 @@ subprojects {
 
 
 sonarqube {
+    androidVariant 'supportDebug'
     properties {
         property "sonar.projectKey", "rafaco_InAppDevTools"
         property "sonar.organization", "rafaco-github"

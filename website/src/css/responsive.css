@@ -1,0 +1,281 @@
+@media (min-width: 992px) and (max-width: 1199px) {
+    .search-button > a {
+        margin: 0 40px;
+    }
+    .menu_area #nav .nav-link {
+        padding: 0 10px;
+    }
+    .search-form-area #search {
+        width: 450px;
+    }
+    .hero-slides .owl-next {
+        right: 20px;
+    }
+    .hero-slides .owl-prev {
+        left: 20px;
+    }
+    .workflow-slides-area {
+        top: 0;
+        padding-bottom: 100px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-toggler {
+        border: 2px solid #fff;
+        background-color: #f2f4f6;
+        margin: 32px 0;
+    }
+    .sticky .navbar-toggler {
+        margin: 11px 0;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    #mosh-navbar {
+        padding: 30px;
+        border-radius: 5px;
+        background-color: #211b31;
+        text-align: left;
+    }
+    .header_area.sticky .navbar {
+        height: 70px;
+    }
+    .menu_area #nav .nav-link {
+        font-size: 14px;
+        padding: 6px 0;
+    }
+    .search-button > a {
+        margin: 15px 0;
+        display: block;
+    }
+    .hero-slide-content h2 {
+        font-size: 36px;
+    }
+    .welcome_area,
+    .single-hero-slide {
+        height: 900px;
+    }
+    .hero-slides .owl-next {
+        right: 5px;
+    }
+    .hero-slides .owl-prev {
+        left: 5px;
+    }
+    .clients-logo-area > a > img {
+        max-width: 100px;
+        height: auto;
+    }
+    .single-more-service-area {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 0 50%;
+                flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .mosh-more-services-area {
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    }
+    .single_gallery_item {
+        width: 50%;
+    }
+    .workflow-slides-area {
+        top: 0;
+        padding-bottom: 100px;
+    }
+    .testimonial-content p {
+        font-size: 13px;
+    }
+    .mosh-cool-facts-area .counter-area > h3 {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+    .header_area {
+        padding: 0;
+        height: 80px;
+    }
+    .navbar-toggler {
+        border: 2px solid #fff;
+        background-color: #f2f4f6;
+        margin: 11px 0;
+    }
+    .sticky .navbar-toggler {
+        margin: 11px 0;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    #mosh-navbar {
+        padding: 30px;
+        border-radius: 5px;
+        background-color: #211b31;
+        text-align: left;
+    }
+    .header_area.sticky .navbar {
+        height: 70px;
+    }
+    .menu_area #nav .nav-link {
+        font-size: 14px;
+        padding: 6px 0;
+    }
+    .search-button > a {
+        margin: 15px 0;
+        display: block;
+    }
+    .hero-slide-content h2 {
+        font-size: 20px;
+    }
+    .hero-slide-content h4 {
+        font-size: 18px;
+    }
+    .welcome_area,
+    .single-hero-slide {
+        height: 600px;
+    }
+    .hero-slides .owl-next {
+        right: 5px;
+    }
+    .hero-slides .owl-prev {
+        left: 5px;
+    }
+    .search-form-area #search {
+        width: 200px;
+        border-radius: 10px;
+        padding: 0 15px;
+    }
+    .section-heading > h2 {
+        font-size: 24px;
+    }
+    .clients-logo-area > a > img {
+        max-width: 100px;
+        height: auto;
+        margin: 15px;
+    }
+    .features-img > img {
+        width: 100%;
+        position: relative;
+        bottom: -30px;
+        left: 0;
+        z-index: 9;
+    }
+    .single-more-service-area {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 0 100%;
+                flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .mosh-more-services-area {
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    }
+    .single_gallery_item {
+        width: 100%;
+    }
+    .workflow-slides-area {
+        top: 50px;
+        padding-bottom: 150px;
+    }
+    .cta-content .section-heading h2 {
+        font-size: 24px;
+    }
+    .mosh-service-slides .owl-prev {
+        left: -15px;
+    }
+    .mosh-service-slides .owl-next {
+        left: auto;
+        right: -15px;
+    }
+    .footer-bottom-area {
+        height: 100px;
+        text-align: center;
+        padding: 25px 0;
+    }
+    .bradcumbContent h2 {
+        font-size: 40px;
+    }
+    .mosh-about-us-thumb {
+        margin-top: 100px;
+    }
+    .mosh-features-thumb {
+        margin-bottom: 100px;
+    }
+    .few-words-contents,
+    .few-words-thumb {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 0 100%;
+                flex: 0 0 100%;
+        max-width: 100%;
+        height: 770px;
+    }
+    .mosh-team-slides .owl-prev {
+        left: -10px;
+    }
+    .mosh-team-slides .owl-next {
+        left: auto;
+        right: -10px;
+    }
+    .subscribe-newsletter-content h2 {
+        font-size: 24px;
+    }
+    .subscribe-newsletter-content form > input {
+        width: 100%;
+    }
+    .subscribe-newsletter-content form > button {
+        width: 120px;
+        padding: 0 15px;
+        right: 0;
+    }
+    .testimonials-slides .owl-prev {
+        left: -10px;
+    }
+    .testimonials-slides .owl-next {
+        left: auto;
+        right: -10px;
+    }
+    .testimonial-content p {
+        font-size: 13px;
+    }
+    .mosh-cool-facts-area .counter-area > h3 {
+        font-size: 20px;
+    }
+    .testimonials-slides:after {
+        text-align: right;
+    }
+    .testimonials-slides:before {
+        text-align: left;
+    }
+    .mosh-blog-sidebar,
+    .contact-information {
+        margin-top: 100px;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    .welcome_area,
+    .single-hero-slide {
+        height: 700px;
+    }
+    .clients-logo-area > a > img {
+        max-width: 75px;
+        height: auto;
+        margin: 0 15px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .welcome_area,
+    .single-hero-slide {
+        height: 800px;
+    }
+    .hero-slide-content h2 {
+        font-size: 30px;
+    }
+    .single-more-service-area {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 0 50%;
+                flex: 0 0 50%;
+        max-width: 50%;
+    }
+}

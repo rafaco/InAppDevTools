@@ -1,9 +1,29 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.info;
 
 import android.os.Handler;
 import android.os.Looper;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -21,10 +41,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -33,6 +55,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 public class InfoScreen extends Screen {
 
     private Timer updateTimer;
+    private TimerTask updateTimerTask;
     private boolean[] expandedState;
 
     private RelativeLayout overviewView;
@@ -75,11 +98,31 @@ public class InfoScreen extends Screen {
 
         infoReportIndex = getInitialPosition();
 
-        updateView(getData(infoReportIndex));
+        InfoReportData data = getData(infoReportIndex);
+        getScreenManager().setTitle(data.getTitle() + " Info");
+        updateView(data);
+    }
 
-        if (infoReportIndex == 0){
+    @Override
+    protected void onPause() {
+        cancelTimerTask();
+    }
+
+    @Override
+    protected void onResume() {
+        if (getInitialPosition() == 0){
             startUpdateTimer();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        //Deliberately empty
+    }
+
+    @Override
+    protected void onDestroy() {
+        cancelTimerTask();
     }
 
     private int getInitialPosition() {
@@ -107,7 +150,6 @@ public class InfoScreen extends Screen {
     }
 
     private void updateHeader(InfoReportData data) {
-        getScreenManager().setTitle(data.getTitle() + " Info");
         overviewTitleView.setText(data.getTitle());
 
         if (data.getIcon()>0){
@@ -146,11 +188,13 @@ public class InfoScreen extends Screen {
 
 
     private void startUpdateTimer() {
-        final Handler handler = new Handler(Looper.getMainLooper());
-        updateTimer = new Timer(false);
-        TimerTask updateTimerTask = new TimerTask() {
+        if (updateTimerTask!=null){
+            destroyTimer();
+        }
+        updateTimerTask = new TimerTask() {
             @Override
             public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -160,20 +204,24 @@ public class InfoScreen extends Screen {
                 });
             }
         };
-        updateTimer.schedule(updateTimerTask, 2000);
+        updateTimer = new Timer("Iadt-InfoUpdate-Timer", false);
+        updateTimer.schedule(updateTimerTask, 5 * 1000);
     }
 
-    private void stopUpdateTimer() {
-        if (updateTimer!=null) updateTimer.cancel();
+
+    private void cancelTimerTask() {
+        if (updateTimerTask!=null){
+            updateTimerTask.cancel();
+            updateTimerTask = null;
+        }
     }
 
-    @Override
-    protected void onStop() {
-        //Deliberately empty
-    }
-
-    @Override
-    protected void onDestroy() {
-        stopUpdateTimer();
+    private void destroyTimer() {
+        cancelTimerTask();
+        if (updateTimer!=null){
+            updateTimer.cancel();
+            updateTimer.purge();
+            updateTimer = null;
+        }
     }
 }

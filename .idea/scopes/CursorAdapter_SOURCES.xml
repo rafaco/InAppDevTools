@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="CursorAdapter SOURCES" pattern="src[library]:es.rafaco.inappdevtools.library.logic.integrations.cursoradapter..*" />
+</component>

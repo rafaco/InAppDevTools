@@ -1,11 +1,40 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.text.TextUtils;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
+
+    public static String newLine(){
+        return System.getProperty("line.separator");
+    }
+
+    public static String fullStop(){
+        return newLine()+ newLine();
+    }
 
     public static String toCapitalCase(String text){
         if (TextUtils.isEmpty(text)){
@@ -29,18 +58,29 @@ public class Humanizer {
         if (TextUtils.isEmpty(text)
                 || TextUtils.isEmpty(character)
                 || character.length() > 1 ){
-            return -1;
+            return 0;
         }
 
         return text.length() - text.replace(character, "").length();
     }
 
-    public static String newLine(){
-        return System.getProperty("line.separator");
-    }
+    public static String getLastPart(String text, String separator) {
+        if (TextUtils.isEmpty(text)) {
+            return text;
+        }
 
-    public static String fullStop(){
-        return newLine()+ newLine();
+        //Matcher matcher = Pattern.compile(separator, Pattern.LITERAL).matcher(text);
+        String[] parts = text.split("[" + separator + "]");
+        if (parts == null || parts.length == 0)
+            return text;
+
+        //String lastPart = matcher.group(matcher.groupCount());
+        String lastPart = parts[parts.length-1];
+        if (lastPart != null
+                && lastPart.length()>0)
+            return lastPart;
+
+        return text;
     }
 
     public static String getElapsedTimeLowered(long oldTimeMillis){
@@ -117,4 +157,30 @@ public class Humanizer {
     }
 
     //endregion
+
+    public static String removeHead(String text, String head) {
+        if (text.startsWith(head)) {
+            return text.substring(head.length());
+        }
+        return text;
+    }
+
+    public static String removeTail(String text, String tail) {
+        if (text.endsWith(tail)) {
+            return text.substring(0, text.length() - tail.length());
+        }
+        return text;
+    }
+
+    public static String trimNewlines(String text) {
+        String result = text;
+        String newLine = newLine();
+        while (result.startsWith(newLine)) {
+            result = removeHead(result, newLine);
+        }
+        while (result.endsWith(newLine)) {
+            result = removeTail(result, newLine);
+        }
+        return result;
+    }
 }

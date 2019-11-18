@@ -1,19 +1,19 @@
 apply plugin: 'com.android.library'
-apply from: '../compat/compat.gradle'
+apply from: '../gradle/constants.gradle'
+apply from: 'preprocess.gradle'
 apply from: 'publish.gradle'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion PROJECT_COMPILE_SDK
+    buildToolsVersion PROJECT_BUILD_TOOLS
 
     defaultConfig {
-        minSdkVersion 1
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion PROJECT_MIN_SDK
+        targetSdkVersion PROJECT_TARGET_SDK
+        versionCode LIBRARY_VERSION_CODE
+        versionName LIBRARY_VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -25,17 +25,17 @@ android {
 
     flavorDimensions "compatibility"
     productFlavors {
-        androidx {
-            dimension "compatibility"
-            processor.symbols "ANDROIDX"
-            matchingFallbacks = ['debug', 'release']
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        }
         support {
             dimension "compatibility"
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+        androidx {
+            dimension "compatibility"
+            processor.symbols "ANDROIDX"
+            matchingFallbacks = ['debug', 'release']
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
     }
 
@@ -45,18 +45,18 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // AndroidX flavor
-    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
-    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
-    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
-    androidxApi "androidx.cardview:cardview:$rootProject.ext.libraryAndroidxVersion"
-    androidxApi "androidx.media:media:$rootProject.ext.libraryAndroidxVersion"
+    androidxApi "com.google.android.material:material:$libraryAndroidxMaterialVersion"
+    androidxApi "androidx.appcompat:appcompat:$libraryAndroidxVersion"
+    androidxApi "androidx.recyclerview:recyclerview:$libraryAndroidxVersion"
+    androidxApi "androidx.cardview:cardview:$libraryAndroidxVersion"
+    androidxApi "androidx.media:media:$libraryAndroidxVersion"
 
     // Support flavor
-    supportApi "com.android.support:appcompat-v7:$rootProject.ext.librarySupportVersion"
-    supportApi "com.android.support:design:$rootProject.ext.librarySupportVersion"
-    supportApi "com.android.support:support-v4:$rootProject.ext.librarySupportVersion"
-    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.librarySupportVersion"
-    supportApi "com.android.support:cardview-v7:$rootProject.ext.librarySupportVersion"
+    supportApi "com.android.support:appcompat-v7:$librarySupportVersion"
+    supportApi "com.android.support:design:$librarySupportVersion"
+    supportApi "com.android.support:support-v4:$librarySupportVersion"
+    supportApi "com.android.support:recyclerview-v7:$librarySupportVersion"
+    supportApi "com.android.support:cardview-v7:$librarySupportVersion"
 
     //Test
     testImplementation 'junit:junit:4.12'
@@ -66,4 +66,8 @@ dependencies {
     androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
     androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+sonarqube {
+    androidVariant 'supportDebug'
 }

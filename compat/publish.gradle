@@ -6,18 +6,16 @@ ext {
 
     bintrayDynamicPkg = true
 
-    /*bintrayPkg = "androidx"
-    projectName = 'Compat-AndroidX'
-    projectDesc = 'AndroidX flavor of es.rafaco.compat'*/
-
-    bintrayPkg = "support"
-    projectName = 'Compat-Support'
-    projectDesc = 'Support flavor of es.rafaco.compat'
+    def isAndroidX = project.rootProject.properties['android.useAndroidX'] == 'true'
+    if (isAndroidX){
+        bintrayPkg = "androidx"
+        projectName = 'Compat-AndroidX'
+        projectDesc = 'AndroidX flavor of es.rafaco.compat'
+    }else{
+        bintrayPkg = "support"
+        projectName = 'Compat-Support'
+        projectDesc = 'Support flavor of es.rafaco.compat'
+    }
 }
 
-// Publish to maven local and Bintray
-//TODO: safe-remove this conditions
-if (project.rootProject.file('local.properties').exists()
-        && !(project.getGradle().startParameter.isOffline())) {
-    apply from: '../gradle/publisher/publisher.gradle'
-}
+apply from: '../gradle/publisher.gradle'

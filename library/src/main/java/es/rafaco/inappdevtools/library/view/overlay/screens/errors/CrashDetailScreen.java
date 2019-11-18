@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 import android.os.AsyncTask;
@@ -21,9 +40,11 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -31,7 +52,6 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
@@ -51,7 +71,7 @@ public class CrashDetailScreen extends Screen {
     private ImageView thumbnail;
     private TextView thread;
     private AppCompatButton logcatButton;
-    private AppCompatButton autologButton;
+    private AppCompatButton reproStepsButton;
     private AppCompatButton revealDetailsButton;
 
     private RecyclerView recyclerView1;
@@ -101,7 +121,7 @@ public class CrashDetailScreen extends Screen {
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
         thread = view.findViewById(R.id.detail_thread);
 
-        autologButton = view.findViewById(R.id.autolog_button);
+        reproStepsButton = view.findViewById(R.id.repro_steps_button);
         logcatButton = view.findViewById(R.id.logcat_button);
         revealDetailsButton = view.findViewById(R.id.reveal_details_button);
         out = view.findViewById(R.id.out);
@@ -187,18 +207,32 @@ public class CrashDetailScreen extends Screen {
         InfoReportData report = helper.parseToInfoGroup(crash);
         out.setText(report.toString());
 
-        autologButton.setOnClickListener(new View.OnClickListener() {
+        SessionDao sessionDao = IadtController.getDatabase().sessionDao();
+        long crashSessionId = sessionDao.findByCrashId(crash.getUid()).getUid();
+        long sessionCount = sessionDao.getLast().getUid();
+        int sessionUiPosition = (int)(1+sessionCount-crashSessionId);
+        final long logId = IadtController.getDatabase().friendlyDao().findLogIdByCrashId(crash.getUid());
+
+        final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+        stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);
+        reproStepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayService.performNavigation(LogScreen.class, null);
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
             }
         });
+
+        final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.ALL);
+        logsFilter.getUiFilter().setSessionInt(sessionUiPosition);
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OverlayService.performNavigation(LogcatScreen.class, null);
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(logsFilter.getUiFilter(), logId));
             }
         });
+        
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

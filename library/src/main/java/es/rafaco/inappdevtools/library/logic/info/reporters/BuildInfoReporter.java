@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.info.reporters;
 
 import android.content.Context;
@@ -18,8 +37,7 @@ import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.storage.files.GitAsset;
-import es.rafaco.inappdevtools.library.storage.files.JsonAsset;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
@@ -39,9 +57,9 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
     public BuildInfoReporter(Context context, InfoReport report) {
         super(context, report);
-        buildInfo = new JsonAssetHelper(context, JsonAsset.BUILD_INFO);
-        buildConfig = new JsonAssetHelper(context, JsonAsset.BUILD_CONFIG);
-        gitConfig = new JsonAssetHelper(context, JsonAsset.GIT_CONFIG);
+        buildInfo = new JsonAssetHelper(context, IadtPath.BUILD_INFO);
+        buildConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
+        gitConfig = new JsonAssetHelper(context, IadtPath.GIT_CONFIG);
     }
 
     @Override
@@ -74,7 +92,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                 .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
                 .add("User email", buildInfo.getString(BuildInfo.USER_EMAIL))
                 .addButton(new RunButton("Send Email",
-                    R.drawable.ic_message_white_24dp,
+                    R.drawable.ic_email_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -217,7 +235,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_COMMITS, -1));
+                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_COMMITS));
                     }
                 }));
 
@@ -240,13 +258,13 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
         group.setOverview(file_changes_count + " files");
         group.add(file_status);
-        group.addButton(new RunButton("View Changes",
-                R.drawable.ic_remove_circle_outline_white_24dp,
+        group.addButton(new RunButton("View Diff",
+                R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams("", GitAsset.LOCAL_CHANGES, -1));
+                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_CHANGES));
                     }
                 }));
 

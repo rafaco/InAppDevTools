@@ -15,94 +15,114 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
+
+    - run:
+        name: Local publish COMPAT SupportDebug
+        command: ./gradlew :compat:publishToMavenLocal
+    - run:
+        name: Local publish COMPAT AndroidXDebug
+        command: ./gradlew :compat:publishToMavenLocal -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
     - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
+
+    - run:
+        name: Assemble NOOP Debug
+        command: ./gradlew :noop:assembleDebug
+
+    - run:
+        name: Assemble LIBRARY SupportDebug
+        command: ./gradlew :library:assembleSupportDebug
+    - run:
+        name: Assemble DEMO SupportDebug
+        command: ./gradlew :demo:assembleSupportDebug
+
+    - run:
+        name: Assemble LIBRARY AndroidxDebug
+        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+    - run:
+        name: Assemble DEMO AndroidxDebug
+        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+
     - save_cache:
         paths:
-        - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          - ~/.gradle
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
 
-    - run: ./gradlew build
-    - run: echo "Build job called"
-
-
-  analize:
+  report:
     <<: *defaults
     steps:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
 
       - run:
-          name: Run Lint report on library
-          command: ./gradlew :inappdevtools:lint
+          name: Lint report LIBRARY SupportDebug
+          command: ./gradlew :library:lintSupportDebug
       - store_artifacts:
-          name: Save Lint report on library
+          name: Saving Lint report
           path: library/build/reports
           destination: library/reports
 
       - run:
-          name: Run Lint report on sample
-          command: ./gradlew :sample:lint
+          name: Lint report DEMO SupportDebug
+          command: ./gradlew :demo:lintSupportDebug
       - store_artifacts:
-          name: Save Lint report on sample
-          path: sample/build/reports
-          destination: sample/reports
+          name: Saving Lint report
+          path: demo/build/reports
+          destination: demo/reports
 
       - run: 
-          name: Run Sonar report and upload to SonarCloud
+          name: Sonar report ALL SupportDebug and upload to SonarCloud
           command: ./gradlew sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
-      
+
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
-  release:
+  deploy:
     <<: *defaults
     steps:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "sample/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
 
-      - run: echo "Release job called"
-      #- run: ./gradlew -Prelease.useLastTag=true final
+      - run: echo "Deploy job DISABLED"
+#      - run:
+#          name: Deploying...
+#          command: ./gradlew -Prelease.useLastTag=true final
+
 
 
 workflows:
   version: 2
-  my-workflow:
+
+  iadt-validation:
     jobs:
+
     - build:        # Fired by commit on any branch (default) plus any tag
         filters:
           tags:
             only: /.*/
 
-    - analize:      # Fired by commit on any branch (default) plus any tag
+    - report:      # Fired by commit on any branch (default) plus any tag
         requires:
         - build
         filters:
           tags:
             only: /.*/
 
-    - release:      # Fired by tags only
+    - deploy:      # Fired by Github releases (tags starting with 'v.')
         requires:
-          - analize
+          - report
         filters:
           tags:
             only: /^v.*/

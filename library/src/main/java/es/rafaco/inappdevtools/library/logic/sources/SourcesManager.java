@@ -1,3 +1,22 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.rafaco.inappdevtools.library.logic.sources;
 
 import android.content.Context;
@@ -19,10 +38,9 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 
 public class SourcesManager {
-
-    public static final String ASSETS = "assets";
 
     Context context;
     AbstractNode root;
@@ -94,19 +112,35 @@ public class SourcesManager {
         return !TextUtils.isEmpty(nodePath);
     }
 
-    public String getPathFromClassName(String fullClassName){
+    /**
+     * Get the internal path to the source file of a class, that can be used to request the file to
+     * SourceManager, or null if not found or !canSourceInspection
+     *
+     * @param className fully qualified name of the class (output string of calling getClassName()
+     *                  in the class)
+     * @return          the internal path to the source to request
+     */
+    public String getPathFromClassName(String className){
         if (!canSourceInspection())
             return null;
 
-        String filename = fullClassName.substring(fullClassName.lastIndexOf("/")+1);
-        String path = fullClassName.substring(0, fullClassName.lastIndexOf("/")+1);
-        path = path.replace(".", "/");
+        String internalPath = className.replace(".", "/");
+        if (internalPath.contains("$"))
+            internalPath = internalPath.substring(0, internalPath.indexOf("$"));
 
-        String[] prefixs = new String[]{"src/", "gen/"};
-        for (String prefix: prefixs){
-            AbstractNode target = NodesHelper.getNodeByFullPath(root, prefix + path + filename);
-            if (target != null){
-                return target.getPath();
+        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
+        for (String prefix: prefixes){
+            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath);
+            if (candidate != null){
+                return candidate.getPath();
+            }
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".java");
+            if (candidate != null){
+                return candidate.getPath();
+            }
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".kt");
+            if (candidate != null){
+                return candidate.getPath();
             }
         }
         return null;
