@@ -17,7 +17,7 @@
     </ExternalSystemSettings>
     <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="publishPlugins" externalProjectPath="$PROJECT_DIR$/plugin" vmOptions="" scriptParameters="" />
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="bintrayUpload" externalProjectPath="$PROJECT_DIR$/noop" vmOptions="" scriptParameters="" />
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="bintrayUpload" externalProjectPath="$PROJECT_DIR$/compat" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />

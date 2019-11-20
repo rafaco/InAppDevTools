@@ -6,11 +6,8 @@
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <!-- Title -->
     <title>InAppDevTools.org</title>
-
 	<meta name="author" content="rafaco@gmail.com">
 	<!--  Essential META Tags -->
 	<meta property="og:title" content="InAppDevTools.org">
@@ -18,15 +15,27 @@
 	<meta property="og:image" content="https://inappdevtools.org/social.jpg">
 	<meta property="og:url" content="https://inappdevtools.org/index.htm">
 	<meta name="twitter:card" content="summary_large_image">
-
 	<!--  Non-Essential, But Recommended -->
 	<meta property="og:site_name" content="InAppDevTools.org">
 	<meta name="twitter:image:alt" content="InAppDevTools.org">
-
-	<!--  Non-Essential, But Required for Analytics 
+	<!--  TODO Non-Essential, But Required for Analytics
 	<meta property="fb:app_id" content="your_app_id" />
 	<meta name="twitter:site" content="@website-username">-->
-	
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-152907025-1"></script>
+    <script>
+        var propertyId = 'UA-152907025-1';
+        if (document.location.hostname == "localhost") {
+            window['ga-disable-' + propertyId] = true;
+            console.log("Analytics disabled for local development");
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', propertyId);
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" href="img/core-img/favicon.ico">
 
@@ -49,6 +58,18 @@
 			color: #007bff;
 			margin-right: 0;
 		}
+		.more-service-content > .fa {
+		    font-size: -webkit-xxx-large;
+            color: #007bff;
+            margin-bottom: 20px;
+            color: #404551;
+        }
+        .welcome_area {
+            height: 800px;
+        }
+        .single-more-service-area {
+            margin-bottom: 20px;
+        }
 	</style>
 </head>
 
@@ -103,17 +124,19 @@
     <!-- ***** Header Area End ***** -->
 
     <!-- ***** Welcome Area Start ***** -->
-    <section class="welcome_area section_padding_200 clearfix" id="home" style="background-image: url(img/bg-img/welcome-bg.png)">
+    <section class="welcome_area section_padding_100_0 clearfix" id="home" style="background-image: url(img/bg-img/welcome-bg.png)">
 		<div class="container">
             <div class="row">
                 <div class="col-12">
 					<div class="hero-slide-content text-center">
 						<h2>Enhance your internal APK!</h2>
 						<h4>A library with a collection of tools for your developers and testers. It allows to inspect, report and debug your app from the same screen where it is running. No cable needed, our UI shows over your activities.</h4>
+                        <h3 class="text-white mt-50">Expected release on December 2019</h3>
+                        <p class="text-white">PRE-RELEASE available</p>
 					</div>
                 </div>
 				<!-- Discover More btn -->
-                <div class="col-12 text-center mt-100">
+                <div class="col-12 text-center text-white">
                     <a href="https://github.com/rafaco/InAppDevTools/" class="btn mosh-btn mosh-btn-3">
 						<i class="fa fa-github"></i>
 						Open on Github.com
@@ -124,20 +147,76 @@
     </section>
     <!-- ***** Welcome Area End ***** -->
 
-    <!-- ***** Workflow Area Start ***** -->
-    <section class="mosh-workflow-area section_padding_0_100 clearfix">
+    <!-- ***** Features Area Start ***** -->
+    <section class="mosh-service-area clearfix">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="section-heading text-center mb-0">
-                        <p>Stay tuned</p>
-                        <h2>Expected release on Christmas'19</h2>
+                    <div class="mosh-service-slides owl-carousel">
+                        <div class="single-service-area text-center">
+                            <h2>01.</h2>
+                            <h4>Repro steps</h4>
+                            <p>Track events per sessions. User interactions, network requests, lifecycle events, crashes, ANRs, device events...</p>
+                        </div>
+                        <div class="single-service-area text-center">
+                            <h2>02.</h2>
+                            <h4>Crash handler</h4>
+                            <p>View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.</p>
+                        </div>
+                        <div class="single-service-area text-center">
+                            <h2>03.</h2>
+                            <h4>Live info</h4>
+                            <p>Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.</p>
+                        </div>
+                        <div class="single-service-area text-center">
+                            <h2>04.</h2>
+                            <h4>Advanced inspectors</h4>
+                            <p>View layout, standard logcat, source code (original and generated) and storage (db, SharedPrefs and Files).</p>
+                        </div>
+                        <div class="single-service-area text-center">
+                            <h2>05.</h2>
+                            <h4>Reports</h4>
+                            <p>Send crashes or issues directly to developers, including a zip with all gathered information.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- ***** Service Area End ***** -->
+    <!-- ***** Features Area End ***** -->
+
+    <!-- ***** Characteristics Area Start ***** -->
+    <section class="mosh-more-services-area d-sm-flex clearfix">
+        <div class="single-more-service-area">
+            <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".1s">
+                <i class="fa fa-child"></i>
+                <h4>Easy setup</h4>
+                <p>Install in seconds using Gradle and start using it!</p>
+            </div>
+        </div>
+        <div class="single-more-service-area">
+            <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".4s">
+                <i class="fa fa-sliders"></i>
+                <h4>Customizable</h4>
+                <p>Configure our library for your builds, integrate your sources and use our dev helpers.</p>
+            </div>
+        </div>
+        <div class="single-more-service-area">
+            <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".7s">
+                <i class="fa fa-handshake-o"></i>
+                <h4>App respectful</h4>
+                <p>We carefully avoid any interference with your app behaviour, as it could hide you bugs.</p>
+            </div>
+        </div>
+        <div class="single-more-service-area">
+            <div class="more-service-content text-center wow fadeInUp" data-wow-delay="1s">
+                <i class="fa fa-gift"></i>
+                <h4>Safe Release</h4>
+                <p>Auto disabled by default and noop artifact for minimum apk size increase.</p>
+            </div>
+        </div>
+    </section>
+    <!-- ***** Characteristics Area End ***** -->
 
     <!-- ***** CTA Area Start ***** -->
     <section class="mosh-call-to-action-area bg-img bg-overlay section_padding_100" style="background-image: url(img/bg-img/cta.jpg);">
