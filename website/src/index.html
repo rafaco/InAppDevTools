@@ -59,16 +59,33 @@
 			margin-right: 0;
 		}
 		.more-service-content > .fa {
-		    font-size: -webkit-xxx-large;
-            color: #007bff;
+            font-size: 70px;
+            color: #4a7aec;
             margin-bottom: 20px;
-            color: #404551;
+            width: 100%;
         }
         .welcome_area {
-            height: 800px;
+            height: 860px;
         }
         .single-more-service-area {
             margin-bottom: 20px;
+        }
+
+        li > strong {
+            color: white;
+        }
+        .features-content > ul {
+            padding-left: 1em !important;
+            margin-left: 1em;
+        }
+        .features-content > ul > li {
+            list-style: disc !important;
+            font-family: 'Roboto', sans-serif;
+            color: #abadbe;
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 0;
+            line-height: 1.9;
         }
 	</style>
 </head>
@@ -130,60 +147,133 @@
                 <div class="col-12">
 					<div class="hero-slide-content text-center mt-30">
 						<h2>Enhance your internal APK!</h2>
-						<h4>A library with a collection of tools for your developers and testers. It allows to inspect, report and debug your app from the same screen where it is running. No cable needed, our UI shows over your activities.</h4>
-                        <h3 class="text-white mt-50">Expected release on December 2019</h3>
-                        <p class="text-white">PRE-RELEASE available</p>
+						<h4>Android library to power up your app internal compilations, adding a complete set of in-app tools for your developers and testers.</h4>
+                        <h4 class="mt-30">Crash handler, internal reports, source browser, auto logger, logcat, layout inspector, storage editor, info panels, coding helpers and much more, all over your app!</h4>
+
+                        <a class="btn mosh-btn mosh-btn-3 mt-50" href="https://github.com/rafaco/InAppDevTools/" >
+                            <i class="fa fa-github"></i>
+                            Open on Github.com
+                        </a>
+                        <h4 class="mt-30">Pre-Release available. Release expected for December 2019.</h4>
 					</div>
                 </div>
 				<!-- Discover More btn -->
-                <div class="col-12 text-center text-white">
-                    <a href="https://github.com/rafaco/InAppDevTools/" class="btn mosh-btn mosh-btn-3">
-						<i class="fa fa-github"></i>
-						Open on Github.com
-					</a>
+                <div class="col-12 text-center text-white mt-50">
+
                 </div>
             </div>
         </div>
     </section>
     <!-- ***** Welcome Area End ***** -->
 
-    <!-- ***** Features Area Start ***** -->
-    <section class="mosh-service-area clearfix">
+    <!-- ***** Services Area Start ***** -->
+    <section class="mosh-service-area section_padding_0_100 clearfix">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-sm single-service-area text-center">
+                    <!--<h2>01.</h2>-->
+                    <h4>Essential for Developers</h4>
+                    <p>A new way of coding assisted by a rich overlay layer with powerful tools for real understanding of what is happening at the device.</p>
+                </div>
+                <div class="col-sm single-service-area text-center">
+                    <!--<h2>01.</h2>-->
+                    <h4>Loved by Testers</h4>
+                    <p>A lighter version with information about what they are exactly testing and a easily way to report issues with screenshots, reproduction steps and other automatically gathered data.</p>
+                </div>
+                <div class="col-sm single-service-area text-center">
+                    <!--<h2>01.</h2>-->
+                    <h4>Enjoyed by customers</h4>
+                    <p>They don't get any of our features neither apk size increase. They get a polished app after an agile development process enhanced by our tools :)</p>
+                </div>
+
+                <!--<div class="col-12">
                     <div class="mosh-service-slides owl-carousel">
                         <div class="single-service-area text-center">
-                            <h2>01.</h2>
-                            <h4>Repro steps</h4>
-                            <p>Track events per sessions. User interactions, network requests, lifecycle events, crashes, ANRs, device events...</p>
+                            &lt;!&ndash;<h2>01.</h2>&ndash;&gt;
+                            <h4>Auto Logger</h4>
+                            <p>We record everything happening underneath, from basic reproduction steps to advanced lifecycle entries.</p>
                         </div>
                         <div class="single-service-area text-center">
-                            <h2>02.</h2>
+                            &lt;!&ndash;<h2>02.</h2>&ndash;&gt;
                             <h4>Crash handler</h4>
-                            <p>View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.</p>
+                            <p>Get full crash details immediately on the same screen it happen! Including screenshot, logs and navigation throw causing source lines.</p>
                         </div>
                         <div class="single-service-area text-center">
-                            <h2>03.</h2>
-                            <h4>Live info</h4>
-                            <p>Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.</p>
-                        </div>
-                        <div class="single-service-area text-center">
-                            <h2>04.</h2>
-                            <h4>Advanced inspectors</h4>
-                            <p>View layout, standard logcat, source code (original and generated) and storage (db, SharedPrefs and Files).</p>
-                        </div>
-                        <div class="single-service-area text-center">
-                            <h2>05.</h2>
+                            &lt;!&ndash;<h2>03.</h2>&ndash;&gt;
                             <h4>Reports</h4>
-                            <p>Send crashes or issues directly to developers, including a zip with all gathered information.</p>
+                            <p>Send crashes or issues directly to developers, including valuable context.</p>
+                        </div>
+                        &lt;!&ndash;<div class="single-service-area text-center">
+                            &lt;!&ndash;<h2>04.</h2>&ndash;&gt;
+                            <h4>Info panels</h4>
+                            <p>Complete information about compilation, device and running things.</p>
+                        </div>
+                        <div class="single-service-area text-center">
+                            &lt;!&ndash;<h2>04.</h2>&ndash;&gt;
+                            <h4>Developer tools</h4>
+                            <p>Sources browser, layout inspector, live logs, network requests, storage editor (databases, SharedPrefs and files) and more.</p>
+                        </div>&ndash;&gt;
+
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </section>
+    <!-- ***** Services Area End ***** -->
+
+    <!-- ***** Features Area Start ***** -->
+    <section class="mosh-features-area section_padding_100 clearfix">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-12 col-md-6">
+                    <div class="section-heading">
+                        <p>for developers</p>
+                        <h2>Rich overlay layer with powerful inspection tools</h2>
+                    </div>
+                    <div class="features-content">
+                        <!--<p></p>-->
+                        <ul>
+                            <li><strong>Logs and events</strong>: Filter your standard Logcat output mixed with an auto generate a log of events covering from basic reproduction steps to advanced lifecycle entries.</li>
+                            <li><strong>Crash handler</strong>: Get full crash details immediately on the same screen it happen! Including screenshot, logs and navigation throw causing source lines.</li>
+                            <li><strong>Info panels</strong>: Exhaustive information about the device, your app, the current compilation and running things (processes, threads, tasks, services, providers...).</li>
+                            <li><strong>Source browser</strong>: AndroidManifest, resources, assets, Java/Kotlin sources and build time generated sources.</li>
+                            <li><strong>View inspector</strong>: Get info about current activity and fragments, with navigation to their sources and xml. Inspect elements by touch or throw the hierarchy and edit their values and see your changes directly.</li>
+                            <li><strong>Storage editor</strong>: Browse your internal databases, SharedPrefs and files. Hot edition allowed for DB and SharedPrefs.</li>
+                            <li><strong>Network</strong>: Inspect your request and responses when communicating with your backend or with any service throw Retrofit.</li>
+                        </ul>
+                        <!-- Progress Bar Content Area -->
+                        <div class="features-progress-bar mt-50 d-none">
+                            <!-- Single Progress Bar -->
+                            <div class="single_progress_bar mb-15 wow fadeInUp" data-wow-delay="0.2s">
+                                <p>Features</p>
+                                <div id="bar1" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="100"></span>
+                                </div>
+                            </div>
+                            <!-- Single Progress Bar -->
+                            <div class="single_progress_bar mb-15 wow fadeInUp" data-wow-delay="0.4s">
+                                <p>Apk size increment</p>
+                                <div id="bar2" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="50"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Feature Thumb -->
+        <div class="features-img">
+            <img src="img/bg-img/features.png" alt="">
+        </div>
     </section>
-    <!-- ***** Features Area End ***** -->
+    <!-- ***** Feature Area End ***** -->
 
     <!-- ***** Characteristics Area Start ***** -->
     <section class="mosh-more-services-area d-sm-flex clearfix">
@@ -191,7 +281,9 @@
             <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".1s">
                 <i class="fa fa-child"></i>
                 <h4>Easy setup</h4>
-                <p>Install in seconds using Gradle and start using it!</p>
+                <p>Installation in seconds editing only Gradle files. Inspect your running app now!</p>
+                <a class="btn mosh-btn mosh-btn-2 mt-30"
+                   href="https://github.com/rafaco/InAppDevTools#installation-">Set up</a>
             </div>
         </div>
         <div class="single-more-service-area">
@@ -199,20 +291,31 @@
                 <i class="fa fa-sliders"></i>
                 <h4>Customizable</h4>
                 <p>Configure our library for your builds, integrate your sources and use our dev helpers.</p>
+                <a class="btn mosh-btn mosh-btn-2 mt-30"
+                   href="https://github.com/rafaco/InAppDevTools#configuration-">Configuration</a>
             </div>
         </div>
         <div class="single-more-service-area">
+            <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".7s">
+                <i class="fa fa-users"></i>
+                <h4>Open Source</h4>
+                <p>Free to use and maintain by a friendly community of people like you.</p>
+                <a class="btn mosh-btn mosh-btn-2 mt-30"
+                   href="https://github.com/rafaco/InAppDevTools/blob/master/CONTRIBUTING.md">Contributing</a>
+            </div>
+        </div>
+        <!--<div class="single-more-service-area">
             <div class="more-service-content text-center wow fadeInUp" data-wow-delay=".7s">
                 <i class="fa fa-handshake-o"></i>
                 <h4>App respectful</h4>
                 <p>We carefully avoid any interference with your app behaviour, as it could hide you bugs.</p>
             </div>
-        </div>
+        </div>-->
         <div class="single-more-service-area">
             <div class="more-service-content text-center wow fadeInUp" data-wow-delay="1s">
-                <i class="fa fa-gift"></i>
-                <h4>Safe Release</h4>
-                <p>Auto disabled by default and noop artifact for minimum apk size increase.</p>
+                <i class="fa fa-handshake-o"></i>
+                <h4>Release respectful</h4>
+                <p>We disable everything by default on your releases and your apk size is not increased. We also avoid any behaviour change while developing, as it could hide you bugs.</p>
             </div>
         </div>
     </section>
@@ -227,7 +330,8 @@
                         <div class="section-heading">
                             <p>help us</p>
                             <h2>Send us your feedback</h2>
-                            <a href="https://github.com/rafaco/InAppDevTools/issues/new/choose" class="btn mosh-btn">Collaborate</a>
+                            <a href="https://github.com/rafaco/InAppDevTools/issues/new/choose" class="btn mosh-btn">Feedback</a>
+                            <a href="https://github.com/rafaco/InAppDevTools/blob/master/CONTRIBUTING.md" class="btn mosh-btn mosh-btn-3">Other collaborations</a>
                         </div>
                     </div>
                 </div>
