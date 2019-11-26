@@ -48,14 +48,12 @@ All artifacts are generated from a single project [hosted in this repo](https://
 | es.rafaco.compat:support | [compat](/compat) | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
 | es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
 | es.rafaco.iadt.demo | [demo](/demo) | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
+| inappdevtools.org | [website](/website) | - | Promo website  | [inappdevtools.org](https:/inappdevtools.org) |
 
-### Build configurations
-We have added 23 shared build configurations to the project. Browse their categories on Android Studio for our custom build tasks.
-//TODO: document build configurations.
 
 ### Switching Androidx/Support build
 
-Work in progress: We use a gradle preprocessor to switch between AndroidX or Support libraries in our modules for each variant. This affect our java source and gradle build files. AndroidX build also require 'android.useAndroidX' properties but we set it dynamically passing following command line args: -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true. 
+We use a gradle preprocessor to switch between AndroidX or Support libraries in our modules for each variant. This affect our java source and gradle build files. AndroidX build also require 'android.useAndroidX' properties but we set it dynamically passing following command line args: -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true. 
 
 Our Android Studio project have "Run Configurations" for AndroidX an Support builds per each module and with correct command line args already set.
 
