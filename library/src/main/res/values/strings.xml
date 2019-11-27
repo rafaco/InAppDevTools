@@ -50,4 +50,6 @@
     <string name="simulated_crash_cause">The scenic panic make you pressed that button :)</string>
     <string name="simulated_crash">Simulated crash on a background thread</string>
 
+    <string name="pd_name_sandbox">Storage inspector</string>
+
 </resources>
