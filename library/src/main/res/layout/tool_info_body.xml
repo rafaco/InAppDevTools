@@ -23,6 +23,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/content_margin">
+
+        <es.rafaco.compat.AppCompatButton
+            android:id="@+id/info_nav_previous"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Previous"
+            android:drawableLeft="@drawable/ic_arrow_left_white_24dp"/>
+
+        <es.rafaco.compat.AppCompatButton
+            android:id="@+id/info_nav_index"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Index"
+            android:drawableLeft="@drawable/ic_format_list_bulleted_white_24dp"/>
+
+        <es.rafaco.compat.AppCompatButton
+            android:id="@+id/info_nav_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Next"
+            android:drawableLeft="@drawable/ic_arrow_right_white_24dp"/>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/overview"
         android:layout_width="match_parent"

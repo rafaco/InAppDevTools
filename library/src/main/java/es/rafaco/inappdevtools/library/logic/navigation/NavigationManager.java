@@ -78,6 +78,14 @@ public class NavigationManager {
         return false;
     }
 
+    public boolean isPreviousScreen(Class<? extends Screen> screenClass){
+        if (history.isEmpty() || history.size() < 2){
+            return false;
+        }
+        NavigationStep previousStep = history.get(history.size() - 2);
+        return previousStep.getClassName().equals(screenClass);
+    }
+
     public String getCurrentParams(){
         return getCurrent().getParams();
     }

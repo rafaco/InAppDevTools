@@ -140,7 +140,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
 }
 
     private void toggleExpandedState(int position) {
-        boolean isExpanded = ((InfoScreen)adapter.getScreen()).toggleExpandedState(position);
+        boolean isExpanded = ((InfoScreen)adapter.getScreen()).toggleExpandedPosition(position);
         applyExpandedState(isExpanded);
     }
 

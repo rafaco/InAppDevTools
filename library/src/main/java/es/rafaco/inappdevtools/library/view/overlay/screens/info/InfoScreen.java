@@ -23,7 +23,6 @@ import android.os.Handler;
 import android.os.Looper;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -36,27 +35,28 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.ComplexCardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.ButtonUtils;
 
 public class InfoScreen extends Screen {
 
     private Timer updateTimer;
     private TimerTask updateTimerTask;
-    private boolean[] expandedState;
 
     private RelativeLayout overviewView;
     private TextView overviewTitleView;
@@ -66,6 +66,10 @@ public class InfoScreen extends Screen {
     private RecyclerView flexibleContents;
     private FlexibleAdapter adapter;
     private int infoReportIndex;
+    private int expandedPosition;
+    private AppCompatButton navIndex;
+    private AppCompatButton navPrevious;
+    private AppCompatButton navNext;
 
     public InfoScreen(ScreenManager manager) {
         super(manager);
@@ -90,17 +94,16 @@ public class InfoScreen extends Screen {
         overviewContentView = view.findViewById(R.id.overview_content);
         overviewIconView = view.findViewById(R.id.overview_icon);
         overviewTitleView = view.findViewById(R.id.overview_title);
+        navIndex = view.findViewById(R.id.info_nav_index);
+        navPrevious = view.findViewById(R.id.info_nav_previous);
+        navNext = view.findViewById(R.id.info_nav_next);
         flexibleContents = view.findViewById(R.id.flexible_contents);
 
         adapter = new FlexibleAdapter(1, new ArrayList<>());
         adapter.setScreen(this);
         flexibleContents.setAdapter(adapter);
 
-        infoReportIndex = getInitialPosition();
-
-        InfoReportData data = getData(infoReportIndex);
-        getScreenManager().setTitle(data.getTitle() + " Info");
-        updateView(data);
+        loadReport();
     }
 
     @Override
@@ -110,7 +113,7 @@ public class InfoScreen extends Screen {
 
     @Override
     protected void onResume() {
-        if (getInitialPosition() == 0){
+        if (getInitialReportPosition() == 0){
             startUpdateTimer();
         }
     }
@@ -125,11 +128,22 @@ public class InfoScreen extends Screen {
         cancelTimerTask();
     }
 
-    private int getInitialPosition() {
+
+    //region [ LOAD REPORT ]
+
+    private void loadReport() {
+        infoReportIndex = getInitialReportPosition();
+        expandedPosition = getInitialExpandedPosition();
+        initInfoNavigationButtons(infoReportIndex);
+
+        InfoReportData data = getData(infoReportIndex);
+        updateView(data);
+    }
+
+    private int getInitialReportPosition() {
         if (TextUtils.isEmpty(getParam())){
             return 0;
         }
-
         int paramPosition = Integer.parseInt(getParam());
         return paramPosition;
     }
@@ -137,14 +151,12 @@ public class InfoScreen extends Screen {
     private InfoReportData getData(int reportPosition) {
         InfoReport report = InfoReport.values()[reportPosition];
         InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
-        if (expandedState == null){
-            initExpandedState(reportData.getGroups().size());
-        }
         reportData = updateDataWithExpandedState(reportData);
         return reportData;
     }
 
     public void updateView(InfoReportData reportData) {
+        getScreenManager().setTitle(reportData.getTitle() + " Info");
         updateHeader(reportData);
         updateContents(reportData);
     }
@@ -168,24 +180,48 @@ public class InfoScreen extends Screen {
         adapter.replaceItems(objectList);
     }
 
-    private void initExpandedState(int size) {
-        expandedState = new boolean[size];
-        Arrays.fill(expandedState, false);
+    //endregion
+
+    //region [ EXPAND/COLLAPSE ]
+
+    private int getInitialExpandedPosition() {
+        if (false){ //TODO: get expanded from params
+            return -1;
+        }
+        return -1;
     }
 
-    public boolean toggleExpandedState(int position){
-        boolean newState = !expandedState[position];
-        expandedState[position] = newState;
-        return newState;
+    public boolean toggleExpandedPosition(int position){
+        int previousPosition = expandedPosition;
+        if (previousPosition == position){
+            //Collapse currently selected
+            expandedPosition = -1;
+            return false;
+        }
+        else{
+            if (previousPosition >= 0){
+                //Collapse previously selected
+                InfoGroupData previousData = (InfoGroupData) adapter.getItems().get(previousPosition);
+                previousData.setExpanded(false);
+                adapter.notifyItemChanged(previousPosition);
+            }
+            //Expand current selection
+            expandedPosition = position;
+            return true;
+        }
     }
 
     private InfoReportData updateDataWithExpandedState(InfoReportData reportData) {
         for (int i = 0; i < reportData.getGroups().size(); i++) {
-            reportData.getGroups().get(i).setExpanded(expandedState[i]);
+            boolean isExpanded = (i==expandedPosition);
+            reportData.getGroups().get(i).setExpanded(isExpanded);
         }
         return reportData;
     }
 
+    //endregion
+
+    //region [ UPDATE TIMER ]
 
     private void startUpdateTimer() {
         if (updateTimerTask!=null){
@@ -224,4 +260,60 @@ public class InfoScreen extends Screen {
             updateTimer = null;
         }
     }
+
+    //endregion
+
+    //region [ INFO NAVIGATION ]
+
+    private void initInfoNavigationButtons(final int reportIndex) {
+        int size = InfoReport.values().length;
+
+        if (reportIndex == 0){
+            ButtonUtils.setDisabled(navPrevious);
+        }else{
+            ButtonUtils.setEnabled(navPrevious, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToReport(reportIndex - 1);
+                }
+            });
+        }
+
+        navIndex.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToIndex();
+            }
+        });
+
+        if (reportIndex == size - 1){
+            ButtonUtils.setDisabled(navNext);
+        }else{
+            ButtonUtils.setEnabled(navNext, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToReport(reportIndex + 1);
+                }
+            });
+        }
+    }
+
+    private void navigateToIndex() {
+        boolean isPreviousOverview = IadtController.get().getNavigationManager()
+                .isPreviousScreen(InfoOverviewScreen.class);
+
+        if (isPreviousOverview){
+            getScreenManager().goBack();
+        }
+        else{
+            OverlayService.performNavigation(InfoOverviewScreen.class);
+        }
+    }
+
+    private void navigateToReport(int reportIndex) {
+        updateParams(reportIndex + "");
+        loadReport();
+    }
+
+    //endregion
 }
