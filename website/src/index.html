@@ -37,7 +37,23 @@
     </script>
 
     <!-- Favicon -->
-    <link rel="icon" href="img/core-img/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="img/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="img/icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/icon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/icon/favicon-16x16.png">
+    <link rel="manifest" href="img/icon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
     <!-- Core Stylesheet -->
     <link href="style.css" rel="stylesheet">
@@ -46,9 +62,16 @@
     <link href="css/responsive.css" rel="stylesheet">
 
 	<style>
+	    .logo {
+            width: 300px;
+            margin-right: 10px;
+            margin-top: -8px;
+        }
 		.navbar-brand {
 			font-size: 2rem;
 			color: #FFF;
+			-webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .5));
 		}
 		i.fa {
 			font-size: x-large;
@@ -105,7 +128,7 @@
                     <div class="menu_area h-100">
                         <nav class="navbar h-100 navbar-expand-lg align-items-center">
                             <!-- Logo -->
-                            <a class="navbar-brand" href="index.html">InAppDevTools</a>
+                            <a class="navbar-brand" href="index.html"><img class="logo" src="img/website_logo.png" alt="Iadt logo"></a>
 
                             <!-- Menu Area -->
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mosh-navbar" aria-controls="mosh-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
