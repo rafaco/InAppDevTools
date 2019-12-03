@@ -43,6 +43,7 @@ public abstract class Layer {
         //manager.getInflater().cloneInContext(new ContextThemeWrapper(getBaseContext(), R.style.AppCompatAlertDialogStyle));
 
         view  = manager.getInflater().inflate(getLayoutId(), null);
+        view.setTag(this.getClass().getSimpleName());
         WindowManager.LayoutParams paramRemove = getLayoutParams();
 
         beforeAttachView(view);

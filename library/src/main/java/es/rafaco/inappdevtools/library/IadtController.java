@@ -164,33 +164,25 @@ public final class IadtController {
     }
 
     private void initForeground(){
-        initDelayedBackground();
 
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController initForeground");
 
         if (FirstStartUtil.isFirstStart()){
+            isPendingForegroundInit = true;
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            onInitForeground();
-                        }
-                    },
+                    null,
                     null);
             FirstStartUtil.saveFirstStart();
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            isPendingForegroundInit = true;
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            onInitForeground();
-                        }
-                    },
+                    null,
                     null);
         }
         else{
+            initDelayedBackground();
             onInitForeground();
         }
     }
