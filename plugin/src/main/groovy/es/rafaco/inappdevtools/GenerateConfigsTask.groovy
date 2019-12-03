@@ -66,6 +66,9 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.email!=null)
             propertiesMap.put("email", extension.email)
 
+        if (extension.notes!=null)
+            propertiesMap.put("notes", extension.notes)
+
         if (extension.overlayEnabled!=null)
             propertiesMap.put("overlayEnabled", extension.overlayEnabled)
 

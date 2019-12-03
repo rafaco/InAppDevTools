@@ -28,7 +28,9 @@ import android.text.TextUtils;
 import android.support.annotation.NonNull;
 //#endif
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
@@ -72,15 +74,32 @@ public class BuildInfoReporter extends AbstractInfoReporter {
 
     @Override
     public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
-                .setOverview(getOverview())
-                .add(getBuilderInfo())
+        InfoReportData.Builder builder = new InfoReportData.Builder(getReport())
+                .setOverview(getOverview());
+
+        String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
+        if (!TextUtils.isEmpty(notes)){
+            builder.add(getNotesInfo());
+            //welcomeText += notes + Humanizer.newLine();
+        }
+
+        builder.add(getBuilderInfo())
                 .add(getBuildHostInfo())
                 .add(getBuildInfo())
                 .add(getRepositoryInfo())
                 .add(getLocalRepositoryInfo())
-                .add(getLocalChangesInfo())
+                .add(getLocalChangesInfo());
+
+        return builder.build();
+    }
+
+    private InfoGroupData getNotesInfo() {
+        InfoGroupData group = new InfoGroupData.Builder("Notes")
+                .setIcon(R.string.gmd_speaker_notes)
+                .setOverview("Added")
+                .add(IadtController.get().getConfig().getString(BuildConfig.NOTES))
                 .build();
+        return group;
     }
 
     public String getBuildWelcome() {

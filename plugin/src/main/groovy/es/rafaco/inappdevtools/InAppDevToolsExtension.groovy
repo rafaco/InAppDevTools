@@ -23,6 +23,7 @@ class InAppDevToolsExtension {
 
     //User features fags
     String email
+    String notes
 
     // Build flags (affect plugin)
     Boolean enabled = true

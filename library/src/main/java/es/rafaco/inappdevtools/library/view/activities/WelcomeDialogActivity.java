@@ -24,6 +24,7 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 //#ifdef ANDROIDX
@@ -115,8 +116,11 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         welcomeText += " ";
         welcomeText += new OSInfoReporter(getApplicationContext()).getOneLineOverview();
         welcomeText += "." + Humanizer.fullStop();
-        welcomeText += "Notes:" + Humanizer.newLine();
-        welcomeText += "This is a sample note. Developers can add notes to their compilations to describe their changes or to give testing instructions." + Humanizer.newLine();
+
+        String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
+        if (!TextUtils.isEmpty(notes)){
+            welcomeText += notes + Humanizer.newLine();
+        }
         
         builder
                 .setTitle(R.string.welcome_welcome_title)

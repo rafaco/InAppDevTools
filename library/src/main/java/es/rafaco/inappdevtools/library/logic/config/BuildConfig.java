@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.R;
 public enum BuildConfig {
 
     EMAIL("email", R.string.config_email, String.class, ""),
+    NOTES("notes", R.string.config_notes, String.class, ""),
 
     ENABLED("enabled", R.string.config_enabled, boolean.class, false),
     ENABLED_ON_RELEASE("enabledOnRelease", R.string.config_enabled_on_release, boolean.class, false),

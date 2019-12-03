@@ -140,6 +140,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 inappdevtools {
     enabled = true
     email = 'yourmail@yourdomain.com'
+    notes = 'This compilation fix the following issues:..'
 }
 ```
 
@@ -154,6 +155,7 @@ Available properties:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | `email` | String | null | Default email to use for reports |
+| `notes` | String | null | Compilation notes to show on initial dialog |
 | `enabled` | boolean | true | Disable all and simulate the no-op library and plugin |
 | `enabledOnRelease` | boolean | false | Force enabling our library for release builds of your app. Warning, read [Exposed sources disclaimer](#exposed_sources) |
 | `debug` | boolean | false | Enable debug mode for the library. It print extra logs and include our sources to your compilation  |
@@ -191,6 +193,14 @@ We can directly read your app's assets but we also include a a zip file in your 
 * Your Java source sets. Content of src/main/java plus dynamic inclusions.
 * Your resources: Content of src/main/res but excluding the raw folder.
 * Build time generated sources. Content of build/generated/ excluding assets and png. -->
+
+### Include compilation notes
+You can provide any text to describe your compilation using `notes` configuration. This is very useful to describe changes or to provide instructions and it will be show on first dialog and on BuildInfo panel. 
+```gradle
+inappdevtools {
+    notes = "This is a NOTE about this compilation:\n" +
+            " - Multiline supported"
+```
 
 ### Add run button
 Add your own buttons to our Run screen. You have to provide a title and Runnable object, when you can perform any logic or call any of your app methods. 
