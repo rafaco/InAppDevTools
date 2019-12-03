@@ -40,6 +40,12 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
+import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
+import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
+import es.rafaco.inappdevtools.library.logic.info.reporters.OSInfoReporter;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class WelcomeDialogActivity extends AppCompatActivity {
 
@@ -77,7 +83,8 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         currentAction = (IntentAction) getIntent().getSerializableExtra(EXTRA_INTENT_ACTION);
         if (currentAction != null) {
             if (currentAction.equals(IntentAction.PRIVACY)) {
-                showFirstDialog();
+                showWelcomeDialog();
+                //showFirstDialog();
             } else if (currentAction.equals(IntentAction.OVERLAY)) {
                 showOverlayDialog();
             }
@@ -96,13 +103,44 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         }
     }
 
+    private void showWelcomeDialog() {
+        ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
+
+        String welcomeText = new AppInfoReporter(getApplicationContext()).getAppNameAndVersions();
+        welcomeText += "." + Humanizer.newLine();
+        welcomeText += new BuildInfoReporter(getApplicationContext()).getBuildWelcome();
+        welcomeText += "." + Humanizer.newLine();
+        welcomeText += new DeviceInfoReporter(getApplicationContext()).getSecondLineOverview();
+        welcomeText += " ";
+        welcomeText += new OSInfoReporter(getApplicationContext()).getOneLineOverview();
+        welcomeText += "." + Humanizer.fullStop();
+        welcomeText += "Notes:" + Humanizer.newLine();
+        welcomeText += "This is a sample note. Developers can add notes to their compilations to describe their changes or to give testing instructions." + Humanizer.newLine();
+        
+        builder
+                .setTitle(R.string.welcome_welcome_title)
+                .setMessage(welcomeText)
+                .setIcon(UiUtils.getAppIconResourceId())
+                .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                        showFirstDialog();
+                    }
+                })
+                .setCancelable(false);
+
+        buildAndShow(builder);
+    }
+
     private void showFirstDialog() {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         builder
                 .setTitle(R.string.welcome_privacy_title)
                 .setMessage(R.string.welcome_privacy_content)
-                .setIcon(R.drawable.ic_bug_report_white_24dp)
+                .setIcon(R.drawable.iadt_logo)
                 .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -128,7 +166,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
             ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
             final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
             builder.setTitle(R.string.welcome_permission_title)
-                    .setIcon(R.drawable.ic_bug_report_white_24dp)
+                    .setIcon(R.drawable.iadt_logo)
                     .setMessage(R.string.welcome_permission_content)
                     .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
                         @Override

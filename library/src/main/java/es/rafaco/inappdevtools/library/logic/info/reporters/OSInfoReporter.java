@@ -69,8 +69,12 @@ public class OSInfoReporter extends AbstractInfoReporter {
     }
 
     public String getFirstLineOverview() {
-        return "Android " + getAndroidVersionFull()
-                + (deviceHelper.isDeviceRooted() ? " [Rooted]" : "");
+        return getOneLineOverview() +
+                (deviceHelper.isDeviceRooted() ? " [Rooted]" : "");
+    }
+
+    public String getOneLineOverview() {
+        return "Android " + getAndroidVersionFull();
     }
 
     @Override

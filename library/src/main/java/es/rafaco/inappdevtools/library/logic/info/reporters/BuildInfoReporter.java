@@ -83,6 +83,11 @@ public class BuildInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
+    public String getBuildWelcome() {
+        String firstLine = getFriendlyBuildType();
+        String secondLine = getFriendlyElapsedTime();
+        return firstLine + " from " + secondLine;
+    }
 
 
     public InfoGroupData getBuilderInfo() {
@@ -176,7 +181,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     }
 
     public String getFriendlyElapsedTime() {
-        return Humanizer.getElapsedTime(
+        return Humanizer.getElapsedTimeLowered(
                 Long.parseLong(buildInfo.getString(BuildInfo.BUILD_TIME)));
     }
 

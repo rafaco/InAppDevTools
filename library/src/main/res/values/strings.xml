@@ -21,15 +21,16 @@
     <string name="config_email">Default email to use for reports</string>
 
     <!-- Dialogs -->
-    <string name="welcome_privacy_title">Developer Tools</string>
-    <string name="welcome_privacy_content">This compilation contains some tools that are locally recording your usage. Nothing will be send without your explicit consent, only you can do it by using our reporting feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
-    <string name="welcome_permission_title">Overlay permission</string>
+    <string name="welcome_welcome_title">Internal compilation</string>
+    <string name="welcome_privacy_title">Privacy</string>
+    <string name="welcome_privacy_content">This compilation contains tools that are locally recording your usage of this app. Only you can share these records by using our report feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
+    <string name="welcome_permission_title">Permission</string>
     <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen you have to accept it, then press back button.</string>
-    <string name="welcome_enabled_title">Developer Tools enabled</string>
-    <string name="welcome_enabled_content">Our interface will pop up if your app crash.\n\nYou can inspect your running app at any time by shaking your device, tapping our notification or programmatically using Iadt.show().\n\nYou can also open it now.</string>
-    <string name="welcome_disabled_title">Disable Developer Tools</string>
+    <string name="welcome_enabled_title">InAppDevTools enabled</string>
+    <string name="welcome_enabled_content">You can open our interface at any time by shaking your app or using the floating bubble. Our interface will automatically pop up on crash.</string>
+    <string name="welcome_disabled_title">Disable InAppDevTools</string>
     <string name="welcome_disabled_content">Your app need to be restarted for a clean startup without our tools.\n\nTip: You can re-enable them by cleaning this application data.</string>
-    <string name="draw_other_app_permission_denied">InApp DevTools require \'draw over other apps\' permission</string>
+    <string name="draw_other_app_permission_denied">InAppDevTools require \'draw over other apps\' permission</string>
 
     <!-- Dialogs buttons-->
     <string name="button_continue">CONTINUE</string>
