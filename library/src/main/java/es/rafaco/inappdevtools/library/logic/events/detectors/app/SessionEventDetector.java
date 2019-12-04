@@ -19,11 +19,8 @@
 
 package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
-import android.util.Log;
-
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -38,9 +35,9 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.CacheUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class InitialEventDetector extends EventDetector {
+public class SessionEventDetector extends EventDetector {
 
-    public InitialEventDetector(EventManager eventManager) {
+    public SessionEventDetector(EventManager eventManager) {
         super(eventManager);
     }
 
@@ -57,6 +54,27 @@ public class InitialEventDetector extends EventDetector {
                 session.setDate(detectionDate);
                 session.setDetectionDate(detectionDate);
                 session.setPid(pid);
+
+                if (FirstStartUtil.isFirstStart()){
+                    FirstStartUtil.saveFirstStart();
+                    session.setFirstStart(true);
+                }else{
+                    session.setFirstStart(false);
+                }
+
+                if (NewBuildUtil.isNewBuild()){
+                    eventManager.fire(Event.APP_NEW_BUILD, NewBuildUtil.getBuildTime());
+                    session.setNewBuild(true);
+                }else{
+                    session.setNewBuild(false);
+                }
+
+                if (PendingCrashUtil.isPending()){
+                    session.setPendingCrash(true);
+                }else{
+                    session.setPendingCrash(false);
+                }
+
 
                 //TODO: calculate finishDate for previous session and update it in db
                 //session.setFinishDate();
@@ -81,16 +99,21 @@ public class InitialEventDetector extends EventDetector {
         eventManager.subscribe(Event.APP_START, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                if (PendingCrashUtil.isSessionFromPending()) {
-                    FriendlyLog.log(new Date().getTime(), "W", "App", "Restart",
-                            "App restarted after a crash");
-                } else if (FirstStartUtil.isFirstStart()) {
+                Session currentSession = DevToolsDatabase.getInstance().sessionDao().getLast();
+
+                if (currentSession.isPendingCrash()) {
+                    FriendlyLog.log(new Date().getTime(), "I", "App", "Restart",
+                            "App restarted (previous session crashed)");
+                }
+                else if (currentSession.isFirstStart()) {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "FirstStart",
-                            "App first start (no data)");
-                } else if (NewBuildUtil.isNewBuild()) {
+                            "App first start (no local data)");
+                }
+                else if (currentSession.isNewBuild()) {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started (new compilation over old data)");
-                } else {
+                }
+                else {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started");
                 }
@@ -100,13 +123,7 @@ public class InitialEventDetector extends EventDetector {
 
     @Override
     public void start() {
-        if (IadtController.get().isDebug())
-            Log.d("SESSION", "New session start");
         eventManager.fire(Event.APP_NEW_SESSION, DateUtils.getLong());
-
-        if (NewBuildUtil.isNewBuild()){
-            eventManager.fire(Event.APP_NEW_BUILD, NewBuildUtil.getBuildTime());
-        }
 
         eventManager.subscribe(Event.PROCESS_ON_CREATE, new EventManager.OneShotListener() {
             @Override

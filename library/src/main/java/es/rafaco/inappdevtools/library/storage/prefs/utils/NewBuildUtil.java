@@ -45,8 +45,6 @@ public class NewBuildUtil {
         return buildTimeOnMemory;
     }
 
-
-
     private static void update(){
 
         long lastBuildTime = DevToolsPrefs.getLong(PREF_VALUE_KEY, -1);

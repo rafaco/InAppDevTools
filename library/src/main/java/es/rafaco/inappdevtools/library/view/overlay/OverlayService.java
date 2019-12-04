@@ -158,8 +158,6 @@ public class OverlayService extends Service {
         if (PendingCrashUtil.isPending()){
             overlayManager.navigateTo(CrashDetailScreen.class.getSimpleName(), null);
             PendingCrashUtil.clearPending();
-            //TODO: check if needed
-            //overlayManager.showMain();
         }
         else{
             overlayManager.showIcon();

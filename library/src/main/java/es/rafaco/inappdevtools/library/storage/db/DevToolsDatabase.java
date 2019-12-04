@@ -49,7 +49,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
-@Database(version = 25, exportSchema = true,
+@Database(version = 26, exportSchema = true,
         entities = {Crash.class,
                 Anr.class,
                 Screenshot.class,

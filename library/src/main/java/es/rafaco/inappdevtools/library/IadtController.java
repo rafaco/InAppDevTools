@@ -168,12 +168,12 @@ public final class IadtController {
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController initForeground");
 
-        if (FirstStartUtil.isFirstStart()){
+        Session session = getDatabase().sessionDao().getLast();
+        if (session.isFirstStart()){
             isPendingForegroundInit = true;
             WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
                     null,
                     null);
-            FirstStartUtil.saveFirstStart();
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             isPendingForegroundInit = true;

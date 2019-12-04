@@ -50,6 +50,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -153,8 +154,7 @@ public class NotificationService extends Service {
                 (int)new Date().getTime(), intent, 0);
 
 
-        Notification notification = buildMainNotification(pendingIntent,
-                PendingCrashUtil.isSessionFromPending() ? new Crash() : null);
+        Notification notification = buildMainNotification(pendingIntent);
 
         //createNotificationGroup();
         //createNotificationSummary();
@@ -190,7 +190,14 @@ public class NotificationService extends Service {
 
     //region [ NOTIFICATION ]
 
-    private Notification buildMainNotification(PendingIntent pendingIntent, Crash crash) {
+    private Notification buildMainNotification(PendingIntent pendingIntent) {
+
+        Session session = IadtController.get().getDatabase().sessionDao().getLast();
+
+        Crash crash = null;
+        if (session.isPendingCrash()){
+            crash = new Crash();
+        }
 
         String overview;
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
@@ -228,7 +235,8 @@ public class NotificationService extends Service {
 
         builder.setChannelId(getCurrentChannel().getId());
         //Log.w("RAFA", "Notification channel: " + getCurrentChannel());
-        if (FirstStartUtil.isSessionFromFirstStart()){
+
+        if (session.isFirstStart()){
             //Log.w("RAFA", "Notification isFirstStart");
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
                     .setPriority(Notification.PRIORITY_MAX);
@@ -270,9 +278,10 @@ public class NotificationService extends Service {
     }
 
     private IadtChannel getCurrentChannel() {
-        if (FirstStartUtil.isSessionFromFirstStart())
+        Session session = IadtController.get().getDatabase().sessionDao().getLast();
+        if (session.isFirstStart())
             return IadtChannel.CHANNEL_PRIORITY;
-        else if (PendingCrashUtil.isSessionFromPending())
+        else if (session.isPendingCrash())
             return IadtChannel.CHANNEL_STANDARD;
         else
             return IadtChannel.CHANNEL_SILENT;

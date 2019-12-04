@@ -29,7 +29,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.app.InitialEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.SessionEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneModeChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.ConnectivityChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.DeviceButtonsEventDetector;
@@ -65,9 +65,10 @@ public class EventDetectorsManager {
     }
 
     private void initDetectors() {
-        initDetector(InitialEventDetector.class);
-
+        // Session should be the first one, before Process
+        initDetector(SessionEventDetector.class);
         initDetector(ProcessEventDetector.class);
+
         initDetector(ForegroundEventDetector.class);
         initDetector(ActivityEventDetector.class);
         initDetector(FragmentEventDetector.class);

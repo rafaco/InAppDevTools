@@ -55,6 +55,15 @@ public class Session implements Serializable {
     @ColumnInfo(name = "compileConfig")
     private String compileConfig;
 
+    @ColumnInfo(name = "isFirstStart")
+    private boolean isFirstStart;
+
+    @ColumnInfo(name = "isNewBuild")
+    private boolean isNewBuild;
+
+    @ColumnInfo(name = "isPendingCrash")
+    private boolean isPendingCrash;
+
     @ColumnInfo(name = "crashId")
     private long crashId;
 
@@ -112,6 +121,30 @@ public class Session implements Serializable {
 
     public void setCompileConfig(String compileConfig) {
         this.compileConfig = compileConfig;
+    }
+
+    public boolean isFirstStart() {
+        return isFirstStart;
+    }
+
+    public void setFirstStart(boolean firstStart) {
+        isFirstStart = firstStart;
+    }
+
+    public boolean isNewBuild() {
+        return isNewBuild;
+    }
+
+    public void setNewBuild(boolean newBuild) {
+        isNewBuild = newBuild;
+    }
+
+    public boolean isPendingCrash() {
+        return isPendingCrash;
+    }
+
+    public void setPendingCrash(boolean pendingCrash) {
+        isPendingCrash = pendingCrash;
     }
 
     public long getCrashId() {
