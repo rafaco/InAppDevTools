@@ -66,7 +66,7 @@ public class OrientationEventDetector extends EventDetector implements SensorEve
                 if (previousOrientation == -1){
                     previousOrientation = getOrientation();
                     String orientation = getOrientationString();
-                    FriendlyLog.log("I", "Device", orientation,
+                    FriendlyLog.log("D", "Device", orientation,
                             "Orientation is " + orientation.toLowerCase());
                 }
             }
@@ -76,14 +76,14 @@ public class OrientationEventDetector extends EventDetector implements SensorEve
         eventManager.subscribe(Event.ORIENTATION_PORTRAIT, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("I", "Device", "Portrait",
+                FriendlyLog.log("D", "Device", "Portrait",
                         "Orientation changed to portrait");
             }
         });
         eventManager.subscribe(Event.ORIENTATION_LANDSCAPE, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("I", "Device", "Landscape",
+                FriendlyLog.log("D", "Device", "Landscape",
                         "Orientation changed to landscape");
             }
         });

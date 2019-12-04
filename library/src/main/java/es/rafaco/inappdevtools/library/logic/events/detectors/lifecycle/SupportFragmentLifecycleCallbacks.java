@@ -76,8 +76,9 @@ public class SupportFragmentLifecycleCallbacks extends FragmentManager.FragmentL
         super.onFragmentResumed(fm, f);
         friendlyLog("D","Resume", fm, f);
 
+        //TODO: restore to info when Fragment Navigation features
         //TODO: skip on rotation like with activities
-        friendlyLog("I","Shown", fm, f);
+        friendlyLog("D","Shown", fm, f);
     }
 
     @Override

@@ -484,18 +484,18 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             Friendly data = adapter.getCurrentList().get(position);
 
             if (action == R.id.action_search) {
-                Iadt.showMessage("Search log on internet");
+                Iadt.showMessage("Searching for log message");
                 ExternalIntentUtils.search(data.getMessage());
                 return true;
             }
-            else if (action == R.id.action_include) {
-                Iadt.showMessage("Include");
+            /*else if (action == R.id.action_include) {
+                Iadt.showMessage("TODO: Filter similar logs");
                 return true;
             }
             else if (action == R.id.action_exclude) {
-                Iadt.showMessage("exclude");
+                Iadt.showMessage("TODO: Exclude similar logs");
                 return true;
-            }
+            }*/
             else if (action == R.id.action_share) {
                 Iadt.showMessage("Sharing log overview");
                 String textToShare = data.getMessage() + Humanizer.fullStop()
@@ -504,7 +504,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 return true;
             }
             else if (action == R.id.action_copy) {
-                Iadt.showMessage("Log message copied to clipboard");
+                Iadt.showMessage("Copied log message to clipboard");
                 ClipboardUtils.save(IadtController.get().getContext(), data.getMessage());
                 return true;
             }

@@ -10,7 +10,7 @@
         android:title="Google it!"
         app:showAsAction="never" />
 
-    <item
+    <!--<item
         android:id="@+id/action_include"
         android:icon="@drawable/ic_add_circle_outline_white_24dp"
         android:orderInCategory="100"
@@ -22,7 +22,7 @@
         android:icon="@drawable/ic_remove_circle_outline_white_24dp"
         android:orderInCategory="100"
         android:title="Exclude by..."
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_share"

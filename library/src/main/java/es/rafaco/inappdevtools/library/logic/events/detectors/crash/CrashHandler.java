@@ -91,7 +91,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             PendingCrashUtil.savePending();
 
             IadtController.get().beforeClose();
-            saveLogcat(crashId);
+            //TODO: REPORTS
+            //saveLogcat(crashId);
             saveScreenshot();
             saveDetailReport();
             saveStacktrace(crashId, ex);
@@ -210,9 +211,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return false;
     }
 
+    //TODO: REPORT - Review if this is currently needed
+    // It doesn't work on Android P
     private Boolean saveLogcat(long crashId){
-        //TODO: REPORT - Review if this is currently needed
-        // It doesn't work on Android P
         LogcatHelper helper = new LogcatHelper();
         if (isDebug()) Log.d(Iadt.TAG, "Extracting logcat");
 
