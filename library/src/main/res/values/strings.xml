@@ -34,12 +34,15 @@
     <string name="draw_other_app_permission_denied">InAppDevTools require \'draw over other apps\' permission</string>
 
     <!-- Dialogs buttons-->
+    <string name="button_ok">OK</string>
     <string name="button_continue">CONTINUE</string>
+    <string name="button_accept">ACCEPT</string>
     <string name="button_disable">DISABLE&#8230;</string>
+    <string name="button_disable_all">DISABLE AND RESTART</string>
     <string name="button_cancel">CANCEL</string>
     <string name="button_close">CLOSE</string>
     <string name="button_open_now">OPEN NOW</string>
-    <string name="button_disable_all">DISABLE AND RESTART</string>
+    <string name="button_skip_next">SKIP NEXT</string>
 
     <!-- Chuck -->
     <string name="chuck_ssl">SSL</string>

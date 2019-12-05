@@ -45,17 +45,19 @@ import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
 import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
 import es.rafaco.inappdevtools.library.logic.info.reporters.OSInfoReporter;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class WelcomeDialogActivity extends AppCompatActivity {
+public class IadtDialogActivity extends AppCompatActivity {
 
-    public enum IntentAction {PRIVACY, OVERLAY, DISABLE}
+    public enum IntentAction { AUTO, BUILD_INFO, PRIVACY, OVERLAY, DISABLE }
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     private static Runnable onSuccess;
     private static Runnable onFailure;
     private IntentAction currentAction;
-
     private AlertDialog alertDialog;
 
     public static void open(IntentAction action, Runnable onSuccessCallback, Runnable onFailureCallback) {
@@ -67,7 +69,7 @@ public class WelcomeDialogActivity extends AppCompatActivity {
 
         if (true){ //TODO: pre-checks to avoid opening an unnecessary activity
             Context context = IadtController.get().getContext();
-            Intent intent = new Intent(context, WelcomeDialogActivity.class);
+            Intent intent = new Intent(context, IadtDialogActivity.class);
             intent.putExtra(EXTRA_INTENT_ACTION, action);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent, null);
@@ -83,28 +85,54 @@ public class WelcomeDialogActivity extends AppCompatActivity {
 
         currentAction = (IntentAction) getIntent().getSerializableExtra(EXTRA_INTENT_ACTION);
         if (currentAction != null) {
-            if (currentAction.equals(IntentAction.PRIVACY)) {
-                showWelcomeDialog();
-                //showFirstDialog();
-            } else if (currentAction.equals(IntentAction.OVERLAY)) {
-                showOverlayDialog();
+            if (currentAction.equals(IntentAction.AUTO)) {
+                showAuto();
+            }
+            else if (currentAction.equals(IntentAction.BUILD_INFO)) {
+                showNewBuildDialog(false);
+            }
+            else if (currentAction.equals(IntentAction.PRIVACY)) {
+                showPrivacyDialog(false);
+            }
+            else if (currentAction.equals(IntentAction.OVERLAY)) {
+                showOverlayDialog(false);
             }
             else if (currentAction.equals(IntentAction.DISABLE)) {
-                showDisableDialog();
+                showDisableDialog(false);
             }
             else{
                 if(Iadt.isDebug())
-                    Log.d(Iadt.TAG, "WelcomeDialogActivity - action not mapped without action");
+                    Log.d(Iadt.TAG, "IadtDialogActivity - action not mapped without action");
                 closeAll(false);
             }
         } else {
             if(Iadt.isDebug())
-                Log.d(Iadt.TAG, "WelcomeDialogActivity - started without action");
+                Log.d(Iadt.TAG, "IadtDialogActivity - started without action");
             closeAll(false);
         }
     }
 
-    private void showWelcomeDialog() {
+    private void showAuto(){
+        Session session = IadtController.getDatabase().sessionDao().getLast();
+
+        if (!NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown()){
+            showNewBuildDialog(true);
+        }
+        else if (!PrivacyConsentUtil.isAccepted()){
+            showPrivacyDialog(true);
+        }
+        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            showOverlayDialog(true);
+        }
+        else if (session.isFirstStart()){
+            showSuccessDialog();
+        }
+        else{
+            closeAll(true);
+        }
+    }
+
+    private void showNewBuildDialog(final boolean isAuto) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
 
@@ -115,7 +143,8 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         welcomeText += new DeviceInfoReporter(getApplicationContext()).getSecondLineOverview();
         welcomeText += " ";
         welcomeText += new OSInfoReporter(getApplicationContext()).getOneLineOverview();
-        welcomeText += "." + Humanizer.fullStop();
+        welcomeText += "." + Humanizer.newLine();
+        welcomeText += Humanizer.fullStop();
 
         String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
         if (!TextUtils.isEmpty(notes)){
@@ -126,37 +155,59 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                 .setTitle(R.string.welcome_welcome_title)
                 .setMessage(welcomeText)
                 .setIcon(UiUtils.getAppIconResourceId())
-                .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
-                        showFirstDialog();
+                        if (isAuto)
+                            showAuto();
+                        else
+                            closeAll(true);
                     }
                 })
                 .setCancelable(false);
 
+        Session session = IadtController.getDatabase().sessionDao().getLast();
+        if (!session.isFirstStart()){
+            builder.setNegativeButton(R.string.button_skip_next, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                    NewBuildUtil.saveBuildInfoSkip();
+                    if (isAuto)
+                        showAuto();
+                    else
+                        closeAll(true);
+                }
+            });
+        }
         buildAndShow(builder);
+        NewBuildUtil.saveBuildInfoShown();
     }
 
-    private void showFirstDialog() {
+    private void showPrivacyDialog(final boolean isAuto) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         builder
                 .setTitle(R.string.welcome_privacy_title)
                 .setMessage(R.string.welcome_privacy_content)
-                .setIcon(R.drawable.iadt_logo)
-                .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+                //.setIcon(R.drawable.iadt_logo)
+                .setPositiveButton(R.string.button_accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
-                        showOverlayDialog();
+                        PrivacyConsentUtil.saveAccepted();
+                        if (isAuto)
+                            showAuto();
+                        else
+                            closeAll(true);
                     }
                 })
                 .setNeutralButton(R.string.button_disable, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
-                        showDisableDialog();
+                        showDisableDialog(true);
                     }
                 })
                 .setCancelable(false);
@@ -164,44 +215,36 @@ public class WelcomeDialogActivity extends AppCompatActivity {
         buildAndShow(builder);
     }
 
-    private void showOverlayDialog() {
+    private void showOverlayDialog(final boolean isAuto) {
+        ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
+        builder.setTitle(R.string.welcome_permission_title)
+                //.setIcon(R.drawable.iadt_logo)
+                .setMessage(R.string.welcome_permission_content)
+                .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                        requestOverlayPermission(isAuto);
+                    }
+                })
+                .setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
 
-        if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
-            final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
-            builder.setTitle(R.string.welcome_permission_title)
-                    .setIcon(R.drawable.iadt_logo)
-                    .setMessage(R.string.welcome_permission_content)
-                    .setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                            requestOverlayPermission();
-                        }
-                    })
-                    .setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (currentAction.equals(IntentAction.PRIVACY)){
-                                alertDialog.dismiss();
-                                showFirstDialog();
-                            }else{
-                                if(onFailure!=null)
-                                    onFailure.run();
-                                closeAll(false);
-                            }
-                        }
-                    })
-                    .setCancelable(false);
+                        if (isAuto)
+                            showDisableDialog(true);
+                        else
+                            closeAll(false);
+                    }
+                })
+                .setCancelable(false);
 
-            buildAndShow(builder);
-        }
-        else{
-            showSuccessDialog();
-        }
+        buildAndShow(builder);
     }
 
-    private void requestOverlayPermission() {
+    private void requestOverlayPermission(final boolean isAuto) {
         PermissionActivity.request(PermissionActivity.IntentAction.OVERLAY,
                 new Runnable() {
                     @Override
@@ -212,14 +255,12 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        showOverlayDialog();
+                        showOverlayDialog(isAuto);
                     }
                 });
     }
 
     private void showSuccessDialog() {
-        IadtController.get().initForegroundIfPending();
-
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         builder.setIcon(R.drawable.ic_check_circle_green_24dp)
@@ -234,16 +275,23 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.button_open_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //TODO: review order or disable
                         IadtController.get().getOverlayHelper().showMain();
                         closeAll(true);
                     }
                 })
-                .setCancelable(false);
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        closeAll(true);
+                    }
+                })
+                .setCancelable(true);
 
         buildAndShow(builder);
     }
 
-    private void showDisableDialog() {
+    private void showDisableDialog(final boolean isAuto) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         builder.setIcon(R.drawable.ic_cancel_red_24dp)
@@ -254,16 +302,17 @@ public class WelcomeDialogActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Iadt.getConfig().setBoolean(BuildConfig.ENABLED, false);
                         IadtController.get().restartApp(false);
-                        closeAll(false);
+                        closeAll(true);
                     }
                 })
                 .setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (currentAction.equals(IntentAction.PRIVACY)){
-                            alertDialog.dismiss();
-                            showFirstDialog();
-                        }else{
+                        alertDialog.dismiss();
+                        if (isAuto){
+                            showAuto();
+                        }
+                        else {
                             closeAll(false);
                         }
                     }

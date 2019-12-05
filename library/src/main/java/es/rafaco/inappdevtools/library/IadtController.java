@@ -41,7 +41,7 @@ import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
+
 import com.readystatesoftware.chuck.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
@@ -51,9 +51,11 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
+import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
-import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
@@ -74,7 +76,7 @@ public final class IadtController {
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
     private InfoManager infoManager;
-    public boolean isPendingForegroundInit;
+    public boolean isPendingInitFull;
     private OverlayHelper overlayHelper;
     private boolean sessionStartTimeImproved = false;
 
@@ -93,25 +95,37 @@ public final class IadtController {
         return INSTANCE;
     }
 
-    //region [ INITIALIZATION ]
+
+    //region [ TWO-STEP INITIALIZATION ]
 
     private void init(Context context) {
         this.context = context.getApplicationContext();
 
         ThreadUtils.printOverview("IadtController init");
 
-        boolean backgroundIsUp = initBackground();
-        if (!backgroundIsUp)
+        boolean isEssentialUp = initEssential();
+        if (!isEssentialUp)
             return;
 
-        if (!AppUtils.isForegroundImportance(context)){
-            isPendingForegroundInit = true;
+        if (shouldDelayInitFull()){
+            isPendingInitFull = true;
         }else{
-            initForeground();
+            initFull();
+        }
+
+        if (shouldShowInitialDialog()){
+            IadtDialogActivity.open(IadtDialogActivity.IntentAction.AUTO,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            IadtController.get().initFullIfPending();
+                        }
+                    },
+                    null);
         }
     }
 
-    private boolean initBackground() {
+    private boolean initEssential() {
         configManager = new ConfigManager(context);
 
         if (!isEnabled()){
@@ -120,7 +134,7 @@ public final class IadtController {
         }
 
         if (isDebug())
-            Log.d(Iadt.TAG, "IadtController initBackground");
+            Log.d(Iadt.TAG, "IadtController init essential");
 
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
@@ -138,6 +152,46 @@ public final class IadtController {
         return true;
     }
 
+    private boolean shouldDelayInitFull() {
+        return !AppUtils.isForegroundImportance(context) ||
+                !PrivacyConsentUtil.isAccepted() ||
+                !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
+    }
+
+    private boolean shouldShowInitialDialog() {
+        Session session = getDatabase().sessionDao().getLast();
+        if (session.isNewBuild() && !NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown() ||
+                !PrivacyConsentUtil.isAccepted() ||
+                !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            return true;
+        }
+        return false;
+    }
+
+    public void initFullIfPending(){
+        if (shouldDelayInitFull()){
+            return;
+        }
+        else if (isPendingInitFull){
+            initFull();
+        }
+        else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
+            //TODO: Research this hack, it smell bad
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
+            overlayHelper = new OverlayHelper(getContext());
+        }
+    }
+
+    private void initFull(){
+        if (isDebug())
+            Log.d(Iadt.TAG, "IadtController init full");
+
+        initDelayedBackground();
+        initForeground();
+        isPendingInitFull = false;
+    }
+
     public void initDelayedBackground() {
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
@@ -149,49 +203,9 @@ public final class IadtController {
         LogcatReaderService.enqueueWork(getContext(), intent);
     }
 
-    public void initForegroundIfPending(){
-        if (!AppUtils.isForegroundImportance(getContext()))
-            return;
-
-        if (isPendingForegroundInit){
-            initForeground();
-        }
-        else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            if (IadtController.get().isDebug())
-                Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
-            overlayHelper = new OverlayHelper(getContext());
-        }
-    }
-
     private void initForeground(){
-
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController initForeground");
-
-        Session session = getDatabase().sessionDao().getLast();
-        if (session.isFirstStart()){
-            isPendingForegroundInit = true;
-            WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.PRIVACY,
-                    null,
-                    null);
-        }
-        else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            isPendingForegroundInit = true;
-            WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
-                    null,
-                    null);
-        }
-        else{
-            initDelayedBackground();
-            onInitForeground();
-        }
-    }
-
-    private void onInitForeground(){
-        isPendingForegroundInit = false;
-
-        if (isDebug())
-            Log.d(Iadt.TAG, "IadtController onInitForeground");
 
         if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();

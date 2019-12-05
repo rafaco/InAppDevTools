@@ -40,7 +40,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
+import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -129,7 +129,7 @@ public class RunScreen extends Screen {
                     @Override
                     public void run() {
                         IadtController.get().getOverlayHelper().showIcon();
-                        WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.DISABLE,
+                        IadtDialogActivity.open(IadtDialogActivity.IntentAction.DISABLE,
                                 new Runnable() {
                                     @Override
                                     public void run() {

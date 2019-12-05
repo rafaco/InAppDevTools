@@ -27,7 +27,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
-import es.rafaco.inappdevtools.library.view.activities.WelcomeDialogActivity;
+import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 
 public class OverlayHelper {
@@ -56,27 +56,25 @@ public class OverlayHelper {
         if (!getController().isEnabled()) return true;
         if (!AppUtils.isForegroundImportance(getContext())) return true;
 
-        if (getController().isPendingForegroundInit) {
-            getController().initForegroundIfPending();
-            if (!getController().isPendingForegroundInit)
+        if (getController().isPendingInitFull) {
+            getController().initFullIfPending();
+            if (!getController().isPendingInitFull)
                 return true;
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-                WelcomeDialogActivity.open(WelcomeDialogActivity.IntentAction.OVERLAY,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                showMain();
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Iadt.showMessage(R.string.draw_other_app_permission_denied);
-                            }
-                        });
-            }
+            IadtDialogActivity.open(IadtDialogActivity.IntentAction.OVERLAY,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            showMain();
+                        }
+                    },
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Iadt.showMessage(R.string.draw_other_app_permission_denied);
+                        }
+                    });
             return true;
         }
         return false;

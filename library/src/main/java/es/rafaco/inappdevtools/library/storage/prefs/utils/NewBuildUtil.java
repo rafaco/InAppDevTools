@@ -27,7 +27,9 @@ import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class NewBuildUtil {
 
-    public static final String PREF_VALUE_KEY = "LAST_BUILD_TIME";
+    public static final String LAST_BUILD_TIME = "LAST_BUILD_TIME";
+    public static final String BUILD_INFO_SHOWN = "BUILD_INFO_SHOWN";
+    public static final String BUILD_INFO_SKIPPED = "BUILD_INFO_SKIPPED";
     public static Boolean isNewBuildOnMemory;
     public static Long buildTimeOnMemory;
 
@@ -36,6 +38,22 @@ public class NewBuildUtil {
             update();
         }
         return isNewBuildOnMemory;
+    }
+
+    public static boolean isBuildInfoShown(){
+        return DevToolsPrefs.getBoolean(BUILD_INFO_SHOWN, false);
+    }
+
+    public static void saveBuildInfoShown(){
+        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, true);
+    }
+
+    public static boolean isBuildInfoSkipped(){
+        return DevToolsPrefs.getBoolean(BUILD_INFO_SKIPPED, false);
+    }
+
+    public static void saveBuildInfoSkip() {
+        DevToolsPrefs.setBoolean(BUILD_INFO_SKIPPED, true);
     }
 
     public static long getBuildTime(){
@@ -47,7 +65,7 @@ public class NewBuildUtil {
 
     private static void update(){
 
-        long lastBuildTime = DevToolsPrefs.getLong(PREF_VALUE_KEY, -1);
+        long lastBuildTime = DevToolsPrefs.getLong(LAST_BUILD_TIME, -1);
         JsonAssetHelper buildInfo = new JsonAssetHelper(IadtController.get().getContext(), IadtPath.BUILD_INFO);
         long currentBuildTime = buildInfo.getLong(BuildInfo.BUILD_TIME);
 
@@ -65,10 +83,15 @@ public class NewBuildUtil {
             isNewBuildOnMemory = true;
             buildTimeOnMemory = currentBuildTime;
             storeBuildTime();
+            clearBuildInfoShown();
         }
     }
 
     private static void storeBuildTime(){
-        DevToolsPrefs.setLong(PREF_VALUE_KEY, buildTimeOnMemory);
+        DevToolsPrefs.setLong(LAST_BUILD_TIME, buildTimeOnMemory);
+    }
+
+    private static void clearBuildInfoShown() {
+        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, false);
     }
 }
