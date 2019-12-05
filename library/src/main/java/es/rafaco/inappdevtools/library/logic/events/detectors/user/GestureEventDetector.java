@@ -41,7 +41,7 @@ public class GestureEventDetector extends EventDetector {
         eventManager.subscribe(Event.GESTURE_SINGLE_TAP, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "UserTouch", "SingleTap",
+                FriendlyLog.log("D", "Touch", "SingleTap",
                         "User touch - onSingleTapConfirmed: " + param);
             }
         });
@@ -49,7 +49,7 @@ public class GestureEventDetector extends EventDetector {
         eventManager.subscribe(Event.GESTURE_CONTEXT_TAP, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "UserTouch", "ContextClick",
+                FriendlyLog.log("D", "Touch", "ContextClick",
                         "User touch - onContextClick: " + param);
             }
         });
@@ -57,7 +57,7 @@ public class GestureEventDetector extends EventDetector {
         eventManager.subscribe(Event.GESTURE_DOUBLE_TAP, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "UserTouch", "DoubleTap",
+                FriendlyLog.log("D", "Touch", "DoubleTap",
                         "User touch - onDoubleTap: " + param);
             }
         });
@@ -65,7 +65,7 @@ public class GestureEventDetector extends EventDetector {
         eventManager.subscribe(Event.GESTURE_LONG_PRESSED, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "UserTouch", "LongPress",
+                FriendlyLog.log("D", "Touch", "LongPress",
                         "User touch - onLongPress: " + param);
             }
         });
@@ -73,7 +73,7 @@ public class GestureEventDetector extends EventDetector {
         eventManager.subscribe(Event.GESTURE_FLING_TAP, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("D", "UserTouch", "Fling", (String)param);
+                FriendlyLog.log("D", "Touch", "Fling", (String)param);
             }
         });
     }
@@ -213,7 +213,7 @@ public class GestureEventDetector extends EventDetector {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            //FriendlyLog.log("W", "UserTouch", "Scroll", "User touch - onScroll");
+            //FriendlyLog.log("W", "Touch", "Scroll", "User touch - onScroll");
             return false;
         }
 

@@ -220,11 +220,11 @@ public class FriendlyLog {
                 return R.drawable.ic_person_pin_white_24dp;
             }
         }
-        else if (log.getCategory().equals("UserTouch")) {
+        else if (log.getCategory().equals("Touch")) {
             return R.drawable.ic_touch_app_white_24dp;
         }
         else if (log.getCategory().equals("User")){
-            if (log.getSubcategory().equals("Touch")){
+            if (log.getSubcategory().equals("Action")){
                 return R.drawable.ic_touch_app_white_24dp;
             }
             else if (log.getSubcategory().equals("BackKey")){

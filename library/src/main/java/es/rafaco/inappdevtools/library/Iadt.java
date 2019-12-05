@@ -129,22 +129,27 @@ public class Iadt {
         showMessage(getController().getContext().getResources().getString(stringId));
     }
 
-    public static void showMessage(final String text) {
+    public static void showMessage(String text) {
         if (!isEnabled()) return;
         CustomToast.show(getController().getContext(), text, CustomToast.TYPE_INFO);
         FriendlyLog.log("I", "Message", "Info", text);
     }
 
-    public static void showWarning(final String text) {
+    public static void showWarning(String text) {
         if (!isEnabled()) return;
         CustomToast.show(getController().getContext(), text, CustomToast.TYPE_WARNING);
         FriendlyLog.log("W", "Message", "Warning", text);
     }
 
-    public static void showError(final String text) {
+    public static void showError(String text) {
         if (!isEnabled()) return;
         CustomToast.show(getController().getContext(), text, CustomToast.TYPE_ERROR);
         FriendlyLog.log("E", "Message", "Error", text);
+    }
+
+    public static void trackUserAction(String text) {
+        if (!isEnabled()) return;
+        FriendlyLog.log("I", "User", "Action", text);
     }
 
     //endregion

@@ -38,7 +38,6 @@ import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.demo.R;
 
 /**
@@ -72,7 +71,7 @@ public class MainActivityFragment extends Fragment {
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FriendlyLog.log("I", "User", "Touch", "User clicked on Browse Demo");
+                Iadt.trackUserAction("User clicked on Browse Demo");
                 Intent intent = new Intent(getContext(), ItemListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -85,8 +84,8 @@ public class MainActivityFragment extends Fragment {
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Iadt.trackUserAction("User clicked on help button");
                 Iadt.viewReadme();
-                FriendlyLog.log("I", "User", "Touch", "User clicked on ShowDevTools");
             }
         });
     }

@@ -39,10 +39,8 @@ import android.support.v7.widget.Toolbar;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.demo.R;
 import es.rafaco.inappdevtools.demo.api.Controller;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FriendlyLog.log("I", "User", "Touch", "User clicked on FloatingActionButton");
+                Iadt.trackUserAction("User clicked on FloatingActionButton");
                 Snackbar.make(view, "Use 'Iadt.show();' to open our UI", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Iadt.show();
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            Iadt.getConfig().getBoolean(BuildConfig.ENABLED)) {
+                Iadt.isEnabled()) {
             return Iadt.getGestureDetector().onGenericMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (Iadt.getConfig().getBoolean(BuildConfig.ENABLED)) {
+        if (Iadt.isEnabled()) {
             //TODO: Work in progress
             //Iadt.getGestureDetector().onTouchEvent(ev);
         }

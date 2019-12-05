@@ -76,9 +76,10 @@ public class Iadt {
     //region [ TOAST & LOG ]
 
     public static void showMessage(int stringId) {}
-    public static void showMessage(final String text) {}
-    public static void showWarning(final String text) {}
-    public static void showError(final String text) {}
+    public static void showMessage(String text) {}
+    public static void showWarning(String text) {}
+    public static void showError(String text) {}
+    public static void trackUserAction(String text) {}
 
     //endregion
 
