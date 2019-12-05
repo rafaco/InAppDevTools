@@ -272,14 +272,13 @@ public class IadtDialogActivity extends AppCompatActivity {
                         closeAll(true);
                     }
                 })
-                .setNegativeButton(R.string.button_open_now, new DialogInterface.OnClickListener() {
+                /*.setNegativeButton(R.string.button_open_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: review order or disable
                         IadtController.get().getOverlayHelper().showMain();
                         closeAll(true);
                     }
-                })
+                })*/
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {

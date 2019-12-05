@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Iadt.trackUserAction("User clicked on FloatingActionButton");
-                Snackbar.make(view, "Use 'Iadt.show();' to open our UI", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Calling 'Iadt.show()' to open it if enabled", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Iadt.show();
             }
