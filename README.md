@@ -230,8 +230,13 @@ After tons of overnight coding fun, I've left my work position to fully focus on
 I have always worked on proprietary software and this is my first open source project. I am really excited to be able to return what I received and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
 
 
-## Apps using this library <a name="usages"/>
-- Your app can be listed here, just ask me for it! 
+## Links <a name="links"/>
+- External references:
+    - [inappdevtools.org](https:/inappdevtools.org). Our new website (under construction)
+    - \[Your link here\] Write a public entry and notify us!
+- Apps using this library:
+    - ~~[InAppDevTools Demo](https://play.google.com)~~ Coming soon at Google Play
+    - \[Your app here\] Let us know and get a link to your app.
 
 
 ## Thanks <a name="thanks"/>
