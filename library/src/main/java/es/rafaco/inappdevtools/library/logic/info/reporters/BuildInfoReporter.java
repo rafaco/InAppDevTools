@@ -105,7 +105,7 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     public String getBuildWelcome() {
         String firstLine = getFriendlyBuildType();
         String secondLine = getFriendlyElapsedTime();
-        return firstLine + " from " + secondLine;
+        return firstLine + " build from " + secondLine;
     }
 
 

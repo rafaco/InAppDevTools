@@ -100,6 +100,24 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
+        data.add(new RunButton("Run",
+                R.drawable.ic_run_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(RunScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Report",
+                R.drawable.ic_send_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(ReportScreen.class);
+                    }
+                }));
+
+        data.add(" ");
+
         data.add(new RunButton("View",
                 R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
@@ -115,7 +133,6 @@ public class HomeScreen extends Screen {
                     public void run() { OverlayService.performNavigation(LogScreen.class);
                     }
                 }));
-
         
         RunButton sources = new RunButton("Sources",
                 R.drawable.ic_local_library_white_24dp,
@@ -154,24 +171,6 @@ public class HomeScreen extends Screen {
                     public void run() { OverlayService.performNavigation(ConsoleScreen.class);
                     }
                 }));
-        
-        
-        data.add(new RunButton("Run",
-                R.drawable.ic_run_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(RunScreen.class);
-                    }
-                }));
-
-        data.add(new RunButton("Report",
-                R.drawable.ic_send_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(ReportScreen.class);
-                    }
-                }));
-
 
         data.add(new RunButton("More",
                 R.drawable.ic_more_vert_white_24dp,

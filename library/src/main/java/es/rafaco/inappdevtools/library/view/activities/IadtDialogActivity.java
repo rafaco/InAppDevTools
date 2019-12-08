@@ -164,11 +164,11 @@ public class IadtDialogActivity extends AppCompatActivity {
                         else
                             closeAll(true);
                     }
-                })
-                .setCancelable(false);
+                });
 
         Session session = IadtController.getDatabase().sessionDao().getLast();
-        if (!session.isFirstStart()){
+        boolean isNotFirstStart = !session.isFirstStart();
+        if (isNotFirstStart){
             builder.setNegativeButton(R.string.button_skip_next, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -181,6 +181,8 @@ public class IadtDialogActivity extends AppCompatActivity {
                 }
             });
         }
+        builder.setCancelable(isNotFirstStart);
+
         buildAndShow(builder);
         NewBuildUtil.saveBuildInfoShown();
     }

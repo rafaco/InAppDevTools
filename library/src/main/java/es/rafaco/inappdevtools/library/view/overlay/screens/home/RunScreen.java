@@ -77,8 +77,8 @@ public class RunScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
         addCustomItems(data);
-        addDevToolsItems(data);
         addAndroidItems(data);
+        addDevToolsItems(data);
 
         return data;
     }
@@ -90,8 +90,13 @@ public class RunScreen extends Screen {
     }
 
     private void addCustomItems(List<Object> data) {
-        data.add("Your App");
-        data.addAll(IadtController.get().getRunnableManager().getAll());
+        data.add("Your buttons");
+        List<RunButton> buttons = IadtController.get().getRunnableManager().getAll();
+        if (buttons.isEmpty()){
+            data.add("(No buttons added by this app)");
+        }else{
+            data.addAll(buttons);
+        }
     }
 
     private void addDevToolsItems(List<Object> data) {
@@ -144,11 +149,29 @@ public class RunScreen extends Screen {
                                 });
                     }
                 }));
+
+        data.add(new RunButton("Restart app",
+                R.drawable.ic_replay_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().restartApp(false);
+                    }
+                }));
+
+        data.add(new RunButton("Close app",
+                R.drawable.ic_warning_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().forceCloseApp(false);
+                    }
+                }));
     }
 
 
     private void addAndroidItems(List<Object> data) {
-        data.add("Android");
+        data.add("Android shortcuts");
         data.add(new RunButton("App Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
@@ -165,24 +188,6 @@ public class RunScreen extends Screen {
                     public void run() {
                         IadtController.get().getOverlayHelper().showIcon();
                         AppUtils.openDeveloperOptions(RunScreen.this.getContext());
-                    }
-                }));
-
-        data.add(new RunButton("Restart app",
-                R.drawable.ic_replay_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().restartApp(false);
-                    }
-                }));
-
-        data.add(new RunButton("Force close",
-                R.drawable.ic_power_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().forceCloseApp(false);
                     }
                 }));
     }
