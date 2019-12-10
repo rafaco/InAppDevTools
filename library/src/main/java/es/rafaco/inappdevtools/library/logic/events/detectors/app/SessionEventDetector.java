@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import java.util.Date;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -47,42 +48,14 @@ public class SessionEventDetector extends EventDetector {
         eventManager.subscribe(Event.APP_NEW_SESSION, new EventManager.OneShotListener(){
             @Override
             public void onEvent(Event event, Object param) {
-                int pid = ThreadUtils.myPid();
-                long detectionDate = (Long) param;
-
-                Session session = new Session();
-                session.setDate(detectionDate);
-                session.setDetectionDate(detectionDate);
-                session.setPid(pid);
-
-                if (FirstStartUtil.isFirstStart()){
-                    FirstStartUtil.saveFirstStart();
-                    session.setFirstStart(true);
-                }else{
-                    session.setFirstStart(false);
-                }
-
-                if (NewBuildUtil.isNewBuild()){
+                if (NewBuildUtil.isNewBuild()) {
                     eventManager.fire(Event.APP_NEW_BUILD, NewBuildUtil.getBuildTime());
-                    session.setNewBuild(true);
-                }else{
-                    session.setNewBuild(false);
                 }
 
-                if (PendingCrashUtil.isPending()){
-                    session.setPendingCrash(true);
-                }else{
-                    session.setPendingCrash(false);
-                }
-
-
-                //TODO: calculate finishDate for previous session and update it in db
-                //session.setFinishDate();
-
-                long id = DevToolsDatabase.getInstance().sessionDao().insert(session);
-
+                //TODO: relocate to session manager?
+                Session session = IadtController.get().getSessionManager().getCurrent();
                 FriendlyLog.log("I", "Iadt", "Init",
-                        "Session " + id + " started");
+                        "Session " + session.getUid() + " started");
             }
         });
 
@@ -99,7 +72,7 @@ public class SessionEventDetector extends EventDetector {
         eventManager.subscribe(Event.APP_START, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                Session currentSession = DevToolsDatabase.getInstance().sessionDao().getLast();
+                Session currentSession = IadtController.get().getSessionManager().getCurrent();
 
                 if (currentSession.isPendingCrash()) {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Restart",

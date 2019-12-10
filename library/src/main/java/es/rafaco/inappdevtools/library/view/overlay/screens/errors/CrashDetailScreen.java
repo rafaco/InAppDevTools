@@ -207,11 +207,12 @@ public class CrashDetailScreen extends Screen {
         InfoReportData report = helper.parseToInfoGroup(crash);
         out.setText(report.toString());
 
-        SessionDao sessionDao = IadtController.getDatabase().sessionDao();
-        long crashSessionId = sessionDao.findByCrashId(crash.getUid()).getUid();
-        long sessionCount = sessionDao.getLast().getUid();
+        long crashSessionId = IadtController.getDatabase().sessionDao()
+                .findByCrashId(crash.getUid()).getUid();
+        long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
         int sessionUiPosition = (int)(1+sessionCount-crashSessionId);
-        final long logId = IadtController.getDatabase().friendlyDao().findLogIdByCrashId(crash.getUid());
+        final long logId = IadtController.getDatabase().friendlyDao()
+                .findLogIdByCrashId(crash.getUid());
 
         final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);

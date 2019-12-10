@@ -113,7 +113,7 @@ public class IadtDialogActivity extends AppCompatActivity {
     }
 
     private void showAuto(){
-        Session session = IadtController.getDatabase().sessionDao().getLast();
+        Session session = IadtController.get().getSessionManager().getCurrent();
 
         if (!NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown()){
             showNewBuildDialog(true);
@@ -166,7 +166,7 @@ public class IadtDialogActivity extends AppCompatActivity {
                     }
                 });
 
-        Session session = IadtController.getDatabase().sessionDao().getLast();
+        Session session = IadtController.get().getSessionManager().getCurrent();
         boolean isNotFirstStart = !session.isFirstStart();
         if (isNotFirstStart){
             builder.setNegativeButton(R.string.button_skip_next, new DialogInterface.OnClickListener() {

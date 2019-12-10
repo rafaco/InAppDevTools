@@ -192,7 +192,7 @@ public class NotificationService extends Service {
 
     private Notification buildMainNotification(PendingIntent pendingIntent) {
 
-        Session session = IadtController.get().getDatabase().sessionDao().getLast();
+        Session session = IadtController.get().getSessionManager().getCurrent();
 
         Crash crash = null;
         if (session.isPendingCrash()){
@@ -278,7 +278,7 @@ public class NotificationService extends Service {
     }
 
     private IadtChannel getCurrentChannel() {
-        Session session = IadtController.get().getDatabase().sessionDao().getLast();
+        Session session = IadtController.get().getSessionManager().getCurrent();
         if (session.isFirstStart())
             return IadtChannel.CHANNEL_PRIORITY;
         else if (session.isPendingCrash())

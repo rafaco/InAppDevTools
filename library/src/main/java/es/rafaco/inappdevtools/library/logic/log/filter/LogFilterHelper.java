@@ -308,7 +308,7 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else if (uiFilter.getSessionInt() == 1){ //Current
-            Session selected = DevToolsDatabase.getInstance().sessionDao().getLast();
+            Session selected = IadtController.get().getSessionManager().getCurrent();
             backFilter.setFromDate(selected.getDate());
             backFilter.setToDate(-1);
         }

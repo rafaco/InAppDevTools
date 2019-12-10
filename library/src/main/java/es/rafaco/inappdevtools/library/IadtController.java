@@ -38,6 +38,7 @@ import es.rafaco.inappdevtools.library.logic.info.InfoManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
+import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -71,6 +72,7 @@ public final class IadtController {
 
     private Context context;
     private ConfigManager configManager;
+    private SessionManager sessionManager;
     private EventManager eventManager;
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
@@ -118,7 +120,7 @@ public final class IadtController {
                     new Runnable() {
                         @Override
                         public void run() {
-                            IadtController.get().initFullIfPending();
+                            initFullIfPending();
                         }
                     },
                     null);
@@ -136,6 +138,7 @@ public final class IadtController {
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController init essential");
 
+        sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
 
@@ -159,7 +162,7 @@ public final class IadtController {
     }
 
     private boolean shouldShowInitialDialog() {
-        Session session = getDatabase().sessionDao().getLast();
+        Session session = getSessionManager().getCurrent();
         if (session.isNewBuild() && !NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown() ||
                 !PrivacyConsentUtil.isAccepted() ||
                 !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
@@ -177,7 +180,7 @@ public final class IadtController {
         }
         else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
             //TODO: Research this hack, it smell bad
-            if (IadtController.get().isDebug())
+            if (isDebug())
                 Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
             overlayHelper = new OverlayHelper(getContext());
         }
@@ -234,6 +237,10 @@ public final class IadtController {
 
     public EventManager getEventManager() {
         return eventManager;
+    }
+
+    public SessionManager getSessionManager() {
+        return sessionManager;
     }
 
     public RunnableManager getRunnableManager() {
@@ -314,9 +321,9 @@ public final class IadtController {
                     public void run() {
                         Crash crash;
                         if (param == null) {
-                            crash = IadtController.get().getDatabase().crashDao().getLast();
+                            crash = getDatabase().crashDao().getLast();
                         } else {
-                            crash = IadtController.get().getDatabase().crashDao().findById((long) param);
+                            crash = getDatabase().crashDao().findById((long) param);
                         }
                         if (crash == null) {
                             Iadt.showError("Unable to found a crash to report");
@@ -380,6 +387,7 @@ public final class IadtController {
         }
 
         if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
+        sessionManager.destroy();
         eventManager.destroy();
 
         /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
@@ -426,7 +434,7 @@ public final class IadtController {
         if (isEnabled() && !sessionStartTimeImproved){
 
             int pid = ThreadUtils.myPid();
-            Session currentSession = IadtController.getDatabase().sessionDao().getLast();
+            Session currentSession = getSessionManager().getCurrent();
 
             if (currentSession.getDate() != currentSession.getDetectionDate()){
                 sessionStartTimeImproved = true;
@@ -435,23 +443,23 @@ public final class IadtController {
 
             long detectionDate = currentSession.getDetectionDate();
             String threadFilter = "%" + "Process: " + pid + "%";
-            Friendly firstSessionLog = IadtController.getDatabase().friendlyDao().getFirstSessionLog(threadFilter, detectionDate);
+            Friendly firstSessionLog = getDatabase().friendlyDao().getFirstSessionLog(threadFilter, detectionDate);
 
             if (firstSessionLog != null
                     && firstSessionLog.getDate()<detectionDate){
 
-                //Improve session item
+                //Update session item
                 long improvedDate = firstSessionLog.getDate();
                 currentSession.setDate(improvedDate);
-                IadtController.getDatabase().sessionDao().update(currentSession);
+                getSessionManager().updateCurrent(currentSession);
 
-                //Improve new session Log
+                //Update 'new session' log item
                 String message = "Session " + currentSession.getUid() +" started";
-                Friendly newSessionLog = IadtController.getDatabase().friendlyDao().getNewSessionLog(message);
+                Friendly newSessionLog = getDatabase().friendlyDao().getNewSessionLog(message);
                 if (newSessionLog != null
                         && improvedDate < newSessionLog.getDate()){
                     newSessionLog.setDate(improvedDate);
-                    IadtController.getDatabase().friendlyDao().update(newSessionLog);
+                    getDatabase().friendlyDao().update(newSessionLog);
                 }
 
                 sessionStartTimeImproved = true;

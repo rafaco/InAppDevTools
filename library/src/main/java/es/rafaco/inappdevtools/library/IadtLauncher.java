@@ -49,18 +49,21 @@ public class IadtLauncher extends ContentProvider {
             Log.d(Iadt.TAG, "IadtLauncher: stopped, library DISABLED by configuration");
             return false;
         }
-
         Log.d(Iadt.TAG, "IadtLauncher: library is ENABLED, starting...");
-        new IadtController(getContext());
-        /*
-        //TODO: Run controller in Background thread
-        ThreadUtils.runOnBack(new Runnable() {
-            @Override
-            public void run() {
-                new IadtController(getContext());
-            }
-        });*/
-        return true;
+
+        return startLibrary();
+    }
+
+    private boolean startLibrary() {
+        try {
+            new IadtController(getContext());
+            return true;
+        }
+        catch (Exception e){
+            Log.e(Iadt.TAG, "IadtLauncher: exception starting library."
+                + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
+            return false;
+        }
     }
 
     private boolean isLibraryEnabled(){
@@ -82,10 +85,12 @@ public class IadtLauncher extends ContentProvider {
             }
         }
         catch (Exception e){
-            Log.e(Iadt.TAG, "IadtLauncher: exception checking isEnabled. Nothing started");
+            Log.e(Iadt.TAG, "IadtLauncher: exception checking isEnabled. Nothing started"
+                    + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
             return false;
         }
     }
+
 
     //region [ LEGACY METHODS FROM CONTENT PROVIDER ]
 
