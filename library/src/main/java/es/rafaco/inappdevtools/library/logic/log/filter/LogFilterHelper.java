@@ -88,7 +88,7 @@ public class LogFilterHelper {
         applyAllPreset();
         uiFilter.setSessionInt(1);   //Current
         uiFilter.setSeverityInt(2);  //Info
-        uiFilter.setTypeInt(1);      //Events
+        uiFilter.setTypeInt(1);      //Only Events
     }
 
     private void applyNetworkPreset() {
@@ -102,7 +102,7 @@ public class LogFilterHelper {
 
     private void applyDebugPreset() {
         applyAllPreset();
-        uiFilter.setWrapLines(true);
+        //uiFilter.setWrapLines(true);
         uiFilter.setSessionInt(1);   //Current
     }
 

@@ -29,6 +29,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
@@ -40,7 +42,6 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogViewHolder;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
@@ -99,7 +100,15 @@ public class SessionDetailScreen extends Screen {
                 new Runnable() {
             @Override
             public void run() {
-                OverlayService.performNavigation(LogScreen.class, "0");
+                final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+
+                //TODO: refactor into setSessionIntFromSessionId()
+                long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
+                int sessionUiPosition = (int)(1 + sessionCount - session.getUid());
+                stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);
+
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(stepsFilter.getUiFilter()));
             }
         }));
 
@@ -110,7 +119,15 @@ public class SessionDetailScreen extends Screen {
                 new Runnable() {
             @Override
             public void run() {
-                OverlayService.performNavigation(LogScreen.class, "1");
+                final LogUiFilter uiFilter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG).getUiFilter();
+
+                //TODO: refactor into setSessionIntFromSessionId()
+                long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
+                int sessionUiPosition = (int)(1 + sessionCount - session.getUid());
+                uiFilter.setSessionInt(sessionUiPosition);
+
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(uiFilter));
             }
         }));
 
