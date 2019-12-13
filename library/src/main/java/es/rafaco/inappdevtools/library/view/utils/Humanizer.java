@@ -20,10 +20,6 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.text.TextUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
@@ -89,20 +85,6 @@ public class Humanizer {
         return  elapsed;
     }
 
-
-    public static String getElapsedTime(long oldTimeMillis, long newTimeMillis){
-        return newTimeMillis-oldTimeMillis + "ms";
-        //TODO: FIX IT
-        /*CharSequence absoluteDate =
-                android.text.format.DateUtils.formatDateRange(
-                        Iadt.getContext(),
-                        oldTimeMillis,
-                        newTimeMillis,
-                        android.text.format.DateUtils.FORMAT_ABBREV_ALL);
-        return absoluteDate.toString();
-        */
-    }
-
     public static String getElapsedTime(long oldTimeMillis){
         if (DateUtils.getLong() - oldTimeMillis < 60*1000){
             return "Just now";
@@ -115,6 +97,53 @@ public class Humanizer {
                         android.text.format.DateUtils.MINUTE_IN_MILLIS,
                         android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE);
         return relativeDate.toString();
+    }
+
+    public static final long MILLIS_PER_SECOND = 1000;
+    public static final long MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND;
+    public static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE;
+    public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR;
+    public static final long MILLIS_PER_WEEK = 7 * MILLIS_PER_DAY;
+    public static final long MILLIS_PER_MONTH = 30 * MILLIS_PER_DAY;
+    public static final long MILLIS_PER_YEAR = 365 * MILLIS_PER_DAY;
+
+    public static String getDuration(long durationMillis) {
+        String humanDuration = null;
+        if (durationMillis >= MILLIS_PER_YEAR) {
+            long years = (durationMillis / MILLIS_PER_YEAR);
+            long months = (durationMillis - (years * MILLIS_PER_YEAR))/MILLIS_PER_MONTH;
+            humanDuration = String.format("%sw %sd", years, months);
+        }
+        else if (durationMillis >= MILLIS_PER_MONTH) {
+            long months = (durationMillis / MILLIS_PER_MONTH);
+            long days = (durationMillis - (months * MILLIS_PER_MONTH))/MILLIS_PER_WEEK;
+            humanDuration = String.format("%sm %sd", months, days);
+        }
+        else if (durationMillis >= MILLIS_PER_DAY) {
+            long days = (durationMillis / MILLIS_PER_DAY);
+            long hours = (durationMillis - (days * MILLIS_PER_DAY))/MILLIS_PER_HOUR;
+            humanDuration = String.format("%sd %sh", days, hours);
+        }
+        else if (durationMillis >= MILLIS_PER_HOUR) {
+            long hours = (durationMillis / MILLIS_PER_HOUR);
+            long minutes = (durationMillis - (hours * MILLIS_PER_HOUR)) / MILLIS_PER_MINUTE;
+            humanDuration = String.format("%sh %smin", hours, minutes);
+        }
+        else if (durationMillis >= MILLIS_PER_MINUTE) {
+            long minutes = (durationMillis / MILLIS_PER_MINUTE);
+            long seconds = (durationMillis - (minutes * MILLIS_PER_MINUTE)) / MILLIS_PER_SECOND;
+            humanDuration = String.format("%smin %ss", minutes, seconds);
+        }
+        else if (durationMillis >= MILLIS_PER_SECOND) {
+            int seconds = (int) (durationMillis / MILLIS_PER_SECOND);
+            long milliseconds = (durationMillis - (seconds * MILLIS_PER_SECOND));
+            humanDuration = String.format("%ss %sms", seconds, milliseconds);
+        }
+        else {
+            long milliseconds = durationMillis;
+            humanDuration = String.format("%sms", milliseconds);
+        }
+        return humanDuration;
     }
 
     public static boolean isEven(int x){

@@ -49,7 +49,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
-@Database(version = 26, exportSchema = true,
+@Database(version = 27, exportSchema = true,
         entities = {Crash.class,
                 Anr.class,
                 Screenshot.class,
@@ -106,7 +106,6 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  Anr: " + anrDao().count() + jump;
         overview +="  Crash: " + crashDao().count() + jump;
         overview +="  Sourcetrace: " + sourcetraceDao().count() + jump;
-
 
         return overview;
     }

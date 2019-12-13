@@ -235,7 +235,7 @@ public class LogFilterDialog {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.session_other){
-                    sessionSpinner.performClick();
+                    //sessionSpinner.performClick();
                     return;
                 }
                 else {
@@ -243,6 +243,15 @@ public class LogFilterDialog {
                     filter.setSessionInt(sessions.indexOf(checkedId));
                 }
                 updateOverview();
+            }
+        });
+
+        RadioButton chooseButton = sessionGroup.findViewById(R.id.session_other);
+        chooseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sessionSpinner.performClick();
+                return;
             }
         });
         addFilterLine(dialogView, R.id.session_spinner, helper.getSessionOptions(), filter.getSessionInt(),

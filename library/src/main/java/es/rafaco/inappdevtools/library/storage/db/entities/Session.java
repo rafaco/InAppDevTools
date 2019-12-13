@@ -29,7 +29,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 //#endif
 
+import com.google.gson.Gson;
 import java.io.Serializable;
+
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 @Entity(tableName = "session")
 public class Session implements Serializable {
@@ -66,6 +69,10 @@ public class Session implements Serializable {
 
     @ColumnInfo(name = "crashId")
     private long crashId;
+
+    @ColumnInfo(name = "analysisJson")
+    private String analysisJson;
+
 
     public long getUid() {
         return uid;
@@ -153,5 +160,32 @@ public class Session implements Serializable {
 
     public void setCrashId(long crashId) {
         this.crashId = crashId;
+    }
+
+    public String getAnalysisJson() {
+        return analysisJson;
+    }
+
+    public void setAnalysisJson(String analysisJson) {
+        this.analysisJson = analysisJson;
+    }
+
+    public SessionAnalysis getAnalysis() {
+        Gson gson = new Gson();
+        return gson.fromJson(analysisJson, SessionAnalysis.class);
+    }
+
+    public void setAnalysis(SessionAnalysis analysis) {
+        Gson gson = new Gson();
+        this.analysisJson = gson.toJson(analysis);
+    }
+
+    public boolean isCurrent() {
+        return getFinishDate() < 1;
+    }
+
+    public long getDuration() {
+        long finish = isCurrent() ? DateUtils.getLong() : getFinishDate();
+        return finish - getDate();
     }
 }

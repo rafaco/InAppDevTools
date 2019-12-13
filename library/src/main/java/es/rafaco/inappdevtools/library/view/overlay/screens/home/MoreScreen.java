@@ -40,6 +40,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
 public class MoreScreen extends Screen {
 
@@ -90,6 +91,14 @@ public class MoreScreen extends Screen {
                     }
                 }));*/
 
+
+        data.add(new RunButton("Sessions",
+                R.drawable.ic_history_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(SessionsScreen.class);
+                    }
+                }));
 
         data.add(new RunButton("Network",
                 R.drawable.ic_cloud_queue_white_24dp,

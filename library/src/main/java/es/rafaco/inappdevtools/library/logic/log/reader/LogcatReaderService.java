@@ -459,7 +459,7 @@ public class LogcatReaderService extends JobIntentService {
         isInjectorRunning = false;
 
         if (insertedCounter>0){
-            IadtController.get().improveSessionStart();
+            IadtController.get().getSessionManager().improveStartTime();
         }
         onPartFinished();
     }

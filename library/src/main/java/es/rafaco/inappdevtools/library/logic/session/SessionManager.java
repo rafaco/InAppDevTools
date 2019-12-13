@@ -20,15 +20,26 @@
 package es.rafaco.inappdevtools.library.logic.session;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 
+import java.util.List;
+
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysisRaw;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class SessionManager {
 
@@ -39,7 +50,7 @@ public class SessionManager {
         this.context = context;
 
         //Tracking session per process
-        startNewSession(DateUtils.getLong());
+        startNew(DateUtils.getLong());
     }
 
     public Session getCurrent() {
@@ -51,7 +62,7 @@ public class SessionManager {
         session = updated;
     }
 
-    public long startNewSession(Long date) {
+    public long startNew(Long date) {
         int pid = ThreadUtils.myPid();
         long detectionDate = date;
 
@@ -88,16 +99,140 @@ public class SessionManager {
         return newSessionId;
     }
 
+    public void improveStartTime() {
+        Session currentSession = getCurrent();
+        if (currentSession.getDate() != currentSession.getDetectionDate()){
+            return;
+        }
 
-    public Context getContext() {
-        return context;
+        long detectionDate = currentSession.getDetectionDate();
+        int pid = ThreadUtils.myPid();
+        String threadFilter = "%" + "Process: " + pid + "%";
+        Friendly firstSessionLog = getFriendlyDao().getFirstSessionLog(threadFilter, detectionDate);
+
+        if (firstSessionLog != null
+                && firstSessionLog.getDate()<detectionDate){
+
+            //Update session item
+            long improvedDate = firstSessionLog.getDate();
+            currentSession.setDate(improvedDate);
+            updateCurrent(currentSession);
+
+            //Update 'new session' log item
+            String message = "Session " + currentSession.getUid() +" started";
+            Friendly newSessionLog = getFriendlyDao().getNewSessionLog(message);
+            if (newSessionLog != null
+                    && improvedDate < newSessionLog.getDate()){
+                newSessionLog.setDate(improvedDate);
+                getFriendlyDao().update(newSessionLog);
+
+                if (IadtController.get().isDebug())
+                    Log.i(Iadt.TAG, "Improved session start time by "
+                            + Humanizer.getDuration(detectionDate - improvedDate));
+            }
+            else{
+                if (IadtController.get().isDebug())
+                    Log.w(Iadt.TAG, "Unable to improve session start time");
+            }
+        }
+        else{
+            Log.w(Iadt.TAG, "Unable to improve session start time");
+        }
     }
+
+    public long updateFinishTime(long uid) {
+        Session target = getDao().findById(uid);
+        if (target.getFinishDate() > 0) {
+            return target.getFinishDate();
+        }
+
+        Session next = getDao().findById(uid+1);
+        //TODO: if (next.getDate() != next.getDetectionDate()){
+        long firstNextDate = next.getDate();
+        Friendly lastSessionLog = getFriendlyDao().getLastSessionLog(firstNextDate);
+
+        long finishDate = lastSessionLog.getDate();
+        target.setFinishDate(finishDate);
+        getDao().update(target);
+
+        return finishDate;
+    }
+
+    public List<Session> getSessionsWithOverview() {
+
+        List<Session> sessions = getDao().getAll();
+
+        //Current session
+        Session current = sessions.get(0);
+        current.setAnalysis(calculateCurrentSessionAnalysis());
+
+        //Previous sessions
+        for (int i = 1; i<sessions.size(); i++){
+            Session target = sessions.get(i);
+            updateFinishedSession(target);
+
+        }
+        return sessions;
+    }
+
+    private void updateFinishedSession(Session target) {
+        //Calculate finish date if needed
+        if (target.getFinishDate()<=0){
+            long finishDate = updateFinishTime(target.getUid());
+            target.setFinishDate(finishDate);
+        }
+
+        //Calculate and store analysis if needed
+        if (TextUtils.isEmpty(target.getAnalysisJson())){
+            target.setAnalysis(calculateFinishedSessionAnalysis(target));
+            getDao().update(target);
+        }
+    }
+
+    public SessionAnalysis calculateCurrentSessionAnalysis() {
+        long startDate = getCurrent().getDetectionDate();
+        List<SessionAnalysisRaw> logcatResume = getDao().analiseLiveSessionLogcat(startDate);
+        List<SessionAnalysisRaw> eventResume = getDao().analiseLiveSessionEvents(startDate);
+        SessionAnalysis analysis = SessionAnalysis.buildFromRaw(logcatResume, eventResume);
+        return analysis;
+    }
+
+    public SessionAnalysis calculateFinishedSessionAnalysis(Session session) {
+        long startDate = session.getDate();
+        long finishDate = session.getFinishDate();
+        List<SessionAnalysisRaw> logcatResume = getDao().analiseFinishedSessionLogcat(startDate, finishDate);
+        List<SessionAnalysisRaw> eventResume = getDao().analiseFinishedSessionEvents(startDate, finishDate);
+        SessionAnalysis analysis = SessionAnalysis.buildFromRaw(logcatResume, eventResume);
+        return analysis;
+    }
+
+    public Session getSessionWithOverview(int sessionUid) {
+        if (getCurrent().getUid() == sessionUid){
+            getCurrent().setAnalysis(calculateCurrentSessionAnalysis());
+            return getCurrent();
+        }
+
+        //Not the current Session
+        Session target = getDao().findById(sessionUid);
+        updateFinishedSession(target);
+        return target;
+    }
+
 
     private SessionDao getDao() {
         return DevToolsDatabase.getInstance().sessionDao();
     }
 
+    private FriendlyDao getFriendlyDao() {
+        return DevToolsDatabase.getInstance().friendlyDao();
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
     public void destroy() {
         //TODO
     }
+
 }

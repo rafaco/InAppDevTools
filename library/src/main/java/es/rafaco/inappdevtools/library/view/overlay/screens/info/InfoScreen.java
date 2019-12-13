@@ -47,6 +47,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.components.flex.ComplexCardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -57,11 +58,6 @@ public class InfoScreen extends Screen {
 
     private Timer updateTimer;
     private TimerTask updateTimerTask;
-
-    private RelativeLayout overviewView;
-    private TextView overviewTitleView;
-    private TextView overviewIconView;
-    private TextView overviewContentView;
 
     private RecyclerView flexibleContents;
     private FlexibleAdapter adapter;
@@ -90,17 +86,18 @@ public class InfoScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        overviewView = view.findViewById(R.id.overview);
-        overviewContentView = view.findViewById(R.id.overview_content);
-        overviewIconView = view.findViewById(R.id.overview_icon);
-        overviewTitleView = view.findViewById(R.id.overview_title);
         navIndex = view.findViewById(R.id.info_nav_index);
         navPrevious = view.findViewById(R.id.info_nav_previous);
         navNext = view.findViewById(R.id.info_nav_next);
         flexibleContents = view.findViewById(R.id.flexible_contents);
 
         adapter = new FlexibleAdapter(1, new ArrayList<>());
-        adapter.setScreen(this);
+        adapter.setOnItemActionListener(new FlexibleAdapter.OnItemActionListener() {
+            @Override
+            public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
+                return toggleExpandedPosition(position);
+            }
+        });
         flexibleContents.setAdapter(adapter);
 
         loadReport();
@@ -151,32 +148,16 @@ public class InfoScreen extends Screen {
     private InfoReportData getData(int reportPosition) {
         InfoReport report = InfoReport.values()[reportPosition];
         InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
-        reportData = updateDataWithExpandedState(reportData);
         return reportData;
     }
 
     public void updateView(InfoReportData reportData) {
         getScreenManager().setTitle(reportData.getTitle() + " Info");
-        updateHeader(reportData);
-        updateContents(reportData);
-    }
 
-    private void updateHeader(InfoReportData data) {
-        overviewTitleView.setText(data.getTitle());
+        List<Object> objectList = new ArrayList<Object>(reportData.getGroups());
+        objectList.add(0, reportData);
+        updateDataWithExpandedState(objectList);
 
-        if (data.getIcon()>0){
-            IconUtils.markAsIconContainer(overviewIconView, IconUtils.MATERIAL);
-            overviewIconView.setText(data.getIcon());
-            overviewIconView.setVisibility(View.VISIBLE);
-        }else{
-            overviewIconView.setVisibility(View.GONE);
-        }
-
-        overviewContentView.setText(data.getOverview());
-    }
-
-    private void updateContents(InfoReportData data) {
-        List<Object> objectList = new ArrayList<Object>(data.getGroups());
         adapter.replaceItems(objectList);
     }
 
@@ -211,12 +192,14 @@ public class InfoScreen extends Screen {
         }
     }
 
-    private InfoReportData updateDataWithExpandedState(InfoReportData reportData) {
-        for (int i = 0; i < reportData.getGroups().size(); i++) {
-            boolean isExpanded = (i==expandedPosition);
-            reportData.getGroups().get(i).setExpanded(isExpanded);
+    private void updateDataWithExpandedState(List<Object> flexibleData) {
+        for (int i = 0; i < flexibleData.size(); i++) {
+            Object current = flexibleData.get(i);
+            if (current instanceof InfoGroupData){
+                boolean isExpanded = (i==expandedPosition);
+                ((InfoGroupData)current).setExpanded(isExpanded);
+            }
         }
-        return reportData;
     }
 
     //endregion

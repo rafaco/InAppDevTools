@@ -37,7 +37,7 @@ import java.util.List;
 @Dao
 public interface SessionDao {
 
-    @Query("SELECT * FROM session ORDER BY date DESC")
+    @Query("SELECT * FROM session ORDER BY uid DESC")
     List<Session> getAll();
 
     @Query("SELECT * FROM session where uid LIKE :uid")
@@ -66,4 +66,39 @@ public interface SessionDao {
 
     @Query("DELETE FROM session")
     void deleteAll();
+
+
+    //region [ SESSION ANALYSIS ]
+
+    @Query("SELECT severity as severity, COUNT(*) as count"
+            + " FROM friendly"
+            + " WHERE category IN ('Logcat')"
+            + " AND date >= :sessionStart"
+            + " GROUP BY severity")
+    List<SessionAnalysisRaw> analiseLiveSessionLogcat(long sessionStart);
+
+    @Query("SELECT severity as severity, COUNT(*) as count"
+            + " FROM friendly"
+            + " WHERE category NOT IN ('Logcat')"
+            + " AND date >= :sessionStart"
+            + " GROUP BY severity")
+    List<SessionAnalysisRaw> analiseLiveSessionEvents(long sessionStart);
+
+    @Query("SELECT severity as severity, COUNT(*) as count"
+            + " FROM friendly"
+            + " WHERE category IN ('Logcat')"
+            + " AND date >= :sessionStart"
+            + " AND date <= :sessionEnd"
+            + " GROUP BY severity")
+    List<SessionAnalysisRaw> analiseFinishedSessionLogcat(long sessionStart, long sessionEnd);
+
+    @Query("SELECT severity as severity, COUNT(*) as count"
+            + " FROM friendly"
+            + " WHERE category NOT IN ('Logcat')"
+            + " AND date >= :sessionStart"
+            + " AND date <= :sessionEnd"
+            + " GROUP BY severity")
+    List<SessionAnalysisRaw> analiseFinishedSessionEvents(long sessionStart, long sessionEnd);
+
+    //endregion
 }

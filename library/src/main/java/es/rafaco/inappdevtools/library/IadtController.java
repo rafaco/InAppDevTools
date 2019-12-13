@@ -80,7 +80,6 @@ public final class IadtController {
     private InfoManager infoManager;
     public boolean isPendingInitFull;
     private OverlayHelper overlayHelper;
-    private boolean sessionStartTimeImproved = false;
 
     protected IadtController(Context context) {
         if (INSTANCE != null) {
@@ -428,48 +427,6 @@ public final class IadtController {
                 throw new ForcedRuntimeException(cause);
             }
         });
-    }
-
-    public void improveSessionStart() {
-        if (isEnabled() && !sessionStartTimeImproved){
-
-            int pid = ThreadUtils.myPid();
-            Session currentSession = getSessionManager().getCurrent();
-
-            if (currentSession.getDate() != currentSession.getDetectionDate()){
-                sessionStartTimeImproved = true;
-                return;
-            }
-
-            long detectionDate = currentSession.getDetectionDate();
-            String threadFilter = "%" + "Process: " + pid + "%";
-            Friendly firstSessionLog = getDatabase().friendlyDao().getFirstSessionLog(threadFilter, detectionDate);
-
-            if (firstSessionLog != null
-                    && firstSessionLog.getDate()<detectionDate){
-
-                //Update session item
-                long improvedDate = firstSessionLog.getDate();
-                currentSession.setDate(improvedDate);
-                getSessionManager().updateCurrent(currentSession);
-
-                //Update 'new session' log item
-                String message = "Session " + currentSession.getUid() +" started";
-                Friendly newSessionLog = getDatabase().friendlyDao().getNewSessionLog(message);
-                if (newSessionLog != null
-                        && improvedDate < newSessionLog.getDate()){
-                    newSessionLog.setDate(improvedDate);
-                    getDatabase().friendlyDao().update(newSessionLog);
-                }
-
-                sessionStartTimeImproved = true;
-                if (isDebug()) Log.i(Iadt.TAG, "Improved session start time! "
-                        + Humanizer.getElapsedTime(improvedDate, detectionDate));
-            }
-            else{
-                Log.w(Iadt.TAG, "Unable to improve session start time");
-            }
-        }
     }
 }
 

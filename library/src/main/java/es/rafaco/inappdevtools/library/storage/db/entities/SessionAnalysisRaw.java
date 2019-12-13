@@ -17,31 +17,31 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.storage.db;
+package es.rafaco.inappdevtools.library.storage.db.entities;
 
-//#ifdef ANDROIDX
-//@import androidx.room.InvalidationTracker;
-//@import androidx.annotation.NonNull;
-//#else
-import android.arch.persistence.room.InvalidationTracker;
-import android.support.annotation.NonNull;
-//#endif
+public class SessionAnalysisRaw {
 
-import java.util.Set;
+    String severity;
+    int count;
 
-
-public class DevToolsTableObserver extends InvalidationTracker.Observer {
-
-    protected DevToolsTableObserver(@NonNull String firstTable, String... rest) {
-        super(firstTable, rest);
+    public SessionAnalysisRaw(String severity, int count) {
+        this.severity = severity;
+        this.count = count;
     }
 
-    public DevToolsTableObserver(@NonNull String[] tables) {
-        super(tables);
+    public String getSeverity() {
+        return severity;
     }
 
-    @Override
-    public void onInvalidated(@NonNull Set<String> tables) {
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

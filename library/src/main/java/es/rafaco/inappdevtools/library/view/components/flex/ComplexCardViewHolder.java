@@ -137,14 +137,14 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 buttonGroupContainer.setVisibility(View.VISIBLE);
             }
         }
-}
+    }
 
     private void toggleExpandedState(int position) {
-        boolean isExpanded = ((InfoScreen)adapter.getScreen()).toggleExpandedPosition(position);
+        Boolean isExpanded = (Boolean) adapter.performItemAction(this, null, position, -1);
         applyExpandedState(isExpanded);
     }
 
-    private void applyExpandedState(boolean isExpanded) {
+    private void applyExpandedState(Boolean isExpanded) {
         if (!isExpanded){
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.rally_white);
             collapsedContentView.setVisibility(View.GONE);

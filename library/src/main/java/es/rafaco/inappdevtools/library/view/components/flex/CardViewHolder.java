@@ -77,8 +77,18 @@ public class CardViewHolder extends FlexibleViewHolder {
                 iconView.setVisibility(View.GONE);
             }
 
+            if (data.getBgColor()>0){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColor()));
+            }
+            else{
+                if (data.getPerformer() != null){
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+                }else{
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+                }
+            }
+
             if (data.getPerformer() != null){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
@@ -92,7 +102,6 @@ public class CardViewHolder extends FlexibleViewHolder {
                 itemView.setClickable(true);
             }
             else{
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
                 cardView.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);

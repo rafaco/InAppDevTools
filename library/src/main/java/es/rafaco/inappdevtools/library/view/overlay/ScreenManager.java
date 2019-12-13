@@ -44,27 +44,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -89,38 +69,12 @@ public class ScreenManager {
         this.screenToolbar = getView().findViewById(R.id.tool_toolbar);
         this.navigationManager = IadtController.get().getNavigationManager();
 
-        registerAllScreens();
+        ScreensLoader.registerAllScreens(this);
 
         ThreadUtils.printOverview("ScreenManager");
     }
 
     //region [ SCREENS MANAGER ]
-
-    private void registerAllScreens() {
-        //Load screenshots definitions
-        //TODO: think a better way to avoid this
-        registerScreen(HomeScreen.class);
-        registerScreen(Home2Screen.class);
-        registerScreen(InfoOverviewScreen.class);
-        registerScreen(InfoScreen.class);
-        registerScreen(NetworkScreen.class);
-        registerScreen(ErrorsScreen.class);
-        registerScreen(LogScreen.class);
-        registerScreen(LogcatScreen.class);
-        registerScreen(ConsoleScreen.class);
-        registerScreen(ScreenshotsScreen.class);
-        registerScreen(ReportScreen.class);
-        registerScreen(CrashDetailScreen.class);
-        registerScreen(AnrDetailScreen.class);
-        registerScreen(NetworkDetailScreen.class);
-        registerScreen(RunScreen.class);
-        registerScreen(MoreScreen.class);
-        registerScreen(InspectViewScreen.class);
-        registerScreen(SourcesScreen.class);
-        registerScreen(SourceDetailScreen.class);
-        registerScreen(AnalysisScreen.class);
-        registerScreen(ConfigScreen.class);
-    }
 
     public void registerScreen(Class<? extends Screen> screenClass){
         registeredScreens.add(screenClass);

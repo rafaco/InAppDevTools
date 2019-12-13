@@ -37,6 +37,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 import android.arch.paging.DataSource;
+import android.util.Pair;
 //#endif
 
 
@@ -106,6 +107,13 @@ public interface FriendlyDao {
 
     @Query("SELECT *"
             + " FROM friendly"
+            + " WHERE date < :firstNextDate"
+            + " AND category IN ('Logcat')"
+            + " ORDER BY date DESC LIMIT 1")
+    Friendly getLastSessionLog(long firstNextDate);
+
+    @Query("SELECT *"
+            + " FROM friendly"
             + " WHERE message LIKE :message"
             + " AND category IN ('Iadt')"
             + " AND subcategory IN ('Init')"
@@ -150,4 +158,5 @@ public interface FriendlyDao {
 
     @Query("DELETE FROM friendly")
     void deleteAll();
+
 }
