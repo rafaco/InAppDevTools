@@ -147,4 +147,18 @@
         <item name="android:paddingRight">8dp</item>
     </style>
 
+
+    <style name="LibTheme.FloatingLabel" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/rally_white</item>
+        <item name="android:textSize">@dimen/card_title</item>
+    </style>
+
+    <!--Campo de texto-->
+    <style name="EditText" parent="LibTheme">
+        <!-- cursor y línea normal-->
+        <item name="colorControlNormal">@color/rally_blue_med</item>
+        <!-- cursor y línea con foco-->
+        <item name="colorControlActivated">@color/rally_blue</item>
+    </style>
+
 </resources>

@@ -19,35 +19,19 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-public class CardData {
+public class OverviewData {
+
     String title;
     String content;
-    Runnable performer;
     int icon;
-    int bgColor;
-    String imagePath;
-    private int titleColor;
+    int color;
 
-    public CardData(String title, Runnable performer) {
+    public OverviewData(String title, String content, int icon, int color) {
         this.title = title;
-        this.performer = performer;
-    }
-
-    public CardData(String title, int icon, Runnable performer) {
-        this(title, performer);
-        this.icon = icon;
-    }
-
-    public CardData(String title, String content, int icon, Runnable performer) {
-        this(title, icon, performer);
         this.content = content;
+        this.icon = icon;
+        this.color = color;
     }
-
-    public CardData(String title, int icon, int bgColorResId, Runnable performer) {
-        this(title, icon, performer);
-        this.bgColor = bgColorResId;
-    }
-
 
     public String getTitle() {
         return title;
@@ -65,14 +49,6 @@ public class CardData {
         this.content = content;
     }
 
-    public Runnable getPerformer() {
-        return performer;
-    }
-
-    public void setPerformer(Runnable performer) {
-        this.performer = performer;
-    }
-
     public int getIcon() {
         return icon;
     }
@@ -81,33 +57,11 @@ public class CardData {
         this.icon = icon;
     }
 
-    public int getBgColor() {
-        return bgColor;
+    public int getColor() {
+        return color;
     }
 
-    public void setBgColor(int bg_color) {
-        this.bgColor = bg_color;
+    public void setColor(int color) {
+        this.color = color;
     }
-
-    public void setTitleColor(int titleColor) {
-        this.titleColor = titleColor;
-    }
-
-    public int getTitleColor() {
-        return titleColor;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public void run(){
-        getPerformer().run();
-    }
-
-
 }

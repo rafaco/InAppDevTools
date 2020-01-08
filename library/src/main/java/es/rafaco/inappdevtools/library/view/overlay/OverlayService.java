@@ -255,7 +255,7 @@ public class OverlayService extends Service {
     @Override
     public void onDestroy() {
         if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "OverlayService - onDestroy");
+            Log.v(Iadt.TAG, "OverlayService - onDestroy... doze?");
         if (overlayManager != null) overlayManager.destroy();
         instance = null;
         isRunning = false;

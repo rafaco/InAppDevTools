@@ -20,11 +20,14 @@
 package es.rafaco.inappdevtools.library.logic.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import es.rafaco.inappdevtools.library.Iadt;
 
 public class DateUtils {
 
@@ -71,7 +74,9 @@ public class DateUtils {
         try {
             date = sdf.parse(year + "-" + text);
         } catch (ParseException e) {
+            Log.e(Iadt.TAG, "Error parsing logcat date: " + text);
             e.printStackTrace();
+            return -1;
         }
         return date.getTime();
     }

@@ -1,0 +1,86 @@
+/*
+ * This source file is part of InAppDevTools, which is available under
+ * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+ *
+ * Copyright 2018-2019 Rafael Acosta Alvarez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package es.rafaco.inappdevtools.library.view.overlay;
+
+import android.view.ViewGroup;
+import java.util.ArrayList;
+import java.util.List;
+
+//#ifdef ANDROIDX
+//@import androidx.recyclerview.widget.RecyclerView;
+//#else
+import android.support.v7.widget.RecyclerView;
+//#endif
+
+import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+
+public abstract class FlexibleScreen extends Screen {
+
+    private RecyclerView flexContainer;
+    private FlexibleAdapter flexAdapter;
+
+    public FlexibleScreen(ScreenManager manager) {
+        super(manager);
+    }
+
+    @Override
+    protected void onCreate() {
+
+    }
+
+    @Override
+    protected void onStart(ViewGroup toolHead) {
+        initAdapter();
+        onAdapterStart();
+    }
+
+    protected abstract void onAdapterStart();
+
+    @Override
+    protected void onStop() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+    }
+
+    @Override
+    public int getBodyLayoutId() {
+        return R.layout.flexible_container;
+    }
+
+    private void initAdapter() {
+        flexAdapter = new FlexibleAdapter(getSpanCount(), new ArrayList<>());
+        flexContainer = getView().findViewById(R.id.flexible);
+        flexContainer.setAdapter(flexAdapter);
+    }
+
+    public void updateAdapter(List<Object> options) {
+        flexAdapter.replaceItems(options);
+    }
+
+    public int getSpanCount(){
+        return 1;
+    }
+}

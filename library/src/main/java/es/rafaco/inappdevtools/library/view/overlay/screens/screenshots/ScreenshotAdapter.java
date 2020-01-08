@@ -80,7 +80,7 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
 
     @Override
     public void onBindViewHolder(final ScreenViewHolder holder, int position) {
-        holder.cardView.setRadius(R.dimen.card_radius);
+        //holder.cardView.setRadius(R.dimen.card_radius);
 
         Screenshot screenshot = screenshotList.get(position);
         holder.title.setText(screenshot.getActivityName());

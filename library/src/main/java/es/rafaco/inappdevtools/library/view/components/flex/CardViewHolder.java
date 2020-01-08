@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
@@ -46,12 +47,14 @@ public class CardViewHolder extends FlexibleViewHolder {
     private final TextView titleView;
     private final TextView contentView;
     private final ImageView navIcon;
+    private final ImageView imageView;
 
     public CardViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         this.itemContent = view.findViewById(R.id.item_content);
         this.cardView = view.findViewById(R.id.card_view);
         this.iconView = view.findViewById(R.id.icon);
+        this.imageView = view.findViewById(R.id.image_left);
         this.titleView = view.findViewById(R.id.title);
         this.contentView = view.findViewById(R.id.content);
         this.navIcon = view.findViewById(R.id.nav_icon);
@@ -65,14 +68,27 @@ public class CardViewHolder extends FlexibleViewHolder {
             itemView.setActivated(true);
 
             titleView.setText(data.getTitle());
+            if (data.getTitleColor()>0){
+                titleView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
+            }
 
             contentView.setVisibility(TextUtils.isEmpty(data.getContent()) ? View.GONE : View.VISIBLE);
             contentView.setText(data.getContent());
+
+            if (!TextUtils.isEmpty(data.getImagePath())){
+                new ImageLoaderAsyncTask(imageView).execute(data.getImagePath());
+            }
+            else {
+                imageView.setVisibility(View.GONE);
+            }
 
             if (data.getIcon()>0){
                 IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
                 iconView.setText(data.getIcon());
                 iconView.setVisibility(View.VISIBLE);
+                if (data.getTitleColor()>0){
+                    iconView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
+                }
             }else{
                 iconView.setVisibility(View.GONE);
             }

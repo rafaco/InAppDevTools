@@ -86,7 +86,7 @@ public class SessionDetailScreen extends Screen {
         getScreenManager().setTitle(reportData.getTitle());
 
         List<Object> objectList = new ArrayList<Object>(reportData.getGroups());
-        objectList.add(0, reportData);
+        objectList.add(0, reportData.getOverviewData());
         objectList.add(1, getButtonGroupData(session));
         return objectList;
     }

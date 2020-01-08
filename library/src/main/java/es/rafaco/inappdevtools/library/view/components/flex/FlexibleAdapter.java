@@ -37,17 +37,9 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 import static tech.linjiang.pandora.util.Utils.getContext;
 
@@ -56,25 +48,13 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     private List<FlexibleItemDescriptor> descriptors;
     private final int spanCount;
     private List<Object> items;
-    private Screen screen;
     private OnItemActionListener onItemActionListener;
 
     public FlexibleAdapter(int spanCount, List<Object> data) {
         this.spanCount = spanCount;
         this.items = data;
 
-        descriptors = new ArrayList<>();
-        descriptors.add(new FlexibleItemDescriptor(String.class, HeaderViewHolder.class, R.layout.flexible_item_header));
-        descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
-        descriptors.add(new FlexibleItemDescriptor(ButtonGroupData.class, ButtonGroupViewHolder.class, R.layout.flexible_item_button_group));
-        descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
-        descriptors.add(new FlexibleItemDescriptor(InfoReportData.class, OverviewViewHolder.class, R.layout.flexible_item_overview));
-        descriptors.add(new FlexibleItemDescriptor(InfoGroupData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
-        descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
-        descriptors.add(new FlexibleItemDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
-        descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
-        descriptors.add(new FlexibleItemDescriptor(AnalysisData.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
-        descriptors.add(new FlexibleItemDescriptor(ConfigData.class, ConfigViewHolder.class, R.layout.flexible_item_config));
+        descriptors = FlexibleLoader.getAllDescriptors();
     }
 
     @Override
@@ -85,11 +65,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
             @Override
             public int getSpanSize(int position) {
                 Class<?> itemDataClass = getItemDataClass(position);
-                if (itemDataClass.equals(String.class)
-                        || itemDataClass.equals(ButtonGroupData.class)
-                        || itemDataClass.equals(InfoReportData.class)
-                        || itemDataClass.equals(InfoGroupData.class)
-                        || itemDataClass.equals(CardData.class)){
+                if (FlexibleLoader.isFullSpan(itemDataClass)){
                     return manager.getSpanCount();
                 }
                 else{
@@ -177,12 +153,10 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     }
 
     public Object performItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
-        final boolean result;
         if (onItemActionListener != null) {
             return onItemActionListener.onItemAction(viewHolder, view, position, id);
-        } else {
-            return null;
         }
+        return null;
     }
 
     //endregion

@@ -30,8 +30,11 @@ import android.support.annotation.NonNull;
 //#endif
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import br.tiagohm.Language;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
@@ -55,7 +58,26 @@ public class ReportHelper extends ScreenHelper {
         return null;
     }
 
-    public enum ReportType { SESSION, CRASH, WIZARD, FULL }
+    public enum ReportType {
+        CRASH(1), SESSION(2), CUSTOM(3),ISSUE(4);
+
+        public int code;
+        private static final Map<Integer, ReportType> TYPES = new HashMap<>();
+        ReportType(int code) {
+            this.code = code;
+        }
+        static {
+            for (ReportType value : values()) {
+                TYPES.put(value.code, value);
+            }
+        }
+        public int getCode() {
+            return code;
+        }
+        public static ReportType getByCode(int code) {
+            return TYPES.get(code);
+        }
+    }
 
     ReportType type;
     Object target;
@@ -129,7 +151,7 @@ public class ReportHelper extends ScreenHelper {
             currentType = "session";
         }else if (type.equals(ReportType.CRASH)){
             currentType = "crash";
-        }else if (type.equals(ReportType.FULL)){
+        }else if (type.equals(ReportType.CUSTOM)){
             currentType = "full";
         }
         return String.format(formatter,

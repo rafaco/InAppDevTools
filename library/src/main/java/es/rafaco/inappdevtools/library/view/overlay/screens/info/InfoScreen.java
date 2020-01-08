@@ -48,6 +48,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.components.flex.ComplexCardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -155,7 +156,7 @@ public class InfoScreen extends Screen {
         getScreenManager().setTitle(reportData.getTitle() + " Info");
 
         List<Object> objectList = new ArrayList<Object>(reportData.getGroups());
-        objectList.add(0, reportData);
+        objectList.add(0, reportData.getOverviewData());
         updateDataWithExpandedState(objectList);
 
         adapter.replaceItems(objectList);

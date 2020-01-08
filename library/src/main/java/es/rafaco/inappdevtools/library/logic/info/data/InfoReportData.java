@@ -30,7 +30,9 @@ import android.support.annotation.StringRes;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InfoReportData {
@@ -78,6 +80,12 @@ public class InfoReportData {
             groups.get(index).removeEntries();
         }
     }
+
+    public OverviewData getOverviewData() {
+        return new OverviewData(getTitle(), getOverview(),
+                R.color.rally_white, getIcon());
+    }
+
 
     @Override
     public String toString(){

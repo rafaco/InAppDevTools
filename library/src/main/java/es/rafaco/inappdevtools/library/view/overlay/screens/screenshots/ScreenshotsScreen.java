@@ -114,9 +114,9 @@ public class ScreenshotsScreen extends Screen {
 
         recyclerView = toolView.findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         adapter.setRecycledView(recyclerView);
         recyclerView.setAdapter(adapter);

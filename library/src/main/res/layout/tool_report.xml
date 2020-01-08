@@ -23,53 +23,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <es.rafaco.compat.RecyclerView
+        android:id="@+id/flexible_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        style="@style/content_margin"/>
 
-        <TextView
-            android:id="@+id/test_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:visibility="gone"
-            style="@style/content_margin"/>
+
+    <!--<TextView
+        android:id="@+id/test_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:visibility="gone"
+        style="@style/content_margin"/>
+
+    <es.rafaco.compat.AppCompatButton
+        android:id="@+id/test_icon2"
+        android:layout_width="match_parent"
+        android:textSize="24dp"
+        android:text="BUTTON"
+        android:visibility="gone"
+        android:layout_height="wrap_content" />-->
+
+
+
+    <!--<RelativeLayout
+        android:id="@+id/wizard_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <es.rafaco.compat.AppCompatButton
-            android:id="@+id/test_icon2"
-            android:layout_width="match_parent"
-            android:textSize="24dp"
-            android:text="BUTTON"
-            android:visibility="gone"
-            android:layout_height="wrap_content" />
+            android:id="@+id/prev_trace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Back"
+            android:drawableTop="@drawable/ic_arrow_left_white_24dp"/>
+
+        <es.rafaco.compat.AppCompatButton
+            android:id="@+id/next_trace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Next"
+            android:drawableTop="@drawable/ic_arrow_right_white_24dp"/>
 
         <TextView
-            android:id="@+id/report_welcome"
-            android:layout_width="match_parent"
+            android:id="@+id/wizard_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/content_margin"/>
+            android:layout_toLeftOf="@id/next_trace"
+            android:layout_toRightOf="@id/prev_trace"
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:gravity="center" />
 
-        <es.rafaco.compat.RecyclerView
-            android:id="@+id/report_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/content_margin"/>
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/manage_screens_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Manage screenshots"
-            style="@style/content_margin"/>
+    <TextView
+        android:id="@+id/wide_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:gravity="center"
+        style="@style/content_margin"/>
 
-        <Button
-            android:id="@+id/report_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Send..."
-            style="@style/content_margin"/>
-    </LinearLayout>
+    <View
+        style="@style/horizontal_separator"
+        android:alpha="1"/>-->
+
 </LinearLayout>

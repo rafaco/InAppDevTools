@@ -19,6 +19,9 @@
 
 package es.rafaco.inappdevtools.library.storage.db;
 
+import android.content.Context;
+import android.util.Log;
+
 //#ifdef ANDROIDX
 //@import androidx.room.Room;
 //@import androidx.room.Database;
@@ -28,9 +31,6 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 //#endif
-
-import android.content.Context;
-import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
@@ -42,6 +42,8 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.LogcatDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Report;
+import es.rafaco.inappdevtools.library.storage.db.entities.ReportDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -56,7 +58,8 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
                 Logcat.class,
                 Friendly.class,
                 Sourcetrace.class,
-                Session.class
+                Session.class,
+                Report.class,
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
@@ -89,6 +92,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract FriendlyDao friendlyDao();
     public abstract SourcetraceDao sourcetraceDao();
     public abstract SessionDao sessionDao();
+    public abstract ReportDao reportDao();
     //endregion
 
     public void printOverview(){
@@ -106,6 +110,7 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  Anr: " + anrDao().count() + jump;
         overview +="  Crash: " + crashDao().count() + jump;
         overview +="  Sourcetrace: " + sourcetraceDao().count() + jump;
+        overview +="  Report: " + reportDao().count() + jump;
 
         return overview;
     }

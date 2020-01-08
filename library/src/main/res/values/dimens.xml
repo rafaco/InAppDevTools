@@ -10,7 +10,8 @@
 
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_radius">0dp</dimen>
-    <dimen name="card_cover_height">160dp</dimen>
+    <dimen name="card_cover_height">100dp</dimen>
+    <dimen name="card_cover_width">10dp</dimen>
     <dimen name="card_title">15dp</dimen>
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_subtitle">12dp</dimen>

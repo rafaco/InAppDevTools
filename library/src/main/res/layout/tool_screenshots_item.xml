@@ -18,14 +18,13 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <es.rafaco.compat.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
         android:foreground="?android:attr/selectableItemBackground"
@@ -39,43 +38,35 @@
 
             <ImageView
                 android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/card_cover_height"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                tools:targetApi="lollipop"
-                android:clickable="true"
-                android:scaleType="fitCenter" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignTop="@id/title"
-                android:background="@color/rally_bg_solid_alpha"/>
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_cover_height"
+                android:layout_height="@dimen/card_cover_height"
                 android:layout_alignParentLeft="true"
-                android:layout_alignBottom="@id/thumbnail"
-                android:paddingBottom="@dimen/card_count_padding_bottom"
-                android:paddingLeft="@dimen/card_title_padding"
-                android:paddingRight="@dimen/card_title_padding"
-                android:textSize="@dimen/card_subtitle" />
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_above="@id/subtitle"
+                android:layout_toRightOf="@id/thumbnail"
+                android:layout_alignParentTop="true"
                 android:paddingLeft="@dimen/card_title_padding"
                 android:paddingRight="@dimen/card_title_padding"
                 android:paddingTop="@dimen/card_title_padding"
                 android:textColor="@color/rally_white"
                 android:textSize="@dimen/card_title" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/thumbnail"
+                android:layout_below="@id/title"
+                android:paddingTop="@dimen/card_count_padding_bottom"
+                android:paddingLeft="@dimen/card_title_padding"
+                android:paddingRight="@dimen/card_title_padding"
+                android:textSize="@dimen/card_subtitle" />
+
+
 
             <ImageView
                 android:id="@+id/overflow"
@@ -88,6 +79,7 @@
                 android:scaleType="centerCrop"
                 android:clickable="true"
                 android:src="@drawable/ic_more_vert_white_24dp" />
+
 
         </RelativeLayout>
 

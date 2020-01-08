@@ -20,26 +20,13 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.report;
 
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 //#ifdef ANDROIDX
-//@import androidx.core.view.ViewCompat;
 //@import androidx.appcompat.app.AlertDialog;
-//@import androidx.appcompat.widget.AppCompatButton;
-//@import androidx.recyclerview.widget.DefaultItemAnimator;
-//@import androidx.recyclerview.widget.LinearLayoutManager;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
@@ -47,27 +34,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
-import es.rafaco.inappdevtools.library.view.icons.IconDrawable;
-import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAdapter;
-import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfo;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
 public class ReportScreen extends Screen {
 
-    private TextView out;
-    private Button sendButton;
-    private DecoratedToolInfoAdapter adapter;
-    private RecyclerView recyclerView;
-    private TextView header;
-    private Button manageScreensButton;
+    private RecyclerView flexibleContainer;
+    private FlexibleAdapter adapter;
+    private ReportHelper.ReportType selectedReport;
 
     public ReportScreen(ScreenManager manager) {
         super(manager);
@@ -88,8 +71,10 @@ public class ReportScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        initView();
         initAdapter();
+
+        //updateAdapter(getTypeSelectorData());
+        updateAdapter(getIndexData());
     }
 
     @Override
@@ -104,150 +89,230 @@ public class ReportScreen extends Screen {
 
 
     private void initView() {
-
-        //ICONs from font playground
-        TextView icon = getView().findViewById(R.id.test_icon);
+        //ICON playground with fonts
+        /*TextView icon = getView().findViewById(R.id.test_icon);
         IconUtils.markAsIconContainer(icon, IconUtils.MATERIAL);
         icon.setText(R.string.gmd_3d_rotation);
 
         AppCompatButton icon2 = getView().findViewById(R.id.test_icon2);
         Drawable drawable = new IconDrawable(getContext(), R.string.gmd_access_alarms,
                 IconUtils.MATERIAL).sizeDp(24);
-        icon2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-
-        out = getView().findViewById(R.id.out);
-        header = getView().findViewById(R.id.report_welcome);
-        sendButton = getView().findViewById(R.id.report_button);
-        manageScreensButton = getView().findViewById(R.id.manage_screens_button);
-
-        header.setText("This generate a zip report and send it to developers. "
-                + "To report an unzipped item, use share feature at other screens.");
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSendReportPressed();
-            }
-        });
-        manageScreensButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onManageScreensPressed();
-            }
-        });
+        icon2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);*/
     }
 
     private void initAdapter() {
-
-        adapter = new DecoratedToolInfoAdapter(getContext(), getInitialOptions());
-        //adapter.enableSwitchMode();
-
-        recyclerView = getView().findViewById(R.id.report_list);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        adapter = new FlexibleAdapter(1, new ArrayList<>());
+        flexibleContainer = getView().findViewById(R.id.flexible_contents);
+        flexibleContainer.setAdapter(adapter);
     }
 
-    private ArrayList<DecoratedToolInfo> getInitialOptions(){
-        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+    private void updateAdapter(List<Object> options) {
+        adapter.replaceItems(options);
+    }
 
-        array.add(new DecoratedToolInfo(
-                "Current session",
-                "Info and logs from your last restart",
-                R.color.rally_blue, 1,
+
+    private List<Object> getIndexData() {
+        List<Object> data = new ArrayList<>();
+        data.add("Send reports directly to the development team, including gathered data to help them.");
+        data.add("");
+        data.add("");
+        data.add("Prepare your reports:");
+        List<RunButton> prepareButtons = new ArrayList<>();
+        prepareButtons.add(new RunButton("Take Screen",
+                R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        onSessionReport();
+                        onTakeScreen();
                     }
                 }));
-
-        array.add(new DecoratedToolInfo(
-                "Last crash report",
-                "Crash, info and logs",
-                R.color.rally_orange, 1,
+        prepareButtons.add(new RunButton("Start new session",
+                R.drawable.ic_flag_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        onCrashReport();
+                        onNewSession();
                     }
                 }));
-
-        /*array.add(new DecoratedToolInfo(
-                "Custom report",
-                "You choose everything",
-                R.color.rally_yellow, 1,
+        data.add(new ButtonGroupData(prepareButtons));
+        data.add("");
+        data.add("Create a report:");
+        data.add(new RunButton("New Report",
+                R.drawable.ic_add_circle_outline_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        onCustomReport();
-                    }
-                }));*/
-
-        array.add(new DecoratedToolInfo(
-                "Full report",
-                "All from last data cleanup",
-                R.color.rally_green, 1,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        onFullReport();
+                        onNewReport();
                     }
                 }));
+        data.add("");
+        data.add("Manage your reports:");
+        data.add(new RunButton("Reports",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onManageReports();
+                    }
+                }));
+        data.add("");
 
-        return array;
+        return data;
     }
 
-    private ArrayList<DecoratedToolInfo> getSessionOptions(){
-        ArrayList<DecoratedToolInfo> array = new ArrayList<>();
+    private void onNewSession() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("Restart required")
+                .setMessage("To start a new session we need to restart your app.")
+                .setCancelable(true)
+                .setPositiveButton("Restart",
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Iadt.showMessage("Restart from ReportScreen");
+                                IadtController.get().restartApp(false);
+                            }})
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
 
-        LogAnalysisHelper helper = new LogAnalysisHelper();
-        List<AnalysisData> sessionOptions = helper.getSessionResult();
-        for (final AnalysisData item : sessionOptions) {
-            array.add(new DecoratedToolInfo(
-                    "Session " + item.getName(),
-                    item.getCount() + " log items " + item.getPercentage() + " %",
-                    R.color.rally_green, 1,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            onSessionReport(item.getName());
-                        }
-                    }));
-        }
-
-        return array;
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(Layer.getLayoutType());
+        alertDialog.show();
     }
 
-    private void onSessionReport() {
-        updateAdapter(getSessionOptions());
+    private void onTakeScreen() {
+        IadtController.get().takeScreenshot();
     }
 
-    private void onSessionReport(String name) {
-        if (TextUtils.isEmpty(name)){
-
-        }
-        //Iadt.sendReport(ReportHelper.ReportType.SESSION, null);
+    private void onNewReport() {
+        OverlayService.performNavigation(NewReportScreen.class);
     }
 
-    private void updateAdapter(ArrayList<DecoratedToolInfo> options) {
-        adapter.replaceAll(options);
+    private void onManageReports() {
+        Iadt.showMessage("//TODO");
+        //OverlayService.performNavigation(ReportsScreen.class);
     }
+
+
+/*    private void manageAttachments() {
+        List<RunButton> sessionButtons = new ArrayList<>();
+        sessionButtons.add(new RunButton("Current Session",
+                R.drawable.ic_send_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onCurrentSessionReport();
+                    }
+                }));
+        sessionButtons.add(new RunButton("View all",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onManageSessions();
+                    }
+                }));
+        data.add(new ButtonGroupData("Sessions:", sessionButtons));
+
+        List<RunButton> crashButtons = new ArrayList<>();
+        crashButtons.add(new RunButton("Last Crash",
+                R.drawable.ic_send_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onLastCrashReport();
+                    }
+                }));
+        crashButtons.add(new RunButton("View all",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onManageCrashes();
+                    }
+                }));
+        data.add(new ButtonGroupData("Crashes:", crashButtons));
+
+        List<RunButton> screenButtons = new ArrayList<>();
+        screenButtons.add(new RunButton("Take Screen",
+                R.drawable.ic_add_a_photo_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onTakeScreen();
+                    }
+                }));
+        screenButtons.add(new RunButton("View all",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onManageScreens();
+                    }
+                }));
+        data.add(new ButtonGroupData("Screenshots:", screenButtons));
+    }
+
+    private void onManageCrashes() {
+
+    }
+
+    private void onLastCrashReport() {
+
+    }
+
+    private void onManageSessions() {
+
+    }
+
+    private void onCurrentSessionReport() {
+
+    }
+
+    private void onManageScreens() {
+
+    }*/
+
+
+
+
+
+    private void onScreenshotsContinue() {
+        Iadt.showMessage("Reports coming soon!");
+    }
+
 
     private void onCrashReport() {
-        Iadt.sendReport(ReportHelper.ReportType.CRASH, null);
+        selectedReport = ReportHelper.ReportType.CRASH;
+
+        List<Object> data = new ArrayList<>();
+        data.add("Step 1 - Report type: SESSION");
+        data.add("");
+        data.add("Step 2 - Choose session:");
+        data.add(new RunButton("SEND",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Iadt.showMessage("Reports coming soon!");
+                        //TODO:
+                        // Iadt.sendReport(selectedReport, selectedSession);
+                    }
+                }));
+
+        //TODO
+        Iadt.sendReport(selectedReport, null);
     }
-
-    private void onFullReport() {
-        Iadt.sendReport(ReportHelper.ReportType.FULL, null);
-    }
-
-
-
 
 
     private void onCustomReport() {
+        selectedReport = ReportHelper.ReportType.CUSTOM;
+
+        //TODO:
         onLevelButton();
     }
 
@@ -275,12 +340,15 @@ public class ReportScreen extends Screen {
     }
 
 
-    //region [ TOOL SPECIFIC ]
+    private void onFullReport() {
+        selectedReport = ReportHelper.ReportType.CUSTOM;
 
-    private void onSendReportPressed() {
-        //TODO:
-        Iadt.sendReport(ReportHelper.ReportType.SESSION, null);
+        //TODO
+        Iadt.sendReport(selectedReport, null);
     }
+
+
+    //region [ TOOL SPECIFIC ]
 
     private void onManageScreensPressed() {
         getScreenManager().goTo(ScreenshotsScreen.class, null);

@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
 public class OverviewViewHolder extends FlexibleViewHolder {
@@ -44,12 +43,13 @@ public class OverviewViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final InfoReportData data = (InfoReportData) abstractData;
+        final OverviewData data = (OverviewData) abstractData;
         if (data!=null){
 
             itemView.setActivated(true);
 
             overviewTitleView.setText(data.getTitle());
+            overviewContentView.setText(data.getContent());
 
             if (data.getIcon()>0){
                 IconUtils.markAsIconContainer(overviewIconView, IconUtils.MATERIAL);
@@ -58,8 +58,6 @@ public class OverviewViewHolder extends FlexibleViewHolder {
             }else{
                 overviewIconView.setVisibility(View.GONE);
             }
-
-            overviewContentView.setText(data.getOverview());
         }
     }
 }
