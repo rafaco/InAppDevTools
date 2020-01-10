@@ -225,7 +225,7 @@ First off, thank you for considering contributing to InAppDevTools. It's people 
 
 I'm a Senior Software Engineer and I started this project to get the log of a real user with a nasty bug that we were unable to reproduce. Then it become my personal developer tool and I started to add new features as I was needing them for my daily duties.  
 
-After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a fully functional version on Christmas 2019.
+After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a fully functional version around February 2020.
 
 I have always worked on proprietary software and this is my first open source project. I am really excited to be able to return what I received and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
 
