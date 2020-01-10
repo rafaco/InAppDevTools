@@ -113,10 +113,27 @@ public class ReportScreen extends Screen {
 
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
-        data.add("Send reports directly to the development team, including gathered data to help them.");
+        data.add("Send reports directly to the development team of this app. We include gathered data to help them.");
         data.add("");
+        data.add(new RunButton("New Report",
+                R.drawable.ic_add_circle_outline_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onNewReport();
+                    }
+                }));
+        data.add(new RunButton("Previous Reports",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onManageReports();
+                    }
+                }));
         data.add("");
-        data.add("Prepare your reports:");
+
+        data.add("Related features:");
         List<RunButton> prepareButtons = new ArrayList<>();
         prepareButtons.add(new RunButton("Take Screen",
                 R.drawable.ic_add_a_photo_white_24dp,
@@ -135,26 +152,6 @@ public class ReportScreen extends Screen {
                     }
                 }));
         data.add(new ButtonGroupData(prepareButtons));
-        data.add("");
-        data.add("Create a report:");
-        data.add(new RunButton("New Report",
-                R.drawable.ic_add_circle_outline_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        onNewReport();
-                    }
-                }));
-        data.add("");
-        data.add("Manage your reports:");
-        data.add(new RunButton("Reports",
-                R.drawable.ic_format_list_bulleted_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        onManageReports();
-                    }
-                }));
         data.add("");
 
         return data;
@@ -194,8 +191,7 @@ public class ReportScreen extends Screen {
     }
 
     private void onManageReports() {
-        Iadt.showMessage("//TODO");
-        //OverlayService.performNavigation(ReportsScreen.class);
+        OverlayService.performNavigation(ReportsScreen.class);
     }
 
 

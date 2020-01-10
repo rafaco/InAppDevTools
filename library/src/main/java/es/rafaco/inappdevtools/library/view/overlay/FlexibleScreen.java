@@ -48,8 +48,8 @@ public abstract class FlexibleScreen extends Screen {
     }
 
     @Override
-    protected void onStart(ViewGroup toolHead) {
-        initAdapter();
+    protected void onStart(ViewGroup bodyView) {
+        initAdapter(bodyView);
         onAdapterStart();
     }
 
@@ -70,9 +70,9 @@ public abstract class FlexibleScreen extends Screen {
         return R.layout.flexible_container;
     }
 
-    private void initAdapter() {
+    private void initAdapter(ViewGroup bodyView) {
         flexAdapter = new FlexibleAdapter(getSpanCount(), new ArrayList<>());
-        flexContainer = getView().findViewById(R.id.flexible);
+        flexContainer = bodyView.findViewById(R.id.flexible);
         flexContainer.setAdapter(flexAdapter);
     }
 

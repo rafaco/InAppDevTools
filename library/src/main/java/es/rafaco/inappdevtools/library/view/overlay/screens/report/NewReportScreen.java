@@ -63,13 +63,14 @@ public class NewReportScreen extends FlexibleScreen {
 
     @Override
     public String getTitle() {
-        return "Report Wizard";
+        return "New Report";
     }
 
     @Override
     protected void onAdapterStart() {
         if (getParams()!=null && getParams().report != null){
             report = getParams().report;
+            getScreenManager().setTitle("Edit Report");
         }
         else{
             report = new Report();
@@ -101,8 +102,6 @@ public class NewReportScreen extends FlexibleScreen {
         }
 
         updateAdapter(getFormData());
-
-
     }
 
 
@@ -303,10 +302,10 @@ public class NewReportScreen extends FlexibleScreen {
         data.add("");
 
         final List<String> reportCategories = new ArrayList<>(
-                Arrays.asList("Report a problem",
-                        "Suggest an improvement",
+                Arrays.asList("Report problem",
+                        "Suggest improvement",
                         "Request feature",
-                        "Send your feedback"));
+                        "Send feedback"));
 
         data.add(new SelectorData("Reason:", reportCategories, report.getReasonInt(), new AdapterView.OnItemSelectedListener() {
             @Override
@@ -321,7 +320,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Enter a title", "", 1, 80,
+        data.add(new EditTextData("Enter a title", report.getTitle(), 1, 80,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -339,7 +338,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Enter a description", "", 2, 500,
+        data.add(new EditTextData("Enter a description", report.getDescription(), 2, 500,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -357,7 +356,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Include your email (optional)", "", 1, 30,
+        data.add(new EditTextData("Include your email (optional)", report.getEmail(), 1, 30,
                 new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -378,7 +377,7 @@ public class NewReportScreen extends FlexibleScreen {
         data.add("");
 
         List<RunButton> reportButtons = new ArrayList<>();
-        reportButtons.add(new RunButton("Save draft",
+        reportButtons.add(new RunButton("Save for later",
                 R.drawable.ic_save_white_24dp,
                 new Runnable() {
                     @Override
@@ -386,7 +385,7 @@ public class NewReportScreen extends FlexibleScreen {
                         onSaveReport();
                     }
                 }));
-        reportButtons.add(new RunButton("Send Report",
+        reportButtons.add(new RunButton("Send",
                 R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
@@ -408,6 +407,7 @@ public class NewReportScreen extends FlexibleScreen {
 
     private void onSendReport() {
         if (validateReport()){
+            report.setDateSent(DateUtils.getLong());
             saveReport();
         }
         getScreenManager().goBack();

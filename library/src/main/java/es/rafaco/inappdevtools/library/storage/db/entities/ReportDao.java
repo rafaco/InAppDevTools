@@ -38,7 +38,7 @@ import java.util.List;
 @Dao
 public interface ReportDao {
 
-    @Query("SELECT * FROM report ORDER BY uid DESC")
+    @Query("SELECT * FROM report ORDER BY date DESC")
     List<Report> getAll();
 
     @Query("SELECT * FROM report where uid LIKE :uid")

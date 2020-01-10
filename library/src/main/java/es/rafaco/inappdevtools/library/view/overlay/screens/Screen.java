@@ -53,7 +53,7 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
 
     //Lifecycle callback methods
     protected abstract void onCreate();
-    protected abstract void onStart(ViewGroup toolHead);
+    protected abstract void onStart(ViewGroup bodyView);
     protected void onResume() {}
     public void onConfigurationChanged(Configuration newConfiguration) { }
     protected void onPause() {}

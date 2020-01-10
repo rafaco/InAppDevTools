@@ -59,7 +59,7 @@ public class ReportHelper extends ScreenHelper {
     }
 
     public enum ReportType {
-        CRASH(1), SESSION(2), CUSTOM(3),ISSUE(4);
+        CRASH(1), SESSION(2), CUSTOM(3), ISSUE(4);
 
         public int code;
         private static final Map<Integer, ReportType> TYPES = new HashMap<>();

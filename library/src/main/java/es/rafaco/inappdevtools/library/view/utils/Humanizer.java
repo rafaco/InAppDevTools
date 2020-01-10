@@ -212,4 +212,11 @@ public class Humanizer {
         }
         return result;
     }
+
+    public static String truncate(String text, int maxLength) {
+        if (!TextUtils.isEmpty(text) && text.length()>3-1 && text.length()>maxLength){
+            return text.substring(0, maxLength-3-1) + "...";
+        }
+        return text;
+    }
 }
