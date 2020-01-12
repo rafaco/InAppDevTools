@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,7 +48,6 @@ public class OverviewViewHolder extends FlexibleViewHolder {
         if (data!=null){
 
             itemView.setActivated(true);
-
             overviewTitleView.setText(data.getTitle());
             overviewContentView.setText(data.getContent());
 
@@ -57,6 +57,12 @@ public class OverviewViewHolder extends FlexibleViewHolder {
                 overviewIconView.setVisibility(View.VISIBLE);
             }else{
                 overviewIconView.setVisibility(View.GONE);
+            }
+
+            if (data.getColor()>0){
+                int contextualColor = ContextCompat.getColor(overviewTitleView.getContext(), data.getColor());
+                overviewTitleView.setTextColor(contextualColor);
+                overviewIconView.setTextColor(contextualColor);
             }
         }
     }

@@ -83,7 +83,7 @@ public class InfoReportData {
 
     public OverviewData getOverviewData() {
         return new OverviewData(getTitle(), getOverview(),
-                R.color.rally_white, getIcon());
+                getIcon(), R.color.rally_white);
     }
 
 
