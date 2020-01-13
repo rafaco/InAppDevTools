@@ -209,23 +209,23 @@ public class ErrorsScreen extends Screen {
     }
 
     public void onCrashUiButton() {
-        Log.i(Iadt.TAG, "Simulated crash on the UI thread...");
-        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
+        Log.i(Iadt.TAG, getContext().getString(R.string.simulated_crash_foreground));
+        final Exception cause = new TooManyListenersException(getContext().getString(R.string.simulated_crash_cause));
         ThreadUtils.runOnMain(new Runnable() {
             @Override
             public void run() {
-                throw new ForcedRuntimeException("Simulated crash on the UI thread", cause);
+                throw new ForcedRuntimeException(getContext().getString(R.string.simulated_crash_foreground), cause);
             }
         });
     }
 
     public void onCrashBackgroundButton() {
-        Log.i(Iadt.TAG, "Simulated crash on a background thread...");
-        final Exception cause = new TooManyListenersException("The scenic panic make you pressed that button :)");
+        Log.i(Iadt.TAG, getContext().getString(R.string.simulated_crash_background));
+        final Exception cause = new TooManyListenersException(getContext().getString(R.string.simulated_crash_cause));
         ThreadUtils.runOnBack(new Runnable() {
             @Override
             public void run() {
-                throw new ForcedRuntimeException("Simulated crash on a background thread", cause);
+                throw new ForcedRuntimeException(getContext().getString(R.string.simulated_crash_background), cause);
             }
         });
     }

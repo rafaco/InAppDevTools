@@ -178,23 +178,40 @@ public class NewReportScreen extends FlexibleScreen {
 
     private List<Object> getCrashSelectorData() {
         List<Object> data = new ArrayList<>();
-        data.add(getOverview());
+        OverviewData overview = getOverview();
+        overview.setColor(R.color.rally_orange);
+        data.add(overview);
         data.add("Choose a crash:");
 
         List<Crash> crashes = IadtController.getDatabase().crashDao().getAll();
-        for (int i = 0; i<crashes.size(); i++) {
-            final Crash crash = crashes.get(i);
-            CardData cardData = new CardData("Session # crashed",
+        if (crashes.size()==0){
+            CardData cardData = new CardData("No crash detected",
                     new Runnable() {
                         @Override
                         public void run() {
-                            report.setCrashId(crash.getUid());
+                            report.setReportType(null);
                             loadNextStep();
                         }
                     });
-            cardData.setContent(crash.getMessage());
-            cardData.setBgColor(R.color.rally_orange_alpha);
+            cardData.setContent("Nothing to report");
+            cardData.setBgColor(R.color.iadt_surface_bottom);
             data.add(cardData);
+        }
+        else{
+            for (int i = 0; i<crashes.size(); i++) {
+                final Crash crash = crashes.get(i);
+                CardData cardData = new CardData("Crash on session " + crash.getScreenId(),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                report.setCrashId(crash.getUid());
+                                loadNextStep();
+                            }
+                        });
+                cardData.setContent(crash.getMessage());
+                cardData.setBgColor(R.color.rally_orange_alpha);
+                data.add(cardData);
+            }
         }
         return data;
     }

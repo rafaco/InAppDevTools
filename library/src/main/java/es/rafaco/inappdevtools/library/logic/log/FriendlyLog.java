@@ -338,7 +338,7 @@ public class FriendlyLog {
     public static void logCrashDetails(long friendlyLogId, long crashId, Crash crash) {
         final Friendly log = IadtController.get().getDatabase().friendlyDao().findById(friendlyLogId);
         log.setDate(crash.getDate());
-        log.setMessage(crash.getMessage());
+        log.setMessage("Session " + crash.getScreenId() + " crashed: " + crash.getMessage());
         log.setLinkedId(crashId);
         IadtController.get().getDatabase().friendlyDao().update(log);
     }

@@ -43,24 +43,32 @@
                 style="@style/TextCondensedBig" />
 
             <TextView
-                android:id="@+id/detail_last_activity"
+                android:id="@+id/detail_session"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_when"
-                style="@style/TextCondensedMedium" />
+                style="@style/TextCondensedMedium"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/detail_foreground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/detail_last_activity"
+                android:layout_below="@id/detail_session"
+                style="@style/TextCondensedMedium" />
+
+            <TextView
+                android:id="@+id/detail_last_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_foreground"
                 style="@style/TextCondensedMedium" />
 
             <TextView
                 android:id="@+id/detail_thread"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/detail_foreground"
+                android:layout_below="@id/detail_last_activity"
                 style="@style/TextCondensedMedium" />
 
             <ImageView
@@ -75,6 +83,23 @@
                 android:scaleType="fitCenter"
                 tools:ignore="NewApi" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <es.rafaco.compat.AppCompatButton
+                android:id="@+id/report_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Report crash"
+                android:backgroundTint="@color/rally_green_alpha"
+                android:drawableLeft="@drawable/ic_send_white_24dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/detail_title"

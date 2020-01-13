@@ -27,24 +27,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//#ifdef ANDROIDX
-//@import androidx.appcompat.widget.AppCompatButton;
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.RecyclerView;
-//#endif
 
 import java.util.List;
 
+import es.rafaco.compat.AppCompatButton;
+import es.rafaco.compat.RecyclerView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
+import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
-import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -53,6 +48,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
@@ -73,9 +69,11 @@ public class CrashDetailScreen extends Screen {
     private AppCompatButton logcatButton;
     private AppCompatButton reproStepsButton;
     private AppCompatButton revealDetailsButton;
+    private AppCompatButton reportButton;
 
     private RecyclerView recyclerView1;
     private RecyclerView recyclerView2;
+    private TextView session;
 
     public CrashDetailScreen(ScreenManager manager) {
         super(manager);
@@ -116,11 +114,13 @@ public class CrashDetailScreen extends Screen {
         thumbnail = view.findViewById(R.id.thumbnail);
 
         title = view.findViewById(R.id.detail_title);
+        session = view.findViewById(R.id.detail_session);
         subtitle = view.findViewById(R.id.detail_subtitle);
         title2 = view.findViewById(R.id.detail_title2);
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
         thread = view.findViewById(R.id.detail_thread);
 
+        reportButton = view.findViewById(R.id.report_button);
         reproStepsButton = view.findViewById(R.id.repro_steps_button);
         logcatButton = view.findViewById(R.id.logcat_button);
         revealDetailsButton = view.findViewById(R.id.reveal_details_button);
@@ -147,10 +147,22 @@ public class CrashDetailScreen extends Screen {
     }
 
     private void initOverview() {
-        when.setText("Your app crashed " + Humanizer.getElapsedTimeLowered(crash.getDate()));
-        thread.setText("Thread: " + crash.getThreadName());
+        when.setText("Session " + crash.getSessionId() + " crashed " + Humanizer.getElapsedTimeLowered(crash.getDate()));
+        //session.setText();
         foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());
+        thread.setText("Crashed thread: " + crash.getThreadName());
+
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Report report = new Report();
+                report.setReportType(ReportHelper.ReportType.CRASH);
+                report.setCrashId(crash.getUid());
+                String params = NewReportScreen.buildParams(report);
+                OverlayService.performNavigation(NewReportScreen.class, params);
+            }
+        });
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -251,8 +263,14 @@ public class CrashDetailScreen extends Screen {
         int selected = item.getItemId();
         if (selected == R.id.action_send)
         {
-            Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
-            getScreenManager().hide();
+            //Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+            //getScreenManager().hide();
+            
+            Report report = new Report();
+            report.setReportType(ReportHelper.ReportType.CRASH);
+            report.setCrashId(crash.getUid());
+            String params = NewReportScreen.buildParams(report);
+            OverlayService.performNavigation(NewReportScreen.class, params);
         }
         else if (selected == R.id.action_share)
         {

@@ -40,6 +40,9 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "date")
     private long date;
 
+    @ColumnInfo(name = "sessionId")
+    private long sessionId;
+
     @ColumnInfo(name = "reportPath")
     private String reportPath;
 
@@ -88,6 +91,9 @@ public class Crash implements Serializable {
     @ColumnInfo(name = "lastActivity")
     private String lastActivity;
 
+    @ColumnInfo(name = "isReported")
+    private boolean isReported;
+
     public long getUid() {
         return uid;
     }
@@ -102,6 +108,14 @@ public class Crash implements Serializable {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getReportPath() {
@@ -230,5 +244,13 @@ public class Crash implements Serializable {
 
     public void setLastActivity(String lastActivity) {
         this.lastActivity = lastActivity;
+    }
+
+    public boolean isReported() {
+        return isReported;
+    }
+
+    public void setReported(boolean reported) {
+        isReported = reported;
     }
 }
