@@ -23,13 +23,13 @@ import android.content.Context;
 import android.view.GestureDetector;
 
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import okhttp3.OkHttpClient;
 
 public class Iadt {
 
-    public static final String TAG = "InAppDevTools";
+    public static final String TAG = "InAppDevTools-Noop";
 
     public static boolean isEnabled(){
         return false;
@@ -86,7 +86,7 @@ public class Iadt {
     //region [ REPORTING ]
 
     public static void takeScreenshot() {}
-    public static void sendReport(final ReportHelper.ReportType type, final Object param){}
+    public static void sendReport(final ReportType type, final Object param){}
 
     //endregion
 

@@ -30,16 +30,14 @@ import android.support.annotation.NonNull;
 //#endif
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import br.tiagohm.Language;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
+import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
@@ -58,26 +56,7 @@ public class ReportHelper extends ScreenHelper {
         return null;
     }
 
-    public enum ReportType {
-        CRASH(1), SESSION(2), CUSTOM(3), ISSUE(4);
 
-        public int code;
-        private static final Map<Integer, ReportType> TYPES = new HashMap<>();
-        ReportType(int code) {
-            this.code = code;
-        }
-        static {
-            for (ReportType value : values()) {
-                TYPES.put(value.code, value);
-            }
-        }
-        public int getCode() {
-            return code;
-        }
-        public static ReportType getByCode(int code) {
-            return TYPES.get(code);
-        }
-    }
 
     ReportType type;
     Object target;
@@ -85,16 +64,19 @@ public class ReportHelper extends ScreenHelper {
     public void start(ReportType type, Object target) {
         this.type = type;
         this.target = target;
-        boolean isHtml = false;
+
         List<String> filesPaths = getFilePaths();
 
+        boolean isHtml = false;
         EmailUtils.sendEmailIntent(context,
-                getEmailTo(),
-                "",
-                getEmailSubject(),
-                getEmailBody(isHtml),
-                filesPaths,
-                false);
+                getEmailTo(), "",
+                getEmailSubject(), getEmailBody(isHtml),
+                filesPaths, isHtml);
+    }
+
+    public void start(Report report) {
+        this.type = report.getReportType();
+        this.target = target;
     }
 
 

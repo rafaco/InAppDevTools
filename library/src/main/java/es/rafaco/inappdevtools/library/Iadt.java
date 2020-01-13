@@ -30,8 +30,8 @@ import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import okhttp3.OkHttpClient;
@@ -161,7 +161,7 @@ public class Iadt {
         getController().takeScreenshot();
     }
 
-    public static void sendReport(final ReportHelper.ReportType type, final Object param) {
+    public static void sendReport(final ReportType type, final Object param) {
         if (!isEnabled()) return;
         getController().sendReport(type, param);
     }

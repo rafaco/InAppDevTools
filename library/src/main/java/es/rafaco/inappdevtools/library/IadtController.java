@@ -38,8 +38,10 @@ import es.rafaco.inappdevtools.library.logic.info.InfoManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 
@@ -311,7 +313,17 @@ public final class IadtController {
         getContext().startActivity(intent);
     }
 
-    public void sendReport(ReportHelper.ReportType type, final Object param) {
+    public void sendReport(final Report report) {
+        ThreadUtils.runOnBack("Iadt-SendReport",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        new ReportHelper().start(report);
+                    }
+                });
+    }
+
+    public void sendReport(ReportType type, final Object param) {
         switch (type){
             case CRASH:
                 ThreadUtils.runOnBack("Iadt-CrashReport",
@@ -328,7 +340,7 @@ public final class IadtController {
                             Iadt.showError("Unable to found a crash to report");
                         }
                         else {
-                            new ReportHelper().start(ReportHelper.ReportType.CRASH, crash);
+                            new ReportHelper().start(ReportType.CRASH, crash);
                         }
                     }
                 });
@@ -341,7 +353,7 @@ public final class IadtController {
                     public void run() {
                         //ArrayList<Uri> files = (ArrayList<Uri>)params;
                         //TODO: Session report
-                        new ReportHelper().start(ReportHelper.ReportType.SESSION, param);
+                        new ReportHelper().start(ReportType.SESSION, param);
                     }
                 });
                 break;

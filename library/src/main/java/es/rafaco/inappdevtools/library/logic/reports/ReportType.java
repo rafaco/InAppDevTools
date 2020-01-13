@@ -19,6 +19,26 @@
 
 package es.rafaco.inappdevtools.library.logic.reports;
 
-public class ReportHelper {
-    public enum ReportType { SESSION, CRASH, WIZARD, FULL }
+import java.util.HashMap;
+import java.util.Map;
+
+public enum ReportType {
+    CRASH(1), SESSION(2), CUSTOM(3), ISSUE(4);
+
+    public int code;
+    private static final Map<Integer, ReportType> TYPES = new HashMap<>();
+    ReportType(int code) {
+        this.code = code;
+    }
+    static {
+        for (ReportType value : values()) {
+            TYPES.put(value.code, value);
+        }
+    }
+    public int getCode() {
+        return code;
+    }
+    public static ReportType getByCode(int code) {
+        return TYPES.get(code);
+    }
 }

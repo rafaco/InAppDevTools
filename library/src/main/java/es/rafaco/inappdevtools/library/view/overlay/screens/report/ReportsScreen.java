@@ -26,7 +26,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.FlexibleScreen;
@@ -83,13 +83,13 @@ public class ReportsScreen extends FlexibleScreen {
 
     private String buildContentString(Report report) {
         String result;
-        if (report.getReportType() == ReportHelper.ReportType.CRASH){
+        if (report.getReportType() == ReportType.CRASH){
             result = "Crash " + report.getCrashId() + " report";
         }
-        else if (report.getReportType() == ReportHelper.ReportType.SESSION){
+        else if (report.getReportType() == ReportType.SESSION){
             result = "Session " + report.getCrashId() + " report";
         }
-        else if (report.getReportType() == ReportHelper.ReportType.CUSTOM){
+        else if (report.getReportType() == ReportType.CUSTOM){
             result = "Custom report about " + report.getReason();
         }else{
             result = "Issue report";

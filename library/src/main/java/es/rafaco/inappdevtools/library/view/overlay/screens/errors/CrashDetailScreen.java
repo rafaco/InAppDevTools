@@ -36,6 +36,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
@@ -47,7 +48,6 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
@@ -157,7 +157,7 @@ public class CrashDetailScreen extends Screen {
             @Override
             public void onClick(View v) {
                 Report report = new Report();
-                report.setReportType(ReportHelper.ReportType.CRASH);
+                report.setReportType(ReportType.CRASH);
                 report.setCrashId(crash.getUid());
                 String params = NewReportScreen.buildParams(report);
                 OverlayService.performNavigation(NewReportScreen.class, params);
@@ -263,11 +263,11 @@ public class CrashDetailScreen extends Screen {
         int selected = item.getItemId();
         if (selected == R.id.action_send)
         {
-            //Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+            //Iadt.sendReport(ReportType.CRASH, crash.getUid());
             //getScreenManager().hide();
             
             Report report = new Report();
-            report.setReportType(ReportHelper.ReportType.CRASH);
+            report.setReportType(ReportType.CRASH);
             report.setCrashId(crash.getUid());
             String params = NewReportScreen.buildParams(report);
             OverlayService.performNavigation(NewReportScreen.class, params);

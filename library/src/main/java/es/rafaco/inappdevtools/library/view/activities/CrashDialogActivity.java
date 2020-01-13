@@ -41,11 +41,11 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 
 public class CrashDialogActivity extends AppCompatActivity {
 
@@ -118,7 +118,7 @@ public class CrashDialogActivity extends AppCompatActivity {
     }
 
     private void onCrashReport(Crash crash) {
-        Iadt.sendReport(ReportHelper.ReportType.CRASH, crash.getUid());
+        Iadt.sendReport(ReportType.CRASH, crash.getUid());
         destroyDialog();
     }
 

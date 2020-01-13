@@ -33,7 +33,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
@@ -85,17 +85,17 @@ public class NewReportScreen extends FlexibleScreen {
             return;
         }
 
-        if (report.getReportType() == ReportHelper.ReportType.CRASH &&
+        if (report.getReportType() == ReportType.CRASH &&
                 report.getCrashId()<1){
             updateAdapter(getCrashSelectorData());
             return;
         }
-        else if (report.getReportType() == ReportHelper.ReportType.SESSION &&
+        else if (report.getReportType() == ReportType.SESSION &&
                 report.getSessionId()<1){
             updateAdapter(getSessionSelectorData());
             return;
         }
-        else if (report.getReportType() == ReportHelper.ReportType.CUSTOM &&
+        else if (report.getReportType() == ReportType.CUSTOM &&
                 TextUtils.isEmpty(report.getScreenIds())){
             updateAdapter(getScreenSelectorData());
             return;
@@ -126,7 +126,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setReportType(ReportHelper.ReportType.CRASH);
+                        report.setReportType(ReportType.CRASH);
                         loadNextStep();
                     }
                 });
@@ -139,7 +139,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setReportType(ReportHelper.ReportType.SESSION);
+                        report.setReportType(ReportType.SESSION);
                         loadNextStep();
                     }
                 });
@@ -152,7 +152,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setReportType(ReportHelper.ReportType.CUSTOM);
+                        report.setReportType(ReportType.CUSTOM);
                         loadNextStep();
                     }
                 });
@@ -165,7 +165,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setReportType(ReportHelper.ReportType.ISSUE);
+                        report.setReportType(ReportType.ISSUE);
                         loadNextStep();
                     }
                 });
@@ -427,7 +427,7 @@ public class NewReportScreen extends FlexibleScreen {
             report.setDateSent(DateUtils.getLong());
             saveReport();
         }
-        getScreenManager().goBack();
+        IadtController.get().sendReport(report);
     }
 
     private boolean validateReport() {

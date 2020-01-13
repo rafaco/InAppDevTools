@@ -35,7 +35,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 
 @Entity(tableName = "report")
 public class Report implements Serializable {
@@ -180,11 +180,11 @@ public class Report implements Serializable {
         return dateSent < 1;
     }
 
-    public ReportHelper.ReportType getReportType() {
-        return ReportHelper.ReportType.getByCode(typeInt);
+    public ReportType getReportType() {
+        return ReportType.getByCode(typeInt);
     }
 
-    public void setReportType(ReportHelper.ReportType reportType) {
+    public void setReportType(ReportType reportType) {
         this.typeInt = reportType.getCode();
     }
 

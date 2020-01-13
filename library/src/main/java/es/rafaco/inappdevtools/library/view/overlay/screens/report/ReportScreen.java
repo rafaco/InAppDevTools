@@ -36,7 +36,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -50,7 +50,7 @@ public class ReportScreen extends Screen {
 
     private RecyclerView flexibleContainer;
     private FlexibleAdapter adapter;
-    private ReportHelper.ReportType selectedReport;
+    private ReportType selectedReport;
 
     public ReportScreen(ScreenManager manager) {
         super(manager);
@@ -284,7 +284,7 @@ public class ReportScreen extends Screen {
 
 
     private void onCrashReport() {
-        selectedReport = ReportHelper.ReportType.CRASH;
+        selectedReport = ReportType.CRASH;
 
         List<Object> data = new ArrayList<>();
         data.add("Step 1 - Report type: SESSION");
@@ -306,7 +306,7 @@ public class ReportScreen extends Screen {
 
 
     private void onCustomReport() {
-        selectedReport = ReportHelper.ReportType.CUSTOM;
+        selectedReport = ReportType.CUSTOM;
 
         //TODO:
         onLevelButton();
@@ -337,7 +337,7 @@ public class ReportScreen extends Screen {
 
 
     private void onFullReport() {
-        selectedReport = ReportHelper.ReportType.CUSTOM;
+        selectedReport = ReportType.CUSTOM;
 
         //TODO
         Iadt.sendReport(selectedReport, null);

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 27,
-    "identityHash": "2cfbc35e71147dcb777a80298c730004",
+    "identityHash": "0412ffa102bf308b9ddfd852653ee121",
     "entities": [
       {
         "tableName": "crash",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `reportPath` TEXT, `screenId` INTEGER NOT NULL, `logcatId` INTEGER NOT NULL, `exception` TEXT, `exceptionAt` TEXT, `message` TEXT, `causeException` TEXT, `causeMessage` TEXT, `causeExceptionAt` TEXT, `stacktrace` TEXT, `threadId` INTEGER NOT NULL, `isMainThread` INTEGER NOT NULL, `threadName` TEXT, `threadGroupName` TEXT, `isForeground` INTEGER NOT NULL, `lastActivity` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `sessionId` INTEGER NOT NULL, `reportPath` TEXT, `screenId` INTEGER NOT NULL, `logcatId` INTEGER NOT NULL, `exception` TEXT, `exceptionAt` TEXT, `message` TEXT, `causeException` TEXT, `causeMessage` TEXT, `causeExceptionAt` TEXT, `stacktrace` TEXT, `threadId` INTEGER NOT NULL, `isMainThread` INTEGER NOT NULL, `threadName` TEXT, `threadGroupName` TEXT, `isForeground` INTEGER NOT NULL, `lastActivity` TEXT, `isReported` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -17,6 +17,12 @@
           {
             "fieldPath": "date",
             "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -115,6 +121,12 @@
             "columnName": "lastActivity",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "isReported",
+            "columnName": "isReported",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -563,7 +575,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2cfbc35e71147dcb777a80298c730004\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0412ffa102bf308b9ddfd852653ee121\")"
     ]
   }
 }

@@ -64,6 +64,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -74,7 +75,6 @@ import es.rafaco.inappdevtools.library.view.components.deco.DecoratedToolInfoAda
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
 public class ReportDialogActivity extends AppCompatActivity {
@@ -287,7 +287,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
     private void onImagesSelected(ArrayList<Uri> mArrayUri) {
         //TODO: use selected images
-        Iadt.sendReport(ReportHelper.ReportType.SESSION, mArrayUri);
+        Iadt.sendReport(ReportType.SESSION, mArrayUri);
         alertDialog.dismiss();
         finish();
     }
