@@ -38,6 +38,7 @@ import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
@@ -70,6 +71,27 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         String secondLine = getRepositoryOverview();
         String thirdLine = getLocalOverview();
         return firstLine + "\n" + secondLine + "\n" + thirdLine;
+    }
+
+    public String getShortOverview() {
+        return getFriendlyBuildType() + " at "
+                + DateUtils.formatShortDate(Long.parseLong(buildInfo.getString(BuildInfo.BUILD_TIME)));
+    }
+
+    public String getShortOverviewSources() {
+        if (!isGitEnabled()){
+            return "Unavailable";
+        }
+        String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
+        String tag = gitConfig.getString(GitInfo.TAG);
+        return branch + " " + tag;
+    }
+
+    public String getShortOverviewChanges() {
+        if (!isGitEnabled()){
+            return "Unavailable";
+        }
+        return getLocalOverview();
     }
 
     @Override

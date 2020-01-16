@@ -73,6 +73,10 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
         return firstLine + Humanizer.newLine() + secondLine;
     }
 
+    public String getOneLineOverview() {
+        return getFormattedDeviceLong();
+    }
+
     public String getFirstLineOverview() {
         return (configHelper.isRunningOnEmulator() ? "Emulated " : "Real ")
                 + getDeviceType();
@@ -213,7 +217,10 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
 
     @NonNull
     public String getFormattedDeviceLong() {
-        return String.format("%s %s with Android %s", Humanizer.toCapitalCase(Build.BRAND), Build.MODEL, Build.VERSION.RELEASE); //getVersionName()
+        return String.format("%s %s with Android %s",
+                configHelper.isRunningOnEmulator() ? "Emulated" : Humanizer.toCapitalCase(Build.BRAND),
+                configHelper.isRunningOnEmulator() ? getDeviceType() : Build.MODEL,
+                Build.VERSION.RELEASE);
     }
 
 

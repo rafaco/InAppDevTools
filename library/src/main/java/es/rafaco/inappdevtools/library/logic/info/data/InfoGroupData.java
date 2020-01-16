@@ -114,12 +114,12 @@ public class InfoGroupData {
     @Override
     public String toString(){
         String result = "";
-        String formatTitle = "%s:";
+        String formatTitle = "## %s:";
 
         if (!TextUtils.isEmpty(getTitle())) {
             result += Humanizer.newLine();
             result += String.format(formatTitle, getTitle());
-            result += Humanizer.newLine();
+            result += Humanizer.fullStop();
         }
         result += entriesToString();
         return result;

@@ -85,4 +85,9 @@ public class DateUtils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
         return simpleDateFormat.format(timeMillis);
     }
+
+    public static String formatShortDate(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm");
+        return simpleDateFormat.format(timeMillis);
+    }
 }

@@ -33,7 +33,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -67,7 +66,7 @@ public class FileCreator {
     }
 
     public static File prepare(String subfolder, String filename) {
-        File file = new File(getCategoryFolder(subfolder), filename);
+        File file = new File(getSubfolder(subfolder), filename);
         //TODO: check if file exists and skip recreation
         try {
             file.createNewFile();
@@ -79,9 +78,8 @@ public class FileCreator {
         }
     }
 
-    public static File getCategoryFolder(String category){
-        File libDirectory = createDirIfNotExist(getLibDir());
-        File categoryFolder = createDirIfNotExist(libDirectory + "/" + category);
+    public static File getSubfolder(String category){
+        File categoryFolder = createDirIfNotExist(getLibDir() + "/" + category);
         return categoryFolder;
     }
 
@@ -93,7 +91,7 @@ public class FileCreator {
     private static File createDirIfNotExist(String path){
         File dir = new File(path);
         if( !dir.exists() ){
-            dir.mkdir();
+            dir.mkdirs();
         }
         return dir;
     }

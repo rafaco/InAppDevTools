@@ -92,12 +92,12 @@ public class InfoReportData {
         String result = Humanizer.newLine();
 
         if (!TextUtils.isEmpty(getTitle())){
-            result += String.format("[ REPORT %s ]", getTitle());
-            result += Humanizer.newLine();
+            result += String.format("# %s", getTitle());
+            result += Humanizer.fullStop();
         }
 
         if (!TextUtils.isEmpty(getOverview())){
-            result += getOverview();
+            result += Humanizer.prependLines(getOverview(), " * ");
             result += Humanizer.newLine();
         }
 

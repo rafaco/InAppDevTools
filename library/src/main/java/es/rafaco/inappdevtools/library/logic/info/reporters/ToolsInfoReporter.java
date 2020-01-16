@@ -49,6 +49,10 @@ public class ToolsInfoReporter extends AbstractInfoReporter {
                 + getFriendlyBuildType();
     }
 
+    public String getShortOverview() {
+        return "v" + BuildConfig.VERSION_NAME;
+    }
+
     @Override
     public InfoReportData getData() {
         return new InfoReportData.Builder(getReport())

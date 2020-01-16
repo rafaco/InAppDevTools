@@ -24,13 +24,7 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
 
-    public static String newLine(){
-        return System.getProperty("line.separator");
-    }
-
-    public static String fullStop(){
-        return newLine()+ newLine();
-    }
+    //region [ TEXT ]
 
     public static String toCapitalCase(String text){
         if (TextUtils.isEmpty(text)){
@@ -43,11 +37,25 @@ public class Humanizer {
         return result;
     }
 
-    public static int countLines(String text) {
-        if (TextUtils.isEmpty(text)){
-            return 0;
+    public static String removeHead(String text, String head) {
+        if (text.startsWith(head)) {
+            return text.substring(head.length());
         }
-        return text.split(newLine()).length;
+        return text;
+    }
+
+    public static String removeTail(String text, String tail) {
+        if (text.endsWith(tail)) {
+            return text.substring(0, text.length() - tail.length());
+        }
+        return text;
+    }
+
+    public static String truncate(String text, int maxLength) {
+        if (!TextUtils.isEmpty(text) && text.length()>3-1 && text.length()>maxLength){
+            return text.substring(0, maxLength-3-1) + "...";
+        }
+        return text;
     }
 
     public static int countOcurrences(String text, String character) {
@@ -78,6 +86,66 @@ public class Humanizer {
 
         return text;
     }
+
+    //endregion
+
+    //region [ MULTILINE TEXT ]
+
+    public static String newLine(){
+        return System.getProperty("line.separator");
+    }
+
+    public static String fullStop(){
+        return newLine()+ newLine();
+    }
+
+    public static int countLines(String text) {
+        if (TextUtils.isEmpty(text)){
+            return 0;
+        }
+        return text.split(newLine()).length;
+    }
+
+    public static String prependLines(String paragraph, String prefix){
+        if (TextUtils.isEmpty(paragraph)){
+            return paragraph;
+        }
+        String result = "";
+        String[] lines = paragraph.split(Humanizer.newLine());
+        for (int i = 0; i<lines.length; i++){
+            result += prefix + lines[i] + Humanizer.newLine();
+        }
+        return result;
+    }
+
+    public static String multiLineComment(String paragraph){
+        if (TextUtils.isEmpty(paragraph)){
+            return paragraph;
+        }
+        String tokenStart = "/*";
+        String tokenMiddle = " * ";
+        String tokenEnd = " */";
+        String result = tokenStart + Humanizer.newLine();
+        result += prependLines(paragraph, tokenMiddle);
+        result += tokenEnd + Humanizer.newLine();
+        return result;
+    }
+
+    public static String trimNewlines(String text) {
+        String result = text;
+        String newLine = newLine();
+        while (result.startsWith(newLine)) {
+            result = removeHead(result, newLine);
+        }
+        while (result.endsWith(newLine)) {
+            result = removeTail(result, newLine);
+        }
+        return result;
+    }
+
+    //endregion
+
+    //region [ TIME ]
 
     public static String getElapsedTimeLowered(long oldTimeMillis){
         String elapsed = getElapsedTime(oldTimeMillis);
@@ -166,6 +234,7 @@ public class Humanizer {
         }
     }
 
+    //endregion
 
     //region [ BYTE/KB ]
 
@@ -186,37 +255,5 @@ public class Humanizer {
     }
 
     //endregion
-
-    public static String removeHead(String text, String head) {
-        if (text.startsWith(head)) {
-            return text.substring(head.length());
-        }
-        return text;
-    }
-
-    public static String removeTail(String text, String tail) {
-        if (text.endsWith(tail)) {
-            return text.substring(0, text.length() - tail.length());
-        }
-        return text;
-    }
-
-    public static String trimNewlines(String text) {
-        String result = text;
-        String newLine = newLine();
-        while (result.startsWith(newLine)) {
-            result = removeHead(result, newLine);
-        }
-        while (result.endsWith(newLine)) {
-            result = removeTail(result, newLine);
-        }
-        return result;
-    }
-
-    public static String truncate(String text, int maxLength) {
-        if (!TextUtils.isEmpty(text) && text.length()>3-1 && text.length()>maxLength){
-            return text.substring(0, maxLength-3-1) + "...";
-        }
-        return text;
-    }
 }
+

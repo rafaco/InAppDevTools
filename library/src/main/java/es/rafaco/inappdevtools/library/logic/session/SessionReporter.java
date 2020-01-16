@@ -23,6 +23,7 @@ import android.content.Context;
 
 import java.text.SimpleDateFormat;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
 import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
@@ -152,7 +153,13 @@ public class SessionReporter {
         if (analysis != null){
             return analysis;
         }
-        analysis = session.getAnalysis();
+
+        if (session.isCurrent()){
+            analysis = IadtController.get().getSessionManager().calculateCurrentSessionAnalysis();
+        }else{
+            analysis = session.getAnalysis();
+        }
+
         return analysis;
     }
 

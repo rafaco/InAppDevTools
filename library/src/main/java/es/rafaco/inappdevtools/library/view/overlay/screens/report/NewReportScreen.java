@@ -426,8 +426,8 @@ public class NewReportScreen extends FlexibleScreen {
         if (validateReport()){
             report.setDateSent(DateUtils.getLong());
             saveReport();
+            IadtController.get().sendReport(report);
         }
-        IadtController.get().sendReport(report);
     }
 
     private boolean validateReport() {
@@ -439,7 +439,8 @@ public class NewReportScreen extends FlexibleScreen {
         if (report.getUid()>0){
             IadtController.getDatabase().reportDao().update(report);
         }else{
-            IadtController.getDatabase().reportDao().insert(report);
+            long id = IadtController.getDatabase().reportDao().insert(report);
+            report.setUid(id);
         }
     }
 
