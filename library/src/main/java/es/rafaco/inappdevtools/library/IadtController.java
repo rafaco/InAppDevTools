@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -67,6 +68,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.Screensh
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+
+import static es.rafaco.inappdevtools.library.Iadt.TAG;
 
 public final class IadtController {
 
@@ -397,14 +400,6 @@ public final class IadtController {
             getRunnableManager().getForceCloseRunnable().run();
         }
 
-        if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
-        sessionManager.destroy();
-        eventManager.destroy();
-
-        /*<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-        ActivityManager am = (ActivityManager)getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses(getContext().getPackageName());*/
-
         if (isDebug()) Log.v(Iadt.TAG, "Stopping Notification Service");
         NotificationService.stop();
 
@@ -414,6 +409,10 @@ public final class IadtController {
         if (isDebug()) Log.v(Iadt.TAG, "Stopping LogcatReaderService");
         Intent intent = LogcatReaderService.getStopIntent(getContext());
         LogcatReaderService.enqueueWork(getContext(), intent);
+
+        if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
+        sessionManager.destroy();
+        eventManager.destroy();
     }
 
     //endregion

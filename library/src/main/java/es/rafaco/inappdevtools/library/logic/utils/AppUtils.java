@@ -115,7 +115,13 @@ public class AppUtils {
     }
 
     public static void exit() {
-        Log.d(TAG, "Killing application process");
+        Context context = IadtController.get().getContext();
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        
+        Log.d(TAG, "Killing background processes");
+        am.killBackgroundProcesses(context.getPackageName());
+
+        Log.d(TAG, "Killing app process");
         android.os.Process.killProcess(ThreadUtils.myPid());
         System.exit(10);
     }

@@ -159,7 +159,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Close app",
+        data.add(new RunButton("Force close app",
                 R.drawable.ic_warning_white_24dp,
                 new Runnable() {
                     @Override
