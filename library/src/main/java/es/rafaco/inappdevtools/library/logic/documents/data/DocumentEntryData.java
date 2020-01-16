@@ -17,24 +17,24 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.data;
+package es.rafaco.inappdevtools.library.logic.documents.data;
 
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoEntryData {
+public class DocumentEntryData {
 
     String label;
     List<String> values;
 
-    public InfoEntryData(String label, List<String> values) {
+    public DocumentEntryData(String label, List<String> values) {
         this.label = label;
         this.values = values;
     }
 
-    public InfoEntryData(String label, String value) {
+    public DocumentEntryData(String label, String value) {
         this.label = label;
         setValue(value);
     }

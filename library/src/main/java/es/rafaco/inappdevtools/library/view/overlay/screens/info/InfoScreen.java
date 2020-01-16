@@ -25,8 +25,6 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
@@ -42,9 +40,9 @@ import java.util.TimerTask;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -131,7 +129,7 @@ public class InfoScreen extends Screen {
         expandedPosition = getInitialExpandedPosition();
         initInfoNavigationButtons(infoReportIndex);
 
-        InfoReportData data = getData(infoReportIndex);
+        DocumentData data = getData(infoReportIndex);
         updateView(data);
     }
 
@@ -143,16 +141,16 @@ public class InfoScreen extends Screen {
         return paramPosition;
     }
 
-    private InfoReportData getData(int reportPosition) {
-        InfoReport report = InfoReport.values()[reportPosition];
-        InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
+    private DocumentData getData(int reportPosition) {
+        Document report = Document.getInfoDocuments()[reportPosition];
+        DocumentData reportData = IadtController.get().getDocumentManager().getDocumentData(report);
         return reportData;
     }
 
-    public void updateView(InfoReportData reportData) {
+    public void updateView(DocumentData reportData) {
         getScreenManager().setTitle(reportData.getTitle() + " Info");
 
-        List<Object> objectList = new ArrayList<Object>(reportData.getGroups());
+        List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
         updateDataWithExpandedState(objectList);
 
@@ -180,7 +178,7 @@ public class InfoScreen extends Screen {
         else{
             if (previousPosition >= 0){
                 //Collapse previously selected
-                InfoGroupData previousData = (InfoGroupData) adapter.getItems().get(previousPosition);
+                DocumentSectionData previousData = (DocumentSectionData) adapter.getItems().get(previousPosition);
                 previousData.setExpanded(false);
                 adapter.notifyItemChanged(previousPosition);
             }
@@ -193,9 +191,9 @@ public class InfoScreen extends Screen {
     private void updateDataWithExpandedState(List<Object> flexibleData) {
         for (int i = 0; i < flexibleData.size(); i++) {
             Object current = flexibleData.get(i);
-            if (current instanceof InfoGroupData){
+            if (current instanceof DocumentSectionData){
                 boolean isExpanded = (i==expandedPosition);
-                ((InfoGroupData)current).setExpanded(isExpanded);
+                ((DocumentSectionData)current).setExpanded(isExpanded);
             }
         }
     }
@@ -247,7 +245,7 @@ public class InfoScreen extends Screen {
     //region [ INFO NAVIGATION ]
 
     private void initInfoNavigationButtons(final int reportIndex) {
-        int size = InfoReport.values().length;
+        int size = Document.getInfoDocuments().length;
 
         if (reportIndex == 0){
             ButtonUtils.setDisabled(navPrevious);

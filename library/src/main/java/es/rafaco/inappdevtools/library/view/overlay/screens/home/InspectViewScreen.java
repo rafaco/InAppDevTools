@@ -37,8 +37,8 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentEntryData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -82,8 +82,8 @@ public class InspectViewScreen extends Screen {
         List<Object> data = new ArrayList<>();
 
         String activityOverview = "";
-        List<InfoEntryData> topActivityInfo = getTopActivityInfo();
-        for (InfoEntryData info : topActivityInfo) {
+        List<DocumentEntryData> topActivityInfo = getTopActivityInfo();
+        for (DocumentEntryData info : topActivityInfo) {
             activityOverview += info.getLabel() + ": " + info.getValues().get(0);
             activityOverview += Humanizer.newLine();
         }
@@ -93,7 +93,7 @@ public class InspectViewScreen extends Screen {
         activityOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
         activityOverview += Humanizer.newLine();
 
-        InfoGroupData.Builder activityDataBuilder = new InfoGroupData.Builder(RunningTasksUtils.getTopActivity())
+        DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(RunningTasksUtils.getTopActivity())
                 .setIcon(R.string.gmd_view_carousel)
                 .setOverview("Activity")
                 .setExpandable(false)
@@ -132,7 +132,7 @@ public class InspectViewScreen extends Screen {
         );
         data.add(activityDataBuilder.build());
 
-        InfoGroupData.Builder fragmentsDataBuilder = new InfoGroupData.Builder("Fragments")
+        DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("Fragments")
                 .setIcon(R.string.gmd_extension)
                 .setOverview("Fragments")
                 .setExpandable(false)

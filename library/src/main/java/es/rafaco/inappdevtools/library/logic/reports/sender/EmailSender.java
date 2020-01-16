@@ -39,7 +39,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
@@ -69,7 +69,7 @@ public class EmailSender {
     }
 
     private String getEmailSubject(){
-        AppInfoReporter helper = new AppInfoReporter(context);
+        AppDocumenter helper = new AppDocumenter(context);
         String formatter = "%s report: %s";
         String currentType = "";
         if(report.getReportType().equals(ReportType.SESSION)){

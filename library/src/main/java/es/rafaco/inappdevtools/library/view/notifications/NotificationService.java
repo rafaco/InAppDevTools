@@ -47,14 +47,12 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
+import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -202,8 +200,8 @@ public class NotificationService extends Service {
         String overview;
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
                 UiUtils.getAppIconResourceId());
-        AppInfoReporter appInfo = new AppInfoReporter(getApplicationContext());
-        BuildInfoReporter buildInfo = new BuildInfoReporter(getApplicationContext());
+        AppDocumenter appInfo = new AppDocumenter(getApplicationContext());
+        BuildDocumenter buildInfo = new BuildDocumenter(getApplicationContext());
         overview = appInfo.getAppNameAndVersions() + "\n"
                 + buildInfo.getFriendlyBuildType();
         if (buildInfo.isGitEnabled()){
@@ -290,7 +288,7 @@ public class NotificationService extends Service {
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
-        AppInfoReporter infoHelper = new AppInfoReporter(getApplicationContext());
+        AppDocumenter infoHelper = new AppDocumenter(getApplicationContext());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 

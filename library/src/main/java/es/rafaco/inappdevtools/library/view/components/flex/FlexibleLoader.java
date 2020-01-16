@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
@@ -43,7 +43,7 @@ public class FlexibleLoader {
         descriptors.add(new FlexibleItemDescriptor(EditTextData.class, EditTextViewHolder.class, R.layout.flexible_item_edit_text));
         descriptors.add(new FlexibleItemDescriptor(Screenshot.class, ImageCardViewHolder.class, R.layout.tool_screenshots_item));
         descriptors.add(new FlexibleItemDescriptor(OverviewData.class, OverviewViewHolder.class, R.layout.flexible_item_overview));
-        descriptors.add(new FlexibleItemDescriptor(InfoGroupData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
+        descriptors.add(new FlexibleItemDescriptor(DocumentSectionData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
         descriptors.add(new FlexibleItemDescriptor(LinkItem.class, LinkViewHolder.class, R.layout.flexible_item_link));
         descriptors.add(new FlexibleItemDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
         descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
@@ -56,7 +56,7 @@ public class FlexibleLoader {
         if (itemDataClass.equals(String.class)
                 || itemDataClass.equals(ButtonGroupData.class)
                 || itemDataClass.equals(OverviewData.class)
-                || itemDataClass.equals(InfoGroupData.class)
+                || itemDataClass.equals(DocumentSectionData.class)
                 || itemDataClass.equals(CardData.class)){
             return true;
         }

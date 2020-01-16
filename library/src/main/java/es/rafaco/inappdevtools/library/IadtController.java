@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -35,13 +34,12 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.logic.info.InfoManager;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
-import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -65,11 +63,8 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-
-import static es.rafaco.inappdevtools.library.Iadt.TAG;
 
 public final class IadtController {
 
@@ -82,7 +77,7 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
-    private InfoManager infoManager;
+    private DocumentManager documentManager;
     public boolean isPendingInitFull;
     private OverlayHelper overlayHelper;
 
@@ -204,7 +199,7 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
 
         sourcesManager = new SourcesManager(getContext());
-        infoManager = new InfoManager(getContext());
+        documentManager = new DocumentManager(getContext());
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
@@ -263,8 +258,8 @@ public final class IadtController {
         return overlayHelper;
     }
 
-    public InfoManager getInfoManager() {
-        return infoManager;
+    public DocumentManager getDocumentManager() {
+        return documentManager;
     }
 
     public static DevToolsDatabase getDatabase() {

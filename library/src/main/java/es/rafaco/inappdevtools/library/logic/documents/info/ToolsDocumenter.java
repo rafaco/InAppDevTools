@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -25,21 +25,22 @@ import android.text.TextUtils;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ToolsInfoReporter extends AbstractInfoReporter {
+public class ToolsDocumenter extends AbstractDocumenter {
 
-    public ToolsInfoReporter(Context context) {
-        this(context, InfoReport.TOOLS);
+    public ToolsDocumenter(Context context) {
+        this(context, Document.TOOLS);
     }
 
-    public ToolsInfoReporter(Context context, InfoReport report) {
+    public ToolsDocumenter(Context context, Document report) {
         super(context, report);
     }
 
@@ -54,8 +55,8 @@ public class ToolsInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getLibraryInfo())
                 .add(getDbInfo())
@@ -64,30 +65,30 @@ public class ToolsInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
-    private InfoGroupData getDbInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Database")
+    private DocumentSectionData getDbInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Database")
                 .setIcon(R.string.gmd_sd_storage)
                 .add(IadtController.get().getDatabase().getOverview())
                 .build();
         return group;
     }
 
-    private InfoGroupData getBuildInfo() {
-        return new InfoGroupData.Builder("Generated BuildInfo")
+    private DocumentSectionData getBuildInfo() {
+        return new DocumentSectionData.Builder("Generated BuildInfo")
                 .setIcon(R.string.gmd_settings_system_daydream)
                 .add(new JsonAssetHelper(context, IadtPath.BUILD_INFO).getAll())
                 .build();
     }
 
-    private InfoGroupData getBuildConfig() {
-        return new InfoGroupData.Builder("Generated BuildConfig")
+    private DocumentSectionData getBuildConfig() {
+        return new DocumentSectionData.Builder("Generated BuildConfig")
                 .setIcon(R.string.gmd_settings_applications)
                 .add(new JsonAssetHelper(context, IadtPath.BUILD_CONFIG).getAll())
                 .build();
     }
 
-    public InfoGroupData getLibraryInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("InAppDevTools")
+    public DocumentSectionData getLibraryInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("InAppDevTools")
                 .setIcon(R.string.gmd_assignment)
                 .setOverview(BuildConfig.VERSION_NAME)
                 .add("Library version", getVersionFormatted())

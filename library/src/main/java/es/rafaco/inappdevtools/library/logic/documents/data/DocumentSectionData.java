@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.data;
+package es.rafaco.inappdevtools.library.logic.documents.data;
 
 import android.text.TextUtils;
 
@@ -34,19 +34,19 @@ import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class InfoGroupData {
+public class DocumentSectionData {
 
     private String title;
     private int icon;
     private String overview;
-    private List<InfoEntryData> entries;
+    private List<DocumentEntryData> entries;
 
     //Extract to ComplexCardData
     private List<RunButton> buttons;
     private boolean isExpandable;
     private boolean isExpanded;
 
-    public InfoGroupData(Builder builder) {
+    public DocumentSectionData(Builder builder) {
         this.title = builder.name;
         this.icon = builder.icon;
         this.overview = builder.overview;
@@ -72,15 +72,15 @@ public class InfoGroupData {
         return buttons;
     }
 
-    public List<InfoEntryData> getEntries() {
+    public List<DocumentEntryData> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<InfoEntryData> entries) {
+    public void setEntries(List<DocumentEntryData> entries) {
         this.entries = entries;
     }
 
-    public void add(InfoEntryData entry) {
+    public void add(DocumentEntryData entry) {
         this.entries.add(entry);
     }
 
@@ -106,7 +106,7 @@ public class InfoGroupData {
 
     public String entriesToString(){
         String result = "";
-        for (InfoEntryData entry : entries){
+        for (DocumentEntryData entry : entries){
             result += entry.toString();
         }
         return result;
@@ -132,7 +132,7 @@ public class InfoGroupData {
         private int icon;
         private String overview;
         private List<RunButton> buttons;
-        private List<InfoEntryData> entries;
+        private List<DocumentEntryData> entries;
         private boolean isExpandable = true;
         private boolean isExpanded;
 
@@ -161,54 +161,54 @@ public class InfoGroupData {
             return this;
         }
 
-        public Builder add(InfoEntryData entry) {
+        public Builder add(DocumentEntryData entry) {
             this.entries.add(entry);
             return this;
         }
 
-        public Builder add(List<InfoEntryData> entries) {
-            for (InfoEntryData entry : entries){
+        public Builder add(List<DocumentEntryData> entries) {
+            for (DocumentEntryData entry : entries){
                 add(entry);
             }
             return this;
         }
 
         public Builder add() {
-            add(new InfoEntryData("", ""));
+            add(new DocumentEntryData("", ""));
             return this;
         }
 
         public Builder add(String text) {
-            add(new InfoEntryData("", text));
+            add(new DocumentEntryData("", text));
             return this;
         }
 
         public Builder add(String label, List<String> values) {
-            add(new InfoEntryData(label, values));
+            add(new DocumentEntryData(label, values));
             return this;
         }
 
         public Builder add(String label, String value) {
-            add(new InfoEntryData(label, value));
+            add(new DocumentEntryData(label, value));
             return this;
         }
 
         public Builder add(String label, boolean value) {
-            add(new InfoEntryData(label, String.valueOf(value)));
+            add(new DocumentEntryData(label, String.valueOf(value)));
             return this;
         }
 
         public Builder add(String label, long value) {
-            add(new InfoEntryData(label, String.valueOf(value)));
+            add(new DocumentEntryData(label, String.valueOf(value)));
             return this;
         }
 
         public Builder addDate(String label, long date) {
-            add(new InfoEntryData(label, DateUtils.format(date)));
+            add(new DocumentEntryData(label, DateUtils.format(date)));
             return this;
         }
 
-        public Builder set(List<InfoEntryData> entries) {
+        public Builder set(List<DocumentEntryData> entries) {
             this.entries = entries;
             return this;
         }
@@ -223,8 +223,8 @@ public class InfoGroupData {
             return this;
         }
 
-        public InfoGroupData build() {
-            return new InfoGroupData(this);
+        public DocumentSectionData build() {
+            return new DocumentSectionData(this);
         }
     }
 }

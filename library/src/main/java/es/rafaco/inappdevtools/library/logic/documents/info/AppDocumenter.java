@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -37,28 +37,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
-public class AppInfoReporter extends AbstractInfoReporter {
+public class AppDocumenter extends AbstractDocumenter {
 
     EasyAppMod easyAppMod;
 
-    public AppInfoReporter(Context context) {
-        this(context, InfoReport.APP);
+    public AppDocumenter(Context context) {
+        this(context, Document.APP);
     }
 
-    public AppInfoReporter(Context context, InfoReport report) {
+    public AppDocumenter(Context context, Document report) {
         super(context, report);
         easyAppMod = new EasyAppMod(context);
     }
@@ -72,8 +73,8 @@ public class AppInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getApkInfo())
                 .add(getInstallInfo())
@@ -82,8 +83,8 @@ public class AppInfoReporter extends AbstractInfoReporter {
         .build();
     }
 
-    private InfoGroupData getSigningInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Sign Certificate")
+    private DocumentSectionData getSigningInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Sign Certificate")
                 .setIcon(R.string.gmd_security)
                 .add(AppInfoUtils.getSigningInfo(context))
                 .build();
@@ -91,9 +92,9 @@ public class AppInfoReporter extends AbstractInfoReporter {
     }
 
 
-    public InfoGroupData getApkInfo() {
+    public DocumentSectionData getApkInfo() {
         PackageInfo pInfo = getPackageInfo();
-        InfoGroupData group = new InfoGroupData.Builder("APK")
+        DocumentSectionData group = new DocumentSectionData.Builder("APK")
                 .setIcon(R.string.gmd_apps)
                 .setOverview(easyAppMod.getAppName() + " " + easyAppMod.getAppVersion())
                 .add("App Name", easyAppMod.getAppName())
@@ -109,10 +110,10 @@ public class AppInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getInstallInfo() {
+    public DocumentSectionData getInstallInfo() {
         PackageInfo pInfo = getPackageInfo();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        InfoGroupData group = new InfoGroupData.Builder("Installation")
+        DocumentSectionData group = new DocumentSectionData.Builder("Installation")
                 .setIcon(R.string.gmd_cloud_download)
                 .setOverview(Humanizer.getElapsedTime(new Date(pInfo.lastUpdateTime).getTime()))
                 .add("Store", easyAppMod.getStore())
@@ -124,7 +125,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getManifestInfo() {
+    public DocumentSectionData getManifestInfo() {
         PackageInfo pInfo = getPackageInfo();
         String activities = parsePackageInfoArray(pInfo.activities);
         String services = parsePackageInfoArray(pInfo.services);
@@ -136,7 +137,7 @@ public class AppInfoReporter extends AbstractInfoReporter {
         }
         String instrumentations = parsePackageInfoArray(pInfo.instrumentation);
 
-        InfoGroupData group = new InfoGroupData.Builder("Manifest")
+        DocumentSectionData group = new DocumentSectionData.Builder("Manifest")
                 .setIcon(R.string.gmd_widgets)
                 .add("Activities", activities)
                 .add("Services", services)

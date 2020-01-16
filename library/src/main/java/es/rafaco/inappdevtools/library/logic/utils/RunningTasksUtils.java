@@ -26,8 +26,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoEntryData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentEntryData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningTasksUtils {
@@ -107,16 +107,16 @@ public class RunningTasksUtils {
         return topActivity.getClassName();
     }
 
-    public static List<InfoEntryData> getTopActivityInfo() {
+    public static List<DocumentEntryData> getTopActivityInfo() {
         return getActivityInfo(0, true);
     }
 
-    private static List<InfoEntryData> getActivityInfo(int taskPosition, boolean isTop) {
+    private static List<DocumentEntryData> getActivityInfo(int taskPosition, boolean isTop) {
         ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(taskPosition+1);
         ActivityManager.RunningTaskInfo topTaskInfo = runningTaskInfoList.get(taskPosition);
         ComponentName activityComponent = isTop ? topTaskInfo.topActivity : topTaskInfo.baseActivity;
-        InfoGroupData data = new InfoGroupData.Builder()
+        DocumentSectionData data = new DocumentSectionData.Builder()
                 .add("PackageName", activityComponent.getPackageName())
                 .add("ShortClassName", activityComponent.getShortClassName())
                 //.add("Name", Humanizer.getLastPart(activityComponent.getClassName(), "."))

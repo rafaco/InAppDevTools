@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -33,8 +33,9 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
@@ -43,22 +44,22 @@ import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class BuildInfoReporter extends AbstractInfoReporter {
+public class BuildDocumenter extends AbstractDocumenter {
 
     JsonAssetHelper buildInfo;
     JsonAssetHelper buildConfig;
     JsonAssetHelper gitConfig;
 
-    public BuildInfoReporter(Context context) {
-        this(context, InfoReport.BUILD);
+    public BuildDocumenter(Context context) {
+        this(context, Document.BUILD);
     }
 
-    public BuildInfoReporter(Context context, InfoReport report) {
+    public BuildDocumenter(Context context, Document report) {
         super(context, report);
         buildInfo = new JsonAssetHelper(context, IadtPath.BUILD_INFO);
         buildConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
@@ -95,8 +96,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        InfoReportData.Builder builder = new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        DocumentData.Builder builder = new DocumentData.Builder(getReport())
                 .setOverview(getOverview());
 
         String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
@@ -115,8 +116,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return builder.build();
     }
 
-    private InfoGroupData getNotesInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Notes")
+    private DocumentSectionData getNotesInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Notes")
                 .setIcon(R.string.gmd_speaker_notes)
                 .setOverview("Added")
                 .add(IadtController.get().getConfig().getString(BuildConfig.NOTES))
@@ -131,8 +132,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
     }
 
 
-    public InfoGroupData getBuilderInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Builder")
+    public DocumentSectionData getBuilderInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Builder")
                 .setIcon(R.string.gmd_person)
                 .setOverview(buildInfo.getString(BuildInfo.USER_NAME))
                 .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
@@ -149,8 +150,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getBuildHostInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Host")
+    public DocumentSectionData getBuildHostInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Host")
                 .setIcon(R.string.gmd_desktop_windows)
                 .setOverview(buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
@@ -162,8 +163,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getBuildInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Build")
+    public DocumentSectionData getBuildInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Build")
                 .setIcon(R.string.gmd_history)
                 .setOverview(getFriendlyBuildType() + ", " + getFriendlyElapsedTime())
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
@@ -176,8 +177,8 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return group;
     }
 
-    public InfoGroupData getRepositoryInfo() {
-        InfoGroupData.Builder group = new InfoGroupData.Builder("Remote repo")
+    public DocumentSectionData getRepositoryInfo() {
+        DocumentSectionData.Builder group = new DocumentSectionData.Builder("Remote repo")
                 .setIcon(R.string.gmd_assignment_turned_in);
 
         if (!isGitEnabled()){
@@ -259,12 +260,12 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return result;
     }
 
-    public InfoGroupData getLocalRepositoryInfo() {
+    public DocumentSectionData getLocalRepositoryInfo() {
         String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
 
-        InfoGroupData.Builder group = new InfoGroupData.Builder("Local repo")
+        DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local repo")
                 .setIcon(R.string.gmd_assignment_ind);
 
         if (!hasLocalCommits){
@@ -288,12 +289,12 @@ public class BuildInfoReporter extends AbstractInfoReporter {
         return group.build();
     }
 
-    public InfoGroupData getLocalChangesInfo() {
+    public DocumentSectionData getLocalChangesInfo() {
         boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
         String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
-        InfoGroupData.Builder group = new InfoGroupData.Builder("Local changes")
+        DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local changes")
                 .setIcon(R.string.gmd_assignment_late);
 
         if (!hasLocalChanges){

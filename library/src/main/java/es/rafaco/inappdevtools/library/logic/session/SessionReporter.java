@@ -25,8 +25,8 @@ import java.text.SimpleDateFormat;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -43,8 +43,8 @@ public class SessionReporter {
         this.session = session;
     }
 
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getTitle())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getTitle())
                 .setIcon(R.string.gmd_timeline)
                 .setOverview(getOverview())
                 .add(getFlagsInfo())
@@ -98,9 +98,9 @@ public class SessionReporter {
                 getAnalysis().getTotal());
     }
 
-    private InfoGroupData getDurationInfo() {
+    private DocumentSectionData getDurationInfo() {
         SimpleDateFormat formatter = new SimpleDateFormat("mm-dd HH:mm:ss");
-        InfoGroupData group = new InfoGroupData.Builder("Dates")
+        DocumentSectionData group = new DocumentSectionData.Builder("Dates")
                 .setIcon(R.string.gmd_timer)
                 .add("Duration", Humanizer.getDuration(session.getDuration()))
                 .add("Start", Humanizer.getElapsedTime(session.getDate())
@@ -112,8 +112,8 @@ public class SessionReporter {
         return group;
     }
 
-    public InfoGroupData getFlagsInfo() {
-        InfoGroupData group = new InfoGroupData.Builder("Flags")
+    public DocumentSectionData getFlagsInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Flags")
                 .setIcon(R.string.gmd_flag)
                 .add("isFirstStart", session.isFirstStart())
                 .add("isNewBuild", session.isNewBuild())
@@ -123,9 +123,9 @@ public class SessionReporter {
         return group;
     }
 
-    public InfoGroupData getLogInfo() {
+    public DocumentSectionData getLogInfo() {
 
-        InfoGroupData group = new InfoGroupData.Builder("Logs")
+        DocumentSectionData group = new DocumentSectionData.Builder("Logs")
                 .setIcon(R.string.gmd_format_align_left)
                 .setOverview(analysis.getTotal() + "")
                 .add(getAnalysis().getTotal() + " logs in Total")

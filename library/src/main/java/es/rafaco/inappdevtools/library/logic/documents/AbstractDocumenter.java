@@ -17,26 +17,25 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents;
 
 import android.content.Context;
 
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 
-public abstract class AbstractInfoReporter {
+public abstract class AbstractDocumenter {
 
     protected Context context;
-    private final InfoReport report;
+    private final Document report;
 
-    public AbstractInfoReporter(Context context, InfoReport report) {
+    public AbstractDocumenter(Context context, Document report) {
         this.context = context;
         this.report = report;
     }
 
-    protected InfoReport getReport() {
+    protected Document getReport() {
         return report;
     }
-    public abstract InfoReportData getData();
+    public abstract DocumentData getData();
     public abstract String getOverview();
 }

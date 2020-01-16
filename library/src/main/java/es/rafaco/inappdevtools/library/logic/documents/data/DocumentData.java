@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.data;
+package es.rafaco.inappdevtools.library.logic.documents.data;
 
 import android.text.TextUtils;
 
@@ -31,21 +31,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class InfoReportData {
+public class DocumentData {
 
     private String title;
     private int icon;
     private String overview;
-    private List<InfoGroupData> groups;
+    private List<DocumentSectionData> sections;
 
-    public InfoReportData(Builder builder) {
+    public DocumentData(Builder builder) {
         this.title = builder.title;
         this.icon = builder.icon;
-        this.groups = builder.entries;
+        this.sections = builder.sections;
         this.overview = builder.overview;
     }
 
@@ -61,23 +61,23 @@ public class InfoReportData {
         return overview;
     }
 
-    public List<InfoGroupData> getGroups() {
-        return groups;
+    public List<DocumentSectionData> getSections() {
+        return sections;
     }
 
-    public void setGroups(List<InfoGroupData> groups) {
-        this.groups = groups;
+    public void setSections(List<DocumentSectionData> sections) {
+        this.sections = sections;
     }
 
     public void removeGroup(int index) {
-        if (index > 0 && index < groups.size()){
-            groups.remove(index);
+        if (index > 0 && index < sections.size()){
+            sections.remove(index);
         }
     }
 
     public void removeGroupEntries(int index) {
-        if (index > 0 && index < groups.size()){
-            groups.get(index).removeEntries();
+        if (index > 0 && index < sections.size()){
+            sections.get(index).removeEntries();
         }
     }
 
@@ -101,8 +101,8 @@ public class InfoReportData {
             result += Humanizer.newLine();
         }
 
-        if (groups.size()>0){
-            for (InfoGroupData entry : groups){
+        if (sections.size()>0){
+            for (DocumentSectionData entry : sections){
                 result += entry.toString();
             }
         }
@@ -114,17 +114,17 @@ public class InfoReportData {
         private String title;
         private int icon;
         private String overview;
-        private List<InfoGroupData> entries;
+        private List<DocumentSectionData> sections;
 
-        public Builder(InfoReport report) {
+        public Builder(Document report) {
             this.title = report.getTitle();
             this.icon = report.getIcon();
-            this.entries = new ArrayList<>();
+            this.sections = new ArrayList<>();
         }
 
         public Builder(String title) {
             this.title = title;
-            this.entries = new ArrayList<>();
+            this.sections = new ArrayList<>();
         }
 
         public Builder setIcon(@StringRes int icon) {
@@ -137,18 +137,18 @@ public class InfoReportData {
             return this;
         }
 
-        public Builder setInfoGroup(List<InfoGroupData> entries) {
-            this.entries = entries;
+        public Builder setSections(List<DocumentSectionData> sections) {
+            this.sections = sections;
             return this;
         }
         
-        public Builder add(InfoGroupData entry) {
-            this.entries.add(entry);
+        public Builder add(DocumentSectionData entry) {
+            this.sections.add(entry);
             return this;
         }
 
         public Builder add(String title, String text) {
-            add(new InfoGroupData.Builder(title)
+            add(new DocumentSectionData.Builder(title)
                     .add(text)
                     .build());
             return this;
@@ -163,8 +163,8 @@ public class InfoReportData {
             return add("");
         }
 
-        public InfoReportData build() {
-            return new InfoReportData(this);
+        public DocumentData build() {
+            return new DocumentData(this);
         }
     }
 }

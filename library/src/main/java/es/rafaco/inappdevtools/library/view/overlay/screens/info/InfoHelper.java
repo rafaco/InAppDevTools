@@ -35,8 +35,8 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -53,9 +53,9 @@ public class InfoHelper extends ScreenHelper {
     public String getReportContent() {
         String result = "Generated report from info pages\n" + "//TODO:";
 
-        InfoReport[] values = InfoReport.values();
-        for (InfoReport report : values){
-            InfoReportData reportData = IadtController.get().getInfoManager().getReportData(report);
+        Document[] values = Document.getInfoDocuments();
+        for (Document report : values){
+            DocumentData reportData = IadtController.get().getDocumentManager().getDocumentData(report);
             result += reportData.toString();
             result += Humanizer.newLine();
         }

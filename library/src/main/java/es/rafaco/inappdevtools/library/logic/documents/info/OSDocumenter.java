@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.os.Build;
@@ -34,27 +34,28 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.RingerMode;
 
-public class OSInfoReporter extends AbstractInfoReporter {
+public class OSDocumenter extends AbstractDocumenter {
 
     EasyConfigMod configHelper;
     EasyDeviceMod deviceHelper;
     EasyMemoryMod memoryHelper;
 
-    public OSInfoReporter(Context context) {
-        this(context, InfoReport.OS);
+    public OSDocumenter(Context context) {
+        this(context, Document.OS);
     }
 
-    public OSInfoReporter(Context context, InfoReport report) {
+    public OSDocumenter(Context context, Document report) {
         super(context, report);
         this.configHelper = new EasyConfigMod(context);
         this.deviceHelper = new EasyDeviceMod(context);
@@ -78,8 +79,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))
@@ -103,8 +104,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
         return loc.getDisplayCountry();
     }
 
-    protected InfoGroupData getAndroidGroup(EasyDeviceMod deviceHelper) {
-        return new InfoGroupData.Builder("Android OS")
+    protected DocumentSectionData getAndroidGroup(EasyDeviceMod deviceHelper) {
+        return new DocumentSectionData.Builder("Android OS")
                 .setIcon(R.string.gmd_android)
                 .setOverview(getAndroidVersionFull())
                 .add("Version", getAndroidVersionFull())
@@ -136,8 +137,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
         }
     }
 
-    protected InfoGroupData getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
-        return new InfoGroupData.Builder("Status")
+    protected DocumentSectionData getConfigGroup(EasyConfigMod configHelper, EasyDeviceMod deviceHelper) {
+        return new DocumentSectionData.Builder("Status")
                     .setIcon(R.string.gmd_settings)
                     .add("Local time", configHelper.getFormattedTime()
                             + " - " + configHelper.getFormattedDate())
@@ -147,8 +148,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
                     .build();
     }
 
-    protected InfoGroupData getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
-        return new InfoGroupData.Builder("Memory & Storage")
+    protected DocumentSectionData getMemoryGroupGroup(EasyConfigMod configHelper, EasyMemoryMod memoryHelper) {
+        return new DocumentSectionData.Builder("Memory & Storage")
                     .setIcon(R.string.gmd_disc_full)
                     .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
                     .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
@@ -159,8 +160,8 @@ public class OSInfoReporter extends AbstractInfoReporter {
                     .build();
     }
 
-    protected InfoGroupData getInstalledApps() {
-        return new InfoGroupData.Builder("Installed Apps")
+    protected DocumentSectionData getInstalledApps() {
+        return new DocumentSectionData.Builder("Installed Apps")
                 .setIcon(R.string.gmd_apps)
                 .setOverview(InstalledAppsUtils.getCount() + "")
                 .add(InstalledAppsUtils.getString())

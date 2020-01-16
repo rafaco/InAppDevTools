@@ -28,10 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -72,7 +71,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, final int position) {
-        final InfoGroupData data = (InfoGroupData) abstractData;
+        final DocumentSectionData data = (DocumentSectionData) abstractData;
         if (data!=null){
 
             itemView.setActivated(true);

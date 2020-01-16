@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -27,26 +27,27 @@ import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class LiveInfoReporter extends AbstractInfoReporter {
+public class LiveDocumenter extends AbstractDocumenter {
 
-    public LiveInfoReporter(Context context) {
-        this(context, InfoReport.LIVE);
+    public LiveDocumenter(Context context) {
+        this(context, Document.LIVE);
     }
 
-    public LiveInfoReporter(Context context, InfoReport report) {
+    public LiveDocumenter(Context context, Document report) {
         super(context, report);
     }
 
@@ -60,8 +61,8 @@ public class LiveInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getActivityInfo())
                 .add(getTaskInfo())
@@ -73,8 +74,8 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
-    public InfoGroupData getActivityInfo() {
-        InfoGroupData.Builder builder = new InfoGroupData.Builder("View")
+    public DocumentSectionData getActivityInfo() {
+        DocumentSectionData.Builder builder = new DocumentSectionData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
                 .setOverview(RunningTasksUtils.getTopActivity())
                 .add("App on " + RunningTasksUtils.getTopActivityStatus())
@@ -93,24 +94,24 @@ public class LiveInfoReporter extends AbstractInfoReporter {
         return builder.build();
     }
 
-    public InfoGroupData getTaskInfo() {
-        return new InfoGroupData.Builder("Tasks")
+    public DocumentSectionData getTaskInfo() {
+        return new DocumentSectionData.Builder("Tasks")
                 .setIcon(R.string.gmd_layers)
                 .setOverview(RunningTasksUtils.getCount() + "")
                 .add(RunningTasksUtils.getString())
                 .build();
     }
 
-    public InfoGroupData getServicesInfo() {
-        return new InfoGroupData.Builder("Services")
+    public DocumentSectionData getServicesInfo() {
+        return new DocumentSectionData.Builder("Services")
                 .setIcon(R.string.gmd_store)
                 .setOverview(RunningServicesUtils.getCount() + "")
                 .add(RunningServicesUtils.getString())
                 .build();
     }
 
-    public InfoGroupData getProvidersInfo() {
-        return new InfoGroupData.Builder("Provider")
+    public DocumentSectionData getProvidersInfo() {
+        return new DocumentSectionData.Builder("Provider")
                 .setIcon(R.string.gmd_local_convenience_store)
                 .setOverview(RunningProvidersUtils.getCount() + "")
                 .add(RunningProvidersUtils.getString())
@@ -118,8 +119,8 @@ public class LiveInfoReporter extends AbstractInfoReporter {
     }
 
     @SuppressLint("NewApi")
-    public InfoGroupData getProcessesInfo() {
-        return new InfoGroupData.Builder("Processes")
+    public DocumentSectionData getProcessesInfo() {
+        return new DocumentSectionData.Builder("Processes")
                 .setIcon(R.string.gmd_developer_board)
                 .setOverview(RunningProcessesUtils.getCount() + "")
                 .add("myPid", Process.myPid())
@@ -129,16 +130,16 @@ public class LiveInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
-    public InfoGroupData getThreadsInfo() {
-        return new InfoGroupData.Builder("Threads")
+    public DocumentSectionData getThreadsInfo() {
+        return new DocumentSectionData.Builder("Threads")
                 .setIcon(R.string.gmd_line_style)
                 .setOverview(RunningThreadsUtils.getCount() + "")
                 .add(RunningThreadsUtils.getString())
                 .build();
     }
 
-    public InfoGroupData getMemoryInfo() {
-        return new InfoGroupData.Builder("Memory")
+    public DocumentSectionData getMemoryInfo() {
+        return new DocumentSectionData.Builder("Memory")
                 .setIcon(R.string.gmd_memory)
                 .add(getRunningMemory())
                 .build();
@@ -175,7 +176,7 @@ public class LiveInfoReporter extends AbstractInfoReporter {
 
         //output += "--> Debug data: system wide" + "\n";
         String nativeHeapSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapSize(), true);
-        //String nativeHeapAllocatedSize = OSInfoReporter.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
+        //String nativeHeapAllocatedSize = OSDocumenter.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
         String nativeHeapFreeSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 

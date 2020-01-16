@@ -35,6 +35,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -44,8 +46,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
@@ -86,8 +86,8 @@ public class HomeScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        AppInfoReporter appHelper = new AppInfoReporter(getContext());
-        DeviceInfoReporter deviceHelper = new DeviceInfoReporter(getContext());
+        AppDocumenter appHelper = new AppDocumenter(getContext());
+        DeviceDocumenter deviceHelper = new DeviceDocumenter(getContext());
         String welcome = appHelper.getFormattedAppLong() + "\n"
                 + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);

@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class AnrDetailScreen extends Screen {
@@ -91,7 +91,7 @@ public class AnrDetailScreen extends Screen {
 
     private void updateOutput() {
         AnrHelper helper = new AnrHelper();
-        InfoReportData report = helper.parseToInfoGroup(anr);
+        DocumentData report = helper.parseToInfoGroup(anr);
         report.removeGroupEntries(1);
 
         title.setText(anr.getMessage() + " " + Humanizer.getElapsedTimeLowered(anr.getDate()));

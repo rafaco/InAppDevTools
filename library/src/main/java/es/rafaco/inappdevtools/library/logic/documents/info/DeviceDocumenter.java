@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.info.reporters;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -34,9 +34,10 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.BatteryHealth;
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod;
@@ -49,17 +50,17 @@ import github.nisrulz.easydeviceinfo.common.EasyDeviceInfo;
 
 import static android.content.Context.WINDOW_SERVICE;
 
-public class DeviceInfoReporter extends AbstractInfoReporter {
+public class DeviceDocumenter extends AbstractDocumenter {
 
     EasyConfigMod configHelper;
     EasyDisplayMod displayHelper;
     EasyMemoryMod memoryHelper;
 
-    public DeviceInfoReporter(Context context) {
-        this(context, InfoReport.DEVICE);
+    public DeviceDocumenter(Context context) {
+        this(context, Document.DEVICE);
     }
 
-    public DeviceInfoReporter(Context context, InfoReport report) {
+    public DeviceDocumenter(Context context, Document report) {
         super(context, report);
         configHelper = new EasyConfigMod(context);
         displayHelper = new EasyDisplayMod(context);
@@ -87,8 +88,8 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
     }
 
     @Override
-    public InfoReportData getData() {
-        return new InfoReportData.Builder(getReport())
+    public DocumentData getData() {
+        return new DocumentData.Builder(getReport())
                 .setOverview(getOverview())
                 .add(getDeviceInfo())
                 .add(getHardwareInfo())
@@ -97,8 +98,8 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
                 .build();
     }
 
-    private InfoGroupData getDeviceInfo() {
-        return new InfoGroupData.Builder("Device")
+    private DocumentSectionData getDeviceInfo() {
+        return new DocumentSectionData.Builder("Device")
                     .setIcon(R.string.gmd_phone_android)
                     .setOverview(Build.MODEL)
                     .add("Form factor", getDeviceType())
@@ -108,8 +109,8 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
                     .build();
     }
 
-    private InfoGroupData getHardwareInfo() {
-        return new InfoGroupData.Builder("Hardware")
+    private DocumentSectionData getHardwareInfo() {
+        return new DocumentSectionData.Builder("Hardware")
                     .setIcon(R.string.gmd_memory)
                     .add("CPU", new EasyCpuMod().getStringSupportedABIS())
                     .add("RAM", Humanizer.parseByte(memoryHelper.getTotalRAM()))
@@ -124,9 +125,9 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
                     .build();
     }
 
-    private InfoGroupData getBatteryInfo() {
+    private DocumentSectionData getBatteryInfo() {
         final EasyBatteryMod easyBatteryMod = new EasyBatteryMod(context);
-        InfoGroupData.Builder batteryBuilder = new InfoGroupData.Builder("Battery")
+        DocumentSectionData.Builder batteryBuilder = new DocumentSectionData.Builder("Battery")
                 .setIcon(R.string.gmd_battery_std)
                 .add("Battery Percentage", String.valueOf(easyBatteryMod.getBatteryPercentage()) + '%')
                 .add("Is device charging", String.valueOf(easyBatteryMod.isDeviceCharging()))
@@ -150,10 +151,10 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
         return batteryBuilder.build();
     }
 
-    private InfoGroupData getSensorsInfo() {
+    private DocumentSectionData getSensorsInfo() {
         EasySensorMod sensorHelper = new EasySensorMod(context);
         List<Sensor> allSensors = sensorHelper.getAllSensors();
-        InfoGroupData.Builder sensorBuilder = new InfoGroupData.Builder("Sensors")
+        DocumentSectionData.Builder sensorBuilder = new DocumentSectionData.Builder("Sensors")
                 .setIcon(R.string.gmd_accessibility)
                 .setOverview(allSensors.size() + "");
         if (allSensors != null && !allSensors.isEmpty()){
@@ -229,7 +230,7 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
     /*
         //Network Mod
         EasyNetworkMod easyNetworkMod = new EasyNetworkMod(context);
-        InfoGroupData network = new InfoGroupData.Builder("App")
+        DocumentSectionData network = new DocumentSectionData.Builder("App")
             .add("WIFI MAC Address", easyNetworkMod.getWifiMAC())
             .add("WIFI LinkSpeed", easyNetworkMod.getWifiLinkSpeed())
             .add("WIFI SSID", easyNetworkMod.getWifiSSID())
@@ -288,7 +289,7 @@ public class DeviceInfoReporter extends AbstractInfoReporter {
                 break;
         }
 
-        InfoGroupData.Builder othersBuilder = new InfoGroupData.Builder("Others");
+        DocumentSectionData.Builder othersBuilder = new DocumentSectionData.Builder("Others");
 
         //Bluetooth Mod
         final EasyBluetoothMod easyBluetoothMod = new EasyBluetoothMod(context);

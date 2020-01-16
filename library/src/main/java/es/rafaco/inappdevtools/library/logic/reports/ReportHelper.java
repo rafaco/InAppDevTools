@@ -35,13 +35,13 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.info.InfoReport;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.ToolsInfoReporter;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.ToolsDocumenter;
 import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
 import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -75,7 +75,7 @@ public class ReportHelper {
     private List<String> generateFiles() {
         List<String> filePaths = new ArrayList<>();
         String subFolder = "session/" + report.getSessionId();
-        InfoReportData reportOverview = new InfoReportData.Builder("Report Overview").build();
+        DocumentData reportOverview = new DocumentData.Builder("Report Overview").build();
 
         if (report.getSessionId()>0){
 
@@ -89,16 +89,16 @@ public class ReportHelper {
 
             //TODO: make for other sessions
             if (report.getSessionId() == IadtController.get().getSessionManager().getCurrent().getUid()){
-                InfoReport[] values = InfoReport.values();
-                for (InfoReport infoReport : values){
-                    InfoReportData reportData = IadtController.get().getInfoManager()
-                            .getReportData(infoReport);
-                    reportOverview.getGroups().add(new InfoGroupData.Builder(infoReport.getTitle())
+                Document[] values = Document.getInfoDocuments();
+                for (Document document : values){
+                    DocumentData reportData = IadtController.get().getDocumentManager()
+                            .getDocumentData(document);
+                    reportOverview.getSections().add(new DocumentSectionData.Builder(document.getTitle())
                             .add(reportData.getOverview()).build());
 
                     addDocument(filePaths, subFolder,
-                            "info_" + infoReport.getTitle().toLowerCase() + ".txt",
-                            "Info " + infoReport.getTitle(),
+                            "info_" + document.getTitle().toLowerCase() + ".txt",
+                            "Info " + document.getTitle(),
                             reportData.toString());
                 }
             }
@@ -127,10 +127,10 @@ public class ReportHelper {
     }
 
     private void buildReportHeader() {
-        AppInfoReporter app = new AppInfoReporter(context);
-        BuildInfoReporter build = new BuildInfoReporter(context);
-        DeviceInfoReporter device = new DeviceInfoReporter(context);
-        ToolsInfoReporter tools = new ToolsInfoReporter(context);
+        AppDocumenter app = new AppDocumenter(context);
+        BuildDocumenter build = new BuildDocumenter(context);
+        DeviceDocumenter device = new DeviceDocumenter(context);
+        ToolsDocumenter tools = new ToolsDocumenter(context);
 
         reportHeader = "Report: " + getReportDescription(report);
         reportHeader += " at " + DateUtils.formatShortDate(report.getDate()) + Humanizer.newLine();

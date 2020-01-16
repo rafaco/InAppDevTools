@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.BuildInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.DeviceInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.LiveInfoReporter;
-import es.rafaco.inappdevtools.library.logic.info.reporters.OSInfoReporter;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.LiveDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.info.OSDocumenter;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -88,14 +88,14 @@ public class Home2Screen extends Screen {
         List<Object> data = new ArrayList<>();
 
 
-        AppInfoReporter appHelper = new AppInfoReporter(getContext());
-        BuildInfoReporter buildReporter = new BuildInfoReporter(getContext());
+        AppDocumenter appHelper = new AppDocumenter(getContext());
+        BuildDocumenter buildReporter = new BuildDocumenter(getContext());
         String appMessage = appHelper.getFormattedVersionLong() + "\n"
                 + "Build " + buildReporter.getBuildOverview() + "\n"
                 + buildReporter.getRepositoryOverview();
 
 
-        InfoGroupData appData = new InfoGroupData.Builder(appHelper.getAppName())
+        DocumentSectionData appData = new DocumentSectionData.Builder(appHelper.getAppName())
                 .setIcon(R.string.gmd_touch_app)
                 .setOverview("App")
                 .setExpandable(false)
@@ -122,10 +122,10 @@ public class Home2Screen extends Screen {
         data.add(appData);
 
 
-        LiveInfoReporter liveHelper = new LiveInfoReporter(getContext());
+        LiveDocumenter liveHelper = new LiveDocumenter(getContext());
         String liveMessage = liveHelper.getOverview();
 
-        InfoGroupData runningData = new InfoGroupData.Builder("Currently running")
+        DocumentSectionData runningData = new DocumentSectionData.Builder("Currently running")
                 .setIcon(R.string.gmd_live_tv)
                 .setOverview("Live")
                 .setExpandable(false)
@@ -165,13 +165,13 @@ public class Home2Screen extends Screen {
         data.add(runningData);
 
 
-        DeviceInfoReporter deviceHelper = new DeviceInfoReporter(getContext());
-        OSInfoReporter osHelper= new OSInfoReporter(getContext());
+        DeviceDocumenter deviceHelper = new DeviceDocumenter(getContext());
+        OSDocumenter osHelper= new OSDocumenter(getContext());
         String deviceMessage = deviceHelper.getFormattedDevice()
                 + Humanizer.newLine()
                 + osHelper.getFirstLineOverview();
 
-        InfoGroupData deviceData = new InfoGroupData.Builder(deviceHelper.getFirstLineOverview())
+        DocumentSectionData deviceData = new DocumentSectionData.Builder(deviceHelper.getFirstLineOverview())
                 .setIcon(R.string.gmd_phone_android)
                 .setOverview("Device")
                 .setExpandable(false)

@@ -26,11 +26,11 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
 import es.rafaco.inappdevtools.library.view.components.flex.TraceItemData;
-import es.rafaco.inappdevtools.library.logic.info.reporters.AppInfoReporter;
 
 public class TraceGrouper {
 
@@ -139,7 +139,7 @@ public class TraceGrouper {
 
     private void initMatcher() {
         matcher = new HashMap<>();
-        AppInfoReporter infoHelper = new AppInfoReporter(IadtController.get().getContext());
+        AppDocumenter infoHelper = new AppDocumenter(IadtController.get().getContext());
         matcher.put(BuildConfig.APPLICATION_ID, IADT_TAG); //Our library
         matcher.put(infoHelper.getPackageName(), YOUR_APP_TAG); //Host app
         matcher.put(infoHelper.getInternalPackageName(), YOUR_APP_TAG); //Host app

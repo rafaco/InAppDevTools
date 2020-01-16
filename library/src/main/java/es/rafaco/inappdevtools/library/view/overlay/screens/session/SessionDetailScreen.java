@@ -27,8 +27,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
@@ -82,10 +82,10 @@ public class SessionDetailScreen extends Screen {
         int sessionUid = Integer.parseInt(getParam());
         Session session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
         SessionReporter reporter = new SessionReporter(getContext(), session);
-        InfoReportData reportData = reporter.getData();
+        DocumentData reportData = reporter.getData();
         getScreenManager().setTitle(reportData.getTitle());
 
-        List<Object> objectList = new ArrayList<Object>(reportData.getGroups());
+        List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
         objectList.add(1, getButtonGroupData(session));
         return objectList;
@@ -170,7 +170,7 @@ public class SessionDetailScreen extends Screen {
         else{
             if (previousPosition >= 0){
                 //Collapse previously selected
-                InfoGroupData previousData = (InfoGroupData) adapter.getItems().get(previousPosition);
+                DocumentSectionData previousData = (DocumentSectionData) adapter.getItems().get(previousPosition);
                 previousData.setExpanded(false);
                 adapter.notifyItemChanged(previousPosition);
             }

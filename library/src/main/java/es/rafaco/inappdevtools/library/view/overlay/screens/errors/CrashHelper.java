@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoGroupData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.info.data.InfoReportData;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 
 public class CrashHelper extends ScreenHelper {
 
@@ -47,15 +47,15 @@ public class CrashHelper extends ScreenHelper {
         return null;
     }
 
-    public InfoReportData parseToInfoGroup(Crash data){
+    public DocumentData parseToInfoGroup(Crash data){
 
-        InfoGroupData status = new InfoGroupData.Builder("App status")
+        DocumentSectionData status = new DocumentSectionData.Builder("App status")
                 //.add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
                 .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
                 .add("LastActivity", data.getLastActivity())
                 .build();
 
-        InfoGroupData basic = new InfoGroupData.Builder("Crash info")
+        DocumentSectionData basic = new DocumentSectionData.Builder("Crash info")
                 .add("CrashId", data.getUid())
                 .add("Date", DateUtils.format(data.getDate()))
                 .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
@@ -68,24 +68,24 @@ public class CrashHelper extends ScreenHelper {
                 .add("CauseAt", data.getCauseExceptionAt())
                 .build();
 
-        InfoGroupData thread = new InfoGroupData.Builder("Thread info")
+        DocumentSectionData thread = new DocumentSectionData.Builder("Thread info")
                 .add("Thread ID", data.getThreadId())
                 .add("Name", data.getThreadName())
                 .add("Group", data.getThreadGroupName())
                 .add("isMain", data.isMainThread())
                 .build();
 
-        InfoGroupData links = new InfoGroupData.Builder("Linked info")
+        DocumentSectionData links = new DocumentSectionData.Builder("Linked info")
                 .add("ReportPath", String.valueOf(data.getReportPath()))
                 .add("LogcatId", String.valueOf(data.getLogcatId()))
                 .add("ScreenId", String.valueOf(data.getScreenId()))
                 .build();
 
-        InfoGroupData stacktrace = new InfoGroupData.Builder("Stacktrace")
+        DocumentSectionData stacktrace = new DocumentSectionData.Builder("Stacktrace")
                 .add("", data.getStacktrace())
                 .build();
 
-        return new InfoReportData.Builder("")
+        return new DocumentData.Builder("")
                 .add(status)
                 .add(basic)
                 .add(thread)
