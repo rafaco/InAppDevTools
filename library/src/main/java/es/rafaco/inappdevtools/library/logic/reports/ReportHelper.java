@@ -38,10 +38,10 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.ToolsDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
 import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -127,10 +127,10 @@ public class ReportHelper {
     }
 
     private void buildReportHeader() {
-        AppDocumenter app = new AppDocumenter(context);
-        BuildDocumenter build = new BuildDocumenter(context);
-        DeviceDocumenter device = new DeviceDocumenter(context);
-        ToolsDocumenter tools = new ToolsDocumenter(context);
+        AppDocumentGenerator app = new AppDocumentGenerator(context);
+        BuildDocumentGenerator build = new BuildDocumentGenerator(context);
+        DeviceDocumentGenerator device = new DeviceDocumentGenerator(context);
+        ToolsDocumentGenerator tools = new ToolsDocumentGenerator(context);
 
         reportHeader = "Report: " + getReportDescription(report);
         reportHeader += " at " + DateUtils.formatShortDate(report.getDate()) + Humanizer.newLine();

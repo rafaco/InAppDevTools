@@ -41,10 +41,10 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.OSDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
@@ -136,13 +136,13 @@ public class IadtDialogActivity extends AppCompatActivity {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
 
-        String welcomeText = new AppDocumenter(getApplicationContext()).getAppNameAndVersions();
+        String welcomeText = new AppDocumentGenerator(getApplicationContext()).getAppNameAndVersions();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += new BuildDocumenter(getApplicationContext()).getBuildWelcome();
+        welcomeText += new BuildDocumentGenerator(getApplicationContext()).getBuildWelcome();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += new DeviceDocumenter(getApplicationContext()).getSecondLineOverview();
+        welcomeText += new DeviceDocumentGenerator(getApplicationContext()).getSecondLineOverview();
         welcomeText += " ";
-        welcomeText += new OSDocumenter(getApplicationContext()).getOneLineOverview();
+        welcomeText += new OSDocumentGenerator(getApplicationContext()).getOneLineOverview();
         welcomeText += "." + Humanizer.newLine();
         welcomeText += Humanizer.fullStop();
 

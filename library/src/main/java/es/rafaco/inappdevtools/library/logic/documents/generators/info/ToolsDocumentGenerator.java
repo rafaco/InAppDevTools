@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -25,7 +25,7 @@ import android.text.TextUtils;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -34,13 +34,13 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.files.PluginList;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ToolsDocumenter extends AbstractDocumenter {
+public class ToolsDocumentGenerator extends AbstractDocumentGenerator {
 
-    public ToolsDocumenter(Context context) {
+    public ToolsDocumentGenerator(Context context) {
         this(context, Document.TOOLS);
     }
 
-    public ToolsDocumenter(Context context, Document report) {
+    public ToolsDocumentGenerator(Context context, Document report) {
         super(context, report);
     }
 
@@ -56,7 +56,7 @@ public class ToolsDocumenter extends AbstractDocumenter {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getReport())
+        return new DocumentData.Builder(getDocument())
                 .setOverview(getOverview())
                 .add(getLibraryInfo())
                 .add(getDbInfo())

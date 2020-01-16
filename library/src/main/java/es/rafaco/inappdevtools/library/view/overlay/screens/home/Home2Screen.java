@@ -26,11 +26,11 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.LiveDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.OSDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.LiveDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -88,8 +88,8 @@ public class Home2Screen extends Screen {
         List<Object> data = new ArrayList<>();
 
 
-        AppDocumenter appHelper = new AppDocumenter(getContext());
-        BuildDocumenter buildReporter = new BuildDocumenter(getContext());
+        AppDocumentGenerator appHelper = new AppDocumentGenerator(getContext());
+        BuildDocumentGenerator buildReporter = new BuildDocumentGenerator(getContext());
         String appMessage = appHelper.getFormattedVersionLong() + "\n"
                 + "Build " + buildReporter.getBuildOverview() + "\n"
                 + buildReporter.getRepositoryOverview();
@@ -122,7 +122,7 @@ public class Home2Screen extends Screen {
         data.add(appData);
 
 
-        LiveDocumenter liveHelper = new LiveDocumenter(getContext());
+        LiveDocumentGenerator liveHelper = new LiveDocumentGenerator(getContext());
         String liveMessage = liveHelper.getOverview();
 
         DocumentSectionData runningData = new DocumentSectionData.Builder("Currently running")
@@ -165,8 +165,8 @@ public class Home2Screen extends Screen {
         data.add(runningData);
 
 
-        DeviceDocumenter deviceHelper = new DeviceDocumenter(getContext());
-        OSDocumenter osHelper= new OSDocumenter(getContext());
+        DeviceDocumentGenerator deviceHelper = new DeviceDocumentGenerator(getContext());
+        OSDocumentGenerator osHelper= new OSDocumentGenerator(getContext());
         String deviceMessage = deviceHelper.getFormattedDevice()
                 + Humanizer.newLine()
                 + osHelper.getFirstLineOverview();

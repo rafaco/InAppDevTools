@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -26,8 +26,8 @@ import android.os.Debug;
 import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
 import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -41,13 +41,13 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class LiveDocumenter extends AbstractDocumenter {
+public class LiveDocumentGenerator extends AbstractDocumentGenerator {
 
-    public LiveDocumenter(Context context) {
+    public LiveDocumentGenerator(Context context) {
         this(context, Document.LIVE);
     }
 
-    public LiveDocumenter(Context context, Document report) {
+    public LiveDocumentGenerator(Context context, Document report) {
         super(context, report);
     }
 
@@ -62,7 +62,7 @@ public class LiveDocumenter extends AbstractDocumenter {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getReport())
+        return new DocumentData.Builder(getDocument())
                 .setOverview(getOverview())
                 .add(getActivityInfo())
                 .add(getTaskInfo())
@@ -176,7 +176,7 @@ public class LiveDocumenter extends AbstractDocumenter {
 
         //output += "--> Debug data: system wide" + "\n";
         String nativeHeapSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapSize(), true);
-        //String nativeHeapAllocatedSize = OSDocumenter.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
+        //String nativeHeapAllocatedSize = OSDocumentGenerator.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
         String nativeHeapFreeSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 

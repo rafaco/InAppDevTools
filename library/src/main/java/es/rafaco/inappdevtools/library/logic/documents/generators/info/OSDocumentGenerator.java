@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.os.Build;
@@ -34,7 +34,7 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
@@ -45,17 +45,17 @@ import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.RingerMode;
 
-public class OSDocumenter extends AbstractDocumenter {
+public class OSDocumentGenerator extends AbstractDocumentGenerator {
 
     EasyConfigMod configHelper;
     EasyDeviceMod deviceHelper;
     EasyMemoryMod memoryHelper;
 
-    public OSDocumenter(Context context) {
+    public OSDocumentGenerator(Context context) {
         this(context, Document.OS);
     }
 
-    public OSDocumenter(Context context, Document report) {
+    public OSDocumentGenerator(Context context, Document report) {
         super(context, report);
         this.configHelper = new EasyConfigMod(context);
         this.deviceHelper = new EasyDeviceMod(context);
@@ -80,7 +80,7 @@ public class OSDocumenter extends AbstractDocumenter {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getReport())
+        return new DocumentData.Builder(getDocument())
                 .setOverview(getOverview())
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))

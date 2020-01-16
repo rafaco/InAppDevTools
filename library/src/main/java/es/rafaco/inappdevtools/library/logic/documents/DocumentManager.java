@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.logic.documents;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 
 public class DocumentManager {
 
@@ -33,11 +34,11 @@ public class DocumentManager {
 
 
     public DocumentData getDocumentData(Document report) {
-        return getDocumenter(report).getData();
+        return getGenerator(report).getData();
     }
 
-    public AbstractDocumenter getDocumenter(Document report) {
-        return report.getDocumenter();
+    public AbstractDocumentGenerator getGenerator(Document report) {
+        return report.getGenerator();
     }
 
 

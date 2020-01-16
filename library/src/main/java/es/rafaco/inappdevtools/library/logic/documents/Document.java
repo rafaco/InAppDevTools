@@ -27,32 +27,33 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.LiveDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.OSDocumenter;
-import es.rafaco.inappdevtools.library.logic.documents.info.ToolsDocumenter;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.LiveDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsDocumentGenerator;
 
 public enum Document {
 
-    LIVE("Live", true, R.string.gmd_live_tv, LiveDocumenter.class),
-    BUILD("Build", true, R.string.gmd_build, BuildDocumenter.class),
-    APP("App", true, R.string.gmd_developer_board, AppDocumenter.class),
-    OS("OS", true, R.string.gmd_android, OSDocumenter.class),
-    DEVICE("Device", true, R.string.gmd_phone_android, DeviceDocumenter.class),
-    TOOLS("Iadt", true, R.string.gmd_extension, ToolsDocumenter.class);
+    LIVE("Live", true, R.string.gmd_live_tv, LiveDocumentGenerator.class),
+    BUILD("Build", true, R.string.gmd_build, BuildDocumentGenerator.class),
+    APP("App", true, R.string.gmd_developer_board, AppDocumentGenerator.class),
+    OS("OS", true, R.string.gmd_android, OSDocumentGenerator.class),
+    DEVICE("Device", true, R.string.gmd_phone_android, DeviceDocumentGenerator.class),
+    TOOLS("Iadt", true, R.string.gmd_extension, ToolsDocumentGenerator.class);
 
     private String title;
     private final boolean isInfo;
     private final int icon;
-    private final Class<? extends AbstractDocumenter> documenterClass;
+    private final Class<? extends AbstractDocumentGenerator> generatorClass;
 
-    Document(String title, boolean isInfo, int icon, Class<? extends AbstractDocumenter> documenterClass) {
+    Document(String title, boolean isInfo, int icon, Class<? extends AbstractDocumentGenerator> generatorClass) {
         this.title = title;
         this.isInfo = isInfo;
         this.icon = icon;
-        this.documenterClass = documenterClass;
+        this.generatorClass = generatorClass;
     }
 
     public String getTitle() {
@@ -61,17 +62,17 @@ public enum Document {
     public int getIcon() {
         return icon;
     }
-    public Class<? extends AbstractDocumenter> getDocumenterClass() {
-        return documenterClass;
+    public Class<? extends AbstractDocumentGenerator> getGeneratorClass() {
+        return generatorClass;
     }
 
-    public AbstractDocumenter getDocumenter() {
+    public AbstractDocumentGenerator getGenerator() {
         try {
             Class[] cArg = new Class[2];
             cArg[0] = Context.class;
             cArg[1] = Document.class;
             Context context = IadtController.get().getContext();
-            return documenterClass.getDeclaredConstructor(cArg).newInstance(context, this);
+            return generatorClass.getDeclaredConstructor(cArg).newInstance(context, this);
         }
         catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -95,6 +96,6 @@ public enum Document {
             if (value.isInfo)
                 result.add(value);
         }
-        return (Document[]) result.toArray();
+        return result.toArray(new Document[0]);
     }
 }

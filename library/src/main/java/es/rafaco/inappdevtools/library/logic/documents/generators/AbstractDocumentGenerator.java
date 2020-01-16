@@ -17,24 +17,25 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents;
+package es.rafaco.inappdevtools.library.logic.documents.generators;
 
 import android.content.Context;
 
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 
-public abstract class AbstractDocumenter {
+public abstract class AbstractDocumentGenerator {
 
     protected Context context;
-    private final Document report;
+    private final Document document;
 
-    public AbstractDocumenter(Context context, Document report) {
+    public AbstractDocumentGenerator(Context context, Document document) {
         this.context = context;
-        this.report = report;
+        this.document = document;
     }
 
-    protected Document getReport() {
-        return report;
+    protected Document getDocument() {
+        return document;
     }
     public abstract DocumentData getData();
     public abstract String getOverview();
