@@ -21,8 +21,9 @@ package es.rafaco.inappdevtools.library.logic.documents;
 
 import android.content.Context;
 
+import java.lang.reflect.InvocationTargetException;
+
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 
 public class DocumentManager {
 
@@ -33,22 +34,58 @@ public class DocumentManager {
     }
 
 
-    public DocumentData getDocumentData(Document report) {
-        return getGenerator(report).getData();
+    public DocumentData getInfoData(InfoDocument document) {
+        return getInfoGenerator(document).getData();
     }
 
-    public AbstractDocumentGenerator getGenerator(Document report) {
-        return report.getGenerator();
+    public AbstractDocumentGenerator getInfoGenerator(InfoDocument document) {
+        return buildGenerator(document, null);
     }
 
-
-    //TODO: remove
-    public DocumentData getDocumentData(int infoReportIndex) {
-        Document document = getInfoReport(infoReportIndex);
-        return getDocumentData(document);
+    public DocumentData getDetailData(DetailDocument document, Object param) {
+        return getDetailGenerator(document, param).getData();
     }
-    public Document getInfoReport(int infoReportIndex) {
-        Document[] documents = Document.getInfoDocuments();
-        return documents[infoReportIndex];
+
+    public AbstractDocumentGenerator getDetailGenerator(DetailDocument document, Object param) {
+        return buildGenerator(document, param);
+    }
+
+    public AbstractDocumentGenerator buildGenerator(Object document, Object param) {
+        try {
+
+
+            if (document instanceof InfoDocument) {
+                InfoDocument doc = (InfoDocument) document;
+                Class[] cArg = new Class[2];
+                cArg[0] = Context.class;
+                cArg[1] = doc.getClass();
+                return doc.getGeneratorClass()
+                        .getDeclaredConstructor(cArg)
+                        .newInstance(context, doc);
+            }
+            else if (document instanceof DetailDocument){
+                DetailDocument doc = (DetailDocument) document;
+                Class[] cArg = new Class[3];
+                cArg[0] = Context.class;
+                cArg[1] = doc.getClass();
+                cArg[2] = doc.getParamClass();
+                return doc.getGeneratorClass()
+                        .getDeclaredConstructor(cArg)
+                        .newInstance(context, doc, param);
+            }
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.generators.info;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -34,8 +34,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -50,17 +50,13 @@ import github.nisrulz.easydeviceinfo.common.EasyDeviceInfo;
 
 import static android.content.Context.WINDOW_SERVICE;
 
-public class DeviceDocumentGenerator extends AbstractDocumentGenerator {
+public class DeviceInfoGenerator extends AbstractDocumentGenerator {
 
     EasyConfigMod configHelper;
     EasyDisplayMod displayHelper;
     EasyMemoryMod memoryHelper;
 
-    public DeviceDocumentGenerator(Context context) {
-        this(context, Document.DEVICE);
-    }
-
-    public DeviceDocumentGenerator(Context context, Document report) {
+    public DeviceInfoGenerator(Context context, InfoDocument report) {
         super(context, report);
         configHelper = new EasyConfigMod(context);
         displayHelper = new EasyDisplayMod(context);
@@ -89,7 +85,7 @@ public class DeviceDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getDocument())
+        return new DocumentData.Builder(getInfoDocument())
                 .setOverview(getOverview())
                 .add(getDeviceInfo())
                 .add(getHardwareInfo())

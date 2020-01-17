@@ -35,8 +35,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -86,8 +87,11 @@ public class HomeScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        AppDocumentGenerator appHelper = new AppDocumentGenerator(getContext());
-        DeviceDocumentGenerator deviceHelper = new DeviceDocumentGenerator(getContext());
+        AppInfoGenerator appHelper = ((AppInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.APP));
+        DeviceInfoGenerator deviceHelper = ((DeviceInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.DEVICE));
+
         String welcome = appHelper.getFormattedAppLong() + "\n"
                 + deviceHelper.getFormattedDeviceLong();
         data.add(welcome);

@@ -27,13 +27,14 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
+import es.rafaco.inappdevtools.library.logic.documents.reports.SessionDetailGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
@@ -81,8 +82,9 @@ public class SessionDetailScreen extends Screen {
     private List<Object> initData() {
         int sessionUid = Integer.parseInt(getParam());
         Session session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
-        SessionReporter reporter = new SessionReporter(getContext(), session);
-        DocumentData reportData = reporter.getData();
+        SessionDetailGenerator sessionHelper = ((SessionDetailGenerator)IadtController.get()
+                .getDocumentManager().getDetailGenerator(DetailDocument.SESSION, session));
+        DocumentData reportData = sessionHelper.getData();
         getScreenManager().setTitle(reportData.getTitle());
 
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());

@@ -39,7 +39,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
@@ -69,7 +70,6 @@ public class EmailSender {
     }
 
     private String getEmailSubject(){
-        AppDocumentGenerator helper = new AppDocumentGenerator(context);
         String formatter = "%s report: %s";
         String currentType = "";
         if(report.getReportType().equals(ReportType.SESSION)){
@@ -79,6 +79,8 @@ public class EmailSender {
         }else if (report.getReportType().equals(ReportType.CUSTOM)){
             currentType = "full";
         }
+        AppInfoGenerator helper = (AppInfoGenerator) IadtController.get().getDocumentManager()
+                .getInfoGenerator(InfoDocument.APP);
         return String.format(formatter,
                 helper.getFormattedAppLong(),
                 report.getTitle());

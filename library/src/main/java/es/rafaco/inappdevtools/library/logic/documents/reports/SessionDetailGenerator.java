@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.session;
+package es.rafaco.inappdevtools.library.logic.documents.reports;
 
 import android.content.Context;
 
@@ -25,24 +25,26 @@ import java.text.SimpleDateFormat;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 
-public class SessionReporter {
+public class SessionDetailGenerator extends AbstractDocumentGenerator {
 
-    private final Context context;
     private final Session session;
     private SessionAnalysis analysis;
 
-    public SessionReporter(Context context, Session session) {
-        this.context = context;
-        this.session = session;
+    public SessionDetailGenerator(Context context, DetailDocument report, Session param) {
+        super(context, report, param);
+        this.session = param;
     }
 
+    @Override
     public DocumentData getData() {
         return new DocumentData.Builder(getTitle())
                 .setIcon(R.string.gmd_timeline)
@@ -53,14 +55,15 @@ public class SessionReporter {
         .build();
     }
 
-    public String getTitle() {
-        return Humanizer.ordinal((int) session.getUid()) + " Session";
-    }
-
+    @Override
     public String getOverview() {
         return getStartOverview()+ Humanizer.newLine()
                 + getFinishOverview() + Humanizer.newLine()
                 + getLogsOverview();
+    }
+
+    public String getTitle() {
+        return Humanizer.ordinal((int) session.getUid()) + " Session";
     }
 
     private String getFinishOverview() {

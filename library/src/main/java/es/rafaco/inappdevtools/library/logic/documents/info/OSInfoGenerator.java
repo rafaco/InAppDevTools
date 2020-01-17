@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.generators.info;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.os.Build;
@@ -34,8 +34,8 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
@@ -45,17 +45,13 @@ import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.RingerMode;
 
-public class OSDocumentGenerator extends AbstractDocumentGenerator {
+public class OSInfoGenerator extends AbstractDocumentGenerator {
 
     EasyConfigMod configHelper;
     EasyDeviceMod deviceHelper;
     EasyMemoryMod memoryHelper;
 
-    public OSDocumentGenerator(Context context) {
-        this(context, Document.OS);
-    }
-
-    public OSDocumentGenerator(Context context, Document report) {
+    public OSInfoGenerator(Context context, InfoDocument report) {
         super(context, report);
         this.configHelper = new EasyConfigMod(context);
         this.deviceHelper = new EasyDeviceMod(context);
@@ -80,7 +76,7 @@ public class OSDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getDocument())
+        return new DocumentData.Builder(getInfoDocument())
                 .setOverview(getOverview())
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))

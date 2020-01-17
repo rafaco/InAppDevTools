@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.generators.info;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -33,8 +33,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
-import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -49,17 +49,13 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class BuildDocumentGenerator extends AbstractDocumentGenerator {
+public class BuildInfoGenerator extends AbstractDocumentGenerator {
 
     JsonAssetHelper buildInfo;
     JsonAssetHelper buildConfig;
     JsonAssetHelper gitConfig;
 
-    public BuildDocumentGenerator(Context context) {
-        this(context, Document.BUILD);
-    }
-
-    public BuildDocumentGenerator(Context context, Document report) {
+    public BuildInfoGenerator(Context context, InfoDocument report) {
         super(context, report);
         buildInfo = new JsonAssetHelper(context, IadtPath.BUILD_INFO);
         buildConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
@@ -97,7 +93,7 @@ public class BuildDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        DocumentData.Builder builder = new DocumentData.Builder(getDocument())
+        DocumentData.Builder builder = new DocumentData.Builder(getInfoDocument())
                 .setOverview(getOverview());
 
         String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);

@@ -32,7 +32,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
+import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.documents.reports.SessionDetailGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -72,7 +73,8 @@ public class SessionsScreen extends Screen {
         for (int i = 0; i<sessions.size(); i++) {
             final Session session = sessions.get(i);
             boolean isCurrent = (i==0);
-            SessionReporter reporter = new SessionReporter(getContext(), session);
+            SessionDetailGenerator reporter = ((SessionDetailGenerator)IadtController.get()
+                    .getDocumentManager().getDetailGenerator(DetailDocument.SESSION, session));
             
             CardData cardData = new CardData(reporter.getTitle(),
                     new Runnable() {

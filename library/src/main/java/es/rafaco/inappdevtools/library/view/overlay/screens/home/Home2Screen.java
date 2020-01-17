@@ -24,13 +24,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.LiveDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.LiveInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.OSInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -87,9 +89,11 @@ public class Home2Screen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
+        AppInfoGenerator appHelper = ((AppInfoGenerator) IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.APP));
+        BuildInfoGenerator buildReporter = ((BuildInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.BUILD));
 
-        AppDocumentGenerator appHelper = new AppDocumentGenerator(getContext());
-        BuildDocumentGenerator buildReporter = new BuildDocumentGenerator(getContext());
         String appMessage = appHelper.getFormattedVersionLong() + "\n"
                 + "Build " + buildReporter.getBuildOverview() + "\n"
                 + buildReporter.getRepositoryOverview();
@@ -122,7 +126,8 @@ public class Home2Screen extends Screen {
         data.add(appData);
 
 
-        LiveDocumentGenerator liveHelper = new LiveDocumentGenerator(getContext());
+        LiveInfoGenerator liveHelper = ((LiveInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.LIVE));
         String liveMessage = liveHelper.getOverview();
 
         DocumentSectionData runningData = new DocumentSectionData.Builder("Currently running")
@@ -165,8 +170,11 @@ public class Home2Screen extends Screen {
         data.add(runningData);
 
 
-        DeviceDocumentGenerator deviceHelper = new DeviceDocumentGenerator(getContext());
-        OSDocumentGenerator osHelper= new OSDocumentGenerator(getContext());
+        DeviceInfoGenerator deviceHelper = ((DeviceInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.DEVICE));
+        OSInfoGenerator osHelper = ((OSInfoGenerator)IadtController.get()
+                .getDocumentManager().getInfoGenerator(InfoDocument.OS));
+
         String deviceMessage = deviceHelper.getFormattedDevice()
                 + Humanizer.newLine()
                 + osHelper.getFirstLineOverview();

@@ -26,7 +26,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -68,11 +68,11 @@ public class InfoOverviewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        Document[] documents = Document.getInfoDocuments();
+        InfoDocument[] infoDocuments = InfoDocument.getValues();
 
-        for (int i = 0; i< documents.length ; i++){
-            Document page = documents[i];
-            DocumentData reportData = IadtController.get().getDocumentManager().getDocumentData(page);
+        for (int i = 0; i< infoDocuments.length ; i++){
+            InfoDocument page = infoDocuments[i];
+            DocumentData reportData = IadtController.get().getDocumentManager().getInfoData(page);
             final String pageIndexParam = String.valueOf(i);
 
             data.add(new CardData(reportData.getTitle(),

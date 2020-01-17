@@ -40,7 +40,7 @@ import java.util.TimerTask;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -142,8 +142,8 @@ public class InfoScreen extends Screen {
     }
 
     private DocumentData getData(int reportPosition) {
-        Document report = Document.getInfoDocuments()[reportPosition];
-        DocumentData reportData = IadtController.get().getDocumentManager().getDocumentData(report);
+        InfoDocument report = InfoDocument.getValues()[reportPosition];
+        DocumentData reportData = IadtController.get().getDocumentManager().getInfoData(report);
         return reportData;
     }
 
@@ -245,7 +245,7 @@ public class InfoScreen extends Screen {
     //region [ INFO NAVIGATION ]
 
     private void initInfoNavigationButtons(final int reportIndex) {
-        int size = Document.getInfoDocuments().length;
+        int size = InfoDocument.getValues().length;
 
         if (reportIndex == 0){
             ButtonUtils.setDisabled(navPrevious);

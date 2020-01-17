@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.generators.info;
+package es.rafaco.inappdevtools.library.logic.documents.info;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -37,8 +37,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -51,15 +51,11 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetail
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
-public class AppDocumentGenerator extends AbstractDocumentGenerator {
+public class AppInfoGenerator extends AbstractDocumentGenerator {
 
     EasyAppMod easyAppMod;
 
-    public AppDocumentGenerator(Context context) {
-        this(context, Document.APP);
-    }
-
-    public AppDocumentGenerator(Context context, Document report) {
+    public AppInfoGenerator(Context context, InfoDocument report) {
         super(context, report);
         easyAppMod = new EasyAppMod(context);
     }
@@ -74,7 +70,7 @@ public class AppDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getDocument())
+        return new DocumentData.Builder(getInfoDocument())
                 .setOverview(getOverview())
                 .add(getApkInfo())
                 .add(getInstallInfo())

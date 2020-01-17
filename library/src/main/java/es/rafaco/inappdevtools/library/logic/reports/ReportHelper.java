@@ -35,15 +35,16 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentManager;
+import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.info.ToolsInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
-import es.rafaco.inappdevtools.library.logic.session.SessionReporter;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
@@ -75,6 +76,7 @@ public class ReportHelper {
     private List<String> generateFiles() {
         List<String> filePaths = new ArrayList<>();
         String subFolder = "session/" + report.getSessionId();
+        DocumentManager manager = IadtController.get().getDocumentManager();
         DocumentData reportOverview = new DocumentData.Builder("Report Overview").build();
 
         if (report.getSessionId()>0){
@@ -85,20 +87,19 @@ public class ReportHelper {
             addDocument(filePaths, subFolder,
                     "session_" + report.getSessionId() +".txt",
                     "Session " + report.getSessionId(),
-                    new SessionReporter(context, session).getData().toString());
+                    manager.getDetailData(DetailDocument.SESSION, session).toString());
 
             //TODO: make for other sessions
             if (report.getSessionId() == IadtController.get().getSessionManager().getCurrent().getUid()){
-                Document[] values = Document.getInfoDocuments();
-                for (Document document : values){
-                    DocumentData reportData = IadtController.get().getDocumentManager()
-                            .getDocumentData(document);
-                    reportOverview.getSections().add(new DocumentSectionData.Builder(document.getTitle())
+                InfoDocument[] values = InfoDocument.getValues();
+                for (InfoDocument infoDocument : values){
+                    DocumentData reportData = manager.getInfoData(infoDocument);
+                    reportOverview.getSections().add(new DocumentSectionData.Builder(infoDocument.getTitle())
                             .add(reportData.getOverview()).build());
 
                     addDocument(filePaths, subFolder,
-                            "info_" + document.getTitle().toLowerCase() + ".txt",
-                            "Info " + document.getTitle(),
+                            "info_" + infoDocument.getTitle().toLowerCase() + ".txt",
+                            "Info " + infoDocument.getTitle(),
                             reportData.toString());
                 }
             }
@@ -127,10 +128,12 @@ public class ReportHelper {
     }
 
     private void buildReportHeader() {
-        AppDocumentGenerator app = new AppDocumentGenerator(context);
-        BuildDocumentGenerator build = new BuildDocumentGenerator(context);
-        DeviceDocumentGenerator device = new DeviceDocumentGenerator(context);
-        ToolsDocumentGenerator tools = new ToolsDocumentGenerator(context);
+        DocumentManager manager = IadtController.get().getDocumentManager();
+
+        AppInfoGenerator app = (AppInfoGenerator) manager.getInfoGenerator(InfoDocument.APP);
+        BuildInfoGenerator build = (BuildInfoGenerator) manager.getInfoGenerator(InfoDocument.BUILD);
+        DeviceInfoGenerator device = (DeviceInfoGenerator) manager.getInfoGenerator(InfoDocument.DEVICE);
+        ToolsInfoGenerator tools = (ToolsInfoGenerator) manager.getInfoGenerator(InfoDocument.TOOLS);
 
         reportHeader = "Report: " + getReportDescription(report);
         reportHeader += " at " + DateUtils.formatShortDate(report.getDate()) + Humanizer.newLine();
