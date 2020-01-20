@@ -21,7 +21,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,13 +44,12 @@ import java.lang.reflect.Method;
 
 import br.tiagohm.CodeView;
 import br.tiagohm.Language;
-import br.tiagohm.Theme;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
-import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;

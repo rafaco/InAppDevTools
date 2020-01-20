@@ -25,11 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
@@ -82,23 +80,5 @@ public class LogcatHelper extends ScreenHelper {
             String stackTraceString = sw.toString();
             Log.e(Iadt.TAG, stackTraceString);
         }
-    }
-
-    public Logcat buildCrashReport(long crashId){
-        String raw = getCrashReport();
-        String filePath = DevToolsFiles.storeCrashLog(crashId, raw);
-
-        Logcat logcat = new Logcat();
-        logcat.setDate(new Date().getTime());
-        logcat.setPath(filePath);
-        logcat.setCrash(true);
-        return logcat;
-    }
-
-    public String getCrashReport(){
-        Shell exe = new Shell();
-        String command = "logcat -d -t 1000 *:V";
-        String output = exe.run(command);
-        return  output;
     }
 }

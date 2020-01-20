@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.detail;
+package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 
 import android.content.Context;
 
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
@@ -35,14 +35,34 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 
-public class SessionLogsDetailGenerator extends AbstractDocumentGenerator {
+public class SessionLogsDocumentGenerator extends AbstractDocumentGenerator {
 
     private final Session session;
     private List<Friendly> rawData;
 
-    public SessionLogsDetailGenerator(Context context, DetailDocument report, Session param) {
+    public SessionLogsDocumentGenerator(Context context, Document report, Session param) {
         super(context, report, param);
         this.session = param;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Logcat from Session " + session.getUid();
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + session.getUid();
+    }
+
+    @Override
+    public String getFilename() {
+        return "session_" + session.getUid() + "_steps" +".txt";
+    }
+
+    @Override
+    public String getOverview() {
+        return "";
     }
 
     @Override
@@ -54,16 +74,6 @@ public class SessionLogsDetailGenerator extends AbstractDocumentGenerator {
         extractRawData();
         insertRawData(builder);
         return builder.build();
-    }
-
-
-    @Override
-    public String getOverview() {
-        return "";
-    }
-
-    public String getTitle() {
-        return "Logcat from Session " + session.getUid();
     }
 
 

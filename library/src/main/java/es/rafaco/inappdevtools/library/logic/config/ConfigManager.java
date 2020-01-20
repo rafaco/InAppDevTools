@@ -24,15 +24,15 @@ import android.content.Context;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class ConfigManager {
 
-    private final JsonAssetHelper compileConfig;
+    private final AssetJsonHelper compileConfig;
 
     public ConfigManager(Context context) {
-        compileConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
+        compileConfig = new AssetJsonHelper(context, IadtPath.BUILD_CONFIG);
     }
 
     public Object get(BuildConfig config) {

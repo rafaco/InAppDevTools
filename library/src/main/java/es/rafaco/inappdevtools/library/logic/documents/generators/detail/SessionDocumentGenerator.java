@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.detail;
+package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 
 import android.content.Context;
 
@@ -26,10 +26,10 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -39,14 +39,37 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class SessionDetailGenerator extends AbstractDocumentGenerator {
+public class SessionDocumentGenerator extends AbstractDocumentGenerator {
 
     private final Session session;
     private SessionAnalysis analysis;
 
-    public SessionDetailGenerator(Context context, DetailDocument report, Session param) {
+    public SessionDocumentGenerator(Context context, Document report, Session param) {
         super(context, report, param);
         this.session = param;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Session " + session.getUid();
+        //return Humanizer.ordinal((int) session.getUid()) + " Session";
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "Session " + session.getUid();
+    }
+
+    @Override
+    public String getFilename() {
+        return "session_" + session.getUid() +".txt";
+    }
+
+    @Override
+    public String getOverview() {
+        return getStartOverview()+ Humanizer.newLine()
+                + getFinishOverview() + Humanizer.newLine()
+                + getLogsOverview();
     }
 
     @Override
@@ -59,17 +82,6 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
                 .add(getLogInfo())
                 .add(getSteps())
         .build();
-    }
-
-    @Override
-    public String getOverview() {
-        return getStartOverview()+ Humanizer.newLine()
-                + getFinishOverview() + Humanizer.newLine()
-                + getLogsOverview();
-    }
-
-    public String getTitle() {
-        return Humanizer.ordinal((int) session.getUid()) + " Session";
     }
 
     private String getFinishOverview() {

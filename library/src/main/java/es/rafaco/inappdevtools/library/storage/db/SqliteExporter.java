@@ -38,7 +38,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
-import es.rafaco.inappdevtools.library.storage.files.MediaScannerUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.MediaScannerUtils;
 
 
 /**

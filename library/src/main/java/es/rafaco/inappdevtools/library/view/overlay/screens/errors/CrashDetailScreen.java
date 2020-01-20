@@ -35,6 +35,8 @@ import es.rafaco.compat.RecyclerView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -216,7 +218,7 @@ public class CrashDetailScreen extends Screen {
     }
 
     private void initFooter() {
-        DocumentData report = helper.parseToInfoGroup(crash);
+        DocumentData report = DocumentRepository.getGenerator(Document.CRASH, crash).getData();
         out.setText(report.toString());
 
         final long logId = IadtController.getDatabase().friendlyDao()

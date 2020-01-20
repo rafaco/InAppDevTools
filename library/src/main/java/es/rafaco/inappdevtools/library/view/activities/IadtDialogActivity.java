@@ -41,13 +41,12 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentManager;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.OSInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
@@ -151,14 +150,13 @@ public class IadtDialogActivity extends AppCompatActivity {
     private void showNewBuildDialog(final boolean isAuto) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
-        DocumentManager docManager = IadtController.get().getDocumentManager();
-        String welcomeText = ((AppInfoGenerator)docManager.getInfoGenerator(InfoDocument.APP)).getAppNameAndVersions();
+        String welcomeText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO)).getAppNameAndVersions();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((BuildInfoGenerator)docManager.getInfoGenerator(InfoDocument.BUILD)).getBuildWelcome();
+        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO)).getBuildWelcome();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((DeviceInfoGenerator)docManager.getInfoGenerator(InfoDocument.DEVICE)).getSecondLineOverview();
+        welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(Document.DEVICE_INFO)).getSecondLineOverview();
         welcomeText += " ";
-        welcomeText += ((OSInfoGenerator)docManager.getInfoGenerator(InfoDocument.OS)).getOneLineOverview();
+        welcomeText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(Document.OS_INFO)).getOneLineOverview();
         welcomeText += "." + Humanizer.newLine();
         welcomeText += Humanizer.fullStop();
 

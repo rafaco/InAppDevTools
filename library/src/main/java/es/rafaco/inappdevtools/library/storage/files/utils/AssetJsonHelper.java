@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.storage.files;
+package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -32,13 +32,13 @@ import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
-public class JsonAssetHelper {
+public class AssetJsonHelper {
 
     private final Context context;
     private final String target;
     private JSONObject json;
 
-    public JsonAssetHelper(Context context, String target) {
+    public AssetJsonHelper(Context context, String target) {
         this.context = context;
         this.target = target;
         init();

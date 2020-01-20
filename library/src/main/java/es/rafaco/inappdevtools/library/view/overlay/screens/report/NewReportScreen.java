@@ -32,12 +32,13 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.documents.detail.SessionDetailGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -267,8 +268,8 @@ public class NewReportScreen extends FlexibleScreen {
             final Session session = sessions.get(i);
             boolean isCurrent = (i==0);
 
-            SessionDetailGenerator generator = (SessionDetailGenerator)IadtController.get().getDocumentManager()
-                    .getDetailGenerator(DetailDocument.SESSION, session);
+            SessionDocumentGenerator generator = (SessionDocumentGenerator) DocumentRepository
+                    .getGenerator(Document.SESSION, session);
 
             CardData cardData = new CardData(generator.getTitle(),
                     new Runnable() {

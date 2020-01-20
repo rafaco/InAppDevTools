@@ -36,24 +36,23 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
-import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -86,15 +85,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Crash crash = buildCrash(thread, ex);
             printLogcatError(thread, crash);
             long crashId = storeCrash(crash);
+            crash.setUid(crashId);
             long sessionId = updateSession(crashId);
 
             PendingCrashUtil.savePending();
 
             IadtController.get().beforeClose();
-            //TODO: REPORTS
-            //saveLogcat(crashId);
+            //TODO:
+            flushLogcat();
             saveScreenshot();
-            saveDetailReport();
+            saveDetailReport(crash);
             saveStacktrace(crashId, ex);
 
             if (isDebug())
@@ -109,6 +109,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
             FriendlyLog.logException("Exception", e);
         }
+    }
+
+    private void flushLogcat() {
+        LogcatReaderService.getStopIntent(context);
     }
 
     private void stopAnrDetector() {
@@ -211,34 +215,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return false;
     }
 
-    //TODO: REPORT - Review if this is currently needed
-    // It doesn't work on Android P
-    private Boolean saveLogcat(long crashId){
-        LogcatHelper helper = new LogcatHelper();
-        if (isDebug()) Log.d(Iadt.TAG, "Extracting logcat");
-
-        Logcat logcat = helper.buildCrashReport(crashId);
-        if (logcat != null){
-            long logcatId = db.logcatDao().insert(logcat);
-            if (logcatId > 0){
-                Crash current = db.crashDao().getLast();
-                current.setLogcatId(logcatId);
-                db.crashDao().update(current);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean saveDetailReport() {
-        CrashHelper helper = new CrashHelper();
-        Crash current = db.crashDao().getLast();
-
-        String report = helper.parseToInfoGroup(current).toString();
-        String filePath = DevToolsFiles.storeCrashDetail(current.getUid(), report);
-        current.setReportPath(filePath);
-        IadtController.get().getDatabase().crashDao().update(current);
-
+    private boolean saveDetailReport(Crash crash) {
+        String docPath = DocumentRepository.saveDocument(Document.CRASH, crash);
+        crash.setReportPath(docPath);
+        IadtController.get().getDatabase().crashDao().update(crash);
         return true;
     }
 

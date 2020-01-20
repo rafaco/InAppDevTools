@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -37,8 +37,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -51,13 +51,30 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetail
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import github.nisrulz.easydeviceinfo.base.EasyAppMod;
 
-public class AppInfoGenerator extends AbstractDocumentGenerator {
+public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
 
+    private long sessionId;
     EasyAppMod easyAppMod;
 
-    public AppInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
+    public AppInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
         easyAppMod = new EasyAppMod(context);
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -70,7 +87,7 @@ public class AppInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getInfoDocument())
+        return new DocumentData.Builder(getTitle())
                 .setOverview(getOverview())
                 .add(getApkInfo())
                 .add(getInstallInfo())

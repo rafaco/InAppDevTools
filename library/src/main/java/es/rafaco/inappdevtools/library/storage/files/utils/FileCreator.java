@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.storage.files;
+package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.content.Context;
 import android.util.Log;

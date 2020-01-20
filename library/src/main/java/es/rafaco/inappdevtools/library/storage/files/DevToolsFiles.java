@@ -23,21 +23,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
+
+@Deprecated
+//Remove in progress
 public class DevToolsFiles {
-
-    public static String storeCrashDetail(long crashId, String report) {
-        return FileCreator.withContent(
-                "crash",
-                "crash_" + crashId + "_detail.txt",
-                report);
-    }
-
-    public static String storeCrashLog(long crashId, String report) {
-        return FileCreator.withContent(
-                "crash",
-                "crash_" + crashId + "_logcat.txt",
-                report);
-    }
 
     public static String storeInfo(String report, long timeMillis) {
         return FileCreator.withContent(

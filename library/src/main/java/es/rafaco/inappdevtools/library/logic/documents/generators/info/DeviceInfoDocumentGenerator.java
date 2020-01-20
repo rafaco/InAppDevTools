@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -34,8 +34,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -50,17 +50,34 @@ import github.nisrulz.easydeviceinfo.common.EasyDeviceInfo;
 
 import static android.content.Context.WINDOW_SERVICE;
 
-public class DeviceInfoGenerator extends AbstractDocumentGenerator {
+public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
+    private final long sessionId;
     EasyConfigMod configHelper;
     EasyDisplayMod displayHelper;
     EasyMemoryMod memoryHelper;
 
-    public DeviceInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
+    public DeviceInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
         configHelper = new EasyConfigMod(context);
         displayHelper = new EasyDisplayMod(context);
         memoryHelper = new EasyMemoryMod(context);
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -85,7 +102,7 @@ public class DeviceInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getInfoDocument())
+        return new DocumentData.Builder(getTitle())
                 .setOverview(getOverview())
                 .add(getDeviceInfo())
                 .add(getHardwareInfo())

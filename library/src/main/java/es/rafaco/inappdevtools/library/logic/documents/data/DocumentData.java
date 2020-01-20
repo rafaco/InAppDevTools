@@ -31,8 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -117,15 +116,9 @@ public class DocumentData {
         private String overview;
         private List<DocumentSectionData> sections;
 
-        public Builder(InfoDocument report) {
-            this.title = report.getTitle();
-            this.icon = report.getIcon();
-            this.sections = new ArrayList<>();
-        }
-
-        public Builder(DetailDocument report) {
-            this.title = report.getTitle();
-            this.icon = report.getIcon();
+        public Builder(Document document) {
+            this.title = document.getName();
+            this.icon = document.getIcon();
             this.sections = new ArrayList<>();
         }
 

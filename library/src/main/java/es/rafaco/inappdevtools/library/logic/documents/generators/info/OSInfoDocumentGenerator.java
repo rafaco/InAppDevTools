@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.os.Build;
@@ -34,8 +34,8 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.utils.InstalledAppsUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
@@ -45,17 +45,34 @@ import github.nisrulz.easydeviceinfo.base.EasyDeviceMod;
 import github.nisrulz.easydeviceinfo.base.EasyMemoryMod;
 import github.nisrulz.easydeviceinfo.base.RingerMode;
 
-public class OSInfoGenerator extends AbstractDocumentGenerator {
+public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
 
+    private final long sessionId;
     EasyConfigMod configHelper;
     EasyDeviceMod deviceHelper;
     EasyMemoryMod memoryHelper;
 
-    public OSInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
+    public OSInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
         this.configHelper = new EasyConfigMod(context);
         this.deviceHelper = new EasyDeviceMod(context);
         this.memoryHelper = new EasyMemoryMod(context);
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -76,7 +93,7 @@ public class OSInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getInfoDocument())
+        return new DocumentData.Builder(getTitle())
                 .setOverview(getOverview())
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))
@@ -101,7 +118,7 @@ public class OSInfoGenerator extends AbstractDocumentGenerator {
     }
 
     protected DocumentSectionData getAndroidGroup(EasyDeviceMod deviceHelper) {
-        return new DocumentSectionData.Builder("Android OS")
+        return new DocumentSectionData.Builder("Android OS_INFO")
                 .setIcon(R.string.gmd_android)
                 .setOverview(getAndroidVersionFull())
                 .add("Version", getAndroidVersionFull())

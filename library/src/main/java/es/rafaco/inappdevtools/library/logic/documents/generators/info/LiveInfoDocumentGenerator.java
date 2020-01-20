@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -26,8 +26,8 @@ import android.os.Debug;
 import android.os.Process;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -41,10 +41,28 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class LiveInfoGenerator extends AbstractDocumentGenerator {
+public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
 
-    public LiveInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
+    private final long sessionId;
+
+    public LiveInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -58,7 +76,7 @@ public class LiveInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getInfoDocument())
+        return new DocumentData.Builder(getTitle())
                 .setOverview(getOverview())
                 .add(getActivityInfo())
                 .add(getTaskInfo())
@@ -172,7 +190,7 @@ public class LiveInfoGenerator extends AbstractDocumentGenerator {
 
         //output += "--> Debug data: system wide" + "\n";
         String nativeHeapSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapSize(), true);
-        //String nativeHeapAllocatedSize = OSInfoGenerator.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
+        //String nativeHeapAllocatedSize = OSInfoDocumentGenerator.humanReadableByteCount(Debug.getNativeHeapAllocatedSize(), true);
         String nativeHeapFreeSize = Humanizer.humanReadableByteCount(Debug.getNativeHeapFreeSize(), true);
         output += String.format("  NativeHeap: %s / %s", nativeHeapFreeSize, nativeHeapSize) + "\n";
 

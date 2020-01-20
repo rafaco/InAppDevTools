@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.storage.files;
+package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -29,9 +29,10 @@ import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class PluginList {
+public class PluginListUtils {
 
     public static String getIadtVersion() {
         return getPluginVersion("inappdevtools-plugin");

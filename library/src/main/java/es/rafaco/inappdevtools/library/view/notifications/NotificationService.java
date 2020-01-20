@@ -47,13 +47,14 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -201,9 +202,8 @@ public class NotificationService extends Service {
         String overview;
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
                 UiUtils.getAppIconResourceId());
-        AppInfoGenerator appInfo = ((AppInfoGenerator)IadtController.get().getDocumentManager().getInfoGenerator(InfoDocument.APP));
-        BuildInfoGenerator buildInfo = ((BuildInfoGenerator)IadtController.get()
-                .getDocumentManager().getInfoGenerator(InfoDocument.BUILD));
+        AppInfoDocumentGenerator appInfo = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
+        BuildInfoDocumentGenerator buildInfo = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO));
         overview = appInfo.getAppNameAndVersions() + "\n"
                 + buildInfo.getFriendlyBuildType();
         if (buildInfo.isGitEnabled()){
@@ -290,8 +290,7 @@ public class NotificationService extends Service {
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
-        AppInfoGenerator infoHelper = ((AppInfoGenerator)IadtController.get()
-                .getDocumentManager().getInfoGenerator(InfoDocument.APP));
+        AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 
@@ -343,7 +342,7 @@ public class NotificationService extends Service {
                 icon = R.drawable.ic_delete_forever_white_24dp;
                 break;
             case ACTION_TOOLS:
-                title = "TOOLS";
+                title = "TOOLS_INFO";
                 icon = R.drawable.ic_developer_mode_white_24dp;
                 break;
             case ACTION_DISMISS:

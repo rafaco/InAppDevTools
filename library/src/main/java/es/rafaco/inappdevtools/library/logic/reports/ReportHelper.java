@@ -35,23 +35,19 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentManager;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.info.ToolsInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.files.FileCreator;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -75,55 +71,29 @@ public class ReportHelper {
 
     private List<String> generateFiles() {
         List<String> filePaths = new ArrayList<>();
-        String subFolder = "session/" + report.getSessionId();
-        DocumentManager manager = IadtController.get().getDocumentManager();
-        DocumentData reportOverview = new DocumentData.Builder("Report Overview").build();
-
         if (report.getSessionId()>0){
 
             Session session = IadtController.get().getDatabase().sessionDao()
                     .findById(report.getSessionId());
 
-            addDocument(filePaths, subFolder,
-                    "session_" + report.getSessionId() +".txt",
-                    "Session " + report.getSessionId(),
-                    manager.getDetailData(DetailDocument.SESSION, session).toString());
+            //Session details
+            filePaths.add(DocumentRepository.saveDocument(Document.SESSION, session));
+            filePaths.add(DocumentRepository.saveDocument(Document.SESSION_STEPS, session));
+            filePaths.add(DocumentRepository.saveDocument(Document.SESSION_LOGS, session));
 
-            addDocument(filePaths, subFolder,
-                    "session_" + report.getSessionId() + "_steps" +".txt",
-                    "Steps from Session " + report.getSessionId(),
-                    manager.getDetailData(DetailDocument.SESSION_STEPS, session).toString());
-
-            addDocument(filePaths, subFolder,
-                    "session_" + report.getSessionId() + "_logs" +".txt",
-                    "Logs from Session " + report.getSessionId(),
-                    manager.getDetailData(DetailDocument.SESSION_LOGS, session).toString());
-
-            //TODO: make for other sessions
-            if (report.getSessionId() == IadtController.get().getSessionManager().getCurrent().getUid()){
-                InfoDocument[] values = InfoDocument.getValues();
-                for (InfoDocument infoDocument : values){
-                    DocumentData infoData = manager.getInfoData(infoDocument);
-                    reportOverview.getSections().add(new DocumentSectionData.Builder(infoDocument.getTitle())
-                            .add(infoData.getOverview()).build());
-
-                    addDocument(filePaths, subFolder,
-                            "info_" + infoDocument.getTitle().toLowerCase() + ".txt",
-                            "Info " + infoDocument.getTitle(),
-                            infoData.toString());
-                }
+            //Info pages
+            filePaths.add(DocumentRepository.saveDocument(Document.INFO_OVERVIEW, session.getUid()));
+            Document[] values = Document.getInfoValues();
+            for (Document document : values){
+                filePaths.add(DocumentRepository.saveDocument(document, session.getUid()));
             }
 
-            //TODO: logs and repro steps
 
             //TODO: crashes
 
             //TODO: screenshots
 
-            addDocument(filePaths, subFolder,
-                    "report_overview_" + report.getUid() +".txt",
-                    "Report Overview " + report.getUid(),
-                    reportOverview.toString());
+            //TODO: sources????
         }
 
         return filePaths;
@@ -138,12 +108,10 @@ public class ReportHelper {
     }
 
     private void buildReportHeader() {
-        DocumentManager manager = IadtController.get().getDocumentManager();
-
-        AppInfoGenerator app = (AppInfoGenerator) manager.getInfoGenerator(InfoDocument.APP);
-        BuildInfoGenerator build = (BuildInfoGenerator) manager.getInfoGenerator(InfoDocument.BUILD);
-        DeviceInfoGenerator device = (DeviceInfoGenerator) manager.getInfoGenerator(InfoDocument.DEVICE);
-        ToolsInfoGenerator tools = (ToolsInfoGenerator) manager.getInfoGenerator(InfoDocument.TOOLS);
+        AppInfoDocumentGenerator app = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO);
+        BuildInfoDocumentGenerator build = (BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO);
+        DeviceInfoDocumentGenerator device = (DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(Document.DEVICE_INFO);
+        ToolsInfoDocumentGenerator tools = (ToolsInfoDocumentGenerator) DocumentRepository.getGenerator(Document.TOOLS_INFO);
 
         reportHeader  = "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
         reportHeader += "Build: " + build.getShortOverview() + Humanizer.newLine();
@@ -232,14 +200,14 @@ public class ReportHelper {
     @NonNull
     private List<String> getFilePaths() {
         List<String> filePaths = new ArrayList<>();
-        filePaths.add(new InfoHelper().getReportPath());
+        //filePaths.add(new InfoHelper().getReportPath());
 
         if(type.equals(ReportType.SESSION)){
 
             filePaths.add(new LogcatHelper().getReportPath());
 
             //Include only the last one
-            //filePaths.add(new ScreenshotHelper().getReportPath());
+            //filePaths.add(new ScreenshotHelper().saveReport());
 
             try{
                 ArrayList<Uri> screens = (ArrayList<Uri>)target;

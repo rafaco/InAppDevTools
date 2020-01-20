@@ -30,7 +30,7 @@ import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNodeReader;
-import es.rafaco.inappdevtools.library.storage.files.AssetFileReader;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetsNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.RootNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNodeReader;

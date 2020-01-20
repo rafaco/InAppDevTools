@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.console;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -100,4 +99,35 @@ public class Shell {
     public static String[] formatBashCommand(String command){
         return new String[] { BASH_PATH, BASH_ARGS, command};
     }
+
+    /* // Another quick way to run commands
+
+    public static String getProcStat() {
+        ArrayList<String> commandLine = new ArrayList<String>();
+        commandLine.add("cat");
+        commandLine.add("/proc/stat");
+        //commandLine.add("/proc/pid/stat");
+        //commandLine.add("adb top -n 1");
+        //In adb shell: top -n 1
+        return runCommandLine(commandLine);
+    }
+
+    @NonNull
+    private static String runCommandLine(ArrayList<String> commandLine) {
+        StringBuilder meminfo = new StringBuilder();
+        try {
+            Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[commandLine.size()]));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                meminfo.append(line);
+                meminfo.append("\n");
+            }
+        } catch (IOException e) {
+            Log.e(Iadt.TAG, "Could not read /proc/meminfo", e);
+        }
+
+        return meminfo.toString();
+    }*/
 }

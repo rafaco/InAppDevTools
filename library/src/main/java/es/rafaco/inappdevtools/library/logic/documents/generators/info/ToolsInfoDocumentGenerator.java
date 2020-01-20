@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -25,19 +25,37 @@ import android.text.TextUtils;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.storage.files.PluginList;
+import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ToolsInfoGenerator extends AbstractDocumentGenerator {
+public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
 
-    public ToolsInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
+    private final long sessionId;
+
+    public ToolsInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -52,7 +70,7 @@ public class ToolsInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getInfoDocument())
+        return new DocumentData.Builder(getTitle())
                 .setOverview(getOverview())
                 .add(getLibraryInfo())
                 .add(getDbInfo())
@@ -72,14 +90,14 @@ public class ToolsInfoGenerator extends AbstractDocumentGenerator {
     private DocumentSectionData getBuildInfo() {
         return new DocumentSectionData.Builder("Generated BuildInfo")
                 .setIcon(R.string.gmd_settings_system_daydream)
-                .add(new JsonAssetHelper(context, IadtPath.BUILD_INFO).getAll())
+                .add(new AssetJsonHelper(context, IadtPath.BUILD_INFO).getAll())
                 .build();
     }
 
     private DocumentSectionData getBuildConfig() {
         return new DocumentSectionData.Builder("Generated BuildConfig")
                 .setIcon(R.string.gmd_settings_applications)
-                .add(new JsonAssetHelper(context, IadtPath.BUILD_CONFIG).getAll())
+                .add(new AssetJsonHelper(context, IadtPath.BUILD_CONFIG).getAll())
                 .build();
     }
 
@@ -88,7 +106,7 @@ public class ToolsInfoGenerator extends AbstractDocumentGenerator {
                 .setIcon(R.string.gmd_assignment)
                 .setOverview(BuildConfig.VERSION_NAME)
                 .add("Library version", getVersionFormatted())
-                .add("Plugin version", PluginList.getIadtVersion())
+                .add("Plugin version", PluginListUtils.getIadtVersion())
                 .add("Build type", BuildConfig.BUILD_TYPE)
                 .add("Flavor", BuildConfig.FLAVOR)
                 .build();

@@ -39,11 +39,12 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
-import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 
 public class EmailSender {
 
@@ -79,8 +80,7 @@ public class EmailSender {
         }else if (report.getReportType().equals(ReportType.CUSTOM)){
             currentType = "full";
         }
-        AppInfoGenerator helper = (AppInfoGenerator) IadtController.get().getDocumentManager()
-                .getInfoGenerator(InfoDocument.APP);
+        AppInfoDocumentGenerator helper = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO);
         return String.format(formatter,
                 helper.getFormattedAppLong(),
                 report.getTitle());

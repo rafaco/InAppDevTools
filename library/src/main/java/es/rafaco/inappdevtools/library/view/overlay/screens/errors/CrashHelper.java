@@ -25,13 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 
 public class CrashHelper extends ScreenHelper {
 
@@ -45,53 +42,6 @@ public class CrashHelper extends ScreenHelper {
     @Override
     public String getReportContent() {
         return null;
-    }
-
-    public DocumentData parseToInfoGroup(Crash data){
-
-        DocumentSectionData status = new DocumentSectionData.Builder("App status")
-                //.add("When", DateUtils.getElapsedTime(data.getDate())) //TODO: no an app status
-                .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
-                .add("LastActivity", data.getLastActivity())
-                .build();
-
-        DocumentSectionData basic = new DocumentSectionData.Builder("Crash info")
-                .add("CrashId", data.getUid())
-                .add("Date", DateUtils.format(data.getDate()))
-                .add("AppStatus", data.isForeground() ? "Foreground" : "Background")
-                .add("LastActivity", data.getLastActivity())
-                .add("Exception", data.getException())
-                .add("Message", data.getMessage())
-                .add("ExceptionAt", data.getExceptionAt())
-                .add("CauseException", data.getCauseException())
-                .add("CauseMessage", data.getCauseMessage())
-                .add("CauseAt", data.getCauseExceptionAt())
-                .build();
-
-        DocumentSectionData thread = new DocumentSectionData.Builder("Thread info")
-                .add("Thread ID", data.getThreadId())
-                .add("Name", data.getThreadName())
-                .add("Group", data.getThreadGroupName())
-                .add("isMain", data.isMainThread())
-                .build();
-
-        DocumentSectionData links = new DocumentSectionData.Builder("Linked info")
-                .add("ReportPath", String.valueOf(data.getReportPath()))
-                .add("LogcatId", String.valueOf(data.getLogcatId()))
-                .add("ScreenId", String.valueOf(data.getScreenId()))
-                .build();
-
-        DocumentSectionData stacktrace = new DocumentSectionData.Builder("Stacktrace")
-                .add("", data.getStacktrace())
-                .build();
-
-        return new DocumentData.Builder("")
-                .add(status)
-                .add(basic)
-                .add(thread)
-                .add(links)
-                .add(stacktrace)
-                .build();
     }
 
     public List<String> getReportPaths(final Crash crash) {

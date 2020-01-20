@@ -9,7 +9,7 @@
  *
  *     * Added this attribution notice
  *     * Comments clean up and translation to English
- *     * Using VERSION.SDK_INT from OS instead of build
+ *     * Using VERSION.SDK_INT from OS_INFO instead of build
  *     * Added scrollToLine feature
  *
  *

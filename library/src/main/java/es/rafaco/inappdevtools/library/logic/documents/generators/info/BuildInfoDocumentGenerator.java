@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.info;
+package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -33,8 +33,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
-import es.rafaco.inappdevtools.library.logic.documents.InfoDocument;
-import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -42,24 +42,41 @@ import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.JsonAssetHelper;
-import es.rafaco.inappdevtools.library.storage.files.PluginList;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class BuildInfoGenerator extends AbstractDocumentGenerator {
+public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
-    JsonAssetHelper buildInfo;
-    JsonAssetHelper buildConfig;
-    JsonAssetHelper gitConfig;
+    private final long sessionId;
+    AssetJsonHelper buildInfo;
+    AssetJsonHelper buildConfig;
+    AssetJsonHelper gitConfig;
 
-    public BuildInfoGenerator(Context context, InfoDocument report) {
-        super(context, report);
-        buildInfo = new JsonAssetHelper(context, IadtPath.BUILD_INFO);
-        buildConfig = new JsonAssetHelper(context, IadtPath.BUILD_CONFIG);
-        gitConfig = new JsonAssetHelper(context, IadtPath.GIT_CONFIG);
+    public BuildInfoDocumentGenerator(Context context, Document report, long param) {
+        super(context, report, param);
+        this.sessionId = param;
+        buildInfo = new AssetJsonHelper(context, IadtPath.BUILD_INFO);
+        buildConfig = new AssetJsonHelper(context, IadtPath.BUILD_CONFIG);
+        gitConfig = new AssetJsonHelper(context, IadtPath.GIT_CONFIG);
+    }
+
+    @Override
+    public String getTitle() {
+        return getDocument().getName() + " Info from session " + sessionId;
+    }
+
+    @Override
+    public String getSubfolder() {
+        return "session/" + sessionId;
+    }
+
+    @Override
+    public String getFilename() {
+        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override
@@ -93,7 +110,7 @@ public class BuildInfoGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        DocumentData.Builder builder = new DocumentData.Builder(getInfoDocument())
+        DocumentData.Builder builder = new DocumentData.Builder(getTitle())
                 .setOverview(getOverview());
 
         String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
@@ -151,7 +168,7 @@ public class BuildInfoGenerator extends AbstractDocumentGenerator {
                 .setIcon(R.string.gmd_desktop_windows)
                 .setOverview(buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
-                .add("Host OS", buildInfo.getString(BuildInfo.HOST_OS))
+                .add("Host OS_INFO", buildInfo.getString(BuildInfo.HOST_OS))
                 .add("Host version", buildInfo.getString(BuildInfo.HOST_VERSION))
                 .add("Host arch", buildInfo.getString(BuildInfo.HOST_ARCH))
                 .add("Host IP", buildInfo.getString(BuildInfo.HOST_ADDRESS))
@@ -167,8 +184,8 @@ public class BuildInfoGenerator extends AbstractDocumentGenerator {
                 .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
                 .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
-                .add("Android plugin", PluginList.getAndroidVersion())
-                .add("Iadt plugin", PluginList.getIadtVersion())
+                .add("Android plugin", PluginListUtils.getAndroidVersion())
+                .add("Iadt plugin", PluginListUtils.getIadtVersion())
                 .build();
         return group;
     }

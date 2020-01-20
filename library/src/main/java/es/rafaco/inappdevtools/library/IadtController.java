@@ -34,7 +34,6 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentManager;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
@@ -52,7 +51,7 @@ import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.files.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
@@ -77,7 +76,6 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
-    private DocumentManager documentManager;
     public boolean isPendingInitFull;
     private OverlayHelper overlayHelper;
 
@@ -140,10 +138,6 @@ public final class IadtController {
         sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
-
-        //TODO: this is not essential but early requested
-        // Could be a static or helper class instead of a manager
-        documentManager = new DocumentManager(getContext());
 
         if (isDebug()){
             ThreadUtils.runOnBack("Iadt-InitBack",
@@ -259,10 +253,6 @@ public final class IadtController {
 
     public OverlayHelper getOverlayHelper() {
         return overlayHelper;
-    }
-
-    public DocumentManager getDocumentManager() {
-        return documentManager;
     }
 
     public static DevToolsDatabase getDatabase() {

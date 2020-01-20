@@ -197,7 +197,7 @@ public class Iadt {
 
     //endregion
 
-    //region [ CLOSE & RESTART APP ]
+    //region [ CLOSE & RESTART APP_INFO ]
 
     public static void restartApp(){
         if (!isEnabled()) return;
