@@ -60,6 +60,12 @@ public class LogFilterHelper {
         return populateBackFilter();
     }
 
+    public void setSessionById(long sessionId) {
+        long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
+        int sessionUiPosition = (int) (1 + sessionCount - sessionId);
+        getUiFilter().setSessionInt(sessionUiPosition);
+    }
+
     //region [ PRESETS ]
     //TODO: custom presets defined from host app
 

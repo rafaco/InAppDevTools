@@ -254,6 +254,13 @@ public class Humanizer {
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
+    public static String unavailable(String text) {
+        if (TextUtils.isEmpty(text)){
+            return "Unavailable";
+        }
+        return text;
+    }
+
     //endregion
 }
 

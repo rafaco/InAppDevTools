@@ -87,7 +87,9 @@ public class RunButton {
     }
 
     public void run(){
-        getPerformer().run();
+        if (getPerformer() != null)
+            getPerformer().run();
+        
         if (getCallback()!= null)
             getCallback().run();
     }

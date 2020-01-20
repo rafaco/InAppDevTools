@@ -25,12 +25,16 @@ import java.lang.reflect.InvocationTargetException;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.reports.SessionDetailGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.detail.SessionLogsDetailGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.detail.SessionStepsDetailGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.detail.SessionDetailGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 
 public enum DetailDocument {
 
-    SESSION("Session", R.string.gmd_extension, SessionDetailGenerator.class, Session.class);
+    SESSION("Session", R.string.gmd_extension, SessionDetailGenerator.class, Session.class),
+    SESSION_STEPS("Steps", R.string.gmd_extension, SessionStepsDetailGenerator.class, Session.class),
+    SESSION_LOGS("Logs", R.string.gmd_extension, SessionLogsDetailGenerator.class, Session.class);
 
     private String title;
     private final int icon;

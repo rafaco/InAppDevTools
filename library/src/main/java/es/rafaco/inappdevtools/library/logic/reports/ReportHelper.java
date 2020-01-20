@@ -89,18 +89,28 @@ public class ReportHelper {
                     "Session " + report.getSessionId(),
                     manager.getDetailData(DetailDocument.SESSION, session).toString());
 
+            addDocument(filePaths, subFolder,
+                    "session_" + report.getSessionId() + "_steps" +".txt",
+                    "Steps from Session " + report.getSessionId(),
+                    manager.getDetailData(DetailDocument.SESSION_STEPS, session).toString());
+
+            addDocument(filePaths, subFolder,
+                    "session_" + report.getSessionId() + "_logs" +".txt",
+                    "Logs from Session " + report.getSessionId(),
+                    manager.getDetailData(DetailDocument.SESSION_LOGS, session).toString());
+
             //TODO: make for other sessions
             if (report.getSessionId() == IadtController.get().getSessionManager().getCurrent().getUid()){
                 InfoDocument[] values = InfoDocument.getValues();
                 for (InfoDocument infoDocument : values){
-                    DocumentData reportData = manager.getInfoData(infoDocument);
+                    DocumentData infoData = manager.getInfoData(infoDocument);
                     reportOverview.getSections().add(new DocumentSectionData.Builder(infoDocument.getTitle())
-                            .add(reportData.getOverview()).build());
+                            .add(infoData.getOverview()).build());
 
                     addDocument(filePaths, subFolder,
                             "info_" + infoDocument.getTitle().toLowerCase() + ".txt",
                             "Info " + infoDocument.getTitle(),
-                            reportData.toString());
+                            infoData.toString());
                 }
             }
 
@@ -135,13 +145,11 @@ public class ReportHelper {
         DeviceInfoGenerator device = (DeviceInfoGenerator) manager.getInfoGenerator(InfoDocument.DEVICE);
         ToolsInfoGenerator tools = (ToolsInfoGenerator) manager.getInfoGenerator(InfoDocument.TOOLS);
 
-        reportHeader = "Report: " + getReportDescription(report);
-        reportHeader += " at " + DateUtils.formatShortDate(report.getDate()) + Humanizer.newLine();
-        reportHeader += "Device: " + device.getOneLineOverview() + Humanizer.newLine();
-        reportHeader += "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
+        reportHeader  = "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
         reportHeader += "Build: " + build.getShortOverview() + Humanizer.newLine();
         reportHeader += "Branch: " + build.getShortOverviewSources() + Humanizer.newLine();
         reportHeader += "Changes: " + build.getShortOverviewChanges() + Humanizer.newLine();
+        reportHeader += "Device: " + device.getOneLineOverview() + Humanizer.newLine();
         reportHeader += Humanizer.newLine();
         reportHeader += "This file has been generated with InAppDevTools " + tools.getShortOverview()
                 + Humanizer.newLine();
@@ -167,29 +175,39 @@ public class ReportHelper {
             buildReportHeader();
         }
 
-        String result = "";
-        result += "Email: " + report.getEmail() + Humanizer.newLine();
-        result += "Reason: " + report.getReason() + Humanizer.newLine();
-        result += "Title and Description: " + Humanizer.fullStop();
-        result += report.getTitle() + Humanizer.fullStop();
-        result += report.getDescription() + Humanizer.fullStop();
+        String result = "Report: " + getShortReportDescription(report);
+        result += " at " + DateUtils.formatShortDate(report.getDate()) + Humanizer.newLine();
+        result += "Reason: " + report.getFormattedReason() + Humanizer.fullStop();
+        result += "Reporter: " + Humanizer.unavailable(report.getEmail()) + Humanizer.newLine();
+        result += "Description:" + Humanizer.newLine() + Humanizer.unavailable(report.getTitle()) + Humanizer.fullStop();
+        result += "Details:" + Humanizer.newLine() + Humanizer.unavailable(report.getDescription()) + Humanizer.fullStop();
         result += reportHeader + Humanizer.newLine();
         result += Humanizer.newLine();
         return result;
     }
 
-    private String getReportDescription(Report report) {
+    public static String getShortReportDescription(Report report) {
         String result = Humanizer.toCapitalCase(report.getReportType().name());
-        if (report.getCrashId()>1){
+        if (report.getReportType() == ReportType.CRASH
+                && report.getCrashId()>0){
             result += " " + report.getCrashId();
         }
-        else if (report.getReportType() == ReportType.SESSION &&
-                report.getSessionId()>1){
-            result += " " + report.getCrashId();
+        else if (report.getReportType() == ReportType.SESSION
+                && report.getSessionId()>0){
+            result += " " + report.getSessionId();
         }
         else if (report.getReportType() == ReportType.CUSTOM){
-            result += " (TODO)";
+            //TODO
         }
+        else if (report.getReportType() == ReportType.ISSUE){
+            //TODO
+        }
+        return result;
+    }
+
+    public static String getLongReportDescription(Report report) {
+        String result = getShortReportDescription(report);
+        result += " report";
         return result;
     }
 

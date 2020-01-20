@@ -91,6 +91,10 @@ public class FriendlyLog {
             return;
         }
 
+        runLogMethod(log);
+    }
+
+    private static void runLogMethod(Friendly log) {
         String text = getFormatted(log);
         switch (log.getSeverity()){
             case "D":

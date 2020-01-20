@@ -47,6 +47,7 @@ import es.rafaco.inappdevtools.library.logic.documents.info.AppInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.info.BuildInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.info.DeviceInfoGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.info.OSInfoGenerator;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
@@ -84,7 +85,20 @@ public class IadtDialogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            initialize();
+        }
+        catch (Exception e){
+            String message = "IadtDialogActivity onCreate crashed";
+            boolean shouldThrow = IadtController.get().handleInternalException(message, e);
+            if (shouldThrow)
+                throw e;
 
+            closeAll(false);
+        }
+    }
+
+    private void initialize() {
         currentAction = (IntentAction) getIntent().getSerializableExtra(EXTRA_INTENT_ACTION);
         if (currentAction != null) {
             if (currentAction.equals(IntentAction.AUTO)) {

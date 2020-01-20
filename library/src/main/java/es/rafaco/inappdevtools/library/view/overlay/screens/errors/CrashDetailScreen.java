@@ -219,15 +219,13 @@ public class CrashDetailScreen extends Screen {
         DocumentData report = helper.parseToInfoGroup(crash);
         out.setText(report.toString());
 
-        long crashSessionId = IadtController.getDatabase().sessionDao()
-                .findByCrashId(crash.getUid()).getUid();
-        long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
-        int sessionUiPosition = (int)(1+sessionCount-crashSessionId);
         final long logId = IadtController.getDatabase().friendlyDao()
                 .findLogIdByCrashId(crash.getUid());
 
+        long crashSessionId = IadtController.getDatabase().sessionDao()
+                .findByCrashId(crash.getUid()).getUid();
         final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-        stepsFilter.getUiFilter().setSessionInt(sessionUiPosition);
+        stepsFilter.setSessionById(crashSessionId);
         reproStepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,7 +235,7 @@ public class CrashDetailScreen extends Screen {
         });
 
         final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.ALL);
-        logsFilter.getUiFilter().setSessionInt(sessionUiPosition);
+        logsFilter.setSessionById(crashSessionId);
         logcatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

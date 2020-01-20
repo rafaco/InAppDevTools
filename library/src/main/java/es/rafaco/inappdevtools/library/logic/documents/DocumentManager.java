@@ -52,8 +52,6 @@ public class DocumentManager {
 
     public AbstractDocumentGenerator buildGenerator(Object document, Object param) {
         try {
-
-
             if (document instanceof InfoDocument) {
                 InfoDocument doc = (InfoDocument) document;
                 Class[] cArg = new Class[2];

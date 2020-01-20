@@ -28,16 +28,16 @@ import android.widget.AdapterView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.documents.reports.SessionDetailGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.detail.SessionDetailGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -108,8 +108,9 @@ public class NewReportScreen extends FlexibleScreen {
 
 
     private OverviewData getOverview() {
+        String description = report==null ? "N/A" : ReportHelper.getLongReportDescription(report);
         OverviewData report = new OverviewData("Report",
-                "Session report\nSelected session 4\nEnter details:",
+                description,
                 R.string.gmd_send, R.color.rally_white);
         return report;
     }
@@ -119,54 +120,94 @@ public class NewReportScreen extends FlexibleScreen {
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        data.add("What do you want to report?");
+        data.add("Did you reproduce a problem in this device? We can include logs and details to help the development team");
         data.add("");
-        CardData crashCard = new CardData("Crash report",
-                "Select a crash to include",
-                R.string.gmd_bug_report,
+        CardData currentSessionCard = new CardData("Current session",
+                "You just reproduce a problem on this session",
+                R.string.gmd_live_tv,
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setReportType(ReportType.CRASH);
+                        report.setReportType(ReportType.SESSION);
+                        report.setReasonInt(0);
+                        Session currentSession = IadtController.get().getSessionManager().getCurrent();
+                        report.setSessionId(currentSession.getUid());
                         loadNextStep();
                     }
                 });
-        crashCard.setTitleColor(R.color.rally_orange);
+        currentSessionCard.setTitleColor(R.color.rally_green);
+        data.add(currentSessionCard);
+
+        final Crash lastCrash = IadtController.getDatabase().crashDao().getLast();
+        CardData crashCard;
+        if (lastCrash==null){
+            //TODO: use real pending, excluding reported ones
+            crashCard = new CardData("No pending crash",
+                    "There are no crash pending to report",
+                    R.string.gmd_bug_report,
+                    null);
+            crashCard.setTitleColor(R.color.rally_gray);
+            crashCard.setBgColor(R.color.iadt_surface_medium);
+        }
+        else {
+            crashCard = new CardData("Last crashed session",
+                    "Session " + lastCrash.getSessionId() + " crashed "
+                            + Humanizer.getElapsedTimeLowered(lastCrash.getDate())
+                            + Humanizer.newLine()
+                            + lastCrash.getMessage(),
+                    R.string.gmd_bug_report,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            report.setReportType(ReportType.CRASH);
+                            report.setReasonInt(0);
+                            report.setCrashId(lastCrash.getUid());
+                            loadNextStep();
+                        }
+                    });
+            crashCard.setTitleColor(R.color.rally_orange);
+        }
         data.add(crashCard);
 
-        CardData sessionCard = new CardData("Session report",
-                "Select a session to include",
+        int sessions = IadtController.getDatabase().sessionDao().getAll().size();
+        int crashes = IadtController.getDatabase().crashDao().getAll().size();
+        CardData sessionCard = new CardData("Other sessions",
+                "Select a previous session when it happen\n"
+                + sessions + " sessions available (" + crashes + " with crash)",
                 R.string.gmd_history,
                 new Runnable() {
                     @Override
                     public void run() {
                         report.setReportType(ReportType.SESSION);
+                        report.setReasonInt(0);
                         loadNextStep();
                     }
                 });
-        sessionCard.setTitleColor(R.color.rally_green);
+        sessionCard.setTitleColor(R.color.rally_blue);
         data.add(sessionCard);
 
-        CardData screenCard = new CardData("Screenshot report",
+        /*CardData screenCard = new CardData("Screenshot report",
                 "Select screenshots to include",
                 R.string.gmd_photo_library,
                 new Runnable() {
                     @Override
                     public void run() {
                         report.setReportType(ReportType.CUSTOM);
+                        report.setReasonInt(1);
                         loadNextStep();
                     }
                 });
         screenCard.setTitleColor(R.color.rally_blue);
-        data.add(screenCard);
+        data.add(screenCard);*/
 
-        CardData customCard = new CardData("Plain report",
-                "For issues, feature request or questions",
+        CardData customCard = new CardData("Without session data",
+                "For issues, feature request or questions without related logs",
                 R.string.gmd_note,
                 new Runnable() {
                     @Override
                     public void run() {
                         report.setReportType(ReportType.ISSUE);
+                        report.setReasonInt(1);
                         loadNextStep();
                     }
                 });
@@ -321,16 +362,9 @@ public class NewReportScreen extends FlexibleScreen {
         data.add(getOverview());
         data.add("");
 
-        final List<String> reportCategories = new ArrayList<>(
-                Arrays.asList("Report problem",
-                        "Suggest improvement",
-                        "Request feature",
-                        "Send feedback"));
-
-        data.add(new SelectorData("Reason:", reportCategories, report.getReasonInt(), new AdapterView.OnItemSelectedListener() {
+        data.add(new SelectorData("Reason:", report.getAllReasons(), report.getReasonInt(), new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                report.setReason(reportCategories.get(position));
                 report.setReasonInt(position);
             }
 
@@ -340,7 +374,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Enter a title", report.getTitle(), 1, 80,
+        data.add(new EditTextData("Short description", report.getTitle(), 1, 80,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -358,7 +392,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Enter a description", report.getDescription(), 2, 500,
+        data.add(new EditTextData("Additional details", report.getDescription(), 2, 500,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -376,7 +410,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Include your email (optional)", report.getEmail(), 1, 30,
+        data.add(new EditTextData("Your email (optional)", report.getEmail(), 1, 30,
                 new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

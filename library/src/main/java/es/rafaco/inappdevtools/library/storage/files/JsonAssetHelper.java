@@ -31,8 +31,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class JsonAssetHelper {
 

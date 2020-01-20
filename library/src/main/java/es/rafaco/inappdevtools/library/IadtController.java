@@ -141,6 +141,10 @@ public final class IadtController {
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
 
+        //TODO: this is not essential but early requested
+        // Could be a static or helper class instead of a manager
+        documentManager = new DocumentManager(getContext());
+
         if (isDebug()){
             ThreadUtils.runOnBack("Iadt-InitBack",
                     new Runnable() {
@@ -199,7 +203,6 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
 
         sourcesManager = new SourcesManager(getContext());
-        documentManager = new DocumentManager(getContext());
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
@@ -433,6 +436,24 @@ public final class IadtController {
                 throw new ForcedRuntimeException(cause);
             }
         });
+    }
+
+    public boolean handleInternalException(String message, final Exception e) {
+        FriendlyLog.logException(message, e);
+
+        Iadt.getConfig().setBoolean(BuildConfig.ENABLED, false);
+        Log.w(Iadt.TAG, "LIBRARY DISABLED");
+
+        if (!isDebug()){
+            //TODO: Replace this line
+            //TODO: FriendlyLog dont print at logcat when !isDebug
+            Log.e(Iadt.TAG, "INTERNAL EXCEPTION: " + message + " -> " + e.getMessage() + "\n"
+                    + Log.getStackTraceString(e));
+
+            return false;
+        }
+        //TODO: prevent showing them on debug mode
+        return false;
     }
 }
 

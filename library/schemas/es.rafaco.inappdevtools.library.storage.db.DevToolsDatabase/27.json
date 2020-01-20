@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 27,
-    "identityHash": "0412ffa102bf308b9ddfd852653ee121",
+    "identityHash": "1e7a538b6cdc8ba89e301008ed73c621",
     "entities": [
       {
         "tableName": "crash",
@@ -488,7 +488,7 @@
       },
       {
         "tableName": "report",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `dateSent` INTEGER NOT NULL, `typeInt` INTEGER NOT NULL, `sessionId` INTEGER NOT NULL, `crashId` INTEGER NOT NULL, `screenIds` TEXT, `title` TEXT, `description` TEXT, `email` TEXT, `reason` TEXT, `reasonInt` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `dateSent` INTEGER NOT NULL, `typeInt` INTEGER NOT NULL, `sessionId` INTEGER NOT NULL, `crashId` INTEGER NOT NULL, `screenIds` TEXT, `title` TEXT, `description` TEXT, `email` TEXT, `reasonInt` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -551,12 +551,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "reason",
-            "columnName": "reason",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "reasonInt",
             "columnName": "reasonInt",
             "affinity": "INTEGER",
@@ -575,7 +569,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0412ffa102bf308b9ddfd852653ee121\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1e7a538b6cdc8ba89e301008ed73c621\")"
     ]
   }
 }

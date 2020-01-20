@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.documents.reports;
+package es.rafaco.inappdevtools.library.logic.documents.detail;
 
 import android.content.Context;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
@@ -29,10 +30,14 @@ import es.rafaco.inappdevtools.library.logic.documents.DetailDocument;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-
 
 public class SessionDetailGenerator extends AbstractDocumentGenerator {
 
@@ -52,6 +57,7 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
                 .add(getFlagsInfo())
                 .add(getDurationInfo())
                 .add(getLogInfo())
+                .add(getSteps())
         .build();
     }
 
@@ -105,12 +111,12 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
         SimpleDateFormat formatter = new SimpleDateFormat("mm-dd HH:mm:ss");
         DocumentSectionData group = new DocumentSectionData.Builder("Dates")
                 .setIcon(R.string.gmd_timer)
-                .add("Duration", Humanizer.getDuration(session.getDuration()))
                 .add("Start", Humanizer.getElapsedTime(session.getDate())
                         +"  "+ formatter.format(session.getDate()))
                 .add("End", session.isCurrent() ? " - " :
                         Humanizer.getElapsedTime(session.getFinishDate())
                                 +"  "+ formatter.format(session.getFinishDate()))
+                .add("Duration", Humanizer.getDuration(session.getDuration()))
                 .build();
         return group;
     }
@@ -128,12 +134,14 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
 
     public DocumentSectionData getLogInfo() {
 
-        DocumentSectionData group = new DocumentSectionData.Builder("Logs")
+        DocumentSectionData group = new DocumentSectionData.Builder("Logs stats")
                 .setIcon(R.string.gmd_format_align_left)
                 .setOverview(analysis.getTotal() + "")
-                .add(getAnalysis().getTotal() + " logs in Total")
+                .add("Events", getAnalysis().getEventTotal() )
+                .add("Logcat", getAnalysis().getLogcatTotal())
+                .add("Total", getAnalysis().getTotal())
                 .add()
-                .add(getAnalysis().getEventTotal() + " Event logs")
+                .add("Events by severity")
                 .add("Fatal", getAnalysis().getEventFatal())
                 .add("Error", getAnalysis().getEventError())
                 .add("Warning", getAnalysis().getEventWarning())
@@ -141,7 +149,7 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
                 .add("Debug", getAnalysis().getEventDebug())
                 .add("Verbose", getAnalysis().getEventVerbose())
                 .add()
-                .add(getAnalysis().getLogcatTotal() + " Logcat logs")
+                .add("Logcat by severity")
                 .add("Fatal", getAnalysis().getLogcatFatal())
                 .add("Error", getAnalysis().getLogcatError())
                 .add("Warning", getAnalysis().getLogcatWarning())
@@ -151,6 +159,24 @@ public class SessionDetailGenerator extends AbstractDocumentGenerator {
                 .build();
         return group;
     }
+
+    private DocumentSectionData getSteps() {
+        DocumentSectionData.Builder builder = new DocumentSectionData.Builder("Reproduction steps")
+                .setIcon(R.string.gmd_history);
+        LogFilterHelper logFilterHelper = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+        logFilterHelper.setSessionById(session.getUid());
+        LogQueryHelper logQueryHelper = new LogQueryHelper(logFilterHelper.getBackFilter());
+        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        List<Friendly> rawData = dao.filterListWithQuery(logQueryHelper.getFilterQuery());
+        int count = 0;
+        for (Friendly step: rawData) {
+            count++;
+            String parsed = count + ". " + step.getMessage();
+            builder.add(parsed);
+        }
+        return builder.build();
+    }
+
 
     public SessionAnalysis getAnalysis(){
         if (analysis != null){

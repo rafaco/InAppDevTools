@@ -64,6 +64,9 @@ public interface FriendlyDao {
     @RawQuery(observedEntities = Friendly.class)
     DataSource.Factory<Integer, Friendly> filterWithQuery(SupportSQLiteQuery query);
 
+    @RawQuery(observedEntities = Friendly.class)
+    List<Friendly> filterListWithQuery(SupportSQLiteQuery query);
+
     @Query("SELECT severity AS name,"
             + " COUNT(*) AS count,"
             + " (count(*) * 100.0 / (select count(*) from friendly)) AS percentage"

@@ -33,6 +33,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
@@ -69,9 +70,6 @@ public class Report implements Serializable {
 
     @ColumnInfo(name = "email")
     private String email;
-
-    @ColumnInfo(name = "reason")
-    private String reason;
 
     @ColumnInfo(name = "reasonInt")
     private int reasonInt;
@@ -132,14 +130,6 @@ public class Report implements Serializable {
         return screenIds;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
     public int getReasonInt() {
         return reasonInt;
     }
@@ -188,6 +178,7 @@ public class Report implements Serializable {
         this.typeInt = reportType.getCode();
     }
 
+
     public List<Long> getScreenIdList() {
         Gson gson = new Gson();
         return gson.fromJson(screenIds, ArrayList.class);
@@ -196,5 +187,18 @@ public class Report implements Serializable {
     public void setScreenIdList(List<Long> screenIds) {
         Gson gson = new Gson();
         this.screenIds = gson.toJson(screenIds);
+    }
+
+
+    public List<String> getAllReasons(){
+        return new ArrayList<>(
+                Arrays.asList("Report problem",
+                        "Suggest improvement",
+                        "Request feature",
+                        "Send feedback"));
+    }
+
+    public String getFormattedReason() {
+        return getAllReasons().get(reasonInt);
     }
 }
