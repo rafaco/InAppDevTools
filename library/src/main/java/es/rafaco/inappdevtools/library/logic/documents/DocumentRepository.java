@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 public class DocumentRepository {
 
     public static AbstractDocumentGenerator getGenerator(Document document) {
-        //TODO: default to current version?
+        //TODO: default to current session
         //Used by Info documents
         long sessionId = IadtController.get().getSessionManager().getCurrent().getUid();
         return buildGenerator(document, sessionId);
@@ -39,20 +39,6 @@ public class DocumentRepository {
 
     public static AbstractDocumentGenerator getGenerator(Document document, Object param) {
         return buildGenerator(document, param);
-    }
-
-    public static String saveDocument(Document document, Object data){
-        AbstractDocumentGenerator detailGenerator = getGenerator(document, data);
-        String report = detailGenerator.getData().toString();
-        String filePath = FileCreator.withContent(
-                detailGenerator.getSubfolder(),
-                detailGenerator.getFilename(),
-                report);
-        if (TextUtils.isEmpty(filePath)){
-            return null;
-        }
-
-        return filePath;
     }
 
     public static AbstractDocumentGenerator buildGenerator(Document document, Object param) {
@@ -79,5 +65,35 @@ public class DocumentRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+
+    public static String saveDocument(Document document, Object data){
+        AbstractDocumentGenerator detailGenerator = getGenerator(document, data);
+        String formattedDocument = getFormatter().formatDocument(detailGenerator.getTitle(),
+                detailGenerator.getData().toString());
+
+        String filePath = FileCreator.withContent(
+                detailGenerator.getSubfolder(),
+                detailGenerator.getFilename(),
+                formattedDocument);
+
+        if (TextUtils.isEmpty(filePath)){
+            return null;
+        }
+
+        return filePath;
+    }
+
+
+
+    private static DocumentFormatter formatter;
+
+    public static DocumentFormatter getFormatter(){
+        if (formatter!=null){
+            formatter = new DocumentFormatter();
+        }
+        return formatter;
     }
 }

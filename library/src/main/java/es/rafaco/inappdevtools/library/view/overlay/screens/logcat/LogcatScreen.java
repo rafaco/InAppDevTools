@@ -53,6 +53,7 @@ import java.util.ArrayList;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderTask;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
@@ -199,9 +200,9 @@ public class LogcatScreen extends Screen {
     }
 
     private void onSaveButton() {
-        ScreenHelper helper = new LogcatHelper();
+        /*ScreenHelper helper = new LogcatUtils();
         String path = helper.getReportPath();
-        Iadt.showMessage("Log stored to " + path);
+        Iadt.showMessage("Log stored to " + path);*/
     }
 
     public void onClearLog(){
@@ -210,7 +211,7 @@ public class LogcatScreen extends Screen {
             @Override
             public void run() {
                 adapter.clear();
-                LogcatHelper.clearLogcatBuffer();
+                LogcatUtils.clearBuffer();
                 startLogReader();
             }
         });

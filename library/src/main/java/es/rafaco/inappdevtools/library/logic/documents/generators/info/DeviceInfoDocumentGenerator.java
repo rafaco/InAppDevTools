@@ -67,7 +67,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocument().getName() + " Info from session " + sessionId;
+        return getDocument().getName() + " Info from Session " + sessionId;
     }
 
     @Override

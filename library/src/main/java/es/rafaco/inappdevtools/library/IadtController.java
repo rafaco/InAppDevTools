@@ -59,7 +59,7 @@ import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatHelper;
+import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import okhttp3.OkHttpClient;
@@ -352,7 +352,8 @@ public final class IadtController {
     }
 
     public static void cleanSession() {
-        LogcatHelper.clearLogcatBuffer();
+        //TODO:
+        // LogcatUtils.clearBuffer();
     }
 
     //endregion

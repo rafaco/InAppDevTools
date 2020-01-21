@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.logcat;
+package es.rafaco.inappdevtools.library.logic.log.reader;
 
 import android.util.Log;
 
@@ -28,15 +28,36 @@ import java.io.StringWriter;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
-import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 
-public class LogcatHelper extends ScreenHelper {
+public class LogcatUtils {
 
-    @Override
-    public String getReportPath() {
-        File file = DevToolsFiles.prepareLogcat(System.currentTimeMillis());
+    public static void clearBuffer() {
+        String[] fullCommand = Shell.formatBashCommand("logcat -c");
+        Process process = null;
+        try {
+            process = new ProcessBuilder()
+                    .command(fullCommand)
+                    .redirectErrorStream(true)
+                    .start();
+            FriendlyLog.log("D", "Iadt", "Delete","Logcat buffer deleted by user");
+        }
+        catch (IOException e) {
+            Log.e(Iadt.TAG, "LogcatBuffer showPlaceholder has failed :(");
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTraceString = sw.toString();
+            Log.e(Iadt.TAG, stackTraceString);
+            process.destroy();
+        }
+    }
+
+    public static String getLogs() {
+        File file = FileCreator.prepare(
+                "logcat",
+                "logcat_" + DateUtils.getLong() + ".txt");
         if (file == null)
             return null;
 
@@ -46,39 +67,17 @@ public class LogcatHelper extends ScreenHelper {
             process.waitFor();
             return file.getPath();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             FriendlyLog.logException("Exception", e);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             FriendlyLog.logException("Exception", e);
             if (process!=null){
                 process.destroy();
             }
             Thread.currentThread().interrupt();
         }
-
         return null;
-    }
-
-    @Override
-    public String getReportContent() {
-        return null;
-    }
-
-    public static void clearLogcatBuffer() {
-        String[] fullCommand = Shell.formatBashCommand("logcat -c");
-        Process process = null;
-        try {
-            process = new ProcessBuilder()
-                    .command(fullCommand)
-                    .redirectErrorStream(true)
-                    .start();
-            FriendlyLog.log("D", "Iadt", "Delete","Logcat buffer deleted by user");
-        } catch (IOException e) {
-            Log.e(Iadt.TAG, "LogcatBuffer showPlaceholder has failed :(");
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String stackTraceString = sw.toString();
-            Log.e(Iadt.TAG, stackTraceString);
-        }
     }
 }

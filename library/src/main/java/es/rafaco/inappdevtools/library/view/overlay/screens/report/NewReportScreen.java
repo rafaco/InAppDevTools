@@ -34,7 +34,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -109,7 +109,7 @@ public class NewReportScreen extends FlexibleScreen {
 
 
     private OverviewData getOverview() {
-        String description = report==null ? "N/A" : ReportHelper.getLongReportDescription(report);
+        String description = report==null ? "N/A" : ReportFormatter.getLongDescription(report);
         OverviewData report = new OverviewData("Report",
                 description,
                 R.string.gmd_send, R.color.rally_white);
@@ -163,6 +163,7 @@ public class NewReportScreen extends FlexibleScreen {
                             report.setReportType(ReportType.CRASH);
                             report.setReasonInt(0);
                             report.setCrashId(lastCrash.getUid());
+                            report.setSessionId(lastCrash.getSessionId());
                             loadNextStep();
                         }
                     });
@@ -375,7 +376,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Short description", report.getTitle(), 1, 80,
+        data.add(new EditTextData("Title", report.getTitle(), 1, 80,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -393,7 +394,7 @@ public class NewReportScreen extends FlexibleScreen {
             }
         }));
 
-        data.add(new EditTextData("Additional details", report.getDescription(), 2, 500,
+        data.add(new EditTextData("Description", report.getDescription(), 2, 500,
                 new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
