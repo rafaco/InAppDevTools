@@ -74,6 +74,12 @@ public class Report implements Serializable {
     @ColumnInfo(name = "reasonInt")
     private int reasonInt;
 
+    @ColumnInfo(name = "isZip")
+    private boolean isZip;
+
+    @ColumnInfo(name = "zipPath")
+    private String zipPath;
+
     public long getUid() {
         return uid;
     }
@@ -177,6 +183,23 @@ public class Report implements Serializable {
     public void setReportType(ReportType reportType) {
         this.typeInt = reportType.getCode();
     }
+
+    public boolean isZip() {
+        return isZip;
+    }
+
+    public void setZip(boolean zip) {
+        isZip = zip;
+    }
+
+    public String getZipPath() {
+        return zipPath;
+    }
+
+    public void setZipPath(String zipPath) {
+        this.zipPath = zipPath;
+    }
+
 
 
     public List<Long> getScreenIdList() {

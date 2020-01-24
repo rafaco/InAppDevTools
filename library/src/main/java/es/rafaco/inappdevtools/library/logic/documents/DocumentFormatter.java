@@ -78,9 +78,9 @@ public class DocumentFormatter {
                 + Humanizer.newLine();
         result += "Reporter: " + Humanizer.unavailable(report.getEmail(), defaultValue)
                 + Humanizer.newLine();
-        result += "Title:" + Humanizer.unavailable(report.getTitle(), defaultValue)
+        result += "Title: " + Humanizer.unavailable(report.getTitle(), defaultValue)
                 + Humanizer.newLine();
-        result += "Description:" + Humanizer.unavailable(report.getDescription(), defaultValue)
+        result += "Description: " + Humanizer.unavailable(report.getDescription(), defaultValue)
                 + Humanizer.fullStop();
         result += constantHeader + Humanizer.newLine();
         return result;

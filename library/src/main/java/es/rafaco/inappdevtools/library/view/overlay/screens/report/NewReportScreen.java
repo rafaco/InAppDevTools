@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 
@@ -47,6 +48,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.components.flex.CheckboxData;
 import es.rafaco.inappdevtools.library.view.components.flex.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.flex.SelectorData;
@@ -76,6 +78,7 @@ public class NewReportScreen extends FlexibleScreen {
         }
         else{
             report = new Report();
+            report.setZip(true);
         }
 
         loadNextStep();
@@ -103,7 +106,7 @@ public class NewReportScreen extends FlexibleScreen {
             return;
         }
 
-        updateAdapter(getFormData());
+        updateAdapter(getContentFormData());
     }
 
 
@@ -358,7 +361,7 @@ public class NewReportScreen extends FlexibleScreen {
 
 
 
-    private List<Object> getFormData() {
+    private List<Object> getContentFormData() {
 
         List<Object> data = new ArrayList<>();
         data.add(getOverview());
@@ -430,10 +433,17 @@ public class NewReportScreen extends FlexibleScreen {
                     }
                 }));
 
+        data.add(new CheckboxData("Send a unique Zip file", report.isZip(), new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                report.setZip(isChecked);
+            }
+        }));
+
         data.add("");
 
         List<RunButton> reportButtons = new ArrayList<>();
-        reportButtons.add(new RunButton("Save for later",
+        reportButtons.add(new RunButton("Save",
                 R.drawable.ic_save_white_24dp,
                 new Runnable() {
                     @Override
@@ -441,8 +451,9 @@ public class NewReportScreen extends FlexibleScreen {
                         onSaveReport();
                     }
                 }));
-        reportButtons.add(new RunButton("Send",
+        reportButtons.add(new RunButton("Next",
                 R.drawable.ic_send_white_24dp,
+                R.color.rally_green,
                 new Runnable() {
                     @Override
                     public void run() {

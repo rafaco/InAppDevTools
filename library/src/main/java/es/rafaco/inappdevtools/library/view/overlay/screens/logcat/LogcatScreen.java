@@ -56,13 +56,11 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderTask;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class LogcatScreen extends Screen {
-
 
     protected LogcatLineAdapter adapter;
     protected LogcatReaderTask logReaderTask = null;

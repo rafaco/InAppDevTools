@@ -159,7 +159,9 @@ public class CrashDetailScreen extends Screen {
             @Override
             public void onClick(View v) {
                 Report report = new Report();
+                report.setZip(true);
                 report.setReportType(ReportType.CRASH);
+                report.setSessionId(crash.getSessionId());
                 report.setCrashId(crash.getUid());
                 String params = NewReportScreen.buildParams(report);
                 OverlayService.performNavigation(NewReportScreen.class, params);
@@ -267,6 +269,7 @@ public class CrashDetailScreen extends Screen {
             //getScreenManager().hide();
             
             Report report = new Report();
+            report.setZip(true);
             report.setReportType(ReportType.CRASH);
             report.setCrashId(crash.getUid());
             String params = NewReportScreen.buildParams(report);

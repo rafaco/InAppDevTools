@@ -48,7 +48,7 @@ public class InfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getFilename() {
-        return "info_overview_" + sessionId +".txt";
+        return "info_overview_" + sessionId + ".txt";
     }
 
     @Override

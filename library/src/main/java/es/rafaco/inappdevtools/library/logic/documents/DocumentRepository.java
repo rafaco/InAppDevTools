@@ -91,7 +91,7 @@ public class DocumentRepository {
     private static DocumentFormatter formatter;
 
     public static DocumentFormatter getFormatter(){
-        if (formatter!=null){
+        if (formatter == null){
             formatter = new DocumentFormatter();
         }
         return formatter;

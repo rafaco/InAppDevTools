@@ -29,7 +29,9 @@ import android.util.Log;
 import android.support.annotation.NonNull;
 //#endif
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -40,8 +42,9 @@ import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
+import es.rafaco.inappdevtools.library.storage.files.utils.ZipUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
-import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
 
 public class ReportHelper {
 
@@ -54,11 +57,38 @@ public class ReportHelper {
         this.context = IadtController.get().getContext();
         this.report = report;
 
-        List<String> filesPaths = generateFiles();
+        List<String> initialFiles = generateFiles();
 
-        //Todo: zip files?
+        List<String> filesToSend;
+        if (!report.isZip()) {
+            filesToSend = initialFiles;
+        }
+        else{
+            String compressedFile = compressFiles(initialFiles);
+            updateReportCompressed(compressedFile);
+            filesToSend = Arrays.asList(compressedFile);
+        }
+        
+        sendByEmail(filesToSend);
+        updateReportSent();
+    }
 
-        sendByEmail(filesPaths);
+    private void updateReportCompressed(String filePath) {
+        report.setZipPath(filePath);
+        IadtController.getDatabase().reportDao().update(report);
+    }
+
+    private void updateReportSent() {
+
+    }
+
+    private String compressFiles(List<String> s) {
+        File outputFile = FileCreator.prepare("report",
+                "report_" + report.getUid() + ".zip");
+        ZipUtils zipManager = new ZipUtils();
+        zipManager.zip(s, outputFile.getAbsolutePath());
+
+        return outputFile.getAbsolutePath();
     }
 
     private List<String> generateFiles() {

@@ -49,6 +49,7 @@ public class FlexibleLoader {
         descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
         descriptors.add(new FlexibleItemDescriptor(AnalysisData.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
         descriptors.add(new FlexibleItemDescriptor(ConfigData.class, ConfigViewHolder.class, R.layout.flexible_item_config));
+        descriptors.add(new FlexibleItemDescriptor(CheckboxData.class, CheckboxViewHolder.class, R.layout.flexible_item_checkbox));
         return descriptors;
     }
 
