@@ -33,7 +33,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
@@ -273,7 +273,7 @@ public class NewReportScreen extends FlexibleScreen {
             boolean isCurrent = (i==0);
 
             SessionDocumentGenerator generator = (SessionDocumentGenerator) DocumentRepository
-                    .getGenerator(Document.SESSION, session);
+                    .getGenerator(DocumentType.SESSION, session);
 
             CardData cardData = new CardData(generator.getTitle(),
                     new Runnable() {
@@ -331,7 +331,7 @@ public class NewReportScreen extends FlexibleScreen {
             String title = String.format("Screenshot %s", screenshot.getUid());
             String content = "Activity: " + screenshot.getActivityName()
                     + Humanizer.newLine()
-                    + "Session: " + screenshot.getSession()
+                    + "Session: " + screenshot.getSessionId()
                     + Humanizer.newLine()
                     + "Elapsed: " + Humanizer.getElapsedTime(screenshot.getDate());
 

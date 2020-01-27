@@ -21,17 +21,17 @@ package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 
 import android.content.Context;
 
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 
-public class InfoDocumentGenerator extends AbstractDocumentGenerator {
+public class InfoOverviewDocumentGenerator extends AbstractDocumentGenerator {
 
     private long sessionId;
 
-    public InfoDocumentGenerator(Context context, Document report, long param) {
+    public InfoOverviewDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
         this.sessionId = param;
     }
@@ -59,10 +59,10 @@ public class InfoDocumentGenerator extends AbstractDocumentGenerator {
     @Override
     public DocumentData getData() {
 
-        Document[] values = Document.getInfoValues();
+        DocumentType[] values = DocumentType.getInfoValues();
         DocumentData reportOverview = new DocumentData.Builder("Info Overview").build();
-        for (Document document : values){
-            DocumentData infoData = DocumentRepository.getGenerator(document).getData();
+        for (DocumentType documentType : values){
+            DocumentData infoData = DocumentRepository.getDocument(documentType);
             reportOverview.getSections().add(new DocumentSectionData.Builder(getTitle())
                     .add(infoData.getOverview()).build());
         }

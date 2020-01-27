@@ -21,36 +21,98 @@ package es.rafaco.inappdevtools.library.logic.documents;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 
 public class DocumentRepository {
 
-    public static AbstractDocumentGenerator getGenerator(Document document) {
-        //TODO: default to current session
-        //Used by Info documents
-        long sessionId = IadtController.get().getSessionManager().getCurrent().getUid();
-        return buildGenerator(document, sessionId);
+    private static DocumentFormatter formatter;
+
+    public static DocumentFormatter getFormatter(){
+        if (formatter == null){
+            formatter = new DocumentFormatter();
+        }
+        return formatter;
     }
 
-    public static AbstractDocumentGenerator getGenerator(Document document, Object param) {
-        return buildGenerator(document, param);
+    public static DocumentData getDocument(DocumentType documentType) {
+        AbstractDocumentGenerator generator = getGenerator(documentType);
+        return generator.getData();
     }
 
-    public static AbstractDocumentGenerator buildGenerator(Document document, Object param) {
+    public static DocumentData getDocument(DocumentType documentType, Object param) {
+        AbstractDocumentGenerator generator = getGenerator(documentType, param);
+        return generator.getData();
+    }
+
+
+    public static AbstractDocumentGenerator getGenerator(DocumentType documentType) {
+        return buildGenerator(documentType, getDefaultParam());
+    }
+
+    public static AbstractDocumentGenerator getGenerator(DocumentType documentType, Object param) {
+        return buildGenerator(documentType, param);
+    }
+
+    private static long getDefaultParam() {
+        //TODO: It currently pass the current session id, needed by Info documents
+        return IadtController.get().getSessionManager().getCurrent().getUid();
+    }
+
+
+    public static String getDocumentPath(DocumentType documentType, Object data) {
+        String savedPath = getStoredDocumentPath(documentType, data);
+        if (TextUtils.isEmpty(savedPath)){
+            savedPath = storeDocument(documentType, data);
+        }else{
+            Log.v(Iadt.TAG, "Document retrieve: " + documentType.getName() + " " + data.toString());
+        }
+        return savedPath;
+    }
+
+    public static String storeDocument(DocumentType documentType, Object data) {
+        AbstractDocumentGenerator generator = getGenerator(documentType, data);
+        String formattedDocument = getFormatter().formatDocument(generator.getTitle(),
+                generator.getData().toString());
+
+        String filePath = FileCreator.withContent(
+                generator.getSubfolder(),
+                generator.getFilename(),
+                formattedDocument);
+
+        if (TextUtils.isEmpty(filePath)){
+            return null;
+        }
+
+        return filePath;
+    }
+
+    public static String getStoredDocumentPath(DocumentType documentType, Object data){
+        AbstractDocumentGenerator generator = getGenerator(documentType, data);
+        if (FileCreator.exists(generator.getSubfolder(), generator.getFilename())) {
+            return FileCreator.getPath(generator.getSubfolder(), generator.getFilename());
+        }
+
+        return null;
+    }
+
+    private static AbstractDocumentGenerator buildGenerator(DocumentType documentType, Object param) {
         Context context = IadtController.get().getContext();
         try {
             Class[] cArg = new Class[3];
             cArg[0] = Context.class;
-            cArg[1] = document.getClass();
-            cArg[2] = document.getParamClass();
-            return document.getGeneratorClass()
+            cArg[1] = documentType.getClass();
+            cArg[2] = documentType.getParamClass();
+            return documentType.getGeneratorClass()
                     .getDeclaredConstructor(cArg)
-                    .newInstance(context, document, param);
+                    .newInstance(context, documentType, param);
         }
         catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -65,35 +127,5 @@ public class DocumentRepository {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-
-    public static String saveDocument(Document document, Object data){
-        AbstractDocumentGenerator detailGenerator = getGenerator(document, data);
-        String formattedDocument = getFormatter().formatDocument(detailGenerator.getTitle(),
-                detailGenerator.getData().toString());
-
-        String filePath = FileCreator.withContent(
-                detailGenerator.getSubfolder(),
-                detailGenerator.getFilename(),
-                formattedDocument);
-
-        if (TextUtils.isEmpty(filePath)){
-            return null;
-        }
-
-        return filePath;
-    }
-
-
-
-    private static DocumentFormatter formatter;
-
-    public static DocumentFormatter getFormatter(){
-        if (formatter == null){
-            formatter = new DocumentFormatter();
-        }
-        return formatter;
     }
 }

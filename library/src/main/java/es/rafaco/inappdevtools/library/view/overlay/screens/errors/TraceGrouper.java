@@ -26,7 +26,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
@@ -141,7 +141,7 @@ public class TraceGrouper {
 
     private void initMatcher() {
         matcher = new HashMap<>();
-        AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
+        AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
         matcher.put(BuildConfig.APPLICATION_ID, IADT_TAG); //Our library
         matcher.put(infoHelper.getPackageName(), YOUR_APP_TAG); //Host app
         matcher.put(infoHelper.getInternalPackageName(), YOUR_APP_TAG); //Host app

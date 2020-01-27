@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
@@ -89,8 +89,8 @@ public class Home2Screen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
-        BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO));
+        AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
+        BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
 
         String appMessage = appHelper.getFormattedVersionLong() + "\n"
                 + "Build " + buildReporter.getBuildOverview() + "\n"
@@ -124,7 +124,7 @@ public class Home2Screen extends Screen {
         data.add(appData);
 
 
-        LiveInfoDocumentGenerator liveHelper = ((LiveInfoDocumentGenerator) DocumentRepository.getGenerator(Document.LIVE_INFO));
+        LiveInfoDocumentGenerator liveHelper = ((LiveInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.LIVE_INFO));
         String liveMessage = liveHelper.getOverview();
 
         DocumentSectionData runningData = new DocumentSectionData.Builder("Currently running")
@@ -167,8 +167,8 @@ public class Home2Screen extends Screen {
         data.add(runningData);
 
 
-        DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(Document.DEVICE_INFO));
-        OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(Document.OS_INFO));
+        DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
+        OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
 
         String deviceMessage = deviceHelper.getFormattedDevice()
                 + Humanizer.newLine()

@@ -26,7 +26,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
@@ -44,7 +44,7 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
     private final Session session;
     private SessionAnalysis analysis;
 
-    public SessionDocumentGenerator(Context context, Document report, Session param) {
+    public SessionDocumentGenerator(Context context, DocumentType report, Session param) {
         super(context, report, param);
         this.session = param;
     }
@@ -57,12 +57,12 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getSubfolder() {
-        return "Session " + session.getUid();
+        return "session/" + session.getUid();
     }
 
     @Override
     public String getFilename() {
-        return "session_" + session.getUid() +".txt";
+        return "session_" + session.getUid() + "_overview" + ".txt";
     }
 
     @Override

@@ -30,6 +30,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ import java.util.List;
 //import com.opencsv.CSVWriter;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.storage.files.DevToolsFiles;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 import es.rafaco.inappdevtools.library.storage.files.utils.MediaScannerUtils;
 
 
@@ -64,8 +65,12 @@ public class SqliteExporter {
     }
 
     public static String export(String dbName, SupportSQLiteDatabase db) throws IOException{
-
-        File backupFile = DevToolsFiles.prepareDatabase(dbName, new Date().getTime());
+        long time = new Date().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmm");
+        String formattedTime = sdf.format(new Date(time));
+        File backupFile =  FileCreator.prepare(
+                    "db",
+                    "db_" + dbName + "_" + formattedTime + ".csv");
 
         List<String> tables = getTablesOnDataBase(db);
         Log.d(TAG, "Started to fill the backup file in " + backupFile.getAbsolutePath());

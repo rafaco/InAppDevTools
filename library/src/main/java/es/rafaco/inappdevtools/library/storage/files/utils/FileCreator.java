@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -54,12 +55,12 @@ public class FileCreator {
             myOutWriter.close();
             fOut.flush();
             fOut.close();
-
+            Log.v(Iadt.TAG, "Document stored: " + subfolder + "/" + filename);
             MediaScannerUtils.scan(file);
             return file.getPath();
         }
         catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+            Log.e(Iadt.TAG, "File write failed: " + e.toString());
         }
 
         return null;
@@ -79,13 +80,19 @@ public class FileCreator {
     }
 
     public static File getSubfolder(String category){
-        File categoryFolder = createDirIfNotExist(getLibDir() + "/" + category);
+        File categoryFolder = createDirIfNotExist(getIadtFolder() + "/" + category);
         return categoryFolder;
     }
 
-    private static String getLibDir(){
+    private static String getIadtFolder(){
         Context context = IadtController.get().getContext();
         return context.getFilesDir() + "/" + FileProviderUtils.ROOT_FOLDER;
+    }
+
+    public static boolean exists(String subfolder, String filename){
+        String filePath = getIadtFolder() + "/" + subfolder + "/" + filename;
+        File file = new File(filePath);
+        return file.exists();
     }
 
     private static File createDirIfNotExist(String path){
@@ -94,5 +101,9 @@ public class FileCreator {
             dir.mkdirs();
         }
         return dir;
+    }
+
+    public static String getPath(String subfolder, String filename) {
+        return getIadtFolder() + "/" + subfolder + "/" + filename;
     }
 }

@@ -25,8 +25,8 @@ import android.text.TextUtils;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
@@ -38,14 +38,14 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     private final long sessionId;
 
-    public ToolsInfoDocumentGenerator(Context context, Document report, long param) {
+    public ToolsInfoDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
         this.sessionId = param;
     }
 
     @Override
     public String getTitle() {
-        return getDocument().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " Info from Session " + sessionId;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getFilename() {
-        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
+        return "info_" + getDocumentType().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override

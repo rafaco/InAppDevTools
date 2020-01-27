@@ -22,7 +22,7 @@ package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -32,7 +32,7 @@ public class CrashDocumentGenerator extends AbstractDocumentGenerator {
 
     private final Crash data;
 
-    public CrashDocumentGenerator(Context context, Document report, Crash param) {
+    public CrashDocumentGenerator(Context context, DocumentType report, Crash param) {
         super(context, report, param);
         this.data = param;
     }

@@ -36,8 +36,8 @@ public class CheckboxViewHolder extends FlexibleViewHolder {
     @Override
     public void bindTo(Object abstractData, int position) {
         final CheckboxData data = (CheckboxData) abstractData;
-        checkBox.setSelected(data.isValue());
         checkBox.setText(data.getTitle());
+        checkBox.setSelected(data.isValue());
         checkBox.setOnCheckedChangeListener(data.getOnChange());
     }
 }

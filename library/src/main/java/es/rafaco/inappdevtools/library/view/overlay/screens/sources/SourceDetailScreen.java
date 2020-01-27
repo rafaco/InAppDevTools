@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -288,8 +287,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                 Iadt.showMessage("Unable to get file path");
                 return;
             }
-            FileProviderUtils.openFileExternally(controller.getContext(),
-                    path, Intent.ACTION_SEND);
+            FileProviderUtils.sendExternally(controller.getContext(), path);
         }
     }
 

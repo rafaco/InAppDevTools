@@ -32,7 +32,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -74,7 +74,7 @@ public class SessionsScreen extends Screen {
         for (int i = 0; i<sessions.size(); i++) {
             final Session session = sessions.get(i);
             boolean isCurrent = (i==0);
-            SessionDocumentGenerator reporter = ((SessionDocumentGenerator) DocumentRepository.getGenerator(Document.SESSION, session));
+            SessionDocumentGenerator reporter = ((SessionDocumentGenerator) DocumentRepository.getGenerator(DocumentType.SESSION, session));
             
             CardData cardData = new CardData(reporter.getTitle(),
                     new Runnable() {

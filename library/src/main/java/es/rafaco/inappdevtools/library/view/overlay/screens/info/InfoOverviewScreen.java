@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
@@ -68,11 +68,11 @@ public class InfoOverviewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        Document[] documents = Document.getInfoValues();
+        DocumentType[] documentTypes = DocumentType.getInfoValues();
 
-        for (int i = 0; i< documents.length ; i++){
-            Document page = documents[i];
-            DocumentData reportData = DocumentRepository.getGenerator(page).getData();
+        for (int i = 0; i< documentTypes.length ; i++){
+            DocumentType page = documentTypes[i];
+            DocumentData reportData = DocumentRepository.getDocument(page);
             final String pageIndexParam = String.valueOf(i);
 
             data.add(new CardData(reportData.getTitle(),

@@ -35,7 +35,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -57,7 +57,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
     EasyDisplayMod displayHelper;
     EasyMemoryMod memoryHelper;
 
-    public DeviceInfoDocumentGenerator(Context context, Document report, long param) {
+    public DeviceInfoDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
         this.sessionId = param;
         configHelper = new EasyConfigMod(context);
@@ -67,7 +67,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocument().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " Info from Session " + sessionId;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getFilename() {
-        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
+        return "info_" + getDocumentType().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override

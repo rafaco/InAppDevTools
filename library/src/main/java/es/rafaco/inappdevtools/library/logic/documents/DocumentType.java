@@ -25,7 +25,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.CrashDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.detail.InfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.detail.InfoOverviewDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionLogsDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionStepsDocumentGenerator;
@@ -38,7 +38,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsInfo
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 
-public enum Document {
+public enum DocumentType {
 
     LIVE_INFO("Live", R.string.gmd_live_tv, LiveInfoDocumentGenerator.class, long.class),
     BUILD_INFO("Build", R.string.gmd_build, BuildInfoDocumentGenerator.class, long.class),
@@ -47,7 +47,7 @@ public enum Document {
     DEVICE_INFO("Device", R.string.gmd_phone_android, DeviceInfoDocumentGenerator.class, long.class),
     TOOLS_INFO("Tools", R.string.gmd_extension, ToolsInfoDocumentGenerator.class, long.class),
 
-    INFO_OVERVIEW("Info Overview", R.string.gmd_info, InfoDocumentGenerator.class, long.class),
+    INFO_OVERVIEW("Info Overview", R.string.gmd_info, InfoOverviewDocumentGenerator.class, long.class),
     SESSION("Session", R.string.gmd_extension, SessionDocumentGenerator.class, Session.class),
     SESSION_STEPS("Steps", R.string.gmd_extension, SessionStepsDocumentGenerator.class, Session.class),
     SESSION_LOGS("Logs", R.string.gmd_extension, SessionLogsDocumentGenerator.class, Session.class),
@@ -58,22 +58,22 @@ public enum Document {
     private final Class<? extends AbstractDocumentGenerator> generatorClass;
     private final Class<?> paramClass;
 
-    Document(String name, int icon, Class<? extends AbstractDocumentGenerator> generatorClass, Class<?> paramClass) {
+    DocumentType(String name, int icon, Class<? extends AbstractDocumentGenerator> generatorClass, Class<?> paramClass) {
         this.name = name;
         this.paramClass = paramClass;
         this.icon = icon;
         this.generatorClass = generatorClass;
     }
 
-    public static Document[] getInfoValues() {
-        List<Document> infoValues = new ArrayList<>();
-        infoValues.add(Document.LIVE_INFO);
-        infoValues.add(Document.BUILD_INFO);
-        infoValues.add(Document.APP_INFO);
-        infoValues.add(Document.OS_INFO);
-        infoValues.add(Document.DEVICE_INFO);
-        infoValues.add(Document.TOOLS_INFO);
-        return infoValues.toArray(new Document[0]);
+    public static DocumentType[] getInfoValues() {
+        List<DocumentType> infoValues = new ArrayList<>();
+        infoValues.add(DocumentType.LIVE_INFO);
+        infoValues.add(DocumentType.BUILD_INFO);
+        infoValues.add(DocumentType.APP_INFO);
+        infoValues.add(DocumentType.OS_INFO);
+        infoValues.add(DocumentType.DEVICE_INFO);
+        infoValues.add(DocumentType.TOOLS_INFO);
+        return infoValues.toArray(new DocumentType[0]);
     }
 
     public String getName() {
@@ -92,7 +92,7 @@ public enum Document {
         return paramClass;
     }
 
-    public static Document[] getValues() {
+    public static DocumentType[] getValues() {
         return values();
     }
 }

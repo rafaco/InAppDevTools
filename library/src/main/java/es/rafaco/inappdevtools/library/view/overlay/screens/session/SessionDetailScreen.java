@@ -27,7 +27,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
@@ -82,8 +82,7 @@ public class SessionDetailScreen extends Screen {
     private List<Object> initData() {
         int sessionUid = Integer.parseInt(getParam());
         Session session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
-        SessionDocumentGenerator sessionHelper = ((SessionDocumentGenerator) DocumentRepository.getGenerator(Document.SESSION, session));
-        DocumentData reportData = sessionHelper.getData();
+        DocumentData reportData = DocumentRepository.getDocument(DocumentType.SESSION, session);
         getScreenManager().setTitle(reportData.getTitle());
 
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());

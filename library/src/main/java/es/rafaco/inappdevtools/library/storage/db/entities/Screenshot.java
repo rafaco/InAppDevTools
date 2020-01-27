@@ -40,8 +40,8 @@ public class Screenshot implements Serializable {
     @ColumnInfo(name = "date")
     private long date;
 
-    @ColumnInfo(name = "session")
-    private int session;
+    @ColumnInfo(name = "sessionId")
+    private long sessionId;
 
     @ColumnInfo(name = "path")
     private String path;
@@ -68,12 +68,12 @@ public class Screenshot implements Serializable {
         this.date = date;
     }
 
-    public int getSession() {
-        return session;
+    public long getSessionId() {
+        return sessionId;
     }
 
-    public void setSession(int session) {
-        this.session = session;
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getPath() {

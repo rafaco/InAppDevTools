@@ -24,8 +24,8 @@ import android.content.Context;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
@@ -41,7 +41,7 @@ public class SessionStepsDocumentGenerator extends AbstractDocumentGenerator {
     private final Session session;
     private List<Friendly> rawData;
 
-    public SessionStepsDocumentGenerator(Context context, Document report, Session param) {
+    public SessionStepsDocumentGenerator(Context context, DocumentType report, Session param) {
         super(context, report, param);
         this.session = param;
     }

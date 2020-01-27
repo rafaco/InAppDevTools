@@ -22,8 +22,8 @@ package es.rafaco.inappdevtools.library.storage.files.utils;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
@@ -35,20 +35,29 @@ import android.support.v4.content.FileProvider;
 //#endif
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.rafaco.inappdevtools.library.IadtController;
 
 public class FileProviderUtils {
 
     public static final String ROOT_FOLDER = "iadt";
+    public static final String AUTHORITY_SUFFIX = ".iadt.files";
 
     public static String getAuthority(Context context) {
-        return context.getApplicationContext().getPackageName() + ".iadt.files";
+        return context.getApplicationContext().getPackageName() + AUTHORITY_SUFFIX;
     }
 
-    public static void openFileExternally(Context context, String filePath) {
-        openFileExternally(context, filePath, Intent.ACTION_VIEW);
+    public static void viewExternally(Context context, String filePath) {
+        sendIntentAction(context, filePath, Intent.ACTION_VIEW);
     }
 
-    public static void openFileExternally(Context context, String filePath, String action ) {
+    public static void sendExternally(Context context, String filePath) {
+        sendIntentAction(context, filePath, Intent.ACTION_SEND);
+    }
+
+    public static void sendIntentAction(Context context, String filePath, String action ) {
         File file = new File(filePath);
         String type = getMimeType(file);
 
@@ -75,5 +84,19 @@ public class FileProviderUtils {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         return mime.getMimeTypeFromExtension(extension);
+    }
+
+    public static void grantPermissions(Intent chooserIntent, ArrayList<Uri> uris) {
+        Context context = IadtController.get().getContext();
+        List<ResolveInfo> resInfoList = context.getPackageManager()
+                .queryIntentActivities(chooserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            for (Uri uri : uris) {
+                context.grantUriPermission(packageName, uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
     }
 }

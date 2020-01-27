@@ -41,7 +41,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
@@ -150,13 +150,13 @@ public class IadtDialogActivity extends AppCompatActivity {
     private void showNewBuildDialog(final boolean isAuto) {
         ContextWrapper ctw = new ContextThemeWrapper(this, R.style.LibTheme_Dialog);
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
-        String welcomeText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO)).getAppNameAndVersions();
+        String welcomeText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO)).getAppNameAndVersions();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO)).getBuildWelcome();
+        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO)).getBuildWelcome();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(Document.DEVICE_INFO)).getSecondLineOverview();
+        welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO)).getSecondLineOverview();
         welcomeText += " ";
-        welcomeText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(Document.OS_INFO)).getOneLineOverview();
+        welcomeText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO)).getOneLineOverview();
         welcomeText += "." + Humanizer.newLine();
         welcomeText += Humanizer.fullStop();
 

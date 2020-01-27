@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.Html;
 
 //#ifdef ANDROIDX
@@ -39,12 +38,12 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class EmailSender {
 
@@ -62,8 +61,8 @@ public class EmailSender {
                 getEmailSubject(),
                 body,
                 //getEmailBody(isHtml),
-                filePaths, isHtml);
-
+                filePaths,
+                isHtml);
     }
 
     private String getEmailTo() {
@@ -71,43 +70,24 @@ public class EmailSender {
     }
 
     private String getEmailSubject(){
-        String formatter = "%s report: %s";
-        String currentType = "";
-        if(report.getReportType().equals(ReportType.SESSION)){
-            currentType = "session";
-        }else if (report.getReportType().equals(ReportType.CRASH)){
-            currentType = "crash";
-        }else if (report.getReportType().equals(ReportType.CUSTOM)){
-            currentType = "full";
-        }
-        AppInfoDocumentGenerator helper = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO);
+        String formatter = "Report from %s: %s";
+        AppInfoDocumentGenerator helper = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO);
         return String.format(formatter,
                 helper.getFormattedAppLong(),
-                report.getTitle());
+                Humanizer.unavailable(report.getTitle(), "No title"));
     }
 
-    @NonNull
-    private String getEmailBody(boolean isHtml) {
+    private static String getHtmlSample() {
         String emailbody;
-        String userTextPlaceholder = "Hi devs,\n\n";
-        String jump = "\n";
-
-        if(!isHtml){
-            emailbody = new  StringBuilder()
-                    //.append(getEmailSubject())
-                    .append(userTextPlaceholder)
-                    //.append(jump)
-                    .toString();
-        }else{
-            emailbody = new  StringBuilder()
-                    .append("<h2><b>Iadt report!</b></h2>")
-                    .append("<p><b>Some Content</b></p>")
-                    .append("<small><p>More content</p></small>")
-                    .append("<a href = \"https://example.com\">https://example.com</a>")
-                    .toString();
-        }
+        emailbody = new  StringBuilder()
+                .append("<h2><b>Iadt report!</b></h2>")
+                .append("<p><b>Some Content</b></p>")
+                .append("<small><p>More content</p></small>")
+                .append("<a href = \"https://example.com\">https://example.com</a>")
+                .toString();
         return emailbody;
     }
+
 
 
     private static void sendEmailIntent(Context context,
@@ -117,19 +97,28 @@ public class EmailSender {
 
         final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        emailIntent.setType(isHtml ? "text/html" : "text/plain");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailTo});
         emailIntent.putExtra(Intent.EXTRA_CC, new String[]{emailCC});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
         if (isHtml){
-            emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(emailText).toString());
+            emailIntent.setType("text/html");
+            String html = getHtmlSample();
+            //String html = emailText;
+            emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(html));
         }else{
+            emailIntent.setType("text/plain");
+            //TODO: avoid an official android bug with a warning ClassCastException
+            //  exists at https://issuetracker.google.com/issues/36956569#comment4
+            // Workaround proposed is not working as the body don't show on gMail app.
+            /*ArrayList<String> extra_text = new ArrayList<>();
+            extra_text.add(emailText);
+            emailIntent.putStringArrayListExtra(Intent.EXTRA_TEXT, extra_text);*/
             emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
         }
 
+        ArrayList<Uri> uris = new ArrayList<>();
         if (filePaths != null && filePaths.size()>0){
-            ArrayList<Uri> uris = new ArrayList<>();
             for (String filePath : filePaths) {
                 File file = new File(filePath);
 
@@ -141,7 +130,7 @@ public class EmailSender {
 
                 Uri contentUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     String authority = FileProviderUtils.getAuthority(context);
                     contentUri = FileProvider.getUriForFile(context, authority, file);
                 } else {
@@ -152,8 +141,10 @@ public class EmailSender {
             emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         }
 
-        Intent chooserIntent = Intent.createChooser(emailIntent, "Send mail...");
+        Intent chooserIntent = Intent.createChooser(emailIntent, "Send report using...");
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        FileProviderUtils.grantPermissions(chooserIntent, uris);
+
         context.startActivity(chooserIntent);
     }
 }

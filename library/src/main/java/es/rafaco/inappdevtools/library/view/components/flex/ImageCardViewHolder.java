@@ -101,12 +101,8 @@ public class ImageCardViewHolder extends FlexibleViewHolder {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             int i = menuItem.getItemId();
-            if (i == R.id.action_preview) {
-                Iadt.showMessage("Preview");
-                return true;
-            } else if (i == R.id.action_open) {
+            if (i == R.id.action_open) {
                 CustomToast.show(cardView.getContext(), "Open", CustomToast.TYPE_WARNING);
-
                 return true;
             } else if (i == R.id.action_delete) {
                 Iadt.showMessage("Delete");

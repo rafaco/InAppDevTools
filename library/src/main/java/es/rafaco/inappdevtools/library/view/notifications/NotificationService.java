@@ -47,7 +47,7 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
@@ -202,8 +202,8 @@ public class NotificationService extends Service {
         String overview;
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(),
                 UiUtils.getAppIconResourceId());
-        AppInfoDocumentGenerator appInfo = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
-        BuildInfoDocumentGenerator buildInfo = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO));
+        AppInfoDocumentGenerator appInfo = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
+        BuildInfoDocumentGenerator buildInfo = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
         overview = appInfo.getAppNameAndVersions() + "\n"
                 + buildInfo.getFriendlyBuildType();
         if (buildInfo.isGitEnabled()){
@@ -290,7 +290,7 @@ public class NotificationService extends Service {
     //TODO: delete?
     private Notification buildCrashNotification(PendingIntent pendingIntent) {
 
-        AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO));
+        AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_error_orange_24dp);
         String title = String.format("Ups, %s crashed", infoHelper.getAppName());
 

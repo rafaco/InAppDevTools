@@ -49,6 +49,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
@@ -82,7 +83,7 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
     public void onBindViewHolder(final ScreenViewHolder holder, int position) {
         //holder.cardView.setRadius(R.dimen.card_radius);
 
-        Screenshot screenshot = screenshotList.get(position);
+        final Screenshot screenshot = screenshotList.get(position);
         holder.title.setText(screenshot.getActivityName());
         holder.count.setText(Humanizer.getElapsedTime(screenshot.getDate()));
 
@@ -94,7 +95,7 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder.overflow);
+                showPopupMenu(holder.overflow, screenshot);
             }
         });
     }
@@ -163,33 +164,39 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
 
     //region [ ACTIONS POP UP ]
 
-    private void showPopupMenu(View view) {
+    private void showPopupMenu(View view, Screenshot screenshot) {
 
         Context wrapper = new ContextThemeWrapper(mContext, R.style.LibPopupMenuStyle);
         PopupMenu popup = new PopupMenu(wrapper, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.screenshots, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        popup.setOnMenuItemClickListener(new ScreenshotItemClickListener(screenshot));
         popup.show();
     }
 
-    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+    class ScreenshotItemClickListener implements PopupMenu.OnMenuItemClickListener {
 
-        public MyMenuItemClickListener() {
+        private final Screenshot screenshot;
+
+        public ScreenshotItemClickListener(Screenshot screenshot) {
+            this.screenshot = screenshot;
         }
 
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             int i = menuItem.getItemId();
-            if (i == R.id.action_preview) {
-                Iadt.showMessage("Preview");
-                return true;
-            } else if (i == R.id.action_open) {
+            if (i == R.id.action_open) {
+                FileProviderUtils.viewExternally(mContext, screenshot.getPath());
                 CustomToast.show(recycledView.getContext(), "Open", CustomToast.TYPE_WARNING);
-
                 return true;
-            } else if (i == R.id.action_delete) {
-                Iadt.showMessage("Delete");
+            }
+            else if (i == R.id.action_share) {
+                FileProviderUtils.sendExternally(mContext, screenshot.getPath());
+                CustomToast.show(recycledView.getContext(), "Share", CustomToast.TYPE_WARNING);
+                return true;
+            }
+            else if (i == R.id.action_delete) {
+                Iadt.showMessage("//TODO: Delete");
                 return true;
             }
             return false;

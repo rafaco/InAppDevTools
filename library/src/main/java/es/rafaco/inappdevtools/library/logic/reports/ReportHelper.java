@@ -36,9 +36,11 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
+import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -82,11 +84,11 @@ public class ReportHelper {
 
     }
 
-    private String compressFiles(List<String> s) {
+    private String compressFiles(List<String> filePaths) {
         File outputFile = FileCreator.prepare("report",
                 "report_" + report.getUid() + ".zip");
         ZipUtils zipManager = new ZipUtils();
-        zipManager.zip(s, outputFile.getAbsolutePath());
+        zipManager.zip(filePaths, outputFile.getAbsolutePath());
 
         return outputFile.getAbsolutePath();
     }
@@ -104,9 +106,9 @@ public class ReportHelper {
         }
 
         //Session details
-        filePaths.add(DocumentRepository.saveDocument(Document.SESSION, session));
-        filePaths.add(DocumentRepository.saveDocument(Document.SESSION_STEPS, session));
-        filePaths.add(DocumentRepository.saveDocument(Document.SESSION_LOGS, session));
+        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION, session));
+        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_STEPS, session));
+        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_LOGS, session));
 
         //Crash??
         if (session.getCrashId()>0){
@@ -119,17 +121,32 @@ public class ReportHelper {
             // the traced one... Nice idea, buddy!!
         }
 
-        //Info pages
-        filePaths.add(DocumentRepository.saveDocument(Document.INFO_OVERVIEW, session.getUid()));
-        Document[] values = Document.getInfoValues();
-        for (Document document : values){
-            filePaths.add(DocumentRepository.saveDocument(document, session.getUid()));
-        }
+        filePaths.addAll(getInfoDocuments(session.getUid()));
 
         //TODO: screenshots
 
         //TODO: sources????
 
+        return filePaths;
+    }
+
+    //Genrate Info overview and individual pages
+    public static List<String> getInfoDocuments(long sessionId) {
+        List<String> filePaths = new ArrayList<>();
+        StopWatch watch = null;
+        if (IadtController.get().isDebug()){
+            watch = new StopWatch("GenerateInfoDocs");
+            watch.step("Overview");
+        }
+        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.INFO_OVERVIEW, sessionId));
+        DocumentType[] values = DocumentType.getInfoValues();
+        for (DocumentType documentType : values){
+            if (IadtController.get().isDebug())
+                watch.step(documentType.getName());
+            filePaths.add(DocumentRepository.getDocumentPath(documentType, sessionId));
+        }
+        if (IadtController.get().isDebug())
+            FriendlyLog.log(watch.finish());
         return filePaths;
     }
 

@@ -33,8 +33,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
@@ -56,7 +56,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     AssetJsonHelper buildConfig;
     AssetJsonHelper gitConfig;
 
-    public BuildInfoDocumentGenerator(Context context, Document report, long param) {
+    public BuildInfoDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
         this.sessionId = param;
         buildInfo = new AssetJsonHelper(context, IadtPath.BUILD_INFO);
@@ -66,7 +66,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocument().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " Info from Session " + sessionId;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getFilename() {
-        return "info_" + getDocument().getName().toLowerCase() + "_" + sessionId + ".txt";
+        return "info_" + getDocumentType().getName().toLowerCase() + "_" + sessionId + ".txt";
     }
 
     @Override

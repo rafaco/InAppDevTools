@@ -35,10 +35,10 @@ public class DocumentFormatter {
     private String constantHeader;
 
     private void buildConstantHeader() {
-        AppInfoDocumentGenerator app = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(Document.APP_INFO);
-        BuildInfoDocumentGenerator build = (BuildInfoDocumentGenerator) DocumentRepository.getGenerator(Document.BUILD_INFO);
-        DeviceInfoDocumentGenerator device = (DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(Document.DEVICE_INFO);
-        ToolsInfoDocumentGenerator tools = (ToolsInfoDocumentGenerator) DocumentRepository.getGenerator(Document.TOOLS_INFO);
+        AppInfoDocumentGenerator app = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO);
+        BuildInfoDocumentGenerator build = (BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO);
+        DeviceInfoDocumentGenerator device = (DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO);
+        ToolsInfoDocumentGenerator tools = (ToolsInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.TOOLS_INFO);
 
         constantHeader  = "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
         constantHeader += "Device: " + device.getOneLineOverview() + Humanizer.newLine();
@@ -82,7 +82,8 @@ public class DocumentFormatter {
                 + Humanizer.newLine();
         result += "Description: " + Humanizer.unavailable(report.getDescription(), defaultValue)
                 + Humanizer.fullStop();
-        result += constantHeader + Humanizer.newLine();
+        result += constantHeader;
+        
         return result;
     }
 }

@@ -32,6 +32,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 
 public class ViewHierarchyUtils {
 
@@ -45,6 +46,19 @@ public class ViewHierarchyUtils {
                 printViewHierarchy(rootView.second);
             }
         }
+    }
+
+    public static Pair<String, View> getAppRootView() {
+        List<Pair<String, View>> rootViews = getRootViews(false);
+        //Exclude our overlay windows
+        for (Pair<String, View> root : rootViews) {
+            //TODO: we return the first one from the app
+            //We could also use view tags to identify our windows
+            if (!(root.second.getContext() instanceof OverlayService)){
+                return root;
+            }
+        }
+        return null;
     }
 
     public static List<Pair<String, View>> getRootViews(Boolean print) {

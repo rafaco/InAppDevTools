@@ -36,13 +36,14 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
@@ -53,7 +54,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -201,8 +201,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private Boolean saveScreenshot(){
-        ScreenshotHelper helper = new ScreenshotHelper();
-        Screenshot screenshot = helper.takeScreenIntoFile(true);
+        Screenshot screenshot = ScreenshotUtils.take(true);
         if (screenshot != null){
             long screenId = db.screenshotDao().insert(screenshot);
             if (screenId > 0){
@@ -216,7 +215,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private boolean saveDetailReport(Crash crash) {
-        String docPath = DocumentRepository.saveDocument(Document.CRASH, crash);
+        String docPath = DocumentRepository.storeDocument(DocumentType.CRASH, crash);
         crash.setReportPath(docPath);
         IadtController.get().getDatabase().crashDao().update(crash);
         return true;

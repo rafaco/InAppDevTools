@@ -27,6 +27,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -235,4 +236,7 @@ public class SessionManager {
         //TODO
     }
 
+    public void storeInfoDocuments() {
+        ReportHelper.getInfoDocuments(getCurrent().getUid());
+    }
 }

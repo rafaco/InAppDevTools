@@ -74,6 +74,10 @@ public class ScreenshotsScreen extends Screen {
         initView(view);
     }
 
+    @Override
+    protected void onResume() {
+        requestData();
+    }
 
     @Override
     protected void onStop() {

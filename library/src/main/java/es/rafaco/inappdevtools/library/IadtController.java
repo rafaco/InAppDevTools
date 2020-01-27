@@ -51,7 +51,7 @@ import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
@@ -59,9 +59,7 @@ import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -198,6 +196,8 @@ public final class IadtController {
 
         sourcesManager = new SourcesManager(getContext());
 
+        sessionManager.storeInfoDocuments();
+
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
     }
@@ -289,13 +289,16 @@ public final class IadtController {
     public void takeScreenshot() {
         if (!isEnabled()) return;
 
-        Screenshot screenshot = new ScreenshotHelper().takeAndSaveScreen();
+        Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
         if(getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED) && OverlayService.isInitialize()){
             getOverlayHelper().showIcon();
         }
-        FileProviderUtils.openFileExternally(getContext(), screenshot.getPath());
+
+        Iadt.showMessage("Screenshot taken");
+        //TODO: show internally
+        //FileProviderUtils.sendIntentAction(getContext(), screenshot.getPath());
     }
 
     public void startReportDialog() {

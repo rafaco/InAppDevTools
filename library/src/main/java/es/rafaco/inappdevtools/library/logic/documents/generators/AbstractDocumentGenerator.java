@@ -21,18 +21,18 @@ package es.rafaco.inappdevtools.library.logic.documents.generators;
 
 import android.content.Context;
 
-import es.rafaco.inappdevtools.library.logic.documents.Document;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 
 public abstract class AbstractDocumentGenerator {
 
     protected Context context;
-    private final Document document;
+    private final DocumentType documentType;
     private final Object param;
 
-    public AbstractDocumentGenerator(Context context, Document document, Object param) {
+    public AbstractDocumentGenerator(Context context, DocumentType documentType, Object param) {
         this.context = context;
-        this.document = document;
+        this.documentType = documentType;
         this.param = param;
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractDocumentGenerator {
         return param;
     }
 
-    protected Document getDocument() {
-        return document;
+    protected DocumentType getDocumentType() {
+        return documentType;
     }
 }
