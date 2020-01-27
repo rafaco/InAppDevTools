@@ -70,7 +70,8 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getTitle())
+        return new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview())
                 .add(getLibraryInfo())
                 .add(getDbInfo())

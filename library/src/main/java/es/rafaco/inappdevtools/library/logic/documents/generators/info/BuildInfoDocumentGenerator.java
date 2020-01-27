@@ -110,7 +110,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        DocumentData.Builder builder = new DocumentData.Builder(getTitle())
+        DocumentData.Builder builder = new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview());
 
         String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);

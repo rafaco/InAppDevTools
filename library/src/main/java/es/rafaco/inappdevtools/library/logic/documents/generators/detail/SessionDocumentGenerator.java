@@ -74,8 +74,8 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getTitle())
-                .setIcon(R.string.gmd_timeline)
+        return new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview())
                 .add(getFlagsInfo())
                 .add(getDurationInfo())

@@ -93,7 +93,8 @@ public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getTitle())
+        return new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview())
                 .add(getAndroidGroup(deviceHelper))
                 .add(getConfigGroup(configHelper, deviceHelper))

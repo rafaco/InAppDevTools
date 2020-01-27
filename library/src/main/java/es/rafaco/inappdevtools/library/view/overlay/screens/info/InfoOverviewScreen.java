@@ -33,6 +33,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
@@ -74,8 +75,8 @@ public class InfoOverviewScreen extends Screen {
             DocumentType page = documentTypes[i];
             DocumentData reportData = DocumentRepository.getDocument(page);
             final String pageIndexParam = String.valueOf(i);
-
-            data.add(new CardData(reportData.getTitle(),
+            String shortTitle = Humanizer.removeTailStartingWith(reportData.getTitle(), " from");
+            data.add(new CardData(shortTitle,
                     reportData.getOverview(),
                     reportData.getIcon(),
                     new Runnable() {

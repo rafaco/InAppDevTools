@@ -68,8 +68,8 @@ public class SessionStepsDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        DocumentData.Builder builder = new DocumentData.Builder(getTitle())
-                .setIcon(R.string.gmd_history)
+        DocumentData.Builder builder = new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview());
 
         extractRawData();

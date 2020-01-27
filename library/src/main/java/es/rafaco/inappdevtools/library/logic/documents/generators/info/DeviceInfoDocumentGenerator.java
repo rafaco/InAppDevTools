@@ -102,7 +102,8 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-        return new DocumentData.Builder(getTitle())
+        return new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .setOverview(getOverview())
                 .add(getDeviceInfo())
                 .add(getHardwareInfo())

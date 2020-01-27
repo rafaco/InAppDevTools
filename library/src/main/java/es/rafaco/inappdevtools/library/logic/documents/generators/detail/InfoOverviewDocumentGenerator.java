@@ -58,9 +58,10 @@ public class InfoOverviewDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public DocumentData getData() {
-
         DocumentType[] values = DocumentType.getInfoValues();
-        DocumentData reportOverview = new DocumentData.Builder("Info Overview").build();
+        DocumentData reportOverview = new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle()).build();
+
         for (DocumentType documentType : values){
             DocumentData infoData = DocumentRepository.getDocument(documentType);
             reportOverview.getSections().add(new DocumentSectionData.Builder(getTitle())

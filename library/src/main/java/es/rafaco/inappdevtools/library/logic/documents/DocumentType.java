@@ -48,9 +48,9 @@ public enum DocumentType {
     TOOLS_INFO("Tools", R.string.gmd_extension, ToolsInfoDocumentGenerator.class, long.class),
 
     INFO_OVERVIEW("Info Overview", R.string.gmd_info, InfoOverviewDocumentGenerator.class, long.class),
-    SESSION("Session", R.string.gmd_extension, SessionDocumentGenerator.class, Session.class),
-    SESSION_STEPS("Steps", R.string.gmd_extension, SessionStepsDocumentGenerator.class, Session.class),
-    SESSION_LOGS("Logs", R.string.gmd_extension, SessionLogsDocumentGenerator.class, Session.class),
+    SESSION("Session", R.string.gmd_timeline, SessionDocumentGenerator.class, Session.class),
+    SESSION_STEPS("Steps", R.string.gmd_history, SessionStepsDocumentGenerator.class, Session.class),
+    SESSION_LOGS("Logs", R.string.gmd_history, SessionLogsDocumentGenerator.class, Session.class),
     CRASH("Crash", R.string.gmd_bug_report, CrashDocumentGenerator.class, Crash.class);
 
     private String name;

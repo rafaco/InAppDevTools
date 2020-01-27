@@ -22,42 +22,33 @@
     android:id="@+id/overview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp">
+    style="@style/content_margin">
 
-    <LinearLayout
-        android:id="@+id/icon_title_wrapper"
+    <TextView
+        android:id="@+id/overview_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:orientation="vertical">
+        android:layout_marginRight="10dp"
+        android:textSize="24dp"/>
 
-        <TextView
-            android:id="@+id/overview_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="30dp"
-            android:layout_margin="5dp"/>
-
-        <TextView
-            android:id="@+id/overview_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
-            style="@style/TextCondensedBig"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/overview_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/overview_icon"
+        android:textStyle="bold"
+        style="@style/TextCondensedBig"/>
 
     <TextView
         android:id="@+id/overview_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon_title_wrapper"
-        android:layout_alignParentRight="true"
-        android:textAlignment="textEnd"
+        android:layout_below="@id/overview_icon"
+        android:layout_alignLeft="@id/overview_title"
         android:layout_gravity="end"
         android:textColor="@color/rally_white"
+        android:layout_marginBottom="10dp"
         style="@style/TextCondensedBig" />
 
 </RelativeLayout>

@@ -122,9 +122,16 @@ public class DocumentData {
             this.sections = new ArrayList<>();
         }
 
+        @Deprecated
+        //Use Builder(DocumentType) instead and override title if needed
         public Builder(String title) {
             this.title = title;
             this.sections = new ArrayList<>();
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
         }
 
         public Builder setIcon(@StringRes int icon) {

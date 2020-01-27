@@ -88,6 +88,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
     @Override
     public DocumentData getData() {
         return new DocumentData.Builder(getTitle())
+                .setIcon(getDocumentType().getIcon())
                 .setOverview(getOverview())
                 .add(getApkInfo())
                 .add(getInstallInfo())

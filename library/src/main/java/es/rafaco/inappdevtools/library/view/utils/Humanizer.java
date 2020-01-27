@@ -38,15 +38,25 @@ public class Humanizer {
     }
 
     public static String removeHead(String text, String head) {
-        if (text.startsWith(head)) {
+        if (!TextUtils.isEmpty(text)
+                && text.startsWith(head)) {
             return text.substring(head.length());
         }
         return text;
     }
 
     public static String removeTail(String text, String tail) {
-        if (text.endsWith(tail)) {
+        if (!TextUtils.isEmpty(text)
+                && text.endsWith(tail)) {
             return text.substring(0, text.length() - tail.length());
+        }
+        return text;
+    }
+
+    public static String removeTailStartingWith(String text, String tailStart) {
+        if (!TextUtils.isEmpty(text)
+                && text.contains(tailStart)) {
+            return text.substring(0, text.indexOf(tailStart));
         }
         return text;
     }

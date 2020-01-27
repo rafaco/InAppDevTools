@@ -95,7 +95,8 @@ public class CrashDocumentGenerator extends AbstractDocumentGenerator {
                 .add("", data.getStacktrace())
                 .build();
 
-        return new DocumentData.Builder(getTitle())
+        return new DocumentData.Builder(getDocumentType())
+                .setTitle(getTitle())
                 .add(status)
                 .add(basic)
                 .add(thread)
