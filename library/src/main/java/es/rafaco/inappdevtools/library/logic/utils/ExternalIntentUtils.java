@@ -30,6 +30,8 @@ public class ExternalIntentUtils {
 
     public static final String REPO_URL = "https://github.com/rafaco/InAppDevTools";
     public static final String README_URL = "https://github.com/rafaco/InAppDevTools/blob/master/README.md";
+    public static final String ISSUES_URL = "https://github.com/rafaco/InAppDevTools/issues";
+    public static final String WEBSITE_URL = "https://InAppDevTools.org";
 
     public static void shareText(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -47,6 +49,14 @@ public class ExternalIntentUtils {
 
     public static void viewReadme() {
         viewUrl(README_URL);
+    }
+
+    public static void viewIssues() {
+        viewUrl(ISSUES_URL);
+    }
+
+    public static void viewWebsite() {
+        viewUrl(WEBSITE_URL);
     }
 
     public static void viewUrl(String url) {
