@@ -36,42 +36,55 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentFormatter;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.reports.sender.EmailSender;
 import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ZipUtils;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashHelper;
 
 public class ReportHelper {
+
+    public static final String EMAIL = "EMAIL";
+    public static final String SEND = "SEND";
+    public static final String VIEW = "VIEW";
 
     Context context;
     Report report;
     ReportType type;
     Object target;
 
-    public void start(Report report) {
+    public void send(Report report) {
         this.context = IadtController.get().getContext();
         this.report = report;
 
-        List<String> initialFiles = generateFiles();
+        List<String> generatedFiles = generateFiles();
 
         List<String> filesToSend;
-        if (!report.isZip()) {
-            filesToSend = initialFiles;
+        if (generatedFiles.size() <= 1) {
+            filesToSend = generatedFiles;
         }
         else{
-            String compressedFile = compressFiles(initialFiles);
+            String compressedFile = compressFiles(generatedFiles);
             updateReportCompressed(compressedFile);
             filesToSend = Arrays.asList(compressedFile);
         }
-        
-        sendByEmail(filesToSend);
+
+        if (report.getSenderType().equals(EMAIL)) {
+            sendByEmail(filesToSend);
+        }
+        else if (report.getSenderType().equals(SEND)){
+            senExternally(filesToSend);
+        }
+        else if (report.getSenderType().equals(VIEW)){
+            viewExternally(filesToSend);
+        }
         updateReportSent();
     }
 
@@ -130,7 +143,7 @@ public class ReportHelper {
         return filePaths;
     }
 
-    //Genrate Info overview and individual pages
+    //Generate Info overview and individual pages
     public static List<String> getInfoDocuments(long sessionId) {
         List<String> filePaths = new ArrayList<>();
         StopWatch watch = null;
@@ -152,8 +165,25 @@ public class ReportHelper {
 
 
     private void sendByEmail(List<String> filesPaths) {
-        String body = DocumentRepository.getFormatter().formatEmailBody(report);
-        new EmailSender().sendReport(context, report, body, filesPaths);
+        DocumentFormatter formatter = DocumentRepository.getFormatter();
+        String body = formatter.formatEmailBody(report);
+        String subject = formatter.formatEmailSubject(report);
+        String to = formatter.formatEmailTo(report);
+        String cc = formatter.formatEmailCc(report);
+
+        FileProviderUtils.sendEmail(to, cc, subject, body, filesPaths);
+    }
+
+    private void viewExternally(List<String> filesToSend) {
+        DocumentFormatter formatter = DocumentRepository.getFormatter();
+        String body = formatter.formatEmailBody(report);
+        FileProviderUtils.viewExternally(body, filesToSend.get(0));
+    }
+
+    private void senExternally(List<String> filesToSend) {
+        DocumentFormatter formatter = DocumentRepository.getFormatter();
+        String body = formatter.formatEmailBody(report);
+        FileProviderUtils.sendExternally(body, filesToSend.get(0));
     }
 
 
@@ -165,7 +195,7 @@ public class ReportHelper {
 
     //TODO: Remove following, is old!
     //
-    public void start(ReportType type, Object target) {
+    public void send(ReportType type, Object target) {
         this.context = IadtController.get().getContext();
         this.type = type;
         this.target = target;

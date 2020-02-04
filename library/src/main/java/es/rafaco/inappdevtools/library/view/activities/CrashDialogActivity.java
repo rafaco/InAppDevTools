@@ -118,7 +118,7 @@ public class CrashDialogActivity extends AppCompatActivity {
     }
 
     private void onCrashReport(Crash crash) {
-        Iadt.sendReport(ReportType.CRASH, crash.getUid());
+        IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
         destroyDialog();
     }
 

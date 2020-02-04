@@ -114,7 +114,7 @@ public class ReportScreen extends Screen {
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        data.add("Send reports directly to the development team of this app. We include gathered data to help them.");
+        data.add("Send reports directly to the development team of this app. You can include logs and other useful information for them.");
         data.add("");
         data.add(new RunButton("New Report",
                 R.drawable.ic_add_circle_outline_white_24dp,
@@ -127,14 +127,8 @@ public class ReportScreen extends Screen {
                 }));
 
         int reportsCount = IadtController.getDatabase().reportDao().getAll().size();
-        if (reportsCount<1){
-            data.add(new RunButton("No Previous Reports",
-                    R.drawable.ic_format_list_bulleted_white_24dp,
-                    R.color.gray,
-                    null));
-        }
-        else{
-            data.add(new RunButton("Manage Previous",
+        if (reportsCount>=1){
+            data.add(new RunButton("Previous Reports",
                     R.drawable.ic_format_list_bulleted_white_24dp,
                     new Runnable() {
                         @Override
@@ -312,8 +306,7 @@ public class ReportScreen extends Screen {
                     }
                 }));
 
-        //TODO
-        Iadt.sendReport(selectedReport, null);
+        IadtController.get().startReportWizard(selectedReport, null);
     }
 
 
@@ -350,9 +343,7 @@ public class ReportScreen extends Screen {
 
     private void onFullReport() {
         selectedReport = ReportType.CUSTOM;
-
-        //TODO
-        Iadt.sendReport(selectedReport, null);
+        IadtController.get().startReportWizard(selectedReport, null);
     }
 
 

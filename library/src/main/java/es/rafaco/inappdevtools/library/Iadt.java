@@ -76,11 +76,6 @@ public class Iadt {
         getController().getOverlayHelper().showMain();
     }
 
-    /*public static void show(String screenName) {
-        if (!isEnabled()) return;
-        getController().goTo(screenName);
-    }*/
-
     public static void hide() {
         if (!isEnabled()) return;
         getController().getOverlayHelper().showIcon();
@@ -161,9 +156,19 @@ public class Iadt {
         getController().takeScreenshot();
     }
 
-    public static void sendReport(final ReportType type, final Object param) {
+    public static void newSession() {
         if (!isEnabled()) return;
-        getController().sendReport(type, param);
+        getController().newSession();
+    }
+
+    public static void startReportWizard() {
+        if (!isEnabled()) return;
+        getController().startReportWizard();
+    }
+
+    public static void startReportWizard(ReportType type, final Object param) {
+        if (!isEnabled()) return;
+        getController().startReportWizard(type, param);
     }
 
     //endregion

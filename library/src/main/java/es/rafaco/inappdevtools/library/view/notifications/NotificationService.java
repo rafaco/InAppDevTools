@@ -120,7 +120,7 @@ public class NotificationService extends Service {
                 case ACTION_CLEAN:
                     bringAppToFront();
                     Toast.makeText(getApplicationContext(), "You click CLEAN button.", Toast.LENGTH_LONG).show();
-                    IadtController.cleanSession();
+                    IadtController.get().newSession();
                     break;
                 case ACTION_TOOLS:
                     bringAppToFront();

@@ -41,7 +41,6 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -50,7 +49,6 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
@@ -158,13 +156,7 @@ public class CrashDetailScreen extends Screen {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Report report = new Report();
-                report.setZip(true);
-                report.setReportType(ReportType.CRASH);
-                report.setSessionId(crash.getSessionId());
-                report.setCrashId(crash.getUid());
-                String params = NewReportScreen.buildParams(report);
-                OverlayService.performNavigation(NewReportScreen.class, params);
+                IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
             }
         });
 
@@ -263,17 +255,8 @@ public class CrashDetailScreen extends Screen {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_send)
-        {
-            //Iadt.sendReport(ReportType.CRASH, crash.getUid());
-            //getScreenManager().hide();
-            
-            Report report = new Report();
-            report.setZip(true);
-            report.setReportType(ReportType.CRASH);
-            report.setCrashId(crash.getUid());
-            String params = NewReportScreen.buildParams(report);
-            OverlayService.performNavigation(NewReportScreen.class, params);
+        if (selected == R.id.action_send) {
+            IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
         }
         else if (selected == R.id.action_share)
         {

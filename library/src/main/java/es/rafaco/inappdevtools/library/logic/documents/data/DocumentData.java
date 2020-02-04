@@ -98,7 +98,7 @@ public class DocumentData {
 
         if (!TextUtils.isEmpty(getOverview())){
             result += Humanizer.prependLines(getOverview(), " * ");
-            result += Humanizer.newLine();
+            result += Humanizer.fullStop();
         }
 
         if (sections.size()>0){

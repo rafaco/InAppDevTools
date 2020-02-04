@@ -30,6 +30,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 
 public class DocumentRepository {
 
@@ -127,5 +128,14 @@ public class DocumentRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void shareDocument(DocumentType documentType, Object param) {
+        String title = getDocument(documentType, param).getTitle();
+        String path = getDocumentPath(documentType, param);
+        if (!TextUtils.isEmpty(path))
+            FileProviderUtils.sendExternally(title, path);
+        else
+            Iadt.showError("Unable to build the document to share");
     }
 }

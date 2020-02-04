@@ -21,6 +21,8 @@ package es.rafaco.inappdevtools.library.logic.documents;
 
 import android.text.TextUtils;
 
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
@@ -40,11 +42,12 @@ public class DocumentFormatter {
         DeviceInfoDocumentGenerator device = (DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO);
         ToolsInfoDocumentGenerator tools = (ToolsInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.TOOLS_INFO);
 
-        constantHeader  = "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
-        constantHeader += "Device: " + device.getOneLineOverview() + Humanizer.newLine();
+        constantHeader = "Device: " + device.getOneLineOverview() + Humanizer.newLine();
+        constantHeader += "App: " + app.getAppNameAndVersions() + Humanizer.newLine();
+
+        //TODO: Calculate correctly for previous builds (Store builds on DB?)
         constantHeader += "Build: " + build.getShortOverview() + Humanizer.newLine();
-        constantHeader += "Branch: " + build.getShortOverviewSources() + Humanizer.newLine();
-        constantHeader += "Changes: " + build.getShortOverviewChanges() + Humanizer.newLine();
+        constantHeader += "Sources: " + build.getShortOverviewSources() + Humanizer.newLine();
         constantHeader += Humanizer.newLine();
         constantHeader += "Generated with InAppDevTools " + tools.getShortOverview()
                 + Humanizer.newLine();
@@ -64,6 +67,7 @@ public class DocumentFormatter {
 
         return String.format(result, docName, content);
     }
+
 
     public String formatEmailBody(Report report) {
         if (TextUtils.isEmpty(constantHeader)){
@@ -85,5 +89,21 @@ public class DocumentFormatter {
         result += constantHeader;
         
         return result;
+    }
+
+    public String formatEmailSubject(Report report){
+        String formatter = "Report from %s: %s";
+        AppInfoDocumentGenerator helper = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO);
+        return String.format(formatter,
+                helper.getFormattedAppLong(),
+                Humanizer.unavailable(report.getTitle(), "No title"));
+    }
+
+    public String formatEmailTo(Report report) {
+        return IadtController.get().getConfig().getString(BuildConfig.EMAIL);
+    }
+
+    public String formatEmailCc(Report report) {
+        return "";
     }
 }

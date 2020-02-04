@@ -36,6 +36,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -48,7 +49,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.CheckboxData;
 import es.rafaco.inappdevtools.library.view.components.flex.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.flex.SelectorData;
@@ -60,6 +60,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 public class NewReportScreen extends FlexibleScreen {
 
     private Report report;
+    private boolean contentReviewed = false;
 
     public NewReportScreen(ScreenManager manager) {
         super(manager);
@@ -78,7 +79,6 @@ public class NewReportScreen extends FlexibleScreen {
         }
         else{
             report = new Report();
-            report.setZip(true);
         }
 
         loadNextStep();
@@ -106,7 +106,12 @@ public class NewReportScreen extends FlexibleScreen {
             return;
         }
 
-        updateAdapter(getContentFormData());
+        if (!contentReviewed){
+            updateAdapter(getContentFormData());
+            return;
+        }
+
+        updateAdapter(getSenderOptionsData());
     }
 
 
@@ -124,7 +129,7 @@ public class NewReportScreen extends FlexibleScreen {
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        data.add("Did you reproduce a problem in this device? We can include logs and details to help the development team");
+        data.add("Did you reproduce it? Select a session to include data about what happen underneath, useful for our developers:");
         data.add("");
         CardData currentSessionCard = new CardData("Current session",
                 "You just reproduce a problem on this session",
@@ -205,8 +210,8 @@ public class NewReportScreen extends FlexibleScreen {
         screenCard.setTitleColor(R.color.rally_blue);
         data.add(screenCard);*/
 
-        CardData customCard = new CardData("Without session data",
-                "For issues, feature request or questions without related logs",
+        CardData customCard = new CardData("No session",
+                "Include only basic info (app, build, device...) without logs or session details",
                 R.string.gmd_note,
                 new Runnable() {
                     @Override
@@ -356,11 +361,6 @@ public class NewReportScreen extends FlexibleScreen {
 
 
 
-
-
-
-
-
     private List<Object> getContentFormData() {
 
         List<Object> data = new ArrayList<>();
@@ -433,13 +433,6 @@ public class NewReportScreen extends FlexibleScreen {
                     }
                 }));
 
-        data.add(new CheckboxData("Send a unique Zip file", report.isZip(), new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                report.setZip(isChecked);
-            }
-        }));
-
         data.add("");
 
         List<RunButton> reportButtons = new ArrayList<>();
@@ -457,7 +450,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        onSendReport();
+                        onContentFormNext();
                     }
                 }));
         data.add(new ButtonGroupData(reportButtons));
@@ -472,13 +465,65 @@ public class NewReportScreen extends FlexibleScreen {
         getScreenManager().goBack();
     }
 
-    private void onSendReport() {
-        if (validateReport()){
-            report.setDateSent(DateUtils.getLong());
-            saveReport();
-            IadtController.get().sendReport(report);
-        }
+    private void onContentFormNext() {
+        contentReviewed = true;
+        loadNextStep();
     }
+
+
+
+    private List<Object> getSenderOptionsData(){
+        List<Object> data = new ArrayList<>();
+        data.add(getOverview());
+
+        data.add("How do you want to send the report?\nOnly external apps are currently supported.");
+        data.add("");
+
+        CardData cardData = new CardData("Send by Email",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        report.setSenderType(ReportHelper.EMAIL);
+                        sendReport();
+                    }
+                });
+        cardData.setContent("Recommended. Use your favourite email app to send it directly to our developers inbox.");
+        cardData.setIcon(R.string.gmd_mail);
+        cardData.setTitleColor(R.color.rally_green);
+        data.add(cardData);
+
+        cardData = new CardData("Share with other apps",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        report.setSenderType(ReportHelper.SEND);
+                        sendReport();
+                    }
+                });
+        cardData.setContent("Advanced. Standard sharing of the report file with installed apps: Slack, Whatsapp, Facebook, Twitter...");
+        cardData.setIcon(R.string.gmd_share);
+        cardData.setTitleColor(R.color.rally_yellow);
+        data.add(cardData);
+
+        cardData = new CardData("View with other apps",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        report.setSenderType(ReportHelper.VIEW);
+                        sendReport();
+                    }
+                });
+        cardData.setContent("Advanced. External view of the report file with installed apps. Useful to preview, unzip or store.");
+        cardData.setIcon(R.string.gmd_visibility);
+        cardData.setTitleColor(R.color.rally_yellow);
+        data.add(cardData);
+
+        data.add("");
+        return data;
+    }
+
+
+
 
     private boolean validateReport() {
         return true;
@@ -491,6 +536,14 @@ public class NewReportScreen extends FlexibleScreen {
         }else{
             long id = IadtController.getDatabase().reportDao().insert(report);
             report.setUid(id);
+        }
+    }
+
+    private void sendReport() {
+        if (validateReport()){
+            report.setDateSent(DateUtils.getLong());
+            saveReport();
+            IadtController.get().sendReport(report);
         }
     }
 

@@ -86,7 +86,9 @@ public class Iadt {
     //region [ REPORTING ]
 
     public static void takeScreenshot() {}
-    public static void sendReport(final ReportType type, final Object param){}
+    public static void newSession() {}
+    public void startReportWizard() {}
+    public void startReportWizard(ReportType type, final Object param) {}
 
     //endregion
 

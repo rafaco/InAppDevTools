@@ -97,15 +97,19 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
             return "Unavailable";
         }
         String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
-        String tag = gitConfig.getString(GitInfo.TAG);
-        return branch + " " + tag;
-    }
 
-    public String getShortOverviewChanges() {
-        if (!isGitEnabled()){
-            return "Unavailable";
+
+        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
+        int local_commits_count = Humanizer.countLines(local_commits);
+        boolean hasLocalCommits = local_commits_count > 0;
+        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+
+        if (!hasLocalCommits && !hasLocalChanges){
+            return branch + " branch without changes";
         }
-        return getLocalOverview();
+        else{
+            return branch + " branch with local changes";
+        }
     }
 
     @Override

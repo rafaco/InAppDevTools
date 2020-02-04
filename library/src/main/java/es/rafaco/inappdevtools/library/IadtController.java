@@ -60,6 +60,7 @@ import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -195,7 +196,6 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
 
         sourcesManager = new SourcesManager(getContext());
-
         sessionManager.storeInfoDocuments();
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
@@ -284,7 +284,45 @@ public final class IadtController {
 
     //endregion
 
-    //region [ METHODS FOR FEATURES ]
+    //region [ METHODS FOR REPORTING ]
+
+    public void startReportDialog() {
+        Intent intent = new Intent(getContext(), ReportDialogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(intent);
+    }
+
+    public void startReportWizard() {
+        OverlayService.performNavigation(NewReportScreen.class, null);
+    }
+
+    public void startReportWizard(ReportType type, final Object param) {
+        Report report = new Report();
+        report.setReportType(type);
+        if(type.equals(ReportType.SESSION)){
+            report.setSessionId((Long) param);
+        }
+        else if(type.equals(ReportType.CRASH)){
+            report.setCrashId((Long) param);
+        }
+        String params = NewReportScreen.buildParams(report);
+
+    }
+
+    public void sendReport(final Report report) {
+        ThreadUtils.runOnBack("Iadt-SendReport",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        new ReportHelper().send(report);
+                    }
+                });
+    }
+
+    public void newSession() {
+        Iadt.showMessage("Starting a new Session (restarting)");
+        IadtController.get().restartApp(false);
+    }
 
     public void takeScreenshot() {
         if (!isEnabled()) return;
@@ -299,64 +337,6 @@ public final class IadtController {
         Iadt.showMessage("Screenshot taken");
         //TODO: show internally
         //FileProviderUtils.sendIntentAction(getContext(), screenshot.getPath());
-    }
-
-    public void startReportDialog() {
-        Intent intent = new Intent(getContext(), ReportDialogActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
-    }
-
-    public void sendReport(final Report report) {
-        ThreadUtils.runOnBack("Iadt-SendReport",
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReportHelper().start(report);
-                    }
-                });
-    }
-
-    public void sendReport(ReportType type, final Object param) {
-        switch (type){
-            case CRASH:
-                ThreadUtils.runOnBack("Iadt-CrashReport",
-                        new Runnable() {
-                    @Override
-                    public void run() {
-                        Crash crash;
-                        if (param == null) {
-                            crash = getDatabase().crashDao().getLast();
-                        } else {
-                            crash = getDatabase().crashDao().findById((long) param);
-                        }
-                        if (crash == null) {
-                            Iadt.showError("Unable to found a crash to report");
-                        }
-                        else {
-                            new ReportHelper().start(ReportType.CRASH, crash);
-                        }
-                    }
-                });
-                break;
-
-            case SESSION:
-                ThreadUtils.runOnBack("Iadt-SessionReport",
-                        new Runnable() {
-                    @Override
-                    public void run() {
-                        //ArrayList<Uri> files = (ArrayList<Uri>)params;
-                        //TODO: Session report
-                        new ReportHelper().start(ReportType.SESSION, param);
-                    }
-                });
-                break;
-        }
-    }
-
-    public static void cleanSession() {
-        //TODO:
-        // LogcatUtils.clearBuffer();
     }
 
     //endregion

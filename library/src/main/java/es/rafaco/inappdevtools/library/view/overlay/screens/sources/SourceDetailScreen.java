@@ -282,12 +282,13 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
             return;
         }
         else{
+            String title = "Source: " + getParams().path;
             String path = localFile.getAbsolutePath();
             if (path == null){
                 Iadt.showMessage("Unable to get file path");
                 return;
             }
-            FileProviderUtils.sendExternally(controller.getContext(), path);
+            FileProviderUtils.sendExternally(title, path);
         }
     }
 

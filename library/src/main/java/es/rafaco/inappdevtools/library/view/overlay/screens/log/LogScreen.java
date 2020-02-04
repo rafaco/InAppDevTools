@@ -65,6 +65,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.documents.generators.detail.LogItemDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
@@ -73,14 +76,15 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
+import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
-import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
@@ -498,9 +502,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             }*/
             else if (action == R.id.action_share) {
                 Iadt.showMessage("Sharing log overview");
-                String textToShare = data.getMessage() + Humanizer.fullStop()
-                        + LogViewHolder.getFormattedDetails(data);
-                ExternalIntentUtils.shareText(textToShare);
+                DocumentRepository.shareDocument(DocumentType.LOG_ITEM, data.getUid());
                 return true;
             }
             else if (action == R.id.action_copy) {
@@ -563,9 +565,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         else if (selected == R.id.action_wrap_lines) {
             onWrapLinesButton();
         }
-        else if (selected == R.id.action_save) {
-            //onSaveButton();
-            Iadt.showMessage("Currently disabled, sorry");
+        else if (selected == R.id.action_share) {
+            onShareButton();
         }
         else if (selected == R.id.action_delete) {
             onClearButton();
@@ -611,8 +612,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         return filterHelper.getUiFilter().isWrapLines();
     }
 
-    private void onSaveButton() {
-        Iadt.showMessage("//TODO: report based on current filter ");
+    private void onShareButton() {
+        DocumentRepository.shareDocument(DocumentType.LOG_FILTER, DateUtils.getLong());
     }
 
     private void onClearButton() {

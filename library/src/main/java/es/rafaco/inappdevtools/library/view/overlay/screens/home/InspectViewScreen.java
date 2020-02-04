@@ -95,7 +95,7 @@ public class InspectViewScreen extends Screen {
 
         DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(RunningTasksUtils.getTopActivity())
                 .setIcon(R.string.gmd_view_carousel)
-                .setOverview("Activity")
+                .setOverview("Current Activity")
                 .setExpandable(false)
                 .add(activityOverview);
 
@@ -134,11 +134,12 @@ public class InspectViewScreen extends Screen {
 
         DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("Fragments")
                 .setIcon(R.string.gmd_extension)
-                .setOverview("Fragments")
+                .setOverview("Current Fragments")
                 .setExpandable(false)
                 .add("Coming soon: list, states and navigation to sources");
 
         data.add(fragmentsDataBuilder.build());
+        data.add("");
 
 
         data.add("Layout inspector");

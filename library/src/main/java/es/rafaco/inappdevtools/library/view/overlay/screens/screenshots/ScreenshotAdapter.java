@@ -185,13 +185,14 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             int i = menuItem.getItemId();
+            String title = "Screenshot " + screenshot.getUid() + ": " + screenshot.getActivityName();
             if (i == R.id.action_open) {
-                FileProviderUtils.viewExternally(mContext, screenshot.getPath());
+                FileProviderUtils.viewExternally(title, screenshot.getPath());
                 CustomToast.show(recycledView.getContext(), "Open", CustomToast.TYPE_WARNING);
                 return true;
             }
             else if (i == R.id.action_share) {
-                FileProviderUtils.sendExternally(mContext, screenshot.getPath());
+                FileProviderUtils.sendExternally(title, screenshot.getPath());
                 CustomToast.show(recycledView.getContext(), "Share", CustomToast.TYPE_WARNING);
                 return true;
             }

@@ -237,6 +237,16 @@ public class SessionManager {
     }
 
     public void storeInfoDocuments() {
-        ReportHelper.getInfoDocuments(getCurrent().getUid());
+        final long currentUid = getCurrent().getUid();
+        ReportHelper.getInfoDocuments(currentUid);
+
+        /* //TODO: Generate docs on background thread
+        ThreadUtils.runOnBack("Iadt-SessionInfoDocs",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ReportHelper.getInfoDocuments(currentUid);
+                    }
+                });*/
     }
 }

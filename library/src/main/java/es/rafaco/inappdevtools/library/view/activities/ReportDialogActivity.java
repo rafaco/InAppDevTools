@@ -287,7 +287,7 @@ public class ReportDialogActivity extends AppCompatActivity {
 
     private void onImagesSelected(ArrayList<Uri> mArrayUri) {
         //TODO: use selected images
-        Iadt.sendReport(ReportType.SESSION, mArrayUri);
+        IadtController.get().startReportWizard(ReportType.SESSION, mArrayUri);
         alertDialog.dismiss();
         finish();
     }
