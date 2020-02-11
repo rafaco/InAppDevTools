@@ -42,11 +42,11 @@ All artifacts are generated from a single project [hosted in this repo](https://
 | Artifact | Module | Variant | Description | Publication |
 | --- | --- | --- | --- | --- |
 | es.rafaco.inappdevtools | [plugin](/plugin) | - | IADT plugin for Gradle| [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) |
-| es.rafaco.inappdevtools:support | [library](/library) | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
-| es.rafaco.inappdevtools:androidx | [library](/library) | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
-| es.rafaco.inappdevtools:noop | [noop](/noop) | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](http://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
-| es.rafaco.compat:support | [compat](/compat) | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/support/) |
-| es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](http://jcenter.bintray.com/es/rafaco/compat/androidx/) |
+| es.rafaco.inappdevtools:support | [library](/library) | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
+| es.rafaco.inappdevtools:androidx | [library](/library) | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
+| es.rafaco.inappdevtools:noop | [noop](/noop) | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
+| es.rafaco.compat:support | [compat](/compat) | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](https://jcenter.bintray.com/es/rafaco/compat/support/) |
+| es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](https://jcenter.bintray.com/es/rafaco/compat/androidx/) |
 | es.rafaco.iadt.demo | [demo](/demo) | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
 | inappdevtools.org | [website](/website) | - | Promo website  | [inappdevtools.org](https:/inappdevtools.org) |
 
