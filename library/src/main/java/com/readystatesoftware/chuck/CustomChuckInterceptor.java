@@ -5,14 +5,9 @@
  * This is a modified source from project Chuck, which is available under
  * Apache License, Version 2.0 at https://github.com/jgilfelt/chuck
  *
- * Modifications:
  *
- *     * Added this attribution notice
- *     * (Warning: can contains un-tracked modifications)
- *
- *
- * Modifications copyright 2018-2019 Rafael Acosta Alvarez
- * Original copyright (C) 2017 Jeff Gilfelt.
+ * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright (C) 2017 Jeff Gilfelt.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +20,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
+ *  ChangeLog:
+ *     - Added previous attribution notice and this changelog
+ *     - TODO: can contains un-tracked modifications
  */
 
 package com.readystatesoftware.chuck;
