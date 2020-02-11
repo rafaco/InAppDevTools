@@ -5,14 +5,8 @@
  * This is a modified source from project MaterialDesign-Toast, which is available
  * without license at https://github.com/valdesekamdem/MaterialDesign-Toast
  *
- * Modifications:
  *
- *     * Added this attribution notice
- *     * Imports resources from es.rafaco.inappdevtools.library.R
- *     * Conditional imports for AndroidX builds
- *
- *
- * Modifications copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +19,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
+ * Changelog:
+ *     - Added previous attribution notice and this changelog
+ *     - Imports resources from es.rafaco.inappdevtools.library.R
+ *     - Conditional imports for AndroidX builds
  */
 
 package com.valdesekamdem.library.mdtoast;
