@@ -5,14 +5,9 @@
  * This is a modified source from a Gist, which is available under
  * Apache License, Version 2.0 at https://gist.github.com/skyfishjy/443b7448f59be978bc59
  *
- * Modifications:
  *
- *     * Added this attribution notice
- *     * Conditional imports for AndroidX builds
- *
- *
- * Modifications copyright 2018-2019 Rafael Acosta Alvarez
- * Original copyright (C) 2014 skyfish.jy@gmail.com
+ * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright (C) 2014 skyfish.jy@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +20,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
+ * Changelog:
+ *     - Added previous attribution notice and this changelog
+ *     - Conditional imports for AndroidX builds
  */
 package es.rafaco.inappdevtools.library.logic.integrations.cursoradapter;
 
