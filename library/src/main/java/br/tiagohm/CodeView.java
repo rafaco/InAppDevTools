@@ -5,15 +5,8 @@
  * This is a modified source from project CodeView, which is available under
  * MIT License at https://github.com/tiagohm/CodeView
  *
- * Modifications:
  *
- *     * Added this attribution notice
- *     * Comments clean up and translation to English
- *     * Using VERSION.SDK_INT from OS_INFO instead of build
- *     * Added scrollToLine feature
- *
- *
- * Modifications copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +21,7 @@
  * limitations under the License.
  *
  *
- * Original copyright (c) 2016-2017 Tiago Melo
+ * Copyright (c) 2016-2017 Tiago Melo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +40,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
+
+/*
+ * Changelog:
+ *     - Added previous attribution notice and this changelog
+ *     - Comments clean up and translation to English
+ *     - Using VERSION.SDK_INT from OS_INFO instead of build
+ *     - Added scrollToLine feature
  */
 
 package br.tiagohm;
