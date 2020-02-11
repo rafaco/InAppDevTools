@@ -5,13 +5,8 @@
  * This is a modified source from WCViewPager by rnevet, which is available
  * Apache License, Version 2.0 at https://github.com/rnevet/WCViewPager
  *
- * Modifications:
  *
- *     * Added this attribution notice
- *     * Conditional imports for AndroidX builds
- *
- *
- * Modifications copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +17,12 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
  *
- * Original Copyright (c) 2015 Raanan Nevet
+ * Copyright (c) 2015 Raanan Nevet
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +41,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ */
+
+/*
+ * Changelog:
+ *     - Added previous attribution notice and this changelog
+ *     - Conditional imports for AndroidX builds
  */
 package nevet.me.wcviewpager;
 
