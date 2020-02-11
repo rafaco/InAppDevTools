@@ -30,6 +30,7 @@ import android.support.annotation.NonNull;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.build.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
@@ -37,12 +38,11 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -52,31 +52,37 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     private final long sessionId;
-    AssetJsonHelper buildInfo;
-    AssetJsonHelper buildConfig;
-    AssetJsonHelper gitConfig;
+    private final long buildId;
+
+    JsonHelper buildInfo;
+    JsonHelper buildConfig;
+    JsonHelper gitConfig;
+    JsonHelper appBuildConfig;
 
     public BuildInfoDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
         this.sessionId = param;
-        buildInfo = new AssetJsonHelper(context, IadtPath.BUILD_INFO);
-        buildConfig = new AssetJsonHelper(context, IadtPath.BUILD_CONFIG);
-        gitConfig = new AssetJsonHelper(context, IadtPath.GIT_CONFIG);
+        this.buildId = BuildFilesRepository.getBuildIdForSession(sessionId);
+
+        buildInfo = BuildFilesRepository.getBuildInfoHelper(sessionId);
+        buildConfig = BuildFilesRepository.getBuildConfigHelper(sessionId);
+        gitConfig = BuildFilesRepository.getGitConfigHelper(sessionId);
+        appBuildConfig = BuildFilesRepository.getAppBuildConfigHelper(sessionId);
     }
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return "Build " + buildId;
     }
 
     @Override
     public String getSubfolder() {
-        return "session/" + sessionId;
+        return "build/" + buildId;
     }
 
     @Override
     public String getFilename() {
-        return "info_" + getDocumentType().getName().toLowerCase() + "_" + sessionId + ".txt";
+        return "info_build_" + buildId + ".txt";
     }
 
     @Override
@@ -186,8 +192,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setIcon(R.string.gmd_history)
                 .setOverview(getFriendlyBuildType() + ", " + getFriendlyElapsedTime())
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
-                .add("Build type", AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE))
-                .add("Flavor", AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR))
+                .add("Build type", appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE))
+                .add("Flavor", appBuildConfig.getString(AppBuildConfigFields.FLAVOR))
                 .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Android plugin", PluginListUtils.getAndroidVersion())
                 .add("Iadt plugin", PluginListUtils.getIadtVersion())
@@ -247,8 +253,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @NonNull
     public String getFriendlyBuildType() {
-        String flavor = AppBuildConfig.getStringValue(context, AppBuildConfigFields.FLAVOR);
-        String buildType = AppBuildConfig.getStringValue(context, AppBuildConfigFields.BUILD_TYPE);
+        String flavor = appBuildConfig.getString(AppBuildConfigFields.FLAVOR);
+        String buildType = appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE);
         String build = TextUtils.isEmpty(flavor) ? Humanizer.toCapitalCase(buildType)
                 : Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
         return build;

@@ -58,6 +58,10 @@ public class SessionManager {
         return session;
     }
 
+    public long getCurrentUid() {
+        return session.getUid();
+    }
+
     public void updateCurrent(Session updated) {
         getDao().update(updated);
         session = updated;
@@ -171,7 +175,6 @@ public class SessionManager {
         for (int i = 1; i<sessions.size(); i++){
             Session target = sessions.get(i);
             updateFinishedSession(target);
-
         }
         return sessions;
     }
@@ -236,7 +239,7 @@ public class SessionManager {
         //TODO
     }
 
-    public void storeInfoDocuments() {
+    public void storeDocuments() {
         final long currentUid = getCurrent().getUid();
         ReportHelper.getInfoDocuments(currentUid);
 

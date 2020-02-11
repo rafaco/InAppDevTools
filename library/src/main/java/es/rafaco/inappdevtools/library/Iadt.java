@@ -36,6 +36,10 @@ import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import okhttp3.OkHttpClient;
 
+/**
+ * This class is the main public interface of InAppDevTools.
+ * Their method are always safe to call even with the library disabled or using our noop version.
+ */
 public class Iadt {
 
     public static final String TAG = "InAppDevTools";

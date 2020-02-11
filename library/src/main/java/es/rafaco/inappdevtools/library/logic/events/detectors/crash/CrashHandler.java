@@ -186,7 +186,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     //TODO: currentCrashId never get used, why?
     //TODO: double get sessionId
     private long storeCrash(final Crash crash) {
-        long sessionId = IadtController.get().getSessionManager().getCurrent().getUid();
+        long sessionId = IadtController.get().getSessionManager().getCurrentUid();
         crash.setSessionId(sessionId);
         currentCrashId = db.crashDao().insert(crash);
         FriendlyLog.logCrashDetails(friendlyLogId, currentCrashId, crash);

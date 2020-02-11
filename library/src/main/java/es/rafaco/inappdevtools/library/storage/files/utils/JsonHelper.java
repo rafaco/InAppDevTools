@@ -19,29 +19,30 @@
 
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import es.rafaco.inappdevtools.library.Iadt;
 
-public class AssetJsonHelper {
+public class JsonHelper {
 
-    private final Context context;
-    private final String target;
+    private final String content;
     private JSONObject json;
 
-    public AssetJsonHelper(Context context, String target) {
-        this.context = context;
-        this.target = target;
-        init();
+    public JsonHelper(String content) {
+        this.content = content;
+
+        try {
+            json = new JSONObject(content);
+        } catch (Exception e) {
+            Log.e(Iadt.TAG,"Invalid content provide to JsonHelper - " + Log.getStackTraceString(e));
+        }
+
+        if (json == null) {
+            json = new JSONObject();
+        }
     }
 
     public boolean contains(String key){
@@ -91,41 +92,5 @@ public class AssetJsonHelper {
         } catch (JSONException e) {
             return json.toString();
         }
-    }
-
-    private void init() {
-        String fileContents = getFileContents();
-        try {
-            json = new JSONObject(fileContents);
-        } catch (Exception e) {
-            Log.e(Iadt.TAG,"Invalid config data at '" + target + "' " + Log.getStackTraceString(e));
-        }
-
-        if (json == null) {
-            json = new JSONObject();
-        }
-    }
-
-    private String getFileContents() {
-        StringBuilder builder = null;
-
-        try {
-            InputStream stream = context.getAssets().open(target);
-            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-            builder = new StringBuilder();
-            String str;
-
-            while ((str = in.readLine()) != null) {
-                builder.append(str);
-            }
-
-            in.close();
-
-        } catch (IOException e) {
-            Log.e(Iadt.TAG, "Unable to read config at '" + target + "'" + Log.getStackTraceString(e));
-            return null;
-        }
-
-        return (builder != null) ? builder.toString() : null;
     }
 }

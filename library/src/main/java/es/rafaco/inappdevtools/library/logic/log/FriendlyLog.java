@@ -414,4 +414,10 @@ public class FriendlyLog {
                 message + " -> " + e.getMessage(),
                 Log.getStackTraceString(e));
     }
+
+    public static void logDebug(String message) {
+        if (IadtController.get().isDebug()){
+            log("D", "Iadt", "Debug", message);
+        }
+    }
 }

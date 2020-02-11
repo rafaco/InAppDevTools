@@ -35,8 +35,9 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 
 //#ifdef ANDROIDX
-//@import androidx.core.content.ContextCompat;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //@import androidx.cardview.widget.CardView;
+//@import androidx.appcompat.widget.PopupMenu;
 //#else
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;

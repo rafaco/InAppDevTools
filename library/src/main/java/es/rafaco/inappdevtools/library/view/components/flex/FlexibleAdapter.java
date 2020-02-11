@@ -19,18 +19,19 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
+//@import androidx.annotation.Nullable;
 //@import androidx.core.view.ViewCompat;
 //@import androidx.recyclerview.widget.GridLayoutManager;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +41,6 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-
-import static tech.linjiang.pandora.util.Utils.getContext;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
@@ -60,7 +59,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        final GridLayoutManager manager = new GridLayoutManager(getContext(), spanCount, RecyclerView.VERTICAL, false);
+        final GridLayoutManager manager = new GridLayoutManager(recyclerView.getContext(),
+                spanCount, RecyclerView.VERTICAL, false);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -98,7 +98,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     @Override
     public FlexibleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         FlexibleItemDescriptor desc = descriptors.get(viewType);
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(desc.layoutResourceId, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(desc.layoutResourceId, viewGroup, false);
         FlexibleViewHolder holder = constructViewHolder(desc, view);
         holder.onCreate(viewGroup, viewType);
         return holder;
@@ -107,7 +108,8 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     private FlexibleViewHolder constructViewHolder(FlexibleItemDescriptor desc, View view) {
         FlexibleViewHolder holder = null;
         try {
-            Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass.getConstructor(View.class, FlexibleAdapter.class);
+            Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass
+                    .getConstructor(View.class, FlexibleAdapter.class);
             holder = ctor.newInstance(new Object[] { view, this });
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);

@@ -35,9 +35,16 @@ import android.support.annotation.Nullable;
 
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
+import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
+/**
+ * This class initialize InAppDevTools library automatically.
+ * Being a ContentProvider registered in Manifest, following onCreate method get called even before
+ * the creation of the host app process, removing the requirement of override Application class
+ * to start our library manually. Google Firebase libraries get initialized in the same way.
+ */
 public class IadtLauncher extends ContentProvider {
 
     public IadtLauncher() {
@@ -66,19 +73,27 @@ public class IadtLauncher extends ContentProvider {
         }
     }
 
+
+    /**
+     * Hardcoded way to read isEnabled configuration without IadtController and ConfigManager initialized.
+     * It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
+     *
+     * @return true if enabled
+     */
     private boolean isLibraryEnabled(){
         try {
-            // Hardcoded way to read isEnabled configuration as IadtController is not already initialized.
-            // It reproduce IadtController.get().getConfig().get(BuildConfig.ENABLED);
             String enableKey = BuildConfig.ENABLED.getKey();
-            SharedPreferences iadtSharedPrefs = getContext().getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-            AssetJsonHelper iadtCompileConfig = new AssetJsonHelper(getContext(), IadtPath.BUILD_CONFIG);
+            SharedPreferences iadtSharedPrefs = getContext()
+                    .getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+            String buildConfigContent = new AssetFileReader(getContext())
+                    .getFileContents(IadtPath.BUILD_CONFIG);
+            JsonHelper iadtBuildConfig = new JsonHelper(buildConfigContent);
 
             if (iadtSharedPrefs.contains(enableKey)){
                 return iadtSharedPrefs.getBoolean(enableKey, false);
             }
-            else if (iadtCompileConfig.contains(enableKey)){
-                return iadtCompileConfig.getBoolean(enableKey);
+            else if (iadtBuildConfig.contains(enableKey)){
+                return iadtBuildConfig.getBoolean(enableKey);
             }
             else{
                 return (boolean) BuildConfig.ENABLED.getDefaultValue();

@@ -64,7 +64,7 @@ public class DocumentRepository {
 
     private static long getDefaultParam() {
         //TODO: It currently pass the current session id, needed by Info documents
-        return IadtController.get().getSessionManager().getCurrent().getUid();
+        return IadtController.get().getSessionManager().getCurrentUid();
     }
 
 

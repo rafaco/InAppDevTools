@@ -25,11 +25,12 @@ import android.text.TextUtils;
 import es.rafaco.inappdevtools.library.BuildConfig;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.build.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -89,16 +90,18 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private DocumentSectionData getBuildInfo() {
+        String content = BuildFilesRepository.getBuildInfoHelper(sessionId).getAll();
         return new DocumentSectionData.Builder("Generated BuildInfo")
                 .setIcon(R.string.gmd_settings_system_daydream)
-                .add(new AssetJsonHelper(context, IadtPath.BUILD_INFO).getAll())
+                .add(content)
                 .build();
     }
 
     private DocumentSectionData getBuildConfig() {
+        String content = BuildFilesRepository.getBuildConfigHelper(sessionId).getAll();
         return new DocumentSectionData.Builder("Generated BuildConfig")
                 .setIcon(R.string.gmd_settings_applications)
-                .add(new AssetJsonHelper(context, IadtPath.BUILD_CONFIG).getAll())
+                .add(content)
                 .build();
     }
 

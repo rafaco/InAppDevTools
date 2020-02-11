@@ -109,36 +109,46 @@ public class ReportHelper {
     private List<String> generateFiles() {
         List<String> filePaths = new ArrayList<>();
 
-        Session session;
-        if (report.getSessionId()>0) {
-            session = IadtController.get().getDatabase().sessionDao()
-                    .findById(report.getSessionId());
-        }else {
-            session = IadtController.get().getDatabase().sessionDao()
-                    .getLast();
+        if (report.getReportType().equals(ReportType.SESSION)
+            || report.getReportType().equals(ReportType.CRASH)){
+
+            if (report.getSessionId()<1 && report.getCrashId()>0){
+                Crash crash = IadtController.get().getDatabase().crashDao()
+                        .findById(report.getCrashId());
+                report.setSessionId(crash.getSessionId());
+            }
+
+            Session session;
+            if (report.getSessionId()>0) {
+                session = IadtController.get().getDatabase().sessionDao()
+                        .findById(report.getSessionId());
+            }else {
+                session = IadtController.get().getDatabase().sessionDao()
+                        .getLast();
+            }
+
+            //Session details
+            filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION, session));
+            filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_STEPS, session));
+            filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_LOGS, session));
+
+            //Crash??
+            if (session.getCrashId()>0){
+                Crash crash = IadtController.get().getDatabase().crashDao()
+                        .findById(session.getCrashId());
+                filePaths.add(crash.getReportPath());
+
+                //TODO: crash screenshots
+                //TODO: crash stacktrace with source snapshot! Include few source lines around
+                // the traced one... Nice idea, buddy!!
+            }
+
+            filePaths.addAll(getInfoDocuments(session.getUid()));
+
+            //TODO: screenshots
+
+            //TODO: sources????
         }
-
-        //Session details
-        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION, session));
-        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_STEPS, session));
-        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.SESSION_LOGS, session));
-
-        //Crash??
-        if (session.getCrashId()>0){
-            Crash crash = IadtController.get().getDatabase().crashDao()
-                    .findById(session.getCrashId());
-            filePaths.add(crash.getReportPath());
-
-            //TODO: crash screenshots
-            //TODO: crash stacktrace with source snapshot! Include few source lines around
-            // the traced one... Nice idea, buddy!!
-        }
-
-        filePaths.addAll(getInfoDocuments(session.getUid()));
-
-        //TODO: screenshots
-
-        //TODO: sources????
 
         return filePaths;
     }

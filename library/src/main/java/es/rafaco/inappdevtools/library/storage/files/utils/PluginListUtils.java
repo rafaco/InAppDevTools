@@ -20,15 +20,8 @@
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.content.Context;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -43,7 +36,8 @@ public class PluginListUtils {
     }
 
     private static String getPluginVersion(String pluginName) {
-        String fileContents = getFileContents(IadtPath.PLUGIN_LIST);
+        AssetFileReader reader = new AssetFileReader(getContext());
+        String fileContents = reader.getFileContents(IadtPath.PLUGIN_LIST);
         String[] lines = fileContents.split(Humanizer.newLine());
         for (String line : lines) {
             if (line.startsWith(pluginName + "-")){
@@ -59,28 +53,6 @@ public class PluginListUtils {
             i++;
 
         return line.substring(i, line.length()-4);
-    }
-
-    private static String getFileContents(String target) {
-        StringBuilder builder = null;
-        try {
-            InputStream stream = getContext().getAssets().open(target);
-            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-            builder = new StringBuilder();
-            String str;
-
-            while ((str = in.readLine()) != null) {
-                builder.append(str + Humanizer.newLine());
-            }
-
-            in.close();
-
-        } catch (IOException e) {
-            FriendlyLog.log("E", "Iadt", "Config",
-                    "Unable to read '" + target + "'", Log.getStackTraceString(e));
-        }
-
-        return (builder != null) ? builder.toString() : null;
     }
 
     private static Context getContext(){

@@ -23,13 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-//#ifdef ANDROIDX
-//@import androidx.annotation.Nullable;
-//#else
-//#endif
-
 import java.util.TooManyListenersException;
 
+import es.rafaco.inappdevtools.library.logic.build.BuildManager;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -50,7 +46,6 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
@@ -64,6 +59,12 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScre
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
+
+/**
+ * This class is the main internal interface of InAppDevTools.
+ * Host apps should try to avoid using this directly, Iadt is our public interface and their method
+ * are always safe to call even with the library disabled or using our noop version.
+ */
 public final class IadtController {
 
     private static IadtController INSTANCE;
@@ -71,6 +72,7 @@ public final class IadtController {
     private Context context;
     private ConfigManager configManager;
     private SessionManager sessionManager;
+    private BuildManager buildManager;
     private EventManager eventManager;
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
@@ -135,6 +137,7 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController init essential");
 
         sessionManager = new SessionManager(context);
+        buildManager = new BuildManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
 
@@ -196,7 +199,9 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
 
         sourcesManager = new SourcesManager(getContext());
-        sessionManager.storeInfoDocuments();
+
+        sessionManager.storeDocuments();
+        //buildManager.storeDocuments();
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
@@ -237,6 +242,10 @@ public final class IadtController {
 
     public SessionManager getSessionManager() {
         return sessionManager;
+    }
+
+    public BuildManager getBuildManager() {
+        return buildManager;
     }
 
     public RunnableManager getRunnableManager() {

@@ -19,7 +19,12 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
 import android.support.v4.content.ContextCompat;
+//#endif
+
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

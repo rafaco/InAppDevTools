@@ -26,7 +26,6 @@ import android.view.View;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
-import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -99,7 +98,7 @@ public class ScreenshotUtils {
     }
 
     private static Screenshot fillDatabaseObject(String selectedName, String activityName, String imageFilePath) {
-        long currentSessionId = IadtController.get().getSessionManager().getCurrent().getUid();
+        long currentSessionId = IadtController.get().getSessionManager().getCurrentUid();
         Screenshot screenshot = new Screenshot();
         screenshot.setSessionId(currentSessionId);
         screenshot.setRootViewName(selectedName);

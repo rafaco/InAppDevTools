@@ -19,6 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.overlay;
 
+import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
@@ -75,5 +77,7 @@ public class ScreensLoader {
         screenManager.registerScreen(ConfigScreen.class);
         screenManager.registerScreen(SessionsScreen.class);
         screenManager.registerScreen(SessionDetailScreen.class);
+        screenManager.registerScreen(BuildsScreen.class);
+        screenManager.registerScreen(BuildDetailScreen.class);
     }
 }

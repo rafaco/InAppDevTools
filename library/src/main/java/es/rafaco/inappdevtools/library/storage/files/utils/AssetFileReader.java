@@ -20,14 +20,20 @@
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.zip.ZipFile;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class AssetFileReader {
 
@@ -40,26 +46,36 @@ public class AssetFileReader {
     public ZipFile getZipFile(String target) {
         ZipFile zip = null;
         try {
-            zip = new ZipFile(getLocalFile(target));
+            zip = new ZipFile(copyToCache(target));
         } catch (IOException e) {
             FriendlyLog.logException("Exception", e);
         }
         return zip;
     }
 
-    private File getLocalFile(String target ){
+    private File copyToCache(String target ){
         if(!target.startsWith("/")){
             target = "/" + target;
         }
         File f = new File(context.getCacheDir() + target);
 
         if (!f.exists()){
-            createLocalFromAsset(target, f);
+            createLocalFileFromAsset(target, f);
         }
         return f;
     }
 
-    private void createLocalFromAsset(String target, File f) {
+    public File copyToInternal(String origin, String destinationFolder ){
+        if(origin.startsWith("/")){
+            origin = origin.substring(1);
+        }
+        String fileNameWithExtension = PathUtils.getFileNameWithExtension(origin);
+        File destination = FileCreator.prepare(destinationFolder, fileNameWithExtension);
+        createLocalFileFromAsset(origin, destination);
+        return destination;
+    }
+
+    private void createLocalFileFromAsset(String target, File f) {
         FileOutputStream fos = null;
         try {
             f.getParentFile().mkdirs();
@@ -74,9 +90,11 @@ public class AssetFileReader {
 
             fos = new FileOutputStream(f);
             fos.write(buffer);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             FriendlyLog.logException("SourceReader exception", e);
-        }finally {
+        }
+        finally {
             if (fos!=null){
                 try {
                     fos.close();
@@ -85,5 +103,29 @@ public class AssetFileReader {
                 }
             }
         }
+    }
+
+    public String getFileContents(String target) {
+        StringBuilder builder = null;
+
+        try {
+            InputStream stream = context.getAssets().open(target);
+            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            builder = new StringBuilder();
+            String str;
+
+            while ((str = in.readLine()) != null) {
+                builder.append(str + Humanizer.newLine());
+            }
+
+            in.close();
+            stream.close();
+
+        } catch (IOException e) {
+            Log.e(Iadt.TAG, "Unable to read config at '" + target + "'" + Log.getStackTraceString(e));
+            return null;
+        }
+
+        return (builder != null) ? builder.toString() : null;
     }
 }

@@ -36,6 +36,8 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnrDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.Build;
+import es.rafaco.inappdevtools.library.storage.db.entities.BuildDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -52,13 +54,15 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 
 @Database(version = 28, exportSchema = false,
-        entities = {Crash.class,
-                Anr.class,
-                Screenshot.class,
-                Logcat.class,
-                Friendly.class,
-                Sourcetrace.class,
+        entities = {
+                Build.class,
                 Session.class,
+                Friendly.class,
+                Logcat.class,
+                Screenshot.class,
+                Crash.class,
+                Anr.class,
+                Sourcetrace.class,
                 Report.class,
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
@@ -85,13 +89,14 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
 
     //region [ DAOs ]
+    public abstract SessionDao sessionDao();
+    public abstract BuildDao buildDao();
+    public abstract FriendlyDao friendlyDao();
+    public abstract LogcatDao logcatDao();
+    public abstract ScreenshotDao screenshotDao();
     public abstract CrashDao crashDao();
     public abstract AnrDao anrDao();
-    public abstract ScreenshotDao screenshotDao();
-    public abstract LogcatDao logcatDao();
-    public abstract FriendlyDao friendlyDao();
     public abstract SourcetraceDao sourcetraceDao();
-    public abstract SessionDao sessionDao();
     public abstract ReportDao reportDao();
     //endregion
 
@@ -103,14 +108,15 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         String overview = "";
         String jump = "\n\t";
         overview +="Iadt DB overview: " + jump;
-        overview +="  Session: " + sessionDao().count() + jump;
-        overview +="  FriendlyLog: " + friendlyDao().count() + jump;
-        overview +="  Logcat: " + logcatDao().count() + jump;
-        overview +="  Screenshot: " + screenshotDao().count() + jump;
-        overview +="  Anr: " + anrDao().count() + jump;
-        overview +="  Crash: " + crashDao().count() + jump;
-        overview +="  Sourcetrace: " + sourcetraceDao().count() + jump;
-        overview +="  Report: " + reportDao().count() + jump;
+        overview +="  Builds: " + buildDao().count() + jump;
+        overview +="  Sessions: " + sessionDao().count() + jump;
+        overview +="  FriendlyLogs: " + friendlyDao().count() + jump;
+        overview +="  Logcats: " + logcatDao().count() + jump;
+        overview +="  Screenshots: " + screenshotDao().count() + jump;
+        overview +="  Crashs: " + crashDao().count() + jump;
+        overview +="  Anrs: " + anrDao().count() + jump;
+        overview +="  SourceTraces: " + sourcetraceDao().count() + jump;
+        overview +="  Reports: " + reportDao().count() + jump;
 
         return overview;
     }

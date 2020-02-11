@@ -21,7 +21,12 @@ package es.rafaco.inappdevtools.library.logic.utils;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -41,11 +46,34 @@ public class AppBuildConfig {
             Class<?> clazz = Class.forName(getNamespace(context) + ".BuildConfig");
             Field field = clazz.getField(fieldName);
             return field.get(null);
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e) {
             FriendlyLog.logException("Exception", e);
-        } catch (NoSuchFieldException e) {
+        }
+        catch (NoSuchFieldException e) {
             FriendlyLog.logException("Exception", e);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
+            FriendlyLog.logException("Exception", e);
+        }
+        return null;
+    }
+
+    public static String toJson(Context context) {
+        try {
+            Class<?> clazz = Class.forName(getNamespace(context) + ".BuildConfig");
+            Field[] fields = clazz.getFields();
+            Map<String, Object> map = new HashMap<>();
+            for (Field field : fields) {
+                map.put(field.getName(), field.get(field.getType()));
+            }
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.toJson(map);
+        }
+        catch (ClassNotFoundException e) {
+            FriendlyLog.logException("Exception", e);
+        }
+        catch (IllegalAccessException e) {
             FriendlyLog.logException("Exception", e);
         }
         return null;

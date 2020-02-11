@@ -22,17 +22,21 @@ package es.rafaco.inappdevtools.library.logic.config;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.build.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
+import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class ConfigManager {
 
-    private final AssetJsonHelper compileConfig;
+    private final JsonHelper compileConfig;
 
     public ConfigManager(Context context) {
-        compileConfig = new AssetJsonHelper(context, IadtPath.BUILD_CONFIG);
+        //Always read buildConfig directly from asset
+        String fileContents = new AssetFileReader(context).getFileContents(IadtPath.BUILD_CONFIG);
+        compileConfig = new JsonHelper(fileContents);
     }
 
     public Object get(BuildConfig config) {

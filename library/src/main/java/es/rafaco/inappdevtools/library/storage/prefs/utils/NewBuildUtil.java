@@ -22,7 +22,8 @@ package es.rafaco.inappdevtools.library.storage.prefs.utils;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
-import es.rafaco.inappdevtools.library.storage.files.utils.AssetJsonHelper;
+import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
+import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 public class NewBuildUtil {
@@ -40,22 +41,6 @@ public class NewBuildUtil {
         return isNewBuildOnMemory;
     }
 
-    public static boolean isBuildInfoShown(){
-        return DevToolsPrefs.getBoolean(BUILD_INFO_SHOWN, false);
-    }
-
-    public static void saveBuildInfoShown(){
-        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, true);
-    }
-
-    public static boolean isBuildInfoSkipped(){
-        return DevToolsPrefs.getBoolean(BUILD_INFO_SKIPPED, false);
-    }
-
-    public static void saveBuildInfoSkip() {
-        DevToolsPrefs.setBoolean(BUILD_INFO_SKIPPED, true);
-    }
-
     public static long getBuildTime(){
         if (buildTimeOnMemory == null){
             update();
@@ -66,12 +51,13 @@ public class NewBuildUtil {
     private static void update(){
 
         long lastBuildTime = DevToolsPrefs.getLong(LAST_BUILD_TIME, -1);
-        AssetJsonHelper buildInfo = new AssetJsonHelper(IadtController.get().getContext(), IadtPath.BUILD_INFO);
+        String fileContents = new AssetFileReader(IadtController.get().getContext())
+                .getFileContents(IadtPath.BUILD_INFO);
+        JsonHelper buildInfo = new JsonHelper(fileContents);
         long currentBuildTime = buildInfo.getLong(BuildInfo.BUILD_TIME);
 
-        if (lastBuildTime<0){
-            //First start
-            isNewBuildOnMemory = false;
+        if (lastBuildTime<0){  //First start
+            isNewBuildOnMemory = true;
             buildTimeOnMemory = currentBuildTime;
             storeBuildTime();
         }
@@ -89,6 +75,24 @@ public class NewBuildUtil {
 
     private static void storeBuildTime(){
         DevToolsPrefs.setLong(LAST_BUILD_TIME, buildTimeOnMemory);
+    }
+
+
+
+    public static boolean isBuildInfoShown(){
+        return DevToolsPrefs.getBoolean(BUILD_INFO_SHOWN, false);
+    }
+
+    public static void saveBuildInfoShown(){
+        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, true);
+    }
+
+    public static boolean isBuildInfoSkipped(){
+        return DevToolsPrefs.getBoolean(BUILD_INFO_SKIPPED, false);
+    }
+
+    public static void saveBuildInfoSkip() {
+        DevToolsPrefs.setBoolean(BUILD_INFO_SKIPPED, true);
     }
 
     private static void clearBuildInfoShown() {

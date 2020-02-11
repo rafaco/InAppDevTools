@@ -61,7 +61,7 @@ public class LogFilterHelper {
     }
 
     public void setSessionById(long sessionId) {
-        long sessionCount = IadtController.get().getSessionManager().getCurrent().getUid();
+        long sessionCount = IadtController.get().getSessionManager().getCurrentUid();
         int sessionUiPosition = (int) (1 + sessionCount - sessionId);
         getUiFilter().setSessionInt(sessionUiPosition);
     }

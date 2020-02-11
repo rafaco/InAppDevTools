@@ -31,6 +31,7 @@ public class CacheUtils {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
+            FriendlyLog.logDebug("Internal cache cleared");
         } catch (Exception e) {
             FriendlyLog.logException("Exception cleaning cache: ", e);
         }

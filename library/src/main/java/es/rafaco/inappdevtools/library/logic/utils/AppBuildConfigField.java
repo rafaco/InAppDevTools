@@ -17,31 +17,38 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.reports;
+package es.rafaco.inappdevtools.library.logic.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+public class AppBuildConfigField {
 
-public enum ReportType {
-    CRASH(1),
-    SESSION(2),
-    CUSTOM(3),
-    ISSUE(4);
+    private String name;
+    private String type;
+    private Object value;
 
-    public int code;
-    private static final Map<Integer, ReportType> TYPES = new HashMap<>();
-    ReportType(int code) {
-        this.code = code;
+    public AppBuildConfigField() {
     }
-    static {
-        for (ReportType value : values()) {
-            TYPES.put(value.code, value);
-        }
+
+    public String getName() {
+        return name;
     }
-    public int getCode() {
-        return code;
+
+    public void setName(String name) {
+        this.name = name;
     }
-    public static ReportType getByCode(int code) {
-        return TYPES.get(code);
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 }
