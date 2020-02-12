@@ -33,7 +33,7 @@ If you prefer to contact us directly in a private way, you can always send us an
 
 Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project. 
 
-Following instructions are for user that want build their own version of InAppDevTools with changes. Remember to contribute your changes to the community using a PR.
+Following instructions are for user that want build their own version of InAppDevTools with changes. Remember to contribute your changes to the community using a Pull Request.
 
 ### Artifacts
 
@@ -59,7 +59,7 @@ Our Android Studio project have "Run Configurations" for AndroidX an Support bui
 
 This params override selections on Android Studio "Build Variant" panel. To manually build AndroidX variants of any submodule, remove command line args and restore properties android.useAndroidX=true and android.enableJetifier=true at gradle.properties.
 
-Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other side around. Test your build switching to Androidx but perform a last build using a support build before committing, to restore support sources.
+Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other way around. Test your build switching to Androidx but perform a last build using Support libraries before committing, to restore support sources.
 
 ## Continuous Integration <a name="ci"/>
 
@@ -105,5 +105,6 @@ Working on your first Pull Request? You can learn how from this *free* series, [
 
 ## Coding standards
 //TODO
+
 
 _Ideas extracted from the following [template] (https://github.com/nayafia/contributing-template)._
