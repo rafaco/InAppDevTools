@@ -24,7 +24,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 
@@ -36,7 +35,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -483,7 +482,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportHelper.EMAIL);
+                        report.setSenderType(ReportSender.EMAIL);
                         sendReport();
                     }
                 });
@@ -496,7 +495,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportHelper.SEND);
+                        report.setSenderType(ReportSender.SEND);
                         sendReport();
                     }
                 });
@@ -509,7 +508,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportHelper.VIEW);
+                        report.setSenderType(ReportSender.VIEW);
                         sendReport();
                     }
                 });

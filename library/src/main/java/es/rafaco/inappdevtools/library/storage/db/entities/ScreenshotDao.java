@@ -39,8 +39,8 @@ public interface ScreenshotDao {
     @Query("SELECT * FROM screenshot ORDER BY date DESC")
     List<Screenshot> getAll();
 
-    /*@Query("SELECT * FROM screenshots ORDER BY date DESC")
-    LiveData<List<Screenshot>> getAllLive();*/
+    @Query("SELECT * FROM screenshot WHERE sessionId == :sessionId ORDER BY uid")
+    List<Screenshot> getAllBySessionId(long sessionId);
 
     @Query("SELECT * FROM screenshot where uid LIKE :uid")
     Screenshot findById(long uid);

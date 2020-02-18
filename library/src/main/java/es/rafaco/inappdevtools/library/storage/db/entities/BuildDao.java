@@ -44,7 +44,7 @@ public interface BuildDao {
     @Query("SELECT * FROM build where uid LIKE :uid")
     Build findById(long uid);
 
-    @Query("SELECT * FROM build WHERE firstSession >= :sessionId ORDER BY uid ASC LIMIT 1")
+    @Query("SELECT * FROM build WHERE firstSession <= :sessionId ORDER BY uid DESC LIMIT 1")
     Build findBySessionId(long sessionId);
 
     @Query("SELECT * FROM build ORDER BY uid DESC LIMIT 1")

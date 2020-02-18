@@ -67,7 +67,6 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.documents.generators.detail.LogItemDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogDataSourceFactory;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
@@ -76,7 +75,6 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
@@ -88,7 +86,6 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
 
 public class LogScreen extends Screen implements LogViewHolder.Listener {

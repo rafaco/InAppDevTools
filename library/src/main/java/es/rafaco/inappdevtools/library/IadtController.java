@@ -54,7 +54,7 @@ import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -136,8 +136,8 @@ public final class IadtController {
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController init essential");
 
-        sessionManager = new SessionManager(context);
         buildManager = new BuildManager(context);
+        sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
 
@@ -315,7 +315,7 @@ public final class IadtController {
             report.setCrashId((Long) param);
         }
         String params = NewReportScreen.buildParams(report);
-
+        OverlayService.performNavigation(NewReportScreen.class, params);
     }
 
     public void sendReport(final Report report) {
@@ -323,7 +323,7 @@ public final class IadtController {
                 new Runnable() {
                     @Override
                     public void run() {
-                        new ReportHelper().send(report);
+                        new ReportSender().send(report);
                     }
                 });
     }

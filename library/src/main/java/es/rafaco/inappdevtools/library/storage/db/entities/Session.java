@@ -23,10 +23,12 @@ package es.rafaco.inappdevtools.library.storage.db.entities;
 //@import androidx.room.ColumnInfo;
 //@import androidx.room.Entity;
 //@import androidx.room.PrimaryKey;
+//@import androidx.room.ForeignKey;
 //#else
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.ForeignKey;
 //#endif
 
 import com.google.gson.Gson;
@@ -34,11 +36,19 @@ import java.io.Serializable;
 
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
-@Entity(tableName = "session")
+
+@Entity(tableName = "session",
+        foreignKeys = @ForeignKey(entity = Build.class,
+            parentColumns = "uid",
+            childColumns = "buildId",
+            onDelete = ForeignKey.CASCADE))
 public class Session implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long uid;
+
+    @ColumnInfo(name = "buildId")
+    private long buildId;
 
     @ColumnInfo(name = "date")
     private long date;
@@ -80,6 +90,14 @@ public class Session implements Serializable {
 
     public void setUid(long uid) {
         this.uid = uid;
+    }
+
+    public long getBuildId() {
+        return buildId;
+    }
+
+    public void setBuildId(long buildId) {
+        this.buildId = buildId;
     }
 
     public long getDate() {

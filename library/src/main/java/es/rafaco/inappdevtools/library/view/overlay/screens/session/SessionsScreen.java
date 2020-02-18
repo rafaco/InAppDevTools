@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.session;
 
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -45,6 +46,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class SessionsScreen extends Screen {
 
+    private long filterBuildId = -1;
+
     public SessionsScreen(ScreenManager manager) {
         super(manager);
     }
@@ -64,12 +67,34 @@ public class SessionsScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        List<?> data = initData();
-        initAdapter((List<Object>) data);
+        initParam();
+        List<Session> data = initData();
+        List<?> cardData = prepareData(data);
+        initAdapter((List<Object>) cardData);
     }
 
-    private List<CardData> initData() {
-        List<Session> sessions = IadtController.get().getSessionManager().getSessionsWithOverview();
+    private void initParam() {
+        if (!TextUtils.isEmpty(getParam())){
+            filterBuildId = Long.parseLong(getParam());
+        }
+
+        if (filterBuildId > -1){
+            getScreenManager().setTitle("Build " + filterBuildId + " sessions");
+        }
+    }
+
+    private List<Session> initData() {
+        List<Session> sessions;
+        if (!TextUtils.isEmpty(getParam())) {
+            sessions = IadtController.get().getSessionManager().getSessionsWithOverview(filterBuildId);
+        } else {
+            sessions = IadtController.get().getSessionManager().getSessionsWithOverview();
+        }
+
+        return sessions;
+    }
+
+    private List<CardData> prepareData(List<Session> sessions) {
         List<CardData> cards = new ArrayList<>();
         for (int i = 0; i<sessions.size(); i++) {
             final Session session = sessions.get(i);

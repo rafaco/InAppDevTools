@@ -260,8 +260,9 @@ public class CrashDetailScreen extends Screen {
         }
         else if (selected == R.id.action_share)
         {
-            //TODO: share error
-            Iadt.showMessage("Not already implemented");
+            Iadt.showMessage("Sharing crash document");
+            DocumentRepository.shareDocument(DocumentType.CRASH, crash);
+            return true;
         }
         else if (selected == R.id.action_delete)
         {

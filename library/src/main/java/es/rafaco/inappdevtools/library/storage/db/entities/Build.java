@@ -40,6 +40,8 @@ public class Build implements Serializable {
     @ColumnInfo(name = "date")
     private long date;
 
+    //TODO: Remove Build.firstSession
+    @Deprecated
     @ColumnInfo(name = "firstSession")
     private long firstSession;
 
@@ -62,10 +64,14 @@ public class Build implements Serializable {
         this.date = date;
     }
 
+    //TODO: Remove Build.firstSession
+    @Deprecated
     public long getFirstSession() {
         return firstSession;
     }
 
+    //TODO: Remove Build.firstSession
+    @Deprecated
     public void setFirstSession(long firstSession) {
         this.firstSession = firstSession;
     }

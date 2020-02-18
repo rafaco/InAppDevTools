@@ -46,9 +46,9 @@ public class FileCreator {
         if (file == null){
             return null;
         }
-
+        FileOutputStream fOut = null;
         try {
-            FileOutputStream fOut = new FileOutputStream(file);
+            fOut = new FileOutputStream(file);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(content);
 
@@ -60,7 +60,8 @@ public class FileCreator {
             return file.getPath();
         }
         catch (IOException e) {
-            Log.e(Iadt.TAG, "File write failed: " + e.toString());
+            FriendlyLog.logException("Error creating file", e);
+            IOUtil.closeQuietly(fOut);
         }
 
         return null;

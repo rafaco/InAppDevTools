@@ -23,12 +23,17 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.reports.ReportHelper;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -75,6 +80,7 @@ public class SessionManager {
         session.setDate(detectionDate);
         session.setDetectionDate(detectionDate);
         session.setPid(pid);
+        session.setBuildId(IadtController.get().getBuildManager().getCurrentId());
 
         if (FirstStartUtil.isFirstStart()){
             FirstStartUtil.saveFirstStart();
@@ -100,6 +106,11 @@ public class SessionManager {
 
         long newSessionId = getDao().insert(session);
         session.setUid(newSessionId);
+
+        //TODO: Remove Build.firstSession
+        if (session.isNewBuild()) {
+            IadtController.get().getBuildManager().updateFirstSession(newSessionId);
+        }
 
         return newSessionId;
     }
@@ -163,20 +174,27 @@ public class SessionManager {
         return finishDate;
     }
 
-    public List<Session> getSessionsWithOverview() {
-
-        List<Session> sessions = getDao().getAll();
-
-        //Current session
-        Session current = sessions.get(0);
-        current.setAnalysis(calculateCurrentSessionAnalysis());
-
-        //Previous sessions
-        for (int i = 1; i<sessions.size(); i++){
-            Session target = sessions.get(i);
-            updateFinishedSession(target);
-        }
+    public List<Session> getSessionsWithOverview(long buildId) {
+        List<Session> sessions = getDao().filterByBuildId(buildId);
+        updateAnalysis(sessions);
         return sessions;
+    }
+
+    public List<Session> getSessionsWithOverview() {
+        List<Session> sessions = getDao().getAll();
+        updateAnalysis(sessions);
+        return sessions;
+    }
+
+    private void updateAnalysis(List<Session> sessions) {
+        for (int i = 0; i<sessions.size(); i++){
+            Session target = sessions.get(i);
+            if (target.isCurrent()){
+                target.setAnalysis(calculateCurrentSessionAnalysis());
+            }else{
+                updateFinishedSession(target);
+            }
+        }
     }
 
     private void updateFinishedSession(Session target) {
@@ -241,15 +259,35 @@ public class SessionManager {
 
     public void storeDocuments() {
         final long currentUid = getCurrent().getUid();
-        ReportHelper.getInfoDocuments(currentUid);
+        getInfoDocuments(currentUid);
 
         /* //TODO: Generate docs on background thread
         ThreadUtils.runOnBack("Iadt-SessionInfoDocs",
                 new Runnable() {
                     @Override
                     public void run() {
-                        ReportHelper.getInfoDocuments(currentUid);
+                        ReportSender.getInfoDocuments(currentUid);
                     }
                 });*/
+    }
+
+    //Generate Info overview and individual pages
+    public List<String> getInfoDocuments(long sessionId) {
+        List<String> filePaths = new ArrayList<>();
+        StopWatch watch = null;
+        if (IadtController.get().isDebug()){
+            watch = new StopWatch("GenerateInfoDocs");
+            watch.step("Overview");
+        }
+        filePaths.add(DocumentRepository.getDocumentPath(DocumentType.INFO_OVERVIEW, sessionId));
+        DocumentType[] values = DocumentType.getInfoValues();
+        for (DocumentType documentType : values){
+            if (IadtController.get().isDebug())
+                watch.step(documentType.getName());
+            filePaths.add(DocumentRepository.getDocumentPath(documentType, sessionId));
+        }
+        if (IadtController.get().isDebug())
+            FriendlyLog.log(watch.finish());
+        return filePaths;
     }
 }

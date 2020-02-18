@@ -61,6 +61,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     public BuildInfoDocumentGenerator(Context context, DocumentType report, long param) {
         super(context, report, param);
+
+        //TODO: param should be buildId.
+        //TODO: Remove deprecated firstSession param at Build object
         this.sessionId = param;
         this.buildId = BuildFilesRepository.getBuildIdForSession(sessionId);
 

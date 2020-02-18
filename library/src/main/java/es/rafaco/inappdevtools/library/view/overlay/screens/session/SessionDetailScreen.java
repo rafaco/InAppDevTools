@@ -40,6 +40,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
@@ -86,11 +87,12 @@ public class SessionDetailScreen extends Screen {
 
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getButtonGroupData(session));
+        objectList.add(1, getFirstButtonGroupData(session));
+        objectList.add(2, getSecondButtonGroupData(session));
         return objectList;
     }
 
-    private ButtonGroupData getButtonGroupData(final Session session) {
+    private ButtonGroupData getFirstButtonGroupData(final Session session) {
         List<RunButton> buttons = new ArrayList<>();
         buttons.add(new RunButton(
                 "Steps",
@@ -134,6 +136,38 @@ public class SessionDetailScreen extends Screen {
                                     session.getCrashId() + "");
                         }
             }));
+        }
+
+        return new ButtonGroupData(buttons);
+    }
+
+    private ButtonGroupData getSecondButtonGroupData(final Session session) {
+        List<RunButton> buttons = new ArrayList<>();
+
+        buttons.add(new RunButton(
+                "View build",
+                R.drawable.ic_build_white_24dp,
+                R.color.rally_purple,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(BuildDetailScreen.class,
+                            session.getBuildId() + "");
+                    }
+                }));
+
+        if (session.getCrashId()>0){
+            buttons.add(new RunButton(
+                    "Crash",
+                    R.drawable.ic_bug_report_white_24dp,
+                    R.color.rally_orange,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(CrashDetailScreen.class,
+                                    session.getCrashId() + "");
+                        }
+                    }));
         }
 
         return new ButtonGroupData(buttons);

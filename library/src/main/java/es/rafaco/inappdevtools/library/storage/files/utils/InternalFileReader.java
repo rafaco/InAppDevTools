@@ -29,6 +29,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -44,7 +47,6 @@ public class InternalFileReader {
     }
 
     public String getContent(String target) {
-
         File fullPath = FileCreator.getSubfolder(target);
         StringBuilder builder = null;
         try {
@@ -68,4 +70,17 @@ public class InternalFileReader {
 
         return (builder != null) ? builder.toString() : null;
     }
+
+    public List<String> getFilesAtFolder(String folderPath) {
+        File folder = new File(folderPath);
+        File[] listOfFiles = folder.listFiles();
+        List<String> result = new ArrayList<>();
+        for (File file : listOfFiles) {
+            if (file.isFile()){
+                result.add(file.getAbsolutePath());
+            }
+        }
+        return result;
+    }
+
 }

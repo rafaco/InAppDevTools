@@ -27,9 +27,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ZipUtils {
 
@@ -49,20 +52,23 @@ public class ZipUtils {
         zipManager.unzip(inputPath + inputFile, outputPath);
     }*/
 
-    public void zip(List<String> filesToCompress, String zipFileName) {
+    public void zip(List<String> fileList, String zipFileName) {
+        BufferedInputStream origin = null;
+        ZipOutputStream out = null;
         try {
-            BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(zipFileName);
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-                    dest));
+            out = new ZipOutputStream(new BufferedOutputStream(dest));
             byte data[] = new byte[BUFFER];
 
-            for (int i = 0; i < filesToCompress.size(); i++) {
-                Log.v("Compress", "Adding: " + filesToCompress.get(i));
-                FileInputStream fi = new FileInputStream(filesToCompress.get(i));
+            for (int i = 0; i < fileList.size(); i++) {
+                String filePath = fileList.get(i);
+                String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                Log.v("Compress", "Adding: " + fileName);
+
+                FileInputStream fi = new FileInputStream(filePath);
                 origin = new BufferedInputStream(fi, BUFFER);
 
-                ZipEntry entry = new ZipEntry(filesToCompress.get(i).substring(filesToCompress.get(i).lastIndexOf("/") + 1));
+                ZipEntry entry = new ZipEntry(fileName);
                 out.putNextEntry(entry);
                 int count;
 
@@ -71,21 +77,58 @@ public class ZipUtils {
                 }
                 origin.close();
             }
-
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Error zipping report", e);
+            IOUtil.closeQuietly(origin, out);
+        }
+    }
+
+    public void zip(Map<String, List<String>> filesMap, String zipFileName) {
+        BufferedInputStream origin = null;
+        ZipOutputStream out = null;
+        try {
+            FileOutputStream dest = new FileOutputStream(zipFileName);
+            out = new ZipOutputStream(new BufferedOutputStream(dest));
+            byte data[] = new byte[BUFFER];
+
+            for (Map.Entry<String,List<String>> folderGroup : filesMap.entrySet()){
+                String currentFolder = folderGroup.getKey();
+                List<String> currentFiles = folderGroup.getValue();
+
+                for (String localFilePath : currentFiles) {
+                    String fileName = localFilePath.substring(localFilePath.lastIndexOf("/") + 1);
+                    String zipFilePath = currentFolder + "/" + fileName;
+                    FriendlyLog.logDebug("ReportSender: Adding " + zipFilePath);
+
+                    FileInputStream fi = new FileInputStream(localFilePath);
+                    origin = new BufferedInputStream(fi, BUFFER);
+
+                    ZipEntry entry = new ZipEntry(zipFilePath);
+                    out.putNextEntry(entry);
+
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                    origin.close();
+                }
+            }
+            out.close();
+        }
+        catch (Exception e) {
+            FriendlyLog.logException("Error zipping report", e);
+            IOUtil.closeQuietly(origin, out);
         }
     }
 
     public void unzip(String zipFile, String outputFolder) {
-
         //create target location folder if not exist
         createDirIfNotExist(outputFolder);
-
+        FileOutputStream fout = null;
+        ZipInputStream zin = null;
         try {
-            FileInputStream fin = new FileInputStream(zipFile);
-            ZipInputStream zin = new ZipInputStream(fin);
+            zin = new ZipInputStream(new FileInputStream(zipFile));
             ZipEntry ze = null;
             while ((ze = zin.getNextEntry()) != null) {
 
@@ -93,7 +136,7 @@ public class ZipUtils {
                 if (ze.isDirectory()) {
                     createDirIfNotExist(ze.getName());
                 } else {
-                    FileOutputStream fout = new FileOutputStream(outputFolder + ze.getName());
+                    fout = new FileOutputStream(outputFolder + ze.getName());
                     for (int c = zin.read(); c != -1; c = zin.read()) {
                         fout.write(c);
                     }
@@ -101,11 +144,11 @@ public class ZipUtils {
                     zin.closeEntry();
                     fout.close();
                 }
-
             }
             zin.close();
         } catch (Exception e) {
-            System.out.println(e);
+            FriendlyLog.logException("Error unzipping report", e);
+            IOUtil.closeQuietly(fout, zin);
         }
     }
 
