@@ -87,11 +87,9 @@ public class ReportsScreen extends FlexibleScreen {
             result = "Crash " + report.getCrashId() + " report";
         }
         else if (report.getReportType() == ReportType.SESSION){
-            result = "Session " + report.getCrashId() + " report";
+            result = "Session " + report.getSessionId() + " report";
         }
-        else if (report.getReportType() == ReportType.CUSTOM){
-            result = "Custom report about " + report.getFormattedReason();
-        }else{
+        else{
             result = "Issue report";
         }
 

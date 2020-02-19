@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.report;
 
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +34,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
-import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
+import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -99,11 +98,6 @@ public class NewReportScreen extends FlexibleScreen {
             updateAdapter(getSessionSelectorData());
             return;
         }
-        else if (report.getReportType() == ReportType.CUSTOM &&
-                TextUtils.isEmpty(report.getScreenIds())){
-            updateAdapter(getScreenSelectorData());
-            return;
-        }
 
         if (!contentReviewed){
             updateAdapter(getContentFormData());
@@ -115,12 +109,22 @@ public class NewReportScreen extends FlexibleScreen {
 
 
 
-    private OverviewData getOverview() {
-        String description = report==null ? "N/A" : ReportFormatter.getLongDescription(report);
-        OverviewData report = new OverviewData("Report",
-                description,
-                R.string.gmd_send, R.color.rally_white);
-        return report;
+    private CardData getOverview() {
+        CardData card = new CardData(ReportFormatter.getTitle(report),
+                ReportFormatter.getAttachmentDescription(report),
+                R.string.gmd_attach_file,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        report.setTypeInt(-1);
+                        report.setSessionId(-1);
+                        report.setCrashId(-1);
+                        loadNextStep();
+                    }
+                });
+        card.setTitleColor(ReportFormatter.getStatusColor(report));
+        card.setNavIcon(R.string.gmd_edit);
+        return card;
     }
 
 
@@ -128,10 +132,14 @@ public class NewReportScreen extends FlexibleScreen {
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        data.add("Did you reproduce it? Select a session to include data about what happen underneath, useful for our developers:");
-        data.add("");
+        OverviewData header = new OverviewData("Did you reproduce the issue? When?",
+                "Select the session when it happen to include all data available as context to help our developers",
+                        R.string.gmd_attach_file,
+                        R.color.rally_white);
+        data.add(header);
+
         CardData currentSessionCard = new CardData("Current session",
-                "You just reproduce a problem on this session",
+                "You just reproduce it on current session",
                 R.string.gmd_live_tv,
                 new Runnable() {
                     @Override
@@ -140,18 +148,19 @@ public class NewReportScreen extends FlexibleScreen {
                         report.setReasonInt(0);
                         Session currentSession = IadtController.get().getSessionManager().getCurrent();
                         report.setSessionId(currentSession.getUid());
+                        report.setCrashId(-1);
                         loadNextStep();
                     }
                 });
-        currentSessionCard.setTitleColor(R.color.rally_green);
+        currentSessionCard.setTitleColor(R.color.rally_blue);
         data.add(currentSessionCard);
 
         final Crash lastCrash = IadtController.getDatabase().crashDao().getLast();
         CardData crashCard;
         if (lastCrash==null){
             //TODO: use real pending, excluding reported ones
-            crashCard = new CardData("No pending crash",
-                    "There are no crash pending to report",
+            crashCard = new CardData("Last crashed session",
+                    "There are no crash recorded",
                     R.string.gmd_bug_report,
                     null);
             crashCard.setTitleColor(R.color.rally_gray);
@@ -159,18 +168,18 @@ public class NewReportScreen extends FlexibleScreen {
         }
         else {
             crashCard = new CardData("Last crashed session",
-                    "Session " + lastCrash.getSessionId() + " crashed "
-                            + Humanizer.getElapsedTimeLowered(lastCrash.getDate())
+                    "Report session " + lastCrash.getSessionId() + " crashed "
+                            + Humanizer.getElapsedTimeLowered(lastCrash.getDate()) + "."
                             + Humanizer.newLine()
-                            + lastCrash.getMessage(),
+                            + Humanizer.truncate(lastCrash.getMessage(), 90),
                     R.string.gmd_bug_report,
                     new Runnable() {
                         @Override
                         public void run() {
                             report.setReportType(ReportType.CRASH);
                             report.setReasonInt(0);
-                            report.setCrashId(lastCrash.getUid());
                             report.setSessionId(lastCrash.getSessionId());
+                            report.setCrashId(lastCrash.getUid());
                             loadNextStep();
                         }
                     });
@@ -180,8 +189,8 @@ public class NewReportScreen extends FlexibleScreen {
 
         int sessions = IadtController.getDatabase().sessionDao().getAll().size();
         int crashes = IadtController.getDatabase().crashDao().getAll().size();
-        CardData sessionCard = new CardData("Other sessions",
-                "Select a previous session when it happen\n"
+        CardData sessionCard = new CardData("Select other session",
+                "Select a previous session to include\n"
                 + sessions + " sessions available (" + crashes + " with crash)",
                 R.string.gmd_history,
                 new Runnable() {
@@ -189,10 +198,12 @@ public class NewReportScreen extends FlexibleScreen {
                     public void run() {
                         report.setReportType(ReportType.SESSION);
                         report.setReasonInt(0);
+                        report.setCrashId(-1);
+                        report.setSessionId(-1);
                         loadNextStep();
                     }
                 });
-        sessionCard.setTitleColor(R.color.rally_blue);
+        sessionCard.setTitleColor(R.color.rally_green);
         data.add(sessionCard);
 
         /*CardData screenCard = new CardData("Screenshot report",
@@ -209,8 +220,8 @@ public class NewReportScreen extends FlexibleScreen {
         screenCard.setTitleColor(R.color.rally_blue);
         data.add(screenCard);*/
 
-        CardData customCard = new CardData("No session",
-                "Include only basic info (app, build, device...) without logs or session details",
+        CardData customCard = new CardData("No reproduced",
+                "Include only basic info about app, build, device... without logs.",
                 R.string.gmd_note,
                 new Runnable() {
                     @Override
@@ -221,6 +232,7 @@ public class NewReportScreen extends FlexibleScreen {
                     }
                 });
         customCard.setTitleColor(R.color.rally_white);
+        data.add("");
         data.add(customCard);
 
         data.add("");
@@ -229,8 +241,8 @@ public class NewReportScreen extends FlexibleScreen {
 
     private List<Object> getCrashSelectorData() {
         List<Object> data = new ArrayList<>();
-        OverviewData overview = getOverview();
-        overview.setColor(R.color.rally_orange);
+        CardData overview = getOverview();
+        overview.setBgColor(R.color.rally_orange);
         data.add(overview);
         data.add("Choose a crash:");
 
@@ -269,7 +281,10 @@ public class NewReportScreen extends FlexibleScreen {
 
     private List<Object> getSessionSelectorData(){
         List<Object> data = new ArrayList<>();
-        data.add(getOverview());
+        //data.add(getOverview());
+        data.add("");
+        data.add("Select a session:");
+        data.add("");
 
         List<Session> sessions = IadtController.get().getSessionManager().getSessionsWithOverview();
         for (int i = 0; i<sessions.size(); i++) {
@@ -279,23 +294,24 @@ public class NewReportScreen extends FlexibleScreen {
             SessionDocumentGenerator generator = (SessionDocumentGenerator) DocumentRepository
                     .getGenerator(DocumentType.SESSION, session);
 
-            CardData cardData = new CardData(generator.getTitle(),
+            CardData cardData = new CardData(generator.getTitle() + " (" + ReportFormatter.getSessionStatusString(session) + ")",
                     new Runnable() {
                         @Override
                         public void run() {
                             report.setSessionId(session.getUid());
+                            report.setCrashId(session.getCrashId());
                             loadNextStep();
                         }
                     });
             cardData.setContent(generator.getOverview());
             cardData.setTitleColor(R.color.rally_white);
             if (isCurrent) {
-                cardData.setBgColor(R.color.rally_blue_darker_alpha);
+                cardData.setBgColor(R.color.rally_blue_dark);
             }
             else if (session.getCrashId()>0){
-                cardData.setBgColor(R.color.rally_orange_alpha);
+                cardData.setBgColor(R.color.rally_orange_dark);
             }else {
-                cardData.setBgColor(R.color.rally_dark_green_alpha);
+                cardData.setBgColor(R.color.rally_dark_green);
             }
             data.add(cardData);
         }
@@ -363,9 +379,10 @@ public class NewReportScreen extends FlexibleScreen {
     private List<Object> getContentFormData() {
 
         List<Object> data = new ArrayList<>();
+        data.add("");
         data.add(getOverview());
         data.add("");
-
+        
         data.add(new SelectorData("Reason:", report.getAllReasons(), report.getReasonInt(), new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -473,8 +490,8 @@ public class NewReportScreen extends FlexibleScreen {
 
     private List<Object> getSenderOptionsData(){
         List<Object> data = new ArrayList<>();
-        data.add(getOverview());
-
+        //data.add(getOverview());
+        data.add("");
         data.add("How do you want to send the report?\nOnly external apps are currently supported.");
         data.add("");
 
@@ -482,7 +499,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportSender.EMAIL);
+                        report.setSenderTypeCode(ReportSenderType.EMAIL.getCode());
                         sendReport();
                     }
                 });
@@ -495,7 +512,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportSender.SEND);
+                        report.setSenderTypeCode(ReportSenderType.SEND.getCode());
                         sendReport();
                     }
                 });
@@ -508,7 +525,7 @@ public class NewReportScreen extends FlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        report.setSenderType(ReportSender.VIEW);
+                        report.setSenderTypeCode(ReportSenderType.VIEW.getCode());
                         sendReport();
                     }
                 });

@@ -46,10 +46,6 @@ import es.rafaco.inappdevtools.library.storage.files.utils.ZipUtils;
 
 public class ReportSender {
 
-    public static final String EMAIL = "EMAIL";
-    public static final String SEND = "SEND";
-    public static final String VIEW = "VIEW";
-
     Context context;
     Report report;
 
@@ -222,13 +218,13 @@ public class ReportSender {
     //region [ SENT ]
 
     private void performSent(Report report, List<String> filesToSend) {
-        if (report.getSenderType().equals(EMAIL)) {
+        if (report.getSenderTypeCode().equals(ReportSenderType.EMAIL.getCode())) {
             sendByEmail(filesToSend);
         }
-        else if (report.getSenderType().equals(SEND)){
+        else if (report.getSenderTypeCode().equals(ReportSenderType.SEND.getCode())){
             sendExternally(filesToSend);
         }
-        else if (report.getSenderType().equals(VIEW)){
+        else if (report.getSenderTypeCode().equals(ReportSenderType.VIEW.getCode())){
             viewExternally(filesToSend);
         }
     }

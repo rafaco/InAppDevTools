@@ -77,6 +77,7 @@ public abstract class FlexibleScreen extends Screen {
     }
 
     public void updateAdapter(List<Object> options) {
+        flexContainer.removeAllViews();
         flexAdapter.replaceItems(options);
     }
 

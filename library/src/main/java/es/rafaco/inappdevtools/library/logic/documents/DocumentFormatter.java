@@ -75,7 +75,7 @@ public class DocumentFormatter {
         }
         String defaultValue = "-";
 
-        String result = "Report: " + ReportFormatter.getShortDescription(report);
+        String result = "Report: " + ReportFormatter.getShortTitle(report);
         result += " at " + DateUtils.formatShortDate(report.getDate())
                 + Humanizer.newLine();
         result += "Reason: " + report.getFormattedReason()

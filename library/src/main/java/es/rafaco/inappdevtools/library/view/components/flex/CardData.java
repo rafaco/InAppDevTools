@@ -23,7 +23,9 @@ public class CardData {
     String title;
     String content;
     Runnable performer;
+
     int icon;
+    int navIcon;
     int bgColor;
     String imagePath;
     private int titleColor;
@@ -81,6 +83,14 @@ public class CardData {
         this.icon = icon;
     }
 
+    public int getNavIcon() {
+        return navIcon;
+    }
+
+    public void setNavIcon(int navIcon) {
+        this.navIcon = navIcon;
+    }
+
     public int getBgColor() {
         return bgColor;
     }
@@ -108,6 +118,4 @@ public class CardData {
     public void run(){
         getPerformer().run();
     }
-
-
 }

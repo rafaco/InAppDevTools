@@ -77,8 +77,8 @@ public class Report implements Serializable {
     @ColumnInfo(name = "zipPath")
     private String zipPath;
 
-    @ColumnInfo(name = "senderType")
-    private String senderType;
+    @ColumnInfo(name = "senderTypeCode")
+    private String senderTypeCode;
 
     public long getUid() {
         return uid;
@@ -192,12 +192,12 @@ public class Report implements Serializable {
         this.zipPath = zipPath;
     }
 
-    public String getSenderType() {
-        return senderType;
+    public String getSenderTypeCode() {
+        return senderTypeCode;
     }
 
-    public void setSenderType(String senderType) {
-        this.senderType = senderType;
+    public void setSenderTypeCode(String senderTypeCode) {
+        this.senderTypeCode = senderTypeCode;
     }
 
 

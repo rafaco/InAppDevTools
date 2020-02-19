@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,25 +22,25 @@ package es.rafaco.inappdevtools.library.logic.reports;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ReportType {
-    CRASH(1),
-    SESSION(2),
-    ISSUE(3);
+public enum ReportSenderType {
+    EMAIL("EMAIL"),
+    SEND("SEND"),
+    VIEW("VIEW");
 
-    public int code;
-    private static final Map<Integer, ReportType> TYPES = new HashMap<>();
-    ReportType(int code) {
+    public String code;
+    private static final Map<String, ReportSenderType> TYPES = new HashMap<>();
+    ReportSenderType(String code) {
         this.code = code;
     }
     static {
-        for (ReportType value : values()) {
+        for (ReportSenderType value : values()) {
             TYPES.put(value.code, value);
         }
     }
-    public int getCode() {
+    public String getCode() {
         return code;
     }
-    public static ReportType getByCode(int code) {
+    public static ReportSenderType getByCode(String code) {
         return TYPES.get(code);
     }
 }

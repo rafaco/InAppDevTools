@@ -46,7 +46,7 @@ public class CardViewHolder extends FlexibleViewHolder {
     private final TextView iconView;
     private final TextView titleView;
     private final TextView contentView;
-    private final ImageView navIcon;
+    private final TextView navIcon;
     private final ImageView imageView;
 
     public CardViewHolder(View view, FlexibleAdapter adapter) {
@@ -82,7 +82,8 @@ public class CardViewHolder extends FlexibleViewHolder {
                 imageView.setVisibility(View.GONE);
             }
 
-            if (data.getIcon()>0){
+            int icon = data.getIcon();
+            if (icon>0){
                 IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
                 iconView.setText(data.getIcon());
                 iconView.setVisibility(View.VISIBLE);
@@ -92,6 +93,7 @@ public class CardViewHolder extends FlexibleViewHolder {
             }else{
                 iconView.setVisibility(View.GONE);
             }
+
 
             if (data.getBgColor()>0){
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColor()));
@@ -108,7 +110,7 @@ public class CardViewHolder extends FlexibleViewHolder {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
-                navIcon.setVisibility(View.VISIBLE);
+                cardView.setClickable(true);
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -116,15 +118,21 @@ public class CardViewHolder extends FlexibleViewHolder {
                     }
                 });
                 itemView.setClickable(true);
+
+                IconUtils.markAsIconContainer(navIcon, IconUtils.MATERIAL);
+                int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
+                        : R.string.gmd_keyboard_arrow_right;
+                navIcon.setText(navIconRes);
+                navIcon.setVisibility(View.VISIBLE);
             }
             else{
-                cardView.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);
                 }
-                navIcon.setVisibility(View.GONE);
+                cardView.setClickable(false);
                 cardView.setOnClickListener(null);
                 itemView.setClickable(false);
+                navIcon.setVisibility(View.GONE);
             }
         }
     }
