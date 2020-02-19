@@ -50,12 +50,26 @@ public class SessionManager {
 
     private final Context context;
     Session session;
+    boolean currentStartCalculated;
+    boolean previousFinishCalculated;
 
     public SessionManager(Context context) {
         this.context = context;
 
         //Tracking session per process
         startNew(DateUtils.getLong());
+    }
+
+    private SessionDao getDao() {
+        return DevToolsDatabase.getInstance().sessionDao();
+    }
+
+    private FriendlyDao getFriendlyDao() {
+        return DevToolsDatabase.getInstance().friendlyDao();
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public Session getCurrent() {
@@ -70,6 +84,12 @@ public class SessionManager {
         getDao().update(updated);
         session = updated;
     }
+    public void destroy() {
+        //TODO
+    }
+
+
+    //region [ START SESSION ]
 
     public long startNew(Long date) {
         int pid = ThreadUtils.myPid();
@@ -114,6 +134,10 @@ public class SessionManager {
         return newSessionId;
     }
 
+    //endregion
+
+    //region [ IMPROVE START TIME ]
+
     public void improveStartTime() {
         Session currentSession = getCurrent();
         if (currentSession.getDate() != currentSession.getDetectionDate()){
@@ -142,7 +166,7 @@ public class SessionManager {
                 getFriendlyDao().update(newSessionLog);
 
                 if (IadtController.get().isDebug())
-                    Log.i(Iadt.TAG, "Improved session start time by "
+                    FriendlyLog.logDebug("Improved session start time by "
                             + Humanizer.getDuration(detectionDate - improvedDate));
             }
             else{
@@ -150,27 +174,66 @@ public class SessionManager {
                     Log.w(Iadt.TAG, "Unable to improve session start time");
             }
         }
-        else{
+        else if (IadtController.get().isDebug()){
             Log.w(Iadt.TAG, "Unable to improve session start time");
         }
     }
 
-    public long updateFinishTime(long uid) {
-        Session target = getDao().findById(uid);
+    //endregion
+
+    //region [ CALCULATE FINISH DATE ]
+
+    public void updatePreviousFinishDateIfNeeded() {
+        if (getCurrentUid() < 2 || previousFinishCalculated){
+            return;
+        }
+        long newDate = updateFinishDate(getCurrentUid() - 1);
+        if (newDate > 0) previousFinishCalculated = true;
+    }
+    
+    public long getFinishTime(long sessionId) {
+        Session target = getDao().findById(sessionId);
         if (target.getFinishDate() > 0) {
             return target.getFinishDate();
         }
 
+        return updateFinishDate(sessionId);
+    }
+
+    private long updateFinishDate(long uid) {
+        Session target = getDao().findById(uid);
         Session next = getDao().findById(uid+1);
-        //TODO: if (next.getDate() != next.getDetectionDate()){
+        if (target == null || next == null){
+            return -1;
+        }
+
         long firstNextDate = next.getDate();
-        Friendly lastSessionLog = getFriendlyDao().getLastSessionLog(firstNextDate);
+        Friendly lastSessionLog = getFriendlyDao().getLastSessionLog(firstNextDate -1);
 
         long finishDate = lastSessionLog.getDate();
         target.setFinishDate(finishDate);
         getDao().update(target);
 
+        FriendlyLog.logDebug("Updated Session " + target.getUid()
+                + " finishDate to " + DateUtils.formatShortDate(finishDate)
+                + " (improved " + Humanizer.getDuration(firstNextDate - finishDate) + ")");
         return finishDate;
+    }
+
+    //endregion
+
+    //region [ GET OVERVIEW WITH ANALYSIS ]
+
+    public Session getSessionWithOverview(int sessionUid) {
+        if (getCurrent().getUid() == sessionUid){
+            getCurrent().setAnalysis(calculateCurrentSessionAnalysis());
+            return getCurrent();
+        }
+
+        //Not the current Session
+        Session target = getDao().findById(sessionUid);
+        updateFinishedSessionAnalysis(target);
+        return target;
     }
 
     public List<Session> getSessionsWithOverview(long buildId) {
@@ -191,15 +254,15 @@ public class SessionManager {
             if (target.isCurrent()){
                 target.setAnalysis(calculateCurrentSessionAnalysis());
             }else{
-                updateFinishedSession(target);
+                updateFinishedSessionAnalysis(target);
             }
         }
     }
 
-    private void updateFinishedSession(Session target) {
+    private void updateFinishedSessionAnalysis(Session target) {
         //Calculate finish date if needed
         if (target.getFinishDate()<=0){
-            long finishDate = updateFinishTime(target.getUid());
+            long finishDate = getFinishTime(target.getUid());
             target.setFinishDate(finishDate);
         }
 
@@ -227,34 +290,9 @@ public class SessionManager {
         return analysis;
     }
 
-    public Session getSessionWithOverview(int sessionUid) {
-        if (getCurrent().getUid() == sessionUid){
-            getCurrent().setAnalysis(calculateCurrentSessionAnalysis());
-            return getCurrent();
-        }
+    //endregion
 
-        //Not the current Session
-        Session target = getDao().findById(sessionUid);
-        updateFinishedSession(target);
-        return target;
-    }
-
-
-    private SessionDao getDao() {
-        return DevToolsDatabase.getInstance().sessionDao();
-    }
-
-    private FriendlyDao getFriendlyDao() {
-        return DevToolsDatabase.getInstance().friendlyDao();
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void destroy() {
-        //TODO
-    }
+    //region [ SESSION DOCUMENTS ]
 
     public void storeDocuments() {
         final long currentUid = getCurrent().getUid();
@@ -289,4 +327,6 @@ public class SessionManager {
             FriendlyLog.log(watch.finish());
         return filePaths;
     }
+
+    //endregion
 }

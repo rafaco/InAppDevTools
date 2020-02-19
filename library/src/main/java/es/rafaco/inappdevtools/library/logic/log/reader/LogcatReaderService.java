@@ -472,6 +472,7 @@ public class LogcatReaderService extends JobIntentService {
             processQueue();
         }
         else if (!isInjectorRunning && !isReaderRunning) {
+            IadtController.get().getSessionManager().updatePreviousFinishDateIfNeeded();
             programNextExecution();
             exit();
         }
