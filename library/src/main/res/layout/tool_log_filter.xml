@@ -34,7 +34,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensedMedium"/>
 
-    <android.support.v7.widget.CardView
+    <es.rafaco.compat.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -72,7 +72,7 @@
 
         </RadioGroup>
 
-    </android.support.v7.widget.CardView>
+    </es.rafaco.compat.CardView>
 
 
     <es.rafaco.compat.AppCompatTextView
@@ -85,7 +85,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensedMedium"/>
 
-    <android.support.v7.widget.CardView
+    <es.rafaco.compat.CardView.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -135,7 +135,7 @@
 
         </RadioGroup>
 
-    </android.support.v7.widget.CardView>
+    </es.rafaco.compat.CardView.CardView>
 
 
     <es.rafaco.compat.AppCompatTextView
@@ -148,7 +148,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensedMedium"/>
 
-    <android.support.v7.widget.CardView
+    <es.rafaco.compat.CardView.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -199,7 +199,7 @@
 
         </RadioGroup>
 
-    </android.support.v7.widget.CardView>
+    </es.rafaco.compat.CardView.CardView>
 
 
     <LinearLayout

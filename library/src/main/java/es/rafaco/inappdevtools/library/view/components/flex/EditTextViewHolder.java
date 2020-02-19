@@ -19,9 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.text.InputType;
+import es.rafaco.compat.TextInputEditText;
+import es.rafaco.compat.TextInputLayout;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.R;
