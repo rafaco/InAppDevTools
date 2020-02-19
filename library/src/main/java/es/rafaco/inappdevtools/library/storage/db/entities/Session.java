@@ -23,12 +23,10 @@ package es.rafaco.inappdevtools.library.storage.db.entities;
 //@import androidx.room.ColumnInfo;
 //@import androidx.room.Entity;
 //@import androidx.room.PrimaryKey;
-//@import androidx.room.ForeignKey;
 //#else
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.ForeignKey;
 //#endif
 
 import com.google.gson.Gson;
@@ -37,11 +35,7 @@ import java.io.Serializable;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 
-@Entity(tableName = "session",
-        foreignKeys = @ForeignKey(entity = Build.class,
-            parentColumns = "uid",
-            childColumns = "buildId",
-            onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "session")
 public class Session implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
