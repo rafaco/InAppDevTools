@@ -29,13 +29,13 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.overlay.FlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 
-public class ReportsScreen extends FlexibleScreen {
+public class ReportsScreen extends AbstractFlexibleScreen {
 
     public ReportsScreen(ScreenManager manager) {
         super(manager);

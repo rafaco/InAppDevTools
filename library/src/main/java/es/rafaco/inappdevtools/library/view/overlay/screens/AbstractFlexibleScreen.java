@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay;
+package es.rafaco.inappdevtools.library.view.overlay.screens;
 
 import android.view.ViewGroup;
 import java.util.ArrayList;
@@ -31,14 +31,15 @@ import android.support.v7.widget.RecyclerView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
-public abstract class FlexibleScreen extends Screen {
+public abstract class AbstractFlexibleScreen extends Screen {
 
     private RecyclerView flexContainer;
     private FlexibleAdapter flexAdapter;
 
-    public FlexibleScreen(ScreenManager manager) {
+    public AbstractFlexibleScreen(ScreenManager manager) {
         super(manager);
     }
 

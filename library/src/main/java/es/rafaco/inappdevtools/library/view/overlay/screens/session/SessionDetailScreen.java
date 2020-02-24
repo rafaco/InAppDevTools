@@ -19,42 +19,27 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.session;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
-//#ifdef ANDROIDX
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v7.widget.RecyclerView;
-//#endif
+public class SessionDetailScreen extends AbstractDocumentScreen {
 
-
-public class SessionDetailScreen extends Screen {
-
-    private FlexibleAdapter adapter;
-    private int expandedPosition = -1;
+    private Session session;
 
     public SessionDetailScreen(ScreenManager manager) {
         super(manager);
@@ -66,25 +51,19 @@ public class SessionDetailScreen extends Screen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.flexible_container; }
-
-    @Override
-    protected void onCreate() {
-        //Nothing needed
+    protected DocumentType getDocumentType() {
+        return DocumentType.SESSION;
     }
 
     @Override
-    protected void onStart(ViewGroup view) {
-        List<?> data = initData();
-        initAdapter((List<Object>) data);
-    }
-
-    private List<Object> initData() {
+    protected Object getDocumentParam() {
         int sessionUid = Integer.parseInt(getParam());
-        Session session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
-        DocumentData reportData = DocumentRepository.getDocument(DocumentType.SESSION, session);
-        getScreenManager().setTitle(reportData.getTitle());
+        session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
+        return session;
+    }
 
+    @Override
+    protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
         objectList.add(1, getFirstButtonGroupData(session));
@@ -171,47 +150,5 @@ public class SessionDetailScreen extends Screen {
         }
 
         return new ButtonGroupData(buttons);
-    }
-
-    private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(3, data);
-        adapter.setOnItemActionListener(new FlexibleAdapter.OnItemActionListener() {
-            @Override
-            public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
-                return toggleExpandedPosition(position);
-            }
-        });
-        RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
-    }
-
-    public boolean toggleExpandedPosition(int position){
-        int previousPosition = expandedPosition;
-        if (previousPosition == position){
-            //Collapse currently selected
-            expandedPosition = -1;
-            return false;
-        }
-        else{
-            if (previousPosition >= 0){
-                //Collapse previously selected
-                DocumentSectionData previousData = (DocumentSectionData) adapter.getItems().get(previousPosition);
-                previousData.setExpanded(false);
-                adapter.notifyItemChanged(previousPosition);
-            }
-            //Expand current selection
-            expandedPosition = position;
-            return true;
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        //Nothing needed
-    }
-
-    @Override
-    protected void onDestroy() {
-        //Nothing needed
     }
 }
