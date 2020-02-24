@@ -85,8 +85,8 @@ public class AnrDetailScreen extends Screen {
             });
         }
 
-        View codeViewer = toolHead.findViewById(R.id.code_view);
-        codeViewer.setVisibility(View.GONE);
+        /*View codeViewer = toolHead.findViewById(R.id.code_view);
+        codeViewer.setVisibility(View.GONE);*/
     }
 
     private void updateOutput() {

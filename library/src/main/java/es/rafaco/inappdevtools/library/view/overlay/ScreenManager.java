@@ -118,6 +118,11 @@ public class ScreenManager {
 
     public void goTo(final Class<? extends Screen> screenClass, final String params){
 
+        if (screenClass == null){
+            Iadt.showError("Unable to find the screen class, add it to our ScreenLoader");
+            return;
+        }
+
         if (IadtController.get().isDebug())
             Log.v(Iadt.TAG, "ScreenManager goTo(" + screenClass.getSimpleName() + ", " + params + ")");
 

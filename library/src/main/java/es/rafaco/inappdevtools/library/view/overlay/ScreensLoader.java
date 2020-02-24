@@ -19,8 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.overlay;
 
-import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;

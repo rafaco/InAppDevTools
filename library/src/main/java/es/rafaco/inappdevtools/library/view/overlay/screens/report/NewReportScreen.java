@@ -50,12 +50,12 @@ import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.flex.SelectorData;
-import es.rafaco.inappdevtools.library.view.overlay.FlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 
-public class NewReportScreen extends FlexibleScreen {
+public class NewReportScreen extends AbstractFlexibleScreen {
 
     private Report report;
     private boolean contentReviewed = false;

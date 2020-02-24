@@ -20,9 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.text.TextWatcher;
-import android.widget.AdapterView;
-
-import java.util.List;
 
 public class EditTextData {
     String title;
