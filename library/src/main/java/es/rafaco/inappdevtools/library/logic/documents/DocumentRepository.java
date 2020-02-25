@@ -50,6 +50,8 @@ public class DocumentRepository {
 
     public static DocumentData getDocument(DocumentType documentType, Object param) {
         AbstractDocumentGenerator generator = getGenerator(documentType, param);
+        if (generator == null)
+            return null;
         return generator.getData();
     }
 

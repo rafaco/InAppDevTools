@@ -37,9 +37,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 import android.arch.paging.DataSource;
-import android.util.Pair;
 //#endif
-
 
 import java.util.List;
 
@@ -48,9 +46,6 @@ public interface FriendlyDao {
 
     @Query("SELECT * FROM friendly ORDER BY date ASC")
     List<Friendly> getAll();
-
-    @Query("SELECT * FROM friendly ORDER BY date ASC")
-    DataSource.Factory<Integer, Friendly> getAllProvider();
 
     @Query("SELECT * FROM friendly WHERE date = :date ORDER BY uid ASC")
     List<Friendly> filterByDate(long date);
@@ -66,6 +61,74 @@ public interface FriendlyDao {
 
     @RawQuery(observedEntities = Friendly.class)
     List<Friendly> filterListWithQuery(SupportSQLiteQuery query);
+
+    @Query("SELECT * FROM friendly where uid LIKE :uid")
+    Friendly findById(long uid);
+
+    @Query("SELECT uid FROM friendly " +
+            "where category LIKE 'Error' " +
+            "AND linkedId LIKE :crashId " +
+            "ORDER BY uid ASC LIMIT 1")
+    long findLogIdByCrashId(long crashId);
+
+    @RawQuery(observedEntities = Friendly.class)
+    List<Friendly> findPositionAtFilter(SupportSQLiteQuery positionQuery);
+
+    @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
+    Friendly getLast();
+
+    @Query("SELECT COUNT(*) from Friendly")
+    int count();
+
+    @Insert
+    long insert(Friendly log);
+
+    @Insert
+    long[] insertAll(List<Friendly> logs);
+
+    @Update
+    void update(Friendly log);
+
+    @Delete
+    void delete(Friendly anr);
+
+    @Query("DELETE FROM friendly")
+    void deleteAll();
+
+
+
+
+    @Query("SELECT * FROM friendly"
+            + " where date LIKE :startDate"
+            + " AND linkedId LIKE :linkedId"
+            + " AND category IN ('Network')"
+            + " AND subcategory IN ('Requesting')")
+    Friendly findNetStart(long startDate, long linkedId);
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE extra LIKE :extraContent"
+            + " AND date < :date"
+            + " AND category IN ('Logcat')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getFirstSessionLog(String extraContent, long date);
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE date < :firstNextDate"
+            + " AND category IN ('Logcat')"
+            + " ORDER BY date DESC LIMIT 1")
+    Friendly getLastSessionLog(long firstNextDate);
+
+    @Query("SELECT *"
+            + " FROM friendly"
+            + " WHERE message LIKE :message"
+            + " AND category IN ('Iadt')"
+            + " AND subcategory IN ('Init')"
+            + " ORDER BY date ASC LIMIT 1")
+    Friendly getNewSessionLog(String message);
+
+
 
     @Query("SELECT severity AS name,"
             + " COUNT(*) AS count,"
@@ -100,66 +163,7 @@ public interface FriendlyDao {
             + " ORDER BY date DESC")
     List<AnalysisData> analiseSession();
 
-    @Query("SELECT *"
-            + " FROM friendly"
-            + " WHERE extra LIKE :extraContent"
-            + " AND date < :date"
-            + " AND category IN ('Logcat')"
-            + " ORDER BY date ASC LIMIT 1")
-    Friendly getFirstSessionLog(String extraContent, long date);
-
-    @Query("SELECT *"
-            + " FROM friendly"
-            + " WHERE date < :firstNextDate"
-            + " AND category IN ('Logcat')"
-            + " ORDER BY date DESC LIMIT 1")
-    Friendly getLastSessionLog(long firstNextDate);
-
-    @Query("SELECT *"
-            + " FROM friendly"
-            + " WHERE message LIKE :message"
-            + " AND category IN ('Iadt')"
-            + " AND subcategory IN ('Init')"
-            + " ORDER BY date ASC LIMIT 1")
-    Friendly getNewSessionLog(String message);
-
     @RawQuery(observedEntities = Friendly.class)
     List<AnalysisData> analiseWithQuery(SupportSQLiteQuery query);
-
-    @Query("SELECT * FROM friendly where uid LIKE :uid")
-    Friendly findById(long uid);
-
-    @Query("SELECT * FROM friendly where linkedId LIKE :linkedId")
-    Friendly findByLinkedId(long linkedId);
-
-    @Query("SELECT uid FROM friendly " +
-            "where category LIKE 'Error' " +
-            "AND linkedId LIKE :crashId " +
-            "ORDER BY uid ASC LIMIT 1")
-    long findLogIdByCrashId(long crashId);
-
-    @RawQuery(observedEntities = Friendly.class)
-    List<Friendly> findPositionAtFilter(SupportSQLiteQuery positionQuery);
-
-    @Query("SELECT * FROM friendly ORDER BY uid DESC LIMIT 1")
-    Friendly getLast();
-
-    @Query("SELECT COUNT(*) from Friendly")
-    int count();
-
-    @Insert
-    long insert(Friendly log);
-
-    @Insert
-    long[] insertAll(List<Friendly> logs);
-
-    @Update
-    void update(Friendly log);
-
-    @Delete
-    void delete(Friendly anr);
-
-    @Query("DELETE FROM friendly")
-    void deleteAll();
 
 }

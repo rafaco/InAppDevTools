@@ -20,6 +20,10 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.text.TextUtils;
+
+import java.io.UnsupportedEncodingException;
+
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
@@ -249,20 +253,51 @@ public class Humanizer {
     //region [ BYTE/KB ]
 
     public static String parseByte(long bytes) {
+        //TODO: verify correctness of base1000
         return humanReadableByteCount(bytes, true);
     }
 
     public static String parseKb(long kb) {
+        //TODO: verify correctness of base1000
         return humanReadableByteCount(kb*1000, true);
     }
 
-    public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
+    public static String humanReadableByteCount(long bytes, boolean base1000) {
+        int unit = base1000 ? 1000 : 1024;
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        String pre = (base1000 ? "kMGTPE" : "KMGTPE").charAt(exp-1) + "";
+
+        // We normally used kB when it should be KiB according to ISO
+        // Find out more at: https://es.wikipedia.org/wiki/Kilobyte
+        boolean strictIsoNaming = false;
+        if (strictIsoNaming && !base1000) pre += "i";
+
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
+
+    public static long countBytes(String text){
+        if (TextUtils.isEmpty(text))
+            return 0;
+
+        byte[] utf8Bytes = null;
+        try {
+            utf8Bytes = text.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            FriendlyLog.logException("Error calculating string size", e);
+        }
+        if (utf8Bytes == null){
+            return 0;
+        }
+        return utf8Bytes.length;
+    }
+
+    public static String getStringSize(String text){
+        long stringBytes = countBytes(text);
+        return humanReadableByteCount(stringBytes, false);
+    }
+
+    //endregion
 
     public static String unavailable(String text, String defaultValue) {
         if (TextUtils.isEmpty(text)){
@@ -270,7 +305,5 @@ public class Humanizer {
         }
         return text;
     }
-
-    //endregion
 }
 

@@ -28,6 +28,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.detail.CrashDo
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.InfoOverviewDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.LogFilterDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.LogItemDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.detail.NetItemDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionLogsDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionStepsDocumentGenerator;
@@ -38,7 +39,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.LiveInfoD
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Report;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 
 public enum DocumentType {
@@ -56,7 +57,8 @@ public enum DocumentType {
     SESSION_LOGS("Logs", R.string.gmd_history, SessionLogsDocumentGenerator.class, Session.class),
     CRASH("Crash", R.string.gmd_bug_report, CrashDocumentGenerator.class, Crash.class),
     LOG_FILTER("Custom Log Filter",R.string.gmd_history, LogFilterDocumentGenerator.class, long.class),
-    LOG_ITEM("Custom Log Item",R.string.gmd_history, LogItemDocumentGenerator.class, long.class);
+    LOG_ITEM("Custom Log Item",R.string.gmd_history, LogItemDocumentGenerator.class, long.class),
+    NETWORK_ITEM("Network Item", R.string.gmd_cloud, NetItemDocumentGenerator.class, NetSummary.class);
 
     private String name;
     private final int icon;

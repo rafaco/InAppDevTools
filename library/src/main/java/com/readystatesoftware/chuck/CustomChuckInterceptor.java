@@ -242,7 +242,7 @@ public final class CustomChuckInterceptor implements Interceptor {
         Uri uri = context.getContentResolver().insert(ChuckContentProvider.TRANSACTION_URI, values);
         transaction.setId(Long.valueOf(uri.getLastPathSegment()));
 
-        FriendlyLog.logNetworkRequest(transaction);
+        //FriendlyLog.logNetStart(transaction);
 
         if (showNotification) {
             notificationHelper.show(transaction);
@@ -256,7 +256,7 @@ public final class CustomChuckInterceptor implements Interceptor {
         ContentValues values = LocalCupboard.getInstance().withEntity(HttpTransaction.class).toContentValues(transaction);
         int updated = context.getContentResolver().update(uri, values, null, null);
 
-        FriendlyLog.logNetworkUpdate(transaction);
+        //FriendlyLog.logNetworkUpdate(transaction);
 
         if (showNotification && updated > 0) {
             notificationHelper.show(transaction);

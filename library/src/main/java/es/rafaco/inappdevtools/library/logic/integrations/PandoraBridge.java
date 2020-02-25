@@ -24,6 +24,7 @@ import android.content.Context;
 import es.rafaco.inappdevtools.library.IadtController;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
+import tech.linjiang.pandora.network.OkHttpInterceptor;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.util.Config;
@@ -41,7 +42,15 @@ public class PandoraBridge {
         Utils.init(getContext());
         Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
         Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
-        gridLineView = new GridLineView(getContext());
+        setInterceptorListener();
+    }
+
+    public static OkHttpInterceptor getInterceptor() {
+        return Pandora.get().getInterceptor();
+    }
+
+    public static void setInterceptorListener() {
+        Pandora.get().getInterceptor().setListener(new PandoraListener());
     }
 
     public static void open() {
@@ -60,7 +69,14 @@ public class PandoraBridge {
         Dispatcher.start(getContext().getApplicationContext(), Type.FILE);
     }
 
+    public static void network() {
+        Dispatcher.start(getContext().getApplicationContext(), Type.NET);
+    }
+
     public static void grid() {
+        if (gridLineView == null){
+            gridLineView = new GridLineView(getContext());
+        }
         gridLineView.toggle();
     }
 

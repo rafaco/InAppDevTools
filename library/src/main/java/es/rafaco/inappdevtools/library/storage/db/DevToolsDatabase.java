@@ -44,6 +44,10 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
 import es.rafaco.inappdevtools.library.storage.db.entities.LogcatDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetContent;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetContentDao;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.ReportDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -64,6 +68,8 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
                 Anr.class,
                 Sourcetrace.class,
                 Report.class,
+                NetSummary.class,
+                NetContent.class,
         })
 public abstract class DevToolsDatabase extends RoomDatabase {
 
@@ -98,6 +104,8 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract AnrDao anrDao();
     public abstract SourcetraceDao sourcetraceDao();
     public abstract ReportDao reportDao();
+    public abstract NetSummaryDao netSummaryDao();
+    public abstract NetContentDao netContentDao();
     //endregion
 
     public void printOverview(){
@@ -117,6 +125,8 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  Anrs: " + anrDao().count() + jump;
         overview +="  SourceTraces: " + sourcetraceDao().count() + jump;
         overview +="  Reports: " + reportDao().count() + jump;
+        overview +="  NetSummary: " + netSummaryDao().count() + jump;
+        overview +="  NetContent: " + netContentDao().count() + jump;
 
         return overview;
     }

@@ -43,7 +43,6 @@ import android.widget.LinearLayout;
 
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -56,7 +55,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -184,14 +183,14 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             extra_wrapper.setVisibility(View.GONE);
         }
 
-        if(isSelected && getNextStep(data)!=null){
+        if(isSelected && getLinkedIdStep(data)!=null){
             FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
                     ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
             ButtonGroupData buttonGroupData = new ButtonGroupData(new RunButton(
                     "Details", new Runnable() {
                 @Override
                 public void run() {
-                    OverlayService.performNavigationStep(LogViewHolder.this.getNextStep(data));
+                    OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
                 }
             }));
             desc.addToView(desc, buttonGroupData, buttonGroupContainer);
@@ -235,7 +234,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         return details;
     }
 
-    private NavigationStep getNextStep(Friendly data) {
+    private NavigationStep getLinkedIdStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
@@ -243,7 +242,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             return new NavigationStep(AnrDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
         else if(data.getCategory().equals("Network")){
-            return new NavigationStep(NetworkDetailScreen.class, String.valueOf(data.getLinkedId()));
+            return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
 
         return null;

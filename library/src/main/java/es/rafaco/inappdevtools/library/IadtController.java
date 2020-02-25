@@ -30,6 +30,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
+import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
@@ -58,6 +59,7 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import tech.linjiang.pandora.network.OkHttpInterceptor;
 
 
 /**
@@ -279,14 +281,20 @@ public final class IadtController {
 
     public OkHttpClient getOkHttpClient() {
 
+        //TODO: remove Chuck
+        CustomChuckInterceptor chuckInterceptor = new CustomChuckInterceptor(getContext());
+        chuckInterceptor.showNotification(false);
+
         //TODO: relocate an create a unique interceptor, and a method to return it
-        CustomChuckInterceptor httpGrabberInterceptor = new CustomChuckInterceptor(getContext());
-        httpGrabberInterceptor.showNotification(false);
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        HttpLoggingInterceptor httpToLogcat = new HttpLoggingInterceptor();
+        httpToLogcat.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
+        OkHttpInterceptor pandoraInterceptor = PandoraBridge.getInterceptor();
+
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(httpGrabberInterceptor)
-                .addInterceptor(httpLoggingInterceptor)
+                .addInterceptor(chuckInterceptor)
+                .addInterceptor(pandoraInterceptor)
+                .addInterceptor(httpToLogcat)
                 .build();
         return client;
     }

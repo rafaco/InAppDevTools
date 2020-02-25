@@ -36,6 +36,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
@@ -79,5 +81,7 @@ public class ScreensLoader {
         screenManager.registerScreen(SessionDetailScreen.class);
         screenManager.registerScreen(BuildsScreen.class);
         screenManager.registerScreen(BuildDetailScreen.class);
+        screenManager.registerScreen(NetScreen.class);
+        screenManager.registerScreen(NetDetailScreen.class);
     }
 }

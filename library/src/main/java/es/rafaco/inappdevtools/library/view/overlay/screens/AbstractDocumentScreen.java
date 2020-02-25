@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
@@ -61,7 +62,21 @@ public abstract class AbstractDocumentScreen extends Screen {
     protected void onStart(ViewGroup view) {
         DocumentData document = DocumentRepository.getDocument(getDocumentType(), getDocumentParam());
         //getScreenManager().setTitle(document.getTitle());
+
+        if (document == null){
+            initAdapter(buildErrorData());
+            return;
+        }
         initAdapter(buildDataFromDocument(document));
+    }
+
+    private List<Object> buildErrorData() {
+        List<Object> data = new ArrayList<>();
+        data.add("");
+        data.add("Unable to get document for the provided params:");
+        data.add(" - DocumentType: " + getDocumentType().getName());
+        data.add(" - DocumentParam: " + getDocumentParam());
+        return data;
     }
 
     protected abstract DocumentType getDocumentType();

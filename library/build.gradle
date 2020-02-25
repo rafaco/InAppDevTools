@@ -103,8 +103,8 @@ dependencies {
     supportApi "android.arch.paging:runtime:$librarySupportPagingVersion"
 
     // Pandora
-    androidxApi "com.github.whataa:pandora:androidx_v2.0.2"
-    supportApi "com.github.whataa:pandora:v2.0.2"
+    androidxApi "com.github.whataa:pandora:androidx_v2.0.6"
+    supportApi "com.github.whataa:pandora:v2.0.6"
 
     // Retrofit
     api 'com.squareup.retrofit2:retrofit:2.6.2'

@@ -28,8 +28,6 @@ import android.util.Log;
 import android.support.annotation.NonNull;
 //#endif
 
-import com.readystatesoftware.chuck.internal.data.HttpTransaction;
-
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -39,6 +37,8 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetFormatter;
 
 public class FriendlyLog {
 
@@ -263,13 +263,13 @@ public class FriendlyLog {
             return R.drawable.ic_message_white_24dp;
         }
         else if (log.getCategory().equals("Network")){
-            if (log.getSubcategory().equals("Requested")){
+            if (log.getSubcategory().equals("Requesting")){
                 return R.drawable.ic_cloud_queue_white_24dp;
             }
             else if (log.getSubcategory().equals("Complete")){
                 return R.drawable.ic_cloud_done_white_24dp;
             }
-            else if (log.getSubcategory().equals("Failed")){
+            else if (log.getSubcategory().equals("Error")){
                 return R.drawable.ic_cloud_off_white_24dp;
             }
             else if (log.getSubcategory().equals("Connected")){
@@ -362,54 +362,59 @@ public class FriendlyLog {
         insertOnBackground(log);
     }
 
-    public static void logNetworkRequest(HttpTransaction transaction) {
-        final Friendly log = new Friendly();
-        log.setDate(transaction.getRequestDate().getTime());
-        log.setSeverity("D");
-        log.setCategory("Network");
-        log.setSubcategory(transaction.getStatus().name());
-        log.setMessage("Request to " + transaction.getPath());
-        log.setLinkedId(transaction.getId());
+    public static void logNetStart(NetSummary summary) {
+        final Friendly startLog = new Friendly();
+        startLog.setDate(summary.start_time);
+        startLog.setLinkedId(summary.uid);
+        startLog.setCategory("Network");
+        startLog.setSubcategory(new NetFormatter(summary).getStatusString());
 
-        logAtLogcat(log);
-        insertOnBackground(log);
+        startLog.setMessage("Request to " + summary.url);
+        startLog.setSeverity("D");
+
+        logAtLogcat(startLog);
+        insertOnBackground(startLog);
     }
 
-    public static void logNetworkUpdate(HttpTransaction transaction) {
-        final Friendly log = IadtController.get().getDatabase().friendlyDao().findByLinkedId(transaction.getId());
-        if (log == null){
-            Iadt.showMessage("Unable to link the network request");
+    public static void logNetEnd(NetSummary summary) {
+        //TODO: findNetStart is not working, disabled update severity
+        /*final Friendly startLog = IadtController.get().getDatabase().friendlyDao().findNetStart(summary.start_time, summary.uid);
+        if (startLog == null){
+            Iadt.showError("Unable to link the network request");
             return;
         }
+        startLog.setSeverity("V");*/
 
-        String overview;
-        switch (transaction.getStatus()) {
-            case Failed:
-                overview = transaction.getError();
-                break;
-            case Requested:
-                overview = "...";
-                break;
-            default:
-                overview = transaction.getResponseMessage() + "(" + transaction.getResponseCode() + ")";
+        NetFormatter formatter = new NetFormatter(summary);
+
+        final Friendly endLog = new Friendly();
+        endLog.setDate(summary.end_time);
+        endLog.setLinkedId(summary.uid);
+        endLog.setCategory("Network");
+        endLog.setSubcategory(formatter.getStatusString());
+
+        if (summary.status == NetSummary.Status.COMPLETE){
+            endLog.setSeverity("I");
+            endLog.setMessage("Response " + summary.code + " from " + summary.url);
         }
-        log.setMessage(overview + " from " + transaction.getPath());
-        log.setSubcategory(transaction.getStatus().name());
-
-        if (log.getSubcategory().equals(HttpTransaction.Status.Failed.name())){
-            log.setSeverity("E");
-        }else if (log.getSubcategory().equals(HttpTransaction.Status.Complete.name())){
-            log.setSeverity("I");
+        else if (summary.status == NetSummary.Status.ERROR){
+            endLog.setSeverity("E");
+            endLog.setMessage("Error receiving " + summary.url);
+        }
+        else{
+            endLog.setSeverity("W");
+            endLog.setMessage("Error processing " + summary.url); //This should never happen
         }
 
-        logAtLogcat(log);
+        logAtLogcat(endLog);
         ThreadUtils.runOnBack("Iadt-NetworkLog",
                 new Runnable() {
-            @Override
-            public void run() {
-                IadtController.get().getDatabase().friendlyDao().update(log);
-            }
-        });
+                    @Override
+                    public void run() {
+                        //IadtController.get().getDatabase().friendlyDao().update(startLog);
+                        IadtController.get().getDatabase().friendlyDao().insert(endLog);
+                    }
+                });
     }
 
     public static void logException(String message, Throwable e) {

@@ -19,34 +19,25 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import android.view.ViewGroup;
-
-//#ifdef ANDROIDX
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v7.widget.RecyclerView;
-//#endif
-
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.build.BuildsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
-public class MoreScreen extends Screen {
+public class MoreScreen extends AbstractFlexibleScreen {
 
-    private FlexibleAdapter adapter;
-    private RecyclerView recyclerView;
 
     public MoreScreen(ScreenManager manager) {
         super(manager);
@@ -58,18 +49,11 @@ public class MoreScreen extends Screen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.flexible_container; }
-
-    @Override
-    protected void onCreate() {
-    }
-    @Override
-    protected void onStart(ViewGroup view) {
-        List<Object> data = initData();
-        initAdapter(data);
+    protected void onAdapterStart() {
+        updateAdapter(getFlexibleData());
     }
 
-    private List<Object> initData() {
+    private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
         data.add("Playgrounds and old screens (pending to remove):\n" +
@@ -84,13 +68,7 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
-        /*data.add(new RunButton("Analysis",
-                R.drawable.ic_settings_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
-                    }
-                }));*/
+        data.add("");
 
 
         data.add(new RunButton("Builds",
@@ -109,7 +87,9 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Network",
+
+        data.add("");
+        data.add(new RunButton("Net-Chuck",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -117,7 +97,27 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
+        data.add(new RunButton("Net-Pand",
+                R.drawable.ic_cloud_queue_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(NetScreen.class);
+                    }
+                }));
 
+        data.add(new RunButton("Pandora Net",
+                R.drawable.ic_extension_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        MoreScreen.this.getScreenManager().hide();
+                        PandoraBridge.network();
+                    }
+                }));
+
+
+        data.add("");
         data.add(new RunButton("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
@@ -142,20 +142,19 @@ public class MoreScreen extends Screen {
                     }
                 }));
 
+        /*data.add(new RunButton("Analysis",
+                R.drawable.ic_settings_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(AnalysisScreen.class);
+                    }
+                }));*/
+
         return data;
     }
 
-    private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(3, data);
-        recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
-    }
-
     @Override
-    protected void onStop() {
-    }
-
-    @Override
-    protected void onDestroy() {
+    public int getSpanCount() {
+        return 3;
     }
 }

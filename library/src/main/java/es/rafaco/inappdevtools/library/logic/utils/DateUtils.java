@@ -22,10 +22,12 @@ package es.rafaco.inappdevtools.library.logic.utils;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import es.rafaco.inappdevtools.library.Iadt;
 
@@ -82,12 +84,22 @@ public class DateUtils {
     }
 
     public static String formatLogcatDate(long timeMillis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.getDefault());
+        return simpleDateFormat.format(timeMillis);
+    }
+
+    public static String formatFull(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss.SSS", Locale.getDefault());
         return simpleDateFormat.format(timeMillis);
     }
 
     public static String formatShortDate(long timeMillis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
+        return simpleDateFormat.format(timeMillis);
+    }
+
+    public static String formatTimeWithMillis(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss SSS", Locale.getDefault());
         return simpleDateFormat.format(timeMillis);
     }
 }
