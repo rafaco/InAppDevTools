@@ -32,7 +32,7 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventD
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.integrations.CustomToast;
+import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import okhttp3.OkHttpClient;
 

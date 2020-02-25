@@ -44,18 +44,9 @@
     <string name="button_open_now">OPEN NOW</string>
     <string name="button_skip_next">SKIP NEXT</string>
 
-    <!-- Chuck -->
-    <string name="chuck_ssl">SSL</string>
-    <string name="chuck_duration">Duration</string>
-    <string name="chuck_request_size">Request size</string>
-    <string name="chuck_request_time">Request time</string>
-    <string name="chuck_response_size">Response size</string>
-    <string name="chuck_response_time">Response time</string>
-    <string name="chuck_total_size">Total size</string>
+    <!-- Simulated exception -->
     <string name="simulated_crash_cause">The stage fright make you pressed that button :)</string>
     <string name="simulated_crash_background">Simulated crash on a BACK thread</string>
     <string name="simulated_crash_foreground">Simulated crash on the MAIN thread</string>
-
-    <string name="pd_name_sandbox">Storage inspector</string>
 
 </resources>

@@ -41,7 +41,7 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.user.ActivityTouch
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ScreenChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ShakeEventDetector;
-import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.CrashHandler;
 

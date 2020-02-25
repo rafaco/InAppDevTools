@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.integrations;
+package es.rafaco.inappdevtools.library.logic.external;
 
 import android.content.Context;
 

@@ -30,7 +30,7 @@ import android.support.annotation.NonNull;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.build.BuildFilesRepository;
+import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;

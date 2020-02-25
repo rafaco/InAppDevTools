@@ -6,21 +6,4 @@
     <dimen name="shadow_height">16dp</dimen>
     <dimen name="shadow_width">24dp</dimen>-->
 
-
-    <!-- Overrides for Chuck -->
-    <string name="chuck_method">Method</string>
-    <string name="chuck_response">Response</string>
-    <string name="chuck_protocol">Protocol</string>
-    <string name="chuck_status">Status</string>
-    <string name="chuck_url">URL</string>
-
-    <style name="Chuck.TextAppearance.Label" parent="android:TextAppearance.Small">
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="Chuck.TextAppearance.Value" parent="android:TextAppearance.Small">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textIsSelectable">true</item>
-    </style>
-
 </resources>

@@ -25,12 +25,12 @@ import android.util.Log;
 
 import java.util.TooManyListenersException;
 
-import es.rafaco.inappdevtools.library.logic.build.BuildManager;
+import es.rafaco.inappdevtools.library.logic.builds.BuildManager;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
@@ -39,8 +39,6 @@ import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-
-import com.readystatesoftware.chuck.CustomChuckInterceptor;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -281,10 +279,6 @@ public final class IadtController {
 
     public OkHttpClient getOkHttpClient() {
 
-        //TODO: remove Chuck
-        CustomChuckInterceptor chuckInterceptor = new CustomChuckInterceptor(getContext());
-        chuckInterceptor.showNotification(false);
-
         //TODO: relocate an create a unique interceptor, and a method to return it
         HttpLoggingInterceptor httpToLogcat = new HttpLoggingInterceptor();
         httpToLogcat.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -292,7 +286,6 @@ public final class IadtController {
         OkHttpInterceptor pandoraInterceptor = PandoraBridge.getInterceptor();
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(chuckInterceptor)
                 .addInterceptor(pandoraInterceptor)
                 .addInterceptor(httpToLogcat)
                 .build();

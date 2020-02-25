@@ -28,9 +28,10 @@
  *     - Renamed from SampleApiService to HttpBinService
  *     - Make all methods public
  *     - Include simulation method
+ *     - Namespace changed
  */
 
-package com.readystatesoftware.chuck.sample;
+package es.rafaco.inappdevtools.library.logic.external.chuck;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;

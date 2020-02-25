@@ -19,13 +19,12 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 
-import com.readystatesoftware.chuck.sample.HttpBinService;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.external.chuck.HttpBinService;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;

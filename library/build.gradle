@@ -112,7 +112,6 @@ dependencies {
     api 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     // Others
-    api 'com.readystatesoftware.chuck:library:1.1.0'
     api 'com.github.alorma:timelineview:2.3.0'
     api 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     api "com.github.nisrulz:easydeviceinfo-base:2.4.1"

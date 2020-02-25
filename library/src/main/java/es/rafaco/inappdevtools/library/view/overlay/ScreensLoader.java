@@ -38,8 +38,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.detail.NetworkDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportsScreen;
@@ -58,7 +56,6 @@ public class ScreensLoader {
         screenManager.registerScreen(Home2Screen.class);
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
-        screenManager.registerScreen(NetworkScreen.class);
         screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(LogScreen.class);
         screenManager.registerScreen(LogcatScreen.class);
@@ -69,7 +66,6 @@ public class ScreensLoader {
         screenManager.registerScreen(NewReportScreen.class);
         screenManager.registerScreen(CrashDetailScreen.class);
         screenManager.registerScreen(AnrDetailScreen.class);
-        screenManager.registerScreen(NetworkDetailScreen.class);
         screenManager.registerScreen(RunScreen.class);
         screenManager.registerScreen(MoreScreen.class);
         screenManager.registerScreen(InspectViewScreen.class);

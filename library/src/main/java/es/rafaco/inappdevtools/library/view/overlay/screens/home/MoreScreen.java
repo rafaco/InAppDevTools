@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -32,7 +32,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetworkScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
@@ -89,15 +88,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
 
 
         data.add("");
-        data.add(new RunButton("Net-Chuck",
-                R.drawable.ic_cloud_queue_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(NetworkScreen.class);
-                    }
-                }));
-
-        data.add(new RunButton("Net-Pand",
+        data.add(new RunButton("New Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -106,7 +97,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Pandora Net",
+        data.add(new RunButton("Pandora Network",
                 R.drawable.ic_extension_white_24dp,
                 new Runnable() {
                     @Override

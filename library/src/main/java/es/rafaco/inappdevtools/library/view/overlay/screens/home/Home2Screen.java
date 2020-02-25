@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfo
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.LiveInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.integrations.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;

@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.logic.config;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.build.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;

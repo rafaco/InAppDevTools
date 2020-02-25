@@ -242,9 +242,8 @@ I have always worked on proprietary software and this is my first open source pr
 
 
 ## Thanks <a name="thanks"/>
-- To [@whataa](https://github.com/whataa) for [Pandora](https://github.com/whataa/pandora), key for layout inspection and storage browser features :trophy:
+- To [@whataa](https://github.com/whataa) for [Pandora](https://github.com/whataa/pandora), key for layout, network and storage inspection :trophy:
 - To [@Zsolt Kocsi](https://github.com/zsoltk) for [Paperwork](https://github.com/zsoltk/paperwork), inspiration for CompileConfig
-- To [@jgilfelt](https://github.com/jgilfelt) for [Chuck](https://github.com/jgilfelt/chuck), used for network interception
 - To [@tiagohm](https://github.com/tiagohm) for [CodeView](https://github.com/tiagohm/CodeView)
 - To [@alorma](https://github.com/alorma) for [TimelineView](https://github.com/alorma/timelineview)
 - To [@valdesekamdem](https://github.com/valdesekamdem) for [MaterialDesign-Toast](https://github.com/valdesekamdem/MaterialDesign-Toast)

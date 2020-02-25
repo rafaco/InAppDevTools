@@ -47,6 +47,35 @@ public class NetFormatter {
             return R.color.rally_orange;
     }
 
+    /* More verbose get color from Chuck, could be useful to color response codes
+    public int getColor() {
+        if (data.status == NetSummary.Status.ERROR) {
+            return R.color.chuck_status_error;
+        }
+        else if (data.status == NetSummary.Status.REQUESTING) {
+            return R.color.chuck_status_requested;
+        }
+        else if (data.code >= 500) {
+            return R.color.chuck_status_500;
+        }
+        else if (data.code >= 400) {
+            return R.color.chuck_status_400;
+        }
+        else if (data.code >= 300) {
+            return R.color.chuck_status_300;
+        }
+        else {
+            return R.color.chuck_status_default;
+        }
+
+        <color name="chuck_status_300">#0D47A1</color>
+        <color name="chuck_status_400">#FF9800</color>
+        <color name="chuck_status_500">#B71C1C</color>
+        <color name="chuck_status_default">#212121</color>
+        <color name="chuck_status_error">#F44336</color>
+        <color name="chuck_status_requested">#9E9E9E</color>
+    }*/
+
     public String getStatusString(){
         switch (data.status){
             case NetSummary.Status.COMPLETE:
