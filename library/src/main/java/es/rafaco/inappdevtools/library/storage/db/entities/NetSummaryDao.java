@@ -20,12 +20,14 @@
 package es.rafaco.inappdevtools.library.storage.db.entities;
 
 //#ifdef ANDROIDX
+//@import androidx.paging.DataSource;
 //@import androidx.room.Dao;
 //@import androidx.room.Delete;
 //@import androidx.room.Insert;
 //@import androidx.room.Query;
 //@import androidx.room.Update;
 //#else
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -50,6 +52,9 @@ public interface NetSummaryDao {
 
     @Query("SELECT * FROM net_summary WHERE sessionId LIKE :sessionId ORDER BY pandoraId ASC")
     List<NetSummary> filterBySessionId(long sessionId);
+
+    @Query("SELECT * FROM net_summary WHERE sessionId LIKE :sessionId ORDER BY pandoraId ASC")
+    DataSource.Factory<Integer, NetSummary> dataSourceBySessionId(long sessionId);
 
     @Query("SELECT * FROM net_summary ORDER BY uid DESC LIMIT 1")
     NetSummary getLast();

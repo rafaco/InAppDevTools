@@ -90,4 +90,15 @@ public class NetSummary implements Serializable {
         int ERROR = 0x01;
         int COMPLETE = 0x02;
     }
+
+    public boolean equalContent(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NetSummary)) return false;
+        NetSummary summary = (NetSummary) o;
+
+        if (start_time != summary.start_time) return false;
+        if (end_time != summary.end_time) return false;
+        if (status != summary.status) return false;
+        return code == summary.code;
+    }
 }
