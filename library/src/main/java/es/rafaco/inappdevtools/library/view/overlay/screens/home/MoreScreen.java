@@ -30,7 +30,6 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
@@ -122,14 +121,6 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(ErrorsScreen.class);
-                    }
-                }));
-
-        data.add(new RunButton("Logcat",
-                R.drawable.ic_android_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(LogcatScreen.class);
                     }
                 }));
 

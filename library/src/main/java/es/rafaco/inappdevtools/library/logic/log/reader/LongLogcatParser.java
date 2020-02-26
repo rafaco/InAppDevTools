@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LongLogcatParser {

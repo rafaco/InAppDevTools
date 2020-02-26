@@ -55,7 +55,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.logcat.LogcatLine;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogcatReaderService extends JobIntentService {

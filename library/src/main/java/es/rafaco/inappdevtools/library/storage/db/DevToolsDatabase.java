@@ -42,8 +42,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
-import es.rafaco.inappdevtools.library.storage.db.entities.LogcatDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetContent;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetContentDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
@@ -62,7 +60,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
                 Build.class,
                 Session.class,
                 Friendly.class,
-                Logcat.class,
                 Screenshot.class,
                 Crash.class,
                 Anr.class,
@@ -98,7 +95,6 @@ public abstract class DevToolsDatabase extends RoomDatabase {
     public abstract SessionDao sessionDao();
     public abstract BuildDao buildDao();
     public abstract FriendlyDao friendlyDao();
-    public abstract LogcatDao logcatDao();
     public abstract ScreenshotDao screenshotDao();
     public abstract CrashDao crashDao();
     public abstract AnrDao anrDao();
@@ -119,7 +115,6 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  Builds: " + buildDao().count() + jump;
         overview +="  Sessions: " + sessionDao().count() + jump;
         overview +="  FriendlyLogs: " + friendlyDao().count() + jump;
-        overview +="  Logcats: " + logcatDao().count() + jump;
         overview +="  Screenshots: " + screenshotDao().count() + jump;
         overview +="  Crashs: " + crashDao().count() + jump;
         overview +="  Anrs: " + anrDao().count() + jump;

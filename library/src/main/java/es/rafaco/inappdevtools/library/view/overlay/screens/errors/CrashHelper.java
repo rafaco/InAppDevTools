@@ -19,15 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-import android.text.TextUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
-import es.rafaco.inappdevtools.library.storage.db.entities.Logcat;
-import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.view.overlay.screens.ScreenHelper;
 
 public class CrashHelper extends ScreenHelper {
@@ -42,39 +34,6 @@ public class CrashHelper extends ScreenHelper {
     @Override
     public String getReportContent() {
         return null;
-    }
-
-    public List<String> getReportPaths(final Crash crash) {
-        List<String> filePaths = new ArrayList<>();
-        addCrashDetailFile(crash, filePaths);
-        addLogcatFile(crash, filePaths);
-        addScreenFile(crash, filePaths);
-
-        return filePaths;
-    }
-
-    private void addCrashDetailFile(Crash crash, List<String> filePaths) {
-        if (!TextUtils.isEmpty(crash.getReportPath())) {
-            filePaths.add(crash.getReportPath());
-        }
-    }
-
-    private void addScreenFile(Crash crash, List<String> filePaths) {
-        Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(crash.getScreenId());
-        String filePath = screenshot.getPath();
-
-        if (!TextUtils.isEmpty(filePath)) {
-            filePaths.add(filePath);
-        }
-    }
-
-    private void addLogcatFile(Crash crash, List<String> filePaths) {
-        Logcat logcat = IadtController.get().getDatabase().logcatDao().findById(crash.getLogcatId());
-        String filePath = logcat.getPath();
-
-        if (!TextUtils.isEmpty(filePath)) {
-            filePaths.add(filePath);
-        }
     }
 
     //region [ TEXT FORMATTERS ]
