@@ -45,7 +45,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 
 public class NetScreen extends Screen implements NetViewHolder.Listener {
 
@@ -53,7 +53,7 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
     private LiveData liveData;
     private NetAdapter adapter;
     private RecyclerView recyclerView;
-    private ToolBarHelper toolbarHelper;
+    private ToolbarSearchHelper toolbarSearch;
     private long filter;
 
     public NetScreen(ScreenManager manager) {
@@ -190,8 +190,9 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
     //region [ TOOL BAR ]
 
     private void initToolbar() {
-        toolbarHelper = new ToolBarHelper(getToolbar());
-        toolbarHelper.initSearchFilterButtons(new SearchView.OnQueryTextListener() {
+        toolbarSearch = new ToolbarSearchHelper(getToolbar(), R.id.action_search);
+        toolbarSearch.setHint("Search...");
+        toolbarSearch.setOnChangeListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -199,13 +200,12 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //TODO:
+                //TODO: update net filter
                 //dataSourceFactory.getFilter().setText(newText);
                 adapter.getCurrentList().getDataSource().invalidate();
                 return false;
             }
         });
-        toolbarHelper.showAllMenuItem();
     }
 
     @Override

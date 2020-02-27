@@ -23,12 +23,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
@@ -86,7 +84,7 @@ import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatUtils;
-import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 
 public class LogScreen extends Screen implements LogViewHolder.Listener {
 
@@ -94,14 +92,13 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     private LiveData logList;
     private LogAdapter adapter;
     private RecyclerView recyclerView;
-    private TextView welcome;
-    private ToolBarHelper toolbarHelper;
     private LogFilterDialog filterDialog;
 
     private long selectedItemId = -1;
     private int selectedItemPosition = -1;
     private boolean pendingScrollToPosition;
     private LogFilterHelper filterHelper;
+    private ToolbarSearchHelper toolbarSearch;
 
     public LogScreen(ScreenManager manager) {
         super(manager);
@@ -118,7 +115,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_log_body; }
+    public int getBodyLayoutId() { return R.layout.tool_live_data_body; }
 
     @Override
     public int getToolbarLayoutId() {
@@ -134,11 +131,9 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     protected void onStart(ViewGroup toolHead) {
         initToolbar();
 
-        welcome = bodyView.findViewById(R.id.welcome);
-        welcome.setVisibility(View.GONE);
         recyclerView = getView().findViewById(R.id.list);
-
         adapter = new LogAdapter(this);
+
         initFilter();
         initSelected();
         initLiveData();
@@ -516,8 +511,9 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     //region [ TOOL BAR ]
 
     private void initToolbar() {
-        toolbarHelper = new ToolBarHelper(getToolbar());
-        toolbarHelper.initSearchFilterButtons(new SearchView.OnQueryTextListener() {
+        toolbarSearch = new ToolbarSearchHelper(getToolbar(), R.id.action_search);
+        toolbarSearch.setHint("Search...");
+        toolbarSearch.setOnChangeListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -530,22 +526,6 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 return false;
             }
         });
-        toolbarHelper.showAllMenuItem();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            int itemId = item.getItemId();
-            if (itemId == R.id.action_level){
-                menu.getItem(i).setVisible(false);
-                menu.getItem(i).setEnabled(false);
-            }
-        }
-        return true;
     }
 
     @Override

@@ -53,12 +53,11 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 
 public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
     CodeView codeViewer;
-    ToolBarHelper toolbarHelper;
     boolean[] tuneSelection;
     RelativeLayout traceContainer;
     TextView traceLabel;
@@ -66,6 +65,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     AppCompatButton nextButton;
     TextView wideLabel;
     private boolean isSourceUnavailable;
+    private ToolbarSearchHelper toolbarSearch;
 
     public SourceDetailScreen(ScreenManager manager) {
         super(manager);
@@ -175,14 +175,10 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        toolbarHelper = new ToolBarHelper(getToolbar());
-        MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search content...");
-        toolbarHelper.showAllMenuItem();
-        
-        final SearchView searchView = (SearchView) menuItem.getActionView();
-
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        toolbarSearch = new ToolbarSearchHelper(getToolbar(), R.id.action_search);
+        toolbarSearch.setHint("Search content...");
+        toolbarSearch.setSubmitButtonEnabled(true);
+        toolbarSearch.setOnChangeListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 codeViewer.findNext(true);
@@ -201,8 +197,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                         //TODO: Check if needed with support libs
                         // FriendlyLog.logException("onQueryTextChange with: " + query, ignored);
                     }
-                }
-                else {
+                } else {
                     codeViewer.findAllAsync(null);
                     try {
                         Method m = WebView.class.getMethod("setFindIsUp", Boolean.TYPE);
@@ -215,7 +210,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                 return true;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        toolbarSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 codeViewer.findAllAsync(null);

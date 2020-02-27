@@ -27,39 +27,33 @@ import android.widget.ImageView;
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.SearchView;
 //@import androidx.appcompat.widget.Toolbar;
+//@import androidx.annotation.DrawableRes;
+//@import androidx.annotation.IdRes;
 //@import static androidx.appcompat.R.*;
 //#else
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import static android.support.v7.appcompat.R.*;
 //#endif
 
-import es.rafaco.inappdevtools.library.R;
 
-public class ToolBarHelper {
+public class ToolbarSearchHelper {
     Context context;
     Toolbar toolbar;
+    MenuItem searchMenuItem;
+    SearchView searchView;
 
-    public ToolBarHelper(Toolbar toolbar) {
+    public ToolbarSearchHelper(Toolbar toolbar, @IdRes int menuItemId) {
         this.context = toolbar.getContext();
         this.toolbar = toolbar;
+        this.searchMenuItem = toolbar.getMenu().findItem(menuItemId);
+        this.searchView = (SearchView) searchMenuItem.getActionView();
+        init();
     }
 
-    public void initSearchFilterButtons(SearchView.OnQueryTextListener onQueryCallback) {
-        initSearchMenuItem(R.id.action_search, "Search...");
-        MenuItem filterItem = initSearchMenuItem(R.id.action_filter, "Filter...");
-
-        SearchView filterView = (SearchView) filterItem.getActionView();
-        if (filterView != null) {
-            int searchImgId = id.search_button; // I used the explicit layout ID of searchview's ImageView
-            ImageView v = filterView.findViewById(searchImgId);
-            v.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_filter_list_white_24dp));
-            filterView.setOnQueryTextListener(onQueryCallback);
-        }
-    }
-
-    public MenuItem initSearchMenuItem(int menuActionId, String hint){
-        final MenuItem item = toolbar.getMenu().findItem(menuActionId);
+    private void init() {
         MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -73,16 +67,11 @@ public class ToolBarHelper {
                 return true;
             }
         };
-        item.setOnActionExpandListener(onActionExpandListener);
-
-        final SearchView searchView = (SearchView) item.getActionView();
-        if (searchView != null) {
-            searchView.setQueryHint(hint);
-        }
-        return item;
+        searchMenuItem.setOnActionExpandListener(onActionExpandListener);
+        showAllMenuItem();
     }
 
-    public void showAllMenuItem() {
+    private void showAllMenuItem() {
         Menu menu = toolbar.getMenu();
         for(int i = 0; i<menu.size(); i++ ){
             MenuItem current = menu.getItem(i);
@@ -90,7 +79,7 @@ public class ToolBarHelper {
         }
     }
 
-    public void hideOthersMenuItem(MenuItem filterItem) {
+    private void hideOthersMenuItem(MenuItem filterItem) {
         Menu menu = toolbar.getMenu();
         for(int i = 0; i<menu.size(); i++ ){
             MenuItem current = menu.getItem(i);
@@ -98,5 +87,42 @@ public class ToolBarHelper {
                 current.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             }
         }
+    }
+
+
+    public void setHint(String hint){
+        if (searchView != null) {
+            searchView.setQueryHint(hint);
+        }
+    }
+
+    public void setSubmitButtonEnabled(boolean enabled){
+        if (searchView != null) {
+            searchView.setSubmitButtonEnabled(enabled);
+        }
+    }
+
+    public void setOnChangeListener(SearchView.OnQueryTextListener onChange){
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(onChange);
+        }
+    }
+
+    public void setOnCloseListener(SearchView.OnCloseListener onClose) {
+        if (searchView != null) {
+            searchView.setOnCloseListener(onClose);
+        }
+    }
+
+    public void replaceActionViewIcon(@DrawableRes int iconResource){
+        //Use an iconResource directly like R.drawable.ic_filter_list_white_24dp
+        if (searchView != null) {
+            ImageView v = searchView.findViewById(id.search_button);
+            v.setImageDrawable(context.getResources().getDrawable(iconResource));
+        }
+    }
+
+    public SearchView getSearchView(){
+        return searchView;
     }
 }

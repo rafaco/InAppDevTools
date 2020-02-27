@@ -49,15 +49,14 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.utils.ToolBarHelper;
+import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class SourcesScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
-    private ToolBarHelper toolbarHelper;
-    private SearchView searchView;
+    private ToolbarSearchHelper toolbarSearch;
     private String contentOverview;
     private AsyncTask<Object, String, List<Object>> currentTask;
 
@@ -298,7 +297,8 @@ public class SourcesScreen extends Screen {
                     } : new Runnable() {
                         @Override
                         public void run() {
-                            searchView.setIconified(true);
+                            //Review this following line
+                            toolbarSearch.getSearchView().setIconified(true);
                             SourcesScreen.this.openSource(entry);
                         }
                     }));
@@ -313,17 +313,10 @@ public class SourcesScreen extends Screen {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //TODO: subtitle
-        //getToolbar().setSubtitle(getSubtitle());
-
-        toolbarHelper = new ToolBarHelper(getToolbar());
-        MenuItem menuItem = toolbarHelper.initSearchMenuItem(R.id.action_search, "Search file names...");
-        toolbarHelper.showAllMenuItem();
-
-        searchView = (SearchView) menuItem.getActionView();
-        searchView.setSubmitButtonEnabled(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        toolbarSearch = new ToolbarSearchHelper(getToolbar(), R.id.action_search);
+        toolbarSearch.setHint("Search file names...");
+        toolbarSearch.getSearchView().setIconifiedByDefault(false);
+        toolbarSearch.setOnChangeListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //codeViewer.findNext(true);
@@ -334,14 +327,13 @@ public class SourcesScreen extends Screen {
             public boolean onQueryTextChange(String query) {
                 if (!query.isEmpty()) {
                     updateSearch(query);
-                }
-                else {
+                } else {
                     updateSearch(null);
                 }
                 return true;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        toolbarSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 updateSearch(null);

@@ -3,6 +3,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="es.rafaco.compat.SearchView"/>
+
+    <item
         android:id="@+id/action_session"
         android:title="Sessions"
         android:icon="@drawable/ic_format_list_bulleted_white_24dp"
@@ -13,20 +20,6 @@
         android:title="Tune"
         android:icon="@drawable/ic_tune_white_24dp"
         app:showAsAction="ifRoom" />
-    
-    <item
-        android:id="@+id/action_filter"
-        android:title="Filter"
-        android:icon="@drawable/ic_filter_list_white_24dp"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="es.rafaco.compat.SearchView"/>
-
-    <item
-        android:id="@+id/action_search"
-        android:title="Search"
-        android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="es.rafaco.compat.SearchView"/>
 
     <item
         android:id="@+id/action_simulate"
