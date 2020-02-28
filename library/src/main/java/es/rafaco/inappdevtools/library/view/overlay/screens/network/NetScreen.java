@@ -19,20 +19,33 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+//#ifdef ANDROIDX
+//@import androidx.lifecycle.LiveData;
+//@import androidx.lifecycle.Observer;
+//@import androidx.lifecycle.ProcessLifecycleOwner;
+//@import androidx.paging.LivePagedListBuilder;
+//@import androidx.paging.PagedList;
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.widget.SearchView;
+//@import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//#else
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+//#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
