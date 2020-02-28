@@ -309,11 +309,7 @@ public class ErrorsScreen extends Screen {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int selected = item.getItemId();
-        if (selected == R.id.action_delete)
-        {
-            onClearAll();
-        }
-        else if (selected == R.id.action_simulate)
+        if (selected == R.id.action_simulate)
         {
             //TODO: dialog or popup to choose type of error
             //TODO: show message before crash or anr
@@ -324,6 +320,10 @@ public class ErrorsScreen extends Screen {
             //TODO: send all errors
             Iadt.showMessage("Not already implemented");
         }
+        /*else if (selected == R.id.action_delete)
+        {
+            onClearAll();
+        }*/
         return super.onMenuItemClick(item);
     }
 

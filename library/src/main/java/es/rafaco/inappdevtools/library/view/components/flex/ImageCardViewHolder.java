@@ -105,10 +105,10 @@ public class ImageCardViewHolder extends FlexibleViewHolder {
             if (i == R.id.action_open) {
                 CustomToast.show(cardView.getContext(), "Open", CustomToast.TYPE_WARNING);
                 return true;
-            } else if (i == R.id.action_delete) {
+            } /*else if (i == R.id.action_delete) {
                 Iadt.showMessage("Delete");
                 return true;
-            }
+            }*/
             return false;
         }
     }

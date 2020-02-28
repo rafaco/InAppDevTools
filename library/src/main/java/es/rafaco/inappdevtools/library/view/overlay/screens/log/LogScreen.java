@@ -545,9 +545,9 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         else if (selected == R.id.action_share) {
             onShareButton();
         }
-        else if (selected == R.id.action_delete) {
+        /*else if (selected == R.id.action_delete) {
             onClearButton();
-        }
+        }*/
         else{
             Iadt.showMessage("Not already implemented");
         }

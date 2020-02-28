@@ -264,10 +264,10 @@ public class CrashDetailScreen extends Screen {
             DocumentRepository.shareDocument(DocumentType.CRASH, crash);
             return true;
         }
-        else if (selected == R.id.action_delete)
+        /*else if (selected == R.id.action_delete)
         {
             onDelete();
-        }
+        }*/
         return super.onMenuItemClick(item);
     }
 

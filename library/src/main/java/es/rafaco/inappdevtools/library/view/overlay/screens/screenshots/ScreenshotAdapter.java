@@ -196,10 +196,10 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Sc
                 CustomToast.show(recycledView.getContext(), "Share", CustomToast.TYPE_WARNING);
                 return true;
             }
-            else if (i == R.id.action_delete) {
+            /*else if (i == R.id.action_delete) {
                 Iadt.showMessage("//TODO: Delete");
                 return true;
-            }
+            }*/
             return false;
         }
     }
