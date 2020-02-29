@@ -36,9 +36,11 @@ For extended feature description, visit our wiki: [Feature description](https://
 
 ## Installation <a name="setup"/>
 
+Android R ready! Successfully tested on Android R Preview v1 emulator. with a host app using build tools 29.0.3, Gradle 5.6.4 and Android Gradle plugin 3.6.1.
+
 ### Limitations <a name="req"/>
-- minSdkVersion >= 16 (Jelly Bean). Check it at your app/build.gradle
-- Minimun Gradle version: //TODO
+- minSdkVersion >= 16 (Jelly Bean)
+- Minimum Gradle version: //TODO
 
 ### Setup <a name="basic"/>
 You only need to modify 2 gradle files. On your **root build.gradle** file, import our plugin and add the JitPack repository. `plugins` closure should be right after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
