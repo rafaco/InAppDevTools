@@ -51,15 +51,47 @@ All artifacts are generated from a single project [hosted in this repo](https://
 | inappdevtools.org | [website](/website) | - | Promo website  | [inappdevtools.org](https:/inappdevtools.org) |
 
 
-### Switching Androidx/Support build
+### Building AndroidX or Support artifacts
 
-We use a gradle preprocessor to switch between AndroidX or Support libraries in our modules for each variant. This affect our java source and gradle build files. AndroidX build also require 'android.useAndroidX' properties but we set it dynamically passing following command line args: -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true. 
+Our project have predefined "Run Configurations" for AndroidX or Support builds per each module. Use them to automatically switch between AndroidX or Support builds.
 
-Our Android Studio project have "Run Configurations" for AndroidX an Support builds per each module and with correct command line args already set.
+In a nutshell, we use a mix of techniques to generate artifacts for both libraries from the same source code:
+- Libraries dependencies are configured per variant
+- AndroidX Gradle properties are set by command line
+- A Java preprocessor change source imports and other source references per variant (Compat module)
 
-This params override selections on Android Studio "Build Variant" panel. To manually build AndroidX variants of any submodule, remove command line args and restore properties android.useAndroidX=true and android.enableJetifier=true at gradle.properties.
+This techniques overrides standard switch on Android Studio via "Build Variants" panel, so it doesn't work in our project. To re-enable it and manually build AndroidX variants of any submodule: remove custom command line args and restore AndroidX properties at gradle.properties file (`android.useAndroidX=true` and `android.enableJetifier=true`).
 
 Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other way around. Test your build switching to Androidx but perform a last build using Support libraries before committing, to restore support sources.
+
+
+### Publishing to local repository
+
+To build all our artifacts and publish them to your local Maven repository, use `Deploy all to local (DEV)` run configuration predefined in our project. Individual run configurations are also available and named like `Publish [MODULE] [VARIANT] to LOCAL`.
+
+### Using local artifacts
+
+To load locally published artifacts into your app, you have to add local repositories definitions to your project.
+
+On your **root build.gradle** file, add your local repository for dependencies:
+```gradle
+allprojects {
+    repositories {
+        mavenLocal()
+        ...
+    }
+}
+```
+
+Then, on your **root settings.gradle** file, add your local repository for plugins (it should be before any other settings):
+```gradle
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+```
 
 ## Continuous Integration <a name="ci"/>
 
