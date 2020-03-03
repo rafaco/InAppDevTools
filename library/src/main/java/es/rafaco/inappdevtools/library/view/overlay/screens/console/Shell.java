@@ -19,9 +19,11 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.console;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -59,27 +61,42 @@ public class Shell {
 
         try {
             process = Runtime.getRuntime().exec(command);
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuffer output = new StringBuffer();
             String line;
             while (!isCancelled && (line = reader.readLine())!= null) {
                 output.append(line + Humanizer.newLine());
             }
-            if (IadtController.get().isDebug()){
-                Log.v(Iadt.TAG, "Shell result: " + output.length() + " lines.");
-                if (output.length() == 0){
-                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                    StringBuffer errorOutput = new StringBuffer();
-                    String errorLine;
-                    while (!isCancelled && (errorLine = errorReader.readLine())!= null) {
-                        errorOutput.append(errorLine + Humanizer.newLine());
-                    }
-                    if (errorOutput.length() != 0) {
-                        Log.w(Iadt.TAG, "Shell error: " + errorOutput.toString());
-                    }
+            String outputString = output.toString();
+            if (IadtController.get().isDebug())
+                Log.v(Iadt.TAG, "Shell result: " + outputString);
+
+            String errorString = null;
+            InputStream errorStream = process.getErrorStream();
+            if (errorStream!=null){
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+                StringBuffer errorOutput = new StringBuffer();
+                String errorLine;
+                while (!isCancelled && (errorLine = errorReader.readLine())!= null) {
+                    errorOutput.append(errorLine + Humanizer.newLine());
                 }
+                errorString = errorOutput.toString();
+
+                if (IadtController.get().isDebug())
+                    Log.w(Iadt.TAG, "Shell error: " + errorString);
             }
-            response = output.toString();
+
+            if (!TextUtils.isEmpty(outputString))
+                response = "OUTPUT: " + outputString;
+
+            if (!TextUtils.isEmpty(errorString)){
+                if (!TextUtils.isEmpty(outputString)){
+                    response += Humanizer.newLine();
+                }
+                response += "ERROR: " + errorString;
+            }
+
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
         }
