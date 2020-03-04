@@ -33,14 +33,14 @@ public class ForegroundInitSubscriber extends EventSubscriber {
     @Override
     public void subscribe() {
 
-        eventManager.subscribe(Event.USER_PRESENT, new EventManager.OneShotListener() {
+        eventManager.subscribe(Event.USER_PRESENT, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
                 IadtController.get().initFullIfPending();
             }
         });
 
-        eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.OneShotListener() {
+        eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
                 IadtController.get().initFullIfPending();
