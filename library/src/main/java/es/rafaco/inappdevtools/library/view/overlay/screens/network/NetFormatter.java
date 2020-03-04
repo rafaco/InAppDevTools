@@ -123,12 +123,12 @@ public class NetFormatter {
 
     private String getComposedLineDuration() {
         return isDone() && data.end_time > 0 && data.start_time > 0
-                ? data.end_time - data.start_time + "ms" : "";
+                ? data.end_time - data.start_time + " ms" : "";
     }
 
     private String getComposedLineSize(){
         return (isDone() && data.response_size > 0)
-                ? data.response_size + "    " : "";
+                ? getResponseSize() + "    " : "";
     }
 
     private String getComposedLineCode(){

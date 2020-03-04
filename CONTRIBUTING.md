@@ -31,7 +31,7 @@ If you prefer to contact us directly in a private way, you can always send us an
 
 # Coding contributions
 
-Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project. 
+Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project.
 
 Following instructions are for user that want build their own version of InAppDevTools with changes. Remember to contribute your changes to the community using a Pull Request.
 
@@ -139,4 +139,4 @@ Working on your first Pull Request? You can learn how from this *free* series, [
 //TODO
 
 
-_Ideas extracted from the following [template] (https://github.com/nayafia/contributing-template)._
+_Ideas extracted from https://github.com/nayafia/contributing-template._

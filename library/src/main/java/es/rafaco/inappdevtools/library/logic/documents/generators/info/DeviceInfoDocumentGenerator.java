@@ -227,7 +227,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public String getFormattedDevice() {
-        return String.format("%s %s %s", Build.BRAND, Build.MODEL, "");
+        return String.format("%s %s %s", Humanizer.toCapitalCase(Build.BRAND), Build.MODEL, "");
     }
 
     @NonNull
