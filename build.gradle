@@ -42,8 +42,6 @@ allprojects {
     }
 }
 
-
-
 // Clean all modules
 task clean(type: Delete) {
     delete rootProject.buildDir
@@ -52,6 +50,8 @@ subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
 }
 
+
+apply from: './gradle/doze_utils.gradle'
 
 sonarqube {
     androidVariant 'supportDebug'
@@ -70,7 +70,6 @@ if (hasProperty('buildScan')) {
         termsOfServiceAgree = 'yes'
     }
 }
-
 
 //TODO: Re-enable JavaDoc generation after common-logging removed.
 subprojects {

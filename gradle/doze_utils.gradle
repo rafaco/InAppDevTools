@@ -1,0 +1,121 @@
+
+// Utility tasks to test Doze mode introduced in Android Marshmallow. Use them in following order:
+// 1. Connect the device to your developing machine having ADB
+// 2. Open your app, leave it on foreground and turn off the display
+// 3. Use batteryChargingStop task. Your device charging indicator will disappear
+// 4. Use dozeEnter task to force deep doze state
+// - (Optional) Use dozeCheck task to view the current deviceidle state
+// - (IMPORTANT) Use dozeRestore to restore standard state
+// - (VERY IMPORTANT!) Use batteryChargingRestore to allow your device to charge when plugged
+
+task batteryChargingStop(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys battery unplug'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+task batteryChargingRestore(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys battery reset'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+task dozeEnter(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys deviceidle force-idle'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+//Cycle Deep Doze States: ACTIVE -> IDLE_PENDING -> SENSING -> LOCATING -> IDLE -> IDLE_MAINTENANCE
+task dozeDeepStepCycle(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys deviceidle step deep'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+//Cycle Light Doze States: ACTIVE -> IDLE -> IDLE_MAINTENANCE -> OVERRIDE
+task dozeLightStepCycle(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys deviceidle step light'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+task dozeRestore(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell dumpsys deviceidle unforce'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+//If mState=IDLE it means DOZE MODE is ON.
+task dozeCheck(type: Exec) {
+    group = 'iadt_doze'
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'adb shell dumpsys deviceidle | findstr mState'
+    } else {
+        commandLine 'adb shell dumpsys deviceidle | grep mState'
+    }
+}
+
+task appStandbyEnter(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell am set-inactive es.rafaco.inappdevtools.demo true'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+task appStandbyRestore(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell am set-inactive es.rafaco.inappdevtools.demo false'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+task appStandbyCheck(type: Exec) {
+    group = 'iadt_doze'
+    def command = 'adb shell am get-inactive es.rafaco.inappdevtools.demo'
+
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', command
+    } else {
+        commandLine command
+    }
+}
+
+
