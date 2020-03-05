@@ -223,6 +223,9 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("UserPresent")) {
                 return R.drawable.ic_person_pin_white_24dp;
             }
+            else if (log.getSubcategory().startsWith("Power")) {
+                return R.drawable.ic_battery_alert_white_24dp;
+            }
         }
         else if (log.getCategory().equals("Touch")) {
             return R.drawable.ic_touch_app_white_24dp;

@@ -81,6 +81,11 @@ public enum Event {
     IMPORTANCE_FOREGROUND("importance_foreground"),
     IMPORTANCE_BACKGROUND("importance_background"),
 
+    //PowerManager
+    POWER_DOZE("PowerDoze"),
+    POWER_SAVE("PowerSave"),
+    POWER_INTERACTIVE("PowerInteractive"),
+
     //Shake
     SHAKE("Shake"),
 

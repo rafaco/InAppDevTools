@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.logic.events;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneMod
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.ConnectivityChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.DeviceButtonsEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.doze.DozeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.FragmentEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ProcessEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
@@ -81,6 +83,10 @@ public class EventDetectorsManager {
         initDetector(ConnectivityChangeEventDetector.class);
         initDetector(AirplaneModeChangeEventDetector.class);
         initDetector(ShakeEventDetector.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            initDetector(DozeEventDetector.class);
+        }
     }
 
     private void initDetector(Class<? extends EventDetector> className) {
