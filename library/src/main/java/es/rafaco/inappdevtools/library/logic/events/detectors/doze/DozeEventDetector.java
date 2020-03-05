@@ -25,7 +25,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.PowerManager;
+//#ifdef ANDROIDX
+//@import androidx.annotation.RequiresApi;
+//#else
 import android.support.annotation.RequiresApi;
+//#endif
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.events.Event;

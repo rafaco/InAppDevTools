@@ -101,8 +101,6 @@ public final class IadtController {
     private void init(Context context) {
         this.context = context.getApplicationContext();
 
-        if (isDebug()) ThreadUtils.printOverview("IadtController init");
-
         boolean isEssentialUp = initEssential();
         if (!isEssentialUp)
             return;
@@ -132,7 +130,7 @@ public final class IadtController {
             Log.w(Iadt.TAG, "Iadt DISABLED by configuration");
             return false;
         }
-
+        if (isDebug()) ThreadUtils.printOverview("IadtController init");
         if (isDebug()) Log.d(Iadt.TAG, "IadtController init essential");
 
         buildManager = new BuildManager(context);
