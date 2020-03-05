@@ -54,7 +54,7 @@ public class EventManager {
         listenerForEvent.add(listener);
     }
 
-    public void unSubscribe(Event event, Listener listener){
+    public void unsubscribe(Event event, Listener listener){
         List<Listener> listeners = eventListeners.get(event);
         if (listeners!=null && listeners.size()>0){
             for (Listener existingListener : listeners) {

@@ -24,22 +24,14 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
 
-public class ForegroundInitSubscriber extends EventSubscriber {
+public class OverlayRestoreSubscriber extends EventSubscriber {
 
-    public ForegroundInitSubscriber(EventManager eventManager) {
+    public OverlayRestoreSubscriber(EventManager eventManager) {
         super(eventManager);
     }
 
     @Override
     public void subscribe() {
-
-        eventManager.subscribe(Event.USER_PRESENT, new EventManager.Listener() {
-            @Override
-            public void onEvent(Event event, Object param) {
-                IadtController.get().initFullIfPending();
-            }
-        });
-
         eventManager.subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {

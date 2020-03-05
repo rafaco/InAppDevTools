@@ -77,8 +77,8 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
-    public boolean isPendingInitFull;
     private OverlayHelper overlayHelper;
+    public boolean isPendingInitFull;
 
     protected IadtController(Context context) {
         if (INSTANCE != null) {
@@ -101,7 +101,7 @@ public final class IadtController {
     private void init(Context context) {
         this.context = context.getApplicationContext();
 
-        ThreadUtils.printOverview("IadtController init");
+        if (isDebug()) ThreadUtils.printOverview("IadtController init");
 
         boolean isEssentialUp = initEssential();
         if (!isEssentialUp)
@@ -133,8 +133,7 @@ public final class IadtController {
             return false;
         }
 
-        if (isDebug())
-            Log.d(Iadt.TAG, "IadtController init essential");
+        if (isDebug()) Log.d(Iadt.TAG, "IadtController init essential");
 
         buildManager = new BuildManager(context);
         sessionManager = new SessionManager(context);
@@ -174,20 +173,20 @@ public final class IadtController {
         if (shouldDelayInitFull()){
             return;
         }
-        else if (isPendingInitFull){
+
+        if (isPendingInitFull){
             initFull();
         }
-        else if (!OverlayService.isRunning && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            //TODO: Research this hack, it smell bad
-            if (isDebug())
-                Log.d(Iadt.TAG, "Restarting OverlayHelper. Doze close it");
+        else if (getConfig().getBoolean(BuildConfig.OVERLAY_ENABLED)
+                && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)
+                && !OverlayService.isRunning()){
+            if (isDebug()) Log.d(Iadt.TAG, "Restarting OverlayHelper");
             overlayHelper = new OverlayHelper(getContext());
         }
     }
 
     private void initFull(){
-        if (isDebug())
-            Log.d(Iadt.TAG, "IadtController init full");
+        if (isDebug()) Log.d(Iadt.TAG, "IadtController init full");
 
         initDelayedBackground();
         initForeground();

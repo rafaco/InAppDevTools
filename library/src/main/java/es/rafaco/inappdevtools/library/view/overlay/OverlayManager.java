@@ -34,15 +34,24 @@ public class OverlayManager {
     private final Context context;
     private final LayerManager layerManager;
     private final ScreenManager screenManager;
+    private EventManager.Listener onForegroundListener;
+    private EventManager.Listener onBackgroundListener;
 
     public OverlayManager(Context context) {
         this.context = context;
         this.layerManager = new LayerManager(context);
         this.screenManager = new ScreenManager(context, layerManager.getMainLayer());
 
-        subscribeNewSyncWithAppImportance();
+        subscribeEventListeners();
     }
 
+    private IadtController getController() {
+        return IadtController.get();
+    }
+
+    private EventManager getEventManager() {
+        return getController().getEventManager();
+    }
 
 
     //region [ INTERNAL NAVIGATION ]
@@ -126,47 +135,48 @@ public class OverlayManager {
     private boolean isForeground = true;
     private boolean isSuspended = false;
 
-    public void subscribeNewSyncWithAppImportance() {
-
-        getController().getEventManager().subscribe(Event.IMPORTANCE_FOREGROUND, new EventManager.Listener() {
+    //TODO: refactor into an EventSubscriber
+    public void subscribeEventListeners() {
+        onForegroundListener = new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (IadtController.get().isDebug())
-                    Log.v(Iadt.TAG, "OverlayManager - IMPORTANCE_FOREGROUND received: " + isForeground + ", " + isSuspended);
                 if (!isForeground && isSuspended) {
                     isForeground = true;
                     isSuspended = false;
                     resume();
                 }
             }
-        });
-
-        getController().getEventManager().subscribe(Event.IMPORTANCE_BACKGROUND, new EventManager.Listener() {
+        };
+        onBackgroundListener = new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (IadtController.get().isDebug())
-                    Log.v(Iadt.TAG, "OverlayManager - IMPORTANCE_BACKGROUND received: " + isForeground + ", " + isSuspended);
                 if (isForeground) {
                     isForeground = false;
                     isSuspended = true;
                     pause();
                 }
             }
-        });
+        };
+        getEventManager().subscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+        getEventManager().subscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+    }
+
+    public void unsubscribeEventListeners() {
+        if (onForegroundListener!=null){
+            getEventManager().unsubscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+            onForegroundListener = null;
+        }
+        if (onBackgroundListener!=null){
+            getEventManager().unsubscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+            onBackgroundListener = null;
+        }
     }
 
     //endregion
 
-    private Context getContext() {
-        return context;
-    }
-
-    private IadtController getController() {
-        return IadtController.get();
-    }
-
     public void destroy() {
         if (screenManager != null) screenManager.destroy();
         if (layerManager != null) layerManager.destroy();
+        unsubscribeEventListeners();
     }
 }

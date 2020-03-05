@@ -36,7 +36,6 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -47,7 +46,8 @@ public class OverlayService extends Service {
     public static final String EXTRA_INTENT_ACTION = "EXTRA_INTENT_ACTION";
     public static final String EXTRA_INTENT_TARGET = "EXTRA_INTENT_TARGET";
     private static final String EXTRA_INTENT_PARAMS = "EXTRA_INTENT_PARAMS";
-    public static Boolean isRunning = false;
+
+    private static OverlayService instance; //TODO: [LOW:Arch] Replace by bounded service
     private static Boolean initialised = false;
 
     private OverlayManager overlayManager;
@@ -66,7 +66,6 @@ public class OverlayService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        isRunning = true;
         initialised = false;
         instance = this;
         if (IadtController.get().isDebug())
@@ -89,6 +88,10 @@ public class OverlayService extends Service {
 
 
     //region [ STATIC ACCESSORS ]
+
+    public static boolean isRunning() {
+        return instance != null;
+    }
 
     public static void performNavigation(Class<? extends Screen> target) {
         performNavigationStep(new NavigationStep(target, null));
@@ -138,7 +141,7 @@ public class OverlayService extends Service {
 
     //endregion
 
-    //region [ INIT ]
+    //region [ INITIALIZATION ]
 
     public static boolean isInitialize() {
         return initialised;
@@ -178,10 +181,12 @@ public class OverlayService extends Service {
             Log.v(Iadt.TAG, "OverlayService - onStartCommand: " + action + " " + target + " " + params);
 
         try {
+            if (!initialised){
+                init();
+            }
+
             if (action != null){
                 processIntentAction(action, target, params);
-            }else{
-                init();
             }
         }
         catch (Exception e) {
@@ -201,8 +206,6 @@ public class OverlayService extends Service {
     }
 
     private void processIntentAction(IntentAction action, String target, String params) {
-        if (!isInitialize()) init();
-
         if (action.equals(IntentAction.NAVIGATE_HOME)){
             overlayManager.navigateHome();
         }
@@ -227,11 +230,9 @@ public class OverlayService extends Service {
 
     //region [ STOP ]
 
-    //TODO: [LOW:Arch] Replace by bounded service
-    private static OverlayService instance;
-
     public static void stop(){
-        if (instance != null) instance.stopService();
+        if (isRunning())
+            instance.stopService();
     }
 
     private void stopService() {
@@ -255,13 +256,12 @@ public class OverlayService extends Service {
     @Override
     public void onDestroy() {
         if (IadtController.get().isDebug())
-            Log.v(Iadt.TAG, "OverlayService - onDestroy... doze?");
-        if (overlayManager != null) overlayManager.destroy();
+            Log.v(Iadt.TAG, "OverlayService - onDestroy");
+        if (overlayManager != null)
+            overlayManager.destroy();
         instance = null;
-        isRunning = false;
         super.onDestroy();
     }
 
     //endregion
-
 }
