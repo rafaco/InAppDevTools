@@ -2,6 +2,17 @@ apply plugin: 'com.android.application'
 apply from: '../compat/preprocess.gradle'
 apply from: '../gradle/constants.gradle'
 
+/*
+ *  Iadt PLUGIN: import directly from modules. For development.
+ */
+//apply from: '../plugin/build.gradle'
+
+/*
+ *  Iadt PLUGIN: import from repository (jCenter or localMaven). Standard usage
+ */
+apply plugin: 'es.rafaco.inappdevtools'
+
+
 android {
     compileSdkVersion PROJECT_COMPILE_SDK
     buildToolsVersion PROJECT_BUILD_TOOLS
@@ -48,7 +59,18 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // AndroidX/Support view components are added by compat module:
+    /*
+     *  Iadt COMPAT: import directly from modules. For release, debug have it from library
+     */
+    releaseApi project(path: ':compat')
+
+    /*
+     *  Iadt COMPAT: import from repository (jCenter or localMaven). Standard usage
+     */
+    //androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
+    //supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
+
+    // AndroidX/Support view components added by compat module:
     //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
     //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
     //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
@@ -57,18 +79,6 @@ dependencies {
     //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
     //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
-    //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.5.0'
-    api 'com.squareup.retrofit2:converter-gson:2.5.0'
-
-    //Test
-    testImplementation 'junit:junit:4.12'
-
-    // AndroidX/Support test components (TODO)
-    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
-    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     /*
      *  Iadt LIBRARY: import directly from modules. For development.
@@ -83,28 +93,20 @@ dependencies {
     //androidxImplementation "es.rafaco.inappdevtools:androidx:$libraryPublishedVersion"
     //releaseImplementation "es.rafaco.inappdevtools:noop:$libraryPublishedVersion"
 
-    /*
-     *  Iadt COMPAT: import directly from modules. For release, debug have it from library
-     */
-    releaseApi project(path: ':compat')
 
-    /*
-     *  Iadt COMPAT: import from repository (jCenter or localMaven). Standard usage
-     */
-    //androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
-    //supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
+    //Retrofit
+    api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+
+    //Test
+    testImplementation 'junit:junit:4.12'
+
+    // AndroidX/Support test components (TODO)
+    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
+    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
-
-
-/*
- *  Iadt PLUGIN: import directly from modules. For development.
- */
-//apply from: '../plugin/build.gradle'
-
-/*
- *  Iadt PLUGIN: import from repository (jCenter or localMaven). Standard usage
- */
-apply plugin: 'es.rafaco.inappdevtools'
 
 /*
  *  Iadt CONFIGURATION
@@ -129,6 +131,8 @@ inappdevtools {
     //invocationByIcon = true
     //callDefaultCrashHandler = true
 }
+
+
 
 sonarqube {
     androidVariant 'supportDebug'

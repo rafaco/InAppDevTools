@@ -1,9 +1,16 @@
 ext{
     PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
-    PROJECT_MIN_SDK = 16
-    PROJECT_TARGET_SDK = 28
+
     PROJECT_COMPILE_SDK = 28
     PROJECT_BUILD_TOOLS = '28.0.3'
+    PROJECT_MIN_SDK = 16
+    PROJECT_TARGET_SDK = 28
+
+    // Testing Android R SDK
+    /*PROJECT_COMPILE_SDK = 'android-R'
+    PROJECT_BUILD_TOOLS = "29.0.3"
+    PROJECT_MIN_SDK = 16
+    PROJECT_TARGET_SDK = 'R'*/
 
     PLUGIN_VERSION = '0.0.17'
     LIBRARY_VERSION = '0.0.54'
@@ -11,7 +18,11 @@ ext{
     DEMO_VERSION = '0.0.01'
     DEMO_VERSION_CODE = 45
 
-    //TODO: we don't need preprocessor, migrate to properties per variant
+    PANDORA_VERSION = "2.0.2"       //2.0.6 -> 2.0.2
+    PANDORA_NOOP_VERSION = "2.0.3"  //2.0.3
+    RETROFIT_VERSION = "2.3.0"      //lib 2.6.2 & app 2.5.0
+
+    //TODO: Migrate to properties per variant
     libraryAndroidxMaterialVersion = "1.0.0-rc01"
     libraryAndroidxVersion = "1.0.0"
     libraryAndroidx2Version = "2.0.0"

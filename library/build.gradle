@@ -101,12 +101,12 @@ dependencies {
     supportApi "android.arch.paging:runtime:$librarySupportPagingVersion"
 
     // Pandora
-    androidxApi "com.github.whataa:pandora:androidx_v2.0.6"
-    supportApi "com.github.whataa:pandora:v2.0.6"
+    androidxApi "com.github.whataa:pandora:androidx_v$PANDORA_VERSION"
+    supportApi "com.github.whataa:pandora:v$PANDORA_VERSION"
 
     // Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.6.2'
-    api 'com.squareup.retrofit2:converter-gson:2.6.2'
+    api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     api 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     // Others
