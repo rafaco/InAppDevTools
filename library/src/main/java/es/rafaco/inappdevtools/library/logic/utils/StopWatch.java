@@ -45,28 +45,26 @@ public class StopWatch {
 
     public String finish(){
         long finishTime = DateUtils.getLong();
-        long duration = finishTime - startTime;
+        long totalTime = finishTime - startTime;
         String result = "StopWatch for" +
                 " " + name + " finished on "
-                + Humanizer.getDuration(duration)
+                + Humanizer.getDuration(totalTime)
                 + Humanizer.newLine();
 
         if (steps != null){
-            duration = steps.get(0).second - startTime;
-            result += "  0. Started: "
-                    + Humanizer.getDuration(duration).toLowerCase()
-                    + Humanizer.newLine();
+            long accumulatedDuration = 0;
             for (int i=0; i<steps.size(); i++){
                 Pair<String, Long> currentStep = steps.get(i);
                 long currentFinish = (i+1 < steps.size()) ? steps.get(i+1).second : finishTime;
-                duration = currentFinish - currentStep.second;
-                result += "  " + (steps.indexOf(currentStep)+1) + ". " + currentStep.first + ": "
-                        + Humanizer.getDuration(duration).toLowerCase()
-                        + Humanizer.newLine();
+                long duration = currentFinish - currentStep.second;
+                accumulatedDuration += duration;
+                result += String.format("  %s. %s: +%s  (%s)%s",
+                        steps.indexOf(currentStep)+1,
+                        currentStep.first,
+                        Humanizer.getDuration(duration),
+                        Humanizer.getDuration(accumulatedDuration),
+                        Humanizer.newLine());
             }
-            result += "  " + (steps.size()+1) + ". Finished: "
-                    + Humanizer.getDuration(steps.get(0).second - startTime).toLowerCase()
-                    + Humanizer.newLine();
         }
         return result;
     }
