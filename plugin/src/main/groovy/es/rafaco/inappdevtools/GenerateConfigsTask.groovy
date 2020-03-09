@@ -115,7 +115,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     private void generatePluginsList(Project project) {
         def plugins = ""
         project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
-        println "Generated gradle_plugins.txt"
+        if (isDebug())
+            println "Generated gradle_plugins.txt"
         File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
         pluginsFile.text = plugins
     }
@@ -189,7 +190,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         //TODO: research why it lock the builds sometimes, like with long diffs or paged result.
         String result = null
         try {
-            println ("Shell on: " + project.rootProject.rootDir)
+            if (isDebug()) println ("Shell command: " + cmd)
             result = cmd.execute([], project.rootProject.rootDir).text.trim()
         }
         catch (java.io.IOException e) {
