@@ -74,7 +74,8 @@ public class EventDetectorsManager {
         initDetector(ForegroundEventDetector.class);
         initDetector(ActivityEventDetector.class);
         initDetector(FragmentEventDetector.class);
-        initDetector(ActivityTouchEventDetector.class);
+        //TODO:
+        //initDetector(ActivityTouchEventDetector.class);
         initDetector(OrientationEventDetector.class);
         initDetector(ErrorAnrEventDetector.class);
         initDetector(GestureEventDetector.class);
