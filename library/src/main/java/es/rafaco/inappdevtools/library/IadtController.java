@@ -196,9 +196,7 @@ public final class IadtController {
             Log.d(Iadt.TAG, "IadtController initDelayedBackground");
 
         sourcesManager = new SourcesManager(getContext());
-
         sessionManager.storeDocuments();
-        //buildManager.storeDocuments();
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);

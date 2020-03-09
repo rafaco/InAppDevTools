@@ -59,7 +59,8 @@ public class FileCreator {
             if (IadtController.get().isDebug()){
                 Log.v(Iadt.TAG, "Document stored: " + subfolder + "/" + filename);
             }
-            MediaScannerUtils.scan(file);
+            //TODO: is this needed? perform conditionally if so
+            //MediaScannerUtils.scan(file);
             return file.getPath();
         }
         catch (IOException e) {
