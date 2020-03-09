@@ -33,6 +33,7 @@ import java.util.Date;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -42,7 +43,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetFormatter
 
 public class FriendlyLog {
 
-    public static final String TAG = "FriendlyLog";
+    public static final String TAG = "IadtEvent";
 
     public enum LEVEL { V, D, I, W, E, F, WTF }
 
@@ -85,9 +86,7 @@ public class FriendlyLog {
 
     private static void logAtLogcat(Friendly log) {
 
-        //TODO: use a configuration flag
-        // Or print always and filter at log screen
-        if (!Iadt.isDebug()){
+        if (!IadtController.get().getConfig().getBoolean(BuildConfig.INJECT_EVENTS_ON_LOGCAT)){
             return;
         }
 

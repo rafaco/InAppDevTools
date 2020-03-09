@@ -53,10 +53,10 @@ public class IadtLauncher extends ContentProvider {
     @Override
     public boolean onCreate() {
         if (!isLibraryEnabled()){
-            Log.d(Iadt.TAG, "IadtLauncher: stopped, library DISABLED by configuration");
+            Log.d(Iadt.TAG, "Library DISABLED by configuration. Nothing started");
             return false;
         }
-        Log.d(Iadt.TAG, "IadtLauncher: library is ENABLED, starting...");
+        Log.d(Iadt.TAG, "Library ENABLED, starting...");
 
         return startLibrary();
     }
@@ -100,7 +100,7 @@ public class IadtLauncher extends ContentProvider {
             }
         }
         catch (Exception e){
-            Log.e(Iadt.TAG, "IadtLauncher: exception checking isEnabled. Nothing started"
+            Log.e(Iadt.TAG, "IadtLauncher: exception checking if enabled."
                     + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
             return false;
         }

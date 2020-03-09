@@ -271,21 +271,23 @@ public final class IadtController {
         return getConfig().getBoolean(BuildConfig.DEBUG);
     }
 
-
     public OkHttpClient getOkHttpClient() {
-
-        //TODO: relocate an create a unique interceptor, and a method to return it
-        HttpLoggingInterceptor httpToLogcat = new HttpLoggingInterceptor();
-        httpToLogcat.setLevel(HttpLoggingInterceptor.Level.BASIC);
-
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         OkHttpInterceptor pandoraInterceptor = PandoraBridge.getInterceptor();
+        clientBuilder.addInterceptor(pandoraInterceptor);
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(pandoraInterceptor)
-                .addInterceptor(httpToLogcat)
-                .build();
-        return client;
+        if (getConfig().getBoolean(BuildConfig.INJECT_NETWORK_ON_LOGCAT)){
+            HttpLoggingInterceptor httpToLogcat = new HttpLoggingInterceptor();
+            httpToLogcat.setLevel(HttpLoggingInterceptor.Level.BODY);
+            clientBuilder.addInterceptor(httpToLogcat);
+        }
+        return clientBuilder.build();
     }
+
+    /*public OkHttpInterceptor getInterceptor() {
+        //TODO: Create a unique interceptor (Pandora + HttpLoggingInterceptor)
+        return PandoraBridge.getInterceptor();
+    }*/
 
     //endregion
 

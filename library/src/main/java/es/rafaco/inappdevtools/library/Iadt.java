@@ -42,7 +42,7 @@ import okhttp3.OkHttpClient;
  */
 public class Iadt {
 
-    public static final String TAG = "InAppDevTools";
+    public static final String TAG = "Iadt";
 
     public static boolean isEnabled() {
         if (getController()==null) {

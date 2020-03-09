@@ -56,6 +56,7 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import okhttp3.OkHttpClient;
 
 public class LogcatReaderService extends JobIntentService {
 
@@ -349,6 +350,16 @@ public class LogcatReaderService extends JobIntentService {
                 continue;
             }
 
+            //Ignore IadtEvents log as they are already in DB.
+            if (parse.getTag().equals(FriendlyLog.TAG)){
+                continue;
+            }
+
+            //Ignore Network log as they are already in DB.
+            if (parse.getTag().equals("OkHttp")){
+                continue;
+            }
+            
             /*if (!checkEmptyLines(line)
                     && !checkIsIgnored(line)
                     && !checkIsStartDateDuplication(line)) {

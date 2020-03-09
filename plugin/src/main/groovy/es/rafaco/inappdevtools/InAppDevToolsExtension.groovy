@@ -38,4 +38,6 @@ class InAppDevToolsExtension {
     Boolean invocationByIcon
     Boolean invocationByNotification
     Boolean callDefaultCrashHandler
+    Boolean injectEventsOnLogcat
+    Boolean injectNetworkOnLogcat
 }

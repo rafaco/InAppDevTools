@@ -90,6 +90,12 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.callDefaultCrashHandler!=null)
             propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 
+        if (extension.injectEventsOnLogcat!=null)
+            propertiesMap.put("injectEventsOnLogcat", extension.injectEventsOnLogcat)
+
+        if (extension.injectNetworkOnLogcat!=null)
+            propertiesMap.put("injectNetworkOnLogcat", extension.injectNetworkOnLogcat)
+
         File file = getFile(project, "${outputPath}/build_config.json")
         saveConfigMap(propertiesMap, file)
     }
