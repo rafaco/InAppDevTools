@@ -119,7 +119,7 @@ inappdevtools {
     //// Build flags (affect plugin)
     //enabled = true
     //enabledOnRelease = true
-    debug = true
+    debug = false
     //sourceInclusion = false
     //sourceInspection = false
 

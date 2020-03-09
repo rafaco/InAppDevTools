@@ -54,6 +54,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 @Database(version = 28, exportSchema = false,
         entities = {
@@ -110,19 +111,17 @@ public abstract class DevToolsDatabase extends RoomDatabase {
 
     public String getOverview(){
         String overview = "";
-        String jump = "\n\t";
-        overview +="Iadt DB overview: " + jump;
-        overview +="  Builds: " + buildDao().count() + jump;
-        overview +="  Sessions: " + sessionDao().count() + jump;
-        overview +="  FriendlyLogs: " + friendlyDao().count() + jump;
-        overview +="  Screenshots: " + screenshotDao().count() + jump;
-        overview +="  Crashs: " + crashDao().count() + jump;
-        overview +="  Anrs: " + anrDao().count() + jump;
-        overview +="  SourceTraces: " + sourcetraceDao().count() + jump;
-        overview +="  Reports: " + reportDao().count() + jump;
-        overview +="  NetSummary: " + netSummaryDao().count() + jump;
-        overview +="  NetContent: " + netContentDao().count() + jump;
-
+        overview +="IadtDatabase overview: " + Humanizer.newLine();
+        overview +="  Builds: " + buildDao().count() + Humanizer.newLine();
+        overview +="  Sessions: " + sessionDao().count() + Humanizer.newLine();
+        overview +="  FriendlyLogs: " + friendlyDao().count() + Humanizer.newLine();
+        overview +="  Screenshots: " + screenshotDao().count() + Humanizer.newLine();
+        overview +="  Crashs: " + crashDao().count() + Humanizer.newLine();
+        overview +="  Anrs: " + anrDao().count() + Humanizer.newLine();
+        overview +="  SourceTraces: " + sourcetraceDao().count() + Humanizer.newLine();
+        overview +="  Reports: " + reportDao().count() + Humanizer.newLine();
+        overview +="  NetSummary: " + netSummaryDao().count() + Humanizer.newLine();
+        overview +="  NetContent: " + netContentDao().count();
         return overview;
     }
 }

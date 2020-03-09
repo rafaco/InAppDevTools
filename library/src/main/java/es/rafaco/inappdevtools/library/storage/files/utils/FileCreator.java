@@ -55,7 +55,10 @@ public class FileCreator {
             myOutWriter.close();
             fOut.flush();
             fOut.close();
-            Log.v(Iadt.TAG, "Document stored: " + subfolder + "/" + filename);
+
+            if (IadtController.get().isDebug()){
+                Log.v(Iadt.TAG, "Document stored: " + subfolder + "/" + filename);
+            }
             MediaScannerUtils.scan(file);
             return file.getPath();
         }

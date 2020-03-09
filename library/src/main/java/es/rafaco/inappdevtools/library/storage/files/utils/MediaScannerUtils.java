@@ -34,17 +34,21 @@ public class MediaScannerUtils {
         scan(paths);
     }
 
+    // Tell the media scanner about the new file so that it is immediately available to the user.
     public static void scan(String[] paths) {
-        // Tell the media scanner about the new file so that it is immediately available to the user.
+        MediaScannerConnection.OnScanCompletedListener callback = null;
+        if (IadtController.get().isDebug()){
+            callback = new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    Log.v("ExternalStorage", "Scanned " + path + " -> uri=" + uri);
+                }
+            };
+        }
         MediaScannerConnection.scanFile(
                 IadtController.get().getContext(),
                 paths,
                 null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                        Log.i("ExternalStorage", "Scanned " + path + " -> uri=" + uri);
-                    }
-                });
+                callback);
     }
 }

@@ -71,7 +71,8 @@ public class ScreenManager {
 
         ScreensLoader.registerAllScreens(this);
 
-        ThreadUtils.printOverview("ScreenManager");
+        if (IadtController.get().isDebug())
+            ThreadUtils.printOverview("ScreenManager");
     }
 
     //region [ SCREENS MANAGER ]

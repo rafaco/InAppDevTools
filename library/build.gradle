@@ -65,17 +65,15 @@ android {
             dependencies.supportApi "es.rafaco.compat:support:$LIBRARY_VERSION"
         }
     }
-}*/
+}
+//androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
+//supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
+*/
 
 dependencies {
 
     api project(path: ':compat')
-    // Compat module from local/remote repo
-    //TODO: restore Compat from sources
-    //androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
-    //supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
-
-    // AndroidX/Support view components from compat module:
+    // AndroidX/Support view components, inherited from compat module:
     //    androidxApi "androidx.appcompat:appcompat:$libraryAndroidxVersion"
     //    supportApi "com.android.support:appcompat-v7:$appSupportVersion"
     //    androidxApi "com.google.android.material:material:$libraryAndroidxMaterialVersion"

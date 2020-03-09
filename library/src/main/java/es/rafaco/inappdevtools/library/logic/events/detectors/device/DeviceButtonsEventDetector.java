@@ -102,21 +102,23 @@ public class DeviceButtonsEventDetector extends EventDetector {
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
-                if (reason != null) {
-                    Log.v(Iadt.TAG, "DeviceButtonsEventDetector - action:" + action + ", reason:" + reason);
+                if (Iadt.isDebug()) Log.v(Iadt.TAG,
+                        "DeviceButtonsEventDetector - action:" + action + ", reason:" + reason);
 
-                    if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
-                        eventManager.fire(Event.DEVICE_HOME_PRESSED);
-                    }
-                    else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
-                        eventManager.fire(Event.DEVICE_RECENT_PRESSED);
-                    }
-                    else if (reason.equals(SYSTEM_DIALOG_REASON_DREAM_KEY)) {
-                        eventManager.fire(Event.DEVICE_DREAM_PRESSED);
-                    }
-                    else{
-                        eventManager.fire(Event.DEVICE_UNKNOWN_PRESSED, reason);
-                    }
+                if (reason == null) {
+                    return;
+                }
+                else if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
+                    eventManager.fire(Event.DEVICE_HOME_PRESSED);
+                }
+                else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
+                    eventManager.fire(Event.DEVICE_RECENT_PRESSED);
+                }
+                else if (reason.equals(SYSTEM_DIALOG_REASON_DREAM_KEY)) {
+                    eventManager.fire(Event.DEVICE_DREAM_PRESSED);
+                }
+                else{
+                    eventManager.fire(Event.DEVICE_UNKNOWN_PRESSED, reason);
                 }
             }
         }
