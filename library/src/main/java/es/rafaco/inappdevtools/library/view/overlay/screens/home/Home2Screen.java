@@ -24,6 +24,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+//#ifdef ANDROIDX
+//@import androidx.recyclerview.widget.RecyclerView;
+//#else
+import android.support.v7.widget.RecyclerView;
+//#endif
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
@@ -40,17 +46,10 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-
-//#ifdef ANDROIDX
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v7.widget.RecyclerView;
-//#endif
 
 public class Home2Screen extends Screen {
 
@@ -91,15 +90,18 @@ public class Home2Screen extends Screen {
 
         AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
         BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
+        DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
+        OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
 
-        String appMessage = appHelper.getFormattedVersionLong() + "\n"
+        String appMessage = appHelper.getFormattedVersionLong()
+                + buildReporter.getRepositoryOverview() + "\n"
                 + "Build " + buildReporter.getBuildOverview() + "\n"
-                + buildReporter.getRepositoryOverview();
+                + deviceHelper.getFormattedDevice() + osHelper.getFirstLineOverview();
 
 
-        DocumentSectionData appData = new DocumentSectionData.Builder(appHelper.getAppName())
-                .setIcon(R.string.gmd_touch_app)
-                .setOverview("App")
+        DocumentSectionData environmentData = new DocumentSectionData.Builder(appHelper.getAppName())
+                .setIcon(R.string.gmd_info)
+                .setOverview("Info")
                 .setExpandable(false)
                 .add(appMessage)
                 .addButton(new RunButton("Info",
@@ -108,31 +110,23 @@ public class Home2Screen extends Screen {
                         new Runnable() {
                             @Override
                             public void run() {
-                                OverlayService.performNavigation(InfoScreen.class, null);
+                                OverlayService.performNavigation(InfoOverviewScreen.class, null);
                             }
                 }))
-                .addButton(new RunButton("Sources",
-                        R.drawable.ic_local_library_white_24dp,
-                        R.color.iadt_background,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                OverlayService.performNavigation(SourcesScreen.class, null);
-                            }
-                })
-                ).build();
-        data.add(appData);
+                .build();
+        data.add(environmentData);
 
 
         LiveInfoDocumentGenerator liveHelper = ((LiveInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.LIVE_INFO));
         String liveMessage = liveHelper.getOverview();
 
-        DocumentSectionData runningData = new DocumentSectionData.Builder("Currently running")
+        DocumentSectionData runningData = new DocumentSectionData.Builder("Session X")
                 .setIcon(R.string.gmd_live_tv)
-                .setOverview("Live")
+                .setOverview("Inspect")
                 .setExpandable(false)
                 .add(liveMessage)
-                /*.addButton(new RunButton("Info", R.drawable.ic_info_white_24dp, new Runnable() {
+                /*  //LIVE INFO??
+                .addButton(new RunButton("Live Info", R.drawable.ic_info_white_24dp, new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(InfoScreen.class, null);
@@ -161,33 +155,16 @@ public class Home2Screen extends Screen {
                             //OverlayService.performNavigation(StorageScreen.class);
                             Home2Screen.this.getScreenManager().hide();
                             PandoraBridge.storage();
-                            }
-                }))
-                .build();
-        data.add(runningData);
-
-
-        DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
-        OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
-
-        String deviceMessage = deviceHelper.getFormattedDevice()
-                + Humanizer.newLine()
-                + osHelper.getFirstLineOverview();
-
-        DocumentSectionData deviceData = new DocumentSectionData.Builder(deviceHelper.getFirstLineOverview())
-                .setIcon(R.string.gmd_phone_android)
-                .setOverview("Device")
-                .setExpandable(false)
-                .add(deviceMessage)
-                .addButton(new RunButton("Info",
-                        R.drawable.ic_info_white_24dp,
+                            }}))
+                .addButton(new RunButton("Sources",
+                        R.drawable.ic_local_library_white_24dp,
                         R.color.iadt_background,
                         new Runnable() {
                             @Override
                             public void run() {
-                                OverlayService.performNavigation(InfoScreen.class, null);
+                                OverlayService.performNavigation(SourcesScreen.class, null);
                             }
-                }))
+                        }))
                 .addButton(new RunButton("Console",
                         R.drawable.ic_computer_white_24dp,
                         R.color.iadt_background,
@@ -196,19 +173,11 @@ public class Home2Screen extends Screen {
                             public void run() { OverlayService.performNavigation(ConsoleScreen.class);
                             }
                         })
-                ).build();
-        data.add(deviceData);
+                )
+                .build();
+        data.add(runningData);
 
-
-/*        data.add(new RunButton("Info",
-                R.drawable.ic_info_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(InfoOverviewScreen.class);
-                    }
-                }));
-        
-        RunButton sources = new RunButton("Sources",
+        /* RunButton sources = new RunButton("Sources",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
@@ -225,26 +194,31 @@ public class Home2Screen extends Screen {
                 }
             });
         }
-        data.add(sources);
+        data.add(sources);*/
 
-        */
-
-        data.add(new RunButton("Run",
-                R.drawable.ic_run_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(RunScreen.class);
-                    }
-                }));
-
-        data.add(new RunButton("Report",
-                R.drawable.ic_send_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(ReportScreen.class);
-                    }
-                }));
-
+        DocumentSectionData teamData = new DocumentSectionData.Builder("Development team")
+                .setIcon(R.string.gmd_people)
+                .setOverview("Team")
+                .setExpandable(false)
+                .add(appMessage)
+                .addButton(new RunButton("Actions",
+                        R.drawable.ic_run_white_24dp,
+                        R.color.iadt_background,
+                        new Runnable() {
+                            @Override
+                            public void run() { OverlayService.performNavigation(RunScreen.class);
+                            }
+                        }))
+                .addButton(new RunButton("Reports",
+                        R.drawable.ic_send_white_24dp,
+                        R.color.iadt_background,
+                        new Runnable() {
+                            @Override
+                            public void run() { OverlayService.performNavigation(ReportScreen.class);
+                            }
+                        }))
+                .build();
+        data.add(teamData);
 
         data.add(new RunButton("More",
                 R.drawable.ic_more_vert_white_24dp,

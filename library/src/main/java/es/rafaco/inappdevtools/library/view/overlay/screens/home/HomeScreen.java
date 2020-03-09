@@ -45,10 +45,13 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
 public class HomeScreen extends Screen {
@@ -99,7 +102,8 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(InfoOverviewScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(InfoOverviewScreen.class);
                     }
                 }));
 
@@ -107,7 +111,8 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(RunScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(RunScreen.class);
                     }
                 }));
 
@@ -115,17 +120,27 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_send_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(ReportScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(ReportScreen.class);
                     }
                 }));
 
-        data.add(" ");
-
-        data.add(new RunButton("View",
-                R.drawable.ic_view_carousel_white_24dp,
+        data.add("");
+        data.add(new RunButton("Builds",
+                R.drawable.ic_build_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(BuildsScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Sessions",
+                R.drawable.ic_history_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SessionsScreen.class);
                     }
                 }));
 
@@ -133,10 +148,21 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_format_align_left_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(LogScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(LogScreen.class);
                     }
                 }));
-        
+
+
+        data.add(new RunButton("View",
+                R.drawable.ic_view_carousel_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(InspectViewScreen.class);
+                    }
+                }));
+
         RunButton sources = new RunButton("Sources",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
@@ -156,6 +182,15 @@ public class HomeScreen extends Screen {
         }
         data.add(sources);
 
+        data.add(new RunButton("Network",
+                R.drawable.ic_cloud_queue_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(NetScreen.class);
+                    }
+                }));
+
         data.add(new RunButton("Storage",
                 R.drawable.ic_storage_white_24dp,
                 new Runnable() {
@@ -171,7 +206,8 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_computer_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(ConsoleScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(ConsoleScreen.class);
                     }
                 }));
 
@@ -179,7 +215,8 @@ public class HomeScreen extends Screen {
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(MoreScreen.class);
+                    public void run() {
+                        OverlayService.performNavigation(MoreScreen.class);
                     }
                 }));
 

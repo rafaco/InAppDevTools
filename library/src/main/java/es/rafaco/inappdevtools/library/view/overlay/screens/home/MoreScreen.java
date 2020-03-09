@@ -55,7 +55,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
         List<Object> data = new ArrayList<>();
 
         data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - Home 2 is a test\n" +
+                " - Home 2 is a proposal in progress\n" +
                 " - All other items has been mixed at Log Screen\n");
 
         data.add(new RunButton("Home 2",
@@ -66,9 +66,8 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
+
         data.add("");
-
-
         data.add(new RunButton("Builds",
                 R.drawable.ic_build_white_24dp,
                 new Runnable() {
@@ -85,29 +84,6 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-
-        data.add("");
-        data.add(new RunButton("New Network",
-                R.drawable.ic_cloud_queue_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(NetScreen.class);
-                    }
-                }));
-
-        data.add(new RunButton("Pandora Network",
-                R.drawable.ic_extension_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        MoreScreen.this.getScreenManager().hide();
-                        PandoraBridge.network();
-                    }
-                }));
-
-
-        data.add("");
         data.add(new RunButton("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
@@ -123,6 +99,28 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     public void run() { OverlayService.performNavigation(ErrorsScreen.class);
                     }
                 }));
+
+
+        data.add("");
+        data.add(new RunButton("Network",
+                R.drawable.ic_cloud_queue_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(NetScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Pandora Net",
+                R.drawable.ic_extension_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        MoreScreen.this.getScreenManager().hide();
+                        PandoraBridge.network();
+                    }
+                }));
+
 
         /*data.add(new RunButton("Analysis",
                 R.drawable.ic_settings_white_24dp,
