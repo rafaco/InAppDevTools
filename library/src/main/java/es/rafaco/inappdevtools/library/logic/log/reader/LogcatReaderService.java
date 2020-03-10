@@ -354,11 +354,6 @@ public class LogcatReaderService extends JobIntentService {
             if (parse.getTag().equals(FriendlyLog.TAG)){
                 continue;
             }
-
-            //Ignore Network log as they are already in DB.
-            if (parse.getTag().equals("OkHttp")){
-                continue;
-            }
             
             /*if (!checkEmptyLines(line)
                     && !checkIsIgnored(line)
