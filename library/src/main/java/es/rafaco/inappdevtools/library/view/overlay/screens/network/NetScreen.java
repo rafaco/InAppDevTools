@@ -19,7 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +53,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.external.chuck.HttpBinService;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
@@ -106,6 +109,37 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
         initFilter();
         initLiveData();
         initAdapter();
+
+        if (!IadtController.get().getNetworkManager().isRequested()){
+            showNotRequestedDialog();
+        }
+    }
+
+    private void showNotRequestedDialog() {
+        ContextWrapper ctw = new ContextThemeWrapper(getView().getContext(), R.style.LibTheme_Dialog);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw)
+                .setTitle("Network feature not enabled")
+                .setMessage("If your app use Retrofit, we can record all network communications for you.\n\nTo enable it, add our OkHttpClient to your Retrofit builder or our interceptor to your custom OkHttpClient.")
+                .setCancelable(true)
+                .setPositiveButton(R.string.button_ok,
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                getScreenManager().goBack();
+                            }})
+                .setNegativeButton("More info",
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                getScreenManager().goBack();
+                                ExternalIntentUtils.viewReadme();
+                            }});
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(Layer.getLayoutType());
+        alertDialog.show();
     }
 
     @Override

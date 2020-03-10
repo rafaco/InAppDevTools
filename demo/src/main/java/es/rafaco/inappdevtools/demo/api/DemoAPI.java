@@ -34,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Controller implements Callback<List<Change>> {
+public class DemoAPI implements Callback<List<Change>> {
 
     static final String BASE_URL = "https://git.eclipse.org/r/";
 

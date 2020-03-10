@@ -40,7 +40,7 @@ import android.support.v7.widget.Toolbar;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.demo.R;
-import es.rafaco.inappdevtools.demo.api.Controller;
+import es.rafaco.inappdevtools.demo.api.DemoAPI;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Controller controller = new Controller();
-        controller.start(getApplicationContext());
+        DemoAPI demoAPI = new DemoAPI();
+        demoAPI.start(getApplicationContext());
     }
 
     @Override

@@ -107,7 +107,7 @@ We don't currently support them but you can use our library in the android compi
 A plugin for each framework are in mind but with low priority. It could automate the installation, extends info panels, fire platform events, redirect logs, include sources and inspect view (dart or webview). Join us and take this task :)
 
 ### Enable network inspection (optional) <a name="network"/>
-If your app use Retrofit, we can record all network communications for you, allowing to inspect and report them. To enable it, add our OkHttpClient to your Retrofit initialization class:
+If your app use Retrofit, we can record all network communications for you, allowing to inspect and report them. To enable it, add our OkHttpClient (`Iadt.getOkHttpClient()`) to your Retrofit builder or our interceptor (`Iadt.getOkHttpInterceptor()`) to your custom OkHttpClient.
 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
@@ -170,7 +170,8 @@ Available properties:
 | `invocationByIcon` | boolean | true | Enable a permanent overlay icon to open our UI |
 | `invocationByNotification` | boolean | false | Show a permanent notification to open the UI. Warning: it currently use a foreground service so your app will not be killed on background |
 | `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
-<!-- ## Customization <a name="customization"/> -->
+| `injectEventsOnLogcat` | boolean | false | Inject IadtEvents on logcat to see them on the standard Logcat output. |
+
 
 ### Limiting sources exposition <a name="exposed_sources"/>
 

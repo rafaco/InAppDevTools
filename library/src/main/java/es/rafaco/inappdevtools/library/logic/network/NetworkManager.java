@@ -24,6 +24,7 @@ import okhttp3.OkHttpClient;
 import tech.linjiang.pandora.network.OkHttpInterceptor;
 
 public class NetworkManager {
+    boolean requested = false;
     OkHttpClient client;
 
     public OkHttpClient getClient() {
@@ -36,6 +37,11 @@ public class NetworkManager {
     }
 
     public OkHttpInterceptor getInterceptor() {
+        requested = true;
         return PandoraBridge.getInterceptor();
+    }
+
+    public boolean isRequested(){
+        return requested;
     }
 }
