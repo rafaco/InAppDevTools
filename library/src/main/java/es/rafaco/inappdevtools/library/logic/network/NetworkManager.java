@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,25 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools
+package es.rafaco.inappdevtools.library.logic.network;
 
-class InAppDevToolsExtension {
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
+import okhttp3.OkHttpClient;
+import tech.linjiang.pandora.network.OkHttpInterceptor;
 
-    //User features fags
-    String email
-    String notes
+public class NetworkManager {
+    OkHttpClient client;
 
-    // Build flags (affect plugin)
-    Boolean enabled = true
-    Boolean enabledOnRelease
-    Boolean debug = false
-    Boolean sourceInclusion
-    Boolean sourceInspection
+    public OkHttpClient getClient() {
+        if (client==null){
+            client = new OkHttpClient.Builder()
+                    .addInterceptor(getInterceptor())
+                    .build();
+        }
+        return client;
+    }
 
-    // Runtime flags (used later on)
-    Boolean overlayEnabled
-    Boolean invocationByShake
-    Boolean invocationByIcon
-    Boolean invocationByNotification
-    Boolean callDefaultCrashHandler
-    Boolean injectEventsOnLogcat
+    public OkHttpInterceptor getInterceptor() {
+        return PandoraBridge.getInterceptor();
+    }
 }

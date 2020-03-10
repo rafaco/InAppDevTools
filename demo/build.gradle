@@ -130,8 +130,7 @@ inappdevtools {
     //invocationByShake = false
     //invocationByIcon = true
     //callDefaultCrashHandler = true
-    injectEventsOnLogcat = false
-    injectNetworkOnLogcat = false
+    //injectEventsOnLogcat = true
 }
 
 

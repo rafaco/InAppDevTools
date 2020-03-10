@@ -30,10 +30,10 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
+import es.rafaco.inappdevtools.library.logic.network.NetworkManager;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
@@ -55,10 +55,6 @@ import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import tech.linjiang.pandora.network.OkHttpInterceptor;
-
 
 /**
  * This class is the main internal interface of InAppDevTools.
@@ -77,6 +73,7 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
+    private NetworkManager networkManager;
     private OverlayHelper overlayHelper;
     public boolean isPendingInitFull;
 
@@ -137,6 +134,7 @@ public final class IadtController {
         sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
+        networkManager = new NetworkManager();
 
         if (isDebug()){
             ThreadUtils.runOnBack("Iadt-InitBack",
@@ -255,6 +253,10 @@ public final class IadtController {
         return navigationManager;
     }
 
+    public NetworkManager getNetworkManager() {
+        return networkManager;
+    }
+
     public OverlayHelper getOverlayHelper() {
         return overlayHelper;
     }
@@ -270,24 +272,6 @@ public final class IadtController {
     public boolean isDebug() {
         return getConfig().getBoolean(BuildConfig.DEBUG);
     }
-
-    public OkHttpClient getOkHttpClient() {
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        OkHttpInterceptor pandoraInterceptor = PandoraBridge.getInterceptor();
-        clientBuilder.addInterceptor(pandoraInterceptor);
-
-        if (getConfig().getBoolean(BuildConfig.INJECT_NETWORK_ON_LOGCAT)){
-            HttpLoggingInterceptor httpToLogcat = new HttpLoggingInterceptor();
-            httpToLogcat.setLevel(HttpLoggingInterceptor.Level.BODY);
-            clientBuilder.addInterceptor(httpToLogcat);
-        }
-        return clientBuilder.build();
-    }
-
-    /*public OkHttpInterceptor getInterceptor() {
-        //TODO: Create a unique interceptor (Pandora + HttpLoggingInterceptor)
-        return PandoraBridge.getInterceptor();
-    }*/
 
     //endregion
 

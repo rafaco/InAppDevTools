@@ -107,7 +107,6 @@ dependencies {
     // Retrofit
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    api 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     // Others
     api 'com.github.alorma:timelineview:2.3.0'
