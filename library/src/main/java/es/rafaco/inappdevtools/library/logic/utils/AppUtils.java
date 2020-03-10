@@ -115,10 +115,9 @@ public class AppUtils {
     }
 
     public static void exit() {
+        Log.d(TAG, "Killing background processes");
         Context context = IadtController.get().getContext();
         ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        
-        Log.d(TAG, "Killing background processes");
         am.killBackgroundProcesses(context.getPackageName());
 
         Log.d(TAG, "Killing app process");

@@ -28,7 +28,7 @@
     <string name="welcome_privacy_title">Privacy</string>
     <string name="welcome_privacy_content">This compilation contains tools that are locally recording your usage of this app. Only you can share these records by using our report feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
     <string name="welcome_permission_title">Permission</string>
-    <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen you have to accept it, then press back button.</string>
+    <string name="welcome_permission_content">We require \'Draw over other apps\' permission to show our interface over your activity. We will never show it over other apps, only over your app.\n\nOn next screen: choose your app, allow it and press back button.</string>
     <string name="welcome_enabled_title">InAppDevTools enabled</string>
     <string name="welcome_enabled_content">You can open our interface at any time by shaking your app or using the floating bubble. Our interface will automatically pop up on crash.</string>
     <string name="welcome_disabled_title">Disable InAppDevTools</string>

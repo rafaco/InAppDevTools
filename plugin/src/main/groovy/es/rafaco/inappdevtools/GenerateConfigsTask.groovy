@@ -29,7 +29,6 @@ import java.time.Instant
 
 class GenerateConfigsTask extends InAppDevToolsTask {
 
-
     GenerateConfigsTask() {
         this.description = "Generate config files (build_config, build_info, git_config,...)"
     }
@@ -37,8 +36,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     @TaskAction
     void perform() {
         def configStartTime = Instant.now()
-
         generateCompileConfig(project)
+
         if (extension.enabled){
             generatePluginsList(project)
             generateBuildInfo(project)
