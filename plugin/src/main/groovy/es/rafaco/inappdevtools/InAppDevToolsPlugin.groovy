@@ -209,7 +209,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             if (isAndroidApplication(project)){
-                from ("${project.buildDir}/intermediates/merged_manifests/${getCurrentBuildVariant(project).uncapitalize()}") {
+                def variantName = getCurrentBuildVariant(project).uncapitalize()
+                from ("${project.buildDir}/intermediates/merged_manifests/${variantName}") {
                     include 'AndroidManifest.xml'
                     into 'merged_manifests'
                 }
@@ -322,7 +323,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String flavor = matcher.group(1)
             return flavor
         } else {
-            if (isDebug())
+            if (isDebug(project))
                 println "getCurrentFlavor: cannot_find"
             return ""
         }
@@ -335,7 +336,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String flavor = matcher.group(1)
             return flavor
         } else {
-            if (isDebug())
+            if (isDebug(project))
                 println "getCurrentFlavor: cannot_find"
             return ""
         }
@@ -350,7 +351,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String buildVariant = flavor + buildType
             return buildVariant
         } else {
-            if (isDebug())
+            if (isDebug(project))
                 println "getCurrentBuildVariant: cannot_find"
             return ""
         }
@@ -365,7 +366,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String buildVariantFolder = buildType + '/' + flavor + '/'
             return buildVariantFolder
         } else {
-            if (isDebug())
+            if (isDebug(project))
                 println "getBuildVariantFolders: cannot_find"
             return ""
         }
