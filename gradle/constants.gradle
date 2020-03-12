@@ -1,4 +1,24 @@
 ext{
+    ORG_NAME = 'inappdevtools.org'
+    ORG_URL = 'http://inappdevtools.org'
+
+    AUTHOR_NAME = 'Rafael Acosta Alvarez'
+    AUTHOR_ID = 'rafaco'
+    AUTHOR_EMAIL = 'rafaco@gmail.com'
+    AUTHOR_URL = 'http://rafaco.es'
+
+    PROJECT_NAME = 'InAppDevTools'
+    PROJECT_URL = 'https://github.com/rafaco/InAppDevTools'
+    PROJECT_TAGS = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
+
+    PROJECT_LICENSE_NAME = 'The Apache Software License, Version 2.0'
+    PROJECT_LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0'
+    PROJECT_ALL_LICENSES = ["Apache-2.0"]
+
+    PLUGIN_NAME = 'inappdevtools-plugin'
+    PLUGIN_DISPLAY_NAME = 'InAppDevtools Plugin'
+    PLUGIN_DESCRIPTION = 'Companion plugin for InAppDevTools, an Android library for debugging, inspecting and reporting from within your own apps'
+
     PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
 
     PROJECT_COMPILE_SDK = 28

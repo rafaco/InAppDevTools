@@ -133,9 +133,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
             //welcomeText += notes + Humanizer.newLine();
         }
 
-        builder.add(getBuilderInfo())
-                .add(getBuildHostInfo())
+        builder.add(getBuildHostInfo())
                 .add(getBuildInfo())
+                .add(getBuilderInfo())
                 .add(getRepositoryInfo())
                 .add(getLocalRepositoryInfo())
                 .add(getLocalChangesInfo());
@@ -162,15 +162,15 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     public DocumentSectionData getBuilderInfo() {
         DocumentSectionData group = new DocumentSectionData.Builder("Builder")
                 .setIcon(R.string.gmd_person)
-                .setOverview(buildInfo.getString(BuildInfo.USER_NAME))
-                .add("User name", buildInfo.getString(BuildInfo.USER_NAME))
-                .add("User email", buildInfo.getString(BuildInfo.USER_EMAIL))
-                .addButton(new RunButton("Send Email",
+                .setOverview(buildInfo.getString(BuildInfo.GIT_USER_NAME))
+                .add("Git name", buildInfo.getString(BuildInfo.GIT_USER_NAME))
+                .add("Git email", buildInfo.getString(BuildInfo.GIT_USER_EMAIL))
+                .addButton(new RunButton("Write Email",
                     R.drawable.ic_email_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
-                            ExternalIntentUtils.composeEmail(buildInfo.getString(BuildInfo.USER_EMAIL), "Email from IADT");
+                            ExternalIntentUtils.composeEmail(buildInfo.getString(BuildInfo.GIT_USER_EMAIL), "Email from IADT");
                         }
                     }))
                 .build();
@@ -182,9 +182,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setIcon(R.string.gmd_desktop_windows)
                 .setOverview(buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
-                .add("Host OS_INFO", buildInfo.getString(BuildInfo.HOST_OS))
-                .add("Host version", buildInfo.getString(BuildInfo.HOST_VERSION))
-                .add("Host arch", buildInfo.getString(BuildInfo.HOST_ARCH))
+                .add("Host OS", buildInfo.getString(BuildInfo.HOST_OS))
+                .add("Host user", buildInfo.getString(BuildInfo.HOST_USER))
                 .add("Host IP", buildInfo.getString(BuildInfo.HOST_ADDRESS))
                 .build();
         return group;
@@ -197,9 +196,11 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
                 .add("Build type", appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", appBuildConfig.getString(AppBuildConfigFields.FLAVOR))
+                .add("Java version", buildInfo.getString(BuildInfo.JAVA_VERSION))
                 .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Android plugin", PluginListUtils.getAndroidVersion())
-                .add("Iadt plugin", PluginListUtils.getIadtVersion())
+                .add("Iadt plugin", buildInfo.getString(BuildInfo.PLUGIN_VERSION))
+                .add("Iadt plugin (Old)", PluginListUtils.getIadtVersion())
                 .build();
         return group;
     }
@@ -245,7 +246,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     public String getBuildOverview() {
         String time = getFriendlyElapsedTime();
-        String user = buildInfo.getString(BuildInfo.USER_NAME);
+        String user = buildInfo.getString(BuildInfo.GIT_USER_NAME);
         return String.format("%s by %s", time, user);
     }
 

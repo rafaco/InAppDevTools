@@ -24,7 +24,6 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.invocation.Gradle
 import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.bundling.Zip
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -52,6 +51,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                         "Only Android application, library or feature project are currently allowed."
             return
         }
+        //Print plugin version
+        println("Configuring " + this.getClass().getPackage().getSpecificationTitle() + " "
+                + this.getClass().getPackage().getSpecificationVersion())
 
         //Init extension
         project.extensions.create(TAG, InAppDevToolsExtension)
@@ -66,6 +68,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def internalPackage = manifest.@package.text()
             project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
             project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
+
+            //TODO: Get android gradle plugin version!!
+            //def version = project.com.android.builder.model.Version.ANDROID_GRADLE_PLUGIN_VERSION
+            //println "Android-Version: " + version
         }
 
         // Add all our tasks to project
@@ -316,7 +322,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String flavor = matcher.group(1)
             return flavor
         } else {
-            println "getCurrentFlavor: cannot_find"
+            if (isDebug())
+                println "getCurrentFlavor: cannot_find"
             return ""
         }
     }
@@ -328,7 +335,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String flavor = matcher.group(1)
             return flavor
         } else {
-            println "getCurrentFlavor: cannot_find"
+            if (isDebug())
+                println "getCurrentFlavor: cannot_find"
             return ""
         }
     }
@@ -342,7 +350,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String buildVariant = flavor + buildType
             return buildVariant
         } else {
-            println "getCurrentBuildVariant: cannot_find"
+            if (isDebug())
+                println "getCurrentBuildVariant: cannot_find"
             return ""
         }
     }
@@ -356,7 +365,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             String buildVariantFolder = buildType + '/' + flavor + '/'
             return buildVariantFolder
         } else {
-            println "getBuildVariantFolders: cannot_find"
+            if (isDebug())
+                println "getBuildVariantFolders: cannot_find"
             return ""
         }
     }

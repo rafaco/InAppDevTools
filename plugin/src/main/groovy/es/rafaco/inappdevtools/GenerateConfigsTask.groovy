@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools
 import groovy.json.JsonOutput
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
-import static org.apache.tools.ant.taskdefs.condition.Os.*
 
 import java.time.Duration
 import java.time.Instant
@@ -52,6 +51,8 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
     private void generateCompileConfig(Project project) {
         Map propertiesMap = [:]
+
+        //TODO: Validate and throw new InvalidUserDataException()
 
         if (extension.enabled!=null)
             propertiesMap.put("enabled", extension.enabled)
@@ -100,14 +101,20 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         Map propertiesMap = [
                 BUILD_TIME      : new Date().getTime(),
                 BUILD_TIME_UTC  : new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
+
                 HOST_NAME       : InetAddress.localHost.hostName,
                 HOST_ADDRESS    : InetAddress.localHost.hostAddress,
-                HOST_OS         : OS_NAME,
-                HOST_VERSION    : OS_VERSION,
-                HOST_ARCH       : OS_ARCH,
-                USER_NAME       : shell('git config user.name'),
-                USER_EMAIL      : shell('git config user.email'),
-                GRADLE_VERSION  : project.gradle.gradleVersion
+                HOST_OS         : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                HOST_USER       : System.properties['user.name'],
+
+                GIT_USER_NAME       : shell('git config user.name'),
+                GIT_USER_EMAIL      : shell('git config user.email'),
+
+                PLUGIN_VERSION  : this.getClass().getPackage().getImplementationVersion(),
+                GRADLE_VERSION  : project.gradle.gradleVersion,
+                JAVA_VERSION    : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                //TODO: ANDROID_VERSION  : Version.ANDROID_GRADLE_PLUGIN_VERSION
+                //TODO: KOTLIN_VERSION
         ]
 
         File file = getFile(project, "${outputPath}/build_info.json")

@@ -12,17 +12,17 @@ ext {
     //projectName = 'InAppDevTools'
     //projectDesc = 'Android library with a collection of tools for debugging, inspecting and reporting from within your own application'
 
-    siteUrl = 'https://github.com/rafaco/InAppDevTools'
-    issuesUrl = 'https://github.com/rafaco/InAppDevTools/issues'
-    githubRepo = 'rafaco/InAppDevTools'
+    siteUrl = PROJECT_URL
+    issuesUrl = PROJECT_URL + '/issues'
+    githubRepo = AUTHOR_ID + '/' + PROJECT_NAME
 
-    developerId = 'rafaco'
-    developerName = 'Rafael Acosta'
-    developerEmail = 'rafaco@gmail.com'
+    developerId = AUTHOR_ID
+    developerName = AUTHOR_NAME
+    developerEmail = AUTHOR_EMAIL
 
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    licenseName = PROJECT_LICENSE_NAME
+    licenseUrl = PROJECT_LICENSE_URL
+    allLicenses = PROJECT_ALL_LICENSES
 }
 
 group = groupId
@@ -197,7 +197,7 @@ afterEvaluate {
             vcsUrl = vcsUrl
             issueTrackerUrl = issuesUrl
             licenses = allLicenses
-            labels = ['aar', 'android']
+            labels = PROJECT_TAGS
             publicDownloadNumbers = true
             githubRepo = githubRepo
             //githubReleaseNotesFile = 'README.md'

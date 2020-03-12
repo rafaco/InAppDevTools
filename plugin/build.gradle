@@ -22,18 +22,93 @@ gradlePlugin {
     plugins {
         inappdevtools {
             id = PROJECT_ARTIFACT_GROUP
-            displayName = 'InAppDevtools Plugin'
-            description = 'Companion plugin for InAppDevTools, an Android library for debugging, inspecting and reporting from within your own apps'
+            displayName = PLUGIN_DISPLAY_NAME
+            description = PLUGIN_DESCRIPTION
             implementationClass = 'es.rafaco.inappdevtools.InAppDevToolsPlugin'
         }
     }
 }
 
 pluginBundle {
-    website = 'https://github.com/rafaco/InAppDevTools'
-    vcsUrl =  'https://github.com/rafaco/InAppDevTools.git'
-    tags = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
+    website = PROJECT_URL
+    vcsUrl =  PROJECT_URL + '.git'
+    tags = PROJECT_TAGS
 }
+
+jar {
+    manifest {
+        attributes(
+                'Manifest-Version': 1.1,
+                'Created-By': AUTHOR_NAME,
+                'Bundle-License' : PROJECT_LICENSE_URL,
+
+                'Name': PLUGIN_NAME,
+                'Specification-Title' : PLUGIN_DISPLAY_NAME,
+                'Specification-Version' : PLUGIN_VERSION,
+                'Specification-Vendor' : AUTHOR_NAME,
+                'Implementation-Title' : PROJECT_NAME,
+                'Implementation-Version' : PLUGIN_VERSION,
+                'Implementation-Vendor' : ORG_NAME,
+                'Implementation-URL' : PROJECT_URL,
+        )
+    }
+}
+
+/*//Sample 1
+Created-By: 1.7.0_06 (Oracle Corporation)
+Name: java/util/
+Specification-Title: Java Utility Classes
+Specification-Version: 1.2
+Specification-Vendor: Example Tech, Inc.
+Implementation-Title: java.util
+Implementation-Version: build57
+Implementation-Vendor: Example Tech, Inc.
+
+//Sample 2
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.4
+Created-By: 1.7.0_40-b43 (Oracle Corporation)
+X-Compile-Source-JDK: 1.7
+X-Compile-Target-JDK: 1.7
+
+//Sample 3
+Name: javax/servlet/
+Specification-Title: Java API for Servlets
+Specification-Version: 3.1
+Specification-Vendor: Sun Microsystems, Inc.
+Implementation-Title: javax.servlet
+Implementation-Version: 3.1.FR
+Implementation-Vendor: Apache Software Foundation
+
+//Complex samples
+Manifest-Version: 1.0
+Created-By: 1.3.1 (IBM Corporation)
+Main-Class: org.apache.xalan.xslt.Process
+Class-Path: xercesImpl.jar xml-apis.jar serializer.jar
+
+Name: org/apache/xalan/
+Comment: Main Xalan engine implementing TrAX/JAXP
+Specification-Title: Java API for XML Processing
+Specification-Vendor: Sun Microsystems Inc.
+Specification-Version: 1.3
+Implementation-Title: org.apache.xalan
+Implementation-Version: 2.7.0
+Implementation-Vendor: Apache Software Foundation
+Implementation-URL: http://xml.apache.org/xalan-j/
+
+Name: org/apache/xpath/
+Comment: XPath engine
+Implementation-Title: org.apache.xpath
+Implementation-Version: 2.7.0
+Implementation-Vendor: Apache Software Foundation
+Implementation-URL: http://xml.apache.org/xalan-j/
+
+Name: org/apache/xml/
+Comment: DTM implementation and utilities
+Implementation-Title: org.apache.xml
+Implementation-Version: 2.7.0
+Implementation-Vendor: Apache Software Foundation
+Implementation-URL: http://xml.apache.org/xalan-j/*/
 
 
 
