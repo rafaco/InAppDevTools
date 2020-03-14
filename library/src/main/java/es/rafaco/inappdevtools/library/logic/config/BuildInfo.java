@@ -29,7 +29,8 @@ public class BuildInfo {
     public static final String HOST_USER = "HOST_USER";
     public static final String GIT_USER_NAME = "GIT_USER_NAME";
     public static final String GIT_USER_EMAIL = "GIT_USER_EMAIL";
+    public static final String IADT_PLUGIN_VERSION = "IADT_PLUGIN_VERSION";
+    public static final String ANDROID_PLUGIN_VERSION = "ANDROID_PLUGIN_VERSION";
     public static final String GRADLE_VERSION = "GRADLE_VERSION";
-    public static final String PLUGIN_VERSION = "PLUGIN_VERSION";
     public static final String JAVA_VERSION = "JAVA_VERSION";
 }

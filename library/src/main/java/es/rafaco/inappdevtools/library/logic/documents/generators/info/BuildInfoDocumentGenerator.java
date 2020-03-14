@@ -198,8 +198,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Flavor", appBuildConfig.getString(AppBuildConfigFields.FLAVOR))
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VERSION))
                 .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
-                .add("Android plugin", PluginListUtils.getAndroidVersion())
-                .add("Iadt plugin", buildInfo.getString(BuildInfo.PLUGIN_VERSION))
+                .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
+                .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
                 .add("Iadt plugin (Old)", PluginListUtils.getIadtVersion())
                 .build();
         return group;

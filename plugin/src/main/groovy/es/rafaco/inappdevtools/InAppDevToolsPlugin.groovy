@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package es.rafaco.inappdevtools
 
+import es.rafaco.inappdevtools.tasks.DependencyTask
+
+import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.invocation.Gradle
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import es.rafaco.inappdevtools.tasks.GenerateConfigsTask
+import es.rafaco.inappdevtools.utils.ProjectUtils
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
@@ -36,61 +38,74 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     final PLUGINS_TASK = 'generatePluginList'
     final CLEAN_TASK = 'cleanGenerated'
+    final DEPENDENCY_REPORT_TASK = 'iadtDependencyReport'
     final CONFIG_TASK = 'generateConfigs'
     final SOURCES_TASK = 'packSources'
     final GENERATED_TASK = 'packGenerated'
     final RESOURCES_TASK = 'packResources'
 
+    InAppDevToolsExtension extension
+    ProjectUtils projectUtils
+    File outputFolder
+
     void apply(Project project) {
 
-        if(!isAndroidApplication(project) && !isAndroidLibrary(project) && !isAndroidFeature(project)){
-            if (isRoot(project))
-                println "IATD skipped for root project"
-            else
-                println "IATD skipped for ${project.name} project. " +
-                        "Only Android application, library or feature project are currently allowed."
+        projectUtils = new ProjectUtils(project)
+
+        if (projectUtils.isRoot()){
+            println "IATD skipped for root project"
             return
         }
-        //Print plugin version
-        println("Configuring " + this.getClass().getPackage().getSpecificationTitle() + " "
-                + this.getClass().getPackage().getSpecificationVersion())
+        else if (!projectUtils.isAndroidModule()){
+            println "IATD skipped for ${project.name} project. " +
+                    "Only Android application, library or feature project are currently allowed."
+            return
+        }
 
-        //Init extension
-        project.extensions.create(TAG, InAppDevToolsExtension)
+        println("Configuring " + getPluginNameAndVersion())
 
-        //Init output folder
-        def outputFolder = project.file(getOutputPath(project))
+        extension = project.extensions.create(TAG, InAppDevToolsExtension)
+
+        outputFolder = getOutputDir(project)
         outputFolder.mkdirs()
-        project.android.sourceSets.main.assets.srcDirs += "${project.buildDir}${ASSETS_PATH}"
+        project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
 
-        if (isAndroidApplication(project)){
-            def manifest = new XmlSlurper().parse(project.file(project.android.sourceSets.main.manifest.srcFile))
-            def internalPackage = manifest.@package.text()
+        if (projectUtils.isAndroidApplication()){
+            //Inject internal package from manifest into resValue
+            def internalPackage = getInternalPackageFromManifest()
             project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
-            project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
+            //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
 
-            //TODO: Get android gradle plugin version!!
-            //def version = project.com.android.builder.model.Version.ANDROID_GRADLE_PLUGIN_VERSION
-            //println "Android-Version: " + version
+            //Add report plugin
+            project.getPluginManager().apply(org.gradle.api.plugins.ProjectReportsPlugin.class)
+            //project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
         }
 
         // Add all our tasks to project
         addGenerateConfigTask(project)
-        addPackSourcesTask(project, outputFolder)
-        addPackResourcesTask(project, outputFolder)
-        addPackGeneratedTask(project, outputFolder)
-        addCleanTask(project, outputFolder)
+        addPackSourcesTask(project)
+        addPackResourcesTask(project)
+        addPackGeneratedTask(project)
+        addDependencyReportTask(project)
+        addCleanTask(project)
 
         // Selectively link our tasks to each BuildVariant
         project.tasks.whenTaskAdded { theTask ->
 
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                def buildVariant = theTask.name.drop(8).reverse().drop(9).reverse()
-                if (shouldIncludeSources(theTask, project)){
-                    if (isDebug(project)) println "${buildVariant} include sources"
+                def buildVariant = theTask.name.drop("generate".length()).reverse()
+                        .drop("ResValues".length()).reverse()
+
+                if (shouldIncludeSources(theTask)){
+                    if (isDebug()) println "${buildVariant} include sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
-                            project.tasks.getByName(RESOURCES_TASK)]
+                            project.tasks.getByName(RESOURCES_TASK) ]
+
+                    if (projectUtils.isAndroidApplication()){
+                        theTask.dependsOn += [
+                                project.tasks.getByName(DEPENDENCY_REPORT_TASK)]
+                    }
                 }
 
                 // Link CONFIG_TASK
@@ -100,49 +115,53 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
-                def buildVariant = theTask.name.drop(8).reverse().drop(6).reverse()
-                if(shouldIncludeSources(theTask, project)){
-                    if (isDebug(project))println "${buildVariant} include generated sources"
+                def buildVariant = theTask.name.drop("generate".length()).reverse()
+                        .drop("Assets".length()).reverse()
+
+                if(shouldIncludeSources(theTask)){
+                    if (isDebug()) println "${buildVariant} include generated sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(GENERATED_TASK)]
                 }
                 else{
-                    if (isDebug(project)) println "${buildVariant} without any sources"
+                    if (isDebug()) println "${buildVariant} without any sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(CLEAN_TASK)]
                 }
             }
         }
 
-        //Extend current project's Clean task
+        //Extend current project's Clean task to clear our outputPath
+        //TODO: reuse our clean task
         project.tasks.clean {
             delete getOutputPath(project)
         }
     }
 
-    private boolean shouldIncludeSources(Task theTask, Project project) {
-        return (!isReleaseTask(theTask) || (isReleaseTask(theTask) && isEnabledOnRelease(project))) &&
-                isEnabled(project) && isSourceInclusion(project) && isSourceInspection(project)
+    //region [ ADD TASKS ]
+
+    private Task addDependencyReportTask(Project project) {
+        project.task(DEPENDENCY_REPORT_TASK, type: DependencyTask)
     }
 
     private Task addGenerateConfigTask(Project project) {
         project.task(CONFIG_TASK, type: GenerateConfigsTask)
     }
 
-    private Task addCleanTask(Project project, outputFolder) {
+    private Task addCleanTask(Project project) {
         project.task(CLEAN_TASK,
                 description: 'Clean generated files',
                 group: TAG,
                 type: Delete) {
 
             doLast {
-                project.delete outputFolder
-                println "Deleted ${outputFolder} from ${project.name}"
+                project.delete getOutputDir(project)
+                println "Deleted ${getOutputDir(project)} from ${project.name}"
             }
         }
     }
 
-    private Task addPackResourcesTask(Project project, outputFolder) {
+    private Task addPackResourcesTask(Project project) {
         project.task(RESOURCES_TASK,
                 description: 'Generate a Zip file with the resources',
                 group: TAG,
@@ -153,22 +172,22 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             def outputName = "${project.name}_resources.zip"
-            destinationDir project.file(outputFolder)
+            destinationDir project.file(getOutputDir(project))
             archiveName = outputName
             includeEmptyDirs = false
 
             def counter = 0
             eachFile {
                 counter++
-                if (isDebug(project)) { println it.path }
+                if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${outputName}"
+                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }
 
-    private Task addPackSourcesTask(Project project, outputFolder) {
+    private Task addPackSourcesTask(Project project) {
         project.task(SOURCES_TASK,
                 description: 'Generate a Zip file with all java sources',
                 group: TAG,
@@ -177,26 +196,26 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def outputName = "${project.name}_sources.zip"
             from project.android.sourceSets.main.java.srcDirs
 
-            if (isAndroidApplication(project)){
+            if (projectUtils.isAndroidApplication()){
                 from project.android.sourceSets.main.manifest.srcFile
             }
 
-            destinationDir project.file(outputFolder)
+            destinationDir project.file(getOutputDir(project))
             archiveName = outputName
             includeEmptyDirs = true
 
             def counter = 0
             eachFile {
                 counter++
-                if (isDebug(project)) { println it.path }
+                if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${outputName}"
+                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }
 
-    private Task addPackGeneratedTask(Project project, outputFolder) {
+    private Task addPackGeneratedTask(Project project) {
         project.task(GENERATED_TASK,
                 description: 'Generate a Zip file with generated sources',
                 group: TAG,
@@ -208,8 +227,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 excludes = ["assets/**", "**/res/pngs/**"]
             }
 
-            if (isAndroidApplication(project)){
-                def variantName = getCurrentBuildVariant(project).uncapitalize()
+            if (projectUtils.isAndroidApplication()){
+                def variantName = projectUtils.getCurrentBuildVariant().uncapitalize()
                 from ("${project.buildDir}/intermediates/merged_manifests/${variantName}") {
                     include 'AndroidManifest.xml'
                     into 'merged_manifests'
@@ -218,7 +237,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
             eachFile { fileDetails ->
                 def filePath = fileDetails.path
-                if (isDebug(project)) println "PROCESSED: " + filePath
+                if (isDebug()) println "PROCESSED: " + filePath
 
                 /* Simplify folders of generated sources.
                 // Seems brokening nodes, could be empty folders
@@ -226,33 +245,96 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (filePath.contains('/r/')) {
                     fileDetails.path = filePath.substring(filePath.indexOf('/r/')
                             + '/r/'.size(), filePath.length())
-                    if (isDebug(project)) println "RENAMED into " + fileDetails.path
+                    if (isDebug()) println "RENAMED into " + fileDetails.path
                 }
                 else if (filePath.contains(currentVariantFolders)) {
                     fileDetails.path = filePath.substring(filePath.indexOf(currentVariantFolders)
                             + currentVariantFolders.size(), filePath.length())
-                    if (isDebug(project)) println "RENAMED into " + fileDetails.path
+                    if (isDebug()) println "RENAMED into " + fileDetails.path
                 }*/
             }
 
-            destinationDir project.file(outputFolder)
+            destinationDir project.file(getOutputDir(project))
             archiveName = outputName
             includeEmptyDirs = true
 
             def counter = 0
             eachFile {
                 counter++
-                if (isDebug(project)) { println it.path }
+                if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${outputName}"
+                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }
 
-    static String getOutputPath(Project project){
-        return "${project.buildDir}${OUTPUT_PATH}"
+    //endregion
+
+    //region [ CONFIGURATION ]
+
+    InAppDevToolsExtension getExtension() {
+        getExtension(projectUtils.getProject())
     }
+
+    boolean isDebug(){
+        isDebug(projectUtils.getProject())
+    }
+
+    boolean isEnabled(){
+        if (getExtension()!=null){
+            return getExtension().enabled
+        }
+        return true
+    }
+
+    boolean isEnabledOnRelease(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.enabledOnRelease!=null){
+            return extension.enabledOnRelease
+        }
+        return false
+    }
+
+    boolean isSourceInclusion(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.sourceInclusion!=null){
+            return extension.sourceInclusion
+        }
+        return true
+    }
+
+    boolean isSourceInspection(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.sourceInspection!=null){
+            return extension.sourceInspection
+        }
+        return true
+    }
+
+    //endregion
+
+    //region [ COMPUTED CONFIGURATION ]
+
+    boolean isPluginEnabled(Task buildTask) {
+        return isEnabled() &&
+                (!isReleaseTask(buildTask) ||
+                        (isReleaseTask(buildTask) && isEnabledOnRelease()))
+    }
+
+    boolean isReleaseTask(Task task){
+        return task.name.contains("Release")
+    }
+
+    boolean shouldIncludeSources(Task task) {
+        return isPluginEnabled(task) &&
+                isSourceInclusion() &&
+                isSourceInspection()
+    }
+
+    //endregion
+
+    //region [ STATIC ACCESS TO PLUGIN ]
 
     static InAppDevToolsExtension getExtension(Project project) {
         project.extensions.getByName(TAG)
@@ -265,137 +347,34 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         return false
     }
 
-    static boolean isReleaseTask(Task task){
-        return task.name.contains("Release")
+    static String getOutputPath(Project project){
+        "${project.buildDir}${OUTPUT_PATH}"
     }
 
-    static boolean isEnabledOnRelease(Project project){
-        InAppDevToolsExtension extension = getExtension(project)
-        if (extension!=null && extension.enabledOnRelease!=null){
-            return extension.enabledOnRelease
-        }
-        return false
+    static File getOutputDir(Project project){
+        project.file(getOutputPath(project))
     }
 
-    static boolean isEnabled(Project project){
-        if (getExtension(project)!=null){
-            return getExtension(project).enabled
-        }
-        return true
+    static File getOutputFile(Project project, String filename){
+        project.file("${getOutputPath(project)}/${filename}")
     }
 
-    static boolean isSourceInclusion(Project project){
-        InAppDevToolsExtension extension = getExtension(project)
-        if (extension!=null && extension.sourceInclusion!=null){
-            return extension.sourceInclusion
-        }
-        return true
+    //endregion
+
+    //region [ PROPERTY EXTRACTORS ]
+
+    String getPluginNameAndVersion() {
+        String pluginName = this.getClass().getPackage().getSpecificationTitle()
+        String pluginVersion = this.getClass().getPackage().getSpecificationVersion()
+        "${pluginName} ${pluginVersion}"
     }
 
-    static boolean isSourceInspection(Project project){
-        InAppDevToolsExtension extension = getExtension(project)
-        if (extension!=null && extension.sourceInspection!=null){
-            return extension.sourceInspection
-        }
-        return true
+    String getInternalPackageFromManifest() {
+        String manifestPath = projectUtils.getProject().android.sourceSets.main.manifest.srcFile
+        File manifestFile = projectUtils.getFile(manifestPath)
+        GPathResult parsedManifest = new XmlSlurper().parse(manifestFile)
+        parsedManifest.@package.text()
     }
 
-    static boolean isRoot(Project project){
-        return project.name.equals(project.rootProject.name)
-    }
-
-    static boolean isAndroidApplication(Project project){
-        return project.plugins.hasPlugin('com.android.application')
-    }
-
-    static boolean isAndroidLibrary(Project project){
-        return project.plugins.hasPlugin('com.android.library')
-    }
-
-    static boolean isAndroidFeature(Project project){
-        return project.plugins.hasPlugin('com.android.feature')
-    }
-
-    static String getCurrentBuildType(Project project) {
-        Matcher matcher = getBuildVariantMatcher(project)
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
-        } else {
-            if (isDebug(project))
-                println "getCurrentFlavor: cannot_find"
-            return ""
-        }
-    }
-
-    static String getCurrentFlavor(Project project) {
-        Matcher matcher = getBuildVariantMatcher(project)
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
-        } else {
-            if (isDebug(project))
-                println "getCurrentFlavor: cannot_find"
-            return ""
-        }
-    }
-
-    static String getCurrentBuildVariant(Project project) {
-        Matcher matcher = getBuildVariantMatcher(project)
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1)
-            String buildType = matcher.group(2)
-            String buildVariant = flavor + buildType
-            return buildVariant
-        } else {
-            if (isDebug(project))
-                println "getCurrentBuildVariant: cannot_find"
-            return ""
-        }
-    }
-
-    static String getBuildVariantFolders(Project project) {
-        Matcher matcher = getBuildVariantMatcher(project)
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1).toLowerCase()
-            String buildType = matcher.group(2).toLowerCase()
-            String buildVariantFolder = buildType + '/' + flavor + '/'
-            return buildVariantFolder
-        } else {
-            if (isDebug(project))
-                println "getBuildVariantFolders: cannot_find"
-            return ""
-        }
-    }
-
-    private static Matcher getBuildVariantMatcher(Project project) {
-        Gradle gradle = project.getGradle()
-        String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
-        Pattern pattern
-
-        if (tskReqStr.contains("assemble"))
-            pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
-        else
-            pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
-
-        Matcher matcher = pattern.matcher(tskReqStr)
-        matcher
-    }
-
-
-
-    static String getCurrentApplicationId(Project project) {
-        def outStr = ''
-        def currFlavor = getCurrentFlavor(project)
-        project.android.productFlavors.all{ flavor ->
-            if( flavor.name==currFlavor )
-                outStr=flavor.applicationId
-        }
-
-        return outStr
-    }
+    //endregion
 }

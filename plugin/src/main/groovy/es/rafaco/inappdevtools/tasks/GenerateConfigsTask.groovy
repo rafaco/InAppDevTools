@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,19 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools
+package es.rafaco.inappdevtools.tasks
 
+import es.rafaco.inappdevtools.utils.ProjectUtils
+import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.json.JsonOutput
-import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
 import java.time.Duration
 import java.time.Instant
 
-class GenerateConfigsTask extends InAppDevToolsTask {
+class GenerateConfigsTask extends IadtBaseTask {
+
+    ProjectUtils projectUtils
 
     GenerateConfigsTask() {
         this.description = "Generate config files (build_config, build_info, git_config,...)"
@@ -35,12 +38,14 @@ class GenerateConfigsTask extends InAppDevToolsTask {
     @TaskAction
     void perform() {
         def configStartTime = Instant.now()
-        generateCompileConfig(project)
+        projectUtils = new ProjectUtils(project)
+
+        generateCompileConfig()
 
         if (extension.enabled){
-            generatePluginsList(project)
-            generateBuildInfo(project)
-            generateGitInfo(project)
+            generatePluginsList()
+            generateBuildInfo()
+            generateGitInfo()
         }
 
         if (isDebug()) {
@@ -49,7 +54,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         }
     }
 
-    private void generateCompileConfig(Project project) {
+    private void generateCompileConfig() {
         Map propertiesMap = [:]
 
         //TODO: Validate and throw new InvalidUserDataException()
@@ -93,11 +98,11 @@ class GenerateConfigsTask extends InAppDevToolsTask {
         if (extension.injectEventsOnLogcat!=null)
             propertiesMap.put("injectEventsOnLogcat", extension.injectEventsOnLogcat)
 
-        File file = getFile(project, "${outputPath}/build_config.json")
+        File file = projectUtils.getFile("${outputPath}/build_config.json")
         saveConfigMap(propertiesMap, file)
     }
 
-    private void generateBuildInfo(Project project) {
+    private void generateBuildInfo() {
         Map propertiesMap = [
                 BUILD_TIME      : new Date().getTime(),
                 BUILD_TIME_UTC  : new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
@@ -110,27 +115,27 @@ class GenerateConfigsTask extends InAppDevToolsTask {
                 GIT_USER_NAME       : shell('git config user.name'),
                 GIT_USER_EMAIL      : shell('git config user.email'),
 
-                PLUGIN_VERSION  : this.getClass().getPackage().getImplementationVersion(),
+                IADT_PLUGIN_VERSION  : this.getClass().getPackage().getImplementationVersion(),
+                ANDROID_PLUGIN_VERSION  : new AndroidPluginUtils(projectUtils.getProject()).getVersion(),
                 GRADLE_VERSION  : project.gradle.gradleVersion,
                 JAVA_VERSION    : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
-                //TODO: ANDROID_VERSION  : Version.ANDROID_GRADLE_PLUGIN_VERSION
                 //TODO: KOTLIN_VERSION
         ]
 
-        File file = getFile(project, "${outputPath}/build_info.json")
+        File file = projectUtils.getFile("${outputPath}/build_info.json")
         saveConfigMap(propertiesMap, file)
     }
 
-    private void generatePluginsList(Project project) {
+    private void generatePluginsList() {
         def plugins = ""
         project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
-        if (isDebug())
-            println "Generated gradle_plugins.txt"
         File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
         pluginsFile.text = plugins
+        if (isDebug())
+            println 'Generated ' + pluginsFile.getAbsolutePath()
     }
 
-    private void generateGitInfo(Project project) {
+    private void generateGitInfo() {
         Map propertiesMap
         def gitDiff = shell('git diff HEAD')
         def localCommitsLong
@@ -167,7 +172,7 @@ class GenerateConfigsTask extends InAppDevToolsTask {
             ]
         }
 
-        File file = getFile(project, "${outputPath}/git_info.json")
+        File file = projectUtils.getFile("${outputPath}/git_info.json")
         saveConfigMap(propertiesMap, file)
 
         File commitsFile = new File("${outputPath}/local_commits.txt")
@@ -184,12 +189,10 @@ class GenerateConfigsTask extends InAppDevToolsTask {
 
     private void saveConfigMap(Map map, File file) {
         String extensionJson
+        extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
         if (isDebug()) {
-            extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
             println "Generated: " + file.getPath()
             println extensionJson
-        } else {
-            extensionJson = JsonOutput.toJson(map)
         }
         file.write extensionJson
     }
