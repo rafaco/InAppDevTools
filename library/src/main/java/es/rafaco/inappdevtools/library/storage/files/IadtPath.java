@@ -39,6 +39,7 @@ public class IadtPath {
     public static final String PLUGIN_LIST_FILE = "gradle_plugins.txt";
     public static final String LOCAL_COMMITS_FILE = "local_commits.txt";
     public static final String LOCAL_CHANGES_FILE = "local_changes.diff";
+    public static final String DEPENDENCIES_FILE = "gradle_dependencies.txt";
 
     public static final String BUILD_INFO = SUBFOLDER + "/" + BUILD_INFO_FILE;
     public static final String BUILD_CONFIG = SUBFOLDER + "/" + BUILD_CONFIG_FILE;
@@ -46,4 +47,5 @@ public class IadtPath {
     public static final String PLUGIN_LIST = SUBFOLDER + "/" + PLUGIN_LIST_FILE;
     public static final String LOCAL_COMMITS = SUBFOLDER + "/" + LOCAL_COMMITS_FILE;
     public static final String LOCAL_CHANGES = SUBFOLDER + "/" + LOCAL_CHANGES_FILE;
+    public static final String DEPENDENCIES = SUBFOLDER + "/" + DEPENDENCIES_FILE;
 }

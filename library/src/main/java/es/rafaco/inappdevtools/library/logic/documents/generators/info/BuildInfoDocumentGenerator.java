@@ -37,6 +37,7 @@ import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -47,6 +48,7 @@ import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
@@ -133,8 +135,10 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
             //welcomeText += notes + Humanizer.newLine();
         }
 
-        builder.add(getBuildHostInfo())
-                .add(getBuildInfo())
+        builder.add(getBuildInfo())
+                .add(getBuildHostInfo())
+
+                .add(getBuildDependencies())
                 .add(getBuilderInfo())
                 .add(getRepositoryInfo())
                 .add(getLocalRepositoryInfo())
@@ -160,7 +164,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
 
     public DocumentSectionData getBuilderInfo() {
-        DocumentSectionData group = new DocumentSectionData.Builder("Builder")
+        DocumentSectionData group = new DocumentSectionData.Builder("Git User")
                 .setIcon(R.string.gmd_person)
                 .setOverview(buildInfo.getString(BuildInfo.GIT_USER_NAME))
                 .add("Git name", buildInfo.getString(BuildInfo.GIT_USER_NAME))
@@ -183,8 +187,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setOverview(buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host name", buildInfo.getString(BuildInfo.HOST_NAME))
                 .add("Host OS", buildInfo.getString(BuildInfo.HOST_OS))
-                .add("Host user", buildInfo.getString(BuildInfo.HOST_USER))
                 .add("Host IP", buildInfo.getString(BuildInfo.HOST_ADDRESS))
+                .add("Host user", buildInfo.getString(BuildInfo.HOST_USER))
                 .build();
         return group;
     }
@@ -196,11 +200,30 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
                 .add("Build type", appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE))
                 .add("Flavor", appBuildConfig.getString(AppBuildConfigFields.FLAVOR))
+
+                //.add("Iadt plugin (Old)", PluginListUtils.getIadtVersion())
+                .build();
+        return group;
+    }
+
+    public DocumentSectionData getBuildDependencies() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Environment")
+                .setIcon(R.string.gmd_extension)
+                .setOverview("Gradle " + buildInfo.getString(BuildInfo.GRADLE_VERSION))
+                .add("Gradle", buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VERSION))
-                .add("Gradle version", buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
                 .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
-                .add("Iadt plugin (Old)", PluginListUtils.getIadtVersion())
+                .addButton(new RunButton("Inspect Dependencies",
+                        R.drawable.ic_format_align_left_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                OverlayService.performNavigation(SourceDetailScreen.class,
+                                        SourceDetailScreen.buildParams(IadtPath.ASSETS
+                                                + "/" + IadtPath.DEPENDENCIES));
+                            }
+                        }))
                 .build();
         return group;
     }
