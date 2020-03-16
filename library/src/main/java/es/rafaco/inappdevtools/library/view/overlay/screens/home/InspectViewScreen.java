@@ -111,7 +111,7 @@ public class InspectViewScreen extends Screen {
                             Iadt.showMessage("Activity source not found");
                         else
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(pathToActivitySource, -1));
+                                SourceDetailScreen.buildSourceParams(pathToActivitySource, -1));
                     }
                 }));
 
@@ -126,7 +126,7 @@ public class InspectViewScreen extends Screen {
                             Iadt.showMessage("Layout xml not found");
                         else
                             OverlayService.performNavigation(SourceDetailScreen.class,
-                                    SourceDetailScreen.buildParams(pathToLayout, -1));
+                                    SourceDetailScreen.buildSourceParams(pathToLayout, -1));
                     }
                 })
         );

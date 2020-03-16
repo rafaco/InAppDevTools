@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,14 +41,17 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import br.tiagohm.CodeView;
 import br.tiagohm.Language;
+import br.tiagohm.Theme;
 import es.rafaco.compat.AppCompatButton;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
+import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -57,15 +61,17 @@ import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 
 public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
+    enum OriginEnum { SOURCE, TRACE, INTERNAL}
+
     CodeView codeViewer;
+    private ToolbarSearchHelper toolbarSearch;
     boolean[] tuneSelection;
+    private boolean isSourceUnavailable;
     RelativeLayout traceContainer;
     TextView traceLabel;
     AppCompatButton prevButton;
     AppCompatButton nextButton;
     TextView wideLabel;
-    private boolean isSourceUnavailable;
-    private ToolbarSearchHelper toolbarSearch;
 
     public SourceDetailScreen(ScreenManager manager) {
         super(manager);
@@ -103,32 +109,8 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         nextButton = bodyView.findViewById(R.id.next_trace);
         codeViewer = bodyView.findViewById(R.id.code_view);
 
-        if (!getParams().isTrace){
-            traceContainer.setVisibility(View.GONE);
-            String message = getParams().path;
-            if (getParams().lineNumber>0){
-                message += Humanizer.newLine()
-                        + "Line: " + getParams().lineNumber;
-            }
-            wideLabel.setText(message);
-            loadSource(getParams().path, getParams().lineNumber + "");
-        }
-        else{
-            getScreenManager().setTitle("Stacktrace");
-            loadTrace(getParams().traceId);
-        }
-    }
-
-    protected void loadSource(String path, String line) {
-        new FillSourceAsyncTask(this).execute(path, line);
-    }
-
-    private void loadSourceUnavailable() {
-        isSourceUnavailable = true;
-    }
-
-    protected void loadTrace(long traceId) {
-        new FillTraceAsyncTask(this).execute(traceId);
+        initTuneSelection();
+        loadFromParams();
     }
 
     @Override
@@ -140,6 +122,156 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     protected void onDestroy() {
         //Nothing needed
     }
+
+
+    //region [ LOADS FROM ASYNC TASK ]
+
+    private void loadFromParams() {
+        loadScreenTitle();
+        loadStandardHeader();
+
+        if (getParams().origin.equals(SourceDetailScreen.OriginEnum.TRACE)){
+            new FillTraceNavigationHeaderAsyncTask(this).execute();
+        }else{
+            removeTraceHeader();
+        }
+
+        new FillCodeAsyncTask(this).execute();
+    }
+
+    private void loadScreenTitle() {
+        switch (getParams().origin){
+            case SOURCE:
+                getScreenManager().setTitle("Source Detail");
+            case TRACE:
+                getScreenManager().setTitle("Stacktrace");
+            case INTERNAL:
+                getScreenManager().setTitle("Internal");
+                break;
+        }
+    }
+
+    protected void update(String newParams) {
+        getScreenManager().updateCurrentStepParams(newParams);
+        loadFromParams();
+    }
+
+    protected void loadCodeViewEmpty() {
+        final String noSources = Humanizer.fullStop() + "Source code not available." + Humanizer.fullStop();
+        codeViewer.post(new Runnable() {
+            @Override
+            public void run() {
+                setSourceUnavailable(true);
+                codeViewer.setTheme(Theme.ANDROIDSTUDIO)
+                        .setFontSize(12)
+                        .setShowLineNumber(false)
+                        .setWrapLine(false)
+                        .setZoomEnabled(false)
+                        .setCode(noSources)
+                        .setLanguage(Language.PLAINTEXT)
+                        .apply();
+            }
+        });
+    }
+
+    protected void loadCodeViewContent(final String content, final String contentPath, final int lineNumber) {
+        codeViewer.post(new Runnable() {
+            @Override
+            public void run() {
+                setSourceUnavailable(false);
+                codeViewer.setOnHighlightListener(SourceDetailScreen.this)
+                        .setTheme(Theme.ANDROIDSTUDIO)
+                        .setFontSize(12)
+                        .setShowLineNumber(isShowLineNumber())
+                        .setWrapLine(isWrapLine())
+                        .setZoomEnabled(false)
+                        .setCode(content)
+                        .setLanguage(Language.parseFromPathExtension(contentPath));
+
+                if (lineNumber > 0) {
+                    codeViewer.highlightLineNumber(lineNumber);
+
+                    int scrollLine = lineNumber - 10;
+                    if (scrollLine < 1) scrollLine = 1;
+                    final int finalScrollLine = scrollLine;
+                    codeViewer.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            codeViewer.scrollToLine(finalScrollLine);
+                        }
+                    });
+                }
+                codeViewer.apply();
+            }
+        });
+    }
+
+    private void loadStandardHeader() {
+        removeTraceHeader();
+        String message = getParams().path;
+        if (getParams().lineNumber > 0) {
+            message += Humanizer.newLine() + "Line: " + getParams().lineNumber;
+        }
+        wideLabel.setText(message);
+    }
+
+    protected void loadTraceNavigationHeader(ArrayList<Sourcetrace> groupTraces, int currentPosition) {
+        Sourcetrace currentTrace = groupTraces.get(currentPosition);
+        int totalTraces = groupTraces.size();
+
+        String traceMessage = Humanizer.toCapitalCase(currentTrace.getExtra()) + " trace ";
+        String positionMessage = currentPosition + "/" + totalTraces;
+        String fileMessage = "File " + currentTrace.getFileName();
+        String lineMessage = "Line " + currentTrace.getLineNumber();
+        String codeMessage = currentTrace.getClassName() + "." + currentTrace.getMethodName() + "()";
+
+        traceLabel.setText(traceMessage + positionMessage + Humanizer.newLine()
+                + fileMessage + Humanizer.newLine()
+                + lineMessage);
+        wideLabel.setText(codeMessage);
+
+        if (currentPosition > 1){
+            prevButton.setAlpha(1f);
+            final long previousTrace = groupTraces.get(currentPosition - 2).getUid();
+            prevButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    update(SourceDetailScreen.buildTraceParams(previousTrace));
+                }
+            });
+        }
+        else{
+            prevButton.setAlpha(0.5f);
+            prevButton.setOnClickListener(null);
+        }
+
+        if (currentPosition < totalTraces){
+            nextButton.setAlpha(1f);
+            final long nextTrace = groupTraces.get(currentPosition).getUid();
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    update(SourceDetailScreen.buildTraceParams(nextTrace));
+                }
+            });
+        }
+        else{
+            nextButton.setAlpha(0.5f);
+            nextButton.setOnClickListener(null);
+        }
+
+        traceContainer.setVisibility(View.VISIBLE);
+    }
+
+    protected void removeTraceHeader() {
+        traceContainer.setVisibility(View.GONE);
+    }
+
+    public void setSourceUnavailable(boolean notAvailable) {
+        isSourceUnavailable = notAvailable;
+    }
+
+    //endregion
 
     //region [ CodeView listener ]
 
@@ -265,6 +397,25 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         alertDialog.show();
     }
 
+    private void initTuneSelection() {
+        switch (getParams().origin){
+            case SOURCE:
+            case TRACE:
+                tuneSelection = new boolean[]{ true, true };
+            case INTERNAL:
+                tuneSelection = new boolean[]{ false, false };
+                break;
+        }
+    }
+
+    private boolean isWrapLine(){
+        return tuneSelection[1];
+    }
+
+    private boolean isShowLineNumber(){
+        return tuneSelection[0];
+    }
+
     private void onShareButton() {
         final IadtController controller = IadtController.get();
         File localFile = controller.getSourcesManager().getLocalFile(getParams().path);
@@ -301,20 +452,28 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     //region [ PARAMS ]
 
-    public static String buildParams(String path){
-        InnerParams paramObject = new InnerParams(path, -1);
+    public static String buildSourceParams(String path){
+        return buildSourceParams(path, -1);
+    }
+
+    public static String buildSourceParams(String sourcePath, int lineNumber){
+        InnerParams paramObject = new InnerParams(OriginEnum.SOURCE);
+        paramObject.path = sourcePath;
+        paramObject.lineNumber = lineNumber;
         Gson gson = new Gson();
         return gson.toJson(paramObject);
     }
 
-    public static String buildParams(String path, int lineNumber){
-        InnerParams paramObject = new InnerParams(path, lineNumber);
+    public static String buildTraceParams(long traceId){
+        InnerParams paramObject = new InnerParams(OriginEnum.TRACE);
+        paramObject.id = traceId;
         Gson gson = new Gson();
         return gson.toJson(paramObject);
     }
 
-    public static String buildParams(long traceId){
-        InnerParams paramObject = new InnerParams(traceId);
+    public static String buildInternalParams(String internalsPath){
+        InnerParams paramObject = new InnerParams(OriginEnum.INTERNAL);
+        paramObject.path = internalsPath;
         Gson gson = new Gson();
         return gson.toJson(paramObject);
     }
@@ -324,26 +483,14 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         return gson.fromJson(getParam(), InnerParams.class);
     }
 
-    public void setSourceUnavailable(boolean notAvailable) {
-        isSourceUnavailable = notAvailable;
-    }
-
     public static class InnerParams {
-        long traceId;
-        boolean isTrace;
+        OriginEnum origin;
+        long id;
         String path;
         int lineNumber;
-        long crashId;
 
-        public InnerParams(String path, int lineNumber) {
-            this.isTrace = false;
-            this.path = path;
-            this.lineNumber = lineNumber;
-        }
-
-        public InnerParams(long traceId) {
-            this.isTrace = true;
-            this.traceId = traceId;
+        public InnerParams(OriginEnum origin) {
+            this.origin = origin;
         }
     }
 

@@ -89,7 +89,7 @@ public class FileCreator {
         return categoryFolder;
     }
 
-    private static String getIadtFolder(){
+    public static String getIadtFolder(){
         Context context = IadtController.get().getContext();
         return context.getFilesDir() + "/" + FileProviderUtils.ROOT_FOLDER;
     }

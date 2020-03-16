@@ -37,18 +37,15 @@ import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
@@ -219,9 +216,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                         new Runnable() {
                             @Override
                             public void run() {
-                                OverlayService.performNavigation(SourceDetailScreen.class,
-                                        SourceDetailScreen.buildParams(IadtPath.ASSETS
-                                                + "/" + IadtPath.DEPENDENCIES));
+                                String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.DEPENDENCIES_FILE);
+                                String params = SourceDetailScreen.buildInternalParams(path);
+                                OverlayService.performNavigation(SourceDetailScreen.class,params);
                             }
                         }))
                 .build();
@@ -332,8 +329,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_COMMITS));
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.LOCAL_COMMITS_FILE);
+                        String params = SourceDetailScreen.buildInternalParams(path);
+                        OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
 
@@ -361,8 +359,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(IadtPath.ASSETS  + "/" + IadtPath.LOCAL_CHANGES));
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.LOCAL_CHANGES_FILE);
+                        String params = SourceDetailScreen.buildInternalParams(path);
+                        OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
 

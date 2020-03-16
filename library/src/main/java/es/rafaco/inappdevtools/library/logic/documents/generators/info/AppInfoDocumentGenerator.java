@@ -164,7 +164,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
                         new Runnable() {
                             @Override
                             public void run() {
-                                String params = SourceDetailScreen.buildParams(IadtPath.SOURCES
+                                String params = SourceDetailScreen.buildSourceParams(IadtPath.SOURCES
                                         + "/AndroidManifest.xml");
                                 OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }
@@ -174,7 +174,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
                         new Runnable() {
                             @Override
                             public void run() {
-                                String params = SourceDetailScreen.buildParams(IadtPath.GENERATED
+                                String params = SourceDetailScreen.buildSourceParams(IadtPath.GENERATED
                                         + "/merged_manifests/AndroidManifest.xml");
                                 OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }

@@ -57,6 +57,8 @@ package br.tiagohm;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
+
 public enum Language {
 
     AUTO(""),
@@ -115,6 +117,15 @@ public enum Language {
 
     public String getLanguageName() {
         return name;
+    }
+
+    public static Language parseFromPathExtension(String path) {
+        String extension = NodesHelper.getFileExtensionFromPath(path);
+        Language language = Language.getLanguageByName(extension.toLowerCase());
+        if (language != null){
+            return language;
+        }
+        return Language.AUTO;
     }
 }
 

@@ -86,10 +86,9 @@ public class AssetFileReader {
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
-            is.close();
-
             fos = new FileOutputStream(f);
             fos.write(buffer);
+            is.close();
         }
         catch (Exception e) {
             FriendlyLog.logException("SourceReader exception", e);

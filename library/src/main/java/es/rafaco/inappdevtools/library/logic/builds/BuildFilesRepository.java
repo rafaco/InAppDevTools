@@ -65,6 +65,13 @@ public class BuildFilesRepository {
         return new JsonHelper(content);
     }
 
+    public static String getBuildFile(long sessionId, String fileName){
+        long buildId = getBuildIdForSession(sessionId);
+        String buildFolder = getSubfolderForBuild(buildId);
+        String buildFile = buildFolder + "/" + fileName;
+        return buildFile;
+    }
+
     public static void saveCurrentBuildFiles(long buildId){
         FriendlyLog.logDebug("Saving build files");
         String destinationFolder = getSubfolderForBuild(buildId);
@@ -75,6 +82,7 @@ public class BuildFilesRepository {
         copier.copyToInternal(IadtPath.GIT_CONFIG, destinationFolder);
         copier.copyToInternal(IadtPath.LOCAL_CHANGES, destinationFolder);
         copier.copyToInternal(IadtPath.LOCAL_COMMITS, destinationFolder);
+        copier.copyToInternal(IadtPath.DEPENDENCIES, destinationFolder);
 
         String jsonValues = AppBuildConfig.toJson(getContext());
         FileCreator.withContent(destinationFolder, IadtPath.APP_BUILD_CONFIG_FILE, jsonValues);

@@ -121,7 +121,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                     @Override
                     public void onClick(View v) {
                         OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildParams(trace.getUid()));
+                                SourceDetailScreen.buildTraceParams(trace.getUid()));
                     }
                 });
                 

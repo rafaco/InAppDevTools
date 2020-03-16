@@ -25,18 +25,13 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.utils.PathUtils;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InternalFileReader {
 
@@ -46,29 +41,36 @@ public class InternalFileReader {
         this.context = context;
     }
 
-    public String getContent(String target) {
-        File fullPath = FileCreator.getSubfolder(target);
+    public String getContent(String internalPath) {
         StringBuilder builder = null;
+        FileInputStream fis;
         try {
-            File file = new File(fullPath.getAbsolutePath());
-            FileInputStream fis = new FileInputStream(file);
+            File target = new File(FileCreator.getIadtFolder() + "/" + internalPath);
+            fis = new FileInputStream(target.getAbsolutePath());
             InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-            BufferedReader in = new BufferedReader(isr);
+            BufferedReader bufferedReader = new BufferedReader(isr);
             builder = new StringBuilder();
-            String str;
-
-            while ((str = in.readLine()) != null) {
-                builder.append(str);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line + Humanizer.newLine());
             }
-
-            in.close();
-
-        } catch (IOException e) {
-            Log.e(Iadt.TAG, "Unable to read config at '" + target + "'" + Log.getStackTraceString(e));
+        }
+        catch (IOException e) {
+            Log.e(Iadt.TAG, "Unable to read content from internal '"
+                    + internalPath + "'" + Log.getStackTraceString(e));
             return null;
         }
 
-        return (builder != null) ? builder.toString() : null;
+        String result = (builder != null) ? builder.toString() : null;
+        try {
+            fis.close();
+        }
+        catch(Exception e){
+            Log.e(Iadt.TAG, "Unable to close stream from internal '"
+                    + internalPath + "'" + Log.getStackTraceString(e));
+        }
+
+        return result;
     }
 
     public List<String> getFilesAtFolder(String folderPath) {
@@ -82,5 +84,4 @@ public class InternalFileReader {
         }
         return result;
     }
-
 }
