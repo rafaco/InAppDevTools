@@ -20,20 +20,20 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
 
 public class ConfigData {
 
-    private final BuildConfig config;
+    private final BuildConfigFields config;
     private Object initialValue;
     private Object newValue;
 
-    public ConfigData(BuildConfig config) {
+    public ConfigData(BuildConfigFields config) {
         this.config = config;
         this.initialValue = IadtController.get().getConfig().get(config);
     }
 
-    public BuildConfig getConfig() {
+    public BuildConfigFields getConfig() {
         return config;
     }
 

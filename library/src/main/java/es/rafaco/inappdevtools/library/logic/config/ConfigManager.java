@@ -38,7 +38,7 @@ public class ConfigManager {
         compileConfig = new JsonHelper(fileContents);
     }
 
-    public Object get(BuildConfig config) {
+    public Object get(BuildConfigFields config) {
         if (config.getValueType() == boolean.class){
             return getBoolean(config);
         }
@@ -53,7 +53,7 @@ public class ConfigManager {
         }
     }
 
-    public void set(BuildConfig config, Object value) {
+    public void set(BuildConfigFields config, Object value) {
         if (config.getValueType() == boolean.class){
             setBoolean(config, (Boolean) value);
         }
@@ -65,7 +65,7 @@ public class ConfigManager {
         }
     }
 
-    public boolean getBoolean(BuildConfig config) {
+    public boolean getBoolean(BuildConfigFields config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getBoolean(config.getKey(), false);
         }
@@ -77,12 +77,12 @@ public class ConfigManager {
         }
     }
 
-    public void setBoolean(BuildConfig config, boolean value) {
+    public void setBoolean(BuildConfigFields config, boolean value) {
         DevToolsPrefs.setBoolean(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
-    public String getString(BuildConfig config) {
+    public String getString(BuildConfigFields config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getString(config.getKey(), "");
         }
@@ -94,12 +94,12 @@ public class ConfigManager {
         }
     }
 
-    public void setString(BuildConfig config, String value) {
+    public void setString(BuildConfigFields config, String value) {
         DevToolsPrefs.setString(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
-    public long getLong(BuildConfig config) {
+    public long getLong(BuildConfigFields config) {
         if (DevToolsPrefs.contains(config.getKey())){
             return DevToolsPrefs.getLong(config.getKey(), 0);
         }
@@ -111,7 +111,7 @@ public class ConfigManager {
         }
     }
 
-    public void setLong(BuildConfig config, long value) {
+    public void setLong(BuildConfigFields config, long value) {
         DevToolsPrefs.setLong(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }

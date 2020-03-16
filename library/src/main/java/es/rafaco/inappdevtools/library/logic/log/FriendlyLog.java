@@ -30,10 +30,9 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -86,7 +85,7 @@ public class FriendlyLog {
 
     private static void logAtLogcat(Friendly log) {
 
-        if (!IadtController.get().getConfig().getBoolean(BuildConfig.INJECT_EVENTS_ON_LOGCAT)){
+        if (!IadtController.get().getConfig().getBoolean(BuildConfigFields.INJECT_EVENTS_ON_LOGCAT)){
             return;
         }
 

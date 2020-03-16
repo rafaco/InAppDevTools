@@ -36,13 +36,11 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScre
 
 public class BuildDetailScreen extends AbstractDocumentScreen {
 
-    private final long sessionId;
     private long buildId;
 
     public BuildDetailScreen(ScreenManager manager) {
         super(manager);
         buildId = getRealBuildIdParam();
-        sessionId = (long) getDocumentParam();
     }
 
     @Override

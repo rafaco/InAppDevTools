@@ -31,7 +31,7 @@ import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
@@ -126,7 +126,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setTitle(getTitle())
                 .setOverview(getOverview());
 
-        String notes = IadtController.get().getConfig().getString(BuildConfig.NOTES);
+        String notes = IadtController.get().getConfig().getString(BuildConfigFields.NOTES);
         if (!TextUtils.isEmpty(notes)){
             builder.add(getNotesInfo());
             //welcomeText += notes + Humanizer.newLine();
@@ -148,7 +148,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         DocumentSectionData group = new DocumentSectionData.Builder("Notes")
                 .setIcon(R.string.gmd_speaker_notes)
                 .setOverview("Added")
-                .add(IadtController.get().getConfig().getString(BuildConfig.NOTES))
+                .add(IadtController.get().getConfig().getString(BuildConfigFields.NOTES))
                 .build();
         return group;
     }
