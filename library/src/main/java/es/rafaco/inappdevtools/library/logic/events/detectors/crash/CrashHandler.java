@@ -35,7 +35,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
@@ -124,7 +124,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void onCrashStored(Thread thread, Throwable ex) {
-        if (IadtController.get().getConfig().getBoolean(BuildConfigFields.CALL_DEFAULT_CRASH_HANDLER)){
+        if (IadtController.get().getConfig().getBoolean(BuildConfigField.CALL_DEFAULT_CRASH_HANDLER)){
             if (isDebug()) Log.d(Iadt.TAG, "CrashHandler finish. Calling default handler");
             previousHandle.uncaughtException(thread, ex);
         }else{

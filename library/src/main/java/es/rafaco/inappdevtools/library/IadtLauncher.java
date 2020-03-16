@@ -33,7 +33,7 @@ import android.util.Log;
 import android.support.annotation.Nullable;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
@@ -110,7 +110,7 @@ public class IadtLauncher extends ContentProvider {
      */
     private boolean isLibraryEnabled(){
         try {
-            String enableKey = BuildConfigFields.ENABLED.getKey();
+            String enableKey = BuildConfigField.ENABLED.getKey();
 
             SharedPreferences iadtSharedPrefs = getContext()
                     .getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
@@ -128,7 +128,7 @@ public class IadtLauncher extends ContentProvider {
             }
             else{
                 extra = "default configuration";
-                return (boolean) BuildConfigFields.ENABLED.getDefaultValue();
+                return (boolean) BuildConfigField.ENABLED.getDefaultValue();
             }
         }
         catch (Exception e){

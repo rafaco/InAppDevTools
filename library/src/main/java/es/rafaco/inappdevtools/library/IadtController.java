@@ -26,7 +26,7 @@ import android.util.Log;
 import java.util.TooManyListenersException;
 
 import es.rafaco.inappdevtools.library.logic.builds.BuildManager;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
@@ -173,7 +173,7 @@ public final class IadtController {
         if (isPendingInitFull){
             initFull();
         }
-        else if (getConfig().getBoolean(BuildConfigFields.OVERLAY_ENABLED)
+        else if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
                 && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)
                 && !OverlayService.isRunning()){
             if (isDebug()) Log.d(Iadt.TAG, "Restarting OverlayHelper");
@@ -204,12 +204,12 @@ public final class IadtController {
         if (isDebug())
             Log.d(Iadt.TAG, "IadtController initForeground");
 
-        if (getConfig().getBoolean(BuildConfigFields.OVERLAY_ENABLED)){
+        if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();
             overlayHelper = new OverlayHelper(context);
         }
 
-        if (getConfig().getBoolean(BuildConfigFields.INVOCATION_BY_NOTIFICATION)){
+        if (getConfig().getBoolean(BuildConfigField.INVOCATION_BY_NOTIFICATION)){
             Intent intent = new Intent(getContext(), NotificationService.class);
             intent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
             getContext().startService(intent);
@@ -266,11 +266,11 @@ public final class IadtController {
     }
 
     public boolean isEnabled() {
-        return getConfig().getBoolean(BuildConfigFields.ENABLED);
+        return getConfig().getBoolean(BuildConfigField.ENABLED);
     }
 
     public boolean isDebug() {
-        return getConfig().getBoolean(BuildConfigFields.DEBUG);
+        return getConfig().getBoolean(BuildConfigField.DEBUG);
     }
 
     //endregion
@@ -321,7 +321,7 @@ public final class IadtController {
         Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
         FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
 
-        if(getConfig().getBoolean(BuildConfigFields.OVERLAY_ENABLED) && OverlayService.isInitialize()){
+        if(getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED) && OverlayService.isInitialize()){
             getOverlayHelper().showIcon();
         }
 
@@ -406,7 +406,7 @@ public final class IadtController {
     public boolean handleInternalException(String message, final Exception e) {
         FriendlyLog.logException(message, e);
 
-        Iadt.getConfig().setBoolean(BuildConfigFields.ENABLED, false);
+        Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
         Log.w(Iadt.TAG, "LIBRARY DISABLED");
 
         if (!isDebug()){

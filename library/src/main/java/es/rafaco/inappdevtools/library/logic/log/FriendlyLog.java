@@ -32,7 +32,7 @@ import java.util.Date;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
@@ -85,7 +85,7 @@ public class FriendlyLog {
 
     private static void logAtLogcat(Friendly log) {
 
-        if (!IadtController.get().getConfig().getBoolean(BuildConfigFields.INJECT_EVENTS_ON_LOGCAT)){
+        if (!IadtController.get().getConfig().getBoolean(BuildConfigField.INJECT_EVENTS_ON_LOGCAT)){
             return;
         }
 

@@ -31,14 +31,14 @@ import android.support.annotation.NonNull;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigField;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -126,7 +126,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setTitle(getTitle())
                 .setOverview(getOverview());
 
-        String notes = IadtController.get().getConfig().getString(BuildConfigFields.NOTES);
+        String notes = IadtController.get().getConfig().getString(BuildConfigField.NOTES);
         if (!TextUtils.isEmpty(notes)){
             builder.add(getNotesInfo());
             //welcomeText += notes + Humanizer.newLine();
@@ -148,7 +148,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         DocumentSectionData group = new DocumentSectionData.Builder("Notes")
                 .setIcon(R.string.gmd_speaker_notes)
                 .setOverview("Added")
-                .add(IadtController.get().getConfig().getString(BuildConfigFields.NOTES))
+                .add(IadtController.get().getConfig().getString(BuildConfigField.NOTES))
                 .build();
         return group;
     }
@@ -195,8 +195,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .setIcon(R.string.gmd_history)
                 .setOverview(getFriendlyBuildType() + ", " + getFriendlyElapsedTime())
                 .add("Build time", buildInfo.getString(BuildInfo.BUILD_TIME_UTC))
-                .add("Build type", appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE))
-                .add("Flavor", appBuildConfig.getString(AppBuildConfigFields.FLAVOR))
+                .add("Build type", appBuildConfig.getString(AppBuildConfigField.BUILD_TYPE))
+                .add("Flavor", appBuildConfig.getString(AppBuildConfigField.FLAVOR))
 
                 //.add("Iadt plugin (Old)", PluginListUtils.getIadtVersion())
                 .build();
@@ -277,8 +277,8 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @NonNull
     public String getFriendlyBuildType() {
-        String flavor = appBuildConfig.getString(AppBuildConfigFields.FLAVOR);
-        String buildType = appBuildConfig.getString(AppBuildConfigFields.BUILD_TYPE);
+        String flavor = appBuildConfig.getString(AppBuildConfigField.FLAVOR);
+        String buildType = appBuildConfig.getString(AppBuildConfigField.BUILD_TYPE);
         String build = TextUtils.isEmpty(flavor) ? Humanizer.toCapitalCase(buildType)
                 : Humanizer.toCapitalCase(flavor) + Humanizer.toCapitalCase(buildType);
         return build;

@@ -22,7 +22,7 @@ package es.rafaco.inappdevtools.library.logic.documents;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
@@ -100,7 +100,7 @@ public class DocumentFormatter {
     }
 
     public String formatEmailTo(Report report) {
-        return IadtController.get().getConfig().getString(BuildConfigFields.EMAIL);
+        return IadtController.get().getConfig().getString(BuildConfigField.EMAIL);
     }
 
     public String formatEmailCc(Report report) {

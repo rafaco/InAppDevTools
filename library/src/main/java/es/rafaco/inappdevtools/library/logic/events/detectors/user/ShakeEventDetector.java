@@ -26,7 +26,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -54,7 +54,7 @@ public class ShakeEventDetector extends EventDetector {
                 FriendlyLog.log("D", "User", "Shake", "Shake detected");
                 IadtController iadtController = IadtController.get();
                 if (!iadtController.isPendingInitFull &&
-                        iadtController.getConfig().getBoolean(BuildConfigFields.INVOCATION_BY_SHAKE)){
+                        iadtController.getConfig().getBoolean(BuildConfigField.INVOCATION_BY_SHAKE)){
                     IadtController.get().getOverlayHelper().showToggle();
                 }
             }

@@ -25,27 +25,27 @@ public class ConfigManager {
 
     public ConfigManager(Context context) {}
 
-    public Object get(BuildConfig config) {
+    public Object get(BuildConfigField config) {
         return null;
     }
 
-    public void set(BuildConfig config, Object value) {}
+    public void set(BuildConfigField config, Object value) {}
 
-    public boolean getBoolean(BuildConfig config) {
+    public boolean getBoolean(BuildConfigField config) {
         return false;
     }
 
-    public void setBoolean(BuildConfig config, boolean value) {}
+    public void setBoolean(BuildConfigField config, boolean value) {}
 
-    public String getString(BuildConfig config) {
+    public String getString(BuildConfigField config) {
         return "";
     }
 
-    public void setString(BuildConfig config, String value) {}
+    public void setString(BuildConfigField config, String value) {}
 
-    public long getLong(BuildConfig config) {
+    public long getLong(BuildConfigField config) {
         return -1;
     }
 
-    public void setLong(BuildConfig config, long value) {}
+    public void setLong(BuildConfigField config, long value) {}
 }

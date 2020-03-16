@@ -17,17 +17,19 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.utils;
+package es.rafaco.inappdevtools.library.logic.config;
 
-public class AppBuildConfigFields {
-    public static final String DEBUG = "DEBUG";
-    public static final String APPLICATION_ID = "APPLICATION_ID";
-    public static final String BUILD_TYPE = "BUILD_TYPE";
-    public static final String FLAVOR = "FLAVOR";
-    public static final String VERSION_CODE = "VERSION_CODE";
-    public static final String VERSION_NAME = "VERSION_NAME";
+public enum BuildConfigField {
 
-    private AppBuildConfigFields() {
-        throw new IllegalStateException("Utility class");
-    }
+    EMAIL(),
+    ENABLED(),
+    ENABLED_ON_RELEASE(),
+    DEBUG(),
+    SOURCE_INCLUSION(),
+    SOURCE_INSPECTION(),
+    OVERLAY_ENABLED(),
+    INVOCATION_BY_SHAKE(),
+    INVOCATION_BY_ICON(),
+    INVOCATION_BY_NOTIFICATION(),
+    CALL_DEFAULT_CRASH_HANDLER();
 }

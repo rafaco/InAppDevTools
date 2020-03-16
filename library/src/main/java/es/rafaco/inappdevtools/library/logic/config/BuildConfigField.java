@@ -24,7 +24,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 
-public enum BuildConfigFields {
+public enum BuildConfigField {
 
     EMAIL("email", R.string.config_email, String.class, ""),
     NOTES("notes", R.string.config_notes, String.class, ""),
@@ -47,7 +47,7 @@ public enum BuildConfigFields {
     private final Class<?> valueType;
     private final Object defaultValue;
 
-    BuildConfigFields(String key, int desc, Class<?> valueType, Object defaultValue) {
+    BuildConfigField(String key, int desc, Class<?> valueType, Object defaultValue) {
         this.key = key;
         this.desc = desc;
         this.valueType = valueType;
@@ -71,11 +71,11 @@ public enum BuildConfigFields {
     }
 
 
-    private static final List<BuildConfigFields> ITEMS = new ArrayList<>();
+    private static final List<BuildConfigField> ITEMS = new ArrayList<>();
 
-    public static List<BuildConfigFields> getAll() {
+    public static List<BuildConfigField> getAll() {
         if (ITEMS.isEmpty()){
-            for (BuildConfigFields item : values()) {
+            for (BuildConfigField item : values()) {
                 ITEMS.add(item);
             }
         }

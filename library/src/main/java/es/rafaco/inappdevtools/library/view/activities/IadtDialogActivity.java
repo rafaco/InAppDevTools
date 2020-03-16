@@ -40,7 +40,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
@@ -160,7 +160,7 @@ public class IadtDialogActivity extends AppCompatActivity {
         welcomeText += "." + Humanizer.newLine();
         welcomeText += Humanizer.fullStop();
 
-        String notes = IadtController.get().getConfig().getString(BuildConfigFields.NOTES);
+        String notes = IadtController.get().getConfig().getString(BuildConfigField.NOTES);
         if (!TextUtils.isEmpty(notes)){
             welcomeText += notes + Humanizer.newLine();
         }
@@ -314,7 +314,7 @@ public class IadtDialogActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.button_disable_all, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Iadt.getConfig().setBoolean(BuildConfigFields.ENABLED, false);
+                        Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
                         IadtController.get().restartApp(false);
                         closeAll(true);
                     }

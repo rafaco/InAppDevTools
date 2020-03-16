@@ -27,7 +27,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.view.components.flex.ConfigData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -79,8 +79,8 @@ public class ConfigScreen extends Screen {
                 + "(Work in progress: not all changes should be allowed)"
                 + Humanizer.fullStop());
 
-        List<BuildConfigFields> allConfigs = BuildConfigFields.getAll();
-        for (BuildConfigFields item : allConfigs) {
+        List<BuildConfigField> allConfigs = BuildConfigField.getAll();
+        for (BuildConfigField item : allConfigs) {
             if (item.getDefaultValue() != null){
                 data.add(new ConfigData(item));
             }

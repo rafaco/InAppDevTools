@@ -20,7 +20,7 @@
 package es.rafaco.inappdevtools.library.logic.events.subscribers;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.EventSubscriber;
@@ -38,7 +38,7 @@ public class ConfigChangeSubscriber extends EventSubscriber {
         eventManager.subscribe(Event.CONFIG_CHANGED, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                BuildConfigFields target = (BuildConfigFields) param;
+                BuildConfigField target = (BuildConfigField) param;
 
                 FriendlyLog.log("D", "Iadt", "BuildConfig",
                         "BuildConfig changed: " + target.getKey() + " to " + IadtController.get().getConfig().get(target));
