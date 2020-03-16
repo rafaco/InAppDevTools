@@ -82,7 +82,7 @@ public class BuildsScreen extends Screen {
                         @Override
                         public void run() {
                             OverlayService.performNavigation(BuildDetailScreen.class,
-                                    build.getUid() + "");
+                                    build.getFirstSession() + "");
                         }
                     });
             cardData.setContent(reporter.getOverview());

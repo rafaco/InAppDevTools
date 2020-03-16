@@ -36,10 +36,13 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScre
 
 public class BuildDetailScreen extends AbstractDocumentScreen {
 
+    private final long sessionId;
     private long buildId;
 
     public BuildDetailScreen(ScreenManager manager) {
         super(manager);
+        buildId = getRealBuildIdParam();
+        sessionId = (long) getDocumentParam();
     }
 
     @Override
@@ -54,8 +57,12 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
 
     @Override
     protected Object getDocumentParam() {
-        buildId = Integer.parseInt(getParam());
-        Build build = IadtController.getDatabase().buildDao().findById(buildId);
+        return Long.parseLong(getParam());
+    }
+
+    protected long getRealBuildIdParam() {
+        long sessionId = (long) getDocumentParam();
+        Build build = IadtController.getDatabase().buildDao().findBySessionId(sessionId);
         return build.getUid();
     }
 
@@ -63,12 +70,12 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getButtonGroupData(buildId));
+        objectList.add(1, getButtonGroupData());
         return objectList;
     }
 
 
-    private ButtonGroupData getButtonGroupData(final long buildId) {
+    private ButtonGroupData getButtonGroupData() {
         List<RunButton> buttons = new ArrayList<>();
         buttons.add(new RunButton(
                 "Filter sessions",
