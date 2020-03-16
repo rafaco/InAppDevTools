@@ -104,11 +104,11 @@ public class AssetFileReader {
         }
     }
 
-    public String getFileContents(String target) {
+    public String getFileContents(String pathInAssetsDir) {
         StringBuilder builder = null;
 
         try {
-            InputStream stream = context.getAssets().open(target);
+            InputStream stream = context.getAssets().open(pathInAssetsDir);
             BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             builder = new StringBuilder();
             String str;
@@ -121,10 +121,31 @@ public class AssetFileReader {
             stream.close();
 
         } catch (IOException e) {
-            Log.e(Iadt.TAG, "Unable to read config at '" + target + "'" + Log.getStackTraceString(e));
+            Log.e(Iadt.TAG, "Unable to read config at '" + pathInAssetsDir + "'" + Log.getStackTraceString(e));
             return null;
         }
 
         return (builder != null) ? builder.toString() : null;
+    }
+
+    public boolean exists(String pathInAssetsDir){
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(pathInAssetsDir);
+            if(null != inputStream ) {
+                return true;
+            }
+        }
+        catch(IOException e) {
+            //Intentionally empty
+        }
+        finally {
+            try {
+                if(null != inputStream) inputStream.close();
+            } catch (IOException e) {
+                //Intentionally empty
+            }
+        }
+        return false;
     }
 }

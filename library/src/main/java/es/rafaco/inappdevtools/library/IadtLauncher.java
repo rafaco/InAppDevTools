@@ -33,7 +33,8 @@ import android.util.Log;
 import android.support.annotation.Nullable;
 //#endif
 
-import es.rafaco.inappdevtools.library.logic.config.BuildConfig;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigFields;
+import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
@@ -47,32 +48,59 @@ import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
  */
 public class IadtLauncher extends ContentProvider {
 
+    AssetFileReader assetFileReader;
+    private String extra;
+
     public IadtLauncher() {
     }
 
     @Override
     public boolean onCreate() {
-        if (!isLibraryEnabled()){
-            Log.d(Iadt.TAG, "Library DISABLED by configuration. Nothing started");
+
+        assetFileReader = new AssetFileReader(getContext());
+
+        if (!isPluginInstalled()) {
+            Log.w(Iadt.TAG, "Iadt DISABLED, plugin not found. Add our plugin to your gradle files.");
             return false;
         }
-        Log.d(Iadt.TAG, "Library ENABLED, starting...");
 
+        if (!isVersionMatch()) {
+            Log.w(Iadt.TAG, "Iadt DISABLED, version mismatch (" + extra +
+                    "). Update versions in your gradle files.");
+            return false;
+        }
+
+        if (!isLibraryEnabled()) {
+            Log.i(Iadt.TAG, "Iadt DISABLED by " + extra +". Nothing started");
+            return false;
+        }
+
+        Log.i(Iadt.TAG, "Iadt v" + BuildConfig.VERSION_NAME + " ENABLED");
         return startLibrary();
     }
 
-    private boolean startLibrary() {
-        try {
-            new IadtController(getContext());
-            return true;
-        }
-        catch (Exception e){
-            Log.e(Iadt.TAG, "IadtLauncher: exception starting library."
-                + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
-            return false;
-        }
+    private boolean isPluginInstalled() {
+        return assetFileReader.exists(IadtPath.BUILD_CONFIG);
     }
 
+    /**
+     * Hardcoded way to check match on plugin and library versions
+     * without using IadtController and ConfigManager (not already initialized).
+     *
+     * @return true if enabled
+     */
+    private boolean isVersionMatch() {
+        String fileContents = assetFileReader.getFileContents(IadtPath.BUILD_INFO);
+        JsonHelper jsonHelper = new JsonHelper(fileContents);
+        String pluginVersion = jsonHelper.getString(BuildInfo.IADT_PLUGIN_VERSION);
+        String libraryVersion = BuildConfig.VERSION_NAME;
+        if (!pluginVersion.equals(libraryVersion)){
+            extra = String.format("Library is %s and plugin is %s.",
+                    libraryVersion, pluginVersion);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Hardcoded way to read isEnabled configuration without IadtController and ConfigManager initialized.
@@ -82,25 +110,41 @@ public class IadtLauncher extends ContentProvider {
      */
     private boolean isLibraryEnabled(){
         try {
-            String enableKey = BuildConfig.ENABLED.getKey();
+            String enableKey = BuildConfigFields.ENABLED.getKey();
+
             SharedPreferences iadtSharedPrefs = getContext()
                     .getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
-            String buildConfigContent = new AssetFileReader(getContext())
-                    .getFileContents(IadtPath.BUILD_CONFIG);
+
+            String buildConfigContent = assetFileReader.getFileContents(IadtPath.BUILD_CONFIG);
             JsonHelper iadtBuildConfig = new JsonHelper(buildConfigContent);
 
             if (iadtSharedPrefs.contains(enableKey)){
+                extra = "stored preference";
                 return iadtSharedPrefs.getBoolean(enableKey, false);
             }
             else if (iadtBuildConfig.contains(enableKey)){
+                extra = "gradle extension";
                 return iadtBuildConfig.getBoolean(enableKey);
             }
             else{
-                return (boolean) BuildConfig.ENABLED.getDefaultValue();
+                extra = "default configuration";
+                return (boolean) BuildConfigFields.ENABLED.getDefaultValue();
             }
         }
         catch (Exception e){
             Log.e(Iadt.TAG, "IadtLauncher: exception checking if enabled."
+                    + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    private boolean startLibrary() {
+        try {
+            new IadtController(getContext());
+            return true;
+        }
+        catch (Exception e){
+            Log.e(Iadt.TAG, "IadtLauncher: exception starting library."
                     + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
             return false;
         }
