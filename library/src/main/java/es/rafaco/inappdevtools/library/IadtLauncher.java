@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 //#ifdef ANDROIDX
@@ -96,7 +97,8 @@ public class IadtLauncher extends ContentProvider {
         String libraryVersion = BuildConfig.VERSION_NAME;
         if (!pluginVersion.equals(libraryVersion)){
             extra = String.format("Library is %s and plugin is %s.",
-                    libraryVersion, pluginVersion);
+                    libraryVersion,
+                    TextUtils.isEmpty(pluginVersion) ? "unknown" : pluginVersion);
             return false;
         }
         return true;
