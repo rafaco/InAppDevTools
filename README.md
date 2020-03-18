@@ -36,14 +36,16 @@ For extended feature description, visit our wiki: [Feature description](https://
 
 ## Installation <a name="setup"/>
 
-Android R ready! Successfully tested on Android R Preview v1 emulator. with a host app using build tools 29.0.3, Gradle 5.6.4 and Android Gradle plugin 3.6.1.
+Android R ready! Successfully tested on Android R Preview v1 emulator with a host app using build tools 29.0.3, Gradle 5.6.4 and Android Gradle plugin 3.6.1.
 
 ### Limitations <a name="req"/>
 - minSdkVersion >= 16 (Jelly Bean)
 - Minimum Gradle version: //TODO
 
 ### Setup <a name="basic"/>
-You only need to modify 2 gradle files. On your **root build.gradle** file, import our plugin and add the JitPack repository. `plugins` closure should be right after `buildscript` and latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
+You only need to modify 2 gradle files, to include our plugin and our library in your project.
+
+On your **root** module **build.gradle** file, add our plugin to your `plugins` or add this closure right below `buildscript`. Then add JitPack to `allprojects` `repositories` if you don't have it. Latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
 
 ```gradle
 buidscript {...}
@@ -59,13 +61,13 @@ allprojects {
 }
 ```
 
-Then, on your **app module build.gradle**, apply our plugin, add targetCompatibility with Java8, and include our library in dependencies. You have to choose between `androidx` or `support` artifact according to your Android libraries and `noop` artifact is recommended for your release compilations. 
+Then on your **app** module **build.gradle** file: apply our plugin, ensure to have `targetCompatibility` with Java8 and include our libraries in your `dependencies`. You have to choose between `androidx` or `support` artifact according to the Android libraries used in your project. `noop` artifact is recommended for your release compilations.
 
 | Artifact | Version | Description |
 |---|---|---|
 |support | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries. Jetifier required.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operational, for your release compilations. Compatible with AndroidX and Support libraries.| 
+|androidx | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries.|
+|noop | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operational, for your release compilations. Compatible with AndroidX and Support projects.|
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -85,7 +87,7 @@ dependencies {
 }
 ```
 
-For AndroidX ensure Jetifier is enabled in your project (our sources are 100% migrated but not all our dependencies). On your **root gradle.properties** include:
+For AndroidX we currently required Jetifier. Check your **root** module **gradle.properties** file:
 
 ```gradle
 android.useAndroidX=true
