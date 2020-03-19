@@ -144,25 +144,6 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add(new RunButton("Logs",
-                R.drawable.ic_format_align_left_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(LogScreen.class);
-                    }
-                }));
-
-
-        data.add(new RunButton("View",
-                R.drawable.ic_view_carousel_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(InspectViewScreen.class);
-                    }
-                }));
-
         RunButton sources = new RunButton("Sources",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
@@ -181,6 +162,25 @@ public class HomeScreen extends Screen {
             });
         }
         data.add(sources);
+
+        
+        data.add(new RunButton("View",
+                R.drawable.ic_view_carousel_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(InspectViewScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Logs",
+                R.drawable.ic_format_align_left_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(LogScreen.class);
+                    }
+                }));
 
         data.add(new RunButton("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
