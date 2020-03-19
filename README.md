@@ -230,11 +230,11 @@ First off, thank you for considering contributing to InAppDevTools. It's people 
 
 ## About the author
 
-I'm a Senior Software Engineer and I started this project to get the log of a real user with a nasty bug that we were unable to reproduce. Then it become my personal developer tool and I started to add new features as I was needing them for my daily duties.  
+I'm a Senior Software Engineer and I started this project to get the log of a real user remotely, who has a nasty bug that we were unable to reproduce. Then it become my personal tool for my daily duties as developer and I started to add new features as I was needing them.  
 
-After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a fully functional version around February 2020.
+After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a fully functional version around Spring 2020.
 
-I have always worked on proprietary software and this is my first open source project. I am really excited to be able to return what I received and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
+I have always worked on proprietary software and this is my first open source project. I am really excited to give back what I received during this years and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
 
 
 ## Links <a name="links"/>
@@ -259,7 +259,7 @@ I have always worked on proprietary software and this is my first open source pr
 
 ## License <a name="license"/>
 ```
-Copyright 2018-2019 Rafael Acosta Alvarez
+Copyright 2018-2020 Rafael Acosta Alvarez
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
