@@ -27,6 +27,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//@import androidx.cardview.widget.CardView;
+//#else
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+//#endif
+
+import java.util.List;
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
@@ -34,16 +44,6 @@ import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-
-//#ifdef ANDROIDX
-//@import androidx.core.content.ContextCompat;
-//@import androidx.cardview.widget.CardView;
-//#else
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-
-import java.util.List;
-//#endif
 
 public class ComplexCardViewHolder extends FlexibleViewHolder {
 

@@ -21,7 +21,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +36,7 @@ import android.view.ViewGroup;
 //@import androidx.appcompat.widget.SearchView;
 //@import androidx.recyclerview.widget.RecyclerView;
 //@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //#else
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -47,6 +47,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.view.ContextThemeWrapper;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;

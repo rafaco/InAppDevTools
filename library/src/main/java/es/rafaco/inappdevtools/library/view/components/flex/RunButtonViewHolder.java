@@ -22,8 +22,8 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.Layout;
 import android.view.View;
+import android.widget.LinearLayout;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatButton;
@@ -31,8 +31,6 @@ import android.view.View;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
