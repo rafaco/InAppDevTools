@@ -11,7 +11,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.4.1'
 
         /*
-         *  Iadt PLUGIN: import using legacy plugin application, with dynamic version.
+         *  Iadt PLUGIN: import using legacy plugin application (support dynamic versioning).
          */
         classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${LIBRARY_VERSION}"
 

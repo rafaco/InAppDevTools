@@ -37,9 +37,9 @@ ext{
     DEMO_VERSION = '0.0.01'
     DEMO_VERSION_CODE = 45
 
-    PANDORA_VERSION = "2.0.2"       //2.0.6 -> 2.0.2
-    PANDORA_NOOP_VERSION = "2.0.3"  //2.0.3
-    RETROFIT_VERSION = "2.3.0"      //lib 2.6.2 & app 2.5.0
+    PANDORA_VERSION = "2.0.2"       //TODO: Update to 2.1.1 when available
+    PANDORA_NOOP_VERSION = "2.0.3"
+    RETROFIT_VERSION = "2.3.0"      //TODO: Update to correct OkHHTP with Pandora next version (was lib 2.6.2 & app 2.5.0)
 
     //TODO: Migrate to properties per variant
     libraryAndroidxMaterialVersion = "1.0.0-rc01"

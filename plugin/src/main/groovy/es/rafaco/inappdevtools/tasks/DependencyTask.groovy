@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -45,22 +46,38 @@ class DependencyTask extends DependencyReportTask {
     File outputFile = InAppDevToolsPlugin.getOutputFile(getProject(),
             'gradle_dependencies.txt')
 
+    @Input
+    String variantName
+
+    String getVariantName() {
+        return variantName
+    }
+
+    void setVariantName(String variantName) {
+        this.variantName = variantName
+    }
+
     @Override
     @TaskAction
     public void generate() {
         boolean isDebug = InAppDevToolsPlugin.isDebug(getProject())
-
         if (isDebug) println "OutputFile: ${outputFile}"
-        if (isDebug) println "Input: ${inputFile}"
+        if (isDebug) println "InputFile: ${inputFile}"
+        if (isDebug) println "VariantName: ${variantName}"
 
-        if (projectUtils.isAndroidApplication()){
-            def variantName = projectUtils.getCurrentBuildVariant().uncapitalize()
-            def targetConfiguration = variantName + 'Runtime' + 'Classpath'
-            setConfiguration(targetConfiguration)
-        }else{
-            setConfiguration('default')
+        if (!projectUtils.isAndroidApplication()) {
+            if (isDebug) println 'Skipped by error: Not AndroidApplication module'
+            return
         }
-        if (isDebug) println "Configurations: ${getConfigurations()}"
+
+        def variantConfiguration = variantName.uncapitalize() + 'Runtime' + 'Classpath'
+        if (!projectUtils.existsConfiguration(variantConfiguration)) {
+            if (isDebug) println "Skipped by error: configuration not found ${variantConfiguration}"
+            return
+        }
+
+        if (isDebug) println "Configuration selected: ${variantConfiguration}"
+        setConfiguration(variantConfiguration)
 
         // Manual skip needed because AbstractReportTask constructor have Task.upToDateWhen{false}
         if (outputFile.lastModified() >inputFile.lastModified()){

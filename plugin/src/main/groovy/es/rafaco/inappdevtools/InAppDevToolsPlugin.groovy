@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools
 import es.rafaco.inappdevtools.tasks.DependencyTask
 
 import groovy.util.slurpersupport.GPathResult
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -29,6 +30,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
 import es.rafaco.inappdevtools.tasks.GenerateConfigsTask
 import es.rafaco.inappdevtools.utils.ProjectUtils
+import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
@@ -36,7 +38,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final ASSETS_PATH = '/generated/assets'
     static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
 
-    final PLUGINS_TASK = 'generatePluginList'
     final CLEAN_TASK = 'cleanGenerated'
     final DEPENDENCY_REPORT_TASK = 'iadtDependencyReport'
     final CONFIG_TASK = 'generateConfigs'
@@ -63,30 +64,38 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
 
         println("Configuring " + getPluginNameAndVersion())
+        AfterEvaluateHelper.afterEvaluateOrExecute( project, new Action<Project>() {
+            @Override
+            void execute(Project project2) {
+                projectUtils.printBuildTypes()
+                projectUtils.printFlavors()
+                projectUtils.printVariants()
+            }
+        })
 
         extension = project.extensions.create(TAG, InAppDevToolsExtension)
-
         outputFolder = getOutputDir(project)
         outputFolder.mkdirs()
         project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
 
         if (projectUtils.isAndroidApplication()){
             //Inject internal package from manifest into resValue
+            //TODO: Incremental issue: check if already set before perform to avoid updating modified date
             def internalPackage = getInternalPackageFromManifest()
             project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
             //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
 
-            //Add report plugin
+            //Add report plugin required for DEPENDENCY_REPORT_TASK
+            //TODO: research other reports (tasks, properties, dashboard,...)
             project.getPluginManager().apply(org.gradle.api.plugins.ProjectReportsPlugin.class)
-            //project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
+            // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
         }
 
-        // Add all our tasks to project
+        // Add our tasks to the project
         addGenerateConfigTask(project)
         addPackSourcesTask(project)
         addPackResourcesTask(project)
         addPackGeneratedTask(project)
-        addDependencyReportTask(project)
         addCleanTask(project)
 
         // Selectively link our tasks to each BuildVariant
@@ -103,15 +112,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                             project.tasks.getByName(RESOURCES_TASK) ]
 
                     if (projectUtils.isAndroidApplication()){
-                        theTask.dependsOn += [
-                                project.tasks.getByName(DEPENDENCY_REPORT_TASK)]
+                        addAndLinkDependencyReportTask(project, theTask, buildVariant)
                     }
                 }
 
                 // Link CONFIG_TASK
-                // Always performed, if disabled it add a static config enabled=false
-                theTask.dependsOn += [
-                        project.tasks.getByName(CONFIG_TASK)]
+                // Always performed, if disabled it only add a static config = { enabled=false }
+                theTask.dependsOn += [project.tasks.getByName(CONFIG_TASK)]
             }
 
             if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
@@ -120,13 +127,11 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
                 if(shouldIncludeSources(theTask)){
                     if (isDebug()) println "${buildVariant} include generated sources"
-                    theTask.dependsOn += [
-                            project.tasks.getByName(GENERATED_TASK)]
+                    theTask.dependsOn += [project.tasks.getByName(GENERATED_TASK)]
                 }
                 else{
                     if (isDebug()) println "${buildVariant} without any sources"
-                    theTask.dependsOn += [
-                            project.tasks.getByName(CLEAN_TASK)]
+                    theTask.dependsOn += [project.tasks.getByName(CLEAN_TASK)]
                 }
             }
         }
@@ -140,8 +145,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     //region [ ADD TASKS ]
 
-    private Task addDependencyReportTask(Project project) {
-        project.task(DEPENDENCY_REPORT_TASK, type: DependencyTask)
+    private Task addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
+        Task dependencyTask = project.task(DEPENDENCY_REPORT_TASK + buildVariant, type: DependencyTask) {
+            variantName = buildVariant
+        }
+        superTask.dependsOn += [ dependencyTask ]
+        dependencyTask
     }
 
     private Task addGenerateConfigTask(Project project) {
@@ -268,6 +277,61 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
         }
     }
+
+    //TODO: REMOVE after validate new implementation with addAndLinkDependencyReportTask()
+    //final VARIANT_DETECTOR_TASK = 'iadtVariantDetectorTask'
+    //final TEST_VARIANT_DETECTOR_TASK = 'iadtTestVariantDetectorTask'
+    /*private Task addAndLinkVariantDetector(Project project) {
+        project.ext.currentVariant = "initial"
+
+        Task variantDetector = project.task(VARIANT_DETECTOR_TASK,
+                //dependsOn: 'installDebug',
+                description: 'Prepare all variants in this project to fill ext.currentVariant property',
+                group: 'Iadt-VariantDetector') {
+
+            def variantCollection= new ProjectUtils(project).getVariantsCollection()
+            variantCollection.all { variant ->
+                variant.outputs.each { output ->
+                    def variantName = variant.name.capitalize()
+                    def taskName = "store${variantName}Variant"
+                    project.task("$taskName",
+                            description: 'Fills ext.currentVariant property with the name of the currently running variant',
+                            group: 'Iadt-VariantDetector')  {
+                        doLast{
+                            println "VariantDetector: running $taskName task to save currentVariant=$variantName"
+                            project.ext.set("currentVariant", variantName)
+                        }
+                    }
+                    println "VariantDetector: $variantName output.assemble dependsOn $taskName task"
+                    output.assemble.dependsOn taskName
+                }
+            }
+        }
+
+        println "before get variants"
+        def variants = projectUtils.getVariants()
+        println "after get variants " + variants.size()
+        variants.each {
+            println "inside variants.each"
+            def installVariantTaskName = 'install' + it.capitalize()
+            if (projectUtils.existsTask(installVariantTaskName)) {
+                println "VariantDetectorTask dependsOn $installVariantTaskName task"
+                def installTask = project.tasks.getByName(installVariantTaskName)
+                variantDetector.dependsOn installTask
+            }
+        }
+
+        println "after variants.each"
+
+        *//*project.task(TEST_VARIANT_DETECTOR_TASK,
+                dependsOn: VARIANT_DETECTOR_TASK,
+                description: 'Print ext.currentVariant property (for testing VariantDetector)',
+                group: 'Iadt-VariantDetector')  {
+            doLast {
+                println("currentVariant is $project.ext.currentVariant")
+            }
+        }*//*
+    }*/
 
     //endregion
 
