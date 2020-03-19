@@ -1,4 +1,4 @@
-# InAppDevTools [![Library](https://img.shields.io/maven-metadata/v/http/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=library&style=plastic)](https://bintray.com/rafaco/InAppDevTools/support/_latestVersion) [![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=plastic)](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) [![Maturity](https://img.shields.io/badge/maturity-experimental-red.svg?style=plastic)](https://github.com/rafaco/InAppDevTools/commits)  [![Project Stats](https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif)](https://www.openhub.net/p/InAppDevTools)
+# InAppDevTools ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=version&style=flat-square)  [![Maturity](https://img.shields.io/badge/maturity-alpha-orange.svg?style=flat-square)](https://github.com/rafaco/InAppDevTools/commits)  [![Project Stats](https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif)](https://www.openhub.net/p/InAppDevTools)
 
 <!---[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/887) -->
 
@@ -43,15 +43,15 @@ Android R ready! Successfully tested on Android R Preview v1 emulator with a hos
 - Minimum Gradle version: //TODO
 
 ### Setup <a name="basic"/>
-You only need to modify 2 gradle files, to include our plugin and our library in your project.
+You only need to modify 2 gradle files, to include our plugin and our library in your project. ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=version&style=flat-square)
 
-On your **root** module **build.gradle** file, add our plugin to your `plugins` or add this closure right below `buildscript`. Then add JitPack to `allprojects` `repositories` if you don't have it. Latest version is ![Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/es/rafaco/inappdevtools/es.rafaco.inappdevtools.gradle.plugin/maven-metadata.xml.svg?label=plugin&colorB=blue&style=flat-square)
+On your **root** module **build.gradle** file, add our plugin to your `plugins` or add this closure right below `buildscript`. Then add JitPack to `allprojects` `repositories` if you don't already have it.
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.16" apply false
+    id "es.rafaco.inappdevtools" version "0.0.54" apply false
 }
 
 allprojects {
@@ -63,11 +63,11 @@ allprojects {
 
 Then on your **app** module **build.gradle** file: apply our plugin, ensure to have `targetCompatibility` with Java8 and include our libraries in your `dependencies`. You have to choose between `androidx` or `support` artifact according to the Android libraries used in your project. `noop` artifact is recommended for your release compilations.
 
-| Artifact | Version | Description |
-|---|---|---|
-|support | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=support&style=flat-square) | For legacy projects using Android Support libraries.|
-|androidx | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/androidx/maven-metadata.xml.svg?colorB=blue&label=androidx&style=flat-square) | For modern projects using AndroidX libraries.|
-|noop | ![Library](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/noop/maven-metadata.xml.svg?colorB=blue&label=noop&style=flat-square) | No operational, for your release compilations. Compatible with AndroidX and Support projects.|
+| ArtifactId | Description |
+|---|---|
+|support | For legacy projects using Android Support libraries.|
+|androidx | For modern projects using AndroidX libraries.|
+|noop | No operational, for your release compilations. Compatible with AndroidX and Support projects.|
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -80,10 +80,10 @@ android {
     }
 }
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.53'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.53'
+    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.54'
+    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.54'
     
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.53'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.54'
 }
 ```
 
