@@ -101,6 +101,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         //TODO: when multiple buttons supported -> Add inspect source
         builder.addButton(new RunButton("Inspect View",
+                R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
                         @Override
                         public void run() { OverlayService.performNavigation(InspectViewScreen.class);

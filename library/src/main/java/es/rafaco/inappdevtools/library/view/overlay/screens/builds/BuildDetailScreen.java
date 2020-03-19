@@ -69,6 +69,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
         objectList.add(1, getButtonGroupData());
+        objectList.add(2, "");
         return objectList;
     }
 

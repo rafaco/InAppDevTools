@@ -68,6 +68,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
         objectList.add(0, reportData.getOverviewData());
         objectList.add(1, getFirstButtonGroupData(session));
         objectList.add(2, getSecondButtonGroupData(session));
+        objectList.add(3, "");
         return objectList;
     }
 

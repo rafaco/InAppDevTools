@@ -64,9 +64,17 @@ public class ButtonGroupViewHolder extends FlexibleViewHolder {
         }
         groupTitle.setVisibility(showTitle ? View.VISIBLE : View.GONE);
 
+        if (data.isWrapContent()){
+            //Current implementation only propagate to child buttons
+            //groupContainer.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+
         if (data.getButtons() != null && data.getButtons().size()>0){
             for (int i=0; i<data.getButtons().size(); i++){
                 RunButton buttonData = data.getButtons().get(i);
+                if (data.isWrapContent()){
+                    buttonData.setWrapContent(true);
+                }
                 FlexibleItemDescriptor desc = new FlexibleItemDescriptor(RunButton.class,
                         RunButtonViewHolder.class, R.layout.flexible_item_button_group_item);
                 desc.addToView(desc, buttonData, groupContainer);

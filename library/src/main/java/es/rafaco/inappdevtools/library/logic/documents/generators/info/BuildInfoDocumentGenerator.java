@@ -242,7 +242,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Tag Status", gitConfig.getString(GitInfo.INFO))
                 .add(" - Last commit:")
                 .add(gitConfig.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
-        group.addButton(new RunButton("Remote",
+        group.addButton(new RunButton("Browse repo",
                 R.drawable.ic_public_white_24dp,
                 new Runnable() {
                     @Override
@@ -354,7 +354,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         group.setOverview(file_changes_count + " files");
         group.add(file_status);
-        group.addButton(new RunButton("View Diff",
+        group.addButton(new RunButton("View Diffs",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override

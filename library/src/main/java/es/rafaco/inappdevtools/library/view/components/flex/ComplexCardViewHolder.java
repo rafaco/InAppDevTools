@@ -30,6 +30,7 @@ import android.widget.TextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -40,6 +41,8 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+
+import java.util.List;
 //#endif
 
 public class ComplexCardViewHolder extends FlexibleViewHolder {
@@ -118,20 +121,27 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
             navIcon.setBackground(null);
             navIcon.setVisibility(View.VISIBLE);
 
-            if (!data.isExpandable() || data.getButtons() == null || data.getButtons().isEmpty()){
+            List<RunButton> buttons = data.getButtons();
+            if (!data.isExpandable() || buttons == null || buttons.isEmpty()){
                 buttonSeparator.setVisibility(View.GONE);
             }
             else {
                 buttonSeparator.setVisibility(View.VISIBLE);
             }
 
-            if (data.getButtons() == null || data.getButtons().isEmpty()){
+            if (buttons == null || buttons.isEmpty()){
                 buttonGroupContainer.setVisibility(View.GONE);
             }
             else{
+                buttonGroupContainer.removeAllViews();
+                for (RunButton button :
+                        buttons) {
+                        button.setColor(R.color.iadt_surface_bottom);
+                };
+                ButtonGroupData buttonGroupData = new ButtonGroupData(buttons);
+                buttonGroupData.setWrapContent(true);
                 FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
                         ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
-                ButtonGroupData buttonGroupData = new ButtonGroupData(data.getButtons());
                 desc.addToView(desc, buttonGroupData, buttonGroupContainer);
                 buttonGroupContainer.setVisibility(View.VISIBLE);
             }

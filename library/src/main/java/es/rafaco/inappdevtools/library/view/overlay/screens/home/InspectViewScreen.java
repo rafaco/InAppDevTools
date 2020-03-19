@@ -117,7 +117,7 @@ public class InspectViewScreen extends Screen {
 
         String layoutName = getActivityLayoutName(pathToActivitySource);
         final String pathToLayout = getActivityLayoutPath(layoutName);
-        activityDataBuilder.addButton(new RunButton("LAYOUT RES",
+        activityDataBuilder.addButton(new RunButton("ACTIVITY RES",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override

@@ -26,6 +26,7 @@ public class ButtonGroupData {
 
     String title;
     List<RunButton> buttons;
+    boolean wrapContent = false;
 
     public ButtonGroupData(RunButton button) {
         ArrayList<RunButton> buttons = new ArrayList<>();
@@ -56,5 +57,13 @@ public class ButtonGroupData {
 
     public void setButtons(List<RunButton> buttons) {
         this.buttons = buttons;
+    }
+
+    public boolean isWrapContent() {
+        return wrapContent;
+    }
+
+    public void setWrapContent(boolean wrapContent) {
+        this.wrapContent = wrapContent;
     }
 }

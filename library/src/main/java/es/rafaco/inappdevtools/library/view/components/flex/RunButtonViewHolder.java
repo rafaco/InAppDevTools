@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Layout;
 import android.view.View;
 
 //#ifdef ANDROIDX
@@ -30,6 +31,8 @@ import android.view.View;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
@@ -56,6 +59,10 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         int color = (data.getColor() >  0) ? data.getColor() : R.color.iadt_surface_top;
         int contextualizedColor = ContextCompat.getColor(button.getContext(), color);
         button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+        if (data.isWrapContent()){
+            //Change width to WRAP_CONTENT and remove WEIGHT
+            button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);

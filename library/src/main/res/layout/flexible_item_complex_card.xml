@@ -107,19 +107,19 @@
                     android:layout_margin="@dimen/card_margin"
                     style="@style/TextCondensedMedium" />
 
-                <View
-                    android:id="@+id/button_separator"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    style="@style/horizontal_separator"/>
-
-                <FrameLayout
-                    android:id="@+id/button_group_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </FrameLayout>
-
             </LinearLayout>
+
+            <View
+                android:id="@+id/button_separator"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                style="@style/horizontal_separator"/>
+
+            <FrameLayout
+                android:id="@+id/button_group_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
 
         </LinearLayout>
 

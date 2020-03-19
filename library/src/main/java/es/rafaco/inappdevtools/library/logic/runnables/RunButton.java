@@ -25,6 +25,7 @@ public class RunButton {
     Runnable callback;
     int icon;
     int color;
+    boolean wrapContent = false;
 
     public RunButton(String title, Runnable performer) {
         this.title = title;
@@ -84,6 +85,14 @@ public class RunButton {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public boolean isWrapContent() {
+        return wrapContent;
+    }
+
+    public void setWrapContent(boolean wrapContent) {
+        this.wrapContent = wrapContent;
     }
 
     public void run(){
