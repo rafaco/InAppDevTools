@@ -76,12 +76,7 @@ dependencies {
 
 Choose between `androidx` or `support` artifact according to the Android libraries used in your project. `androidx` require Jetifier enabled.
 
-> From now on, your source code will be exposed on your debug compilations, but you can [limit your source code exposition](#exposed_sources).
-
-Ready to go. Just run a debug build and shake your app!
-
-### Enable network inspection (optional) <a name="network"/>
-If your app use Retrofit or OkHttp, we can record all network communications and allow you to inspect and report them. To enable it, add our OkHttpClient (`Iadt.getOkHttpClient()`) to your Retrofit builder or our interceptor (`Iadt.getOkHttpInterceptor()`) to your custom OkHttpClient.
+Optionally, you can enable our network inspection feature if your app use any OkHttp client (Retrofit, Glimpse,...). 
 
 ```java
 Retrofit retrofit = new Retrofit.Builder()
@@ -90,12 +85,16 @@ Retrofit retrofit = new Retrofit.Builder()
                 .build();
 ```
 
-For extended setup details visit our wiki: 
+Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
+
+For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#compatibility)
 - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#detailed-setup)
 - [Detailed network setup](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#enable-network-inspection-optional)
 - [Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#hybrid-apps)
 - [Including additional Gradle modules](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#including-additional-gradle-modules-optional)
+
+> WARNING: From now on, your source code will be exposed on your debug compilations. You can [limit your source code exposition](#exposed_sources).
 
 
 ## Usage <a name="usage"/>
