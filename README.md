@@ -32,8 +32,6 @@
 <!---![Home](https://github.com/rafaco/InAppDevTools/wiki/screenshots/Iadt_Home.jpg)-->
 </p>
 
-For extended feature description, visit our wiki: [Feature description](https://github.com/rafaco/InAppDevTools/wiki/Feature-description)
-
 ## Setup <a name="setup"/>
 
 You only need to modify 2 gradle files, to include our plugin and our library in your project. ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=latest_version&style=flat-square)
@@ -88,28 +86,16 @@ Retrofit retrofit = new Retrofit.Builder()
 Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
-- [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#detailed-setup)
-- [Detailed network setup](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#enable-network-inspection-optional)
-- [Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#hybrid-apps)
-- [Including additional Gradle modules](https://github.com/rafaco/InAppDevTools/wiki/Extended-setup#including-additional-gradle-modules-optional)
-
-> WARNING: From now on, your source code will be exposed on your debug compilations. You can [limit your source code exposition](#exposed_sources).
+- [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
+- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
+- [Network interceptor](https://github.com/rafaco/InAppDevTools/wiki/Setup#enable-network-inspection-optional)
+- [Web Apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
+- [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
 
-## Usage <a name="usage"/>
-After the [installation](#setup) you only need to generate a debug build of your app and run it on a real device or emulator. 
+## Configuration <a name="configuration"/>
 
-### Invocation <a name="invocation"/>
-On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
-- Shake your device with your app on foreground
-- Tap our floating icon
-- Tap our notification (disabled by default, enable it with configuration)
-- Or programmatically calling `Iadt.show();`
-
-
-### Configuration <a name="configuration"/>
-You can configure our library behaviour at build time by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values. 
+You can easily configure our library behaviour at **build time** by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values.
 ```gradle
 apply plugin: 'es.rafaco.inappdevtools'
 
@@ -119,57 +105,45 @@ inappdevtools {
     notes = 'This compilation fix the following issues:..'
 }
 ```
+All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.
 
-You can also override build configurations at run time by using our Config Screen (Overlay toolbar > More > Setting) or programmatically from your sources. This values will be lost when cleaning your app data, restoring the build configuration. 
+You can also override your build configuration at **run time** from our UI (Overlay toolbar > More > Setting) or programmatically calling us from your sources. Runtime values will be lost when cleaning your app data, restoring the build ones from our gradle extension.
 ```java
-Iadt.getConfig().setBoolean(Config.ENABLED, false);
+Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
 Iadt.restartApp();
 ```
 
-Available properties:
+## Important considerations
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| `email` | String | null | Default email to use for reports |
-| `notes` | String | null | Compilation notes to show on initial dialog |
-| `enabled` | boolean | true | Disable all and simulate the no-op library and plugin |
-| `enabledOnRelease` | boolean | false | Force enabling our library for release builds of your app. Warning, read [Exposed sources disclaimer](#exposed_sources) |
-| `debug` | boolean | false | Enable debug mode for the library. It print extra logs and include our sources to your compilation  |
-| `sourceInclusion` | boolean | true | Disable including this module sources in your apk. Read [Exposed sources disclaimer](#exposed_sources) |
-| `sourceInspection` | boolean | true | Disable source features and source inclusion. Read [Exposed sources disclaimer](#exposed_sources) |
-| `overlayEnabled` | boolean | true | Disable our overlay interface  |
-| `invocationByShake` | boolean | true | Disable opening our UI on device shake |
-| `invocationByIcon` | boolean | true | Enable a permanent overlay icon to open our UI |
-| `invocationByNotification` | boolean | false | Show a permanent notification to open the UI. Warning: it currently use a foreground service so your app will not be killed on background |
-| `callDefaultCrashHandler` | boolean | false | Propagate unhandled exceptions to the default handler (for Crashlytics and similar) |
-| `injectEventsOnLogcat` | boolean | false | Inject IadtEvents on logcat to see them on the standard Logcat output. |
+### Debug vs Release compilation
+
+Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug compilations are for internal use and your release ones are for production, but you can adjust it.
+
+You can disable our library and plugin in your **debug builds** by setting `enabled = false` in configuration or using our `noop` library. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#1-enabled).
+
+We have a **release protection mechanism** to auto-disable everything on your release builds even if you forget to use our `noop` artifact or if your configuration have `enabled = true`. On release builds, our plugin will not perform any of their tasks and our `androidx` and `support` libraries will behave like the `noop` one.
+
+To enable our library and plugin in your **release builds** you have to explicitly override our protection mechanism by setting `enabledOnRelease = true` in configuration. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#2-enabled-on-release).
+
+### Source code exposition <a name="exposed_sources"/>
+
+When this library is enabled, **your source code get exposed to anyone who get your APK**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled.
+
+You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection) .
 
 
-### Limiting sources exposition <a name="exposed_sources"/>
+## Usage <a name="usage"/>
+After the [setup](#setup) you only need to *Run* a debug build of your app into a real device or emulator. Our welcome dialog will pop up.
 
-When this library is enabled, **your source code can be accessed at our UI and they can also be extracted from your APK**. Using default configuration, our library will be enabled on debug builds and automatically disabled for release builds, even if you don't use `noop` artifact for your release.
+### Invocation <a name="invocation"/>
+On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
+- Shake your device with your app on foreground
+- Tap our floating icon
+- Tap our notification (disabled by default, enable it with configuration)
+- Or programmatically calling `Iadt.show();`
 
-If you don't want to show all or some of your proprietary sources in your debug builds, you have few options:
 
-* ~~(TODO) Exclude concrete source files by configuration. Useful for specific files with sensible information like passwords, api keys,...~~
-* Disable source inclusion by configuration (`sourceInclusion = false`). Your apk will not include your sources but assets inspection will be available in our overlay.
-* Disable source inspection by configuration (`sourceInspection = false`). Your apk will not include your sources and our interface will not show your assets.
-* ~~(TODO) Enable tester mode~~
-* Disable all our library by configuration (`enabled = false`). Your apk will not include your sources and all our features will be disabled but in your apk.
-* Disable all our library using the noop dependency. Same as before but with a minimal apk size increase.
-
-When source inclusion or source inspection get disabled you also lost the following features: browse your sources, view a source, share a source and navigation from stacktrace to source line.
-
-You can also enable our library and the source inclusion/inspection in your release builds. This is not recommended but can be useful for beta versions: 
-* Include `enabledOnRelease = true` in your configuration
-* Remove `sourceInclusion` and `sourceInspection` from your configuration or ensure both of them are `true`.
-* Stop using our `noop` artifact in your release dependencies. i.e. replace `releaseImplementation 'es.rafaco.inappdevtools:noop:...'` by `releaseImplementation 'es.rafaco.inappdevtools:androidx:...'`
-
-<!--This library work out of the box for developer compilations which include Source inspection, allowing users to view and share your source code. In order to provide this features, your apk contains your source code as well as you compiled code (a zip file asset). 
-We can directly read your app's assets but we also include a a zip file in your apk with other source files:
-* Your Java source sets. Content of src/main/java plus dynamic inclusions.
-* Your resources: Content of src/main/res but excluding the raw folder.
-* Build time generated sources. Content of build/generated/ excluding assets and png. -->
+## Integrations
 
 ### Include compilation notes
 You can provide any text to describe your compilation using `notes` configuration. This is very useful to describe changes or to provide instructions and it will be show on first dialog and on BuildInfo panel. 
@@ -200,11 +174,11 @@ First off, thank you for considering contributing to InAppDevTools. It's people 
 
 ## About the author
 
-I'm a Senior Software Engineer and I started this project to get the log of a real user remotely, who has a nasty bug that we were unable to reproduce. Then it become my personal tool for my daily duties as developer and I started to add new features as I was needing them.  
+I started this project to get the log from a real user located in another country. He has a nasty bug that we were unable to reproduce and we detect the issue by sending him a special apk. Then I added an overlay to see the logs over our app and the first info panels... and it became my personal tool for my daily duties as developer.
 
-After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a fully functional version around Spring 2020.
+After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a first complete version around Spring 2020.
 
-I have always worked on proprietary software and this is my first open source project. I am really excited to give back what I received during this years and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
+As a Senior Software Engineer, I have always worked on proprietary software and this is my first open source project. I am really excited to give back what I received during all this years and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
 
 
 ## Links <a name="links"/>
