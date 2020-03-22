@@ -4,11 +4,13 @@ plugins {
     id 'maven'
     id 'maven-publish'
     id 'com.gradle.plugin-publish' version '0.10.0'
+    //id 'pandora-plugin' version '1.0.1' apply false
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.github.whataa:pandora-plugin:1.0.1'
     testImplementation 'junit:junit:4.12'
 }
 
@@ -119,6 +121,7 @@ Implementation-URL: http://xml.apache.org/xalan-j/*/
 
 repositories {
     mavenCentral()
+    maven { url  "https://dl.bintray.com/yanglssc/maven" }
 }
 
 uploadArchives {

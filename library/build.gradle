@@ -100,8 +100,13 @@ dependencies {
     supportApi "android.arch.paging:runtime:$librarySupportPagingVersion"
 
     // Pandora
-    androidxApi "com.github.whataa:pandora:androidx_v$PANDORA_VERSION"
-    supportApi "com.github.whataa:pandora:v$PANDORA_VERSION"
+    androidxApi ("com.github.whataa:pandora:androidx_v$PANDORA_VERSION") {
+        exclude group: 'com.squareup.okhttp3'
+    }
+    supportApi ("com.github.whataa:pandora:v$PANDORA_VERSION") {
+        exclude group: 'com.squareup.okhttp3'
+    }
+    api("com.squareup.okhttp3:okhttp:$OKHTTP_VERSION")
 
     // Retrofit
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"

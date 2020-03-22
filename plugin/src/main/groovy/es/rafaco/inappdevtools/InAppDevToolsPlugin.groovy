@@ -31,6 +31,7 @@ import org.gradle.api.tasks.bundling.Zip
 import es.rafaco.inappdevtools.tasks.GenerateConfigsTask
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
+import tech.linjiang.pandora.gradle.PandoraPlugin;
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
@@ -88,6 +89,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             //Add report plugin required for DEPENDENCY_REPORT_TASK
             //TODO: research other reports (tasks, properties, dashboard,...)
             project.getPluginManager().apply(org.gradle.api.plugins.ProjectReportsPlugin.class)
+            project.getPluginManager().apply(PandoraPlugin.class)
             // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
         }
 

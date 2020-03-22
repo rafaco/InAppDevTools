@@ -46,7 +46,7 @@ public class DemoAPI implements Callback<List<Change>> {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(Iadt.getOkHttpClient())
+                //.client(Iadt.getOkHttpClient())
                 .build();
 
         GerritAPI gerritAPI = retrofit.create(GerritAPI.class);
