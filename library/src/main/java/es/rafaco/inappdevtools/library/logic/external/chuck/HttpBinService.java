@@ -33,7 +33,6 @@
 
 package es.rafaco.inappdevtools.library.logic.external.chuck;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,11 +50,12 @@ import retrofit2.http.Query;
 
 public class HttpBinService {
 
-    public static HttpbinApi getInstance(OkHttpClient client) {
+    static final String BASE_URL = "https://httpbin.org";
+
+    public static HttpbinApi getInstance() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://httpbin.org")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
                 .build();
         return retrofit.create(HttpbinApi.class);
     }
@@ -118,8 +118,8 @@ public class HttpBinService {
         Call<Void> cache(@Path("seconds") int seconds);
     }
 
-    public static void simulation(OkHttpClient client) {
-        HttpBinService.HttpbinApi api = HttpBinService.getInstance(client);
+    public static void simulation() {
+        HttpBinService.HttpbinApi api = HttpBinService.getInstance();
         Callback<Void> cb = new Callback<Void>() {
             @Override public void onResponse(Call call, Response response) {}
             @Override public void onFailure(Call call, Throwable t) { t.printStackTrace(); }

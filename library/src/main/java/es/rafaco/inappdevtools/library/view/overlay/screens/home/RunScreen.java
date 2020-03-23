@@ -203,7 +203,7 @@ public class RunScreen extends Screen {
                         dialog.dismiss();
                         switch (which){
                             case 0: //Traffic
-                                HttpBinService.simulation(Iadt.getOkHttpClient());
+                                HttpBinService.simulation();
                                 break;
                             case 1: //Anr
                                 onAnrButton();

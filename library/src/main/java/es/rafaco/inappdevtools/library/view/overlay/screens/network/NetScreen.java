@@ -111,9 +111,10 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
         initLiveData();
         initAdapter();
 
-        if (!IadtController.get().getNetworkManager().isRequested()){
+        //TODO: REMOVE
+        /*if (!IadtController.get().getNetworkManager().isRequested()){
             showNotRequestedDialog();
-        }
+        }*/
     }
 
     private void showNotRequestedDialog() {
@@ -290,7 +291,7 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
                 .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        HttpBinService.simulation(Iadt.getOkHttpClient());
+                        HttpBinService.simulation();
                         dialog.dismiss();
                     }
                 });
