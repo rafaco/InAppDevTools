@@ -78,10 +78,10 @@
                 android:layout_marginTop="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:scaleType="fitCenter"
-                tools:ignore="NewApi" />
+                android:focusable="true" />
         </RelativeLayout>
 
         <LinearLayout

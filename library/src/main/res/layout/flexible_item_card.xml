@@ -48,10 +48,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:minHeight="@dimen/card_cover_height"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                tools:targetApi="lollipop"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/icon"
