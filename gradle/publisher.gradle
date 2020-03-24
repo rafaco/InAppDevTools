@@ -133,6 +133,7 @@ publishing.publications {
                         if (it.group == null) return // Avoid empty dependency nodes
                         def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', it.group)
+
                         //TODO: Remapping COMPAT, project dependency
                         def artifact = it.name
                         if (it.group == 'es.rafaco.compat'){
@@ -141,12 +142,22 @@ publishing.publications {
                             else
                                 artifact = 'support'
                         }
+
                         dependencyNode.appendNode('artifactId', artifact)
                         dependencyNode.appendNode('version', it.version)
                         if (it.hasProperty('optional') && it.optional) {
                             dependencyNode.appendNode('optional', 'true')
                         }
                         println(" - Added ${it.group}:${artifact}:${it.version}")
+
+                        //TODO: hardcoded exclusion of OkHttp in Pandora
+                        if (it.group == 'com.github.whataa') {
+                            def exclusions = dependencyNode.appendNode('exclusions')
+                            def exclusion = exclusions.appendNode('exclusion')
+                            exclusion.appendNode('groupId', 'com.squareup.okhttp3')
+                            exclusion.appendNode('artifactId', 'okhttp')
+                            println("   - Excluded 'com.squareup.okhttp3:okhttp3'")
+                        }
                     }
 
                     // Add general dependencies
