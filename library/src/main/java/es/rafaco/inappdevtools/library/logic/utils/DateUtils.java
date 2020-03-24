@@ -89,7 +89,7 @@ public class DateUtils {
     }
 
     public static String formatFull(long timeMillis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
         return simpleDateFormat.format(timeMillis);
     }
 
