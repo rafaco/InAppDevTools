@@ -26,6 +26,9 @@ ext{
     PROJECT_MIN_SDK = 16
     PROJECT_TARGET_SDK = 28
 
+    TARGET_COMPATIBILITY = JavaVersion.VERSION_1_7
+    SOURCE_COMPATIBILITY = JavaVersion.VERSION_1_7
+
     // Testing Android R SDK
     /*PROJECT_COMPILE_SDK = 'android-R'
     PROJECT_BUILD_TOOLS = "29.0.3"

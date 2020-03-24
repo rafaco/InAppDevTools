@@ -20,16 +20,9 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_7
-        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility TARGET_COMPATIBILITY
+        sourceCompatibility SOURCE_COMPATIBILITY
     }
 
     flavorDimensions "compatibility"
@@ -45,6 +38,13 @@ android {
             processor.symbols "ANDROIDX"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

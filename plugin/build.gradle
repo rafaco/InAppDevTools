@@ -56,6 +56,27 @@ jar {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven { url  "https://dl.bintray.com/yanglssc/maven" }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('repo'))
+        }
+    }
+}
+
+
+// MAIN PUBLICATION TASKS
+// publishPlugins: Production publication into Gradle Plugin Portal
+// publishToMavenLocal: Development publication into mavenLocal
+// uploadArchives: Development publication into local 'repo'
+
+
+//JAR MANIFEST SAMPLES:
 /*//Sample 1
 Created-By: 1.7.0_06 (Oracle Corporation)
 Name: java/util/
@@ -111,23 +132,3 @@ Implementation-Title: org.apache.xml
 Implementation-Version: 2.7.0
 Implementation-Vendor: Apache Software Foundation
 Implementation-URL: http://xml.apache.org/xalan-j/*/
-
-
-
-// PUBLICATION
-// publishPlugins: Production publication into Gradle Plugin Portal
-// publishToMavenLocal: Development publication into mavenLocal
-// uploadArchives: Development publication into local 'repo'
-
-repositories {
-    mavenCentral()
-    maven { url  "https://dl.bintray.com/yanglssc/maven" }
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('repo'))
-        }
-    }
-}
