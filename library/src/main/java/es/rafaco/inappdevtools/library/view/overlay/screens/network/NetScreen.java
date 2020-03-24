@@ -244,7 +244,7 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
     private void onSimulateButton() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("Inject network traffic?")
-                .setMessage("We can do few network request to HttpBin to help you testing this features. Do you want to inject some network traffic?")
+                .setMessage("We can do some network calls to help you testing this tool. Do you want to continue?")
                 .setCancelable(true)
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                     @Override

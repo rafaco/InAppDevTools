@@ -34,7 +34,7 @@
 
 ## Setup <a name="setup"/>
 
-You only need to modify 2 gradle files, to include our plugin and our library in your project. ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=latest_version&style=flat-square)
+Include our plugin and our libraries in your Gradle files and that's it! We will pop up in your debug compilations.
 
 On your **root build.gradle** file:
 
@@ -62,20 +62,20 @@ android {
     ...
 }
 dependencies {
-    debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.54'
-    //debugImplementation 'es.rafaco.inappdevtools:support:0.0.54'
-    
     releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.54'
+    
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.54'
+    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.54'
 }
 ```
 
-You have to choose between `androidx` or `support` artifact according to the Android libraries used in your project. `androidx` require Jetifier enabled.
+Choose only one between `androidx` or `support` artifacts, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
 
 Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)-optional)
+- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
 - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
