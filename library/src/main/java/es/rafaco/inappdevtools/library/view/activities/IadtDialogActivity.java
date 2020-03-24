@@ -157,12 +157,12 @@ public class IadtDialogActivity extends AppCompatActivity {
         welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO)).getSecondLineOverview();
         welcomeText += " ";
         welcomeText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO)).getOneLineOverview();
-        welcomeText += "." + Humanizer.newLine();
-        welcomeText += Humanizer.fullStop();
+        welcomeText += ".";
 
         String notes = IadtController.get().getConfig().getString(BuildConfigField.NOTES);
         if (!TextUtils.isEmpty(notes)){
-            welcomeText += notes + Humanizer.newLine();
+            welcomeText += Humanizer.fullStop();
+            welcomeText += notes;
         }
         
         builder.setTitle(R.string.welcome_welcome_title)
