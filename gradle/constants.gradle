@@ -42,8 +42,8 @@ ext{
 
     PANDORA_VERSION = "2.1.0"
     PANDORA_NOOP_VERSION = "2.0.3"
-    OKHTTP_VERSION = "3.8.0"    //3.12.10 is the last version supporting API<21 but...
-    RETROFIT_VERSION = "2.3.0"  //Java7 sourceCompatibility require this for pandora plugin to work
+    OKHTTP_VERSION = "3.12.10"    //Last version supporting API<21 and Java<8
+    RETROFIT_VERSION = "2.6.4"  //Transitive match with OKHTTP_VERSION
 
     //TODO: Migrate to properties per variant
     libraryAndroidxMaterialVersion = "1.0.0-rc01"
