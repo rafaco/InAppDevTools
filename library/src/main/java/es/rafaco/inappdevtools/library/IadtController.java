@@ -33,7 +33,6 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntim
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
-import es.rafaco.inappdevtools.library.logic.network.NetworkManager;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
@@ -73,7 +72,6 @@ public final class IadtController {
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
     private NavigationManager navigationManager;
-    private NetworkManager networkManager;
     private OverlayHelper overlayHelper;
     public boolean isPendingInitFull;
 
@@ -134,7 +132,6 @@ public final class IadtController {
         sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
-        networkManager = new NetworkManager();
 
         if (isDebug()){
             ThreadUtils.runOnBack("Iadt-InitBack",
@@ -251,10 +248,6 @@ public final class IadtController {
 
     public NavigationManager getNavigationManager() {
         return navigationManager;
-    }
-
-    public NetworkManager getNetworkManager() {
-        return networkManager;
     }
 
     public OverlayHelper getOverlayHelper() {

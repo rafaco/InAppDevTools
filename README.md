@@ -60,9 +60,6 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 android {
     ...
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 dependencies {
     debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.54'
@@ -72,24 +69,14 @@ dependencies {
 }
 ```
 
-Choose between `androidx` or `support` artifact according to the Android libraries used in your project. `androidx` require Jetifier enabled.
-
-Optionally, you can enable our network inspection feature if your app use any OkHttp client (Retrofit, Glimpse,...). 
-
-```java
-Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(Iadt.getOkHttpClient())
-                .build();
-```
+You have to choose between `androidx` or `support` artifact according to the Android libraries used in your project. `androidx` require Jetifier enabled.
 
 Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
-- [Network interceptor](https://github.com/rafaco/InAppDevTools/wiki/Setup#enable-network-inspection-optional)
-- [Web Apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
+- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)-optional)
+- [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
 

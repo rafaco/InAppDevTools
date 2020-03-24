@@ -34,8 +34,6 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import okhttp3.OkHttpClient;
-import tech.linjiang.pandora.network.OkHttpInterceptor;
 
 /**
  * This class is the main public interface of InAppDevTools.
@@ -89,18 +87,6 @@ public class Iadt {
     //endregion
 
     //region [ INTEGRATIONS ]
-
-    @NonNull
-    public static OkHttpClient getOkHttpClient() {
-        if (!isEnabled()) return new OkHttpClient();
-        return getController().getNetworkManager().getClient();
-    }
-
-    @NonNull
-    public static OkHttpInterceptor getOkHttpInterceptor() {
-        if (!isEnabled()) return new OkHttpInterceptor();
-        return getController().getNetworkManager().getInterceptor();
-    }
 
     public static void addRunButton(RunButton runnable){
         if(!isEnabled()) return;

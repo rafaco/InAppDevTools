@@ -25,8 +25,6 @@ import android.view.GestureDetector;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import okhttp3.OkHttpClient;
-import tech.linjiang.pandora.network.OkHttpInterceptor;
 
 public class Iadt {
 
@@ -63,10 +61,6 @@ public class Iadt {
 
     //region [ INTEGRATIONS ]
 
-    public static OkHttpClient getOkHttpClient() {
-        return new OkHttpClient();
-    }
-    public static OkHttpInterceptor getOkHttpInterceptor() { return new OkHttpInterceptor(); }
     public static void addRunButton(RunButton runnable){}
     public static GestureDetector getGestureDetector() {
         return null;
