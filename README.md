@@ -42,7 +42,7 @@ On your **root build.gradle** file:
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.54" apply false
+    id "es.rafaco.inappdevtools" version "0.0.55" apply false
 }
 
 allprojects {
@@ -62,10 +62,10 @@ android {
     ...
 }
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.54'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.55'
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.54'
-    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.54'
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.55'
+    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.55'
 }
 ```
 
