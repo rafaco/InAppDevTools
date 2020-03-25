@@ -76,6 +76,28 @@ class ProjectUtils {
 
     boolean isAndroidModule(){
         return isAndroidApplication() || isAndroidLibrary() || isAndroidFeature()
+        /*TODO:
+        return project.getPlugins().hasPlugin('com.android.application') ||
+                project.getPlugins().hasPlugin('com.android.library') ||
+                project.getPlugins().hasPlugin('com.android.feature') ||
+                project.getPlugins().hasPlugin('com.android.dynamic-feature') ||
+                project.getPlugins().hasPlugin('com.android.instantapp') ||
+                project.getPlugins().hasPlugin('android') ||
+                project.getPlugins().hasPlugin('android-library') */
+    }
+
+    //TODO: KOTLIN!
+    boolean isKotlin() {
+        return project.getPlugins().hasPlugin('kotlin') ||
+                project.getPlugins().hasPlugin('kotlin-platform-common') ||
+                project.getPlugins().hasPlugin('kotlin-platform-jvm') ||
+                project.getPlugins().hasPlugin('kotlin-platform-js') ||
+                project.getPlugins().hasPlugin('org.jetbrains.kotlin') ||
+                project.getPlugins().hasPlugin('org.jetbrains.kotlin.jvm') ||
+                project.getPlugins().hasPlugin('org.jetbrains.kotlin.js') ||
+                project.getPlugins().hasPlugin('kotlin2js') ||
+                project.getPlugins().hasPlugin('kotlin-android') ||
+                project.getPlugins().hasPlugin('kotlin-android-extensions')
     }
 
     boolean isAndroidApplication(){
