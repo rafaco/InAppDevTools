@@ -139,7 +139,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
         initLiveData();
         initAdapter();
 
-        if (LogFilterStore.get() == null){
+        if (LogFilterStore.get() == null &&
+                (getParams() == null || getParams().filter == null)){
             onProfilesButton();
         }
     }

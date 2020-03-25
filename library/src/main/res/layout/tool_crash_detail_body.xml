@@ -88,16 +88,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp">
 
             <es.rafaco.compat.AppCompatButton
                 android:id="@+id/report_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Report crash"
-                android:backgroundTint="@color/rally_green_alpha"
+                android:text="Report this crash"
+                android:backgroundTint="@color/rally_orange"
                 android:drawableLeft="@drawable/ic_send_white_24dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp">
+
+            <es.rafaco.compat.AppCompatButton
+                android:id="@+id/repro_steps_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Repro Steps"
+                android:backgroundTint="@color/rally_green_alpha"
+                android:drawableLeft="@drawable/ic_format_list_numbered_white_24dp"/>
+
+            <es.rafaco.compat.AppCompatButton
+                android:id="@+id/logcat_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Full Log"
+                android:backgroundTint="@color/rally_blue_med"
+                android:drawableLeft="@drawable/ic_format_align_left_white_24dp"/>
 
         </LinearLayout>
 
@@ -185,33 +217,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/repro_steps_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Repro Steps"
-            android:drawableLeft="@drawable/ic_history_white_24dp"/>
-
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/logcat_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Full Log"
-            android:drawableLeft="@drawable/ic_format_align_left_white_24dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:visibility="gone">
 
         <es.rafaco.compat.AppCompatButton
             android:id="@+id/reveal_details_button"

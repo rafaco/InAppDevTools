@@ -75,9 +75,9 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
     private ButtonGroupData getFirstButtonGroupData(final Session session) {
         List<RunButton> buttons = new ArrayList<>();
         buttons.add(new RunButton(
-                "Steps",
-                R.drawable.ic_history_white_24dp,
-                R.color.rally_green,
+                "Repro Steps",
+                R.drawable.ic_format_list_numbered_white_24dp,
+                R.color.rally_green_alpha,
                 new Runnable() {
             @Override
             public void run() {

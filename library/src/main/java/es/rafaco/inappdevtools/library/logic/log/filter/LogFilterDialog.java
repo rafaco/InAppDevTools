@@ -118,7 +118,7 @@ public class LogFilterDialog {
 
         data.add(new CardData("Repro Steps",
                 "Important events from current session",
-                R.string.gmd_history,
+                R.string.gmd_format_list_numbered,
                 new Runnable() {
                     @Override
                     public void run() {

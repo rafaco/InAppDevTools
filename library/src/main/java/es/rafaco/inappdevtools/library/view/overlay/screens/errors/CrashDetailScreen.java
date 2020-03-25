@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.List;
 
 import es.rafaco.compat.AppCompatButton;
@@ -140,10 +139,10 @@ public class CrashDetailScreen extends Screen {
 
     private void updateView() {
         initOverview();
+        initButtons();
         initExceptionDetails();
         initStackTraces();
-
-        initFooter();
+        //initFooter();
     }
 
     private void initOverview() {
@@ -152,14 +151,7 @@ public class CrashDetailScreen extends Screen {
         foreground.setText("App status: " + (crash.isForeground() ? "Foreground" : "Background"));
         lastActivity.setText("Last activity: " + crash.getLastActivity());
         thread.setText("Crashed thread: " + crash.getThreadName());
-
-        reportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
-            }
-        });
-
+        
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -168,6 +160,40 @@ public class CrashDetailScreen extends Screen {
                 if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
                     new ImageLoaderAsyncTask(thumbnail).execute(screenshot.getPath());
                 }
+            }
+        });
+    }
+
+    private void initButtons() {
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
+            }
+        });
+
+        final long logId = IadtController.getDatabase().friendlyDao()
+                .findLogIdByCrashId(crash.getUid());
+
+        long crashSessionId = IadtController.getDatabase().sessionDao()
+                .findByCrashId(crash.getUid()).getUid();
+        final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+        stepsFilter.setSessionById(crashSessionId);
+        reproStepsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
+            }
+        });
+
+        final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
+        logsFilter.setSessionById(crashSessionId);
+        logcatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OverlayService.performNavigation(LogScreen.class,
+                        LogScreen.buildParams(logsFilter.getUiFilter(), logId));
             }
         });
     }
@@ -214,31 +240,6 @@ public class CrashDetailScreen extends Screen {
     private void initFooter() {
         DocumentData report = DocumentRepository.getDocument(DocumentType.CRASH, crash);
         out.setText(report.toString());
-
-        final long logId = IadtController.getDatabase().friendlyDao()
-                .findLogIdByCrashId(crash.getUid());
-
-        long crashSessionId = IadtController.getDatabase().sessionDao()
-                .findByCrashId(crash.getUid()).getUid();
-        final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-        stepsFilter.setSessionById(crashSessionId);
-        reproStepsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
-            }
-        });
-
-        final LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.ALL);
-        logsFilter.setSessionById(crashSessionId);
-        logcatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(logsFilter.getUiFilter(), logId));
-            }
-        });
         
         revealDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
