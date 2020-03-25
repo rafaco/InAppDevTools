@@ -27,6 +27,7 @@ public class ButtonGroupData {
     String title;
     List<RunButton> buttons;
     boolean wrapContent = false;
+    boolean borderless = false;
 
     public ButtonGroupData(RunButton button) {
         ArrayList<RunButton> buttons = new ArrayList<>();
@@ -65,5 +66,13 @@ public class ButtonGroupData {
 
     public void setWrapContent(boolean wrapContent) {
         this.wrapContent = wrapContent;
+    }
+
+    public boolean isBorderless() {
+        return borderless;
+    }
+
+    public void setBorderless(boolean borderless) {
+        this.borderless = borderless;
     }
 }

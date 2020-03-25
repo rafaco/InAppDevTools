@@ -75,8 +75,11 @@ public class ButtonGroupViewHolder extends FlexibleViewHolder {
                 if (data.isWrapContent()){
                     buttonData.setWrapContent(true);
                 }
+                int style = data.isBorderless() ?
+                        R.layout.flexible_item_button_group_item_borderless :
+                        R.layout.flexible_item_button_group_item;
                 FlexibleItemDescriptor desc = new FlexibleItemDescriptor(RunButton.class,
-                        RunButtonViewHolder.class, R.layout.flexible_item_button_group_item);
+                        RunButtonViewHolder.class, style);
                 desc.addToView(desc, buttonData, groupContainer);
             }
         }

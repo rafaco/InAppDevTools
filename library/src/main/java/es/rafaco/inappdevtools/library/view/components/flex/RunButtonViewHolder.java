@@ -64,6 +64,7 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
+            button.setCompoundDrawablePadding(UiUtils.dpToPx(button.getContext(), 5));
         }
         button.setText(data.getTitle());
         button.setOnClickListener(new View.OnClickListener() {
