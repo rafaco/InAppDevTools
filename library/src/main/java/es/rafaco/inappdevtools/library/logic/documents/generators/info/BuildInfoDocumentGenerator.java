@@ -211,14 +211,24 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VERSION))
                 .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
                 .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
-                .addButton(new RunButton("Inspect Dependencies",
+                .addButton(new RunButton("Plugins",
+                        R.drawable.ic_format_align_left_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.PLUGIN_LIST_FILE);
+                                String params = SourceDetailScreen.buildInternalParams(path);
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
+                            }
+                        }))
+                .addButton(new RunButton("Dependencies",
                         R.drawable.ic_format_align_left_white_24dp,
                         new Runnable() {
                             @Override
                             public void run() {
                                 String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.DEPENDENCIES_FILE);
                                 String params = SourceDetailScreen.buildInternalParams(path);
-                                OverlayService.performNavigation(SourceDetailScreen.class,params);
+                                OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }
                         }))
                 .build();

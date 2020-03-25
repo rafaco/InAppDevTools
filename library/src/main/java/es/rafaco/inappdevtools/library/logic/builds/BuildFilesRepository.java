@@ -82,6 +82,7 @@ public class BuildFilesRepository {
         copier.copyToInternal(IadtPath.GIT_CONFIG, destinationFolder);
         copier.copyToInternal(IadtPath.LOCAL_CHANGES, destinationFolder);
         copier.copyToInternal(IadtPath.LOCAL_COMMITS, destinationFolder);
+        copier.copyToInternal(IadtPath.PLUGIN_LIST, destinationFolder);
         copier.copyToInternal(IadtPath.DEPENDENCIES, destinationFolder);
 
         String jsonValues = AppBuildConfig.toJson(getContext());
