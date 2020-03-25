@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -198,7 +199,12 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
         if (session.isCurrent()){
             analysis = IadtController.get().getSessionManager().calculateCurrentSessionAnalysis();
         }else{
-            analysis = session.getAnalysis();
+            if (!TextUtils.isEmpty(session.getAnalysisJson())){
+                analysis = session.getAnalysis();
+            }else{
+                //TODO: It's always this case. Remove analysis from session?
+                analysis = IadtController.get().getSessionManager().calculateFinishedSessionAnalysis(session);
+            }
         }
 
         return analysis;
