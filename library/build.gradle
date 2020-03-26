@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion PROJECT_MIN_SDK
         targetSdkVersion PROJECT_TARGET_SDK
-        versionCode LIBRARY_VERSION_CODE
-        versionName LIBRARY_VERSION
+        versionCode PROJECT_VERSION_CODE
+        versionName PROJECT_VERSION
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -21,8 +21,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility TARGET_COMPATIBILITY
-        sourceCompatibility SOURCE_COMPATIBILITY
+        targetCompatibility PROJECT_TARGET_COMPATIBILITY
+        sourceCompatibility PROJECT_SOURCE_COMPATIBILITY
     }
 
     flavorDimensions "compatibility"
@@ -59,14 +59,14 @@ android {
     }
     else {
         if (variant.flavorName == 'androidx') {
-            dependencies.androidxApi "es.rafaco.compat:androidx:$LIBRARY_VERSION"
+            dependencies.androidxApi "es.rafaco.compat:androidx:$PROJECT_VERSION"
         } else {
-            dependencies.supportApi "es.rafaco.compat:support:$LIBRARY_VERSION"
+            dependencies.supportApi "es.rafaco.compat:support:$PROJECT_VERSION"
         }
     }
 }
-//androidxImplementation "es.rafaco.compat:androidx:$LIBRARY_VERSION"
-//supportImplementation "es.rafaco.compat:support:$LIBRARY_VERSION"
+//androidxImplementation "es.rafaco.compat:androidx:$PROJECT_VERSION"
+//supportImplementation "es.rafaco.compat:support:$PROJECT_VERSION"
 */
 
 dependencies {

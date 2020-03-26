@@ -13,7 +13,7 @@ buildscript {
         /*
          *  Iadt PLUGIN: import using legacy plugin application (support dynamic versioning).
          */
-        classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${LIBRARY_VERSION}"
+        classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
 
         // Internal Iadt plugins for build and publication
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'

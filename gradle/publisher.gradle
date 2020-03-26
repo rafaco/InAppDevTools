@@ -26,7 +26,7 @@ ext {
 }
 
 group = groupId
-version = LIBRARY_VERSION
+version = PROJECT_VERSION
 
 def publicationNames = []
 def pomConfig = {
@@ -112,7 +112,7 @@ publishing.publications {
         "$publicationName"(MavenPublication) {
             group groupId
             artifactId variantArtifactId
-            version LIBRARY_VERSION
+            version PROJECT_VERSION
 
             artifact variant.packageLibraryProvider.get()
             //Was deprecated: variant.outputs[0].packageLibrary
@@ -195,7 +195,7 @@ afterEvaluate {
             repo = bintrayRepo
             name = bintrayPkg  //Was project.name
             version {
-                name = LIBRARY_VERSION
+                name = PROJECT_VERSION
                 desc = projectDesc //TODO: versionDesc
                 gpg {
                     sign = true

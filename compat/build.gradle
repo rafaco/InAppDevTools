@@ -10,15 +10,15 @@ android {
     defaultConfig {
         minSdkVersion PROJECT_MIN_SDK
         targetSdkVersion PROJECT_TARGET_SDK
-        versionCode LIBRARY_VERSION_CODE
-        versionName LIBRARY_VERSION
+        versionCode PROJECT_VERSION_CODE
+        versionName PROJECT_VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        targetCompatibility TARGET_COMPATIBILITY
-        sourceCompatibility SOURCE_COMPATIBILITY
+        targetCompatibility PROJECT_TARGET_COMPATIBILITY
+        sourceCompatibility PROJECT_SOURCE_COMPATIBILITY
     }
 
     flavorDimensions "compatibility"
