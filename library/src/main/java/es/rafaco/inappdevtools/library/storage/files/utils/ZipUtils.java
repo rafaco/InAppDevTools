@@ -33,39 +33,28 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class ZipUtils {
 
     private static final int BUFFER = 80000;
 
-    /*public void test(){
-
-        String[] s = new String[2];
-
-        // Type the path of the files in here
-        s[0] = inputPath + "/image.jpg";
-        s[1] = inputPath + "/textfile.txt"; // /sdcard/ZipDemo/textfile.txt
-
-        // first parameter is d files second parameter is zip file name
-        ZipUtils zipManager = new ZipUtils();
-        zipManager.zip(s, inputPath + inputFile);
-        zipManager.unzip(inputPath + inputFile, outputPath);
-    }*/
-
     public void zip(List<String> fileList, String zipFileName) {
+        FileOutputStream dest = null;
         BufferedInputStream origin = null;
         ZipOutputStream out = null;
+        FileInputStream fi = null;
         try {
-            FileOutputStream dest = new FileOutputStream(zipFileName);
+            dest = new FileOutputStream(zipFileName);
             out = new ZipOutputStream(new BufferedOutputStream(dest));
-            byte data[] = new byte[BUFFER];
+            byte[] data = new byte[BUFFER];
 
             for (int i = 0; i < fileList.size(); i++) {
                 String filePath = fileList.get(i);
-                String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
                 Log.v("Compress", "Adding: " + fileName);
 
-                FileInputStream fi = new FileInputStream(filePath);
+                fi = new FileInputStream(filePath);
                 origin = new BufferedInputStream(fi, BUFFER);
 
                 ZipEntry entry = new ZipEntry(fileName);
@@ -80,28 +69,32 @@ public class ZipUtils {
             out.close();
         } catch (Exception e) {
             FriendlyLog.logException("Error zipping report", e);
-            IOUtil.closeQuietly(origin, out);
+        }
+        finally {
+            IOUtil.closeQuietly(origin, out, dest, fi);
         }
     }
 
     public void zip(Map<String, List<String>> filesMap, String zipFileName) {
         BufferedInputStream origin = null;
+        FileOutputStream dest = null;
         ZipOutputStream out = null;
+        FileInputStream fi = null;
         try {
-            FileOutputStream dest = new FileOutputStream(zipFileName);
+            dest = new FileOutputStream(zipFileName);
             out = new ZipOutputStream(new BufferedOutputStream(dest));
-            byte data[] = new byte[BUFFER];
+            byte[] data = new byte[BUFFER];
 
             for (Map.Entry<String,List<String>> folderGroup : filesMap.entrySet()){
                 String currentFolder = folderGroup.getKey();
                 List<String> currentFiles = folderGroup.getValue();
 
                 for (String localFilePath : currentFiles) {
-                    String fileName = localFilePath.substring(localFilePath.lastIndexOf("/") + 1);
-                    String zipFilePath = currentFolder + "/" + fileName;
+                    String fileName = localFilePath.substring(localFilePath.lastIndexOf('/') + 1);
+                    String zipFilePath = PathUtils.join(currentFolder, fileName);
                     FriendlyLog.logDebug("ReportSender: Adding " + zipFilePath);
 
-                    FileInputStream fi = new FileInputStream(localFilePath);
+                    fi = new FileInputStream(localFilePath);
                     origin = new BufferedInputStream(fi, BUFFER);
 
                     ZipEntry entry = new ZipEntry(zipFilePath);
@@ -118,7 +111,9 @@ public class ZipUtils {
         }
         catch (Exception e) {
             FriendlyLog.logException("Error zipping report", e);
-            IOUtil.closeQuietly(origin, out);
+        }
+        finally {
+            IOUtil.closeQuietly(origin, out, dest, fi);
         }
     }
 
@@ -148,6 +143,8 @@ public class ZipUtils {
             zin.close();
         } catch (Exception e) {
             FriendlyLog.logException("Error unzipping report", e);
+        }
+        finally{
             IOUtil.closeQuietly(fout, zin);
         }
     }

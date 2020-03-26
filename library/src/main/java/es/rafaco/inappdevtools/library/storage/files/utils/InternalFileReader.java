@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -27,29 +26,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class InternalFileReader {
 
-    private final Context context;
-
-    public InternalFileReader(Context context) {
-        this.context = context;
-    }
-
     public String getContent(String internalPath) {
-        StringBuilder builder = null;
-        FileInputStream fis;
+        StringBuilder builder = new StringBuilder();
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader bufferedReader = null;
         try {
-            File target = new File(FileCreator.getIadtFolder() + "/" + internalPath);
+            String path = PathUtils.join(FileCreator.getIadtFolder(), internalPath);
+            File target = new File(path);
             fis = new FileInputStream(target.getAbsolutePath());
-            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            builder = new StringBuilder();
+            isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+            bufferedReader = new BufferedReader(isr);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 builder.append(line + Humanizer.newLine());
@@ -60,17 +57,10 @@ public class InternalFileReader {
                     + internalPath + "'" + Log.getStackTraceString(e));
             return null;
         }
-
-        String result = (builder != null) ? builder.toString() : null;
-        try {
-            fis.close();
+        finally {
+            IOUtil.closeQuietly(fis, isr, bufferedReader);
         }
-        catch(Exception e){
-            Log.e(Iadt.TAG, "Unable to close stream from internal '"
-                    + internalPath + "'" + Log.getStackTraceString(e));
-        }
-
-        return result;
+        return builder.toString();
     }
 
     public List<String> getFilesAtFolder(String folderPath) {

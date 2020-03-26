@@ -556,7 +556,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     private void onProfilesButton() {
-        LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
+        LogUiFilter clonedUiFilter = new LogUiFilter(getFilter().getUiFilter());
         final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
         filterDialog = new LogFilterDialog(getContext(), tempFilter, new Runnable() {
             @Override
@@ -568,7 +568,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     }
 
     private void onTuneButton() {
-        LogUiFilter clonedUiFilter = getFilter().getUiFilter().clone();
+        LogUiFilter clonedUiFilter = new LogUiFilter(getFilter().getUiFilter());
         final LogFilterHelper tempFilter = new LogFilterHelper(clonedUiFilter);
         filterDialog = new LogFilterDialog(getContext(), tempFilter, new Runnable() {
             @Override

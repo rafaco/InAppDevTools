@@ -84,9 +84,6 @@ public final class IadtController {
     }
 
     public static IadtController get() {
-        if (INSTANCE == null) {
-            return null;
-        }
         return INSTANCE;
     }
 

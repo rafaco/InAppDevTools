@@ -21,8 +21,10 @@ package es.rafaco.inappdevtools.library.view.utils;
 
 public class PathUtils {
 
+    public static final String separator = "/";
+
     public static String removeLastSlash(String path) {
-        if (path.lastIndexOf("/") == path.length()-1)
+        if (path.lastIndexOf('/') == path.length()-1)
             return removeLastChar(path);
         return path;
     }
@@ -33,7 +35,7 @@ public class PathUtils {
 
     public static String getFileNameWithExtension(String path){
         String[] parts = path.split("[/]");
-        boolean isFile = !path.endsWith("/");
+        boolean isFile = !path.endsWith(separator);
         return isFile ? (parts[parts.length-1]) : "";
     }
 
@@ -56,5 +58,9 @@ public class PathUtils {
         String[] parts = removeLastSlash(path).split("[/]");
         if (parts.length<1) return "";
         return parts[parts.length-1];
+    }
+
+    public static String join(String...strings) {
+        return Humanizer.join(separator, strings);
     }
 }

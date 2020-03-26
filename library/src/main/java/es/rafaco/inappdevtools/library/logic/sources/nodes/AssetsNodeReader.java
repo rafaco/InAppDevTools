@@ -91,7 +91,7 @@ public class AssetsNodeReader extends AbstractNodeReader{
 
     @Override
     protected AbstractNode createParentNode(String parentName) {
-        String shortName = parentName.substring(parentName.lastIndexOf("/"),
+        String shortName = parentName.substring(parentName.lastIndexOf('/'),
                 parentName.length()-1);
         return addEntry(shortName, parentName, true);
     }

@@ -128,7 +128,7 @@ public class ReportSender {
     private void addBuildFiles(Map<String, List<String>> reportMap, Session session) {
         List<String> buildFiles = new ArrayList<>();
         String buildSubfolder = BuildFilesRepository.getSubfolderForBuild(session.getUid());
-        InternalFileReader reader = new InternalFileReader(context);
+        InternalFileReader reader = new InternalFileReader();
         File buildFolder = FileCreator.getSubfolder(buildSubfolder);
         buildFiles.addAll(reader.getFilesAtFolder(buildFolder.getAbsolutePath()));
         reportMap.put("build", buildFiles);

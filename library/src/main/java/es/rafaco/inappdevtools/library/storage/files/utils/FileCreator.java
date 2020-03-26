@@ -29,6 +29,7 @@ import android.support.annotation.NonNull;
 //#endif
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -36,66 +37,71 @@ import java.io.OutputStreamWriter;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class FileCreator {
 
+    private FileCreator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     @NonNull
-    public static String withContent(final String subfolder, final String filename, final String content) {
+    public static String withContent(final String subfolder, final String filename, final String content){
 
         File file = prepare(subfolder, filename);
         if (file == null){
-            return null;
+            return "";
         }
         FileOutputStream fOut = null;
+        OutputStreamWriter myOutWriter = null;
         try {
             fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(content);
 
             myOutWriter.close();
             fOut.flush();
             fOut.close();
 
-            if (IadtController.get().isDebug()){
+            if (IadtController.get().isDebug()) {
                 Log.v(Iadt.TAG, "Document stored: " + subfolder + "/" + filename);
             }
-            //TODO: is this needed? perform conditionally if so
-            //MediaScannerUtils.scan(file);
             return file.getPath();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             FriendlyLog.logException("Error creating file", e);
-            IOUtil.closeQuietly(fOut);
+        } finally {
+            IOUtil.closeQuietly(fOut, myOutWriter);
         }
-
-        return null;
+        return "";
     }
 
     public static File prepare(String subfolder, String filename) {
         File file = new File(getSubfolder(subfolder), filename);
         //TODO: check if file exists and skip recreation
         try {
-            file.createNewFile();
-            return file;
-        } catch (IOException e) {
+            boolean created = file.createNewFile();
+            if (created){
+                return file;
+            }
+        }
+        catch (IOException e) {
             FriendlyLog.logException("Error preparing file " + subfolder + ":" + filename, e);
             FriendlyLog.logException("Exception", e);
-            return null;
         }
+        return null;
     }
 
     public static File getSubfolder(String category){
-        File categoryFolder = createDirIfNotExist(getIadtFolder() + "/" + category);
-        return categoryFolder;
+        return createDirIfNotExist(PathUtils.join(getIadtFolder(), category));
     }
 
     public static String getIadtFolder(){
         Context context = IadtController.get().getContext();
-        return context.getFilesDir() + "/" + FileProviderUtils.ROOT_FOLDER;
+        return PathUtils.join(context.getFilesDir().toString(), FileProviderUtils.ROOT_FOLDER);
     }
 
     public static boolean exists(String subfolder, String filename){
-        String filePath = getIadtFolder() + "/" + subfolder + "/" + filename;
+        String filePath = PathUtils.join(getIadtFolder(), subfolder, filename);
         File file = new File(filePath);
         return file.exists();
     }
@@ -109,6 +115,6 @@ public class FileCreator {
     }
 
     public static String getPath(String subfolder, String filename) {
-        return getIadtFolder() + "/" + subfolder + "/" + filename;
+        return PathUtils.join(getIadtFolder(), subfolder, filename);
     }
 }

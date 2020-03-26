@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.zip.ZipFile;
 
 import es.rafaco.inappdevtools.library.Iadt;
@@ -77,12 +78,13 @@ public class AssetFileReader {
 
     private void createLocalFileFromAsset(String target, File f) {
         FileOutputStream fos = null;
+        InputStream is = null;
         try {
             f.getParentFile().mkdirs();
             if (target.startsWith("/assets/")){
                 target = target.substring("/assets/".length());
             }
-            InputStream is = context.getAssets().open(target);
+            is = context.getAssets().open(target);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -94,38 +96,33 @@ public class AssetFileReader {
             FriendlyLog.logException("SourceReader exception", e);
         }
         finally {
-            if (fos!=null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    FriendlyLog.logException("Exception", e);
-                }
-            }
+            IOUtil.closeQuietly(fos, is);
         }
     }
 
     public String getFileContents(String pathInAssetsDir) {
         StringBuilder builder = null;
+        InputStream stream = null;
+        BufferedReader in = null;
 
         try {
-            InputStream stream = context.getAssets().open(pathInAssetsDir);
-            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            stream = context.getAssets().open(pathInAssetsDir);
+            in = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
             builder = new StringBuilder();
             String str;
-
             while ((str = in.readLine()) != null) {
                 builder.append(str + Humanizer.newLine());
             }
-
-            in.close();
-            stream.close();
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(Iadt.TAG, "Unable to read config at '" + pathInAssetsDir + "'" + Log.getStackTraceString(e));
             return null;
         }
+        finally {
+            IOUtil.closeQuietly(stream, in);
+        }
 
-        return (builder != null) ? builder.toString() : null;
+        return builder.toString();
     }
 
     public boolean exists(String pathInAssetsDir){
@@ -140,11 +137,7 @@ public class AssetFileReader {
             //Intentionally empty
         }
         finally {
-            try {
-                if(null != inputStream) inputStream.close();
-            } catch (IOException e) {
-                //Intentionally empty
-            }
+            IOUtil.closeQuietly(inputStream);
         }
         return false;
     }

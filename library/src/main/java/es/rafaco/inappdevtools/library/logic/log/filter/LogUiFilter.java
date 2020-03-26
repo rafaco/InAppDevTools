@@ -30,8 +30,22 @@ public class LogUiFilter {
     private int tagInt;
     private String tagName;
 
-    //Only affect ui
-    private boolean wrapLines;
+    private boolean wrapLines; //Only affect ui
+
+    public LogUiFilter() {
+    }
+
+    public LogUiFilter(LogUiFilter filter) {
+        this.setSessionInt(filter.getSessionInt());
+        this.setSeverityInt(filter.getSeverityInt());
+        this.setTypeInt(filter.getTypeInt());
+        this.setCategoryInt(filter.getCategoryInt());
+        this.setCategoryName(filter.getCategoryName());
+        this.setTagInt(filter.getTagInt());
+        this.setTagName(filter.getTagName());
+        this.setText(filter.getText());
+        this.setWrapLines(filter.isWrapLines());
+    }
 
     public String getText() {
         return text;
@@ -124,19 +138,5 @@ public class LogUiFilter {
         if (isWrapLines() != that.isWrapLines())
             return false;
         return getTagName() != null ? getTagName().equals(that.getTagName()) : that.getTagName() == null;
-    }
-
-    public LogUiFilter clone() {
-        LogUiFilter filter = new LogUiFilter();
-        filter.setSessionInt(this.getSessionInt());
-        filter.setSeverityInt(this.getSeverityInt());
-        filter.setTypeInt(this.getTypeInt());
-        filter.setCategoryInt(this.getCategoryInt());
-        filter.setCategoryName(this.getCategoryName());
-        filter.setTagInt(this.getTagInt());
-        filter.setTagName(this.getTagName());
-        filter.setText(this.getText());
-        filter.setWrapLines(this.isWrapLines());
-        return filter;
     }
 }

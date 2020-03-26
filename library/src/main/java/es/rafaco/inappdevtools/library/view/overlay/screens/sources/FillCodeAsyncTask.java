@@ -63,7 +63,7 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
 
         if (params.origin.equals(SourceDetailScreen.OriginEnum.INTERNAL)) {
             Context context = IadtController.get().getContext();
-            InternalFileReader internalFileReader = new InternalFileReader(context);
+            InternalFileReader internalFileReader = new InternalFileReader();
             return internalFileReader.getContent(finalPath);
         }
 

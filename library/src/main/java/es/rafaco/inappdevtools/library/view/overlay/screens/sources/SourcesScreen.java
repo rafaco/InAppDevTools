@@ -377,7 +377,7 @@ public class SourcesScreen extends Screen {
             return "";
         }
         String currentName = PathUtils.removeLastSlash(getParams().getName());
-        return currentName.substring(0, currentName.lastIndexOf("/")+1);
+        return currentName.substring(0, currentName.lastIndexOf('/')+1);
     }
 
     private String getLinkName(SourceEntry entry) {

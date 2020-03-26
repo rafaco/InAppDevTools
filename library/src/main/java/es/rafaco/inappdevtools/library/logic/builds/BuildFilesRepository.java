@@ -37,7 +37,7 @@ public class BuildFilesRepository {
         long buildId = getBuildIdForSession(sessionId);
         String buildFolder = getSubfolderForBuild(buildId);
         String buildFile = buildFolder + "/" + IadtPath.BUILD_INFO_FILE;
-        String content = new InternalFileReader(getContext()).getContent(buildFile);
+        String content = new InternalFileReader().getContent(buildFile);
         return new JsonHelper(content);
     }
 
@@ -45,7 +45,7 @@ public class BuildFilesRepository {
         long buildId = getBuildIdForSession(sessionId);
         String buildFolder = getSubfolderForBuild(buildId);
         String buildFile = buildFolder + "/" + IadtPath.BUILD_CONFIG_FILE;
-        String content = new InternalFileReader(getContext()).getContent(buildFile);
+        String content = new InternalFileReader().getContent(buildFile);
         return new JsonHelper(content);
     }
 
@@ -53,7 +53,7 @@ public class BuildFilesRepository {
         long buildId = getBuildIdForSession(sessionId);
         String buildFolder = getSubfolderForBuild(buildId);
         String buildFile = buildFolder + "/" + IadtPath.GIT_CONFIG_FILE;
-        String content = new InternalFileReader(getContext()).getContent(buildFile);
+        String content = new InternalFileReader().getContent(buildFile);
         return new JsonHelper(content);
     }
 
@@ -61,7 +61,7 @@ public class BuildFilesRepository {
         long buildId = getBuildIdForSession(sessionId);
         String buildFolder = getSubfolderForBuild(buildId);
         String buildFile = buildFolder + "/" + IadtPath.APP_BUILD_CONFIG_FILE;
-        String content = new InternalFileReader(getContext()).getContent(buildFile);
+        String content = new InternalFileReader().getContent(buildFile);
         return new JsonHelper(content);
     }
 

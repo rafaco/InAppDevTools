@@ -22,6 +22,8 @@ package es.rafaco.inappdevtools.library.view.utils;
 import android.text.TextUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -304,6 +306,19 @@ public class Humanizer {
             return defaultValue;
         }
         return text;
+    }
+
+    public static String join(String separator, String...strings) {
+        ArrayList<String> list = new ArrayList<String>();
+        Collections.addAll(list, strings);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            String s = list.get(i);
+            sb.append(s);
+            if (i + 1 < list.size())
+                sb.append(separator);
+        }
+        return sb.toString();
     }
 }
 

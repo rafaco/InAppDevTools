@@ -61,10 +61,11 @@ import es.rafaco.inappdevtools.library.view.utils.ToolbarSearchHelper;
 
 public class SourceDetailScreen extends Screen implements CodeView.OnHighlightListener {
 
+    public static final String SET_FIND_IS_UP = "setFindIsUp";
+
     enum OriginEnum { SOURCE, TRACE, INTERNAL}
 
     CodeView codeViewer;
-    private ToolbarSearchHelper toolbarSearch;
     boolean[] tuneSelection;
     private boolean isSourceUnavailable;
     RelativeLayout traceContainer;
@@ -98,6 +99,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     protected void onCreate() {
+        //Nothing to do
     }
 
     @Override
@@ -143,8 +145,10 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         switch (getParams().origin){
             case SOURCE:
                 getScreenManager().setTitle("Source Detail");
+                break;
             case TRACE:
                 getScreenManager().setTitle("Stacktrace");
+                break;
             case INTERNAL:
                 getScreenManager().setTitle("Internal");
                 break;
@@ -277,10 +281,12 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     public void onStartCodeHighlight() {
+        //Empty initially
     }
 
     @Override
     public void onFinishCodeHighlight() {
+        //Empty initially
     }
 
     @Override
@@ -306,7 +312,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        ToolbarSearchHelper toolbarSearch;
         toolbarSearch = new ToolbarSearchHelper(getToolbar(), R.id.action_search);
         toolbarSearch.setHint("Search content...");
         toolbarSearch.setSubmitButtonEnabled(true);
@@ -323,18 +329,18 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                 if (!query.isEmpty()) {
                     codeViewer.findAllAsync(query);
                     try {
-                        Method m = WebView.class.getMethod("setFindIsUp", Boolean.TYPE);
+                        Method m = WebView.class.getMethod(SET_FIND_IS_UP, Boolean.TYPE);
                         m.invoke(codeViewer, true);
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                         //TODO: Check if needed with support libs
                         // FriendlyLog.logException("onQueryTextChange with: " + query, ignored);
                     }
                 } else {
                     codeViewer.findAllAsync(null);
                     try {
-                        Method m = WebView.class.getMethod("setFindIsUp", Boolean.TYPE);
+                        Method m = WebView.class.getMethod(SET_FIND_IS_UP, Boolean.TYPE);
                         m.invoke(codeViewer, false);
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                         //TODO: Check if needed with support libs
                         // FriendlyLog.logException("onQueryTextChange with: " + query, ignored);
                     }
@@ -347,9 +353,9 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
             public boolean onClose() {
                 codeViewer.findAllAsync(null);
                 try {
-                    Method m = WebView.class.getMethod("setFindIsUp", Boolean.TYPE);
+                    Method m = WebView.class.getMethod(SET_FIND_IS_UP, Boolean.TYPE);
                     m.invoke(codeViewer, false);
-                } catch (Throwable ignored) {
+                } catch (Exception ignored) {
                     //TODO: Check if needed with support libs
                     // FriendlyLog.logException("onClose", ignored);
                 }
@@ -402,6 +408,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
             case SOURCE:
             case TRACE:
                 tuneSelection = new boolean[]{ true, true };
+                break;
             case INTERNAL:
                 tuneSelection = new boolean[]{ false, false };
                 break;
@@ -425,7 +432,6 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         }
         else if (localFile==null) {
             Iadt.showMessage("Unable to get file path");
-            return;
         }
         else{
             String title = "Source: " + getParams().path;

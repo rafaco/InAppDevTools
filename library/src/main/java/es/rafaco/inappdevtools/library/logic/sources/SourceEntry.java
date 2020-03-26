@@ -56,7 +56,7 @@ public class SourceEntry {
     }
 
     public String getFileName() {
-        int lastFound = name.lastIndexOf("/");
+        int lastFound = name.lastIndexOf('/');
         return name.substring(lastFound + 1);
     }
 
