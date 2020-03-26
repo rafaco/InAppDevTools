@@ -51,8 +51,17 @@ subprojects {
 }
 
 
+//TODO: Re-enable JavaDoc generation after common-logging removed.
+subprojects {
+    tasks.withType(Javadoc).all { enabled = false }
+}
+
+
+
+//Doze Utils
 apply from: './gradle/doze_utils.gradle'
 
+//SonarCloud Report (running task sonarqube)
 sonarqube {
     androidVariant 'supportDebug'
     properties {
@@ -60,16 +69,26 @@ sonarqube {
         property "sonar.login", System.getenv('SONAR_TOKEN')
     }
 }
+task prepareLocalNodeForSonar(){
+    doLast{
+        Properties localProperties = new Properties()
+        def targetPropertyName = 'sonar.nodejs.executable'
+        def localPropertiesFile = project.rootProject.file('local.properties')
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.newDataInputStream())
+            def localValue = localProperties.getProperty(targetPropertyName, null)
+            if (localValue != null){
+                System.setProperty(targetPropertyName, localValue)
+            }
+        }
+    }
+}
+project.tasks["sonarqube"].dependsOn "prepareLocalNodeForSonar"
 
-//Enable Gradle report using param --scan
+//Gradle Scanner Report (enable with param --scan)
 if (hasProperty('buildScan')) {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
         termsOfServiceAgree = 'yes'
     }
-}
-
-//TODO: Re-enable JavaDoc generation after common-logging removed.
-subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
 }
