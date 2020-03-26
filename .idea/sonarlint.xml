@@ -3,6 +3,7 @@
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
     <option name="projectKey" value="rafaco_InAppDevTools" />
-    <option name="serverId" value="SonarCloud Rafaco" />
+    <option name="serverId" value="Sonarcloud" />
+    <option name="verboseEnabled" value="true" />
   </component>
 </project>
