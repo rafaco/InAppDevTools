@@ -103,13 +103,13 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
             if (!data.isExpanded()){
                 iconLabel.setText(data.getCount() + " more ");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    icon.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_down_white_24dp));
+                    UiUtils.setBackground(icon, ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_down_white_24dp));
                 }
             }
             else {
                 iconLabel.setText("Hide " + data.getCount() + " ");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    icon.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_up_white_24dp));
+                    UiUtils.setBackground(icon, ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_up_white_24dp));
                 }
             }
         }

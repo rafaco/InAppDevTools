@@ -48,6 +48,7 @@
  *     - Comments clean up and translation to English
  *     - Using VERSION.SDK_INT from OS_INFO instead of build
  *     - Added scrollToLine feature
+ *     - Added findAllAsync compatible with api 15
  */
 
 package br.tiagohm;
@@ -57,7 +58,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -66,6 +67,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -230,7 +232,7 @@ public class CodeView extends WebView {
     public CodeView setCode(String code) {
         if (code == null) code = "";
         this.code = code;
-        this.escapeCode = Html.escapeHtml(code);
+        this.escapeCode = TextUtils.htmlEncode(code);
         return this;
     }
 
@@ -508,4 +510,24 @@ public class CodeView extends WebView {
     }
 
     //endregion
+
+    @Override
+    public void findAllAsync(String find) {
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            super.findAllAsync(find);
+        } else {
+            findAll(find);
+            try{
+                //Can't use getMethod() as it's a private method
+                for(Method m : WebView.class.getDeclaredMethods()){
+                    if(m.getName().equals("setFindIsUp")){
+                        m.setAccessible(true);
+                        m.invoke(this, true);
+                        break;
+                    }
+                }
+            }catch(Exception ignored){}
+        }
+        throw new RuntimeException("Stub!");
+    }
 }

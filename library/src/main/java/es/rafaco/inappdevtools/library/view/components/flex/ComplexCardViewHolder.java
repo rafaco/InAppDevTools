@@ -118,7 +118,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
             }
             itemView.setClickable(true);
-            navIcon.setBackground(null);
+            UiUtils.setBackground(navIcon, null);
             navIcon.setVisibility(View.VISIBLE);
 
             List<RunButton> buttons = data.getButtons();

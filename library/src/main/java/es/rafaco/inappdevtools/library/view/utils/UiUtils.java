@@ -67,6 +67,13 @@ public class UiUtils {
         return applicationInfo.icon;
     }
 
+    public static void setBackground(View view, Drawable background) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackgroundDrawable(background);
+        } else {
+            view.setBackground(background);
+        }
+    }
     public static void setStrokeToDrawable(Context context, int i, int color, Drawable background) {
         GradientDrawable drawable = (GradientDrawable)background;
         drawable.setStroke((int)getPixelsFromDp(context, (float)i), ContextCompat.getColor(context, color));

@@ -140,7 +140,7 @@ public class ConsoleScreen extends Screen {
     }
 
     private void setupButton(ImageButton button, int iconId, View.OnClickListener listener) {
-        button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rounded_corner));
+        UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.rounded_corner));
         UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
         //int contextualizedColor = ContextCompat.getColor(getContext(), R.color.rally_bg_solid);
         //button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);

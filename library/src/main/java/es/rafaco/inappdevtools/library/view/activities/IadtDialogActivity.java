@@ -74,7 +74,7 @@ public class IadtDialogActivity extends AppCompatActivity {
             Intent intent = new Intent(context, IadtDialogActivity.class);
             intent.putExtra(EXTRA_INTENT_ACTION, action);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent, null);
+            context.startActivity(intent);
         }else{
             if (onSuccess !=null)
                 onSuccess.run();

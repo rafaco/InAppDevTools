@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Debug;
 import android.os.Process;
 
@@ -173,9 +174,12 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
         //output += "--> ActivityManager.memoryInfo: Total device memory" + "\n";
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         manager.getMemoryInfo(memoryInfo);
+        long totalMemory1 = -1;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+            totalMemory1 = memoryInfo.totalMem;
         output += String.format("  Device: %s / %s total (%s threshold)%s",
                 Humanizer.parseByte(memoryInfo.availMem),
-                Humanizer.parseByte(memoryInfo.totalMem),
+                Humanizer.parseByte(totalMemory1),
                 Humanizer.parseByte(memoryInfo.threshold),
                 memoryInfo.lowMemory? " LOW!" : ""
         ) + "\n";
@@ -183,11 +187,11 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
         //output += "--> Runtime data: dalvik process" + "\n";
         Runtime runtime = Runtime.getRuntime();
         int processors = runtime.availableProcessors();
-        String totalMemory = Humanizer.humanReadableByteCount(runtime.totalMemory(), true);
+        String totalMemory2 = Humanizer.humanReadableByteCount(runtime.totalMemory(), true);
         String freeMemory = Humanizer.humanReadableByteCount(runtime.freeMemory(), true);
         output += String.format("  Runtime: %s / %s (%s processors) ",
                 freeMemory,
-                totalMemory,
+                totalMemory2,
                 processors) + "\n";
 
         //output += "--> Debug data: system wide" + "\n";

@@ -26,6 +26,7 @@
  *     - Added previous attribution notice and this changelog
  *     - Imports resources from es.rafaco.inappdevtools.library.R
  *     - Conditional imports for AndroidX builds
+ *     - Using UiUtils.setBackground()
  */
 
 package com.valdesekamdem.library.mdtoast;
@@ -53,6 +54,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 /**
  * Material Design Toast class
@@ -107,25 +109,25 @@ public class MDToast extends Toast {
             case TYPE_SUCCESS:
                 icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check_circle_white_24dp));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    view.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_toast_success_background));
+                    UiUtils.setBackground(view, ContextCompat.getDrawable(context, R.drawable.custom_toast_success_background));
                 } else view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorSuccess));
                 break;
             case TYPE_WARNING:
                 icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_warning_white_24dp));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    view.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_toast_warn_background));
+                    UiUtils.setBackground(view, ContextCompat.getDrawable(context, R.drawable.custom_toast_warn_background));
                 } else view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWarning));
                 break;
             case TYPE_ERROR:
                 icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_white_24dp));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    view.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_toast_error_background));
+                    UiUtils.setBackground(view, ContextCompat.getDrawable(context, R.drawable.custom_toast_error_background));
                 } else view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorError));
                 break;
             default:
                 icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_info_white_24dp));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    view.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_toast_info_background));
+                    UiUtils.setBackground(view, ContextCompat.getDrawable(context, R.drawable.custom_toast_info_background));
                 } else view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorInfo));
                 break;
         }
