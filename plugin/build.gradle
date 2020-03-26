@@ -18,7 +18,7 @@ apply from: '../gradle/constants.gradle'
 
 //PLUGIN DEFINITION
 group PROJECT_ARTIFACT_GROUP
-version LIBRARY_VERSION
+version PROJECT_VERSION
 
 gradlePlugin {
     plugins {
@@ -46,10 +46,10 @@ jar {
 
                 'Name': PLUGIN_NAME,
                 'Specification-Title' : PLUGIN_DISPLAY_NAME,
-                'Specification-Version' : LIBRARY_VERSION,
+                'Specification-Version' : PROJECT_VERSION,
                 'Specification-Vendor' : AUTHOR_NAME,
                 'Implementation-Title' : PROJECT_NAME,
-                'Implementation-Version' : LIBRARY_VERSION,
+                'Implementation-Version' : PROJECT_VERSION,
                 'Implementation-Vendor' : ORG_NAME,
                 'Implementation-URL' : PROJECT_URL,
         )
