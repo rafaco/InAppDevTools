@@ -13,7 +13,8 @@ jobs:
     <<: *defaults
     steps:
     - checkout
-
+    - setup_remote_docker:
+        docker_layer_caching: true
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
 
@@ -54,7 +55,8 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-
+      - setup_remote_docker:
+          docker_layer_caching: true
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
 
@@ -84,7 +86,8 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-
+      - setup_remote_docker:
+          docker_layer_caching: true
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
       - run:
