@@ -7,14 +7,15 @@ plugins {
     //id 'pandora-plugin' version '1.0.1' apply false
 }
 
+apply from: '../gradle/constants.gradle'
+
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.github.whataa:pandora-plugin:1.0.1'
-    testImplementation 'junit:junit:4.12'
+    implementation "com.github.whataa:pandora-plugin:$PANDORA_PLUGIN_VERSION"
+    testImplementation "junit:junit:$JUNIT_VERSION"
 }
 
-apply from: '../gradle/constants.gradle'
 
 //PLUGIN DEFINITION
 group PROJECT_ARTIFACT_GROUP

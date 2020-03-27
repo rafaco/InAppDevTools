@@ -73,31 +73,31 @@ dependencies {
 
     api project(path: ':compat')
     // AndroidX/Support view components, inherited from compat module:
-    //    androidxApi "androidx.appcompat:appcompat:$libraryAndroidxVersion"
+    //    androidxApi "androidx.appcompat:appcompat:$ANDROIDX_MAIN_VERSION"
     //    supportApi "com.android.support:appcompat-v7:$appSupportVersion"
-    //    androidxApi "com.google.android.material:material:$libraryAndroidxMaterialVersion"
+    //    androidxApi "com.google.android.material:material:$ANDROIDX_MATERIAL_VERSION"
     //    supportApi "com.android.support:design:$appSupportVersion"
     //    supportApi "com.android.support:support-v4:$appSupportVersion"
-    //    androidxApi "androidx.recyclerview:recyclerview:$libraryAndroidxVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$ANDROIDX_MAIN_VERSION"
     //    supportApi "com.android.support:recyclerview-v7:$appSupportVersion"
 
     // AndroidX logic components
-    androidxApi "androidx.annotation:annotation:$libraryAndroidxVersion"
-    androidxApi "androidx.room:room-runtime:$libraryAndroidx2Version"
-    androidxAnnotationProcessor "androidx.room:room-compiler:$libraryAndroidx2Version"
-    androidxApi "androidx.lifecycle:lifecycle-runtime:$libraryAndroidx2Version"
-    androidxApi "androidx.lifecycle:lifecycle-extensions:$libraryAndroidx2Version"
-    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$libraryAndroidx2Version"
-    androidxApi "androidx.paging:paging-runtime:$libraryAndroidx2Version"
+    androidxApi "androidx.annotation:annotation:$ANDROIDX_MAIN_VERSION"
+    androidxApi "androidx.room:room-runtime:$ANDROIDX_OTHER_VERSION"
+    androidxAnnotationProcessor "androidx.room:room-compiler:$ANDROIDX_OTHER_VERSION"
+    androidxApi "androidx.lifecycle:lifecycle-runtime:$ANDROIDX_OTHER_VERSION"
+    androidxApi "androidx.lifecycle:lifecycle-extensions:$ANDROIDX_OTHER_VERSION"
+    androidxAnnotationProcessor "androidx.lifecycle:lifecycle-compiler:$ANDROIDX_OTHER_VERSION"
+    androidxApi "androidx.paging:paging-runtime:$ANDROIDX_OTHER_VERSION"
 
     // Support logic components
-    supportApi "com.android.support:support-annotations:$librarySupportVersion"
-    supportApi "android.arch.persistence.room:runtime:$librarySupportArchVersion"
-    supportAnnotationProcessor "android.arch.persistence.room:compiler:$librarySupportArchVersion"
-    supportApi "android.arch.lifecycle:extensions:$librarySupportArchVersion"
-    supportApi "android.arch.lifecycle:runtime:$librarySupportArchVersion"
-    supportAnnotationProcessor "android.arch.lifecycle:compiler:$librarySupportArchVersion"
-    supportApi "android.arch.paging:runtime:$librarySupportPagingVersion"
+    supportApi "com.android.support:support-annotations:$SUPPORT_MAIN_VERSION"
+    supportApi "android.arch.persistence.room:runtime:$SUPPORT_ARCH_VERSION"
+    supportAnnotationProcessor "android.arch.persistence.room:compiler:$SUPPORT_ARCH_VERSION"
+    supportApi "android.arch.lifecycle:extensions:$SUPPORT_ARCH_VERSION"
+    supportApi "android.arch.lifecycle:runtime:$SUPPORT_ARCH_VERSION"
+    supportAnnotationProcessor "android.arch.lifecycle:compiler:$SUPPORT_ARCH_VERSION"
+    supportApi "android.arch.paging:runtime:$SUPPORT_PAGING_VERSION"
 
     // Pandora
     androidxApi ("com.github.whataa:pandora:androidx_v$PANDORA_VERSION") {
@@ -119,16 +119,14 @@ dependencies {
     //api 'com.opencsv:opencsv:4.2' // Using org.apache.commons
 
     //Test
-    testImplementation 'junit:junit:4.12'
-
-    // AndroidX/Support test components (TODO)
-    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
-    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testSupportImplementation "android.arch.persistence.room:testing:$librarySupportArchVersion"
-    testSupportImplementation "android.arch.core:core-testing:$librarySupportArchVersion"
-    testSupportImplementation "android.arch.paging:common:$librarySupportPagingVersion"
+    testImplementation "junit:junit:$JUNIT_VERSION"
+    androidTestAndroidxImplementation "androidx.test:runner:$ANDROIDX_TEST_RUNNER"
+    androidTestAndroidxImplementation "androidx.test.espresso:espresso-core:$ANDROIDX_TEST_ESPRESSO"
+    androidTestImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
+    testSupportImplementation "android.arch.persistence.room:testing:$SUPPORT_ARCH_VERSION"
+    testSupportImplementation "android.arch.core:core-testing:$SUPPORT_ARCH_VERSION"
+    testSupportImplementation "android.arch.paging:common:$SUPPORT_PAGING_VERSION"
 }
 
 /*

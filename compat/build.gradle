@@ -49,27 +49,25 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // AndroidX flavor
-    androidxApi "com.google.android.material:material:$libraryAndroidxMaterialVersion"
-    androidxApi "androidx.appcompat:appcompat:$libraryAndroidxVersion"
-    androidxApi "androidx.recyclerview:recyclerview:$libraryAndroidxVersion"
-    androidxApi "androidx.cardview:cardview:$libraryAndroidxVersion"
-    androidxApi "androidx.media:media:$libraryAndroidxVersion"
+    androidxApi "com.google.android.material:material:$ANDROIDX_MATERIAL_VERSION"
+    androidxApi "androidx.appcompat:appcompat:$ANDROIDX_MAIN_VERSION"
+    androidxApi "androidx.recyclerview:recyclerview:$ANDROIDX_MAIN_VERSION"
+    androidxApi "androidx.cardview:cardview:$ANDROIDX_MAIN_VERSION"
+    androidxApi "androidx.media:media:$ANDROIDX_MAIN_VERSION"
 
     // Support flavor
-    supportApi "com.android.support:appcompat-v7:$librarySupportVersion"
-    supportApi "com.android.support:design:$librarySupportVersion"
-    supportApi "com.android.support:support-v4:$librarySupportVersion"
-    supportApi "com.android.support:recyclerview-v7:$librarySupportVersion"
-    supportApi "com.android.support:cardview-v7:$librarySupportVersion"
+    supportApi "com.android.support:appcompat-v7:$SUPPORT_MAIN_VERSION"
+    supportApi "com.android.support:design:$SUPPORT_MAIN_VERSION"
+    supportApi "com.android.support:support-v4:$SUPPORT_MAIN_VERSION"
+    supportApi "com.android.support:recyclerview-v7:$SUPPORT_MAIN_VERSION"
+    supportApi "com.android.support:cardview-v7:$SUPPORT_MAIN_VERSION"
 
     //Test
-    testImplementation 'junit:junit:4.12'
-
-    // AndroidX/Support test components (TODO)
-    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
-    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:$JUNIT_VERSION"
+    androidTestAndroidxImplementation "androidx.test:runner:$ANDROIDX_TEST_RUNNER"
+    androidTestAndroidxImplementation "androidx.test.espresso:espresso-core:$ANDROIDX_TEST_ESPRESSO"
+    androidTestImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
 }
 
 sonarqube {

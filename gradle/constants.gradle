@@ -1,4 +1,15 @@
 ext{
+    /*
+     METADATA FOR PUBLICATIONS
+     */
+    PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
+    PROJECT_NAME = 'InAppDevTools'
+    PROJECT_URL = 'https://github.com/rafaco/InAppDevTools'
+    PROJECT_TAGS = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
+    PROJECT_LICENSE_NAME = 'The Apache Software License, Version 2.0'
+    PROJECT_LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0'
+    PROJECT_ALL_LICENSES = ["Apache-2.0"]
+
     ORG_NAME = 'inappdevtools.org'
     ORG_URL = 'http://inappdevtools.org'
 
@@ -7,45 +18,50 @@ ext{
     AUTHOR_EMAIL = 'rafaco@gmail.com'
     AUTHOR_URL = 'http://rafaco.es'
 
-    PROJECT_NAME = 'InAppDevTools'
-    PROJECT_URL = 'https://github.com/rafaco/InAppDevTools'
-    PROJECT_TAGS = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
-
-    PROJECT_LICENSE_NAME = 'The Apache Software License, Version 2.0'
-    PROJECT_LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0'
-    PROJECT_ALL_LICENSES = ["Apache-2.0"]
-
     PLUGIN_NAME = 'inappdevtools-plugin'
     PLUGIN_DISPLAY_NAME = 'InAppDevtools Plugin'
     PLUGIN_DESCRIPTION = 'Companion plugin for InAppDevTools, an Android library for debugging, inspecting and reporting from within your own apps'
 
-    PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
-
+    /*
+     BUILD OPTIONS
+     */
     PROJECT_COMPILE_SDK = 28
     PROJECT_BUILD_TOOLS = '28.0.3'
     PROJECT_MIN_SDK = 15
     PROJECT_TARGET_SDK = 28
-
     PROJECT_TARGET_COMPATIBILITY = JavaVersion.VERSION_1_7
     PROJECT_SOURCE_COMPATIBILITY = JavaVersion.VERSION_1_7
 
+    /*
+     PROJECT VERSIONS
+     */
     PROJECT_VERSION = '0.0.56'
     PROJECT_VERSION_CODE = 1
     DEMO_VERSION = '0.0.01'
     DEMO_VERSION_CODE = 45
 
+    /*
+     DEPENDENCIES VERSIONS
+     */
     PANDORA_VERSION = "2.1.0"
     PANDORA_NOOP_VERSION = "2.0.3"
+    PANDORA_PLUGIN_VERSION = "1.0.1"
     OKHTTP_VERSION = "3.12.10"    //Last version supporting API<21 and Java<8
     RETROFIT_VERSION = "2.6.4"  //Transitive match with OKHTTP_VERSION
 
-    //TODO: Migrate to properties per variant
-    libraryAndroidxMaterialVersion = "1.0.0-rc01"
-    libraryAndroidxVersion = "1.0.0"
-    libraryAndroidx2Version = "2.0.0"
-    librarySupportVersion = '28.0.0'
-    librarySupportArchVersion = "1.1.0"
-    librarySupportPagingVersion = "1.0.1"
+    ANDROIDX_MATERIAL_VERSION = "1.0.0-rc01"
+    ANDROIDX_MAIN_VERSION = "1.0.0"
+    ANDROIDX_OTHER_VERSION = "2.0.0"
+
+    SUPPORT_MAIN_VERSION = '28.0.0'
+    SUPPORT_ARCH_VERSION = "1.1.1"
+    SUPPORT_PAGING_VERSION = "1.0.1"
+
+    JUNIT_VERSION = "4.12"
+    ANDROIDX_TEST_RUNNER = "1.2.0"
+    ANDROIDX_TEST_ESPRESSO = "3.2.0"
+    SUPPORT_TEST_RUNNER = "1.0.2"
+    SUPPORT_TEST_ESPRESSO = "3.0.2"
 
     //OLD support
     // appTargetSdkVersion = 26
@@ -55,7 +71,7 @@ ext{
     // libraryTargetSdkVersion = 27
     // libraryCompileSdkVersion = 27
     // libraryBuildToolsVersion = '27.0.3'
-    // librarySupportVersion = '27.1.1'
+    // SUPPORT_MAIN_VERSION = '27.1.1'
     //API 23 -> gradleToolVersion = '2.1.0'
     // appTargetSdkVersion = 23
     // appCompileSdkVersion = 23

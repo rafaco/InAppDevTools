@@ -76,12 +76,12 @@ dependencies {
     //supportImplementation "es.rafaco.compat:support:$PROJECT_VERSION"
 
     // AndroidX/Support view components added by compat module:
-    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.libraryAndroidxVersion"
+    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.ANDROIDX_MAIN_VERSION"
     //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    //    androidxApi "com.google.android.material:material:$rootProject.ext.libraryAndroidxMaterialVersion"
+    //    androidxApi "com.google.android.material:material:$rootProject.ext.ANDROIDX_MATERIAL_VERSION"
     //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
     //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.libraryAndroidxVersion"
+    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.ANDROIDX_MAIN_VERSION"
     //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
 
 
@@ -104,13 +104,11 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
     //Test
-    testImplementation 'junit:junit:4.12'
-
-    // AndroidX/Support test components (TODO)
-    androidTestAndroidxImplementation 'androidx.test:runner:1.1.0'
-    androidTestAndroidxImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestSupportImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestSupportImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:$JUNIT_VERSION"
+    androidTestAndroidxImplementation "androidx.test:runner:$ANDROIDX_TEST_RUNNER"
+    androidTestAndroidxImplementation "androidx.test.espresso:espresso-core:$ANDROIDX_TEST_ESPRESSO"
+    androidTestImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
 }
 
 /*
