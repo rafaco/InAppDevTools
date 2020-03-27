@@ -6,6 +6,9 @@
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
 </p>
 
+<script type='text/javascript' src='https://www.openhub.net/p/InAppDevTools/widgets/project_basic_stats?format=js'></script>
+<script type='text/javascript' src='https://www.openhub.net/p/InAppDevTools/widgets/project_languages?format=js'></script>
+<script type='text/javascript' src='https://www.openhub.net/p/InAppDevTools/widgets/project_factoids?format=js'></script>
 
 **InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows to report, inspect and debug your app from the same screen when it's running. No cable needed, our UI shows over your app.**
 
