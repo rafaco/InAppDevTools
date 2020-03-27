@@ -73,15 +73,10 @@ jobs:
           name: Saving Lint report
           path: demo/build/reports
           destination: demo/reports
-
-      - sonarcloud/scan_with_gradle:
-          main_branch: ${CIRCLE_BRANCH}
-
-      - sonarcloud/check_quality_gate
-      #- run:
-      #    name: Sonar report ALL SupportDebug and upload to SonarCloud
-      #    command: ./gradlew :demo:assembleSupportDebug sonarqube
-      #    #command: ./gradlew sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
+      - run:
+          name: Sonar report ALL SupportDebug and upload to SonarCloud
+          #command: ./gradlew :demo:assembleSupportDebug sonarqube
+          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
@@ -105,9 +100,6 @@ jobs:
 #          name: Deploying...
 #          command: ./gradlew -Prelease.useLastTag=true final
 
-orbs:
-  sonarcloud: extendaretail/sonarcloud@0.0.2
-
 workflows:
   version: 2
 
@@ -120,7 +112,6 @@ workflows:
             only: /.*/
 
     - report:      # Fired by commit on any branch (default) plus any tag
-        context: sonarcloud
         requires:
           - build
         filters:
