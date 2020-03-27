@@ -45,6 +45,8 @@ allprojects {
 // Clean all modules
 task clean(type: Delete) {
     delete rootProject.buildDir
+    delete './captures'
+    delete './plugin/build'
 }
 subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }

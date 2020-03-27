@@ -31,7 +31,7 @@ import org.gradle.api.tasks.bundling.Zip
 import es.rafaco.inappdevtools.tasks.GenerateConfigsTask
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
-import tech.linjiang.pandora.gradle.PandoraPlugin;
+import tech.linjiang.pandora.gradle.PandoraPlugin
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
