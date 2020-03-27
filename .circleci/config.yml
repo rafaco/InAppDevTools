@@ -74,9 +74,8 @@ jobs:
           path: demo/build/reports
           destination: demo/reports
 
-      - sonarcloud/scan_with_gradle
-          executor:
-            main_branch: ${CIRCLE_BRANCH}
+      - sonarcloud/scan_with_gradle:
+          main_branch: ${CIRCLE_BRANCH}
 
       - sonarcloud/check_quality_gate
       #- run:
