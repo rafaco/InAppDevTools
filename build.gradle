@@ -69,8 +69,16 @@ sonarqube {
         property "sonar.login", System.getenv('SONAR_TOKEN')
     }
 }
-task prepareLocalNodeForSonar(){
+task prepareLocalSonar(){
     doLast{
+        def isCircleCi = System.getenv('CI')
+        if (isCircleCi){
+            println "Build environment is CI, skipped."
+            return
+        }
+        println "Build environment is LOCAL, preparing..."
+        System.setProperty("sonar.branch.name", "local")
+        System.setProperty("sonar.branch.target", "develop") //TODO: get from git command
         Properties localProperties = new Properties()
         def targetPropertyName = 'sonar.nodejs.executable'
         def localPropertiesFile = project.rootProject.file('local.properties')
@@ -83,7 +91,7 @@ task prepareLocalNodeForSonar(){
         }
     }
 }
-project.tasks["sonarqube"].dependsOn "prepareLocalNodeForSonar"
+project.tasks["sonarqube"].dependsOn "prepareLocalSonar"
 
 //Gradle Scanner Report (enable with param --scan)
 if (hasProperty('buildScan')) {

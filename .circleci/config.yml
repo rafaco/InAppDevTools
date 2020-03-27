@@ -75,8 +75,7 @@ jobs:
           destination: demo/reports
       - run:
           name: Sonar report ALL SupportDebug and upload to SonarCloud
-          #command: ./gradlew :demo:assembleSupportDebug sonarqube
-          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH}
+          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
@@ -118,11 +117,11 @@ workflows:
           tags:
             only: /.*/
 
-    - deploy:      # Fired by Github releases (tags starting with 'v.')
+    - deploy:      # Fired by Github releases (tags on master starting with 'v')
         requires:
           - report
         filters:
           tags:
             only: /^v.*/
           branches:
-            ignore: /.*/
+            only: master
