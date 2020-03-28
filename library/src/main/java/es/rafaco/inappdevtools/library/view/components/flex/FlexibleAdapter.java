@@ -101,6 +101,9 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(desc.layoutResourceId, viewGroup, false);
         FlexibleViewHolder holder = constructViewHolder(desc, view);
+        if (holder==null){
+            return new HeaderViewHolder(viewGroup, this);
+        }
         holder.onCreate(viewGroup, viewType);
         return holder;
     }
@@ -110,7 +113,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         try {
             Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass
                     .getConstructor(View.class, FlexibleAdapter.class);
-            holder = ctor.newInstance(new Object[] { view, this });
+            holder = ctor.newInstance(view, this);
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
         }

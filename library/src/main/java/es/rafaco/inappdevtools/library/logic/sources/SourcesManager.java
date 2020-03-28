@@ -39,12 +39,12 @@ import es.rafaco.inappdevtools.library.logic.sources.nodes.AbstractNode;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNode;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
+import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
 public class SourcesManager {
 
     Context context;
     AbstractNode root;
-    private boolean initialized;
 
     public SourcesManager(Context context) {
         this.context = context;
@@ -54,17 +54,12 @@ public class SourcesManager {
     public void init() {
         if (canSourceInspection()) {
             root = NodesHelper.populate(context);
-            initialized = true;
         }
     }
 
     public boolean canSourceInspection() {
-        if (IadtController.get().isEnabled()
-                && IadtController.get().getConfig().getBoolean(BuildConfigField.SOURCE_INSPECTION)){
-            return true;
-        }else{
-            return false;
-        }
+        return IadtController.get().isEnabled()
+                && IadtController.get().getConfig().getBoolean(BuildConfigField.SOURCE_INSPECTION);
     }
 
 
@@ -126,7 +121,7 @@ public class SourcesManager {
 
         String internalPath = className.replace(".", "/");
         if (internalPath.contains("$"))
-            internalPath = internalPath.substring(0, internalPath.indexOf("$"));
+            internalPath = internalPath.substring(0, internalPath.indexOf('$'));
 
         String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
         for (String prefix: prefixes){
@@ -184,7 +179,7 @@ public class SourcesManager {
             }
             else{
                 String obtainedPath = target.getPath();
-                String realPath = obtainedPath.substring(obtainedPath.indexOf("/")+1);
+                String realPath = obtainedPath.substring(obtainedPath.indexOf('/')+1);
                 inputStream = context.getAssets().open(realPath);
             }
         }
@@ -210,7 +205,10 @@ public class SourcesManager {
     }
 
     private File readToLocalFile(String path, InputStream inputStream) {
-        File f = new File(context.getCacheDir()+"/"+ path);
+        if (inputStream == null){
+            return null;
+        }
+        File f = new File(PathUtils.join(context.getCacheDir().toString(), path));
         if (!f.exists()){
             FileOutputStream fos = null;
             try {

@@ -56,7 +56,6 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-import okhttp3.OkHttpClient;
 
 public class LogcatReaderService extends JobIntentService {
 
@@ -70,7 +69,6 @@ public class LogcatReaderService extends JobIntentService {
     public final static String PARAM_KEY = "param";
     public static final String LOGCAT_COMMAND = "logcat -v long";
 
-    private static boolean isReaderDebug = false;
     private boolean isReaderRunning = false;
     private boolean isInjectorRunning = false;
     private boolean isCancelled;

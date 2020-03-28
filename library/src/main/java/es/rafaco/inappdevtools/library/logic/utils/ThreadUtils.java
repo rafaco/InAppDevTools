@@ -32,6 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 
 public class ThreadUtils {
 
@@ -130,26 +131,25 @@ public class ThreadUtils {
     }
 
     public static String formatCurrentName(){
-        String thread = (isMain()) ? "main" : "background";
-        return thread;
+        return (isMain()) ? "main" : "background";
     }
 
 
     public static Set<Thread> getAllStacktraces(){
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        return threadSet;
+        return Thread.getAllStackTraces().keySet();
     }
 
 
     public static void addDummy(String name, final long delay, final Runnable onFinish){
         Thread splashThread = new Thread(name) {
+            @Override
             public void run() {
                 try {
                     synchronized (this) {
                         wait(delay);
                     }
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    IadtController.get().handleInternalException("addDummy", ex);
                 } finally {
                     onFinish.run();
                     interrupt();
@@ -168,7 +168,8 @@ public class ThreadUtils {
                     Thread.sleep( delay );
                 }
                 catch ( InterruptedException e ) {
-                    e.printStackTrace();
+                    IadtController.get().handleInternalException("addDummyAsync", e);
+                    Thread.currentThread().interrupt();
                 }
                 return null;
             }
@@ -189,6 +190,5 @@ public class ThreadUtils {
 
     public static void printCurrentStacktrace(){
         new Throwable().printStackTrace();
-        //Log.e("TEST", new Throwable());
     }
 }

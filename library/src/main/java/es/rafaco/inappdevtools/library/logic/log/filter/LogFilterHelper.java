@@ -108,7 +108,6 @@ public class LogFilterHelper {
 
     private void applyDebugPreset() {
         applyAllPreset();
-        //uiFilter.setWrapLines(true);
         uiFilter.setSessionInt(1);   //Current
     }
 
@@ -245,7 +244,7 @@ public class LogFilterHelper {
                 result += "from previous session" + ", ";
             }
             else{
-                long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
+                long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1L;
                 Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
             }
@@ -279,7 +278,7 @@ public class LogFilterHelper {
                     result.substring(lastCommaPosition + 2);
         }
 
-        result.trim();
+        result = result.trim();
         result += ". ";
         result += String.format(" %s%% of total (%s/%s)",
                 currentAnalysisData.getPercentage(),
@@ -319,7 +318,7 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else{ //Previous and others
-            long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1;
+            long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1L;
             Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
             if (selected != null) backFilter.setFromDate(selected.getDate());
             
@@ -396,9 +395,6 @@ public class LogFilterHelper {
         } else {
             subcats.add(uiFilter.getTagName());
             backFilter.setSubcategories(subcats);
-            //List<String> cats = new ArrayList<>();
-            //cats.add("Logcat");
-            //filter.setCategories(cats);
         }
 
         if (isDebug())

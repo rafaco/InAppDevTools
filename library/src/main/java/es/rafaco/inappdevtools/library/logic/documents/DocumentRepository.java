@@ -23,8 +23,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
-
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
@@ -36,6 +34,10 @@ public class DocumentRepository {
 
     private static DocumentFormatter formatter;
 
+    private DocumentRepository() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static DocumentFormatter getFormatter(){
         if (formatter == null){
             formatter = new DocumentFormatter();
@@ -44,8 +46,7 @@ public class DocumentRepository {
     }
 
     public static DocumentData getDocument(DocumentType documentType) {
-        AbstractDocumentGenerator generator = getGenerator(documentType);
-        return generator.getData();
+        return getDocument(documentType, getDefaultParam());
     }
 
     public static DocumentData getDocument(DocumentType documentType, Object param) {
@@ -65,7 +66,7 @@ public class DocumentRepository {
     }
 
     private static long getDefaultParam() {
-        //TODO: It currently pass the current session id, needed by Info documents
+        //It currently pass the current session id, needed by Info documents
         return IadtController.get().getSessionManager().getCurrentUid();
     }
 
@@ -82,14 +83,16 @@ public class DocumentRepository {
 
     public static String storeDocument(DocumentType documentType, Object data) {
         AbstractDocumentGenerator generator = getGenerator(documentType, data);
+        if (generator == null){
+            return null;
+        }
+
         String formattedDocument = getFormatter().formatDocument(generator.getTitle(),
                 generator.getData().toString());
-
         String filePath = FileCreator.withContent(
                 generator.getSubfolder(),
                 generator.getFilename(),
                 formattedDocument);
-
         if (TextUtils.isEmpty(filePath)){
             return null;
         }
@@ -99,10 +102,10 @@ public class DocumentRepository {
 
     public static String getStoredDocumentPath(DocumentType documentType, Object data){
         AbstractDocumentGenerator generator = getGenerator(documentType, data);
-        if (FileCreator.exists(generator.getSubfolder(), generator.getFilename())) {
+        if (generator != null &&
+                FileCreator.exists(generator.getSubfolder(), generator.getFilename())) {
             return FileCreator.getPath(generator.getSubfolder(), generator.getFilename());
         }
-
         return null;
     }
 
@@ -117,26 +120,17 @@ public class DocumentRepository {
                     .getDeclaredConstructor(cArg)
                     .newInstance(context, documentType, param);
         }
-        catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            IadtController.get().handleInternalException("DocumentRepository buildGenerator", e);
         }
         return null;
     }
 
     public static void shareDocument(DocumentType documentType, Object param) {
-        String title = getDocument(documentType, param).getTitle();
+        DocumentData document = getDocument(documentType, param);
         String path = getDocumentPath(documentType, param);
-        if (!TextUtils.isEmpty(path))
-            FileProviderUtils.sendExternally(title, path);
+        if (document!=null && !TextUtils.isEmpty(path))
+            FileProviderUtils.sendExternally(document.getTitle(), path);
         else
             Iadt.showError("Unable to build the document to share");
     }

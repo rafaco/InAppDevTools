@@ -76,7 +76,7 @@ public class PermissionActivity extends AppCompatActivity {
             Intent intent = PermissionActivity.buildIntent(action, context);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent, null);
-        }else{
+        }else if (onSuccessCallback!=null){
             onSuccessCallback.run();
         }
     }
@@ -182,7 +182,7 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case STORAGE_REQUEST_CODE:
                 if (grantResults.length > 0
@@ -202,10 +202,6 @@ public class PermissionActivity extends AppCompatActivity {
         if(onGrantedCallback != null){
             onGrantedCallback.run();
             onGrantedCallback = null;
-        }else{
-            //TODO: remove
-            //Intent intent = OverlayService.buildActionIntent(OverlayService.IntentAction.NAVIGATE_TO, "Screenshot");
-            //startService(intent);
         }
         finish();
     }

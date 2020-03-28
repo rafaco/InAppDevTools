@@ -49,7 +49,7 @@
                 android:id="@+id/decorator"
                 android:layout_width="12dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
                 android:paddingTop="2dp"
                 android:textColor="@color/iadt_background"

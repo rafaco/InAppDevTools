@@ -105,7 +105,7 @@ public class DozeEventDetector extends EventDetector {
                powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                        Iadt.TAG + ":DozeDetector");
-               wakeLock.acquire(30 * 1000);
+               wakeLock.acquire(30 * 1000L);
 
                if (powerManager.isDeviceIdleMode()) {
                    eventManager.fire(Event.POWER_DOZE);
@@ -116,11 +116,9 @@ public class DozeEventDetector extends EventDetector {
                else if (powerManager.isPowerSaveMode()) {
                    eventManager.fire(Event.POWER_SAVE);
                }
-               if (wakeLock != null) {
-                   wakeLock.release();
-                   powerManager = null;
-                   wakeLock = null;
-               }
+               wakeLock.release();
+               powerManager = null;
+               wakeLock = null;
            }
            catch (Exception ex) {
                FriendlyLog.logException("Exception at DozeEventDetector receiver", ex);

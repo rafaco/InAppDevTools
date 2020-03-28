@@ -34,6 +34,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
 
 public class LogcatUtils {
 
+    private LogcatUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void clearBuffer() {
         String[] fullCommand = Shell.formatBashCommand("logcat -c");
         Process process = null;
@@ -50,7 +54,11 @@ public class LogcatUtils {
             e.printStackTrace(new PrintWriter(sw));
             String stackTraceString = sw.toString();
             Log.e(Iadt.TAG, stackTraceString);
-            process.destroy();
+        }
+        finally {
+            if (process!=null){
+                process.destroy();
+            }
         }
     }
 
@@ -73,10 +81,12 @@ public class LogcatUtils {
         }
         catch (InterruptedException e) {
             FriendlyLog.logException("Exception", e);
+            Thread.currentThread().interrupt();
+        }
+        finally {
             if (process!=null){
                 process.destroy();
             }
-            Thread.currentThread().interrupt();
         }
         return null;
     }

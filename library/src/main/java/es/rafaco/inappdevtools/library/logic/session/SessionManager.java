@@ -295,17 +295,9 @@ public class SessionManager {
     //region [ SESSION DOCUMENTS ]
 
     public void storeDocuments() {
+        //TODO: Generate docs on background thread
         final long currentUid = getCurrent().getUid();
         getInfoDocuments(currentUid);
-
-        /* //TODO: Generate docs on background thread
-        ThreadUtils.runOnBack("Iadt-SessionInfoDocs",
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ReportSender.getInfoDocuments(currentUid);
-                    }
-                });*/
     }
 
     //Generate Info overview and individual pages
@@ -319,11 +311,11 @@ public class SessionManager {
         filePaths.add(DocumentRepository.getDocumentPath(DocumentType.INFO_OVERVIEW, sessionId));
         DocumentType[] values = DocumentType.getInfoValues();
         for (DocumentType documentType : values){
-            if (IadtController.get().isDebug())
+            if (IadtController.get().isDebug() && watch!=null)
                 watch.step(documentType.getName());
             filePaths.add(DocumentRepository.getDocumentPath(documentType, sessionId));
         }
-        if (IadtController.get().isDebug())
+        if (IadtController.get().isDebug() && watch!=null)
             FriendlyLog.log(watch.finish());
         return filePaths;
     }

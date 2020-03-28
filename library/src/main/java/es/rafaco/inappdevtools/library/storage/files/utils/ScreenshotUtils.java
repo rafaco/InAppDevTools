@@ -36,6 +36,10 @@ import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class ScreenshotUtils {
 
+    private ScreenshotUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Screenshot takeAndSave(boolean isFromCrash) {
         final Screenshot screenshot = take(isFromCrash);
         saveDatabaseEntry(screenshot);
@@ -55,7 +59,7 @@ public class ScreenshotUtils {
         else{
             long sessionId = DevToolsDatabase.getInstance().sessionDao().count();
             subfolder = "session/" + sessionId;
-            long fileId = DevToolsDatabase.getInstance().screenshotDao().count() + 1 ;
+            long fileId = DevToolsDatabase.getInstance().screenshotDao().count() + 1L ;
             filename = "screenshot_" + fileId;
         }
         return grabAndSaveFile(subfolder, filename);
@@ -90,7 +94,7 @@ public class ScreenshotUtils {
 
             return fillDatabaseObject(selectedName, activityName, imageFile.getAbsolutePath());
 
-        } catch (Throwable e) {
+        } catch (Exception e) {
             // Several error may come out with file handling or DOM
             FriendlyLog.logException("Exception", e);
         }
@@ -115,7 +119,7 @@ public class ScreenshotUtils {
                     new Runnable() {
                         @Override
                         public void run() {
-                            IadtController.get().getDatabase().screenshotDao().insert(screenshot);
+                            IadtController.getDatabase().screenshotDao().insert(screenshot);
                         }
                     });
         }

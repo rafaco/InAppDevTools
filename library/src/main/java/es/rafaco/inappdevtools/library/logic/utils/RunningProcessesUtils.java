@@ -26,7 +26,6 @@ import android.os.Debug;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningProcessesUtils {
@@ -65,9 +64,6 @@ public class RunningProcessesUtils {
             else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE) {
                 importance += "Gone";
             }
-            else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED) {
-                importance += "Cached";
-            }
             result
                     .append(info.pid)
                     .append(" - ")
@@ -93,8 +89,7 @@ public class RunningProcessesUtils {
 
     private static List<ActivityManager.RunningAppProcessInfo> getList() {
         ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> result =  manager.getRunningAppProcesses();
-        return result;
+        return manager.getRunningAppProcesses();
     }
 
     private static String getMemoryInfoFormatted(ActivityManager.RunningAppProcessInfo processInfo) {

@@ -139,8 +139,7 @@ public class InfoScreen extends Screen {
         if (TextUtils.isEmpty(getParam())){
             return 0;
         }
-        int paramPosition = Integer.parseInt(getParam());
-        return paramPosition;
+        return Integer.parseInt(getParam());
     }
 
     private DocumentData getData(int reportPosition) {
@@ -223,7 +222,7 @@ public class InfoScreen extends Screen {
             }
         };
         updateTimer = new Timer("Iadt-InfoUpdate-Timer", false);
-        updateTimer.schedule(updateTimerTask, 5 * 1000);
+        updateTimer.schedule(updateTimerTask, 5 * 1000L);
     }
 
 

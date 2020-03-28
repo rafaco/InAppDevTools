@@ -21,14 +21,17 @@ package es.rafaco.inappdevtools.library.view.utils;
 
 import android.text.TextUtils;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
 public class Humanizer {
+
+    private Humanizer() {
+        throw new IllegalStateException("Utility class");
+    }
 
     //region [ TEXT ]
 
@@ -126,12 +129,12 @@ public class Humanizer {
         if (TextUtils.isEmpty(paragraph)){
             return paragraph;
         }
-        String result = "";
+        StringBuilder resultBuilder = new StringBuilder();
         String[] lines = paragraph.split(Humanizer.newLine());
         for (int i = 0; i<lines.length; i++){
-            result += prefix + lines[i] + Humanizer.newLine();
+            resultBuilder.append(prefix + lines[i] + Humanizer.newLine());
         }
-        return result;
+        return resultBuilder.toString();
     }
 
     public static String multiLineComment(String paragraph){
@@ -283,11 +286,7 @@ public class Humanizer {
             return 0;
 
         byte[] utf8Bytes = null;
-        try {
-            utf8Bytes = text.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            FriendlyLog.logException("Error calculating string size", e);
-        }
+        utf8Bytes = text.getBytes(Charset.forName("UTF-8"));
         if (utf8Bytes == null){
             return 0;
         }
