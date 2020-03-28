@@ -66,8 +66,8 @@ dependencies {
     testImplementation "junit:junit:$JUNIT_VERSION"
     androidTestAndroidxImplementation "androidx.test:runner:$ANDROIDX_TEST_RUNNER"
     androidTestAndroidxImplementation "androidx.test.espresso:espresso-core:$ANDROIDX_TEST_ESPRESSO"
-    androidTestImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
+    androidTestSupportImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
+    androidTestSupportImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
 }
 
 sonarqube {
