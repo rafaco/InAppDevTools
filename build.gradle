@@ -79,7 +79,7 @@ task prepareLocalSonar(){
             return
         }
         println "Build environment is LOCAL, preparing..."
-        System.setProperty("sonar.branch.name", "local")
+        System.setProperty("sonar.branch.name", "local-develop")
         System.setProperty("sonar.branch.target", "develop") //TODO: get from git command
         Properties localProperties = new Properties()
         def targetPropertyName = 'sonar.nodejs.executable'
