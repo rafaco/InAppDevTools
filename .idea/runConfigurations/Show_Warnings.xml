@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Show Warinings" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Gradle">
+  <configuration default="false" name="Show Warnings" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
