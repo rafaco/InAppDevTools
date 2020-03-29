@@ -512,6 +512,7 @@ public class CodeView extends WebView {
     //endregion
 
     @Override
+    @SuppressWarnings("deprecation")
     public void findAllAsync(String find) {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
             super.findAllAsync(find);

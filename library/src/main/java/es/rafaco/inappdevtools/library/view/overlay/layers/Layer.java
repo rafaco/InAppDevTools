@@ -21,11 +21,14 @@ package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.content.res.Configuration;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.WindowManager;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
+
+import static android.os.Build.VERSION_CODES.O;
 
 public abstract class Layer {
 
@@ -43,7 +46,7 @@ public abstract class Layer {
         //manager.getInflater().cloneInContext(new ContextThemeWrapper(getBaseContext(), R.style.AppCompatAlertDialogStyle));
 
         view  = manager.getInflater().inflate(getLayoutId(), null);
-        view.setTag(this.getClass().getSimpleName());
+        view.setTag(this.getClass().getSimpleName()); 
         WindowManager.LayoutParams paramRemove = getLayoutParams();
 
         beforeAttachView(view);
@@ -60,10 +63,20 @@ public abstract class Layer {
     }
 
     public static int getLayoutType(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return WindowManager.LayoutParams.TYPE_PHONE;
+        if (Build.VERSION.SDK_INT < O) {
+            return getLegacyLayoutType();
         }
+        return getModernLayoutType();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static int getModernLayoutType() {
         return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+    }
+
+    @SuppressWarnings("deprecation")
+    private static int getLegacyLayoutType() {
+        return WindowManager.LayoutParams.TYPE_PHONE;
     }
 
     //TODO: Research https://github.com/Manabu-GT/DebugOverlay-Android

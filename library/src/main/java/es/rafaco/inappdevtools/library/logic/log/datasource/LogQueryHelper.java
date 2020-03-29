@@ -41,8 +41,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 public class LogQueryHelper {
 
     private final LogBackFilter filter;
-    private String queryString = new String();
-    private List<Object> args = new ArrayList();
+    private String queryString;
+    private List<Object> args = new ArrayList<>();
     private boolean containsCondition = false;
 
     public LogQueryHelper(LogBackFilter filter) {
@@ -50,8 +50,8 @@ public class LogQueryHelper {
     }
 
     public SupportSQLiteQuery getFilterQuery() {
-        queryString = new String();
-        args = new ArrayList();
+        queryString = "";
+        args = new ArrayList<>();
         containsCondition = false;
 
         queryString += "SELECT * FROM friendly";
@@ -118,9 +118,10 @@ public class LogQueryHelper {
     private void addConjunction() {
         if (containsCondition)
             queryString += " AND";
-        else
+        else {
             queryString += " WHERE";
             containsCondition = true;
+        }
     }
 
     private void addInWithList(String key, List<String> list, boolean isIn){

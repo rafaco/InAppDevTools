@@ -182,6 +182,7 @@ public class ReportSender {
 
     //region [ COMPRESS ]
 
+    @SuppressWarnings("unchecked") //TODO fix
     private List<String> compressIfNeeded(Map<String, List<String>> reportFilesMap) {
         List<String> filesToSend;
         if (reportFilesMap.isEmpty()) {
@@ -206,10 +207,11 @@ public class ReportSender {
     private String compressFiles(Map<String, List<String>> filePaths) {
         File outputFile = FileCreator.prepare("report",
                 "report_" + report.getUid() + ".zip");
-
+        if (outputFile == null){
+            return null;
+        }
         ZipUtils zipManager = new ZipUtils();
         zipManager.zip(filePaths, outputFile.getAbsolutePath());
-
         return outputFile.getAbsolutePath();
     }
 

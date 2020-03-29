@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.logic.utils.ListUtils;
 
 @Entity(tableName = "report")
 public class Report implements Serializable {
@@ -204,7 +205,8 @@ public class Report implements Serializable {
 
     public List<Long> getScreenIdList() {
         Gson gson = new Gson();
-        return gson.fromJson(screenIds, ArrayList.class);
+        ArrayList array = gson.fromJson(screenIds, ArrayList.class);
+        return ListUtils.cast(Long.class, array);
     }
 
     public void setScreenIdList(List<Long> screenIds) {
