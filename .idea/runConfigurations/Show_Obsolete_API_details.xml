@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Refresh Dependencies" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Gradle">
+  <configuration default="false" name="Show Obsolete API details" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="--refresh-dependencies" />
+      <option name="scriptParameters" value="-Pandroid.debug.obsoleteApi=true" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="dependencies" />
+          <option value="assembleSupportDebug" />
         </list>
       </option>
       <option name="vmOptions" value="" />

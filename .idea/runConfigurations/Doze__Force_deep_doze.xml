@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Doze: Force deep doze" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils">
+  <configuration default="false" name="Doze: Force deep doze" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Android">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />

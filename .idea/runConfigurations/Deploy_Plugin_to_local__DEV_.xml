@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Refresh Dependencies" type="GradleRunConfiguration" factoryName="Gradle" folderName="Utils Gradle">
+  <configuration default="false" name="Deploy Plugin to local (DEV)" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/plugin" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="--refresh-dependencies" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="dependencies" />
+          <option value="publishToMavenLocal" />
         </list>
       </option>
       <option name="vmOptions" value="" />
