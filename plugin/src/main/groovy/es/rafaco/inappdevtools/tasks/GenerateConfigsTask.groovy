@@ -141,7 +141,8 @@ class GenerateConfigsTask extends IadtBaseTask {
         def localCommitsLong
 
         if (gitDiff == null) {
-            println TAG + ": " + "Unable to reach git command, check your PATH!"
+            if (isDebug())
+                println TAG + ": " + "Unable to reach git command, check your PATH!"
             propertiesMap = [
                     ENABLED: false
             ]

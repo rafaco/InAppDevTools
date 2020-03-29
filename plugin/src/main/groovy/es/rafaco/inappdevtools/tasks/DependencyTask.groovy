@@ -32,7 +32,7 @@ class DependencyTask extends DependencyReportTask {
 
     ProjectUtils projectUtils
 
-    public DependencyTask() {
+    DependencyTask() {
         super()
         this.description = 'Generated dependencies report if needed'
         this.group = InAppDevToolsPlugin.TAG
@@ -59,7 +59,7 @@ class DependencyTask extends DependencyReportTask {
 
     @Override
     @TaskAction
-    public void generate() {
+    void generate() {
         boolean isDebug = InAppDevToolsPlugin.isDebug(getProject())
         if (isDebug) println "OutputFile: ${outputFile}"
         if (isDebug) println "InputFile: ${inputFile}"
@@ -86,6 +86,6 @@ class DependencyTask extends DependencyReportTask {
         }
 
         super.generate();
-        println "Generated dependency report into ${outputFile}"
+        if (isDebug) println "Generated dependency report into ${outputFile}"
     }
 }

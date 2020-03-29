@@ -64,17 +64,20 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             return
         }
 
-        println("Configuring " + getPluginNameAndVersion())
-        AfterEvaluateHelper.afterEvaluateOrExecute( project, new Action<Project>() {
-            @Override
-            void execute(Project project2) {
-                projectUtils.printBuildTypes()
-                projectUtils.printFlavors()
-                projectUtils.printVariants()
-            }
-        })
-
         extension = project.extensions.create(TAG, InAppDevToolsExtension)
+
+        println("${getPluginNameAndVersion()} @ Gradle ${project.gradle.gradleVersion}")
+        if (isDebug()){
+            AfterEvaluateHelper.afterEvaluateOrExecute( project, new Action<Project>() {
+                @Override
+                void execute(Project project2) {
+                    projectUtils.printBuildTypes()
+                    projectUtils.printFlavors()
+                    projectUtils.printVariants()
+                }
+            })
+        }
+
         outputFolder = getOutputDir(project)
         outputFolder.mkdirs()
         project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
@@ -193,7 +196,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+                if (isDebug())
+                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }
@@ -221,7 +225,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+                if (isDebug())
+                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }
@@ -275,7 +280,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug()) { println it.path }
             }
             doLast {
-                println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+                if (isDebug())
+                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
         }
     }

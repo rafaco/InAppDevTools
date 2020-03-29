@@ -107,21 +107,19 @@ publishing.publications {
         //def publicationName = "Iadt_${variant.name.capitalize()}"
         publicationNames.add(publicationName)
 
-        println "Publication candidate: ${publicationName}"
-
         "$publicationName"(MavenPublication) {
             group groupId
             artifactId variantArtifactId
             version PROJECT_VERSION
 
             artifact variant.packageLibraryProvider.get()
-            //Was deprecated: variant.outputs[0].packageLibrary
             artifact sourcesJar
             artifact javadocJar
 
             pom {
                 packaging 'aar'
                 withXml {
+                    println "Building pom.xml for ${publicationName}"
                     def root = asNode()
                     root.appendNode("name", projectName)
                     root.appendNode("url", siteUrl)
