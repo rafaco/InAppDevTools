@@ -83,7 +83,7 @@ public class UiUtils {
         view.setBackground(background);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     private static void setBackgroundLegacy(View view, Drawable background) {
         view.setBackgroundDrawable(background);
     }
