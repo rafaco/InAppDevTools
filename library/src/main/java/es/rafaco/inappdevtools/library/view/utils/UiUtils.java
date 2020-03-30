@@ -28,6 +28,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
@@ -51,7 +52,9 @@ import es.rafaco.inappdevtools.library.R;
 
 public class UiUtils {
 
-    private UiUtils() { throw new IllegalStateException("Utility class"); }
+    private UiUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static void setAppIconAsBackground(ImageView imageView){
         Drawable d = getAppIconDrawable();
@@ -69,11 +72,22 @@ public class UiUtils {
 
     public static void setBackground(View view, Drawable background) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackgroundDrawable(background);
+            setBackgroundLegacy(view, background);
         } else {
-            view.setBackground(background);
+            setBackgroundModern(view, background);
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private static void setBackgroundModern(View view, Drawable background) {
+        view.setBackground(background);
+    }
+
+    @SuppressWarnings("deprecated")
+    private static void setBackgroundLegacy(View view, Drawable background) {
+        view.setBackgroundDrawable(background);
+    }
+    
     public static void setStrokeToDrawable(Context context, int i, int color, Drawable background) {
         GradientDrawable drawable = (GradientDrawable)background;
         drawable.setStroke((int)getPixelsFromDp(context, (float)i), ContextCompat.getColor(context, color));

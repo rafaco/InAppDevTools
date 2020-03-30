@@ -25,6 +25,10 @@ import es.rafaco.compat.AppCompatButton;
 
 public class ButtonUtils {
 
+    private ButtonUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void setEnabled(AppCompatButton button, View.OnClickListener onClickListener){
         toggleEnabled(button, true, onClickListener);
     }

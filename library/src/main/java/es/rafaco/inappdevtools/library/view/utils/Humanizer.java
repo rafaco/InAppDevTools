@@ -308,7 +308,7 @@ public class Humanizer {
     }
 
     public static String join(String separator, String...strings) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         Collections.addAll(list, strings);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {

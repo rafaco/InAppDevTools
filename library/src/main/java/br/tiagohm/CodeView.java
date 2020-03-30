@@ -512,23 +512,27 @@ public class CodeView extends WebView {
     //endregion
 
     @Override
-    @SuppressWarnings("deprecation")
     public void findAllAsync(String find) {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
             super.findAllAsync(find);
         } else {
-            findAll(find);
-            try{
-                //Can't use getMethod() as it's a private method
-                for(Method m : WebView.class.getDeclaredMethods()){
-                    if(m.getName().equals("setFindIsUp")){
-                        m.setAccessible(true);
-                        m.invoke(this, true);
-                        break;
-                    }
-                }
-            }catch(Exception ignored){}
+            findAllLegacy(find);
         }
-        throw new RuntimeException("Stub!");
+    }
+
+    @SuppressWarnings("deprecation")
+    private void findAllLegacy(String find) {
+        findAll(find);
+        try{
+            for(Method m : WebView.class.getDeclaredMethods()){
+                if(m.getName().equals("setFindIsUp")){
+                    m.setAccessible(true);
+                    m.invoke(this, true);
+                    break;
+                }
+            }
+        }catch(Exception ignored){
+            //Intentionally empty
+        }
     }
 }

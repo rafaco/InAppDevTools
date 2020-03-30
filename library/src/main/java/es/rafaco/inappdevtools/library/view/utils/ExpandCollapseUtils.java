@@ -36,7 +36,9 @@ public class ExpandCollapseUtils {
 
         final Animation.AnimationListener expandListener = new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+                //Intentionally empty
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -45,12 +47,16 @@ public class ExpandCollapseUtils {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+                //Intentionally empty
+            }
         };
 
         Animation.AnimationListener collapseListener = new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+                //Intentionally empty
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -60,7 +66,9 @@ public class ExpandCollapseUtils {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+                //Intentionally empty
+            }
         };
 
         collapse(view, collapseListener);

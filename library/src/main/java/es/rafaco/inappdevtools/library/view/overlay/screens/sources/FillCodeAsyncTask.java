@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import es.rafaco.inappdevtools.library.IadtController;
@@ -46,9 +45,7 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
         params = screen.getParams();
         finalPath = initFinalPath();
         finalLineNumber = initFinalLineNumber();
-
-        String result = getContent();
-        return result;
+        return getContent();
     }
 
     private String initFinalPath() {
@@ -62,7 +59,6 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
     private String getContent() {
 
         if (params.origin.equals(SourceDetailScreen.OriginEnum.INTERNAL)) {
-            Context context = IadtController.get().getContext();
             InternalFileReader internalFileReader = new InternalFileReader();
             return internalFileReader.getContent(finalPath);
         }
