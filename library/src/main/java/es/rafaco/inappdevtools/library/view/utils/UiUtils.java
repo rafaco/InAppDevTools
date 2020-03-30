@@ -28,7 +28,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
@@ -42,9 +41,11 @@ import android.widget.TextView;
 //#ifdef ANDROIDX
 //@import androidx.cardview.widget.CardView;
 //@import androidx.core.content.ContextCompat;
+//@import androidx.annotation.RequiresApi;
 //#else
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.support.annotation.RequiresApi;
 //#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
@@ -87,7 +88,7 @@ public class UiUtils {
     private static void setBackgroundLegacy(View view, Drawable background) {
         view.setBackgroundDrawable(background);
     }
-    
+
     public static void setStrokeToDrawable(Context context, int i, int color, Drawable background) {
         GradientDrawable drawable = (GradientDrawable)background;
         drawable.setStroke((int)getPixelsFromDp(context, (float)i), ContextCompat.getColor(context, color));
