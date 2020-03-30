@@ -21,9 +21,10 @@ jobs:
         name: Download Dependencies
         command: ./gradlew androidDependencies
 
-    - run:
-        name: Assemble Plugin
-        command: ./gradlew :plugin:assemble
+    #Not needed: Plugin build already included in project (using includBuild)
+    #- run:
+    #    name: Assemble Plugin
+    #    command: ./gradlew :plugin:assemble
     - run:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
