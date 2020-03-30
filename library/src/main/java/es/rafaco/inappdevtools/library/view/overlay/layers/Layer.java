@@ -21,14 +21,17 @@ package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.content.res.Configuration;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.WindowManager;
 
+//#ifdef ANDROIDX
+//@import androidx.annotation.RequiresApi;
+//#else
+import android.support.annotation.RequiresApi;
+//#endif
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
-
-import static android.os.Build.VERSION_CODES.O;
 
 public abstract class Layer {
 
@@ -63,7 +66,7 @@ public abstract class Layer {
     }
 
     public static int getLayoutType(){
-        if (Build.VERSION.SDK_INT < O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return getLegacyLayoutType();
         }
         return getModernLayoutType();
