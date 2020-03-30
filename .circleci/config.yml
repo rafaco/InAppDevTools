@@ -15,7 +15,7 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
+        key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
     - run:
         name: Local publish COMPAT SupportDebug
@@ -48,7 +48,7 @@ jobs:
     - save_cache:
         paths:
           - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
+        key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
   report:
     <<: *defaults
@@ -56,7 +56,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
+          key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
       - run:
           name: Lint report LIBRARY SupportDebug
@@ -85,19 +85,21 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
+          key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
+
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
+
+      - run: echo "Deploy job is currently DISABLED"
+      #      - run:
+      #          name: Deploying...
+      #          command: ./gradlew -Prelease.useLastTag=true final
+
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "demo/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/constants.gradle" }}
-
-      - run: echo "Deploy job DISABLED"
-#      - run:
-#          name: Deploying...
-#          command: ./gradlew -Prelease.useLastTag=true final
+          key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
 workflows:
   version: 2
