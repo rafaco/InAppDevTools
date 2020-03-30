@@ -8,7 +8,8 @@ buildscript {
     apply from: './gradle/constants.gradle'
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        //classpath 'com.android.tools.build:gradle:3.6.1' //Latest tested
 
         /*
          *  Iadt PLUGIN: import using legacy plugin application (support dynamic versioning).
@@ -105,3 +106,10 @@ if (hasProperty('buildScan')) {
         termsOfServiceAgree = 'yes'
     }
 }
+
+//Show Gradle Lint compile warnings
+/*allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}*/
