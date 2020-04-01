@@ -20,15 +20,17 @@
 package es.rafaco.inappdevtools
 
 import es.rafaco.inappdevtools.tasks.DependencyTask
-
+import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
+import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.plugins.ProjectReportsPlugin
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
-import es.rafaco.inappdevtools.tasks.GenerateConfigsTask
+import es.rafaco.inappdevtools.tasks.BuildInfoTask
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
 import tech.linjiang.pandora.gradle.PandoraPlugin
@@ -39,36 +41,51 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final ASSETS_PATH = '/generated/assets'
     static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
 
-    final CLEAN_TASK = 'cleanGenerated'
-    final DEPENDENCY_REPORT_TASK = 'iadtDependencyReport'
-    final CONFIG_TASK = 'generateConfigs'
-    final SOURCES_TASK = 'packSources'
-    final GENERATED_TASK = 'packGenerated'
-    final RESOURCES_TASK = 'packResources'
+    final CLEAN_TASK = 'iadtClean'
+    final EMPTY_BUILD_INFO_TASK = 'iadtEmptyBuildInfo'
+    final BUILD_INFO_TASK = 'iadtBuildInfo'
+    final DEPENDENCIES_TASK = 'iadtDependencies'
+    final SOURCES_TASK = 'iadtSrcPack'
+    final GENERATED_TASK = 'iadtGenPack'
+    final RESOURCES_TASK = 'iadtResPack'
 
     InAppDevToolsExtension extension
     ProjectUtils projectUtils
     File outputFolder
 
     void apply(Project project) {
-
         projectUtils = new ProjectUtils(project)
+        boolean isValidModule = validateModule()
+        if (!isValidModule)
+            return
 
+        initPlugin(project, projectUtils)
+        initTasks(project)
+    }
+
+    private boolean validateModule(Project project) {
         if (projectUtils.isRoot()){
             println "IATD skipped for root project"
-            return
+            return false
         }
         else if (!projectUtils.isAndroidModule()){
             println "IATD skipped for ${project.name} project. " +
                     "Only Android application, library or feature project are currently allowed."
-            return
+            return false
         }
+        return true
+    }
 
+    //region [ INIT PLUGIN ]
+
+    private void initPlugin(Project project, ProjectUtils projectUtils) {
         extension = project.extensions.create(TAG, InAppDevToolsExtension)
 
-        println("${getPluginNameAndVersion()} @ Gradle ${project.gradle.gradleVersion}")
-        if (isDebug()){
-            AfterEvaluateHelper.afterEvaluateOrExecute( project, new Action<Project>() {
+        println(getPluginNameAndVersion())
+        if (isDebug()) {
+            println "Gradle $project.gradle.gradleVersion"
+            println "Android Gradle Plugin ${new AndroidPluginUtils(projectUtils.getProject()).getVersion()}"
+            AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
                 @Override
                 void execute(Project project2) {
                     projectUtils.printBuildTypes()
@@ -82,98 +99,89 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         outputFolder.mkdirs()
         project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
 
-        if (projectUtils.isAndroidApplication()){
-            //Inject internal package from manifest into resValue
-            //TODO: Incremental issue: check if already set before perform to avoid updating modified date
-            def internalPackage = getInternalPackageFromManifest()
-            project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
-            //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
-
-            //Add report plugin required for DEPENDENCY_REPORT_TASK
-            //TODO: research other reports (tasks, properties, dashboard,...)
-            project.getPluginManager().apply(org.gradle.api.plugins.ProjectReportsPlugin.class)
-            project.getPluginManager().apply(PandoraPlugin.class)
-            // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
-        }
-
-        // Add our tasks to the project
-        addGenerateConfigTask(project)
-        addPackSourcesTask(project)
-        addPackResourcesTask(project)
-        addPackGeneratedTask(project)
-        addCleanTask(project)
-
-        // Selectively link our tasks to each BuildVariant
-        project.tasks.whenTaskAdded { theTask ->
-
-            if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
-                def buildVariant = theTask.name.drop("generate".length()).reverse()
-                        .drop("ResValues".length()).reverse()
-                //println "IadtPlugin: task $theTask.name added for variant $buildVariant"
-
-                boolean isNoop = isNoopIncluded(buildVariant)
-                if (isNoop){
-                    println "Iadt DISABLED for $buildVariant by noop artifact"
-                }
-                else if (!isPluginEnabled(theTask)){
-                    println "Iadt DISABLED for $buildVariant by configuration"
-                }
-                else{
-                    println "Iadt ENABLED for $buildVariant"
-                }
-
-                if (!isNoop && shouldIncludeSources(theTask)){
-                    if (isDebug()) println "${buildVariant} include sources"
-                    theTask.dependsOn += [
-                            project.tasks.getByName(SOURCES_TASK),
-                            project.tasks.getByName(RESOURCES_TASK) ]
-                }
-
-                if (!isNoop && isPluginEnabled(theTask) && projectUtils.isAndroidApplication()){
-                    if (isDebug()) println "${buildVariant} include dependency report"
-                    addAndLinkDependencyReportTask(project, theTask, buildVariant)
-                }
-
-                // Link CONFIG_TASK
-                // Always performed, if disabled it only add a static config with { enabled=false }
-                theTask.dependsOn += [project.tasks.getByName(CONFIG_TASK)]
-            }
-
-            if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
-                def buildVariant = theTask.name.drop("generate".length()).reverse()
-                        .drop("Assets".length()).reverse()
-                //println "IadtPlugin: task $theTask.name added for variant $buildVariant"
-                boolean isNoop = isNoopIncluded(buildVariant)
-                if(!isNoop && shouldIncludeSources(theTask)){
-                    if (isDebug()) println "${buildVariant} include generated sources"
-                    theTask.dependsOn += [project.tasks.getByName(GENERATED_TASK)]
-                }
-                else{
-                    if (isDebug()) println "${buildVariant} without any sources"
-                    theTask.dependsOn += [project.tasks.getByName(CLEAN_TASK)]
-                }
-            }
-        }
-
-        //Extend current project's Clean task to clear our outputPath
-        //TODO: reuse our clean task
+        //Extend current project's Clean task to clear our outputs
         project.tasks.clean {
             delete getOutputPath(project)
         }
-    }
 
-    //region [ ADD TASKS ]
-
-    private Task addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
-        Task dependencyTask = project.task(DEPENDENCY_REPORT_TASK + buildVariant, type: DependencyTask) {
-            variantName = buildVariant
+        if (projectUtils.isAndroidApplication()) {
+            injectInternalPackage(project)
+            injectExternalPlugins(project)
         }
-        superTask.dependsOn += [ dependencyTask ]
-        dependencyTask
     }
 
-    private Task addGenerateConfigTask(Project project) {
-        project.task(CONFIG_TASK, type: GenerateConfigsTask)
+    //Inject internal package from host app manifest into resValue
+    private void injectInternalPackage(Project project) {
+        //TODO: Incremental issue: check if already set before perform to avoid updating modified date
+        def internalPackage = getInternalPackageFromManifest()
+        project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
+        //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
+    }
+
+    //Inject in the host app build process other external plugins required for Iadt
+    private void injectExternalPlugins(Project project) {
+        project.getPluginManager().apply(ProjectReportsPlugin.class)
+        project.getPluginManager().apply(PandoraPlugin.class)
+        //TODO: research other reports (tasks, properties, dashboard,...)
+        // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
+    }
+
+    //endregion
+
+    //region [ INIT TASKS ]
+
+    private void initTasks(Project project) {
+        // Add our tasks to the project (just add)
+        addCleanTask(project)
+        addEmptyBuildInfoTask(project)
+        addBuildInfoTask(project)
+        addSourcesTask(project)
+        addResourcesTask(project)
+        addGeneratedTask(project)
+
+        // Selectively link our tasks to each variant base on configuration
+        project.tasks.whenTaskAdded { theTask ->
+            if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
+
+                def buildVariant = theTask.name.drop("generate".length()).reverse()
+                        .drop("Assets".length()).reverse()
+
+                boolean isNoop = isNoopIncluded(buildVariant)
+                if (isNoop) {
+                    println "Iadt DISABLED for $buildVariant (noop artifact)"
+                } else if (!isPluginEnabled(theTask)) {
+                    if (!isEnabled())
+                        println "Iadt DISABLED for $buildVariant (configuration)"
+                    else
+                        println "Iadt DISABLED for ${buildVariant}. Auto-disabled for Release, use noop to reduce apk size."
+                } else {
+                    println "Iadt ENABLED for $buildVariant"
+                }
+
+                if (isNoop || !isPluginEnabled(theTask)){
+                    Task emptyTask = project.tasks.getByName(EMPTY_BUILD_INFO_TASK)
+                    Task cleanTask = project.tasks.getByName(CLEAN_TASK)
+                    emptyTask.dependsOn += [ cleanTask ]
+                    theTask.dependsOn += [ emptyTask ]
+                    return
+                }
+
+                theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
+                if (projectUtils.isAndroidApplication()) {
+                    addAndLinkDependencyReportTask(project, theTask, buildVariant)
+                }
+                if (shouldIncludeSources(theTask)) {
+                    theTask.dependsOn += [
+                            project.tasks.getByName(SOURCES_TASK),
+                            project.tasks.getByName(RESOURCES_TASK),
+                            project.tasks.getByName(GENERATED_TASK)]
+                }
+            }
+        }
+    }
+
+    private Task addEmptyBuildInfoTask(Project project) {
+        project.task(EMPTY_BUILD_INFO_TASK, type: EmptyBuildInfoTask)
     }
 
     private Task addCleanTask(Project project) {
@@ -189,7 +197,19 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    private Task addPackResourcesTask(Project project) {
+    private Task addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
+        Task dependencyTask = project.task(DEPENDENCIES_TASK + buildVariant, type: DependencyTask) {
+            variantName = buildVariant
+        }
+        superTask.dependsOn += [ dependencyTask ]
+        dependencyTask
+    }
+
+    private Task addBuildInfoTask(Project project) {
+        project.task(BUILD_INFO_TASK, type: BuildInfoTask)
+    }
+
+    private Task addResourcesTask(Project project) {
         project.task(RESOURCES_TASK,
                 description: 'Generate a Zip file with the resources',
                 group: TAG,
@@ -216,7 +236,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    private Task addPackSourcesTask(Project project) {
+    private Task addSourcesTask(Project project) {
         project.task(SOURCES_TASK,
                 description: 'Generate a Zip file with all java sources',
                 group: TAG,
@@ -245,7 +265,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    private Task addPackGeneratedTask(Project project) {
+    private Task addGeneratedTask(Project project) {
         project.task(GENERATED_TASK,
                 description: 'Generate a Zip file with generated sources',
                 group: TAG,

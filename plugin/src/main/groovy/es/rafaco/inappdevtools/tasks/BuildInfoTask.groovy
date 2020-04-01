@@ -19,19 +19,20 @@
 
 package es.rafaco.inappdevtools.tasks
 
+import es.rafaco.inappdevtools.utils.ConfigUtils
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
-import groovy.json.JsonOutput
 import org.gradle.api.tasks.TaskAction
 
 import java.time.Duration
 import java.time.Instant
 
-class GenerateConfigsTask extends IadtBaseTask {
+class BuildInfoTask extends IadtBaseTask {
 
     ProjectUtils projectUtils
+    ConfigUtils configUtils
 
-    GenerateConfigsTask() {
+    BuildInfoTask() {
         this.description = "Generate config files (build_config, build_info, git_config,...)"
     }
 
@@ -39,14 +40,12 @@ class GenerateConfigsTask extends IadtBaseTask {
     void perform() {
         def configStartTime = Instant.now()
         projectUtils = new ProjectUtils(project)
+        configUtils = new ConfigUtils(project)
 
         generateCompileConfig()
-
-        if (extension.enabled){
-            generatePluginsList()
-            generateBuildInfo()
-            generateGitInfo()
-        }
+        generateBuildInfo()
+        generateGitInfo()
+        generatePluginsList()
 
         if (isDebug()) {
             def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
@@ -99,7 +98,7 @@ class GenerateConfigsTask extends IadtBaseTask {
             propertiesMap.put("injectEventsOnLogcat", extension.injectEventsOnLogcat)
 
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        saveConfigMap(propertiesMap, file)
+        configUtils.saveConfigMap(propertiesMap, file)
     }
 
     private void generateBuildInfo() {
@@ -112,8 +111,8 @@ class GenerateConfigsTask extends IadtBaseTask {
                 HOST_OS         : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
                 HOST_USER       : System.properties['user.name'],
 
-                GIT_USER_NAME       : shell('git config user.name'),
-                GIT_USER_EMAIL      : shell('git config user.email'),
+                GIT_USER_NAME       : configUtils.shell('git config user.name'),
+                GIT_USER_EMAIL      : configUtils.shell('git config user.email'),
 
                 IADT_PLUGIN_VERSION  : this.getClass().getPackage().getImplementationVersion(),
                 ANDROID_PLUGIN_VERSION  : new AndroidPluginUtils(projectUtils.getProject()).getVersion(),
@@ -123,7 +122,7 @@ class GenerateConfigsTask extends IadtBaseTask {
         ]
 
         File file = projectUtils.getFile("${outputPath}/build_info.json")
-        saveConfigMap(propertiesMap, file)
+        configUtils.saveConfigMap(propertiesMap, file)
     }
 
     private void generatePluginsList() {
@@ -137,44 +136,42 @@ class GenerateConfigsTask extends IadtBaseTask {
 
     private void generateGitInfo() {
         Map propertiesMap
-        def gitDiff = shell('git diff HEAD')
+        def gitDiff = configUtils.shell('git diff HEAD')
         def localCommitsLong
 
         if (gitDiff == null) {
             if (isDebug())
                 println TAG + ": " + "Unable to reach git command, check your PATH!"
-            propertiesMap = [
-                    ENABLED: false
-            ]
+            propertiesMap = [ ENABLED : false ]
         } else {
-            //def localBranch = shell("git name-rev --name-only HEAD")
-            def localBranch = shell("git rev-parse --abbrev-ref HEAD")
-            def trackingRemote = shell('git config --get branch.' + localBranch + '.remote')
+            //def localBranch = configUtils.shell("git name-rev --name-only HEAD")
+            def localBranch = configUtils.shell("git rev-parse --abbrev-ref HEAD")
+            def trackingRemote = configUtils.shell('git config --get branch.' + localBranch + '.remote')
             def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
-            def remoteUrl = shell('git config remote.' + trackingRemote + '.url')
-            def tag = shell('git describe --tags --abbrev=0')
-            localCommitsLong = shell('git log ' + trackingFull + '..HEAD')
+            def remoteUrl = configUtils.shell('git config remote.' + trackingRemote + '.url')
+            def tag = configUtils.shell('git describe --tags --abbrev=0')
+            localCommitsLong = configUtils.shell('git log ' + trackingFull + '..HEAD')
 
             propertiesMap = [
                     ENABLED         : true,
                     REMOTE_NAME     : trackingRemote,
                     REMOTE_URL      : remoteUrl,
-                    REMOTE_LAST     : shell('git log ' + trackingFull +' -1'),
+                    REMOTE_LAST     : configUtils.shell('git log ' + trackingFull +' -1'),
 
                     TAG             : tag,
-                    INFO            : shell('git describe --tags --always --dirty'),
-                    TAG_DISTANCE    : shell('git rev-list ' + tag + ' --count'),
+                    INFO            : configUtils.shell('git describe --tags --always --dirty'),
+                    TAG_DISTANCE    : configUtils.shell('git rev-list ' + tag + ' --count'),
 
                     LOCAL_BRANCH    : localBranch,
-                    LOCAL_COMMITS : shell('git cherry -v'),
+                    LOCAL_COMMITS   : configUtils.shell('git cherry -v'),
 
                     HAS_LOCAL_CHANGES: gitDiff != '',
-                    LOCAL_CHANGES    : shell('git status --short'),
+                    LOCAL_CHANGES    : configUtils.shell('git status --short'),
             ]
         }
 
         File file = projectUtils.getFile("${outputPath}/git_info.json")
-        saveConfigMap(propertiesMap, file)
+        configUtils.saveConfigMap(propertiesMap, file)
 
         File commitsFile = new File("${outputPath}/local_commits.txt")
         commitsFile.text = localCommitsLong
@@ -186,38 +183,5 @@ class GenerateConfigsTask extends IadtBaseTask {
         }else{
             if (diffFile.exists()) { diffFile.delete() }
         }
-    }
-
-    private void saveConfigMap(Map map, File file) {
-        String extensionJson
-        extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
-        if (isDebug()) {
-            println "Generated: " + file.getPath()
-            println extensionJson
-        }
-        file.write extensionJson
-    }
-
-    private String shell(String cmd) {
-        //TODO: print output error
-        //TODO: research why it lock the builds sometimes, like with long diffs or paged result.
-        String result = null
-        try {
-            if (isDebug()) println ("Shell command: " + cmd)
-            result = cmd.execute([], project.rootProject.rootDir).text.trim()
-        }
-        catch (java.io.IOException e) {
-            println TAG + "[WARNING]: " + "Unable to reach git command, check your PATH!"
-            if (isDebug()) {
-                e.printStackTrace()
-            }
-        }
-        catch (Exception e) {
-            println TAG + "[WARNING]: " + "Unable to get git info"
-            if (isDebug()) {
-                e.printStackTrace()
-            }
-        }
-        result
     }
 }
