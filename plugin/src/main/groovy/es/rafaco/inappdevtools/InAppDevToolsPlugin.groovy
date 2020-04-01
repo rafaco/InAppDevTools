@@ -109,28 +109,42 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             if (theTask.name.contains("generate") & theTask.name.contains("ResValues")) {
                 def buildVariant = theTask.name.drop("generate".length()).reverse()
                         .drop("ResValues".length()).reverse()
+                //println "IadtPlugin: task $theTask.name added for variant $buildVariant"
 
-                if (shouldIncludeSources(theTask)){
+                boolean isNoop = isNoopIncluded(buildVariant)
+                if (isNoop){
+                    println "Iadt DISABLED for $buildVariant by noop artifact"
+                }
+                else if (!isPluginEnabled(theTask)){
+                    println "Iadt DISABLED for $buildVariant by configuration"
+                }
+                else{
+                    println "Iadt ENABLED for $buildVariant"
+                }
+
+                if (!isNoop && shouldIncludeSources(theTask)){
                     if (isDebug()) println "${buildVariant} include sources"
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
                             project.tasks.getByName(RESOURCES_TASK) ]
+                }
 
-                    if (projectUtils.isAndroidApplication()){
-                        addAndLinkDependencyReportTask(project, theTask, buildVariant)
-                    }
+                if (!isNoop && isPluginEnabled(theTask) && projectUtils.isAndroidApplication()){
+                    if (isDebug()) println "${buildVariant} include dependency report"
+                    addAndLinkDependencyReportTask(project, theTask, buildVariant)
                 }
 
                 // Link CONFIG_TASK
-                // Always performed, if disabled it only add a static config = { enabled=false }
+                // Always performed, if disabled it only add a static config with { enabled=false }
                 theTask.dependsOn += [project.tasks.getByName(CONFIG_TASK)]
             }
 
             if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
                 def buildVariant = theTask.name.drop("generate".length()).reverse()
                         .drop("Assets".length()).reverse()
-
-                if(shouldIncludeSources(theTask)){
+                //println "IadtPlugin: task $theTask.name added for variant $buildVariant"
+                boolean isNoop = isNoopIncluded(buildVariant)
+                if(!isNoop && shouldIncludeSources(theTask)){
                     if (isDebug()) println "${buildVariant} include generated sources"
                     theTask.dependsOn += [project.tasks.getByName(GENERATED_TASK)]
                 }
@@ -286,61 +300,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    //TODO: REMOVE after validate new implementation with addAndLinkDependencyReportTask()
-    //final VARIANT_DETECTOR_TASK = 'iadtVariantDetectorTask'
-    //final TEST_VARIANT_DETECTOR_TASK = 'iadtTestVariantDetectorTask'
-    /*private Task addAndLinkVariantDetector(Project project) {
-        project.ext.currentVariant = "initial"
-
-        Task variantDetector = project.task(VARIANT_DETECTOR_TASK,
-                //dependsOn: 'installDebug',
-                description: 'Prepare all variants in this project to fill ext.currentVariant property',
-                group: 'Iadt-VariantDetector') {
-
-            def variantCollection= new ProjectUtils(project).getVariantsCollection()
-            variantCollection.all { variant ->
-                variant.outputs.each { output ->
-                    def variantName = variant.name.capitalize()
-                    def taskName = "store${variantName}Variant"
-                    project.task("$taskName",
-                            description: 'Fills ext.currentVariant property with the name of the currently running variant',
-                            group: 'Iadt-VariantDetector')  {
-                        doLast{
-                            println "VariantDetector: running $taskName task to save currentVariant=$variantName"
-                            project.ext.set("currentVariant", variantName)
-                        }
-                    }
-                    println "VariantDetector: $variantName output.assemble dependsOn $taskName task"
-                    output.assemble.dependsOn taskName
-                }
-            }
-        }
-
-        println "before get variants"
-        def variants = projectUtils.getVariants()
-        println "after get variants " + variants.size()
-        variants.each {
-            println "inside variants.each"
-            def installVariantTaskName = 'install' + it.capitalize()
-            if (projectUtils.existsTask(installVariantTaskName)) {
-                println "VariantDetectorTask dependsOn $installVariantTaskName task"
-                def installTask = project.tasks.getByName(installVariantTaskName)
-                variantDetector.dependsOn installTask
-            }
-        }
-
-        println "after variants.each"
-
-        *//*project.task(TEST_VARIANT_DETECTOR_TASK,
-                dependsOn: VARIANT_DETECTOR_TASK,
-                description: 'Print ext.currentVariant property (for testing VariantDetector)',
-                group: 'Iadt-VariantDetector')  {
-            doLast {
-                println("currentVariant is $project.ext.currentVariant")
-            }
-        }*//*
-    }*/
-
     //endregion
 
     //region [ CONFIGURATION ]
@@ -402,6 +361,27 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         return isPluginEnabled(task) &&
                 isSourceInclusion() &&
                 isSourceInspection()
+    }
+
+    boolean isNoopIncluded(String variantName) {
+        def variantConfigurationName = variantName.uncapitalize() + 'Runtime' + 'Classpath'
+        if (!projectUtils.existsConfiguration(variantConfigurationName)) {
+            if (isDebug) println "Skipped by error: configuration not found ${variantConfigurationName}"
+            return
+        }
+        boolean isNoop = false
+        def currentConfiguration = projectUtils.getConfigurations().getByName(variantConfigurationName)
+        currentConfiguration.allDependencies.each {dep ->
+            //println "Iadt Plugin3 $currentConfiguration.name > ${dep.group}:${dep.name}:${dep.version}"
+            if (dep.group=='inappdevtools' && dep.name=='noop'){
+                //InAppDevTools project
+                isNoop = true
+            }else if (dep.group=='es.rafaco.inappdevtools' && dep.name=='noop') {
+                //External projects
+                isNoop = true
+            }
+        }
+        isNoop
     }
 
     //endregion
