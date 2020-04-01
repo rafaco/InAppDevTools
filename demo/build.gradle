@@ -65,9 +65,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     /*
-     *  Iadt COMPAT: import directly from modules. For release, debug have it from library
+     *  Iadt COMPAT: import directly from modules.
      */
-    releaseApi project(path: ':compat')
+    api project(path: ':compat')
 
     /*
      *  Iadt COMPAT: import from repository (jCenter or localMaven). Standard usage
@@ -115,20 +115,20 @@ dependencies {
  *  Iadt CONFIGURATION
  */
 inappdevtools {
-    //// User features fags
-    email = 'inappdevtools@gmail.com'
-    notes = "This is a SAMPLE NOTE about this compilation:\n" +
-            " - Developers can add any text here using Gradle configuration\n" +
-            " - Useful to describe changes or to provide instructions"
-
-    //// Build flags (affect plugin)
-    //enabled = true
+    //// Build flags (affect plugin behaviour)
+    enabled = true
     //enabledOnRelease = true
     debug = false
     //sourceInclusion = false
     //sourceInspection = false
 
-    //// Runtime flags (used later on)
+    //// Customization flags (runtime)
+    email = 'inappdevtools@gmail.com'
+    notes = "This is a SAMPLE NOTE about this compilation:\n" +
+            " - Developers can add any text here using Gradle configuration\n" +
+            " - Useful to describe changes or to provide instructions"
+
+    // Feature switches (runtime)
     //overlayEnabled = false
     //invocationByShake = false
     //invocationByIcon = true

@@ -31,7 +31,7 @@ class EmptyBuildInfoTask extends IadtBaseTask {
 
     @TaskAction
     void perform() {
-        Map propertiesMap = [ ENABLED : false ]
+        Map propertiesMap = [ enabled : false ]
 
         ProjectUtils projectUtils = new ProjectUtils(project)
         ConfigUtils configUtils = new ConfigUtils(project)
