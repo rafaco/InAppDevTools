@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools
 
+
 import es.rafaco.inappdevtools.tasks.DependencyTask
 import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
@@ -106,7 +107,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         if (projectUtils.isAndroidApplication()) {
             injectInternalPackage(project)
-            injectExternalPlugins(project)
+            applySafePlugins(project)
         }
     }
 
@@ -118,12 +119,16 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
     }
 
-    //Inject in the host app build process other external plugins required for Iadt
-    private void injectExternalPlugins(Project project) {
+    //Apply external plugins required for Iadt (save to be applied even if we dont use them)
+    private void applySafePlugins(Project project) {
         project.getPluginManager().apply(ProjectReportsPlugin.class)
-        project.getPluginManager().apply(PandoraPlugin.class)
         //TODO: research other reports (tasks, properties, dashboard,...)
         // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
+    }
+
+    //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
+    private void applyPandoraPlugins(Project project){
+        project.getPluginManager().apply(PandoraPlugin.class)
     }
 
     //endregion
@@ -166,6 +171,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     return
                 }
 
+                applyPandoraPlugins(project)
+
                 theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
                 if (projectUtils.isAndroidApplication()) {
                     addAndLinkDependencyReportTask(project, theTask, buildVariant)
@@ -192,7 +199,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
             doLast {
                 project.delete getOutputDir(project)
-                println "Deleted ${getOutputDir(project)} from ${project.name}"
+                if (isDebug()) println "Deleted ${getOutputDir(project)} from ${project.name}"
             }
         }
     }
