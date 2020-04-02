@@ -295,9 +295,14 @@ public class SessionManager {
     //region [ SESSION DOCUMENTS ]
 
     public void storeDocuments() {
-        //TODO: Generate docs on background thread
         final long currentUid = getCurrent().getUid();
-        getInfoDocuments(currentUid);
+        ThreadUtils.runOnBack("Iadt-SaveCurrentSessionFiles",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        getInfoDocuments(currentUid);
+                    }
+                });
     }
 
     //Generate Info overview and individual pages

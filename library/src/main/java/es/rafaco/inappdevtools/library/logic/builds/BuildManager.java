@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.logic.builds;
 import android.content.Context;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.storage.db.entities.BuildDao;
@@ -38,7 +39,7 @@ public class BuildManager {
         FriendlyLog.logDebug("Init build manager");
 
         if (isNew()){
-            createNewDbEntry();
+            build = createNewBuild();
             storeDocuments();
         }
         else{
@@ -58,12 +59,12 @@ public class BuildManager {
         return build.getUid();
     }
 
-    private void createNewDbEntry() {
-        build = new Build();
-        build.setDate(NewBuildUtil.getBuildTime());
-
-        long newBuildId = getDao().insert(build);
-        build.setUid(newBuildId);
+    private Build createNewBuild() {
+        Build newBuild = new Build();
+        newBuild.setDate(NewBuildUtil.getBuildTime());
+        long newBuildId = getDao().insert(newBuild);
+        newBuild.setUid(newBuildId);
+        return newBuild;
     }
 
     public void updateCurrent(Build updated) {
@@ -91,20 +92,13 @@ public class BuildManager {
     }
 
     public void storeDocuments() {
-        /*final long sessionUid = IadtController.get().getSessionManager().getCurrentUid();
-        String documentPath = DocumentRepository.getDocumentPath(DocumentType.BUILD_INFO, sessionUid);
-        getCurrent().setDocumentPath(documentPath);
-        updateCurrent(getCurrent());*/
-
-        BuildFilesRepository.saveCurrentBuildFiles(build.getUid());
-
-        /* //TODO: Generate docs on background thread
-        ThreadUtils.runOnBack("Iadt-SessionInfoDocs",
+        final long currentBuildId = build.getUid();
+        ThreadUtils.runOnBack("Iadt-SaveCurrentBuildFiles",
                 new Runnable() {
                     @Override
                     public void run() {
-                        ReportSender.getInfoDocuments(currentUid);
+                        BuildFilesRepository.saveCurrentBuildFiles(currentBuildId);
                     }
-                });*/
+                });
     }
 }
