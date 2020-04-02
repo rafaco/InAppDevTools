@@ -28,10 +28,12 @@ import es.rafaco.inappdevtools.library.IadtController;
 
 public class ExternalIntentUtils {
 
-    public static final String REPO_URL = "https://github.com/rafaco/InAppDevTools";
-    public static final String README_URL = "https://github.com/rafaco/InAppDevTools/blob/master/README.md";
-    public static final String ISSUES_URL = "https://github.com/rafaco/InAppDevTools/issues";
-    public static final String WEBSITE_URL = "https://InAppDevTools.org";
+    private static final String REPO_URL = "https://github.com/rafaco/InAppDevTools";
+    private static final String README_URL = "https://github.com/rafaco/InAppDevTools/blob/master/README.md";
+    private static final String ISSUES_URL = "https://github.com/rafaco/InAppDevTools/issues";
+    private static final String WEBSITE_URL = "https://InAppDevTools.org";
+
+    private ExternalIntentUtils() { throw new IllegalStateException("Utility class"); }
 
     public static void shareText(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);

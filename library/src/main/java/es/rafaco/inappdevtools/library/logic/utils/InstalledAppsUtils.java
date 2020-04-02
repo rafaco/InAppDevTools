@@ -18,6 +18,7 @@
  */
 
 package es.rafaco.inappdevtools.library.logic.utils;
+
 import android.content.Context;
 import android.content.Intent;
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class InstalledAppsUtils {
+
+    private InstalledAppsUtils() { throw new IllegalStateException("Utility class"); }
 
     private static Context getContext(){
         return IadtController.get().getContext();

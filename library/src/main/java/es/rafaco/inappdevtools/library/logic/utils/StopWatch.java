@@ -27,9 +27,10 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class StopWatch {
-    String name;
-    long startTime;
-    List<Pair<String, Long>> steps;
+
+    private String name;
+    private long startTime;
+    private List<Pair<String, Long>> steps;
 
     public StopWatch(String name) {
         this.name = name;

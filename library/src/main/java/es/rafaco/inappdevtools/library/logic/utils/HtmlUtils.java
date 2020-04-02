@@ -27,6 +27,8 @@ package es.rafaco.inappdevtools.library.logic.utils;
 
 public class HtmlUtils {
 
+    private HtmlUtils() { throw new IllegalStateException("Utility class"); }
+
     /**
      * Returns an HTML escaped representation of the given plain text.
      */
