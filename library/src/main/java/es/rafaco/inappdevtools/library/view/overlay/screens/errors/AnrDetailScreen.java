@@ -71,7 +71,7 @@ public class AnrDetailScreen extends Screen {
 
         title = toolHead.findViewById(R.id.detail_title);
         subtitle = toolHead.findViewById(R.id.detail_subtitle);
-        console = toolHead.findViewById(R.id.detail_console);
+        console = toolHead.findViewById(R.id.detail_console); //TODO: not in xml!!
 
         if (!TextUtils.isEmpty(getParam())){
             final long anrId = Long.parseLong(getParam());

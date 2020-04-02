@@ -238,9 +238,10 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
+        /* TODO: enable ANR screen
         else if(data.getSubcategory().equals("Anr")){
             return new NavigationStep(AnrDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
+        }*/
         else if(data.getCategory().equals("Network")){
             return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
         }

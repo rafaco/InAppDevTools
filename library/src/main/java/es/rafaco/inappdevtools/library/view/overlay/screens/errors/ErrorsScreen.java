@@ -19,6 +19,14 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
 //#ifdef ANDROIDX
 //@import androidx.core.view.ViewCompat;
 //@import androidx.annotation.NonNull;
@@ -36,14 +44,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 //#endif
-
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -253,9 +253,9 @@ public class ErrorsScreen extends Screen {
                             step));
                 }
 
+                /* TODO: AnrDetailScreen
                 List<Anr> anrs = db.anrDao().getAll();
                 for (Anr anr : anrs){
-                    //TODO: AnrDetailScreen
                     NavigationStep step = new NavigationStep(AnrDetailScreen.class, String.valueOf(anr.getUid()));
                     array.add(new DecoratedToolInfo(
                             "ANR " + getElapsedTimeLowered(anr.getDate()),
@@ -263,7 +263,7 @@ public class ErrorsScreen extends Screen {
                             R.color.rally_blue,
                             anr.getDate(),
                             step));
-                }
+                }*/
 
                 Collections.sort(array, new Comparator<DecoratedToolInfo>() {
                     @Override
