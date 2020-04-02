@@ -32,11 +32,6 @@ android {
         sourceCompatibility PROJECT_SOURCE_COMPATIBILITY
     }
 
-    /*compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_8
-    }*/
-
     flavorDimensions "compatibility"
     productFlavors {
         support {
@@ -94,9 +89,9 @@ dependencies {
     /*
      *  Iadt LIBRARY: import from repository (jCenter or localMaven). Standard usage
      */
-    //supportImplementation "es.rafaco.inappdevtools:support:$libraryPublishedVersion"
-    //androidxImplementation "es.rafaco.inappdevtools:androidx:$libraryPublishedVersion"
-    //releaseImplementation "es.rafaco.inappdevtools:noop:$libraryPublishedVersion"
+    //supportImplementation "es.rafaco.inappdevtools:support:$PROJECT_VERSION"
+    //androidxImplementation "es.rafaco.inappdevtools:androidx:$PROJECT_VERSION"
+    //releaseImplementation "es.rafaco.inappdevtools:noop:$PROJECT_VERSION"
 
 
     //Retrofit
@@ -117,10 +112,10 @@ dependencies {
 inappdevtools {
     //// Build flags (affect plugin behaviour)
     enabled = true
-    //enabledOnRelease = true
     debug = false
     //sourceInclusion = false
     //sourceInspection = false
+    //enabledOnRelease = true
 
     //// Customization flags (runtime)
     email = 'inappdevtools@gmail.com'

@@ -65,14 +65,14 @@ public class IadtLauncher extends ContentProvider {
             return false;
         }
 
+        if (!isLibraryEnabled()) {
+            Log.i(Iadt.TAG, "Iadt DISABLED by " + extra +". Nothing started");
+            return false;
+        }
+        
         if (!isVersionMatch()) {
             Log.w(Iadt.TAG, "Iadt DISABLED, version mismatch (" + extra +
                     "). Update versions in your gradle files.");
-            return false;
-        }
-
-        if (!isLibraryEnabled()) {
-            Log.i(Iadt.TAG, "Iadt DISABLED by " + extra +". Nothing started");
             return false;
         }
 

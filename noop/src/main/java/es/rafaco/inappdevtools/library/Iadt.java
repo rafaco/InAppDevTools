@@ -94,8 +94,8 @@ public class Iadt {
     public static void shareDemo() {}
     public static void shareLibrary() {}
 
-    public void crashUiThread() {}
-    public void crashBackgroundThread() {}
+    public static void crashUiThread() {}
+    public static void crashBackgroundThread() {}
 
     //endregion
 
