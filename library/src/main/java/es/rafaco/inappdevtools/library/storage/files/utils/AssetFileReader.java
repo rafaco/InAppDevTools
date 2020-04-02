@@ -72,6 +72,9 @@ public class AssetFileReader {
         }
         String fileNameWithExtension = PathUtils.getFileNameWithExtension(origin);
         File destination = FileCreator.prepare(destinationFolder, fileNameWithExtension);
+        if (!exists(origin)){
+            return null;
+        }
         createLocalFileFromAsset(origin, destination);
         return destination;
     }
