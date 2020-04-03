@@ -2,7 +2,7 @@
 
 First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. InAppDevTools is an open source project and we love to receive contributions from our community — you! 
 
-There are many ways to contribute, starting from telling your coworkers or in your social networks, sending us your feedback, writing tutorials or blog posts, improving the documentation, submitting bug reports or feature requests, translating or writing code which can be incorporated into InAppDevTools itself.
+There are many ways to contribute, starting from telling your friends about us, sending us a feedback, writing tutorials or blog posts, improving the documentation, submitting bug reports or feature requests, translating to your language or writing code which can be incorporated into our codebase.
 
 
 # Non coding contributions
@@ -11,132 +11,28 @@ There are many ways to contribute, starting from telling your coworkers or in yo
 You can start right now by giving this repo a GitHub start or telling your developer friends about us at work or in your social networks. It would be awesome if you write a tutorial or a blog post. Please notify us about publications and we will link it.
 
 ## Feedback
-In this early stage your feedback is so valuable for us. Share us any thoughts or experiences you have had using our library, what did you like, what annoy you, what would you change... Open a [Feedback issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or mail us privately.
+In this early stage your feedback is so valuable for us. Share us any thoughts or experiences you have had using our library, what did you like, what annoy you, what would you change... Create a [Feedback issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or [mail us](mailto:inappdevtools@gmail.com).
 
-## Bug report
-Open a [Bug Report issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) to let us know about any failure.
+## Bug report and security issue
+If you found any incompatibility or a runtime issues open a [Bug Report](https://github.com/rafaco/InAppDevTools/issues/new/choose) to let us know about any failure.
 
-## Security issues and private requests:
-If you find a security vulnerability, do NOT open a public issue. Email [inappdevtools@gmail.com](mailto:inappdevtools@gmail.com) instead.
+Do NOT open a public issue if you find a security vulnerability that could be use in a malicious way. Please [email us](mailto:inappdevtools@gmail.com) instead.
 
 ## Feature request
-Open a [Feature Request issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) to suggest any idea for this project.
+To suggest any idea or feature that fits into this project, open a [Feature Request](https://github.com/rafaco/InAppDevTools/issues/new/choose).
 
 ## Support
-Work in progress: We have to setup a proper support channel. Meanwhile you can open a [Support issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or mail us with any question you may have.
+Work in progress: We have to setup a proper support channel. Meanwhile you can open a [Support issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or [email us](mailto:inappdevtools@gmail.com) with any question you may have.
 
 ## Private contact
-If you prefer to contact us directly in a private way, you can always send us an email to [inappdevtools@gmail.com](mailto:inappdevtools@gmail.com).
+If you prefer to contact us directly in a private way for any reason, you can always send us an email to [inappdevtools@gmail.com](mailto:inappdevtools@gmail.com).
 
 
 # Coding contributions
 
-Standard user don't need to manually download or build our artifacts as they are available at public repositories preconfigured by Android Studio. Just follow the installation process in our [README](README.md#setup) and rebuild your project.
+Pull requests are more than welcome and our community will be grateful to you for life! From small bug fixing to big new features.
 
-Following instructions are for user that want build their own version of InAppDevTools with changes. Remember to contribute your changes to the community using a Pull Request.
-
-### Artifacts
-
-All artifacts are generated from a single project [hosted in this repo](https://github.com/rafaco/InAppDevTools), each one using different combinations of Gradle module and variant.
-
-| Artifact | Module | Variant | Description | Publication |
-| --- | --- | --- | --- | --- |
-| es.rafaco.inappdevtools | [plugin](/plugin) | - | IADT plugin for Gradle| [Gradle Plugin Portal](https://plugins.gradle.org/plugin/es.rafaco.inappdevtools) |
-| es.rafaco.inappdevtools:support | [library](/library) | support | IADT library for Support libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/support) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/support/) |
-| es.rafaco.inappdevtools:androidx | [library](/library) | androidx | IADT library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/InAppDevTools/androidx) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/androidx/) |
-| es.rafaco.inappdevtools:noop | [noop](/noop) | - | IADT library, no operational | [Bintray](https://bintray.com/rafaco/InAppDevTools/noop) / [jCenter](https://jcenter.bintray.com/es/rafaco/inappdevtools/noop/) |
-| es.rafaco.compat:support | [compat](/compat) | support | Compat library for Support libraries | [Bintray](https://bintray.com/rafaco/Compat/support) / [jCenter](https://jcenter.bintray.com/es/rafaco/compat/support/) |
-| es.rafaco.compat:androidx | [compat](/compat) | androidx | Compat library for AndroidX libraries | [Bintray](https://bintray.com/rafaco/Compat/androidx) / [jCenter](https://jcenter.bintray.com/es/rafaco/compat/androidx/) |
-| es.rafaco.iadt.demo | [demo](/demo) | androidx/support | Demo app  | ~~[Google Play](https://play.google.com)~~ |
-| inappdevtools.org | [website](/website) | - | Promo website  | [inappdevtools.org](https:/inappdevtools.org) |
-
-
-### Building AndroidX or Support artifacts
-
-Our project have predefined "Run Configurations" for AndroidX or Support builds per each module. Use them to automatically switch between AndroidX or Support builds.
-
-In a nutshell, we use a mix of techniques to generate artifacts for both libraries from the same source code:
-- Libraries dependencies are configured per variant
-- AndroidX Gradle properties are set by command line
-- A Java preprocessor change source imports and other source references per variant (Compat module)
-
-This techniques overrides standard switch on Android Studio via "Build Variants" panel, so it doesn't work in our project. To re-enable it and manually build AndroidX variants of any submodule: remove custom command line args and restore AndroidX properties at gradle.properties file (`android.useAndroidX=true` and `android.enableJetifier=true`).
-
-Sources at our repo should always be ready to build support variant, as it also works on AndroidX project but not the other way around. Test your build switching to Androidx but perform a last build using Support libraries before committing, to restore support sources.
-
-
-### Publishing to local repository
-
-To build all our artifacts and publish them to your local Maven repository, use `Deploy all to local (DEV)` run configuration predefined in our project. Individual run configurations are also available and named like `Publish [MODULE] [VARIANT] to LOCAL`.
-
-### Using local artifacts
-
-To load locally published artifacts into your app, you have to add local repositories definitions to your project.
-
-On your **root build.gradle** file, add your local repository for dependencies:
-```gradle
-allprojects {
-    repositories {
-        mavenLocal()
-        ...
-    }
-}
-```
-
-Then, on your **root settings.gradle** file, add your local repository for plugins (it should be before any other settings):
-```gradle
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
-}
-```
-
-## Continuous Integration <a name="ci"/>
-
-We use CircleCi to automatise tests for commit and for PR. We currently only test support builds and generate some reports. Unit test are not implemented.
-
-1. Build
-    1. Assemble and include PLUGIN
-    2. Assemble and local publish COMPAT SupportDebug
-    3. Assemble and local publish COMPAT AndroidXDebug
-    4. Assemble NOOP Debug
-    5. Assemble LIBRARY SupportDebug
-    6. Assemble DEMO SupportDebug
-    7. Assemble LIBRARY AndroidxDebug
-    8. Assemble DEMO AndroidxDebug
-2. Report:
-    1. Lint report LIBRARY SupportDebug
-    2. Lint report DEMO SupportDebug
-    3. Sonar report ALL SupportDebug and upload to SonarCloud
-
-Following badges are related to master branch. For other branches check at [https://circleci.com/gh/rafaco/InAppDevTools/](https://circleci.com/gh/rafaco/InAppDevTools/) after committing your branch and before sending your Pull Request.
-
-[![CircleCI](https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=svg)](https://circleci.com/gh/rafaco/InAppDevTools/tree/master) 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=alert_status)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools) 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=security_rating)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=bugs)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=code_smells)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=coverage)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc)](https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools)
-
-### Pull requests
-
-Use a Pull Request to send us your changes and we will integrate them as soon as possible. 
-
-Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github). Feel free to ask for help; everyone is a beginner at first 😸
-
-
-## Coding standards
-//TODO
+Find out more at our Wiki, in [Coding contributions guide](https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide) (Project structure, building instructions, local deployment,...)
 
 
 _Ideas extracted from https://github.com/nayafia/contributing-template._
