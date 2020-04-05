@@ -220,7 +220,8 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     }
 
     protected void loadTraceNavigationHeader(ArrayList<Sourcetrace> groupTraces, int currentPosition) {
-        Sourcetrace currentTrace = groupTraces.get(currentPosition);
+        int currentIndex = currentPosition - 1;
+        Sourcetrace currentTrace = groupTraces.get(currentIndex);
         int totalTraces = groupTraces.size();
 
         String traceMessage = Humanizer.toCapitalCase(currentTrace.getExtra()) + " trace ";
@@ -236,7 +237,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
         if (currentPosition > 1){
             prevButton.setAlpha(1f);
-            final long previousTrace = groupTraces.get(currentPosition - 2).getUid();
+            final long previousTrace = groupTraces.get(currentIndex - 1).getUid();
             prevButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -251,7 +252,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
         if (currentPosition < totalTraces){
             nextButton.setAlpha(1f);
-            final long nextTrace = groupTraces.get(currentPosition).getUid();
+            final long nextTrace = groupTraces.get(currentIndex+1).getUid();
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
