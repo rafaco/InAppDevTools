@@ -29,8 +29,6 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
 
     protected final SourceDetailScreen screen;
     protected SourceDetailScreen.InnerParams params;
-    protected String finalPath;
-    protected int finalLineNumber;
 
     public FillCodeAsyncTask() {
         throw new UnsupportedOperationException("You have to provide a SourceDetailScreen");
@@ -43,45 +41,30 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
         params = screen.getParams();
-        finalPath = initFinalPath();
-        finalLineNumber = initFinalLineNumber();
         return getContent();
-    }
-
-    private String initFinalPath() {
-        return params.path;
-    }
-
-    private int initFinalLineNumber() {
-        return params.lineNumber;
     }
 
     private String getContent() {
 
         if (params.origin.equals(SourceDetailScreen.OriginEnum.INTERNAL)) {
             InternalFileReader internalFileReader = new InternalFileReader();
-            return internalFileReader.getContent(finalPath);
+            return internalFileReader.getContent(params.path);
         }
 
         if (params.origin.equals(SourceDetailScreen.OriginEnum.TRACE)) {
-            //Recalculate finalPath and finalLineNumber from trace data
-            long traceId;
-            try {
-                traceId = Long.parseLong(finalPath);
-            }catch (Exception e){
-                traceId = -1;
-            }
+            long traceId = params.id;
             if (traceId>0){
+                //Calculate finalPath and finalLineNumber from traceId
                 Sourcetrace sourcetrace = IadtController.getDatabase().sourcetraceDao()
                         .findById(traceId);
-                finalPath = IadtController.get().getSourcesManager()
+                params.path = IadtController.get().getSourcesManager()
                         .getPathFromClassName(sourcetrace.getClassName());
-                finalLineNumber = sourcetrace.getLineNumber();
+                params.lineNumber = sourcetrace.getLineNumber();
             }
         }
 
         //For OriginEnum.SOURCE and OriginEnum.TRACE:
-        return IadtController.get().getSourcesManager().getContent(finalPath);
+        return IadtController.get().getSourcesManager().getContent(params.path);
     }
 
 
@@ -92,7 +75,7 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
         if (content == null) {
             screen.loadCodeViewEmpty();
         }else{
-            screen.loadCodeViewContent(content, finalPath, params.lineNumber);
+            screen.loadCodeViewContent(content, params.path, params.lineNumber);
         }
     }
 }
