@@ -93,7 +93,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             IadtController.get().beforeClose();
             //TODO:
             flushLogcat();
-            saveScreenshot();
+            saveScreenshot(crash);
             saveDetailReport(crash);
             saveStacktrace(crashId, ex);
 
@@ -101,7 +101,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Log.v(Iadt.TAG, "CrashHandler: processing finished on "
                         + (new Date().getTime() - startTime) + " ms");
 
-            onCrashStored( thread, ex);
+            onCrashStored(thread, ex);
         }
         catch (Exception e) {
             Log.e(Iadt.TAG, "CrashHandler CRASHED! exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
@@ -200,14 +200,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return session.getUid();
     }
 
-    private Boolean saveScreenshot(){
+    private Boolean saveScreenshot(Crash crash){
         Screenshot screenshot = ScreenshotUtils.take(true);
         if (screenshot != null){
             long screenId = db.screenshotDao().insert(screenshot);
             if (screenId > 0){
-                Crash current = db.crashDao().getLast();
-                current.setScreenId(screenId);
-                db.crashDao().update(current);
+                crash.setScreenId(screenId);
+                db.crashDao().update(crash);
                 return true;
             }
         }
@@ -217,13 +216,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private boolean saveDetailReport(Crash crash) {
         String docPath = DocumentRepository.storeDocument(DocumentType.CRASH, crash);
         crash.setReportPath(docPath);
-        IadtController.get().getDatabase().crashDao().update(crash);
+        db.crashDao().update(crash);
         return true;
     }
 
     private Boolean saveStacktrace(long crashId, Throwable ex){
         if (isDebug()) Log.d(Iadt.TAG, "Storing stacktrace");
-        SourcetraceDao stacktraceDao = db.sourcetraceDao();
         List<Sourcetrace> traces = new ArrayList<>();
         StackTraceElement[] stackTrace = ex.getStackTrace();
         int i=0;
@@ -258,7 +256,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
 
-        stacktraceDao.insertAll(traces);
+        db.sourcetraceDao().insertAll(traces);
         if (isDebug()) Log.d(Iadt.TAG, "Stored " + traces.size() + " traces");
         return true;
     }
