@@ -407,7 +407,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         switch (getParams().origin){
             case SOURCE:
             case TRACE:
-                tuneSelection = new boolean[]{ true, true };
+                tuneSelection = new boolean[]{ true, false };
                 break;
             case INTERNAL:
                 tuneSelection = new boolean[]{ false, false };
