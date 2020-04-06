@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class EventManager {
@@ -106,5 +107,9 @@ public class EventManager {
     }
 
     public interface OneShotListener extends Listener {
+    }
+
+    public ActivityEventDetector getActivityWatcher(){
+        return (ActivityEventDetector) getEventDetectorsManager().get(ActivityEventDetector.class);
     }
 }

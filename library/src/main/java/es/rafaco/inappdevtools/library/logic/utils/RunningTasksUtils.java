@@ -93,8 +93,8 @@ public class RunningTasksUtils {
 
     //TODO: It don't seem the best way
     public static String getTopActivityStatus() {
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
-                .getEventDetectorsManager().get(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
+                .getActivityWatcher();
         return activityWatcher.isInBackground() ? "Background" : "Foreground";
     }
 

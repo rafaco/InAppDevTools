@@ -35,8 +35,9 @@ public class ActivityEventDetector extends EventDetector implements Application.
 
     protected final Deque<String> activityLog = new ArrayDeque<>(100);
     //protected WeakReference<Activity> lastActivityCreated = new WeakReference<>(null);
-    protected int currentlyStartedActivities = 0;
-    protected String lastActivityResumed = "";
+    protected int startedActivities = 0;
+    protected String currentActivityName = "";
+    protected Activity currentActivity = null;
     protected boolean isInBackground = true;
 
     public ActivityEventDetector(EventManager eventManager) {
@@ -125,18 +126,19 @@ public class ActivityEventDetector extends EventDetector implements Application.
 
     @Override
     public void onActivityStarted(Activity activity) {
-        currentlyStartedActivities++;
-        isInBackground = (currentlyStartedActivities == 0);
+        startedActivities++;
+        isInBackground = (startedActivities == 0);
         eventManager.fire(Event.ACTIVITY_ON_START, activity);
     }
 
     @Override
     public void onActivityResumed(final Activity activity) {
         eventManager.fire(Event.ACTIVITY_ON_RESUME, activity);
-        if (!lastActivityResumed.equals(activity.getClass().getSimpleName())){
+        if (!currentActivityName.equals(activity.getClass().getSimpleName())){
             eventManager.fire(Event.ACTIVITY_OPEN, activity);
         }
-        lastActivityResumed = activity.getClass().getSimpleName();
+        currentActivityName = activity.getClass().getSimpleName();
+        currentActivity = activity;
     }
 
     @Override
@@ -146,8 +148,8 @@ public class ActivityEventDetector extends EventDetector implements Application.
 
     @Override
     public void onActivityStopped(Activity activity) {
-        currentlyStartedActivities--;
-        isInBackground = (currentlyStartedActivities == 0);
+        startedActivities--;
+        isInBackground = (startedActivities == 0);
         eventManager.fire(Event.ACTIVITY_ON_STOP, activity);
     }
 
@@ -188,11 +190,19 @@ public class ActivityEventDetector extends EventDetector implements Application.
         return activityLogStringBuilder.toString();
     }
 
-    public String getLastActivityResumed() {
-        return lastActivityResumed;
+    public String getCurrentActivityName() {
+        return currentActivityName;
     }
 
-    public void setLastActivityResumed(String lastActivityResumed) {
-        this.lastActivityResumed = lastActivityResumed;
+    public void setCurrentActivityName(String currentActivityName) {
+        this.currentActivityName = currentActivityName;
+    }
+
+    public Activity getCurrentActivity() {
+        return currentActivity;
+    }
+
+    public void setCurrentActivity(Activity currentActivity) {
+        this.currentActivity = currentActivity;
     }
 }

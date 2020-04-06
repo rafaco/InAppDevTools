@@ -51,6 +51,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleItemDescriptor;
+import es.rafaco.inappdevtools.library.view.components.flex.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
@@ -184,8 +185,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         }
 
         if(isSelected && getLinkedIdStep(data)!=null){
-            FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
-                    ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
+            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ButtonGroupData.class);
             ButtonGroupData buttonGroupData = new ButtonGroupData(new RunButton(
                     "Details", new Runnable() {
                 @Override
@@ -193,7 +193,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
                     OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
                 }
             }));
-            desc.addToView(desc, buttonGroupData, buttonGroupContainer);
+            desc.addToView(buttonGroupData, buttonGroupContainer);
 
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);

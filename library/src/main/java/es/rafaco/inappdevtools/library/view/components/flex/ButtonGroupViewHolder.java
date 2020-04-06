@@ -80,7 +80,7 @@ public class ButtonGroupViewHolder extends FlexibleViewHolder {
                         R.layout.flexible_item_button_group_item;
                 FlexibleItemDescriptor desc = new FlexibleItemDescriptor(RunButton.class,
                         RunButtonViewHolder.class, style);
-                desc.addToView(desc, buttonData, groupContainer);
+                desc.addToView(buttonData, groupContainer);
             }
         }
     }

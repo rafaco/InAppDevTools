@@ -141,9 +141,8 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 ButtonGroupData buttonGroupData = new ButtonGroupData(buttons);
                 buttonGroupData.setWrapContent(true);
                 buttonGroupData.setBorderless(true);
-                FlexibleItemDescriptor desc = new FlexibleItemDescriptor(ButtonGroupData.class,
-                        ButtonGroupViewHolder.class, R.layout.flexible_item_button_group);
-                desc.addToView(desc, buttonGroupData, buttonGroupContainer);
+                FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ButtonGroupData.class);
+                desc.addToView(buttonGroupData, buttonGroupContainer);
                 buttonGroupContainer.setVisibility(View.VISIBLE);
             }
         }

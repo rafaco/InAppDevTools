@@ -96,6 +96,16 @@ public class OverlayHelper {
         OverlayService.performAction(OverlayService.IntentAction.SHOW_ICON);
     }
 
+    public void hideAll() {
+        if (cantShowOverlay()) return;
+        OverlayService.performAction(OverlayService.IntentAction.HIDE_ALL);
+    }
+
+    public void restoreAll() {
+        if (cantShowOverlay()) return;
+        OverlayService.performAction(OverlayService.IntentAction.RESTORE_ALL);
+    }
+
     //endregion
 
 }

@@ -40,10 +40,10 @@ public class FlexibleItemDescriptor {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public View addToView(FlexibleItemDescriptor descriptor, Object data, ViewGroup container) {
+    public View addToView(Object data, ViewGroup container) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
-        View view =  inflater.inflate(descriptor.layoutResourceId, container, false);
-        FlexibleViewHolder holder = constructViewHolder(descriptor, view);
+        View view =  inflater.inflate(layoutResourceId, container, false);
+        FlexibleViewHolder holder = constructViewHolder(view);
         holder.onCreate(container, -1);
         holder.bindTo(data, -1);
         container.addView(view);
@@ -51,10 +51,10 @@ public class FlexibleItemDescriptor {
     }
 
     //TODO: use this for all usages
-    private FlexibleViewHolder constructViewHolder(FlexibleItemDescriptor desc, View view) {
+    private FlexibleViewHolder constructViewHolder(View view) {
         FlexibleViewHolder holder = null;
         try {
-            Constructor<? extends FlexibleViewHolder> constructor = desc.viewHolderClass
+            Constructor<? extends FlexibleViewHolder> constructor = viewHolderClass
                     .getConstructor(View.class);
             holder = constructor.newInstance(new Object[] { view });
         } catch (Exception e) {
