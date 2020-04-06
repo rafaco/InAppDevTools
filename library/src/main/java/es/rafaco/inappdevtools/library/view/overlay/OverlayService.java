@@ -59,6 +59,8 @@ public class OverlayService extends Service {
         SHOW_MAIN,
         SHOW_ICON,
         SHOW_TOGGLE,
+        HIDE_ALL,
+        RESTORE_ALL,
     }
 
     public OverlayService() {}
@@ -224,6 +226,12 @@ public class OverlayService extends Service {
         else if (action.equals(IntentAction.SHOW_TOGGLE)) {
             overlayManager.showToggle();
         }
+        else if (action.equals(IntentAction.HIDE_ALL)) {
+            overlayManager.toggleVisibility(false);
+        }
+        else if (action.equals(IntentAction.RESTORE_ALL)) {
+            overlayManager.toggleVisibility(true);
+        }
     }
 
     //endregion
@@ -246,11 +254,11 @@ public class OverlayService extends Service {
     public void onTaskRemoved(Intent rootIntent){
         //TODO: relocate to eventmanager
         FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
-                .getEventDetectorsManager().get(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
+                .getActivityWatcher();
 
         //TODO: ???
-        activityWatcher.setLastActivityResumed("");
+        activityWatcher.setCurrentActivityName("");
     }
 
     @Override

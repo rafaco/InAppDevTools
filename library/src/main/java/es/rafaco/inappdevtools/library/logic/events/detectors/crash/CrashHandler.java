@@ -51,7 +51,6 @@ import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -87,13 +86,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             long crashId = storeCrash(crash);
             crash.setUid(crashId);
             long sessionId = updateSession(crashId);
-
             PendingCrashUtil.savePending();
+
+            long screenshotId = saveScreenshot(crash);
+            crash.setScreenId(screenshotId);
+            db.crashDao().update(crash);
 
             IadtController.get().beforeClose();
             //TODO:
             flushLogcat();
-            saveScreenshot(crash);
             saveDetailReport(crash);
             saveStacktrace(crashId, ex);
 
@@ -106,7 +107,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         catch (Exception e) {
             Log.e(Iadt.TAG, "CrashHandler CRASHED! exception while processing uncaughtException on " + Humanizer.getElapsedTime(startTime));
             Log.e(Iadt.TAG, "EXCEPTION: " + e.getCause() + " -> " + e.getMessage());
-            Log.e(Iadt.TAG, String.valueOf(e.getStackTrace()));
+            Log.e(Iadt.TAG, Log.getStackTraceString(e));
             FriendlyLog.logException("Exception", e);
         }
     }
@@ -160,15 +161,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
-        ActivityEventDetector activityWatcher = (ActivityEventDetector) IadtController.get().getEventManager()
-                .getEventDetectorsManager().get(ActivityEventDetector.class);
+        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
+                .getActivityWatcher();
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isMain(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
         crash.setForeground(!activityWatcher.isInBackground());
-        crash.setLastActivity(activityWatcher.getLastActivityResumed());
+        crash.setLastActivity(activityWatcher.getCurrentActivityName());
         return crash;
     }
 
@@ -200,17 +201,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return session.getUid();
     }
 
-    private Boolean saveScreenshot(Crash crash){
+    private long saveScreenshot(Crash crash){
         Screenshot screenshot = ScreenshotUtils.take(true);
         if (screenshot != null){
             long screenId = db.screenshotDao().insert(screenshot);
             if (screenId > 0){
-                crash.setScreenId(screenId);
-                db.crashDao().update(crash);
-                return true;
+                return screenId;
             }
         }
-        return false;
+        return -1;
     }
 
     private boolean saveDetailReport(Crash crash) {

@@ -49,9 +49,6 @@ public class Screenshot implements Serializable {
     @ColumnInfo(name = "activityName")
     private String activityName;
 
-    @ColumnInfo(name = "rootViewName")
-    private String rootViewName;
-
     public long getUid() {
         return uid;
     }
@@ -90,13 +87,5 @@ public class Screenshot implements Serializable {
 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
-    }
-
-    public String getRootViewName() {
-        return rootViewName;
-    }
-
-    public void setRootViewName(String rootViewName) {
-        this.rootViewName = rootViewName;
     }
 }

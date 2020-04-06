@@ -102,7 +102,7 @@ public class OverlayManager {
             Log.v(Iadt.TAG, "OverlayManager - resume");
         if (screenManager.getCurrentScreen() != null)
             screenManager.getCurrentScreen().resume();
-        layerManager.toggleAllLayerVisibility(true);
+        toggleVisibility(true);
     }
 
     private void pause() {
@@ -110,7 +110,11 @@ public class OverlayManager {
             Log.v(Iadt.TAG, "OverlayManager - pause");
         if (screenManager.getCurrentScreen() != null)
             screenManager.getCurrentScreen().pause();
-        layerManager.toggleAllLayerVisibility(false);
+        toggleVisibility(false);
+    }
+
+    public void toggleVisibility(boolean isVisible) {
+        layerManager.toggleAllLayerVisibility(isVisible);
     }
 
     //endregion

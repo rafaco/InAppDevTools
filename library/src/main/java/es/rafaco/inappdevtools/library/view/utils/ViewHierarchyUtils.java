@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -130,11 +131,19 @@ public class ViewHierarchyUtils {
     }
 
     public static String getActivityNameFromRootView(View selectedView) {
-        WindowManager.LayoutParams wlp = (WindowManager.LayoutParams) selectedView.getLayoutParams();
-        String windowTitle = wlp.getTitle().toString();
-        String activityName = windowTitle.substring(windowTitle.lastIndexOf('.') + 1);
-        //TODO: fallback with another extractor
+        String activityName = "";
+        try{
+            WindowManager.LayoutParams wlp = (WindowManager.LayoutParams) selectedView.getLayoutParams();
+            String windowTitle = wlp.getTitle().toString();
+            activityName = windowTitle.substring(windowTitle.lastIndexOf('.') + 1);
+        }
+        catch (Exception e){
+            //Intentionally empty
+        }
 
+        if (TextUtils.isEmpty(activityName)){
+            return selectedView.toString();
+        }
         return activityName;
     }
 }

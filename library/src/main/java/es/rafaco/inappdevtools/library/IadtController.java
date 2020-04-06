@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.TooManyListenersException;
@@ -307,17 +308,29 @@ public final class IadtController {
 
     public void takeScreenshot() {
         if (!isEnabled()) return;
+        boolean isOverlayRunning = getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
+                && OverlayService.isInitialize();
 
-        Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
-        FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
-
-        if(getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED) && OverlayService.isInitialize()){
-            getOverlayHelper().showIcon();
+        if (!isOverlayRunning){
+            Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
+            FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
         }
 
-        Iadt.showMessage("Screenshot taken");
-        //TODO: show internally
-        //FileProviderUtils.sendIntentAction(getContext(), screenshot.getPath());
+        getOverlayHelper().hideAll();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
+                FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getOverlayHelper().restoreAll();
+                    }
+                }, 200);
+            }
+        }, 200);
     }
 
     //endregion

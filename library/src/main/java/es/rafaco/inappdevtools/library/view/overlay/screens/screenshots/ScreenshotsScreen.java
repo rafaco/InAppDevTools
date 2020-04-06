@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,38 +19,29 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
-//#ifdef ANDROIDX
-//@import androidx.core.view.ViewCompat;
-//@import androidx.recyclerview.widget.DefaultItemAnimator;
-//@import androidx.recyclerview.widget.GridLayoutManager;
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-//#endif
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
-import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ScreenshotsScreen extends Screen {
-
-    private Button shotButton;
-    private RecyclerView recyclerView;
-    private ScreenshotAdapter adapter;
+public class ScreenshotsScreen extends AbstractFlexibleScreen {
 
     public ScreenshotsScreen(ScreenManager manager) {
         super(manager);
@@ -58,99 +49,116 @@ public class ScreenshotsScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return "Screens";
+        return "Screenshots";
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.tool_screenshots; }
-
-    @Override
-    protected void onCreate() {
-        //Nothing needed
+    protected void onAdapterStart() {
+        updateAdapter(getFlexibleData());
     }
 
-    @Override
-    protected void onStart(ViewGroup view) {
-        initView(view);
-    }
+    private List<Object> getFlexibleData() {
+        List<Object> data = new ArrayList<>();
 
-    @Override
-    protected void onResume() {
-        requestData();
-    }
+        data.add("Take screenshots of your running activities, we will auto take a shot of your crashes. You can include them in your reports or share it directly.");
 
-    @Override
-    protected void onStop() {
-        //Nothing needed
-    }
+        RunButton take = new RunButton( "Take Screenshot",
+                R.drawable.ic_add_a_photo_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onScreenshotButton();
+                    }
+                });
 
-    @Override
-    protected void onDestroy() {
-        //Nothing needed
-    }
+        RunButton filter = new RunButton( "Filter by session",
+                R.drawable.ic_history_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Iadt.showMessage("Coming soon");
+                    }
+                });
+        List<RunButton> buttons = new ArrayList<>();
+        buttons.add(take);
+        buttons.add(filter);
+        data.add(new ButtonGroupData(buttons));
 
+        data.add("");
 
-    private void initView(View toolView) {
-        initShotButton(toolView);
-        initAdapter(toolView);
+        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        long currentSession = IadtController.get().getSessionManager().getCurrentUid();
+        final List<Screenshot> screenshots = screenshotDao.getAll();
+        for (int i = 0; i<screenshots.size(); i++) {
+            final Screenshot screenshot = screenshots.get(i);
 
-        requestData();
-    }
+            String title = String.format("Screenshot %s", screenshot.getUid());
+            String content = "Activity: " + screenshot.getActivityName()
+                    + Humanizer.newLine()
+                    + "Session: " + screenshot.getSessionId()
+                    + Humanizer.newLine()
+                    + "Elapsed: " + Humanizer.getElapsedTime(screenshot.getDate());
 
-    private void initShotButton(View toolView) {
-        shotButton = toolView.findViewById(R.id.shot_button);
-        shotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onScreenshotButton();
+            CardData cardData = new CardData(title,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            onCardClick(screenshot);
+                        }
+                    });
+            cardData.setContent(content);
+            cardData.setImagePath(screenshot.getPath());
+            cardData.setNavIcon(R.string.gmd_open_in_new);
+
+            if (screenshot.getSessionId() == currentSession) {
+                cardData.setBgColor(R.color.rally_blue_dark);
             }
-        });
+            else if (screenshot.getPath().contains("crash_")){
+                cardData.setBgColor(R.color.rally_orange_dark);
+            }
+            else {
+                cardData.setBgColor(R.color.rally_dark_green);
+            }
+            data.add(cardData);
+        }
+
+        return data;
     }
 
     private void onScreenshotButton() {
         IadtController.get().takeScreenshot();
-    }
 
-
-
-    private void initAdapter(View toolView) {
-        adapter = new ScreenshotAdapter(getContext(), new ArrayList<Screenshot>());
-
-        recyclerView = toolView.findViewById(R.id.recycler_view);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 1);
-        recyclerView.setLayoutManager(mLayoutManager);
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        adapter.setRecycledView(recyclerView);
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void requestData() {
-        ThreadUtils.runOnBack("Iadt-GetScreenshot",
-                new Runnable() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
-                final ArrayList<Screenshot> newScreenshotList = (ArrayList<Screenshot>) screenshotDao.getAll();
-                ThreadUtils.runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateList(newScreenshotList);
-                    }
-                });
-                //screenshotDao.getAllLive().observe(ScreenshotsScreen.this, screens -> updateLive(screens));
+                updateAdapter(getFlexibleData());
             }
-        });
+        }, 1000);
     }
 
-    /*private void updateLive(List<Screenshot> screens) {
-        adapter.setData(screens);
-    }*/
+    private void onCardClick(final Screenshot screenshot) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
+                .setTitle("What do you want to do?")
+                .setMessage("To apply your changes safely, we currently need to restart your app. You can also discard them by now.")
+                .setCancelable(false)
+                .setPositiveButton("VIEW",
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FileProviderUtils.viewExternally("", screenshot.getPath() );
+                            }})
+                //TODO: add to report
+                .setNegativeButton("SHARE",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FileProviderUtils.sendExternally("", screenshot.getPath() );
+                            }
+                        });
 
-    private void updateList(ArrayList<Screenshot> screenshots) {
-        adapter.setData(screenshots);
-        //screenList.addAll(screenshots);
-        //adapter.notifyDataSetChanged();
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setType(Layer.getLayoutType());
+        alertDialog.show();
     }
 }
