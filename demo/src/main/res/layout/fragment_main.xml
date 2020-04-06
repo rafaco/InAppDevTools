@@ -2,137 +2,219 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_desc_header"
-        style="@style/Header"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_desc"
-        style="@style/Paragraph"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/library_desc_header"
-        style="@style/Header"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/library_desc"
-        style="@style/Paragraph"/>
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/warning_shape"
-        android:backgroundTint="@color/demo_yellow">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:drawableLeft="@drawable/ic_warning_yellow_24dp"
-            android:drawableTint="@color/demo_gray"
-            android:drawablePadding="5dp"
-            android:layout_gravity="top"
-            android:gravity="top"
-            android:text="@string/disclaimer"
-            android:textStyle="italic"
-            android:textColor="@color/demo_gray"
-            android:justificationMode="inter_word" />
+            android:text="@string/app_desc_header"
+            style="@style/Header"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_desc"
+            style="@style/Paragraph"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/library_desc_header"
+            style="@style/Header"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/library_desc"
+            style="@style/Paragraph"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/warning_shape"
+            android:backgroundTint="@color/demo_yellow">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:drawableLeft="@drawable/ic_warning_yellow_24dp"
+                android:drawableTint="@color/demo_gray"
+                android:drawablePadding="5dp"
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:text="@string/disclaimer"
+                android:textStyle="italic"
+                android:textColor="@color/demo_gray"
+                android:justificationMode="inter_word" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/invocation_desc"
+            android:layout_marginTop="10dp"
+            style="@style/Paragraph"/>
 
     </LinearLayout>
 
-    <TextView
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view_crash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/invocation_desc"
-        android:layout_marginTop="10dp"
-        style="@style/Paragraph"/>
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="10dp"
+        card_view:cardBackgroundColor="@color/demo_red"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-    <RelativeLayout
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title_crash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/home_crash_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:textColor="@color/demo_white"/>
+
+            <TextView
+                android:id="@+id/detail_crash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_crash"
+                android:layout_toLeftOf="@id/image_crash"
+                android:text="@string/home_crash_desc"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/demo_white"/>
+
+            <ImageView
+                android:id="@+id/image_crash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_bug_report_white_24dp"
+                android:tint="@color/demo_white"/>
+        </RelativeLayout>
+    </es.rafaco.compat.CardView>
+
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view_browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="10dp"
+        card_view:cardBackgroundColor="@color/demo_blue_dark"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/crash_button"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:backgroundTint="@color/demo_red"
-            android:textColor="@color/demo_white"
-            android:drawableLeft="@drawable/ic_bug_report_white_24dp"
-            android:text="@string/crash_button"
-            android:layout_gravity="right"/>
+            android:padding="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/crash_button"
-            android:text="@string/crash_desc"
-            style="@style/Paragraph"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/title_browse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/home_browse_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:textColor="@color/demo_white"/>
 
-    <RelativeLayout
+            <TextView
+                android:id="@+id/detail_browse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_browse"
+                android:layout_toLeftOf="@id/image_browse"
+                android:text="@string/home_browse_desc"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/demo_white"/>
+
+            <ImageView
+                android:id="@+id/image_browse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_run_white_24dp"
+                android:tint="@color/demo_white"/>
+        </RelativeLayout>
+    </es.rafaco.compat.CardView>
+
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="10dp"
+        card_view:cardBackgroundColor="@color/demo_green_dark"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/browse_button"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/browse_button"
-            android:layout_gravity="right" />
+            android:padding="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/browse_button"
-            android:text="@string/browse_desc"
-            style="@style/Paragraph"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/title_help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/home_help_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:textColor="@color/demo_white"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="50dp">
+            <TextView
+                android:id="@+id/detail_help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_help"
+                android:layout_toLeftOf="@id/image_help"
+                android:text="@string/home_help_desc"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/demo_white"/>
 
-        <es.rafaco.compat.AppCompatButton
-            android:id="@+id/help_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_help_outline_white_24dp"
-            android:drawableTint="@color/demo_gray"
-            android:text="@string/help_button"
-            android:layout_gravity="right"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/help_button"
-            android:text="@string/help_desc"
-            style="@style/Paragraph"/>
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/image_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_help_outline_white_24dp"
+                android:tint="@color/demo_white"/>
+        </RelativeLayout>
+    </es.rafaco.compat.CardView>
 
 </LinearLayout>

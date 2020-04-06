@@ -37,8 +37,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 //#endif
 
+import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.demo.R;
+import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -58,29 +60,32 @@ public class MainActivityFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AppCompatButton crashButton = view.findViewById(R.id.crash_button);
-        crashButton.setOnClickListener(new View.OnClickListener() {
+        CardView card_crash = view.findViewById(R.id.card_view_crash);
+        card_crash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Iadt.crashBackgroundThread();
+                Iadt.trackUserAction("User clicked on Crash section");
+                Intent intent = new Intent(getContext(), CrashActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(intent);
             }
         });
 
-        AppCompatButton browseButton = view.findViewById(R.id.browse_button);
-        browseButton.setOnClickListener(new View.OnClickListener() {
+        CardView card_browse = view.findViewById(R.id.card_view_browse);
+        card_browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Iadt.trackUserAction("User clicked on Browse Demo");
                 Intent intent = new Intent(getContext(), ItemListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
                 startActivity(intent);
             }
         });
 
-        AppCompatButton helpButton = view.findViewById(R.id.help_button);
-        helpButton.setOnClickListener(new View.OnClickListener() {
+        CardView card_help = view.findViewById(R.id.card_view_help);
+        card_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Iadt.trackUserAction("User clicked on help button");

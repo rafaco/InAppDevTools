@@ -56,7 +56,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-@Database(version = 28, exportSchema = false,
+@Database(version = 29, exportSchema = false,
         entities = {
                 Build.class,
                 Session.class,

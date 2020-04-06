@@ -9,16 +9,17 @@
     <string name="library_desc">InAppDevTools is a collection of tools for debugging, inspecting and reporting from within your own application... on the same screen!</string>
     <string name="invocation_desc">You can open our tools at any time to inspect your running app. Just shake your device, tap our notification or tap our floating icon.</string>
 
-    <string name="crash_desc">On crash our tools will automatically pop up, showing a visual stacktrace</string>
-    <string name="crash_button">Crash</string>
-    <string name="browse_button">Browse</string>
-    <string name="browse_desc">You can browse some dummy activities to generate more data to inspect</string>
-    <string name="help_button">Help</string>
-    <string name="help_desc">For installation instructions or to get more info, visit our GitHub repo</string>
+    <string name="home_crash_title">Crash Handler</string>
+    <string name="home_crash_desc">Try what will happen if your app crash</string>
+    <string name="home_browse_title">Dummy Activities</string>
+    <string name="home_browse_desc">Browse some activities to generate data to inspect</string>
+    <string name="home_help_title">Setup and Support</string>
+    <string name="home_help_desc">Visit our GitHub repo for more info</string>
     <string name="disclaimer">InAppDevTools doesn\'t inspect/debug other installed apps. It only works with APK\'s who has been built with our library inside</string>
 
     <string name="action_share">Share this app</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_crash">Crash Demo</string>
 
 </resources>
