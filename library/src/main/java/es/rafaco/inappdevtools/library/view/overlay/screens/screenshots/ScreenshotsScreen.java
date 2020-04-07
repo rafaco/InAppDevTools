@@ -21,7 +21,12 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.screenshots;
 
 import android.content.DialogInterface;
 import android.os.Handler;
+
+//#ifdef ANDROIDX
+//@import androidx.appcompat.app.AlertDialog;
+//#else
 import android.support.v7.app.AlertDialog;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
