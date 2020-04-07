@@ -104,7 +104,7 @@ public class ZipNodeReader extends AbstractNodeReader {
         }
         ZipEntry entry = file.getEntry(parentName);
         if (entry==null){
-            Log.e("TAG", "no entry for " + parentName);
+            Log.e(Iadt.TAG, "no entry for " + parentName);
             return null;
         }
         return addEntry(entry);

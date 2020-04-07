@@ -158,8 +158,8 @@ class BuildInfoTask extends IadtBaseTask {
                     REMOTE_URL      : remoteUrl,
                     REMOTE_LAST     : configUtils.shell('git log ' + trackingFull +' -1'),
 
-                    TAG             : tag,
-                    INFO            : configUtils.shell('git describe --tags --always --dirty'),
+                    TAG_LAST        : tag,
+                    TAG_INFO        : configUtils.shell('git describe --tags --always --dirty'),
                     TAG_DISTANCE    : configUtils.shell('git rev-list ' + tag + ' --count'),
 
                     LOCAL_BRANCH    : localBranch,

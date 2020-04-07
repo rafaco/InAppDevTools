@@ -24,8 +24,8 @@ public class GitInfo {
     public static final String REMOTE_NAME = "";
     public static final String REMOTE_URL = "";
     public static final String REMOTE_LAST = "";
-    public static final String TAG = "";
-    public static final String INFO = "";
+    public static final String TAG_LAST = "";
+    public static final String TAG_INFO = "";
     public static final String TAG_DISTANCE = "";
     public static final String LOCAL_BRANCH = "";
     public static final String LOCAL_COMMITS = "";

@@ -245,11 +245,11 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
             return group.build();
         }
 
-        group.setOverview(gitConfig.getString(GitInfo.LOCAL_BRANCH) + "-" + gitConfig.getString(GitInfo.TAG));
+        group.setOverview(gitConfig.getString(GitInfo.LOCAL_BRANCH) + "-" + gitConfig.getString(GitInfo.TAG_LAST));
         group.add("Git url", gitConfig.getString(GitInfo.REMOTE_URL))
                 .add("Branch", gitConfig.getString(GitInfo.LOCAL_BRANCH))
-                .add("Tag", gitConfig.getString(GitInfo.TAG))
-                .add("Tag Status", gitConfig.getString(GitInfo.INFO))
+                .add("Last Tag", gitConfig.getString(GitInfo.TAG_LAST))
+                .add("Tag Info", gitConfig.getString(GitInfo.TAG_INFO))
                 .add(" - Last commit:")
                 .add(gitConfig.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
         group.addButton(new RunButton("Browse repo",
@@ -269,7 +269,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
         String build = getFriendlyBuildType();
         String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
-        String tag = gitConfig.getString(GitInfo.TAG);
+        String tag = gitConfig.getString(GitInfo.TAG_LAST);
 
         return String.format("%s from %s %s", build, branch, tag);
     }
