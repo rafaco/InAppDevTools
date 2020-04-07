@@ -1,13 +1,14 @@
 <resources>
 
     <string name="app_name">InAppDevTools Demo</string>
-    <string name="app_desc_header">What is this app?</string>
-    <string name="app_desc">This app is the demo of a open source Android library called InAppDevTools.</string>
-
     <string name="library_name">InAppDevTools</string>
+
+    <string name="app_desc_header">What is this app?</string>
+    <string name="app_desc">This app is a demo of an Android library called InAppDevTools.</string>
     <string name="library_desc_header">What is InAppDevTools?</string>
     <string name="library_desc">InAppDevTools is a collection of tools for debugging, inspecting and reporting from within your own application... on the same screen!</string>
-    <string name="invocation_desc">You can open our tools at any time to inspect your running app. Just shake your device, tap our notification or tap our floating icon.</string>
+    <string name="disclaimer">InAppDevTools doesn\'t inspect/debug other installed apps. It only works with apps build with our library inside.</string>
+    <string name="invocation_desc">You can open our tools at any time by tapping our floating icon or shaking your device. We will pop up if your app crash</string>
 
     <string name="home_crash_title">Crash Handler</string>
     <string name="home_crash_desc">Try what will happen if your app crash</string>
@@ -15,7 +16,7 @@
     <string name="home_browse_desc">Browse some activities to generate data to inspect</string>
     <string name="home_help_title">Setup and Support</string>
     <string name="home_help_desc">Visit our GitHub repo for more info</string>
-    <string name="disclaimer">InAppDevTools doesn\'t inspect/debug other installed apps. It only works with APK\'s who has been built with our library inside</string>
+
 
     <string name="action_share">Share this app</string>
     <string name="title_item_list">Items</string>

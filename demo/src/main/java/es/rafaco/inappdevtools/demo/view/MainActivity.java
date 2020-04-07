@@ -24,16 +24,13 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AppCompatActivity;
 //@import androidx.appcompat.widget.Toolbar;
-//@import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //@import com.google.android.material.snackbar.Snackbar;
 //#else
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 //#endif
@@ -51,17 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Iadt.trackUserAction("User clicked on FloatingActionButton");
-                Snackbar.make(view, "Calling 'Iadt.show()' to open it if enabled", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Iadt.show();
-            }
-        });
 
         DemoAPI demoAPI = new DemoAPI();
         demoAPI.start(getApplicationContext());

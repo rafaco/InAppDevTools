@@ -41,14 +41,16 @@
 
     </es.rafaco.compat.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/activity_crash_content" />
-    </FrameLayout>
+
+    </ScrollView>
 
     <es.rafaco.compat.FloatingActionButton
         android:id="@+id/fab"
@@ -56,6 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_popup_reminder" />
 
 </es.rafaco.compat.CoordinatorLayout>

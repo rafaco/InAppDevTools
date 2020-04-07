@@ -26,18 +26,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:fillViewport="true"
-        android:layout_marginTop="40dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/content_main" />
 
     </ScrollView>
-
-    <es.rafaco.compat.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </es.rafaco.compat.CoordinatorLayout>

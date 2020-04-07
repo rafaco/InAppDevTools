@@ -77,7 +77,6 @@ public class CrashActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-
                                 ScreenshotUtils.takeAndSave(false);
                                 dialog.dismiss();
                             }
