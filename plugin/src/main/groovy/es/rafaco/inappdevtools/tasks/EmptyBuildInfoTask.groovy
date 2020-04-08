@@ -36,10 +36,8 @@ class EmptyBuildInfoTask extends IadtBaseTask {
         ProjectUtils projectUtils = new ProjectUtils(project)
         ConfigUtils configUtils = new ConfigUtils(project)
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        configUtils.saveConfigMap(propertiesMap, file)
+        configUtils.writeMap(file, propertiesMap)
 
-        if (isDebug()) {
-            println "   Generated empty build_config for Iadt disabled"
-        }
+        if (isDebug()) println "   Generated empty build_config for Iadt disabled"
     }
 }

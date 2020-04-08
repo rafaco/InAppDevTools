@@ -21,6 +21,9 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 public class GitInfo {
     public static final String ENABLED = "";
+    public static final String VERSION = "";
+    public static final String USER_NAME = "";
+    public static final String USER_EMAIL = "";
     public static final String REMOTE_NAME = "";
     public static final String REMOTE_URL = "";
     public static final String REMOTE_LAST = "";
@@ -28,6 +31,7 @@ public class GitInfo {
     public static final String TAG_INFO = "";
     public static final String TAG_DISTANCE = "";
     public static final String LOCAL_BRANCH = "";
+    public static final String HAS_LOCAL_COMMITS = "";
     public static final String LOCAL_COMMITS = "";
     public static final String HAS_LOCAL_CHANGES = "";
     public static final String LOCAL_CHANGES = "";

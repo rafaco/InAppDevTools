@@ -55,7 +55,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     JsonHelper buildInfo;
     JsonHelper buildConfig;
-    JsonHelper gitConfig;
+    JsonHelper gitInfo;
     JsonHelper appBuildConfig;
 
     public BuildInfoDocumentGenerator(Context context, DocumentType report, long param) {
@@ -68,7 +68,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         buildInfo = BuildFilesRepository.getBuildInfoHelper(sessionId);
         buildConfig = BuildFilesRepository.getBuildConfigHelper(sessionId);
-        gitConfig = BuildFilesRepository.getGitConfigHelper(sessionId);
+        gitInfo = BuildFilesRepository.getGitInfoHelper(sessionId);
         appBuildConfig = BuildFilesRepository.getAppBuildConfigHelper(sessionId);
     }
 
@@ -104,13 +104,13 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         if (!isGitEnabled()){
             return "Unavailable";
         }
-        String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
+        String branch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
 
 
-        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
+        String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
 
         if (!hasLocalCommits && !hasLocalChanges){
             return branch + " branch without changes";
@@ -134,12 +134,17 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         builder.add(getBuildInfo())
                 .add(getBuildHostInfo())
+                .add(getBuildEnvironment());
 
-                .add(getBuildDependencies())
-                .add(getBuilderInfo())
-                .add(getRepositoryInfo())
-                .add(getLocalRepositoryInfo())
-                .add(getLocalChangesInfo());
+        if (!isGitEnabled()){
+            builder.add(getGitUnavailableInfo());
+        }
+        else{
+            builder.add(getGitUserInfo())
+                    .add(getGitRepoInfo())
+                    .add(getGitLocalRepoInfo())
+                    .add(getGitLocalChangesInfo());
+        }
 
         return builder.build();
     }
@@ -157,25 +162,6 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         String firstLine = getFriendlyBuildType();
         String secondLine = getFriendlyElapsedTime();
         return firstLine + " build from " + secondLine;
-    }
-
-
-    public DocumentSectionData getBuilderInfo() {
-        DocumentSectionData group = new DocumentSectionData.Builder("Git User")
-                .setIcon(R.string.gmd_person)
-                .setOverview(buildInfo.getString(BuildInfo.GIT_USER_NAME))
-                .add("Git name", buildInfo.getString(BuildInfo.GIT_USER_NAME))
-                .add("Git email", buildInfo.getString(BuildInfo.GIT_USER_EMAIL))
-                .addButton(new RunButton("Write Email",
-                    R.drawable.ic_email_white_24dp,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            ExternalIntentUtils.composeEmail(buildInfo.getString(BuildInfo.GIT_USER_EMAIL), "Email from IADT");
-                        }
-                    }))
-                .build();
-        return group;
     }
 
     public DocumentSectionData getBuildHostInfo() {
@@ -203,12 +189,13 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group;
     }
 
-    public DocumentSectionData getBuildDependencies() {
+    public DocumentSectionData getBuildEnvironment() {
         DocumentSectionData group = new DocumentSectionData.Builder("Environment")
                 .setIcon(R.string.gmd_extension)
                 .setOverview("Gradle " + buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Gradle", buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VERSION))
+                .add("Java version", buildInfo.getString(BuildInfo.JAVA_VENDOR))
                 .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
                 .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
                 .addButton(new RunButton("Plugins",
@@ -235,7 +222,37 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group;
     }
 
-    public DocumentSectionData getRepositoryInfo() {
+
+
+    private DocumentSectionData getGitUnavailableInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Git Info")
+                .setIcon(R.string.gmd_assignment_late)
+                .setOverview("UNAVAILABLE")
+                .add("Git command was not reachable on build time or your project is not in a Git repository.")
+                .build();
+        return group;
+    }
+
+    public DocumentSectionData getGitUserInfo() {
+        DocumentSectionData group = new DocumentSectionData.Builder("Git User")
+                .setIcon(R.string.gmd_person)
+                .setOverview(gitInfo.getString(GitInfo.USER_NAME))
+                .add("Git name", gitInfo.getString(GitInfo.USER_NAME))
+                .add("Git email", gitInfo.getString(GitInfo.USER_EMAIL))
+                .add("Git version", gitInfo.getString(GitInfo.VERSION))
+                .addButton(new RunButton("Write Email",
+                        R.drawable.ic_email_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                ExternalIntentUtils.composeEmail(gitInfo.getString(GitInfo.USER_EMAIL), "Email from IADT");
+                            }
+                        }))
+                .build();
+        return group;
+    }
+
+    public DocumentSectionData getGitRepoInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Remote repo")
                 .setIcon(R.string.gmd_assignment_turned_in);
 
@@ -245,38 +262,40 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
             return group.build();
         }
 
-        group.setOverview(gitConfig.getString(GitInfo.LOCAL_BRANCH) + "-" + gitConfig.getString(GitInfo.TAG_LAST));
-        group.add("Git url", gitConfig.getString(GitInfo.REMOTE_URL))
-                .add("Branch", gitConfig.getString(GitInfo.LOCAL_BRANCH))
-                .add("Last Tag", gitConfig.getString(GitInfo.TAG_LAST))
-                .add("Tag Info", gitConfig.getString(GitInfo.TAG_INFO))
+        group.setOverview(gitInfo.getString(GitInfo.LOCAL_BRANCH) + "-" + gitInfo.getString(GitInfo.TAG_LAST));
+        group.add("Git url", gitInfo.getString(GitInfo.REMOTE_URL))
+                .add("Branch", gitInfo.getString(GitInfo.LOCAL_BRANCH))
+                .add("Last Tag", gitInfo.getString(GitInfo.TAG_LAST))
+                .add("Tag Info", gitInfo.getString(GitInfo.TAG_INFO))
                 .add(" - Last commit:")
-                .add(gitConfig.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
+                .add(gitInfo.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
         group.addButton(new RunButton("Browse repo",
                 R.drawable.ic_public_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        ExternalIntentUtils.viewUrl(gitConfig.getString(GitInfo.REMOTE_URL));
+                        ExternalIntentUtils.viewUrl(gitInfo.getString(GitInfo.REMOTE_URL));
                     }
                 }));
         return group.build();
     }
 
     public String getRepositoryOverview() {
-        if (!isGitEnabled()){
-            return null;
-        }
         String build = getFriendlyBuildType();
-        String branch = gitConfig.getString(GitInfo.LOCAL_BRANCH);
-        String tag = gitConfig.getString(GitInfo.TAG_LAST);
+        if (!isGitEnabled()){
+            return build;
+        }
+        String branch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
+        String tag = gitInfo.getString(GitInfo.TAG_LAST);
 
         return String.format("%s from %s %s", build, branch, tag);
     }
 
     public String getBuildOverview() {
         String time = getFriendlyElapsedTime();
-        String user = buildInfo.getString(BuildInfo.GIT_USER_NAME);
+        String user = gitInfo.getString(GitInfo.USER_NAME);
+        if (TextUtils.isEmpty(user))
+            user = buildInfo.getString(BuildInfo.HOST_USER);
         return String.format("%s by %s", time, user);
     }
 
@@ -295,11 +314,14 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public String getLocalOverview(){
-        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
+        if (!isGitEnabled()){
+            return "No Git repository";
+        }
+        String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
-        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        String file_status = gitInfo.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         if (!hasLocalCommits && !hasLocalChanges){
@@ -318,20 +340,19 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         return result;
     }
 
-    public DocumentSectionData getLocalRepositoryInfo() {
-        String local_commits = gitConfig.getString(GitInfo.LOCAL_COMMITS);
-        int local_commits_count = Humanizer.countLines(local_commits);
-        boolean hasLocalCommits = local_commits_count > 0;
-
+    public DocumentSectionData getGitLocalRepoInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local repo")
                 .setIcon(R.string.gmd_assignment_ind);
 
+        boolean hasLocalCommits = gitInfo.getBoolean(GitInfo.HAS_LOCAL_COMMITS);
         if (!hasLocalCommits){
             group.setOverview("CLEAN");
             group.add("No local commits");
             return group.build();
         }
 
+        String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
+        int local_commits_count = Humanizer.countLines(local_commits);
         group.setOverview(local_commits_count + " commits ahead");
         group.add(local_commits);
         group.addButton(new RunButton("View Commits",
@@ -348,9 +369,9 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group.build();
     }
 
-    public DocumentSectionData getLocalChangesInfo() {
-        boolean hasLocalChanges = gitConfig.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        String file_status = gitConfig.getString(GitInfo.LOCAL_CHANGES);
+    public DocumentSectionData getGitLocalChangesInfo() {
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        String file_status = gitInfo.getString(GitInfo.LOCAL_CHANGES);
         int file_changes_count = Humanizer.countLines(file_status);
 
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local changes")
@@ -379,7 +400,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public boolean isGitEnabled() {
-        return gitConfig.getBoolean(GitInfo.ENABLED);
+        return gitInfo.getBoolean(GitInfo.ENABLED);
     }
 
 }

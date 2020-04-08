@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.logic.config;
 
-
 public class BuildInfo {
     public static final String BUILD_TIME = "BUILD_TIME";
     public static final String BUILD_TIME_UTC = "BUILD_TIME_UTC";
@@ -27,10 +26,9 @@ public class BuildInfo {
     public static final String HOST_ADDRESS = "HOST_ADDRESS";
     public static final String HOST_OS = "HOST_OS";
     public static final String HOST_USER = "HOST_USER";
-    public static final String GIT_USER_NAME = "GIT_USER_NAME";
-    public static final String GIT_USER_EMAIL = "GIT_USER_EMAIL";
     public static final String IADT_PLUGIN_VERSION = "IADT_PLUGIN_VERSION";
     public static final String ANDROID_PLUGIN_VERSION = "ANDROID_PLUGIN_VERSION";
     public static final String GRADLE_VERSION = "GRADLE_VERSION";
     public static final String JAVA_VERSION = "JAVA_VERSION";
+    public static final String JAVA_VENDOR = "JAVA_VENDOR";
 }

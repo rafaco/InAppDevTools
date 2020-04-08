@@ -49,7 +49,7 @@ class BuildInfoTask extends IadtBaseTask {
 
         if (isDebug()) {
             def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
-            println "   GenerateConfigs took " + duration + " secs for ${project.name}"
+            println "   BuildInfoTask took " + duration + " secs for ${project.name}"
         }
     }
 
@@ -98,7 +98,7 @@ class BuildInfoTask extends IadtBaseTask {
             propertiesMap.put("injectEventsOnLogcat", extension.injectEventsOnLogcat)
 
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        configUtils.saveConfigMap(propertiesMap, file)
+        configUtils.writeMap(file, propertiesMap)
     }
 
     private void generateBuildInfo() {
@@ -111,77 +111,84 @@ class BuildInfoTask extends IadtBaseTask {
                 HOST_OS         : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
                 HOST_USER       : System.properties['user.name'],
 
-                GIT_USER_NAME       : configUtils.shell('git config user.name'),
-                GIT_USER_EMAIL      : configUtils.shell('git config user.email'),
-
-                IADT_PLUGIN_VERSION  : this.getClass().getPackage().getImplementationVersion(),
+                IADT_PLUGIN_VERSION     : this.getClass().getPackage().getImplementationVersion(),
                 ANDROID_PLUGIN_VERSION  : new AndroidPluginUtils(projectUtils.getProject()).getVersion(),
                 GRADLE_VERSION  : project.gradle.gradleVersion,
-                JAVA_VERSION    : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                JAVA_VERSION    : "${System.properties['java.version']}",
+                JAVA_VENDOR     : "${System.properties['java.vendor']} ${System.properties['java.vm.version']}",
                 //TODO: KOTLIN_VERSION
         ]
 
         File file = projectUtils.getFile("${outputPath}/build_info.json")
-        configUtils.saveConfigMap(propertiesMap, file)
+        configUtils.writeMap(file, propertiesMap)
     }
 
     private void generatePluginsList() {
         def plugins = ""
         project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
         File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
-        pluginsFile.text = plugins
-        if (isDebug())
-            println 'Generated ' + pluginsFile.getAbsolutePath()
+        configUtils.writeString(pluginsFile, plugins)
     }
 
     private void generateGitInfo() {
-        Map propertiesMap
-        def gitDiff = configUtils.shell('git diff HEAD')
-        def localCommitsLong
-
-        if (gitDiff == null) {
-            if (isDebug())
-                println TAG + ": " + "Unable to reach git command, check your PATH!"
-            propertiesMap = [ ENABLED : false ]
-        } else {
-            //def localBranch = configUtils.shell("git name-rev --name-only HEAD")
-            def localBranch = configUtils.shell("git rev-parse --abbrev-ref HEAD")
-            def trackingRemote = configUtils.shell('git config --get branch.' + localBranch + '.remote')
-            def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
-            def remoteUrl = configUtils.shell('git config remote.' + trackingRemote + '.url')
-            def tag = configUtils.shell('git describe --tags --abbrev=0')
-            localCommitsLong = configUtils.shell('git log ' + trackingFull + '..HEAD')
-
-            propertiesMap = [
-                    ENABLED         : true,
-                    REMOTE_NAME     : trackingRemote,
-                    REMOTE_URL      : remoteUrl,
-                    REMOTE_LAST     : configUtils.shell('git log ' + trackingFull +' -1'),
-
-                    TAG_LAST        : tag,
-                    TAG_INFO        : configUtils.shell('git describe --tags --always --dirty'),
-                    TAG_DISTANCE    : configUtils.shell('git rev-list ' + tag + ' --count'),
-
-                    LOCAL_BRANCH    : localBranch,
-                    LOCAL_COMMITS   : configUtils.shell('git cherry -v'),
-
-                    HAS_LOCAL_CHANGES: gitDiff != '',
-                    LOCAL_CHANGES    : configUtils.shell('git status --short'),
-            ]
+        def canShellGit = configUtils.canShell("git --version")
+        if (!canShellGit){
+            println "DISABLED GIT INFO: Unable to reach git command, check your PATH!"
+            generateEmptyGitInfo()
+            return
         }
+
+        def isGitFolder = configUtils.shell('git rev-parse --is-inside-git-dir')
+        if (!isGitFolder){
+            println "DISABLED GIT INFO: Project folder is not in a Git repository. Run 'git init' to initialise."
+            generateEmptyGitInfo()
+            return
+        }
+
+        //def localBranch = configUtils.shell("git name-rev --name-only HEAD")
+        def localBranch = configUtils.shell("git rev-parse --abbrev-ref HEAD")
+        def trackingRemote = configUtils.shell('git config --get branch.' + localBranch + '.remote')
+        def trackingFull = trackingRemote + '/' + localBranch //TODO: trackingBranch
+        def remoteUrl = configUtils.shell('git config remote.' + trackingRemote + '.url')
+        def tag = configUtils.shell('git describe --tags --abbrev=0')
+        def gitDiff = configUtils.shell('git diff HEAD')
+        def localCommits = configUtils.shell('git cherry -v')
+
+        Map propertiesMap = [
+                ENABLED         : true,
+                VERSION         : configUtils.shell('git --version').minus("git version "),
+                USER_NAME       : configUtils.shell('git config user.name'),
+                USER_EMAIL      : configUtils.shell('git config user.email'),
+                REMOTE_NAME     : trackingRemote,
+                REMOTE_URL      : remoteUrl,
+                REMOTE_LAST     : configUtils.shell('git log ' + trackingFull +' -1'),
+                TAG_LAST        : tag,
+                TAG_INFO        : configUtils.shell('git describe --tags --always --dirty'),
+                TAG_DISTANCE    : configUtils.shell('git rev-list ' + tag + ' --count'),
+                LOCAL_BRANCH        : localBranch,
+                HAS_LOCAL_COMMITS   : localCommits != '',
+                LOCAL_COMMITS       : localCommits,
+                HAS_LOCAL_CHANGES   : gitDiff != '',
+                LOCAL_CHANGES       : configUtils.shell('git status --short'),
+        ]
 
         File file = projectUtils.getFile("${outputPath}/git_info.json")
-        configUtils.saveConfigMap(propertiesMap, file)
+        configUtils.writeMap(file, propertiesMap)
 
+        def localCommitsLong = configUtils.shell('git log ' + trackingFull + '..HEAD')
         File commitsFile = new File("${outputPath}/local_commits.txt")
-        commitsFile.text = localCommitsLong
+        configUtils.writeString(commitsFile, localCommitsLong)
 
         File diffFile = new File("${outputPath}/local_changes.diff")
-        if (gitDiff != null && gitDiff != '') {
-            if (isDebug()) {  println "Generated: " + diffFile.getPath() }
-            diffFile.text = gitDiff
-        }else{
-            if (diffFile.exists()) { diffFile.delete() }
-        }
+        configUtils.writeString(diffFile, gitDiff)
+    }
+
+    private void generateEmptyGitInfo() {
+        Map propertiesMap = [ ENABLED : false ]
+        File file = projectUtils.getFile("${outputPath}/git_info.json")
+        configUtils.writeMap(file, propertiesMap)
+
+        new File("${outputPath}/local_commits.txt").delete()
+        new File("${outputPath}/local_changes.diff").delete()
     }
 }

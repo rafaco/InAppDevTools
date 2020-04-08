@@ -26,10 +26,9 @@ public class BuildInfo {
     public static final String HOST_ADDRESS = "";
     public static final String HOST_OS = "";
     public static final String HOST_USER = "";
-    public static final String GIT_USER_NAME = "";
-    public static final String GIT_USER_EMAIL = "";
     public static final String IADT_PLUGIN_VERSION = "";
     public static final String ANDROID_PLUGIN_VERSION = "";
     public static final String GRADLE_VERSION = "";
     public static final String JAVA_VERSION = "";
+    public static final String JAVA_VENDOR = "";
 }

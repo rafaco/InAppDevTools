@@ -39,36 +39,55 @@ class ConfigUtils {
         return InAppDevToolsPlugin.TAG
     }
 
-    void saveConfigMap(Map map, File file) {
+    void writeMap(File file, Map map) {
+        if (file.exists() && (map == null || map.size() == 0)){
+            file.delete()
+            return
+        }
         String extensionJson
         extensionJson = JsonOutput.prettyPrint(JsonOutput.toJson(map))
+        if (file.exists() && file.text == extensionJson){
+            return
+        }
+        file.write extensionJson
         if (isDebug()) {
             println "Generated: " + file.getPath()
             println extensionJson
         }
-        file.write extensionJson
+    }
+
+    void writeString(File file, String content) {
+        if (content == null || content == ''){
+            if (file.exists()) file.delete()
+            return
+        }
+        if (file.exists() && file.text == content){
+            return
+        }
+        file.write content
+        if (isDebug()) println "Generated: " + file.getPath()
     }
 
     String shell(String command) {
-        //TODO: print output error
-        //TODO: research why it lock the builds sometimes, like with long diffs or paged result.
         String result = null
         try {
             if (isDebug()) println ("Shell command: " + command)
             result = command.execute([], project.rootProject.rootDir).text.trim()
         }
-        catch (java.io.IOException e) {
-            println getTag() + "[WARNING]: " + "Unable to reach git command, check your PATH!"
-            if (isDebug()) {
-                e.printStackTrace()
-            }
-        }
         catch (Exception e) {
-            println getTag() + "[WARNING]: " + "Unable to get git info"
-            if (isDebug()) {
-                e.printStackTrace()
-            }
+            if (isDebug()) e.printStackTrace()
         }
         result
+    }
+
+    boolean canShell(String command) {
+        try {
+            command.execute([], project.rootProject.rootDir)
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+            return false
+        }
+        return true
     }
 }
