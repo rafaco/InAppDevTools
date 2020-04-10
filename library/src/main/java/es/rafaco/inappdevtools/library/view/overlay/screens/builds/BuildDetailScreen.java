@@ -77,8 +77,8 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     private ButtonGroupData getButtonGroupData() {
         List<RunButton> buttons = new ArrayList<>();
         buttons.add(new RunButton(
-                "Filter sessions",
-                R.drawable.ic_history_white_24dp,
+                "Sessions",
+                R.drawable.ic_timeline_white_24dp,
                 R.color.rally_purple,
                 new Runnable() {
                     @Override

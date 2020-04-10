@@ -45,12 +45,14 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
@@ -125,22 +127,28 @@ public class HomeScreen extends Screen {
                     }
                 }));
 
-        data.add("");
-        data.add(new RunButton("Builds",
+        data.add("Inspect");
+        data.add(new RunButton("Build",
                 R.drawable.ic_build_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
+                        long currentSessionId = IadtController.get().getSessionManager()
+                                .getCurrentUid();
+                        OverlayService.performNavigation(BuildDetailScreen.class,
+                                currentSessionId + "");
                     }
                 }));
 
-        data.add(new RunButton("Sessions",
-                R.drawable.ic_history_white_24dp,
+        data.add(new RunButton("Session",
+                R.drawable.ic_timeline_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SessionsScreen.class);
+                        long currentSessionId = IadtController.get().getSessionManager()
+                                .getCurrentUid();
+                        OverlayService.performNavigation(SessionDetailScreen.class,
+                                currentSessionId + "");
                     }
                 }));
 
@@ -208,6 +216,27 @@ public class HomeScreen extends Screen {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(ConsoleScreen.class);
+                    }
+                }));
+
+
+
+        data.add("");
+        data.add(new RunButton("Builds",
+                R.drawable.ic_build_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(BuildsScreen.class);
+                    }
+                }));
+
+        data.add(new RunButton("Sessions",
+                R.drawable.ic_timeline_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SessionsScreen.class);
                     }
                 }));
 

@@ -68,7 +68,7 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getOverview() {
-        return getStartOverview()+ Humanizer.newLine()
+        return getStartOverview() + Humanizer.newLine()
                 + getFinishOverview() + Humanizer.newLine()
                 + getLogsOverview();
     }
@@ -100,18 +100,15 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private String getStartOverview() {
-        String flagsLine = "";
+        String result = "Started " + Humanizer.getElapsedTimeLowered(session.getDate());
 
         if (session.isFirstStart()){
-            flagsLine += "First start ";
+            result += " (First start)";
         }
         else if (session.isNewBuild()){
-            flagsLine += "New build ";
+            result += " (New build)";
         }
-        else {
-            flagsLine += "Started ";
-        }
-        return flagsLine + Humanizer.getElapsedTimeLowered(session.getDate());
+        return result;
     }
 
     private String getLogsOverview() {
