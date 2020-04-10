@@ -230,6 +230,11 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
         return String.format("Version %s (%s)", packageInfo.versionName, packageInfo.versionCode);
     }
 
+    public String getFormattedVersionShort() {
+        PackageInfo packageInfo = getPackageInfo();
+        return String.format("%s (%s)", packageInfo.versionName, packageInfo.versionCode);
+    }
+
 
     @NonNull
     private String getMinSdkVersion(PackageInfo pInfo) {

@@ -8,12 +8,15 @@
 
     <color name="material_background">#121212</color>
     <color name="material_surface_bottom">#1D1D1D</color>
+    <color name="material_surface_bar">#1F1F1F</color>
     <color name="material_surface_medium">#2C2C2C</color>
     <color name="material_surface_top">#373737</color>
 
     <color name="iadt_accent">@color/rally_blue_med</color>
     <color name="iadt_accent_dark">@color/rally_blue_dark</color>
 
+    <color name="text_primary">#FFE1E1E1</color>
+    <color name="text_secondary">#545454</color>
 
     <!--<color name="iadt_background">@color/rally_bg_solid</color>
     <color name="iadt_surface">@color/rally_bg_blur</color>-->

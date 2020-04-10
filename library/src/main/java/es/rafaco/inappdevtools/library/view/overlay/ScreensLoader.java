@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailSc
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -53,6 +54,7 @@ public class ScreensLoader {
         //Load screenshots definitions
         screenManager.registerScreen(HomeScreen.class);
         screenManager.registerScreen(Home2Screen.class);
+        screenManager.registerScreen(Home3Screen.class);
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
         screenManager.registerScreen(ErrorsScreen.class);

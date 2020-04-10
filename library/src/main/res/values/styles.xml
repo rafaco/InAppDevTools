@@ -115,6 +115,10 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+    <style name="TextCondensedExtraBig" parent="TextCondensedSmall">
+        <item name="android:textSize">20dp</item>
+    </style>
+
     <style name="TextMonospaceSmall">
         <item name="android:typeface">monospace</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
