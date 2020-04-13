@@ -71,12 +71,15 @@ public class OverlayManager {
                 screenManager.goTo(currentStep.getClassName(), currentStep.getParams());
             else
                 screenManager.goHome();
+        }else{
+            resume();
         }
 
         layerManager.toggleMainLayerVisibility(true);
     }
 
     protected void showIcon() {
+        pause();
         layerManager.toggleMainLayerVisibility(false);
     }
 
