@@ -62,6 +62,15 @@ public interface NetSummaryDao {
     @Query("SELECT COUNT(*) FROM net_summary")
     int count();
 
+    @Query("SELECT COUNT(*) FROM net_summary WHERE sessionId LIKE :sessionId ")
+    int countBySession(long sessionId);
+
+    @Query("SELECT SUM(response_size) FROM net_summary WHERE sessionId LIKE :sessionId ")
+    long sizeBySession(long sessionId);
+
+    @Query("SELECT COUNT(*) FROM net_summary WHERE sessionId LIKE :sessionId and status LIKE :status")
+    long countBySessionAndStatus(long sessionId, int status);
+
     @Insert
     long insert(NetSummary netsummary);
 

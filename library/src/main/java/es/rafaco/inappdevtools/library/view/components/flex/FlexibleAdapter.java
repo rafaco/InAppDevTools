@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,14 @@ import android.view.ViewGroup;
 //@import androidx.annotation.Nullable;
 //@import androidx.core.view.ViewCompat;
 //@import androidx.recyclerview.widget.GridLayoutManager;
+//@import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
@@ -44,37 +47,55 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
-    private List<FlexibleItemDescriptor> descriptors;
+    public enum Layout { GRID, STAGGERED }
+
+    private Layout layout;
     private final int spanCount;
+    private FullWidthSolver fullWidthSolver;
+    private List<FlexibleItemDescriptor> descriptors;
     private List<Object> items;
     private OnItemActionListener onItemActionListener;
 
     public FlexibleAdapter(int spanCount, List<Object> data) {
+        this(Layout.GRID, spanCount, data);
+    }
+
+    public FlexibleAdapter(Layout layout, int spanCount, List<Object> data) {
+        this.layout = layout;
         this.spanCount = spanCount;
         this.items = data;
-
-        descriptors = FlexibleLoader.getAllDescriptors();
+        this.descriptors = FlexibleLoader.getAllDescriptors();
     }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        final GridLayoutManager manager = new GridLayoutManager(recyclerView.getContext(),
-                spanCount, RecyclerView.VERTICAL, false);
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                Class<?> itemDataClass = getItemDataClass(position);
-                if (FlexibleLoader.isFullSpan(itemDataClass)){
-                    return manager.getSpanCount();
-                }
-                else{
-                    return 1;
-                }
-            }
-        });
-        recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(getLayoutManager(recyclerView));
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    private RecyclerView.LayoutManager getLayoutManager(@NonNull RecyclerView recyclerView) {
+
+        if (layout.equals(Layout.GRID)){
+            final GridLayoutManager manager = new GridLayoutManager(recyclerView.getContext(),
+                    spanCount, RecyclerView.VERTICAL, false);
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    boolean isFull = (fullWidthSolver!=null)
+                            ? isFullWidthItem(position)
+                            : FlexibleLoader.isFullSpan(getItemDataClass(position));
+                    return (isFull ? manager.getSpanCount() : 1);
+                }
+            });
+            return manager;
+        }
+        else if (layout.equals(Layout.STAGGERED)){
+            final StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+            manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+            return manager;
+        }
+        return null;
     }
 
     public Class<?> getItemDataClass(int position) {
@@ -124,7 +145,16 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     public void onBindViewHolder(@NonNull FlexibleViewHolder holder, int position) {
         Object viewData = items.get(position);
         FlexibleItemDescriptor desc = descriptors.get(getItemViewType(position));
-        desc.viewHolderClass.cast(holder).bindTo(desc.dataClass.cast(viewData), position);
+
+        if (layout.equals(Layout.STAGGERED) && isFullWidthItem(position)) {
+            StaggeredGridLayoutManager.LayoutParams layoutParams;
+            layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+        }
+
+        FlexibleViewHolder castedHolder = desc.viewHolderClass.cast(holder);
+        Object castedData = desc.dataClass.cast(viewData);
+        castedHolder.bindTo(castedData, position);
     }
 
     public List<Object> getItems(){
@@ -162,6 +192,25 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
             return onItemActionListener.onItemAction(viewHolder, view, position, id);
         }
         return null;
+    }
+
+    //endregion
+
+    //region [ FULL WIDTH SOLVER ]
+
+    public interface FullWidthSolver {
+        boolean isFullWidth(int position);
+    }
+
+    public void setFullWidthSolver(FullWidthSolver solver) {
+        this.fullWidthSolver = solver;
+    }
+
+    protected boolean isFullWidthItem(int position) {
+        if (fullWidthSolver!=null){
+            return fullWidthSolver.isFullWidth(position);
+        }
+        return false;
     }
 
     //endregion

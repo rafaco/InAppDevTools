@@ -280,6 +280,16 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group.build();
     }
 
+    public String getBranchTag() {
+        if (!isGitEnabled()){
+            return getFriendlyBuildType();
+        }
+        String branch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
+        String tag = gitInfo.getString(GitInfo.TAG_LAST);
+
+        return String.format("%s %s", branch, tag);
+    }
+
     public String getRepositoryOverview() {
         String build = getFriendlyBuildType();
         if (!isGitEnabled()){
@@ -290,6 +300,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         return String.format("%s from %s %s", build, branch, tag);
     }
+
 
     public String getBuildOverview() {
         String time = getFriendlyElapsedTime();
@@ -338,6 +349,18 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
 
         return result;
+    }
+
+    public Boolean hasLocalCommitsOrChanges(){
+        if (!isGitEnabled()){
+            return null;
+        }
+        boolean hasLocalCommits = gitInfo.getBoolean(GitInfo.HAS_LOCAL_COMMITS);
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        if (!hasLocalCommits && !hasLocalChanges){
+            return false;
+        }
+        return true;
     }
 
     public DocumentSectionData getGitLocalRepoInfo() {

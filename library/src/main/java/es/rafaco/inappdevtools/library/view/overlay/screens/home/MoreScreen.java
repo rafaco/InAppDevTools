@@ -47,6 +47,11 @@ public class MoreScreen extends AbstractFlexibleScreen {
     }
 
     @Override
+    public int getSpanCount() {
+        return 3;
+    }
+
+    @Override
     protected void onAdapterStart() {
         updateAdapter(getFlexibleData());
     }
@@ -139,10 +144,5 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 }));*/
 
         return data;
-    }
-
-    @Override
-    public int getSpanCount() {
-        return 3;
     }
 }

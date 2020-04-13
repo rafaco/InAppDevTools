@@ -27,10 +27,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
@@ -73,5 +80,26 @@ public class InternalFileReader {
             }
         }
         return result;
+    }
+
+    public static String getTotalSizeFormatted(){
+        File target = IadtController.get().getContext().getFilesDir().getParentFile();
+        return getFolderSizeFormatted(target);
+    }
+
+    public static String getFolderSizeFormatted(File dir) {
+        long size = getFolderSize(dir);
+        return Humanizer.humanReadableByteCount(size, false);
+    }
+    public static long getFolderSize(File dir) {
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            }
+            else
+                size += getFolderSize(file);
+        }
+        return size;
     }
 }

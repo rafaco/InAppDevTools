@@ -112,6 +112,10 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
+    // MPAndroidChart: 3.0.3 is the last version using support libraries
+    androidxApi 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    supportApi 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
     // Others
     api 'com.jraska:falcon:2.1.1'
     api 'com.github.alorma:timelineview:2.3.0'

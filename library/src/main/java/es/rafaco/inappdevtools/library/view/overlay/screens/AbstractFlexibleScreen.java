@@ -32,7 +32,6 @@ import android.support.v7.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public abstract class AbstractFlexibleScreen extends Screen {
 
@@ -72,17 +71,26 @@ public abstract class AbstractFlexibleScreen extends Screen {
     }
 
     private void initAdapter(ViewGroup bodyView) {
-        flexAdapter = new FlexibleAdapter(getSpanCount(), new ArrayList<>());
+        flexAdapter = new FlexibleAdapter(getLayout(), getSpanCount(), new ArrayList<>());
         flexContainer = bodyView.findViewById(R.id.flexible);
+        flexContainer.setHasFixedSize(true);
         flexContainer.setAdapter(flexAdapter);
+    }
+
+    public FlexibleAdapter.Layout getLayout(){
+        return FlexibleAdapter.Layout.GRID;
+    }
+
+    public int getSpanCount(){
+        return 1;
+    }
+
+    public void setFullWidthSolver(FlexibleAdapter.FullWidthSolver solver) {
+        flexAdapter.setFullWidthSolver(solver);
     }
 
     public void updateAdapter(List<Object> options) {
         flexContainer.removeAllViews();
         flexAdapter.replaceItems(options);
-    }
-
-    public int getSpanCount(){
-        return 1;
     }
 }
