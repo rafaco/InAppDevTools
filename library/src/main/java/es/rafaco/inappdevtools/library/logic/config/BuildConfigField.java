@@ -35,7 +35,6 @@ public enum BuildConfigField {
     SOURCE_INSPECTION("sourceInspection", R.string.config_source_inspection, boolean.class, true),
 
     // Customization flags (runtime)
-    EMAIL("email", R.string.config_email, String.class, ""),
     NOTES("notes", R.string.config_notes, String.class, ""),
     TEAM_NAME("teamName", R.string.config_team_name, String.class, ""),
     TEAM_EMAIL("teamEmail", R.string.config_team_email, String.class, ""),

@@ -67,9 +67,6 @@ class BuildInfoTask extends IadtBaseTask {
         if (extension.debug!=null)
             propertiesMap.put("debug", extension.debug)
 
-        if (extension.email!=null)
-            propertiesMap.put("email", extension.email)
-
         if (extension.notes!=null)
             propertiesMap.put("notes", extension.notes)
 

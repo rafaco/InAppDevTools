@@ -118,7 +118,6 @@ inappdevtools {
     //enabledOnRelease = true
 
     //// Customization flags (runtime)
-    email = 'inappdevtools@gmail.com'
     notes = "This is a SAMPLE NOTE about this compilation:\n" +
             " - Developers can add any text here using Gradle configuration\n" +
             " - Useful to describe changes or to provide instructions"

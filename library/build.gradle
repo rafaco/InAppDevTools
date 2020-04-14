@@ -139,7 +139,7 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     //// User features fags
-    //email = 'inappdevtools@gmail.com'
+    //teamEmail = 'inappdevtools@gmail.com'
 
     //// Build flags (affect plugin)
     //enabled = true

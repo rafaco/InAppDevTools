@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools
 class InAppDevToolsExtension {
 
     //User features fags
-    String email
     String notes
 
     String teamName

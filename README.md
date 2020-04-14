@@ -79,8 +79,8 @@ apply plugin: 'es.rafaco.inappdevtools'
 
 inappdevtools {
     enabled = true
-    email = 'yourmail@yourdomain.com'
     notes = 'This compilation fix the following issues:..'
+    teamEmail = 'email@domain.com'
 }
 ```
 All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.

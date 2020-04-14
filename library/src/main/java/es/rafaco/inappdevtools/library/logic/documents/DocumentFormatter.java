@@ -100,7 +100,7 @@ public class DocumentFormatter {
     }
 
     public String formatEmailTo(Report report) {
-        return IadtController.get().getConfig().getString(BuildConfigField.EMAIL);
+        return IadtController.get().getConfig().getString(BuildConfigField.TEAM_EMAIL);
     }
 
     public String formatEmailCc(Report report) {
