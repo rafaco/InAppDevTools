@@ -21,6 +21,12 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 import android.content.Context;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -113,6 +119,35 @@ public class ConfigManager {
 
     public void setLong(BuildConfigField config, long value) {
         DevToolsPrefs.setLong(config.getKey(), value);
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
+    }
+
+    public Map getMap(BuildConfigField config) {
+        if (DevToolsPrefs.contains(config.getKey())){
+            //TODO: not tested
+            String stringMap = DevToolsPrefs.getString(config.getKey(), "");
+            Map<String, Object> stringObjectMap = new HashMap<String, Object>();
+            try {
+                JSONObject jsonObject = new JSONObject(stringMap);
+                stringObjectMap = JsonHelper.toMap(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return stringObjectMap;
+        }
+        else if (compileConfig.contains(config.getKey())){
+            return compileConfig.getMap(config.getKey());
+        }
+        else{
+            return new HashMap<String, Object>();
+        }
+    }
+
+    public void setMap(BuildConfigField config, Map value) {
+        //TODO: not tested and it only seems to work with Map<String, String>
+        JSONObject jsonObject = new JSONObject(value);
+        String stringMap = jsonObject.toString();
+        DevToolsPrefs.setString(config.getKey(), stringMap);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

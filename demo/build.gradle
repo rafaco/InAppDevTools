@@ -123,6 +123,14 @@ inappdevtools {
             " - Developers can add any text here using Gradle configuration\n" +
             " - Useful to describe changes or to provide instructions"
 
+    teamName = "IadtTeam"
+    teamEmail = 'inappdevtools@gmail.com'
+    teamDesc = "This is a sample description about your team, change it in your Gradle configuration"
+    teamLinks = [ website   : "http://inappdevtools.org",
+                  repo      : "https://github.com/rafaco/InAppDevTools",
+                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
+                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
+
     // Feature switches (runtime)
     //overlayEnabled = false
     //invocationByShake = false

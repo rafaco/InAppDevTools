@@ -73,6 +73,18 @@ class BuildInfoTask extends IadtBaseTask {
         if (extension.notes!=null)
             propertiesMap.put("notes", extension.notes)
 
+        if (extension.teamName!=null)
+            propertiesMap.put("teamName", extension.teamName)
+
+        if (extension.teamEmail!=null)
+            propertiesMap.put("teamEmail", extension.teamEmail)
+
+        if (extension.teamDesc!=null)
+            propertiesMap.put("teamDesc", extension.teamDesc)
+
+        if (extension.teamLinks!=null)
+            propertiesMap.put("teamLinks", extension.teamLinks)
+
         if (extension.overlayEnabled!=null)
             propertiesMap.put("overlayEnabled", extension.overlayEnabled)
 

@@ -19,8 +19,11 @@
     <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
     <string name="config_inject_events_on_logcat">Inject IadtEvents on logcat to see them on the standard Logcat output.</string>
     <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
-    <string name="config_email">Default email to use for reports</string>
     <string name="config_notes">Compilation notes to show on initial dialog</string>
+    <string name="config_team_name">Name of development team, shown in home and team screen</string>
+    <string name="config_team_email">Default email to use for reports</string>
+    <string name="config_team_desc">Free text about your team, shown in team screen</string>
+    <string name="config_team_links">Collection of url links with their name, shown in team screen</string>
 
     <!-- Dialogs -->
     <string name="welcome_welcome_title">Internal compilation</string>

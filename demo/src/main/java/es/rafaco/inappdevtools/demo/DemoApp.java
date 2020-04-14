@@ -34,35 +34,6 @@ public class DemoApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-
-        Iadt.addRunButton(new RunButton("Website",
-                R.drawable.ic_public_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewWebsite();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("Repository",
-                R.drawable.ic_cloud_done_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewReadme();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("Issues",
-                R.drawable.ic_error_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewIssues();
-                    }
-                }));
-
-
         Iadt.addRunButton(new RunButton("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {

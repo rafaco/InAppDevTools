@@ -25,6 +25,11 @@ class InAppDevToolsExtension {
     String email
     String notes
 
+    String teamName
+    String teamEmail
+    String teamDesc
+    Map teamLinks
+
     // Build flags (affect plugin)
     Boolean enabled = true
     Boolean enabledOnRelease

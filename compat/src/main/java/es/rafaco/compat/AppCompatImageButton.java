@@ -23,7 +23,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 //#ifdef ANDROIDX
-//@public class AppCompatButton extends androidx.appcompat.widget.AppCompatImageButton {
+//@public class AppCompatImageButton extends androidx.appcompat.widget.AppCompatImageButton {
 //#else
 public class AppCompatImageButton extends android.support.v7.widget.AppCompatImageButton {
 //#endif

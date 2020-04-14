@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ import java.util.TimerTask;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
+import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
@@ -58,7 +61,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -104,15 +106,18 @@ public class Home3Screen extends AbstractFlexibleScreen {
         BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
         DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
         OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
+        ConfigManager configManager = IadtController.get().getConfig();
 
-
+        String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
+        if (TextUtils.isEmpty(teamName))
+            teamName = "Resources";
         WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
                 //.setIcon(R.string.gmd_people)
-                .setMainContent("Demo Team")
+                .setMainContent(teamName)
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(ReportScreen.class);
+                        OverlayService.performNavigation(TeamScreen.class);
                     }
                 })
                 .build();
@@ -263,11 +268,11 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(jvmData);
 
-        data.add(new RunButton("More",
-                R.drawable.ic_more_vert_white_24dp,
+        data.add(new RunButton("Original Home",
+                R.drawable.iadt_logo,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(MoreScreen.class);
+                    public void run() { OverlayService.performNavigation(HomeScreen.class);
                     }
                 }));
 

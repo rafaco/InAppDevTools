@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import es.rafaco.inappdevtools.library.R;
 
@@ -36,6 +37,10 @@ public enum BuildConfigField {
     // Customization flags (runtime)
     EMAIL("email", R.string.config_email, String.class, ""),
     NOTES("notes", R.string.config_notes, String.class, ""),
+    TEAM_NAME("teamName", R.string.config_team_name, String.class, ""),
+    TEAM_EMAIL("teamEmail", R.string.config_team_email, String.class, ""),
+    TEAM_DESC("teamDesc", R.string.config_team_desc, String.class, ""),
+    TEAM_LINKS("teamLinks", R.string.config_team_links, Map.class, null),
 
     // Feature switches (runtime)
     OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
