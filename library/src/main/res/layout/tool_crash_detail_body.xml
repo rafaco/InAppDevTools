@@ -148,10 +148,41 @@
             android:layout_marginBottom="5dp"
             style="@style/TextCondensedMedium" />
 
+        <LinearLayout
+            android:id="@+id/message_buttons1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <es.rafaco.compat.AppCompatButton
+                android:id="@+id/reveal_stacktrace1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="start"
+                android:text="Show StackTrace"
+                android:backgroundTint="@color/iadt_surface_top"
+                android:drawableLeft="@drawable/ic_arrow_down_white_24dp"/>
+            <es.rafaco.compat.AppCompatImageButton
+                android:id="@+id/copy1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/iadt_surface_bottom"
+                android:src="@drawable/ic_content_copy_white_24dp"/>
+            <es.rafaco.compat.AppCompatImageButton
+                android:id="@+id/google1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/iadt_surface_bottom"
+                android:src="@drawable/ic_google_brands" />
+        </LinearLayout>
+
         <es.rafaco.compat.RecyclerView
             android:id="@+id/flexible1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
 
         <TextView
@@ -169,10 +200,41 @@
             android:layout_marginBottom="5dp"
             style="@style/TextCondensedMedium" />
 
+        <LinearLayout
+            android:id="@+id/message_buttons2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <es.rafaco.compat.AppCompatButton
+                android:id="@+id/reveal_stacktrace2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="start"
+                android:text="Show StackTrace"
+                android:backgroundTint="@color/iadt_surface_top"
+                android:drawableLeft="@drawable/ic_arrow_down_white_24dp"/>
+            <es.rafaco.compat.AppCompatImageButton
+                android:id="@+id/copy2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/iadt_surface_bottom"
+                android:src="@drawable/ic_content_copy_white_24dp"/>
+            <es.rafaco.compat.AppCompatImageButton
+                android:id="@+id/google2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/iadt_surface_bottom"
+                android:src="@drawable/ic_google_brands"/>
+        </LinearLayout>
+
         <es.rafaco.compat.RecyclerView
             android:id="@+id/flexible2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <!--<RelativeLayout
             android:layout_width="match_parent"

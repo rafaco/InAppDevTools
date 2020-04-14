@@ -146,7 +146,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("What do you want to do?")
                 //.setMessage("To apply your changes safely, we currently need to restart your app. You can also discard them by now.")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("VIEW",
                         new DialogInterface.OnClickListener(){
                             @Override

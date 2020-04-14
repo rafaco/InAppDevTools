@@ -19,17 +19,26 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import java.util.List;
 
 import es.rafaco.compat.AppCompatButton;
+import es.rafaco.compat.AppCompatImageButton;
 import es.rafaco.compat.RecyclerView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
@@ -38,10 +47,13 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
+import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -73,6 +85,15 @@ public class CrashDetailScreen extends Screen {
     private RecyclerView recyclerView1;
     private RecyclerView recyclerView2;
     private TextView session;
+
+    private LinearLayout messageButtons1;
+    private AppCompatButton revealStacktrace1;
+    private AppCompatImageButton copy1;
+    private AppCompatImageButton google1;
+    private LinearLayout messageButtons2;
+    private AppCompatButton revealStacktrace2;
+    private AppCompatImageButton copy2;
+    private AppCompatImageButton google2;
 
     public CrashDetailScreen(ScreenManager manager) {
         super(manager);
@@ -115,9 +136,20 @@ public class CrashDetailScreen extends Screen {
         title = view.findViewById(R.id.detail_title);
         session = view.findViewById(R.id.detail_session);
         subtitle = view.findViewById(R.id.detail_subtitle);
+        messageButtons1 = view.findViewById(R.id.message_buttons1);
+        copy1 = view.findViewById(R.id.copy1);
+        revealStacktrace1 = view.findViewById(R.id.reveal_stacktrace1);
+        google1 = view.findViewById(R.id.google1);
+        recyclerView1 = bodyView.findViewById(R.id.flexible1);
+
         title2 = view.findViewById(R.id.detail_title2);
         subtitle2 = view.findViewById(R.id.detail_subtitle2);
+        messageButtons2 = view.findViewById(R.id.message_buttons2);
+        revealStacktrace2 = view.findViewById(R.id.reveal_stacktrace2);
+        copy2 = view.findViewById(R.id.copy2);
+        google2 = view.findViewById(R.id.google2);
         thread = view.findViewById(R.id.detail_thread);
+        recyclerView2 = bodyView.findViewById(R.id.flexible2);
 
         reportButton = view.findViewById(R.id.report_button);
         reproStepsButton = view.findViewById(R.id.repro_steps_button);
@@ -156,9 +188,15 @@ public class CrashDetailScreen extends Screen {
             @Override
             public void run() {
                 long screenId = crash.getScreenId();
-                Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
+                final Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
                 if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
                     new ImageLoaderAsyncTask(thumbnail).execute(screenshot.getPath());
+                    thumbnail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FileProviderUtils.viewExternally("", screenshot.getPath() );
+                        }
+                    });
                 }
             }
         });
@@ -208,12 +246,69 @@ public class CrashDetailScreen extends Screen {
         title.setText(crash.getException());
         subtitle.setText(message);
 
+        final String composedMessage = crash.getException() + " " + crash.getMessage();
+        revealStacktrace1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isHidden = (recyclerView1.getVisibility() == View.GONE);
+                recyclerView1.setVisibility(isHidden ? View.VISIBLE : View.GONE);
+                int i = isHidden ? R.drawable.ic_arrow_up_white_24dp : R.drawable.ic_arrow_down_white_24dp;
+                Drawable drawable = ContextCompat.getDrawable(getContext(), i);
+                revealStacktrace1.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                revealStacktrace1.setText(isHidden ? "Hide Stacktrace" : "Show Stacktrace");
+            }
+        });
+        copy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardUtils.save(getContext(), composedMessage);
+                Iadt.showMessage("Exception copied to clipboard");
+            }
+        });
+        google1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://www.google.com/search?q=" + composedMessage;
+                ExternalIntentUtils.viewUrl(url);
+            }
+        });
+
+        recyclerView1.setVisibility(View.GONE);
+
         if (cause!=null){
             title2.setText("Caused by: " + crash.getCauseException());
             subtitle2.setText(crash.getCauseMessage());
+
+            final String composedMessage2 = crash.getCauseException() + " " + crash.getCauseMessage();
+            revealStacktrace2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean isHidden = (recyclerView2.getVisibility() == View.GONE);
+                    recyclerView2.setVisibility(isHidden ? View.VISIBLE : View.GONE);
+                    int i = isHidden ? R.drawable.ic_arrow_up_white_24dp : R.drawable.ic_arrow_down_white_24dp;
+                    Drawable drawable = ContextCompat.getDrawable(getContext(), i);
+                    revealStacktrace2.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                    revealStacktrace2.setText(isHidden ? "Hide Stacktrace" : "Show Stacktrace");
+                }
+            });
+            copy2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardUtils.save(getContext(), composedMessage);
+                    Iadt.showMessage("Exception copied to clipboard");
+                }
+            });
+            google2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = "https://www.google.com/search?q=" + composedMessage2;
+                    ExternalIntentUtils.viewUrl(url);
+                }
+            });
         }else{
             title2.setVisibility(View.GONE);
             subtitle2.setVisibility(View.GONE);
+            messageButtons2.setVisibility(View.GONE);
         }
     }
 
@@ -226,13 +321,11 @@ public class CrashDetailScreen extends Screen {
 
         adapter = grouper.getExceptionAdapter();
         if (adapter != null){
-            recyclerView1 = bodyView.findViewById(R.id.flexible1);
             recyclerView1.setAdapter(adapter);
         }
 
         adapter = grouper.getCauseAdapter();
         if (adapter != null){
-            recyclerView2 = bodyView.findViewById(R.id.flexible2);
             recyclerView2.setAdapter(adapter);
         }
     }
