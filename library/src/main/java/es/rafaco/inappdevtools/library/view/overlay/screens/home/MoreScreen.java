@@ -63,6 +63,14 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 " - Home 2 is a proposal in progress\n" +
                 " - All other items has been mixed at Log Screen\n");
 
+        data.add(new RunButton("Original Home",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(HomeScreen.class);
+                    }
+                }));
+
         data.add(new RunButton("Home 2",
                 R.drawable.ic_format_list_bulleted_white_24dp,
                 new Runnable() {

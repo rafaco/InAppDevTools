@@ -44,7 +44,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -105,7 +105,7 @@ public class ScreenManager {
     }
 
     public static Class<? extends Screen> getHomeClass() {
-        return HomeScreen.class;
+        return Home3Screen.class;
     }
 
     //endregion

@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,6 +88,20 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
     public FlexibleAdapter.Layout getLayout(){
         return FlexibleAdapter.Layout.STAGGERED;
+    }
+
+    @Override
+    protected void onStart(ViewGroup bodyView) {
+        super.onStart(bodyView);
+
+        //TODO: Home icon resize not working on first navigation
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getScreenManager().getScreenLayer().toggleBackButton(false);
+            }
+        }, 100);
     }
 
     @Override
@@ -269,11 +284,11 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(jvmData);
 
-        data.add(new RunButton("Original Home",
-                R.drawable.iadt_logo,
+        data.add(new RunButton("More",
+                R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(HomeScreen.class);
+                    public void run() { OverlayService.performNavigation(MoreScreen.class);
                     }
                 }));
 
