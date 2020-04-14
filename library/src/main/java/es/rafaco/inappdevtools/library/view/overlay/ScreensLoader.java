@@ -21,11 +21,12 @@ package es.rafaco.inappdevtools.library.view.overlay;
 
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
@@ -33,8 +34,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.TeamScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.OsInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.AnalysisScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
@@ -51,21 +54,37 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScree
 
 public class ScreensLoader {
 
+    /**
+     * Load screenshots definitions. Should be replaced by dagger
+     * @param screenManager
+     */
     static void registerAllScreens(ScreenManager screenManager) {
-        //Load screenshots definitions
+        //HOME
         screenManager.registerScreen(HomeScreen.class);
         screenManager.registerScreen(Home2Screen.class);
         screenManager.registerScreen(Home3Screen.class);
+
+        //TOPBAR
+        screenManager.registerScreen(ConfigScreen.class);
+
+        //TEAM
         screenManager.registerScreen(TeamScreen.class);
+        screenManager.registerScreen(ReportScreen.class);
+        screenManager.registerScreen(NewReportScreen.class);
+        screenManager.registerScreen(ReportsScreen.class);
+
+        //DEVICE
+        screenManager.registerScreen(DeviceScreen.class);
+        screenManager.registerScreen(DeviceInfoScreen.class);
+        screenManager.registerScreen(OsInfoScreen.class);
+        screenManager.registerScreen(TerminalScreen.class);
+
+        //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
         screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(LogScreen.class);
-        screenManager.registerScreen(ConsoleScreen.class);
         screenManager.registerScreen(ScreenshotsScreen.class);
-        screenManager.registerScreen(ReportScreen.class);
-        screenManager.registerScreen(ReportsScreen.class);
-        screenManager.registerScreen(NewReportScreen.class);
         screenManager.registerScreen(CrashDetailScreen.class);
         screenManager.registerScreen(AnrDetailScreen.class);
         screenManager.registerScreen(RunScreen.class);
@@ -74,7 +93,6 @@ public class ScreensLoader {
         screenManager.registerScreen(SourcesScreen.class);
         screenManager.registerScreen(SourceDetailScreen.class);
         screenManager.registerScreen(AnalysisScreen.class);
-        screenManager.registerScreen(ConfigScreen.class);
         screenManager.registerScreen(SessionsScreen.class);
         screenManager.registerScreen(SessionDetailScreen.class);
         screenManager.registerScreen(BuildsScreen.class);

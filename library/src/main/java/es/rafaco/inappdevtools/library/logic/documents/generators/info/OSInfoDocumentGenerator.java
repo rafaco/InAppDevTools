@@ -119,7 +119,7 @@ public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     protected DocumentSectionData getAndroidGroup(EasyDeviceMod deviceHelper) {
-        return new DocumentSectionData.Builder("Android OS_INFO")
+        return new DocumentSectionData.Builder("Operative System")
                 .setIcon(R.string.gmd_android)
                 .setOverview(getAndroidVersionFull())
                 .add("Version", getAndroidVersionFull())

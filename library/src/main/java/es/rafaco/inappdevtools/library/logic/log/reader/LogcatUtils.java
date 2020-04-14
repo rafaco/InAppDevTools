@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.Shell;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.Shell;
 
 public class LogcatUtils {
 

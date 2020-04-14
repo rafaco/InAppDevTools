@@ -45,7 +45,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
@@ -170,7 +170,7 @@ public class Home2Screen extends Screen {
                         R.color.iadt_background,
                         new Runnable() {
                             @Override
-                            public void run() { OverlayService.performNavigation(ConsoleScreen.class);
+                            public void run() { OverlayService.performNavigation(TerminalScreen.class);
                             }
                         })
                 )

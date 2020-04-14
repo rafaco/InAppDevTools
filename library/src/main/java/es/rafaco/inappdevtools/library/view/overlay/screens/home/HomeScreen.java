@@ -47,7 +47,7 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.console.ConsoleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
@@ -215,7 +215,7 @@ public class HomeScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(ConsoleScreen.class);
+                        OverlayService.performNavigation(TerminalScreen.class);
                     }
                 }));
 

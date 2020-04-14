@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.console;
+package es.rafaco.inappdevtools.library.view.overlay.screens.device;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +43,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ConsoleScreen extends Screen {
+public class TerminalScreen extends Screen {
 
     private EditText input;
     private Spinner presets;
@@ -54,7 +54,7 @@ public class ConsoleScreen extends Screen {
     private String command;
     private Shell shell;
 
-    public ConsoleScreen(ScreenManager manager) {
+    public TerminalScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -98,7 +98,7 @@ public class ConsoleScreen extends Screen {
 
         presets = getView().findViewById(R.id.presets);
         List<String> list = new ArrayList<>();
-        for (PresetCommand item : PresetCommand.values()) {
+        for (TerminalPreset item : TerminalPreset.values()) {
             list.add(item.getLabel());
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
@@ -109,7 +109,7 @@ public class ConsoleScreen extends Screen {
         presets.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PresetCommand preset = PresetCommand.values()[position];
+                TerminalPreset preset = TerminalPreset.values()[position];
                 input.setText(preset.getCommand());
             }
 

@@ -31,6 +31,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
@@ -49,6 +50,8 @@ public abstract class AbstractDocumentScreen extends Screen {
     }
 
     public abstract String getTitle();
+
+    protected abstract DocumentType getDocumentType();
 
     @Override
     public int getBodyLayoutId() { return R.layout.flexible_container; }
@@ -79,11 +82,16 @@ public abstract class AbstractDocumentScreen extends Screen {
         return data;
     }
 
-    protected abstract DocumentType getDocumentType();
+    protected Object getDocumentParam(){
+        return IadtController.get().getSessionManager().getCurrentUid();
+    }
 
-    protected abstract Object getDocumentParam();
-
-    protected abstract List<Object> buildDataFromDocument(DocumentData reportData);
+    protected List<Object> buildDataFromDocument(DocumentData reportData) {
+        List<Object> objectList = new ArrayList<Object>(reportData.getSections());
+        objectList.add(0, reportData.getOverviewData());
+        objectList.add(1, "");
+        return objectList;
+    }
 
     private void initAdapter(List<Object> data) {
         adapter = new FlexibleAdapter(3, data);

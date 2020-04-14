@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.console;
+package es.rafaco.inappdevtools.library.view.overlay.screens.device;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum PresetCommand {
+public enum TerminalPreset {
 
     LOGCAT_LAST("Logcat: last 10 logs", "logcat -d -t 9 *:V"),
     LOGCAT_SINCE("Logcat: since date", "logcat -t '06-27 16:06:00.000' *:V"),
@@ -36,7 +36,7 @@ public enum PresetCommand {
     private final String label;
     private final String command;
 
-    PresetCommand(String label, String command) {
+    TerminalPreset(String label, String command) {
         this.label = label;
         this.command = command;
     }
@@ -51,22 +51,22 @@ public enum PresetCommand {
 
 
 
-    private static final Map<String, PresetCommand> ITEMS = new HashMap<>();
+    private static final Map<String, TerminalPreset> ITEMS = new HashMap<>();
 
-    public static PresetCommand getByLabel(String name) {
+    public static TerminalPreset getByLabel(String name) {
         return ITEMS.get(name);
     }
 
-    public static List<PresetCommand> getAll() {
-        return (List<PresetCommand>) ITEMS.values();
+    public static List<TerminalPreset> getAll() {
+        return (List<TerminalPreset>) ITEMS.values();
     }
 
-    public static List<PresetCommand> getAllLabels() {
-        return (List<PresetCommand>) ITEMS.values();
+    public static List<TerminalPreset> getAllLabels() {
+        return (List<TerminalPreset>) ITEMS.values();
     }
 
     static {
-        for (PresetCommand item : values()) {
+        for (TerminalPreset item : values()) {
             ITEMS.put(item.label, item);
         }
     }
