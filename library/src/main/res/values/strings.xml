@@ -15,7 +15,6 @@
     <string name="config_source_inspection">Disable source features and source inclusion</string>
     <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
     <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
-    <string name="config_invocation_by_notification">Disable showing our notification to open the UI</string>
     <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
     <string name="config_inject_events_on_logcat">Inject IadtEvents on logcat to see them on the standard Logcat output.</string>
     <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>

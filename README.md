@@ -117,7 +117,6 @@ After the [setup](#setup) you only need to *Run* a debug build of your app into 
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device with your app on foreground
 - Tap our floating icon
-- Tap our notification (disabled by default, enable it with configuration)
 - Or programmatically calling `Iadt.show();`
 
 

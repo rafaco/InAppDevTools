@@ -51,7 +51,6 @@ import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -132,14 +131,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             if (isDebug()) Log.d(Iadt.TAG, "CrashHandler finish. Restarting app");
             IadtController.get().restartApp(true);
         }
-    }
-
-    //TODO: Close our services before to prevent "Schedule restart"
-    private void stopDevToolsServices() {
-        Intent in = new Intent(context, OverlayService.class);
-        context.stopService(in);
-        in = new Intent(context, NotificationService.class);
-        context.stopService(in);
     }
 
     @NonNull

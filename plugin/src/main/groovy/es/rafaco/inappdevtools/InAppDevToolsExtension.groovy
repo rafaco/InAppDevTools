@@ -40,7 +40,6 @@ class InAppDevToolsExtension {
     Boolean overlayEnabled
     Boolean invocationByShake
     Boolean invocationByIcon
-    Boolean invocationByNotification
     Boolean callDefaultCrashHandler
     Boolean injectEventsOnLogcat
 }

@@ -97,9 +97,6 @@ class BuildInfoTask extends IadtBaseTask {
         if (extension.invocationByShake!=null)
             propertiesMap.put("invocationByShake", extension.invocationByShake)
 
-        if (extension.invocationByNotification!=null)
-            propertiesMap.put("invocationByNotification", extension.invocationByNotification)
-
         if (extension.callDefaultCrashHandler!=null)
             propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
 

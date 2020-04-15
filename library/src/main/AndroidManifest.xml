@@ -34,10 +34,6 @@
         <service android:name=".view.overlay.OverlayService"
             android:exported="false"/>
 
-        <service
-            android:name=".view.notifications.NotificationService"
-            android:exported="false" />
-
 
         <activity
             android:name=".view.activities.PermissionActivity"

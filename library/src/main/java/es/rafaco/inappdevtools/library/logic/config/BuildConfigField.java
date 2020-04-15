@@ -45,7 +45,6 @@ public enum BuildConfigField {
     OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
     INVOCATION_BY_SHAKE("invocationByShake", R.string.config_invocation_by_shake, boolean.class, true),
     INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, true),
-    INVOCATION_BY_NOTIFICATION("invocationByNotification", R.string.config_invocation_by_notification, boolean.class, false),
     CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
     INJECT_EVENTS_ON_LOGCAT("injectEventsOnLogcat", R.string.config_inject_events_on_logcat, boolean.class, false);
 

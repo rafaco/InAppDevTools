@@ -51,7 +51,6 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
-import es.rafaco.inappdevtools.library.view.notifications.NotificationService;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
@@ -202,12 +201,6 @@ public final class IadtController {
         if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)){
             navigationManager = new NavigationManager();
             overlayHelper = new OverlayHelper(context);
-        }
-
-        if (getConfig().getBoolean(BuildConfigField.INVOCATION_BY_NOTIFICATION)){
-            Intent intent = new Intent(getContext(), NotificationService.class);
-            intent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
-            getContext().startService(intent);
         }
     }
 
@@ -365,9 +358,6 @@ public final class IadtController {
             Log.i(Iadt.TAG, "Calling custom ForceCloseRunnable");
             getRunnableManager().getForceCloseRunnable().run();
         }
-
-        if (isDebug()) Log.v(Iadt.TAG, "Stopping Notification Service");
-        NotificationService.stop();
 
         if (isDebug()) Log.v(Iadt.TAG, "Stopping OverlayUI Service");
         OverlayService.stop();
