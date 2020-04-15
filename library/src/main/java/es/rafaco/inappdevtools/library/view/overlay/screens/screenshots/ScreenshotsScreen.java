@@ -98,6 +98,10 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
             final Screenshot screenshot = screenshots.get(i);
 
             String title = String.format("Screenshot %s", screenshot.getUid());
+            if (screenshot.getPath().contains("crash_")){
+                title +=  " (Crash)";
+            }
+
             String content = "Activity: " + screenshot.getActivityName()
                     + Humanizer.newLine()
                     + "Session: " + screenshot.getSessionId()
@@ -119,7 +123,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
                 cardData.setBgColor(R.color.rally_blue_dark);
             }
             else if (screenshot.getPath().contains("crash_")){
-                cardData.setBgColor(R.color.rally_orange_dark);
+                cardData.setBgColor(R.color.rally_orange_alpha);
             }
             else {
                 cardData.setBgColor(R.color.rally_dark_green);

@@ -47,6 +47,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -195,6 +196,14 @@ public class InspectViewScreen extends Screen {
                     }
                 }));
 
+        data.add(new RunButton("All Screenshots",
+                R.drawable.ic_photo_library_white_24dp,
+                R.color.iadt_surface_medium,
+                new Runnable() {
+                    @Override
+                    public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);
+                    }
+                }));
 
         return data;
     }

@@ -94,17 +94,19 @@ public class ScreensLoader {
         screenManager.registerScreen(SourcesScreen.class);
         screenManager.registerScreen(SourceDetailScreen.class);
 
+        //VIEW
+        screenManager.registerScreen(InspectViewScreen.class);
+        screenManager.registerScreen(ScreenshotsScreen.class);
+
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
         screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(LogScreen.class);
-        screenManager.registerScreen(ScreenshotsScreen.class);
         screenManager.registerScreen(CrashDetailScreen.class);
         screenManager.registerScreen(AnrDetailScreen.class);
         screenManager.registerScreen(RunScreen.class);
         screenManager.registerScreen(MoreScreen.class);
-        screenManager.registerScreen(InspectViewScreen.class);
         screenManager.registerScreen(AnalysisScreen.class);
         screenManager.registerScreen(SessionsScreen.class);
         screenManager.registerScreen(SessionDetailScreen.class);

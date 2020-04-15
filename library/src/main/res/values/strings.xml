@@ -52,4 +52,7 @@
     <string name="simulated_crash_background">Simulated crash on a BACK thread</string>
     <string name="simulated_crash_foreground">Simulated crash on the MAIN thread</string>
 
+    <!-- Override Pandora strings -->
+    <string name="pd_name_sandbox">Storage Inspector</string>
+
 </resources>
