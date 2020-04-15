@@ -59,6 +59,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.WidgetData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
@@ -160,7 +161,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(InfoOverviewScreen.class);
+                        OverlayService.performNavigation(AppScreen.class);
                     }
                 })
                 .build();

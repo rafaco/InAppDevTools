@@ -19,6 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay;
 
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppInfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.ToolsInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
@@ -79,6 +82,12 @@ public class ScreensLoader {
         screenManager.registerScreen(OsInfoScreen.class);
         screenManager.registerScreen(TerminalScreen.class);
 
+        //APP
+        screenManager.registerScreen(AppScreen.class);
+        screenManager.registerScreen(AppInfoScreen.class);
+        screenManager.registerScreen(BuildDetailScreen.class);
+        screenManager.registerScreen(ToolsInfoScreen.class);
+
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
@@ -96,7 +105,7 @@ public class ScreensLoader {
         screenManager.registerScreen(SessionsScreen.class);
         screenManager.registerScreen(SessionDetailScreen.class);
         screenManager.registerScreen(BuildsScreen.class);
-        screenManager.registerScreen(BuildDetailScreen.class);
+        //screenManager.registerScreen(BuildDetailScreen.class);
         screenManager.registerScreen(NetScreen.class);
         screenManager.registerScreen(NetDetailScreen.class);
     }
