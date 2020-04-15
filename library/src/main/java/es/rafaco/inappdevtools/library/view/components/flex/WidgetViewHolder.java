@@ -75,8 +75,8 @@ public class WidgetViewHolder extends FlexibleViewHolder {
     private final TextView secondContent;
     private final FrameLayout chartContainer;
 
-    public WidgetViewHolder(View view) {
-        super(view);
+    public WidgetViewHolder(View view, FlexibleAdapter adapter) {
+        super(view, adapter);
         this.cardView = view.findViewById(R.id.card_view);
         this.title = view.findViewById(R.id.title);
         this.mainContent = view.findViewById(R.id.main_content);
