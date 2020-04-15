@@ -103,7 +103,7 @@ public class JsonHelper {
     }
 
     public static Map<String, Object> toMap(JSONObject jsonobj)  throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Iterator<String> keys = jsonobj.keys();
         while(keys.hasNext()) {
             String key = keys.next();
@@ -119,7 +119,7 @@ public class JsonHelper {
     }
 
     public static List<Object> toList(JSONArray array) throws JSONException {
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         for(int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
             if (value instanceof JSONArray) {

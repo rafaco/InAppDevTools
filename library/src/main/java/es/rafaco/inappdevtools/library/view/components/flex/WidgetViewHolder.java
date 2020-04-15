@@ -35,9 +35,6 @@ import android.support.v7.widget.CardView;
 //#endif
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -57,14 +54,29 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class WidgetViewHolder extends FlexibleViewHolder {
 
+    private final int[] NET_COLORS = {
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_green),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_gray),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange),
+    };
+
+    private final int[] LOG_COLORS = {
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_white),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_blue),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_green),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_yellow),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange),
+            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange_dark),
+    };
+
     private final CardView cardView;
     private final TextView mainContent;
     private final TextView title;
     private final TextView secondContent;
     private final FrameLayout chartContainer;
 
-    public WidgetViewHolder(View view, FlexibleAdapter adapter) {
-        super(view, adapter);
+    public WidgetViewHolder(View view) {
+        super(view);
         this.cardView = view.findViewById(R.id.card_view);
         this.title = view.findViewById(R.id.title);
         this.mainContent = view.findViewById(R.id.main_content);
@@ -124,13 +136,6 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
     private void initLogChart() {
         Context context = itemView.getContext();
-        /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                (int) UiUtils.getPixelsFromDp(context, 100));
-        BarChart chart = new BarChart(context);
-        chart.setLayoutParams(params);
-        chartContainer.addView(chart);
-        chartContainer.setVisibility(View.VISIBLE);*/
-
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 (int) UiUtils.getPixelsFromDp(context, 20));
         HorizontalBarChart chart = new HorizontalBarChart(context);
@@ -141,36 +146,25 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
         chart.setDescription(null);
         chart.setTouchEnabled(false);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setEnabled(false);
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setEnabled(false);
-        YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setEnabled(false);
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
+        chart.getXAxis().setEnabled(false);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getLegend().setEnabled(false);
 
-        chart.animateY(1000);
-        chart.animateX(2000);
+        //Following seems not affecting
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+        chart.setPinchZoom(false);
+        chart.setDrawGridBackground(false);
 
-        int[] LOG_COLORS = {
-                ContextCompat.getColor(context, R.color.rally_white),
-                ContextCompat.getColor(context, R.color.rally_blue),
-                ContextCompat.getColor(context, R.color.rally_green),
-                ContextCompat.getColor(context, R.color.rally_yellow),
-                ContextCompat.getColor(context, R.color.rally_orange),
-                ContextCompat.getColor(context, R.color.rally_orange),
-        };
+        //chart.animateXY(2000, 1000);
+        chart.animateXY(0,0);
 
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        /*for (int i = (int) 0; i < 5; i++) {
-            float val = (float) (Math.random());
-            yVals1.add(new BarEntry(i, val * 1000));
-        }*/
         Session currentSession = IadtController.get().getSessionManager().getCurrent();
         SessionDocumentGenerator generator = new SessionDocumentGenerator(context, DocumentType.SESSION, currentSession);
         SessionAnalysis analysis = generator.getAnalysis();
 
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         yVals1.add(new BarEntry(1, new float[]{
                 analysis.getLogcatVerbose() + analysis.getEventVerbose(),
                 analysis.getLogcatDebug() + analysis.getEventDebug(),
@@ -180,18 +174,10 @@ public class WidgetViewHolder extends FlexibleViewHolder {
                 analysis.getLogcatFatal() + analysis.getEventFatal(),
         }));
 
-        /*yVals1.add(new BarEntry(1, analysis.getLogcatVerbose()));
-        yVals1.add(new BarEntry(2, analysis.getLogcatDebug()));
-        yVals1.add(new BarEntry(3, analysis.getLogcatInfo()));
-        yVals1.add(new BarEntry(4, analysis.getLogcatWarning()));
-        yVals1.add(new BarEntry(5, analysis.getLogcatError()));
-        yVals1.add(new BarEntry(6, analysis.getLogcatFatal()));*/
-
-        BarDataSet set1;
-        set1 = new BarDataSet(yVals1, "Verbosity");
+        BarDataSet set1 = new BarDataSet(yVals1, "Verbosity");
         set1.setColors(LOG_COLORS);
 
-        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
         BarData data = new BarData(dataSets);
@@ -215,23 +201,13 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
         chart.setDescription(null);
         chart.setTouchEnabled(false);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setEnabled(false);
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setEnabled(false);
-        YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setEnabled(false);
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
+        chart.getXAxis().setEnabled(false);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getLegend().setEnabled(false);
 
-        chart.animateY(1000);
-        chart.animateX(2000);
-
-        int[] NET_COLORS = {
-                ContextCompat.getColor(context, R.color.rally_green),
-                ContextCompat.getColor(context, R.color.rally_gray),
-                ContextCompat.getColor(context, R.color.rally_orange),
-        };
+        chart.animateXY(0,0);
+        //chart.animateXY(2000, 1000);
 
         NetSummaryDao netSummaryDao = IadtController.getDatabase().netSummaryDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
@@ -239,7 +215,7 @@ public class WidgetViewHolder extends FlexibleViewHolder {
         long successCount = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.COMPLETE);
         long pendingCount = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.REQUESTING);
 
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        ArrayList<BarEntry> yVals1 = new ArrayList<>();
         yVals1.add(new BarEntry(1, new float[]{
                 successCount,
                 pendingCount,
@@ -249,7 +225,7 @@ public class WidgetViewHolder extends FlexibleViewHolder {
         BarDataSet set1 = new BarDataSet(yVals1, "Verbosity");
         set1.setColors(NET_COLORS);
 
-        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
         BarData data = new BarData(dataSets);
@@ -260,56 +236,4 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
         chart.setData(data);
     }
-
-    /*private void initChart1() {
-        chart.setMaxVisibleValueCount(5);
-        //chart.setOnChartValueSelectedListener(this);
-        chart.setDrawBarShadow(false);
-        chart.setDrawValueAboveBar(true);
-        chart.getDescription().setEnabled(false);
-        chart.setPinchZoom(false);
-        chart.setDrawGridBackground(false);
-        //chart.setAxDrawYLabels(false);
-
-        ArrayList NoOfEmp = new ArrayList();
-        NoOfEmp.add(new BarEntry(945f, 0));
-        NoOfEmp.add(new BarEntry(1040f, 1));
-        NoOfEmp.add(new BarEntry(1133f, 2));
-        NoOfEmp.add(new BarEntry(1240f, 3));
-        NoOfEmp.add(new BarEntry(1369f, 4));
-
-        ArrayList<String> year = new ArrayList();
-        year.add("2008");
-        year.add("2009");
-        year.add("2010");
-        year.add("2011");
-        year.add("2012");
-        year.add("2013");
-        year.add("2014");
-        year.add("2015");
-        year.add("2016");
-        year.add("2017");
-
-        BarDataSet empdataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        //BarDataSet yeardataset = new BarDataSet(year, "Years");
-        chart.animateY(1000);
-        BarData data = new BarData(empdataset);
-        data.setBarWidth(100F);
-        empdataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        chart.setData(data);
-
-
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setEnabled(false);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setEnabled(false);
-
-        YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setEnabled(false);
-
-        Legend l = chart.getLegend();
-        l.setEnabled(false);
-    }*/
 }
