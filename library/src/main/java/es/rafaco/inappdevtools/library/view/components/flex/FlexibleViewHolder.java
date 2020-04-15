@@ -32,14 +32,18 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class FlexibleViewHolder extends RecyclerView.ViewHolder {
 
-    //TODO: remove refactoring usages at traces
+    //TODO: remove usages and param from constructor (used at traces)
     FlexibleAdapter adapter;
 
+    //Constructor used when creating from other viewHolders, like RunButtons and RunButtonGroup
+    // at ComplexCard
+    //It should be the only one and we should stop passing adapter to the view holders
     public FlexibleViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
-    @Deprecated
+    //Constructor used when creating from the adapter
+    //We should stop passing adapter to the view holders, needed at current traces
     public FlexibleViewHolder(@NonNull View itemView,@NonNull FlexibleAdapter adapter) {
         super(itemView);
         this.adapter = adapter;
