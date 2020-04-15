@@ -43,6 +43,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDo
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -65,7 +66,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScr
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class Home3Screen extends AbstractFlexibleScreen {
@@ -121,6 +122,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
         AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
         BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
+        RepoInfoDocumentGenerator repoReporter = ((RepoInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.REPO_INFO));
         DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
         OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
         ConfigManager configManager = IadtController.get().getConfig();
@@ -176,23 +178,23 @@ public class Home3Screen extends AbstractFlexibleScreen {
         }
         
         String repoMain, repoSecond;
-        boolean isGitInfo = buildReporter.isGitEnabled();
+        boolean isGitInfo = repoReporter.isGitEnabled();
         if (!isGitInfo){
             repoMain = "No Git Info";
             repoSecond = list.length + " assets";
         }
         else{
-            repoMain = buildReporter.getBranchTag();
-            Boolean anyLocalChange = buildReporter.hasLocalCommitsOrChanges();
+            repoMain = repoReporter.getBranchAndTag();
+            Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
             repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
         }
-        WidgetData sourcesData = new WidgetData.Builder("Sources")
+        WidgetData sourcesData = new WidgetData.Builder("Source Code")
                 .setMainContent(repoMain)
                 .setSecondContent(repoSecond)
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SourcesScreen.class);
+                        OverlayService.performNavigation(SourceCodeScreen.class);
                     }
                 })
                 .build();

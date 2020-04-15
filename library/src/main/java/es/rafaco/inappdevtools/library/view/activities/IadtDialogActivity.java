@@ -152,7 +152,7 @@ public class IadtDialogActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         String welcomeText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO)).getAppNameAndVersions();
         welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO)).getBuildWelcome();
+        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO)).getBuildOverviewForWelcome();
         welcomeText += "." + Humanizer.newLine();
         welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO)).getSecondLineOverview();
         welcomeText += " ";

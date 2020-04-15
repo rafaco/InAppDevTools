@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.app;
+package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +26,29 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppInfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.ToolsInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class AppScreen extends AbstractFlexibleScreen {
+public class SourceCodeScreen extends AbstractFlexibleScreen {
 
-    public AppScreen(ScreenManager manager) {
+    public SourceCodeScreen(ScreenManager manager) {
         super(manager);
     }
 
     @Override
     public String getTitle() {
-        return "App";
+        return "Source Code";
     }
 
     @Override
@@ -56,30 +65,16 @@ public class AppScreen extends AbstractFlexibleScreen {
         List<Object> data = new ArrayList<>();
 
         long sessionId = IadtController.get().getSessionManager().getCurrentUid();
-        data.add(DocumentRepository.getCardDataLink(DocumentType.APP_INFO,
-                AppInfoScreen.class, null));
-        data.add(DocumentRepository.getCardDataLink(DocumentType.BUILD_INFO,
-                BuildDetailScreen.class, sessionId + ""));
-        data.add(DocumentRepository.getCardDataLink(DocumentType.TOOLS_INFO,
-                ToolsInfoScreen.class, null));
+        data.add(DocumentRepository.getCardDataLink(DocumentType.REPO_INFO,
+                RepoInfoScreen.class, sessionId + ""));
 
-        data.add("");
-        data.add("App shortcuts");
-        data.add(new RunButton("Restart app",
-                R.drawable.ic_replay_white_24dp,
+        data.add(new CardData("Browse Sources",
+                "Navigate through your SRC, RES and ASSETS",
+                R.string.gmd_local_library,
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().restartApp(false);
-                    }
-                }));
-
-        data.add(new RunButton("Force close app",
-                R.drawable.ic_warning_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().forceCloseApp(false);
+                        OverlayService.performNavigation(SourcesScreen.class);
                     }
                 }));
 

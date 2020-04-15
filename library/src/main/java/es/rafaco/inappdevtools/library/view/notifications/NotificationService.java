@@ -50,6 +50,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -204,10 +205,11 @@ public class NotificationService extends Service {
                 UiUtils.getAppIconResourceId());
         AppInfoDocumentGenerator appInfo = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
         BuildInfoDocumentGenerator buildInfo = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
+        RepoInfoDocumentGenerator repoInfo = ((RepoInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.REPO_INFO));
         overview = appInfo.getAppNameAndVersions() + "\n"
                 + buildInfo.getFriendlyBuildType();
-        if (buildInfo.isGitEnabled()){
-            overview += " from " + buildInfo.getRepositoryOverview();
+        if (repoInfo.isGitEnabled()){
+            overview += " from " + repoInfo.getBranchAndTag();
         }
         //overview += ", " + buildInfo.getFriendlyElapsedTime();
 

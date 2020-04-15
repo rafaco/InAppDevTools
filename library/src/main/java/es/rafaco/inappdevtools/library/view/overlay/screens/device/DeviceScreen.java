@@ -26,15 +26,12 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class DeviceScreen extends AbstractFlexibleScreen {
 
@@ -60,8 +57,10 @@ public class DeviceScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        addInfoOverview(data, DocumentType.DEVICE_INFO, DeviceInfoScreen.class);
-        addInfoOverview(data, DocumentType.OS_INFO, OsInfoScreen.class);
+        data.add(DocumentRepository.getCardDataLink(DocumentType.DEVICE_INFO,
+                DeviceInfoScreen.class, null));
+        data.add(DocumentRepository.getCardDataLink(DocumentType.OS_INFO,
+                OsInfoScreen.class, null));
 
         data.add(new CardData("Shell Terminal",
                 "Run shell commands on this device",
@@ -95,20 +94,5 @@ public class DeviceScreen extends AbstractFlexibleScreen {
                 }));
 
         return data;
-    }
-
-    private void addInfoOverview(List<Object> data, DocumentType documentType, final Class<? extends Screen> screenClass) {
-        DocumentType page = documentType;
-        DocumentData reportData = DocumentRepository.getDocument(page);
-        String shortTitle = Humanizer.removeTailStartingWith(reportData.getTitle(), " from");
-        data.add(new CardData(shortTitle,
-                reportData.getOverview(),
-                reportData.getIcon(),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(screenClass);
-                    }
-                }));
     }
 }

@@ -30,7 +30,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailSc
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home2Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
@@ -51,6 +50,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportsScreen
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
@@ -64,7 +65,6 @@ public class ScreensLoader {
     static void registerAllScreens(ScreenManager screenManager) {
         //HOME
         screenManager.registerScreen(HomeScreen.class);
-        screenManager.registerScreen(Home2Screen.class);
         screenManager.registerScreen(Home3Screen.class);
 
         //TOPBAR
@@ -88,6 +88,12 @@ public class ScreensLoader {
         screenManager.registerScreen(BuildDetailScreen.class);
         screenManager.registerScreen(ToolsInfoScreen.class);
 
+        //SOURCE CODE
+        screenManager.registerScreen(SourceCodeScreen.class);
+        screenManager.registerScreen(RepoInfoScreen.class);
+        screenManager.registerScreen(SourcesScreen.class);
+        screenManager.registerScreen(SourceDetailScreen.class);
+
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
@@ -99,8 +105,6 @@ public class ScreensLoader {
         screenManager.registerScreen(RunScreen.class);
         screenManager.registerScreen(MoreScreen.class);
         screenManager.registerScreen(InspectViewScreen.class);
-        screenManager.registerScreen(SourcesScreen.class);
-        screenManager.registerScreen(SourceDetailScreen.class);
         screenManager.registerScreen(AnalysisScreen.class);
         screenManager.registerScreen(SessionsScreen.class);
         screenManager.registerScreen(SessionDetailScreen.class);

@@ -29,6 +29,10 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileCreator;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class DocumentRepository {
 
@@ -133,5 +137,20 @@ public class DocumentRepository {
             FileProviderUtils.sendExternally(document.getTitle(), path);
         else
             Iadt.showError("Unable to build the document to share");
+    }
+
+    public static CardData getCardDataLink(DocumentType documentType, final Class<? extends Screen> screenClass, final String param) {
+        DocumentData reportData = DocumentRepository.getDocument(documentType);
+        String shortTitle = Humanizer.removeTailStartingWith(reportData.getTitle(), " from");
+        CardData card =  new CardData(shortTitle,
+                reportData.getOverview(),
+                reportData.getIcon(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(screenClass, param);
+                    }
+                });
+        return card;
     }
 }

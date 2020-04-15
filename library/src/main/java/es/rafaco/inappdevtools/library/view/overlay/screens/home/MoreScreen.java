@@ -71,14 +71,6 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Home 2",
-                R.drawable.ic_format_list_bulleted_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(Home2Screen.class);
-                    }
-                }));
-
         data.add(new RunButton("Home 3",
                 R.drawable.ic_timeline_white_24dp,
                 new Runnable() {
