@@ -62,6 +62,7 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
@@ -205,7 +206,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
         WidgetData viewData = new WidgetData.Builder("View")
                 //.setIcon(R.string.gmd_view_carousel)
                 .setMainContent(activityWatcher.getCurrentActivityName())
-                .setSecondContent("w/ 3 fragments")
+                .setSecondContent("3 fragments")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
@@ -229,11 +230,11 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(storageData);
 
-        FriendlyDao logsDao = IadtController.getDatabase().friendlyDao();
-        String allLogs = logsDao.count() + " logs"; //TODO: filter by session
+        int logsCount = IadtController.getDatabase().friendlyDao().count(); //TODO: filter by session
+
         WidgetData logsData = new WidgetData.Builder("Logs")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(allLogs)
+                .setMainContent(Humanizer.plural(logsCount, "log"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
@@ -245,13 +246,14 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
         NetSummaryDao netSummaryDao = IadtController.getDatabase().netSummaryDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
-        int sessionCount = netSummaryDao.countBySession(currentSession);
-        long sessionSize = netSummaryDao.sizeBySession(currentSession);
-        long errorsCount = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
+        int netCount = netSummaryDao.countBySession(currentSession);
+        long netSize = netSummaryDao.sizeBySession(currentSession);
+        int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
         WidgetData networkData = new WidgetData.Builder("Network")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(Humanizer.humanReadableByteCount(sessionSize, false))
-                .setSecondContent(sessionCount +" req. and " + errorsCount +" errors")
+                .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
+                .setSecondContent(netCount +" req. and "
+                        + Humanizer.plural(netErrors, "error"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
@@ -261,14 +263,16 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(networkData);
 
+        int sessionCount = IadtController.getDatabase().sessionDao().count();
+        int buildCount = IadtController.getDatabase().buildDao().count();
         WidgetData historyData = new WidgetData.Builder("History")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent("34 Session")
-                .setSecondContent("8 Builds")
+                .setMainContent(Humanizer.plural(sessionCount, "Session"))
+                .setSecondContent(Humanizer.plural(buildCount, "Build"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SessionsScreen.class);
+                        OverlayService.performNavigation(HistoryScreen.class);
                     }
                 })
                 .build();

@@ -23,7 +23,9 @@ import android.text.TextUtils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
@@ -318,6 +320,22 @@ public class Humanizer {
                 sb.append(separator);
         }
         return sb.toString();
+    }
+
+    public static String plural(int count, String singularName){
+        boolean isSingular = count == 1;
+        if (isSingular)
+            return count + " " + singularName;
+
+        String[] esPluralSuffixes = {"s", "ss", "sh", "ch", "x", "z"};
+        boolean isEsPlural = false;
+        for (String esPluralSuffix: esPluralSuffixes) {
+            if (singularName.endsWith(esPluralSuffix)) {
+                isEsPlural = true;
+                break;
+            }
+        }
+        return count + " " + singularName + (isEsPlural ? "es" : "s");
     }
 }
 

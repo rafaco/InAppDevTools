@@ -19,8 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX

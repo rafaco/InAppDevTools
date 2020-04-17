@@ -28,6 +28,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScree
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
@@ -85,7 +86,7 @@ public class ScreensLoader {
         //APP
         screenManager.registerScreen(AppScreen.class);
         screenManager.registerScreen(AppInfoScreen.class);
-        screenManager.registerScreen(BuildDetailScreen.class);
+        //screenManager.registerScreen(BuildDetailScreen.class);
         screenManager.registerScreen(ToolsInfoScreen.class);
 
         //SOURCE CODE
@@ -98,20 +99,24 @@ public class ScreensLoader {
         screenManager.registerScreen(InspectViewScreen.class);
         screenManager.registerScreen(ScreenshotsScreen.class);
 
+        //HISTORY
+        screenManager.registerScreen(HistoryScreen.class);
+        screenManager.registerScreen(SessionsScreen.class);
+        screenManager.registerScreen(SessionDetailScreen.class);
+        screenManager.registerScreen(BuildsScreen.class);
+        screenManager.registerScreen(BuildDetailScreen.class);
+        screenManager.registerScreen(ErrorsScreen.class);
+        screenManager.registerScreen(CrashDetailScreen.class);
+        //screenManager.registerScreen(ScreenshotsScreen.class);
+
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
-        screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(LogScreen.class);
-        screenManager.registerScreen(CrashDetailScreen.class);
         screenManager.registerScreen(AnrDetailScreen.class);
         screenManager.registerScreen(RunScreen.class);
         screenManager.registerScreen(MoreScreen.class);
         screenManager.registerScreen(AnalysisScreen.class);
-        screenManager.registerScreen(SessionsScreen.class);
-        screenManager.registerScreen(SessionDetailScreen.class);
-        screenManager.registerScreen(BuildsScreen.class);
-        //screenManager.registerScreen(BuildDetailScreen.class);
         screenManager.registerScreen(NetScreen.class);
         screenManager.registerScreen(NetDetailScreen.class);
     }
