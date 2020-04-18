@@ -101,6 +101,7 @@ public class Iadt {
 
     //region [ CLOSE & RESTART APP ]
 
+    public static void cleanAll(){}
     public static void restartApp(){}
     public static void forceCloseApp(){}
     public static void addOnForceCloseRunnable(Runnable onForceClose){}

@@ -133,12 +133,13 @@ public class ActivityEventDetector extends EventDetector implements Application.
 
     @Override
     public void onActivityResumed(final Activity activity) {
-        eventManager.fire(Event.ACTIVITY_ON_RESUME, activity);
-        if (!currentActivityName.equals(activity.getClass().getSimpleName())){
-            eventManager.fire(Event.ACTIVITY_OPEN, activity);
-        }
+        String previousActivityName = currentActivityName;
         currentActivityName = activity.getClass().getSimpleName();
         currentActivity = activity;
+        eventManager.fire(Event.ACTIVITY_ON_RESUME, activity);
+        if (!currentActivityName.equals(previousActivityName)){
+            eventManager.fire(Event.ACTIVITY_OPEN, activity);
+        }
     }
 
     @Override

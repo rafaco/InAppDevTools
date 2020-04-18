@@ -21,12 +21,6 @@ package es.rafaco.inappdevtools.library;
 
 import android.view.GestureDetector;
 
-//#ifdef ANDROIDX
-//@import androidx.annotation.NonNull; 
-//#else
-import android.support.annotation.NonNull;
-//#endif
-
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
@@ -200,6 +194,11 @@ public class Iadt {
     //endregion
 
     //region [ CLOSE & RESTART APP ]
+
+    public static void cleanAll(){
+        if (!isEnabled()) return;
+        getController().cleanAll();
+    }
 
     public static void restartApp(){
         if (!isEnabled()) return;

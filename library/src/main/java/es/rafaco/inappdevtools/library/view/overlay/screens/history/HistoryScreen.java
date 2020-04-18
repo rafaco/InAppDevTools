@@ -19,9 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.history;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +26,10 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
-import es.rafaco.inappdevtools.library.storage.files.IadtFileProvider;
-import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
@@ -115,12 +107,12 @@ public class HistoryScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("Shortcuts");
-        data.add(new RunButton("Delete all",
+        data.add(new RunButton("Clean all...",
                 R.drawable.ic_delete_forever_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        //IadtController.get().deleteAll();
+                        IadtController.get().cleanAll();
                     }
                 }));
 

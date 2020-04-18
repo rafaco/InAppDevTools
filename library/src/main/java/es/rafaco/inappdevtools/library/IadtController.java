@@ -54,6 +54,7 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
+import es.rafaco.inappdevtools.library.view.dialogs.CleanAllDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
@@ -378,6 +379,10 @@ public final class IadtController {
         if (isDebug()) Log.v(Iadt.TAG, "Stopping watchers");
         sessionManager.destroy();
         eventManager.destroy();
+    }
+
+    public void cleanAll() {
+        getDialogManager().load(CleanAllDialog.class);
     }
 
     public void performCleanAll() {
