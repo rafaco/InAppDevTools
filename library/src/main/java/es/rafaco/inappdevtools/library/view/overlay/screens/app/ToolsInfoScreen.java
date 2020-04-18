@@ -19,7 +19,17 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 
@@ -37,5 +47,49 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
     @Override
     protected DocumentType getDocumentType() {
         return DocumentType.TOOLS_INFO;
+    }
+
+    @Override
+    protected List<Object> buildDataFromDocument(DocumentData reportData) {
+        List<Object> objectList = new ArrayList<Object>(reportData.getSections());
+        objectList.add(0, reportData.getOverviewData());
+        objectList.add(1, getFirstButtonGroupData());
+        objectList.add(2, "");
+        return objectList;
+    }
+
+    private ButtonGroupData getFirstButtonGroupData() {
+        List<RunButton> buttons = new ArrayList<>();
+        buttons.add(new RunButton("Clean all...",
+                R.drawable.ic_delete_forever_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().cleanAll();
+                    }
+                }));
+
+        buttons.add(new RunButton("Disable Iadt...",
+                R.drawable.ic_power_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper().showIcon();
+                        IadtDialogActivity.open(IadtDialogActivity.IntentAction.DISABLE,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Iadt.showMessage("Developer tools disabled!");
+                                    }
+                                },
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Iadt.showMessage("Developer tools NOT disabled");
+                                    }
+                                });
+                    }
+                }));
+        return new ButtonGroupData(buttons);
     }
 }

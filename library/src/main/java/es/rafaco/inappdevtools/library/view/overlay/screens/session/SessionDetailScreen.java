@@ -75,7 +75,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
     private ButtonGroupData getFirstButtonGroupData(final Session session) {
         List<RunButton> buttons = new ArrayList<>();
         buttons.add(new RunButton(
-                "Repro Steps",
+                "Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
                 R.color.rally_green_alpha,
                 new Runnable() {
@@ -90,7 +90,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
         }));
 
         buttons.add(new RunButton(
-                "Full Logs",
+                "Logs",
                 R.drawable.ic_format_align_left_white_24dp,
                 R.color.rally_blue_med,
                 new Runnable() {
@@ -104,20 +104,6 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
             }
         }));
 
-        if (session.getCrashId()>0){
-            buttons.add(new RunButton(
-                    "Crash",
-                    R.drawable.ic_bug_report_white_24dp,
-                    R.color.rally_orange,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            OverlayService.performNavigation(CrashDetailScreen.class,
-                                    session.getCrashId() + "");
-                        }
-            }));
-        }
-
         return new ButtonGroupData(buttons);
     }
 
@@ -125,7 +111,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
         List<RunButton> buttons = new ArrayList<>();
 
         buttons.add(new RunButton(
-                "View build",
+                "Build Info",
                 R.drawable.ic_build_white_24dp,
                 R.color.rally_purple,
                 new Runnable() {
@@ -138,7 +124,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
 
         if (session.getCrashId()>0){
             buttons.add(new RunButton(
-                    "Crash",
+                    "Crash Detail",
                     R.drawable.ic_bug_report_white_24dp,
                     R.color.rally_orange,
                     new Runnable() {
