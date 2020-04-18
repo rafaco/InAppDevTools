@@ -3,31 +3,35 @@
 
     <item>
         <shape android:shape="rectangle" >
-            <corners android:radius="1dp"
-                android:topLeftRadius="15dp" android:topRightRadius="15dp"
-                android:bottomRightRadius="0dp" android:bottomLeftRadius="0dp"/>
+            <corners android:radius="0dp"
+                android:topLeftRadius="@dimen/iadt_shape_radius"
+                android:topRightRadius="@dimen/iadt_shape_radius"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"/>
 
-            <stroke android:width="1dp"
-                android:color="@color/text_third"/>
+            <stroke android:width="@dimen/iadt_shape_stroke"
+                android:color="@color/iadt_shape_stroke"/>
 
             <solid android:color="@color/material_surface_bar"/>
         </shape>
     </item>
 
-    <!-- Same shape but 1dp lower, to remove bottom stroke -->
+    <!-- Same shape but 1dp lower, to remove bottom stroke
     <item
-        android:left="1dp"
-        android:right="1dp"
-        android:top="1dp"
-        android:bottom="-1dp">
+        android:left="@dimen/iadt_shape_stroke"
+        android:right="@dimen/iadt_shape_stroke"
+        android:top="@dimen/iadt_shape_stroke"
+        android:bottom="@dimen/iadt_shape_stroke_negative">
         <shape android:shape="rectangle" >
-            <corners android:radius="1dp"
-                android:topLeftRadius="15dp" android:topRightRadius="15dp"
-                android:bottomRightRadius="0dp" android:bottomLeftRadius="0dp"/>
+            <corners android:radius="0dp"
+                android:topLeftRadius="@dimen/iadt_shape_radius"
+                android:topRightRadius="@dimen/iadt_shape_radius"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"/>
             <stroke
                 android:width="0dp"/>
 
             <solid android:color="@color/material_surface_bar"/>
         </shape>
-    </item>
+    </item>-->
 </layer-list>

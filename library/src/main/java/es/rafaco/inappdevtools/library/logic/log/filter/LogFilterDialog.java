@@ -77,7 +77,7 @@ public class LogFilterDialog {
     public void showStandardDialog() {
         dialog = buildPresetDialog();
         dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog);
         dialog.show();
     }
 

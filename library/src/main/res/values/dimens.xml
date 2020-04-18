@@ -1,5 +1,17 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- Iadt shape -->
+    <dimen name="iadt_shape_margin">7dp</dimen>
+    <dimen name="iadt_shape_stroke">1dp</dimen>
+    <dimen name="iadt_shape_stroke_negative">-2dp</dimen>
+    <dimen name="iadt_shape_radius">15dp</dimen>
+    <dimen name="iadt_shape_top_height">40dp</dimen>
+    <dimen name="iadt_shape_icon_size">40dp</dimen>
+
+    <!-- Iadt features -->
+    <dimen name="iadt_toast_y_offset">24dp</dimen>
+
+
+    <!-- Default screen margins -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
@@ -8,6 +20,7 @@
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
 
+    <!-- Default cards margins-->
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_radius">0dp</dimen>
     <dimen name="card_cover_height">100dp</dimen>
@@ -19,8 +32,4 @@
     <dimen name="card_overflow_width">25dp</dimen>
     <dimen name="card_overflow_height">25dp</dimen>
     <dimen name="card_overflow_margin_top">10dp</dimen>
-
-    <dimen name="overlay_dialog_margin">7dp</dimen>
-    <dimen name="toast_y_offset">24dp</dimen>
-    <dimen name="toolbar_height">40dp</dimen>
 </resources>

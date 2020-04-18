@@ -47,7 +47,7 @@ public class CustomToast {
             public void run() {
                 MDToast toast = MDToast.makeText(context, text, MDToast.LENGTH_LONG, type);
                 int gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-                int yOffset = context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset);
+                int yOffset = context.getResources().getDimensionPixelSize(R.dimen.iadt_toast_y_offset);
                 toast.setGravity(gravity, 0, yOffset);
                 //toast.getView().getParent().getWindow().setType(Layer.getLayoutType());
                 toast.show();
