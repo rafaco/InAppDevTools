@@ -29,6 +29,7 @@ import java.util.TooManyListenersException;
 import es.rafaco.inappdevtools.library.logic.builds.BuildManager;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
+import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
@@ -129,6 +130,7 @@ public final class IadtController {
         sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
         runnableManager = new RunnableManager((context));
+        dialogManager = new DialogManager((context));
 
         if (isDebug()){
             ThreadUtils.runOnBack("Iadt-InitBack",
@@ -231,6 +233,10 @@ public final class IadtController {
 
     public RunnableManager getRunnableManager() {
         return runnableManager;
+    }
+
+    public DialogManager getDialogManager() {
+        return dialogManager;
     }
 
     public SourcesManager getSourcesManager() {
