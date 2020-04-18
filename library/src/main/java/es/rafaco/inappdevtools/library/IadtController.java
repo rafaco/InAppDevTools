@@ -46,7 +46,9 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
+import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
@@ -72,6 +74,7 @@ public final class IadtController {
     private EventManager eventManager;
     private SourcesManager sourcesManager;
     private RunnableManager runnableManager;
+    private DialogManager dialogManager;
     private NavigationManager navigationManager;
     private OverlayHelper overlayHelper;
     public boolean isPendingInitFull;
@@ -377,8 +380,19 @@ public final class IadtController {
         eventManager.destroy();
     }
 
+    public void performCleanAll() {
+        IadtController.get().beforeClose();
+
+        IadtController.getDatabase().deleteAll();
+        DevToolsPrefs.deleteAll();
+        FileProviderUtils.deleteAll();
+
+        IadtController.get().restartApp(true);
+    }
+
     //endregion
 
+    //region [ CRASH ]
 
     public void crashUiThread() {
         Log.i(Iadt.TAG, "Crashing the UI thread...");
@@ -419,5 +433,7 @@ public final class IadtController {
         //TODO: prevent showing them on debug mode
         return false;
     }
+
+    //endregion
 }
 

@@ -63,4 +63,8 @@ public class DevToolsPrefs {
     private static Context getContext() {
         return IadtController.get().getContext();
     }
+
+    public static void deleteAll() {
+        getPrefs().edit().clear().commit();
+    }
 }

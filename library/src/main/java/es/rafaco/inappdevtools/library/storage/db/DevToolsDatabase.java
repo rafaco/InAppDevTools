@@ -19,7 +19,9 @@
 
 package es.rafaco.inappdevtools.library.storage.db;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 //#ifdef ANDROIDX
@@ -123,5 +125,23 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         overview +="  NetSummary: " + netSummaryDao().count() + Humanizer.newLine();
         overview +="  NetContent: " + netContentDao().count();
         return overview;
+    }
+
+    public void deleteAll(){
+        sessionDao().deleteAll();
+        buildDao().deleteAll();
+        friendlyDao().deleteAll();
+        screenshotDao().deleteAll();
+        crashDao().deleteAll();
+        anrDao().deleteAll();
+        sourcetraceDao().deleteAll();
+        reportDao().deleteAll();
+        netSummaryDao().deleteAll();
+        netContentDao().deleteAll();
+
+        //Reset all sequences
+        SupportSQLiteDatabase supportSQLiteDatabase = getOpenHelper().getWritableDatabase();
+        SQLiteDatabase supportSQLiteDatabase1 = SQLiteDatabase.openOrCreateDatabase(supportSQLiteDatabase.getPath(), null, null);
+        supportSQLiteDatabase1.execSQL("delete from sqlite_sequence");
     }
 }
