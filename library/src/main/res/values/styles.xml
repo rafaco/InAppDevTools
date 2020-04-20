@@ -92,6 +92,12 @@
         <item name="android:elevation" tools:targetApi="21">4dp</item>
     </style>
 
+    <style name="vertical_separator">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/text_secondary</item>
+    </style>
+
     <style name="horizontal_separator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>

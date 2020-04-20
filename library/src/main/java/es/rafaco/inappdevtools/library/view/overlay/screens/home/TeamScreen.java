@@ -49,7 +49,9 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 
 public class TeamScreen extends AbstractFlexibleScreen {
 
@@ -94,6 +96,8 @@ public class TeamScreen extends AbstractFlexibleScreen {
                 R.color.rally_white);
         data.add(overviewData);
 
+
+        int reportCount = IadtController.getDatabase().reportDao().count();
         data.add(new CardData("Reports",
                 "Send report to this team",
                 R.string.gmd_send,
@@ -101,29 +105,38 @@ public class TeamScreen extends AbstractFlexibleScreen {
                     @Override
                     public void run() { OverlayService.performNavigation(ReportScreen.class);
                     }
+                })
+                .setNavCount(reportCount)
+                .setNavAdd(R.string.gmd_add, new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(NewReportScreen.class);
+                    }
                 }));
-        List<RunButton> prepareButtons = new ArrayList<>();
-        RunButton take_screen = new RunButton("Take Screen",
-                R.drawable.ic_add_a_photo_white_24dp,
+
+        int screenshotsCount = IadtController.getDatabase().screenshotDao().count();
+        data.add(new CardData("Screenshots",
+                "Taken on crash or manually",
+                R.string.gmd_photo_library,
                 new Runnable() {
                     @Override
                     public void run() {
-                        onTakeScreen();
+                        OverlayService.performNavigation(ScreenshotsScreen.class);
                     }
-                });
-        take_screen.setColor(R.color.iadt_surface_bottom);
-        prepareButtons.add(take_screen);
-        RunButton start_new_session = new RunButton("Start new session",
-                R.drawable.ic_flag_white_24dp,
-                new Runnable() {
+                })
+                .setNavCount(screenshotsCount)
+                .setNavAdd(R.string.gmd_add_a_photo, new Runnable() {
                     @Override
                     public void run() {
-                        onNewSession();
+                        IadtController.get().takeScreenshot();;
+                        bodyView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                onAdapterStart();
+                            }
+                        }, 1000);
                     }
-                });
-        start_new_session.setColor(R.color.iadt_surface_bottom);
-        prepareButtons.add(start_new_session);
-        data.add(new ButtonGroupData(prepareButtons));
+                }));
         
         data.add("");
         data.add("Links");
@@ -179,9 +192,5 @@ public class TeamScreen extends AbstractFlexibleScreen {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.getWindow().setType(Layer.getLayoutType());
         alertDialog.show();
-    }
-
-    private void onTakeScreen() {
-        IadtController.get().takeScreenshot();
     }
 }

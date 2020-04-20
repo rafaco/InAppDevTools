@@ -30,6 +30,8 @@ public class CardData {
     int bgColor;
     String imagePath;
     private int titleColor;
+    private int navAddIcon;
+    private Runnable navAddRunnable;
 
     public CardData(String title, Runnable performer) {
         this.title = title;
@@ -98,6 +100,20 @@ public class CardData {
 
     public CardData setNavCount(int navCount) {
         this.navCount = navCount;
+        return this;
+    }
+
+    public int getNavAddIcon() {
+        return navAddIcon;
+    }
+
+    public Runnable getNavAddRunnable() {
+        return navAddRunnable;
+    }
+
+    public CardData setNavAdd(int addIcon, Runnable addRunnable) {
+        this.navAddIcon = addIcon;
+        this.navAddRunnable = addRunnable;
         return this;
     }
 

@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
@@ -48,16 +49,24 @@ public class CardViewHolder extends FlexibleViewHolder {
     private final TextView contentView;
     private final TextView navIcon;
     private final ImageView imageView;
+    private final RelativeLayout mainContainer;
+    private final LinearLayout navAddContainer;
+    private final TextView navAddIcon;
+    private View navAddSeparator;
 
     public CardViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         this.itemContent = view.findViewById(R.id.item_content);
         this.cardView = view.findViewById(R.id.card_view);
+        this.mainContainer = view.findViewById(R.id.main_container);
         this.iconView = view.findViewById(R.id.icon);
         this.imageView = view.findViewById(R.id.image_left);
         this.titleView = view.findViewById(R.id.title);
         this.contentView = view.findViewById(R.id.content);
         this.navIcon = view.findViewById(R.id.nav_icon);
+        this.navAddContainer = view.findViewById(R.id.nav_add_container);
+        this.navAddSeparator = view.findViewById(R.id.nav_add_separator);
+        this.navAddIcon = view.findViewById(R.id.nav_add_icon);
     }
 
     @Override
@@ -110,14 +119,13 @@ public class CardViewHolder extends FlexibleViewHolder {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
                 }
-                cardView.setClickable(true);
-                cardView.setOnClickListener(new View.OnClickListener() {
+                mainContainer.setClickable(true);
+                mainContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         data.getPerformer().run();
                     }
                 });
-                itemView.setClickable(true);
 
                 if (data.getNavCount()>-1){
                     navIcon.setText(data.getNavCount()+"");
@@ -137,10 +145,31 @@ public class CardViewHolder extends FlexibleViewHolder {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setElevation(0);
                 }
-                cardView.setClickable(false);
-                cardView.setOnClickListener(null);
-                itemView.setClickable(false);
+                mainContainer.setClickable(false);
+                mainContainer.setOnClickListener(null);
                 navIcon.setVisibility(View.GONE);
+            }
+
+            if (data.getNavAddRunnable() != null){
+                IconUtils.markAsIconContainer(navAddIcon, IconUtils.MATERIAL);
+                int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon()
+                        : R.string.gmd_add;
+                navAddIcon.setText(navAddIconRes);
+                navAddIcon.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_primary));
+
+                navAddContainer.setClickable(true);
+                navAddContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        data.getNavAddRunnable().run();
+                    }
+                });
+                navAddContainer.setVisibility(View.VISIBLE);
+                navAddSeparator.setVisibility(View.VISIBLE);
+            }
+            else{
+                navAddContainer.setVisibility(View.GONE);
+                navAddSeparator.setVisibility(View.GONE);
             }
         }
     }
