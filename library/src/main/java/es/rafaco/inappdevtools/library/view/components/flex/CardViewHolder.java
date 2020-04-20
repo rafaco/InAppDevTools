@@ -100,7 +100,7 @@ public class CardViewHolder extends FlexibleViewHolder {
             }
             else{
                 if (data.getPerformer() != null){
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.material_surface_medium));
                 }else{
                     cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
                 }
@@ -119,10 +119,18 @@ public class CardViewHolder extends FlexibleViewHolder {
                 });
                 itemView.setClickable(true);
 
-                IconUtils.markAsIconContainer(navIcon, IconUtils.MATERIAL);
-                int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
-                        : R.string.gmd_keyboard_arrow_right;
-                navIcon.setText(navIconRes);
+                if (data.getNavCount()>-1){
+                    navIcon.setText(data.getNavCount()+"");
+                    //navIcon.setTextSize(UiUtils.getPixelsFromDp(itemView.getContext(), 10));
+                }
+                else{
+                    IconUtils.markAsIconContainer(navIcon, IconUtils.MATERIAL);
+                    int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
+                            : R.string.gmd_keyboard_arrow_right;
+                    navIcon.setText(navIconRes);
+                }
+
+                navIcon.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_primary));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{

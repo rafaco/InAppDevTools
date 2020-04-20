@@ -112,7 +112,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 collapsedContentView.setVisibility(View.VISIBLE);
                 cardView.setOnClickListener(null);
             }
-            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_medium));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
@@ -155,11 +155,11 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
 
     private void applyExpandedState(Boolean isExpanded) {
         if (!isExpanded){
-            IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.rally_white);
+            IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.iadt_primary);
             collapsedContentView.setVisibility(View.GONE);
         }
         else {
-            IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_up_white_24dp, R.color.rally_white);
+            IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_up_white_24dp, R.color.iadt_primary);
             collapsedContentView.setVisibility(View.VISIBLE);
         }
     }

@@ -26,6 +26,7 @@ public class CardData {
 
     int icon;
     int navIcon;
+    int navCount = -1;
     int bgColor;
     String imagePath;
     private int titleColor;
@@ -89,6 +90,15 @@ public class CardData {
 
     public void setNavIcon(int navIcon) {
         this.navIcon = navIcon;
+    }
+
+    public int getNavCount() {
+        return navCount;
+    }
+
+    public CardData setNavCount(int navCount) {
+        this.navCount = navCount;
+        return this;
     }
 
     public int getBgColor() {

@@ -51,6 +51,6 @@
         android:id="@+id/separator"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        style="@style/horizontal_separator"/>
+        style="@style/horizontal_separator_log"/>
 
 </LinearLayout>

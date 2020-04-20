@@ -36,7 +36,7 @@
         android:focusable="true"
         android:elevation="6dp"
         android:layout_margin="@dimen/card_margin"
-        app:cardCornerRadius="6dp">
+        app:cardCornerRadius="@dimen/card_radius">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
                 android:layout_marginTop="4dp"
-                style="@style/TextCondensedMedium"/>
+                style="@style/TextCondensedBig"/>
 
             <TextView
                 android:id="@+id/main_content"

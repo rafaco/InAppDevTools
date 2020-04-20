@@ -66,8 +66,7 @@
         style="@style/content_margin"/>
 
     <View
-        style="@style/horizontal_separator"
-        android:alpha="1"/>
+        style="@style/horizontal_separator"/>
 
     <br.tiagohm.CodeView
         android:id="@+id/code_view"

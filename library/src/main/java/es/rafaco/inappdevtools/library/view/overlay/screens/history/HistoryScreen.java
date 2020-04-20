@@ -33,7 +33,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class HistoryScreen extends AbstractFlexibleScreen {
 
@@ -59,8 +58,19 @@ public class HistoryScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
+        int buildCount = IadtController.getDatabase().buildDao().count();
+        data.add(new CardData("Builds",
+                "Compilations used and their changes",
+                R.string.gmd_build,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(BuildsScreen.class);
+                    }
+                }).setNavCount(buildCount));
+
         int sessionCount = IadtController.getDatabase().sessionDao().count();
-        data.add(new CardData(Humanizer.plural(sessionCount, "Session"),
+        data.add(new CardData("Sessions",
                 "From app open to fully close",
                 R.string.gmd_history,
                 new Runnable() {
@@ -68,21 +78,10 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     public void run() {
                         OverlayService.performNavigation(SessionsScreen.class);
                     }
-                }));
-
-        int buildCount = IadtController.getDatabase().buildDao().count();
-        data.add(new CardData(Humanizer.plural(buildCount, "Build"),
-                "Apk modifications by developers",
-                R.string.gmd_build,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
-                    }
-                }));
+                }).setNavCount(sessionCount));
 
         int crashCount = IadtController.getDatabase().crashDao().count();
-        data.add(new CardData(crashCount + " Crashes",
+        data.add(new CardData("Crashes",
                 "Unexpected exits caused by an unhandled exception",
                 R.string.gmd_bug_report,
                 new Runnable() {
@@ -90,10 +89,10 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     public void run() {
                         OverlayService.performNavigation(ErrorsScreen.class);
                     }
-                }));
+                }).setNavCount(crashCount));
 
         int screenshotsCount = IadtController.getDatabase().screenshotDao().count();
-        data.add(new CardData(screenshotsCount + " Screenshots",
+        data.add(new CardData("Screenshots",
                 "Taken by users or when crash happen",
                 R.string.gmd_photo_library,
                 new Runnable() {
@@ -101,7 +100,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     public void run() {
                         OverlayService.performNavigation(ScreenshotsScreen.class);
                     }
-                }));
+                }).setNavCount(screenshotsCount));
 
         data.add("");
         data.add("Shortcuts");

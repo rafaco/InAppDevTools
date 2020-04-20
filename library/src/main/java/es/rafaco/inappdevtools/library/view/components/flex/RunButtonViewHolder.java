@@ -54,15 +54,19 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
     @Override
     public void bindTo(Object abstractData, int position) {
         final RunButton data = (RunButton) abstractData;
-        int color = (data.getColor() >  0) ? data.getColor() : R.color.iadt_surface_top;
-        int contextualizedColor = ContextCompat.getColor(button.getContext(), color);
-        button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+        boolean isCustomBackground = data.getColor() > 0;
+        int color = isCustomBackground ? data.getColor() : R.color.iadt_surface_top;
+        int backgroundColor = ContextCompat.getColor(button.getContext(), color);
+        int accentColor = ContextCompat.getColor(button.getContext(), R.color.iadt_primary);
+        button.getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
         if (data.isWrapContent()){
             //Change width to WRAP_CONTENT and remove WEIGHT
             button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         }
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
+            if (!isCustomBackground)
+                icon.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
             button.setCompoundDrawablePadding(UiUtils.dpToPx(button.getContext(), 5));
         }

@@ -7,19 +7,27 @@
     <color name="material_surface_bar">#1F1F1F</color>
     <color name="material_surface_medium">#2C2C2C</color>
     <color name="material_surface_top">#373737</color>
+    <color name="material_orange">#ffcc80</color>
     <color name="material_blue">#FF42A5F5</color>
+    <color name="material_light_blue">#FF81d4fa</color>
     <color name="material_white">#FFE1E1E1</color>
     <color name="material_white2">#BFE1E1E1</color>
     <color name="material_white3">#80E1E1E1</color>
+    <color name="material_gray">#FF878787</color>
 
     <!-- Theme: from Material dark theme guide -->
+    <color name="iadt_primary">@color/material_blue</color>
+    <color name="iadt_secondary">@color/material_orange</color>
+
     <color name="iadt_background">@color/material_background</color>
     <color name="iadt_surface_bottom">@color/material_surface_bottom</color>
     <color name="iadt_surface_medium">@color/material_surface_medium</color>
     <color name="iadt_surface_top">@color/material_surface_top</color>
-    <color name="iadt_shape_stroke">@color/material_blue</color>
+
+    <color name="iadt_shape_stroke">@color/material_gray</color>
     <color name="iadt_shape_background">@color/iadt_background</color>
-    <color name="text_header">@color/material_blue</color>
+
+    <color name="text_header">@color/iadt_primary</color>
     <color name="text_primary">@color/material_white</color>
     <color name="text_secondary">@color/material_white2</color>
     <color name="text_third">@color/material_white3</color>

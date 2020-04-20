@@ -20,6 +20,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -32,6 +33,7 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
         android:elevation="6dp"
+        app:cardCornerRadius="@dimen/card_radius"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true">
@@ -42,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/image_left"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:minHeight="@dimen/card_cover_height"
@@ -55,10 +57,12 @@
             <TextView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/image_left"
                 android:layout_margin="5dp"
-                android:textSize="24dp"/>
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/iadt_primary"/>
 
             <TextView
                 android:id="@+id/nav_icon"
@@ -67,7 +71,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
-                android:textSize="24dp"/>
+                android:textSize="30dp"
+                android:textColor="@color/iadt_primary"/>
 
             <LinearLayout
                 android:id="@+id/details"
@@ -89,7 +94,8 @@
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextCondensedMedium" />
+                    style="@style/TextCondensedMedium"
+                    android:textColor="@color/text_secondary"/>
 
             </LinearLayout>
 
