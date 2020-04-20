@@ -22,14 +22,12 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.app;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 
@@ -74,20 +72,7 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().getOverlayHelper().showIcon();
-                        IadtDialogActivity.open(IadtDialogActivity.IntentAction.DISABLE,
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Iadt.showMessage("Developer tools disabled!");
-                                    }
-                                },
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Iadt.showMessage("Developer tools NOT disabled");
-                                    }
-                                });
+                        IadtController.get().disable();
                     }
                 }));
         return new ButtonGroupData(buttons);

@@ -39,22 +39,19 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
-import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
-import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
+import es.rafaco.inappdevtools.library.view.dialogs.WelcomeDialogHelper;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.CleanAllDialog;
+import es.rafaco.inappdevtools.library.view.dialogs.DisableDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
@@ -108,16 +105,12 @@ public final class IadtController {
             initFull();
         }
 
-        if (shouldShowInitialDialog()){
-            IadtDialogActivity.open(IadtDialogActivity.IntentAction.AUTO,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            initFullIfPending();
-                        }
-                    },
-                    null);
-        }
+        new WelcomeDialogHelper().showIfNeededThen(new Runnable() {
+            @Override
+            public void run() {
+                initFullIfPending();
+            }
+        });
     }
 
     private boolean initEssential() {
@@ -153,16 +146,6 @@ public final class IadtController {
         return !AppUtils.isForegroundImportance(context) ||
                 !PrivacyConsentUtil.isAccepted() ||
                 !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
-    }
-
-    private boolean shouldShowInitialDialog() {
-        Session session = getSessionManager().getCurrent();
-        if (session.isNewBuild() && !NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown() ||
-                !PrivacyConsentUtil.isAccepted() ||
-                !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            return true;
-        }
-        return false;
     }
 
     public void initFullIfPending(){
@@ -381,18 +364,13 @@ public final class IadtController {
         eventManager.destroy();
     }
 
-    public void cleanAll() {
-        getDialogManager().load(CleanAllDialog.class);
+    public void disable() {
+        getDialogManager().load(new DisableDialog());
     }
 
-    public void performCleanAll() {
-        IadtController.get().beforeClose();
-
-        IadtController.getDatabase().deleteAll();
-        DevToolsPrefs.deleteAll();
-        FileProviderUtils.deleteAll();
-
-        IadtController.get().restartApp(true);
+    public void cleanAll() {
+        getDialogManager().load(new CleanAllDialog()
+                .setCancelable(true));
     }
 
     //endregion

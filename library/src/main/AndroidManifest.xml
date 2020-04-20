@@ -39,9 +39,6 @@
             android:name=".view.activities.PermissionActivity"
             android:theme="@style/LibTheme.Translucent" />
 
-        <activity android:name=".view.activities.IadtDialogActivity"
-            android:theme="@style/LibTheme.Translucent"/>
-
         <activity android:name=".view.activities.CrashDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 

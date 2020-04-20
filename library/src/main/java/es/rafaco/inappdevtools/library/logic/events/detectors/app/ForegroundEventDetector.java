@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -51,7 +52,7 @@ public class ForegroundEventDetector extends EventDetector {
         eventManager.subscribe(Event.ACTIVITY_ON_RESUME, new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                updateOnActivityResumed();
+                updateOnActivityResumed((Activity) param);
             }
         });
         eventManager.subscribe(Event.ACTIVITY_ON_PAUSE, new EventManager.Listener() {
@@ -97,7 +98,7 @@ public class ForegroundEventDetector extends EventDetector {
         }
     }
 
-    private void updateOnActivityResumed() {
+    private void updateOnActivityResumed(Activity activity) {
         if (mBackgroundTransition != null) {
             mBackgroundDelayHandler.removeCallbacks(mBackgroundTransition);
             mBackgroundTransition = null;
@@ -105,7 +106,7 @@ public class ForegroundEventDetector extends EventDetector {
 
         if (mInBackground && AppUtils.isForegroundImportance(getContext())) {
             mInBackground = false;
-            eventManager.fire(Event.IMPORTANCE_FOREGROUND);
+            eventManager.fire(Event.IMPORTANCE_FOREGROUND, activity);
         }
     }
 

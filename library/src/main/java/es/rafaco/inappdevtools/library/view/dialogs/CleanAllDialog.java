@@ -19,35 +19,32 @@
 
 package es.rafaco.inappdevtools.library.view.dialogs;
 
-import android.content.Context;
 import android.content.DialogInterface;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
-//@import androidx.appcompat.view.ContextThemeWrapper;
 //#else
 import android.support.v7.app.AlertDialog;
 //#endif
 
 public class CleanAllDialog extends IadtDialogBuilder {
 
-    public CleanAllDialog(Context context) {
-        super(context);
+    public CleanAllDialog() {
+        super();
     }
 
-    @Override
-    public AlertDialog build() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext())
-                .setTitle("Clean tools data?")
+    public void onBuilderCreated(AlertDialog.Builder builder) {
+        builder.setTitle("Clean tools data?")
                 .setMessage("You are going to delete all data locally collected by InAppDevTools.\n\nYour app will be restarted.")
-                .setCancelable(true)
                 .setPositiveButton("Clean All",
                         new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                IadtController.get().performCleanAll();
+                                performCleanAll();
                             }})
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
@@ -56,8 +53,15 @@ public class CleanAllDialog extends IadtDialogBuilder {
                                 dialog.dismiss();
                             }
                         });
+    }
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        return alertDialog;
+    private void performCleanAll() {
+        IadtController.get().beforeClose();
+
+        IadtController.getDatabase().deleteAll();
+        DevToolsPrefs.deleteAll();
+        FileProviderUtils.deleteAll();
+
+        IadtController.get().restartApp(true);
     }
 }

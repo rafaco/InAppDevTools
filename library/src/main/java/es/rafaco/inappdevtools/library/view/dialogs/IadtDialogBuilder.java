@@ -24,18 +24,62 @@ import android.content.ContextWrapper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 
 public abstract class IadtDialogBuilder {
-    ContextWrapper themedContext;
 
-    IadtDialogBuilder(Context context) {
-        themedContext = new ContextThemeWrapper(context, R.style.LibTheme_Dialog);
+    ContextWrapper context;
+    private boolean isCancelable;
+
+    IadtDialogBuilder() {
+
+    }
+
+    public AlertDialog createDialog(Context baseContext){
+        setContext(baseContext);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        initBuilder(builder);
+        onBuilderCreated(builder);
+
+        AlertDialog dialog = builder.create();
+        initDialog(dialog);
+        onDialogCreated(dialog);
+
+        return dialog;
+    }
+
+    private void initBuilder(AlertDialog.Builder builder) {
+        builder.setCancelable(isCancelable);
+    }
+
+    public abstract void onBuilderCreated(AlertDialog.Builder builder);
+
+    private void initDialog(AlertDialog dialog) {
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog);
+    }
+
+    public void onDialogCreated(AlertDialog dialog) {
+        //Intentionally empty
+    }
+
+    private void setContext(Context baseContext){
+        context = new ContextThemeWrapper(baseContext, R.style.LibTheme_Dialog);
     }
 
     protected Context getContext(){
-        return themedContext;
+        return context;
     }
 
-    public abstract AlertDialog build();
+    protected DialogManager getManager(){
+        return IadtController.get().getDialogManager();
+    }
+
+
+    public IadtDialogBuilder setCancelable (boolean isCancelable){
+        this.isCancelable = isCancelable;
+        return this;
+    }
 }

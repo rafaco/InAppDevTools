@@ -34,15 +34,13 @@ public class OverlayManager {
     private final Context context;
     private final LayerManager layerManager;
     private final ScreenManager screenManager;
-    private EventManager.Listener onForegroundListener;
-    private EventManager.Listener onBackgroundListener;
 
     public OverlayManager(Context context) {
         this.context = context;
         this.layerManager = new LayerManager(context);
         this.screenManager = new ScreenManager(context, layerManager.getMainLayer());
 
-        subscribeEventListeners();
+        subscribeForegroundListeners();
     }
 
     private IadtController getController() {
@@ -137,44 +135,35 @@ public class OverlayManager {
     //endregion
 
 
-    //region [ EVENTS SUBSCRIBERS ]
+    //region [ FOREGROUND LISTENER ]
 
-    private boolean isForeground = true;
-    private boolean isSuspended = false;
+    private EventManager.Listener onForegroundListener;
+    private EventManager.Listener onBackgroundListener;
 
-    //TODO: refactor into an EventSubscriber
-    public void subscribeEventListeners() {
+    public void subscribeForegroundListeners() {
         onForegroundListener = new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (!isForeground && isSuspended) {
-                    isForeground = true;
-                    isSuspended = false;
-                    resume();
-                }
+                resume();
             }
         };
         onBackgroundListener = new EventManager.Listener() {
             @Override
             public void onEvent(Event event, Object param) {
-                if (isForeground) {
-                    isForeground = false;
-                    isSuspended = true;
-                    pause();
-                }
+                pause();
             }
         };
-        getEventManager().subscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
-        getEventManager().subscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+        getEventManager().subscribe(Event.FOREGROUND_CHANGE_ENTER, onForegroundListener);
+        getEventManager().subscribe(Event.FOREGROUND_CHANGE_EXIT, onBackgroundListener);
     }
 
-    public void unsubscribeEventListeners() {
+    public void unsubscribeForegroundListeners() {
         if (onForegroundListener!=null){
-            getEventManager().unsubscribe(Event.IMPORTANCE_FOREGROUND, onForegroundListener);
+            getEventManager().unsubscribe(Event.FOREGROUND_CHANGE_ENTER, onForegroundListener);
             onForegroundListener = null;
         }
         if (onBackgroundListener!=null){
-            getEventManager().unsubscribe(Event.IMPORTANCE_BACKGROUND, onBackgroundListener);
+            getEventManager().unsubscribe(Event.FOREGROUND_CHANGE_EXIT, onBackgroundListener);
             onBackgroundListener = null;
         }
     }
@@ -184,6 +173,6 @@ public class OverlayManager {
     public void destroy() {
         if (screenManager != null) screenManager.destroy();
         if (layerManager != null) layerManager.destroy();
-        unsubscribeEventListeners();
+        unsubscribeForegroundListeners();
     }
 }

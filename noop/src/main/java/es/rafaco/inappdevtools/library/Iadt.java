@@ -101,6 +101,7 @@ public class Iadt {
 
     //region [ CLOSE & RESTART APP ]
 
+    public static void disable(){}
     public static void cleanAll(){}
     public static void restartApp(){}
     public static void forceCloseApp(){}

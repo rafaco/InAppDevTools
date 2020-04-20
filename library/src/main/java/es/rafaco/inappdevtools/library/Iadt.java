@@ -195,6 +195,11 @@ public class Iadt {
 
     //region [ CLOSE & RESTART APP ]
 
+    public static void disable(){
+        if (!isEnabled()) return;
+        getController().disable();
+    }
+
     public static void cleanAll(){
         if (!isEnabled()) return;
         getController().cleanAll();

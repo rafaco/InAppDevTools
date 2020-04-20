@@ -29,6 +29,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.SessionEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneModeChangeEventDetector;
@@ -71,6 +72,7 @@ public class EventDetectorsManager {
         initDetector(SessionEventDetector.class);
         initDetector(ProcessEventDetector.class);
 
+        initDetector(ForegroundChangeEventDetector.class);
         initDetector(ForegroundEventDetector.class);
         initDetector(ActivityEventDetector.class);
         initDetector(FragmentEventDetector.class);

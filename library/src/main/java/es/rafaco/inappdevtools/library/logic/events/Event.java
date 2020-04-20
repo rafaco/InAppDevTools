@@ -80,6 +80,8 @@ public enum Event {
     //ScreenChange
     IMPORTANCE_FOREGROUND("importance_foreground"),
     IMPORTANCE_BACKGROUND("importance_background"),
+    FOREGROUND_CHANGE_ENTER("foreground_change_enter"),
+    FOREGROUND_CHANGE_EXIT("foreground_change_exit"),
 
     //PowerManager
     POWER_DOZE("PowerDoze"),
