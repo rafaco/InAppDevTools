@@ -45,7 +45,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Build Detail";
+        return "";
     }
 
     @Override

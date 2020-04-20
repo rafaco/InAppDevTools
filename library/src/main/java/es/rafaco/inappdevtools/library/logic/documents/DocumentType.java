@@ -51,7 +51,7 @@ public enum DocumentType {
     APP_INFO("App", R.string.gmd_developer_board, AppInfoDocumentGenerator.class, long.class),
     OS_INFO("OS", R.string.gmd_android, OSInfoDocumentGenerator.class, long.class),
     DEVICE_INFO("Device", R.string.gmd_phone_android, DeviceInfoDocumentGenerator.class, long.class),
-    TOOLS_INFO("Iadt", R.string.gmd_extension, ToolsInfoDocumentGenerator.class, long.class),
+    TOOLS_INFO("Tools", R.string.gmd_extension, ToolsInfoDocumentGenerator.class, long.class),
 
     INFO_OVERVIEW("Info Overview", R.string.gmd_info, InfoOverviewDocumentGenerator.class, long.class),
     SESSION("Session", R.string.gmd_timeline, SessionDocumentGenerator.class, Session.class),

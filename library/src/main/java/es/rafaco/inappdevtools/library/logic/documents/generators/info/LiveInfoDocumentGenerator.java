@@ -53,7 +53,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " info from Session " + sessionId;
     }
 
     @Override

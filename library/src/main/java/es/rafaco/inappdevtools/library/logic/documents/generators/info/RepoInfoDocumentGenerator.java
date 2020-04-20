@@ -62,7 +62,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return "Repository on build " + buildId;
+        return "Repository from build " + buildId;
     }
 
     @Override

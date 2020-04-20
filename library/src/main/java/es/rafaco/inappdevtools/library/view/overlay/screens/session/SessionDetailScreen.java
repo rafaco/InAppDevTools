@@ -47,7 +47,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Session Detail";
+        return "";
     }
 
     @Override

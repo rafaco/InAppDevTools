@@ -27,9 +27,11 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScreen;
 
 public class AppScreen extends AbstractFlexibleScreen {
 
@@ -39,7 +41,7 @@ public class AppScreen extends AbstractFlexibleScreen {
 
     @Override
     public String getTitle() {
-        return "App";
+        return "Apk";
     }
 
     @Override
@@ -58,8 +60,12 @@ public class AppScreen extends AbstractFlexibleScreen {
         long sessionId = IadtController.get().getSessionManager().getCurrentUid();
         data.add(DocumentRepository.getCardDataLink(DocumentType.APP_INFO,
                 AppInfoScreen.class, null));
-        data.add(DocumentRepository.getCardDataLink(DocumentType.BUILD_INFO,
-                BuildDetailScreen.class, sessionId + ""));
+        CardData cardDataLink1 = DocumentRepository.getCardDataLink(DocumentType.BUILD_INFO,
+                BuildDetailScreen.class, sessionId + "");
+        cardDataLink1.setTitle("Build");
+        data.add(cardDataLink1);
+        data.add(DocumentRepository.getCardDataLink(DocumentType.REPO_INFO,
+                RepoInfoScreen.class, sessionId + ""));
         data.add(DocumentRepository.getCardDataLink(DocumentType.TOOLS_INFO,
                 ToolsInfoScreen.class, null));
 

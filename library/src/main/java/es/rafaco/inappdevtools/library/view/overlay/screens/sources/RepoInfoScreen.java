@@ -31,7 +31,7 @@ public class RepoInfoScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Repo Info";
+        return "";
     }
 
     @Override

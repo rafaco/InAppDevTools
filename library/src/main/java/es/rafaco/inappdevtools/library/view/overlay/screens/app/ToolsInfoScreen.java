@@ -39,7 +39,7 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Tools Info";
+        return "";
     }
 
     @Override

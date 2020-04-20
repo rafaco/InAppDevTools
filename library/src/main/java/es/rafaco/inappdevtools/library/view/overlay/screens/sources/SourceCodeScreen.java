@@ -68,7 +68,7 @@ public class SourceCodeScreen extends AbstractFlexibleScreen {
         data.add(DocumentRepository.getCardDataLink(DocumentType.REPO_INFO,
                 RepoInfoScreen.class, sessionId + ""));
 
-        data.add(new CardData("Source Inspector",
+        data.add(new CardData("Inspect Sources",
                 "Src, res and assets",
                 R.string.gmd_local_library,
                 new Runnable() {

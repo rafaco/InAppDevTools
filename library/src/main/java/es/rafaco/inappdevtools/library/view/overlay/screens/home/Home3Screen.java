@@ -81,7 +81,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
     @Override
     public String getTitle() {
-        return "Home3";
+        return getContext().getString(R.string.library_name);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(deviceData);
 
-        WidgetData appData = new WidgetData.Builder("App")
+        WidgetData appData = new WidgetData.Builder("Apk")
                 //.setIcon(R.string.gmd_apps)
                 .setMainContent(appHelper.getAppName())
                 .setSecondContent(appHelper.getFormattedVersionShort()

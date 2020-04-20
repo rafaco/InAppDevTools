@@ -31,7 +31,7 @@ public class AppInfoScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "App Info";
+        return "";
     }
 
     @Override

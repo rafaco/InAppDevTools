@@ -91,10 +91,9 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
             itemView.setActivated(true);
 
-            title.setText(data.getTitle().toUpperCase());
+            title.setText(data.getTitle());
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_header));
 
-            mainContent.setText(data.getMainContent());
             mainContent.setText(data.getMainContent());
 
             secondContent.setVisibility(TextUtils.isEmpty(data.getSecondContent()) ? View.GONE : View.VISIBLE);

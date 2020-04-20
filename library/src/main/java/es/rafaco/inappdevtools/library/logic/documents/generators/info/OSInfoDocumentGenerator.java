@@ -62,7 +62,7 @@ public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " from Session " + sessionId;
     }
 
     @Override
