@@ -115,7 +115,7 @@ public class LogFilterDialog {
         alertDialogBuilder.setView(dialogView);
 
         List<Object> data = new ArrayList<>();
-
+        int cardBackground = R.color.iadt_surface_top;
         data.add(new CardData("Repro Steps",
                 "Important events from current session",
                 R.string.gmd_format_list_numbered,
@@ -124,7 +124,7 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.REPRO_STEPS);
                     }
-                }));
+                }).setBgColor(cardBackground));
 
         /*data.add(new CardData("Network",
                 "Data request from current session",
@@ -144,7 +144,8 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.DEBUG);
                     }
-                }));
+                })
+                .setBgColor(cardBackground));
 
         data.add(new CardData("Crashes",
                 "Crash events from all session",
@@ -154,7 +155,7 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.CRASHES);
                     }
-                }));
+                }).setBgColor(cardBackground));
 
         data.add("");
         data.add(new CardData("Custom",
@@ -166,7 +167,7 @@ public class LogFilterDialog {
                         onPresetSelected(LogFilterHelper.Preset.CUSTOM);
                         showAdvancedDialog();
                     }
-                }));
+                }).setBgColor(cardBackground));
 
         FlexibleAdapter presetAdapter = new FlexibleAdapter(1, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);

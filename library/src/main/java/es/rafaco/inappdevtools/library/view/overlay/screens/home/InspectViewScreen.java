@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
+import android.app.Activity;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
@@ -40,6 +41,8 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.device.Orientation
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentEntryData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -47,6 +50,7 @@ import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -82,8 +86,9 @@ public class InspectViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
+        data.add("Activity");
         String activityOverview = "";
-        List<DocumentEntryData> topActivityInfo = getTopActivityInfo();
+        /*List<DocumentEntryData> topActivityInfo = getTopActivityInfo();
         for (DocumentEntryData info : topActivityInfo) {
             activityOverview += info.getLabel() + ": " + info.getValues().get(0);
             activityOverview += Humanizer.newLine();
@@ -92,59 +97,167 @@ public class InspectViewScreen extends Screen {
         activityOverview += " in " + OrientationEventDetector.getOrientationString();
         activityOverview += Humanizer.newLine();
         activityOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
-        activityOverview += Humanizer.newLine();
+        activityOverview += Humanizer.newLine();*/
 
+
+        Activity activity = IadtController.get().getEventManager().getActivityWatcher().getCurrentActivity();
+        activityOverview = Humanizer.removeTail(activity.getClass().getCanonicalName(), "." + activity.getClass().getSimpleName());
         DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(RunningTasksUtils.getTopActivity())
-                .setIcon(R.string.gmd_view_carousel)
-                .setOverview("Current Activity")
+                //.setIcon(R.string.gmd_view_carousel)
+                //.setOverview("Activity")
                 .setExpandable(false)
                 .add(activityOverview);
 
-        final String pathToActivitySource = IadtController.get().getSourcesManager()
+        final String activitySrcPath = IadtController.get().getSourcesManager()
                 .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
+        String activitySrcFile = Humanizer.getLastPart(activitySrcPath, "/");
+        if (TextUtils.isEmpty(activitySrcFile)){
+            activityDataBuilder.addButton(new RunButton("Unavailable",
+                    R.drawable.ic_local_library_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Iadt.showMessage("Activity source not found");
+                        }
+                    }));
+        }
+        else{
+            activityDataBuilder.addButton(new RunButton(activitySrcFile,
+                    R.drawable.ic_local_library_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(SourceDetailScreen.class,
+                                    SourceDetailScreen.buildSourceParams(activitySrcPath, -1));
+                        }
+                    }));
+        }
 
-        activityDataBuilder.addButton(new RunButton("ACTIVITY SRC",
-                R.drawable.ic_local_library_white_24dp,
+
+        String activityLayoutName = getActivityLayoutName(activitySrcPath);
+        final String activityResPath = getActivityLayoutPath(activityLayoutName);
+        String activityResFile = Humanizer.getLastPart(activityResPath, "/");
+        if (TextUtils.isEmpty(activityResFile)) {
+            activityDataBuilder.addButton(new RunButton("Unavailable",
+                    R.drawable.ic_local_library_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Iadt.showMessage("Layout xml not found");
+                        }
+                    })
+            );
+        }
+        else{
+            activityDataBuilder.addButton(new RunButton(activityResFile,
+                    R.drawable.ic_local_library_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(SourceDetailScreen.class,
+                                    SourceDetailScreen.buildSourceParams(activityResPath, -1));
+                        }
+                    })
+            );
+        }
+        data.add(activityDataBuilder.build());
+
+        final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
+        data.add(new RunButton(
+                "Steps",
+                R.drawable.ic_format_list_numbered_white_24dp,
+                R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (TextUtils.isEmpty(pathToActivitySource))
-                            Iadt.showMessage("Activity source not found");
-                        else
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildSourceParams(pathToActivitySource, -1));
+                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+                        filter.setSessionById(currentSessionUid);
+                        LogUiFilter uiFilter = filter.getUiFilter();
+                        uiFilter.setTypeInt(1);
+                        uiFilter.setCategoryInt(1);
+                        uiFilter.setCategoryName("App");
+                        uiFilter.setTagInt(1);
+                        uiFilter.setTagName("Navigation");
+
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(filter.getUiFilter()));
+                    }
+                }));
+        data.add(new RunButton(
+                "Lifecycle",
+                R.drawable.ic_format_align_left_white_24dp,
+                R.color.rally_blue_med_alpha,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
+                        filter.setSessionById(currentSessionUid);
+                        LogUiFilter uiFilter = filter.getUiFilter();
+                        uiFilter.setTypeInt(1);
+                        uiFilter.setCategoryInt(1);
+                        uiFilter.setCategoryName("Activity");
+
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(uiFilter));
                     }
                 }));
 
-        String layoutName = getActivityLayoutName(pathToActivitySource);
-        final String pathToLayout = getActivityLayoutPath(layoutName);
-        activityDataBuilder.addButton(new RunButton("ACTIVITY RES",
-                R.drawable.ic_local_library_white_24dp,
+
+
+
+
+        data.add("");
+        data.add("Fragments");
+        DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("Fragments")
+                //.setIcon(R.string.gmd_extension)
+                //.setOverview("Fragments")
+                .setExpandable(false)
+                .add("Coming soon: list, states and navigation to sources");
+        data.add(fragmentsDataBuilder.build());
+
+        data.add(new RunButton(
+                "Steps",
+                R.drawable.ic_format_list_numbered_white_24dp,
+                R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (TextUtils.isEmpty(pathToLayout))
-                            Iadt.showMessage("Layout xml not found");
-                        else
-                            OverlayService.performNavigation(SourceDetailScreen.class,
-                                    SourceDetailScreen.buildSourceParams(pathToLayout, -1));
+                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+                        filter.setSessionById(currentSessionUid);
+                        LogUiFilter uiFilter = filter.getUiFilter();
+                        uiFilter.setTypeInt(1);
+                        uiFilter.setCategoryInt(1);
+                        uiFilter.setCategoryName("Fragment");
+                        uiFilter.setTagInt(1);
+                        uiFilter.setTagName("Create");
+
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(filter.getUiFilter()));
                     }
-                })
-        );
-        data.add(activityDataBuilder.build());
+                }));
+        data.add(new RunButton(
+                "Lifecycle",
+                R.drawable.ic_format_align_left_white_24dp,
+                R.color.rally_blue_med_alpha,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
+                        filter.setSessionById(currentSessionUid);
+                        LogUiFilter uiFilter = filter.getUiFilter();
+                        uiFilter.setTypeInt(1);
+                        uiFilter.setCategoryInt(1);
+                        uiFilter.setCategoryName("Fragment");
 
-        DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("Fragments")
-                .setIcon(R.string.gmd_extension)
-                .setOverview("Current Fragments")
-                .setExpandable(false)
-                .add("Coming soon: list, states and navigation to sources");
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(uiFilter));
+                    }
+                }));
 
-        data.add(fragmentsDataBuilder.build());
+
+
         data.add("");
-
-
         data.add("Layout inspector");
-
         data.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
@@ -198,7 +311,6 @@ public class InspectViewScreen extends Screen {
 
         data.add(new RunButton("All Screenshots",
                 R.drawable.ic_photo_library_white_24dp,
-                R.color.iadt_surface_medium,
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);

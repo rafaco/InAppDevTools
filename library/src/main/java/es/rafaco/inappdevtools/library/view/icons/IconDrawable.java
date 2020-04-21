@@ -108,7 +108,7 @@ public class IconDrawable extends Drawable {
      * @return The current IconDrawable for chaining.
      */
     public IconDrawable sizeDp(int size) {
-        return sizePx(UiUtils.dpToPx(context, size));
+        return sizePx((int) UiUtils.dpToPx(context, size));
     }
 
     /**

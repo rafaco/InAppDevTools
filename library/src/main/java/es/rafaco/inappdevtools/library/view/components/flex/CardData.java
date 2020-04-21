@@ -121,8 +121,9 @@ public class CardData {
         return bgColor;
     }
 
-    public void setBgColor(int bg_color) {
+    public CardData setBgColor(int bg_color) {
         this.bgColor = bg_color;
+        return this;
     }
 
     public void setTitleColor(int titleColor) {

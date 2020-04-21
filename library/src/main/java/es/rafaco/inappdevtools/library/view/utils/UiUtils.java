@@ -207,9 +207,12 @@ public class UiUtils {
         return findParentById(parent, targetId);
     }
 
-    public static int dpToPx(Context context, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                context.getResources().getDisplayMetrics());
+    public static float dpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    public static float pxToDp(Context context, float px) {
+        return px / context.getResources().getDisplayMetrics().density;
     }
 
     public static Drawable getDrawable(int icon) {

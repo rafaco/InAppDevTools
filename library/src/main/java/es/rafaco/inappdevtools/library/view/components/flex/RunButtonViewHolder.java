@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.components.flex;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -62,14 +63,19 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         if (data.isWrapContent()){
             //Change width to WRAP_CONTENT and remove WEIGHT
             button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            button.setAllCaps(false);
+            button.setTextColor(accentColor);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_PX,42);
+            //button.setTypeface(null, Typeface.BOLD);
         }
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
-            if (!isCustomBackground)
+            if (!isCustomBackground || data.isWrapContent())
                 icon.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
-            button.setCompoundDrawablePadding(UiUtils.dpToPx(button.getContext(), 5));
+            button.setCompoundDrawablePadding((int) UiUtils.dpToPx(button.getContext(), 5));
         }
+
         button.setText(data.getTitle());
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,7 +33,7 @@ public abstract class IadtDialogBuilder {
     ContextWrapper context;
     private boolean isCancelable;
 
-    IadtDialogBuilder() {
+    public IadtDialogBuilder() {
 
     }
 
