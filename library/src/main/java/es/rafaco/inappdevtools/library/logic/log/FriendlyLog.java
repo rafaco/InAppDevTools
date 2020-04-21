@@ -193,7 +193,7 @@ public class FriendlyLog {
                 return R.drawable.ic_flag_white_24dp;
             }
             else if (log.getSubcategory().equals("Navigation")) {
-                return R.drawable.ic_view_carousel_white_24dp;
+                return R.drawable.ic_location_on_white_24dp;
             }
             else if (log.getSubcategory().equals("TaskRemoved")) {
                 return R.drawable.ic_close_white_24dp;

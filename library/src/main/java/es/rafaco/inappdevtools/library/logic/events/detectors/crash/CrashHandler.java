@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.logic.events.detectors.crash;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 //#ifdef ANDROIDX
@@ -40,8 +39,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
+import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
@@ -51,7 +50,6 @@ import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -152,15 +150,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
         crash.setStacktrace(Log.getStackTraceString(ex));
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isMain(thread));
         crash.setThreadName(thread.getName());
         crash.setThreadGroupName(thread.getThreadGroup().getName());
-        crash.setForeground(!activityWatcher.isInBackground());
-        crash.setLastActivity(activityWatcher.getCurrentActivityName());
+
+        ActivityTracker activityTracker = IadtController.get().getActivityTracker();
+        crash.setForeground(!activityTracker.isInBackground());
+        crash.setLastActivity(activityTracker.getCurrentName());
         return crash;
     }
 

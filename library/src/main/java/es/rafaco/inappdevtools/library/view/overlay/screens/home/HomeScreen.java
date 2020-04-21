@@ -53,6 +53,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 
 public class HomeScreen extends Screen {
 
@@ -166,7 +167,7 @@ public class HomeScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(InspectViewScreen.class);
+                        OverlayService.performNavigation(ViewScreen.class);
                     }
                 }));
 

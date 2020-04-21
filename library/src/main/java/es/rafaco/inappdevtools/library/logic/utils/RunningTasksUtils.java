@@ -25,7 +25,6 @@ import android.content.Context;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentEntryData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -91,11 +90,9 @@ public class RunningTasksUtils {
         return shortClassName;
     }
 
-    //TODO: It don't seem the best way
     public static String getTopActivityStatus() {
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
-        return activityWatcher.isInBackground() ? "Background" : "Foreground";
+        return IadtController.get().getActivityTracker().isInBackground()
+                ? "Background" : "Foreground";
     }
 
     public static String getTopActivityClassName() {

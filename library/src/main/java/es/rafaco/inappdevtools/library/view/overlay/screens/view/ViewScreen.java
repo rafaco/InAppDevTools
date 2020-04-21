@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.home;
+package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.app.Activity;
 import android.text.TextUtils;
@@ -37,8 +37,6 @@ import java.util.regex.Pattern;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentEntryData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
@@ -55,14 +53,12 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.Screensh
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-import static es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils.getTopActivityInfo;
-
-public class InspectViewScreen extends Screen {
+public class ViewScreen extends Screen {
 
     private FlexibleAdapter adapter;
     private RecyclerView recyclerView;
 
-    public InspectViewScreen(ScreenManager manager) {
+    public ViewScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -100,7 +96,7 @@ public class InspectViewScreen extends Screen {
         activityOverview += Humanizer.newLine();*/
 
 
-        Activity activity = IadtController.get().getEventManager().getActivityWatcher().getCurrentActivity();
+        Activity activity = IadtController.get().getActivityTracker().getCurrent();
         activityOverview = Humanizer.removeTail(activity.getClass().getCanonicalName(), "." + activity.getClass().getSimpleName());
         DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(RunningTasksUtils.getTopActivity())
                 //.setIcon(R.string.gmd_view_carousel)
@@ -164,8 +160,8 @@ public class InspectViewScreen extends Screen {
 
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
         data.add(new RunButton(
-                "Steps",
-                R.drawable.ic_format_list_numbered_white_24dp,
+                "Navigation",
+                R.drawable.ic_location_on_white_24dp,
                 R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
@@ -263,7 +259,7 @@ public class InspectViewScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        InspectViewScreen.this.getScreenManager().hide();
+                        ViewScreen.this.getScreenManager().hide();
                         PandoraBridge.select();
                     }
                 }));
@@ -272,7 +268,7 @@ public class InspectViewScreen extends Screen {
                 R.drawable.ic_layers_white_24dp, new Runnable() {
             @Override
             public void run() {
-                InspectViewScreen.this.getScreenManager().hide();
+                ViewScreen.this.getScreenManager().hide();
                 PandoraBridge.hierarchy();
             }
         }));
@@ -282,7 +278,7 @@ public class InspectViewScreen extends Screen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        InspectViewScreen.this.getScreenManager().hide();
+                        ViewScreen.this.getScreenManager().hide();
                         PandoraBridge.measure();
                     }
                 }));

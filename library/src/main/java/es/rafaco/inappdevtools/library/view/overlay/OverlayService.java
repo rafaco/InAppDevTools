@@ -34,7 +34,7 @@ import android.support.annotation.Nullable;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
@@ -252,13 +252,7 @@ public class OverlayService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
-        //TODO: relocate to eventmanager
-        FriendlyLog.log("I", "App", "TaskRemoved", "App closed (task removed)");
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
-
-        //TODO: ???
-        activityWatcher.setCurrentActivityName("");
+        IadtController.get().getEventManager().fire(Event.APP_TASK_REMOVED);
     }
 
     @Override

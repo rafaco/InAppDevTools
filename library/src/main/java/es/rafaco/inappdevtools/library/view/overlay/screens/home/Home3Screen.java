@@ -44,13 +44,11 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfo
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.storage.files.utils.InternalFileReader;
@@ -66,8 +64,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScree
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class Home3Screen extends AbstractFlexibleScreen {
@@ -201,16 +199,14 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(sourcesData);
 
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
         WidgetData viewData = new WidgetData.Builder("View")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(activityWatcher.getCurrentActivityName())
+                .setMainContent(IadtController.get().getActivityTracker().getCurrentName())
                 .setSecondContent("3 fragments")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(InspectViewScreen.class);
+                        OverlayService.performNavigation(ViewScreen.class);
                     }
                 })
                 .build();

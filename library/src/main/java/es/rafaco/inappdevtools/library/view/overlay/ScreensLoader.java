@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.RunScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.TeamScreen;
@@ -96,7 +96,7 @@ public class ScreensLoader {
         screenManager.registerScreen(SourceDetailScreen.class);
 
         //VIEW
-        screenManager.registerScreen(InspectViewScreen.class);
+        screenManager.registerScreen(ViewScreen.class);
         screenManager.registerScreen(ScreenshotsScreen.class);
 
         //HISTORY

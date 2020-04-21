@@ -39,7 +39,7 @@ import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
@@ -105,7 +105,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
                 R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
                         @Override
-                        public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                        public void run() { OverlayService.performNavigation(ViewScreen.class);
                         }
                     }));
         return builder.build();

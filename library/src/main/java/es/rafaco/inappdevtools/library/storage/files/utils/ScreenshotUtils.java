@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.graphics.Bitmap;
-import android.util.Pair;
 import android.view.View;
 
 import com.jraska.falcon.Falcon;
@@ -30,12 +29,11 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
-import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class ScreenshotUtils {
 
@@ -70,18 +68,12 @@ public class ScreenshotUtils {
 
     private static Screenshot grabAndSaveFile(String subfolder, String filename) {
 
-        String activityName = "";
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
-        if (activityWatcher != null || activityWatcher.getCurrentActivity()!=null){
-            activityName = activityWatcher.getCurrentActivityName();
-        }
-
+        ActivityTracker activityTracker = IadtController.get().getActivityTracker();
         File imageFile = FileCreator.prepare(subfolder, filename + ".jpg");
 
         try {
             //Take with Falcon but save our way (more compression)
-            Bitmap bitmap = Falcon.takeScreenshotBitmap(activityWatcher.getCurrentActivity());
+            Bitmap bitmap = Falcon.takeScreenshotBitmap(activityTracker.getCurrent());
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 80;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
@@ -90,7 +82,7 @@ public class ScreenshotUtils {
 
             MediaScannerUtils.scan(imageFile);
 
-            return fillDatabaseObject(activityName, imageFile.getAbsolutePath());
+            return fillDatabaseObject(activityTracker.getCurrentName(), imageFile.getAbsolutePath());
 
         } catch (Exception e) {
             // Several error may come out with file handling or DOM

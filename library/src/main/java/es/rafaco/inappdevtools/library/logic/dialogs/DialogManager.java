@@ -107,7 +107,7 @@ public class DialogManager {
     }
 
     private Activity getCurrentActivity() {
-        return IadtController.get().getEventManager().getActivityWatcher().getCurrentActivity();
+        return IadtController.get().getActivityTracker().getCurrent();
     }
 
     //region [ DIALOG ]

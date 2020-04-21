@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.app.SessionEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.AppEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneModeChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.ConnectivityChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.DeviceButtonsEventDetector;
@@ -40,7 +40,6 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.doze.DozeEventDete
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.FragmentEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ProcessEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.user.ActivityTouchEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ScreenChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ShakeEventDetector;
@@ -68,8 +67,9 @@ public class EventDetectorsManager {
     }
 
     private void initDetectors() {
-        // Session should be the first one, before Process
-        initDetector(SessionEventDetector.class);
+        // AppEventDetector should be the first one,
+        // then ProcessEventDetector and then the other ones.
+        initDetector(AppEventDetector.class);
         initDetector(ProcessEventDetector.class);
 
         initDetector(ForegroundChangeEventDetector.class);
