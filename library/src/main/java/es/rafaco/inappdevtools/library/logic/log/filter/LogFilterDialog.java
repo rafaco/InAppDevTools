@@ -84,7 +84,7 @@ public class LogFilterDialog {
     public void showAdvancedDialog() {
         dialog = buildCustomDialog();
         dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog);
         dialog.show();
     }
 
@@ -96,11 +96,7 @@ public class LogFilterDialog {
 
     private void onBackToPresets() {
         dialog.dismiss();
-
-        dialog = buildPresetDialog();
-        dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
-        dialog.show();
+        showStandardDialog();
     }
 
     private AlertDialog buildPresetDialog() {

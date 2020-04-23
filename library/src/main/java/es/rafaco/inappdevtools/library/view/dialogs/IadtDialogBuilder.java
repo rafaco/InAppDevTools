@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.view.dialogs;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 
@@ -53,6 +54,12 @@ public abstract class IadtDialogBuilder {
 
     private void initBuilder(AlertDialog.Builder builder) {
         builder.setCancelable(isCancelable);
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                onDismissWrapper(dialog);
+            }
+        });
     }
 
     public abstract void onBuilderCreated(AlertDialog.Builder builder);
@@ -62,7 +69,7 @@ public abstract class IadtDialogBuilder {
     }
 
     public void onDialogCreated(AlertDialog dialog) {
-        //Intentionally empty
+        //Intentionally empty, optional to override
     }
 
     private void setContext(Context baseContext){
@@ -81,5 +88,14 @@ public abstract class IadtDialogBuilder {
     public IadtDialogBuilder setCancelable (boolean isCancelable){
         this.isCancelable = isCancelable;
         return this;
+    }
+
+    public void onDismissWrapper(DialogInterface dialog) {
+        onDismiss(dialog);
+        getManager().onDismiss(dialog);
+    }
+
+    public void onDismiss(DialogInterface dialog) {
+        //Intentionally empty, optional to override
     }
 }

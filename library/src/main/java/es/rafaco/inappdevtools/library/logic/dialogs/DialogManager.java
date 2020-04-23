@@ -122,18 +122,6 @@ public class DialogManager {
 
     private void build(IadtDialogBuilder builder, Context context) {
         currentDialog = builder.createDialog(context);
-        currentDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (isManagerDismiss) {
-                    isManagerDismiss = false;
-                }
-                else{
-                    //Dismissed by user
-                    cleanLoaded();
-                }
-            }
-        });
 
         if (canDrawOverlay()){
             currentDialog.getWindow().setType(Layer.getLayoutType());
@@ -144,6 +132,16 @@ public class DialogManager {
     private void show() {
         Log.d("DIALOGS", "Showing dialog");
         currentDialog.show();
+    }
+
+    public void onDismiss(DialogInterface dialog) {
+        if (isManagerDismiss) {
+            isManagerDismiss = false;
+        }
+        else{
+            //Dismissed by user
+            cleanLoaded();
+        }
     }
 
     public void onPause(){

@@ -19,6 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.dialogs;
 
+import android.content.DialogInterface;
+
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -129,8 +131,8 @@ public class WelcomeDialogHelper {
     private void showSuccessDialog() {
         getDialogManager().load(new WelcomeSuccessDialog() {
             @Override
-            public void onDismiss() {
-                closeAll(false);
+            public void onDismiss(DialogInterface dialog) {
+                closeAll(true);
             }
         }.setCancelable(true));
     }
