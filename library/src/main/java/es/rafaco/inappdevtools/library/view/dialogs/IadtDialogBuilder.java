@@ -22,8 +22,14 @@ package es.rafaco.inappdevtools.library.view.dialogs;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+
+//#ifdef ANDROIDX
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.appcompat.view.ContextThemeWrapper;
+//#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+//#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;

@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.storage.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -28,10 +27,12 @@ import android.util.Log;
 //@import androidx.room.Room;
 //@import androidx.room.Database;
 //@import androidx.room.RoomDatabase;
+//@import androidx.sqlite.db.SupportSQLiteDatabase;
 //#else
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 //#endif
 
 import es.rafaco.inappdevtools.library.Iadt;

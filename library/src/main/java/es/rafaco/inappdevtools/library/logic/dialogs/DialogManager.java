@@ -23,12 +23,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
 //#else
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 //#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
