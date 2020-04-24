@@ -337,8 +337,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                     @Override
                     public void run() {
                         updateAdapter(getFlexibleData());
-                        //if (isDebug())
-                        Log.v(Iadt.TAG, "Home3Screen updated");
+                        //if (isDebug()) Log.v(Iadt.TAG, "Home3Screen updated");
                         startUpdateTimer();
                     }
                 });

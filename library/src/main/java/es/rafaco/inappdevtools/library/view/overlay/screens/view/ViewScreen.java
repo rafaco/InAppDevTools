@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
-import android.app.Activity;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
@@ -30,9 +29,8 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
@@ -42,8 +40,11 @@ import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
-import es.rafaco.inappdevtools.library.storage.files.IadtPath;
+import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
+import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
+import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
+import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
+import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -64,7 +65,7 @@ public class ViewScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return "Inspect View";
+        return "View";
     }
 
     @Override
@@ -73,8 +74,14 @@ public class ViewScreen extends Screen {
     @Override
     protected void onCreate() {
     }
+
     @Override
     protected void onStart(ViewGroup view) {
+
+    }
+
+    @Override
+    protected void onResume() {
         List<Object> data = initData();
         initAdapter(data);
     }
@@ -82,34 +89,53 @@ public class ViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add("Activity");
+
+        data.add("Layout inspector");
+        data.add(new RunButton("Select element",
+                R.drawable.ic_touch_app_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewScreen.this.getScreenManager().hide();
+                        PandoraBridge.select();
+                    }
+                }));
+        data.add(new RunButton("Browse hierarchy",
+                R.drawable.ic_layers_white_24dp, new Runnable() {
+            @Override
+            public void run() {
+                ViewScreen.this.getScreenManager().hide();
+                PandoraBridge.hierarchy();
+            }
+        }));
+
+
+        data.add("");
+        data.add("Components inspector");
+        ActivityTracker tracker = IadtController.get().getActivityTracker();
+        final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
+
         String activityOverview = "";
-        /*List<DocumentEntryData> topActivityInfo = getTopActivityInfo();
-        for (DocumentEntryData info : topActivityInfo) {
-            activityOverview += info.getLabel() + ": " + info.getValues().get(0);
-            activityOverview += Humanizer.newLine();
-        }
-        activityOverview += "App on " + RunningTasksUtils.getTopActivityStatus();
-        activityOverview += " in " + OrientationEventDetector.getOrientationString();
+        activityOverview += "Creation time: " + tracker.getCurrentActivityStartupTime()
+                + " ("+ tracker.getCurrentActivityCreationElapsed() + ")";
         activityOverview += Humanizer.newLine();
-        activityOverview += RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities";
-        activityOverview += Humanizer.newLine();*/
+        activityOverview += "Last event: " + tracker.getCurrentActivityLastEvent();
+        activityOverview += Humanizer.newLine();
+        activityOverview += "Pkg: " + tracker.getCurrentActivityPackage();
+        activityOverview += Humanizer.newLine();
+        activityOverview += "Instances this session: " + tracker.getCurrentActivityInstanceCount();
 
-
-        Activity activity = IadtController.get().getActivityTracker().getCurrent();
-        activityOverview = Humanizer.removeTail(activity.getClass().getCanonicalName(), "." + activity.getClass().getSimpleName());
-        DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(RunningTasksUtils.getTopActivity())
-                //.setIcon(R.string.gmd_view_carousel)
-                //.setOverview("Activity")
+        DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(tracker.getCurrentName())
+                .setIcon(R.string.gmd_view_carousel)
                 .setExpandable(false)
                 .add(activityOverview);
 
-        final String activitySrcPath = IadtController.get().getSourcesManager()
-                .getPathFromClassName(RunningTasksUtils.getTopActivityClassName());
+        final String activitySrcPath = getSourcesManager()
+                .getPathFromClassName(tracker.getCurrentHistory().className);
         String activitySrcFile = Humanizer.getLastPart(activitySrcPath, "/");
         if (TextUtils.isEmpty(activitySrcFile)){
             activityDataBuilder.addButton(new RunButton("Unavailable",
-                    R.drawable.ic_local_library_white_24dp,
+                    R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -119,7 +145,7 @@ public class ViewScreen extends Screen {
         }
         else{
             activityDataBuilder.addButton(new RunButton(activitySrcFile,
-                    R.drawable.ic_local_library_white_24dp,
+                    R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -129,13 +155,12 @@ public class ViewScreen extends Screen {
                     }));
         }
 
-
-        String activityLayoutName = getActivityLayoutName(activitySrcPath);
-        final String activityResPath = getActivityLayoutPath(activityLayoutName);
+        String activityLayoutName = getSourcesManager().getLayoutNameFromClassName(activitySrcPath);
+        final String activityResPath = getSourcesManager().getLayoutPathFromLayoutName(activityLayoutName);
         String activityResFile = Humanizer.getLastPart(activityResPath, "/");
         if (TextUtils.isEmpty(activityResFile)) {
             activityDataBuilder.addButton(new RunButton("Unavailable",
-                    R.drawable.ic_local_library_white_24dp,
+                    R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -146,7 +171,7 @@ public class ViewScreen extends Screen {
         }
         else{
             activityDataBuilder.addButton(new RunButton(activityResFile,
-                    R.drawable.ic_local_library_white_24dp,
+                    R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -158,6 +183,35 @@ public class ViewScreen extends Screen {
         }
         data.add(activityDataBuilder.build());
 
+        //Fragments
+        FragmentTracker fragmentTracker = IadtController.get().getFragmentTracker();
+        LinkedHashMap<Long, FragmentTrack> currentActivityHistory = fragmentTracker.getCurrentActivityHistory();
+        boolean hasFragments = (currentActivityHistory != null && currentActivityHistory.size() > 0);
+        if (!hasFragments){
+            DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("No Fragments")
+                    .setExpandable(false)
+                    .add("Current activity don't use fragments");
+            data.add(fragmentsDataBuilder.build());
+        }
+        else {
+            String fragmentOverview = currentActivityHistory.values().iterator().next().name;
+            if (currentActivityHistory.size() > 1) {
+                fragmentOverview += " and " + (currentActivityHistory.size() - 1) + "more";
+            }
+            data.add(new CardData("Fragments",
+                    fragmentOverview,
+                    R.string.gmd_extension,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(FragmentsScreen.class,
+                                    currentActivityUuuid + "");
+                        }
+                    }).setNavCount(currentActivityHistory.size()));
+        }
+
+
+        //Logs links (TODO)
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
         data.add(new RunButton(
                 "Navigation",
@@ -199,81 +253,9 @@ public class ViewScreen extends Screen {
                 }));
 
 
-
-
-
         data.add("");
-        data.add("Fragments");
-        DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("Fragments")
-                //.setIcon(R.string.gmd_extension)
-                //.setOverview("Fragments")
-                .setExpandable(false)
-                .add("Coming soon: list, states and navigation to sources");
-        data.add(fragmentsDataBuilder.build());
-
-        data.add(new RunButton(
-                "Steps",
-                R.drawable.ic_format_list_numbered_white_24dp,
-                R.color.rally_green_alpha,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-                        filter.setSessionById(currentSessionUid);
-                        LogUiFilter uiFilter = filter.getUiFilter();
-                        uiFilter.setTypeInt(1);
-                        uiFilter.setCategoryInt(1);
-                        uiFilter.setCategoryName("Fragment");
-                        uiFilter.setTagInt(1);
-                        uiFilter.setTagName("Create");
-
-                        OverlayService.performNavigation(LogScreen.class,
-                                LogScreen.buildParams(filter.getUiFilter()));
-                    }
-                }));
-        data.add(new RunButton(
-                "Lifecycle",
-                R.drawable.ic_format_align_left_white_24dp,
-                R.color.rally_blue_med_alpha,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
-                        filter.setSessionById(currentSessionUid);
-                        LogUiFilter uiFilter = filter.getUiFilter();
-                        uiFilter.setTypeInt(1);
-                        uiFilter.setCategoryInt(1);
-                        uiFilter.setCategoryName("Fragment");
-
-                        OverlayService.performNavigation(LogScreen.class,
-                                LogScreen.buildParams(uiFilter));
-                    }
-                }));
-
-
-
-        data.add("");
-        data.add("Layout inspector");
-        data.add(new RunButton("Select element",
-                R.drawable.ic_touch_app_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ViewScreen.this.getScreenManager().hide();
-                        PandoraBridge.select();
-                    }
-                }));
-
-        data.add(new RunButton("Browse hierarchy",
-                R.drawable.ic_layers_white_24dp, new Runnable() {
-            @Override
-            public void run() {
-                ViewScreen.this.getScreenManager().hide();
-                PandoraBridge.hierarchy();
-            }
-        }));
-
-        data.add(new RunButton("Take Measure",
+        data.add("Other tools");
+        data.add(new RunButton("Rule",
                 R.drawable.ic_format_line_spacing_white_24dp,
                 new Runnable() {
                     @Override
@@ -282,8 +264,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.measure();
                     }
                 }));
-
-        data.add(new RunButton("Show grid",
+        data.add(new RunButton("Grid",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override
@@ -291,11 +272,6 @@ public class ViewScreen extends Screen {
                         PandoraBridge.grid();
                     }
                 }));
-
-
-
-        data.add("Others");
-
         data.add(new RunButton( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
@@ -316,6 +292,10 @@ public class ViewScreen extends Screen {
         return data;
     }
 
+    private SourcesManager getSourcesManager() {
+        return IadtController.get().getSourcesManager();
+    }
+
     private void initAdapter(List<Object> data) {
         adapter = new FlexibleAdapter(2, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
@@ -328,25 +308,5 @@ public class ViewScreen extends Screen {
 
     @Override
     protected void onDestroy() {
-    }
-
-    public String getActivityLayoutName(String pathToActivitySource) {
-        String content = IadtController.get().getSourcesManager().getContent(pathToActivitySource);
-        if (TextUtils.isEmpty(content))
-            return "";
-
-        Pattern pattern = Pattern.compile("setContentView\\(R\\.layout\\.(\\w+)\\)");
-        Matcher matcher = pattern.matcher(content);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return "";
-    }
-
-    public String getActivityLayoutPath(String layoutName) {
-        if (TextUtils.isEmpty(layoutName))
-            return "";
-
-        return IadtPath.RESOURCES + "/" + "layout" + "/" + layoutName + ".xml";
     }
 }

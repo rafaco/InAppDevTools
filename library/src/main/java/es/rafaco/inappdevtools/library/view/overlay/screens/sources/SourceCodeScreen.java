@@ -70,7 +70,7 @@ public class SourceCodeScreen extends AbstractFlexibleScreen {
 
         data.add(new CardData("Inspect Sources",
                 "Src, res and assets",
-                R.string.gmd_local_library,
+                R.string.gmd_code,
                 new Runnable() {
                     @Override
                     public void run() {

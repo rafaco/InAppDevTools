@@ -97,7 +97,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 iconView.setVisibility(View.GONE);
             }
 
-            if (data.isExpandable()) {
+            if (data.isExpandable() && !data.getEntries().isEmpty()) {
                 contentSeparator.setVisibility(View.VISIBLE);
                 applyExpandedState(data.isExpanded());
                 cardView.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,8 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                     }
                 });
 
-            }else {
+            }
+            else {
                 contentSeparator.setVisibility(View.GONE);
                 collapsedContentView.setVisibility(View.VISIBLE);
                 cardView.setOnClickListener(null);

@@ -32,9 +32,9 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.utils.CacheUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class SessionEventDetector extends EventDetector {
+public class AppEventDetector extends EventDetector {
 
-    public SessionEventDetector(EventManager eventManager) {
+    public AppEventDetector(EventManager eventManager) {
         super(eventManager);
     }
 
@@ -86,6 +86,25 @@ public class SessionEventDetector extends EventDetector {
                     FriendlyLog.log(new Date().getTime(), "I", "App", "Start",
                             "App started");
                 }
+            }
+        });
+
+        //Fired at OverlayService
+        eventManager.subscribe(Event.APP_TASK_REMOVED, new EventManager.Listener(){
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("I", "App", "TaskRemoved",
+                        "App closed (task removed)");
+            }
+        });
+
+        //Fired by ActivityTracker when tracking ACTIVITY_ON_RESUME
+        //TODO: fragment navigation
+        eventManager.subscribe(Event.APP_NAVIGATION, new EventManager.Listener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                FriendlyLog.log("I", "App", "Navigation",
+                        "Navigation to " + param);
             }
         });
     }

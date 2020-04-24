@@ -37,6 +37,7 @@ import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
+import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -78,6 +79,7 @@ public final class IadtController {
     private OverlayHelper overlayHelper;
     public boolean isPendingInitFull;
     private ActivityTracker activityTracker;
+    private FragmentTracker fragmentTracker;
 
     protected IadtController(Context context) {
         if (INSTANCE != null) {
@@ -126,6 +128,7 @@ public final class IadtController {
         if (isDebug()) Log.d(Iadt.TAG, "IadtController init essential");
 
         activityTracker = new ActivityTracker(context);
+        fragmentTracker = new FragmentTracker(context, activityTracker);
         buildManager = new BuildManager(context);
         sessionManager = new SessionManager(context);
         eventManager = new EventManager(context);
@@ -215,6 +218,10 @@ public final class IadtController {
 
     public ActivityTracker getActivityTracker() {
         return activityTracker;
+    }
+
+    public FragmentTracker getFragmentTracker() {
+        return fragmentTracker;
     }
 
     public SessionManager getSessionManager() {
