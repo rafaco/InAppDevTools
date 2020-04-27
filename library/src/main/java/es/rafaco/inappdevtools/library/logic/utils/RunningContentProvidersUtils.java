@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class RunningProvidersUtils {
+public class RunningContentProvidersUtils {
 
-    private RunningProvidersUtils() { throw new IllegalStateException("Utility class"); }
+    private RunningContentProvidersUtils() { throw new IllegalStateException("Utility class"); }
 
     private static Context getContext(){
         return IadtController.get().getContext();
@@ -53,11 +54,16 @@ public class RunningProvidersUtils {
         return providers.size();
     }
 
-    private static List<ProviderInfo> getList() {
+    public static String getClassName(ProviderInfo info) {
+        return info.name;
+    }
+
+    public static List<ProviderInfo> getList() {
         List<ProviderInfo> result = new ArrayList<>();
 
         String packageName = getContext().getPackageName();
-        for (PackageInfo pack: getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
+        List<PackageInfo> installedPackages = getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+        for (PackageInfo pack: installedPackages) {
             if (pack.packageName.equals(packageName)){
                 ProviderInfo[] providers = pack.providers;
                 if (providers != null) {
@@ -68,5 +74,39 @@ public class RunningProvidersUtils {
             }
         }
         return result;
+    }
+
+    public static String getTitle(ProviderInfo info) {
+        String shortAuthority = Humanizer.removeHead(info.authority, info.packageName + ".");
+        String shortName = Humanizer.getLastPart(info.name, ".");
+
+        return shortName + " (" + shortAuthority + ")";
+    }
+
+    public static String getContent(ProviderInfo info) {
+        StringBuffer contentBuffer = new StringBuffer();
+
+        contentBuffer.append("Exported: " + info.exported);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Multiprocess: " + info.multiprocess);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Name: " + info.name);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Authority: " + info.authority);
+        contentBuffer.append(Humanizer.newLine());
+
+        if (info.metaData!=null) {
+            Bundle bundle = info.metaData;
+            contentBuffer.append("MetaData: ");
+            for (String key: bundle.keySet()) {
+                contentBuffer.append(key + ": " + bundle.get(key));
+                contentBuffer.append(Humanizer.newLine());
+            }
+        }
+
+        return contentBuffer.toString();
     }
 }

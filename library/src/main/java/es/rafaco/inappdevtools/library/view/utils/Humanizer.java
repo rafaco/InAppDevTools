@@ -337,5 +337,10 @@ public class Humanizer {
         }
         return count + " " + singularName + (isEsPlural ? "es" : "s");
     }
+
+    public static String packageFromClass(Class<?> objectClass) {
+        return Humanizer.removeTail(objectClass.getCanonicalName(), "."
+                + objectClass.getSimpleName());
+    }
 }
 

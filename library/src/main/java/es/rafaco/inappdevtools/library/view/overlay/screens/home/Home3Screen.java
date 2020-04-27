@@ -63,6 +63,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
@@ -212,22 +213,20 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(viewData);
 
-        WidgetData storageData = new WidgetData.Builder("Storage")
+        WidgetData jvmData = new WidgetData.Builder("Logic")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(InternalFileReader.getTotalSizeFormatted())
-                .setSecondContent("3 DB, 4 SP & 1234 files")
+                .setMainContent(RunningThreadsUtils.getCount() + " threads")
+                .setSecondContent(RunningProcessesUtils.getCount() + " process and " + RunningTasksUtils.getCount() + " tasks")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        Home3Screen.this.getScreenManager().hide();
-                        PandoraBridge.storage();
+                        OverlayService.performNavigation(LogicScreen.class);
                     }
                 })
                 .build();
-        data.add(storageData);
+        data.add(jvmData);
 
         int logsCount = IadtController.getDatabase().friendlyDao().count(); //TODO: filter by session
-
         WidgetData logsData = new WidgetData.Builder("Logs")
                 //.setIcon(R.string.gmd_view_carousel)
                 .setMainContent(Humanizer.plural(logsCount, "log"))
@@ -274,18 +273,19 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(historyData);
 
-        WidgetData jvmData = new WidgetData.Builder("JVM")
+        WidgetData storageData = new WidgetData.Builder("Storage")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(RunningThreadsUtils.getCount() + " threads")
-                .setSecondContent(RunningProcessesUtils.getCount() + " process and " + RunningTasksUtils.getCount() + " tasks")
+                .setMainContent(InternalFileReader.getTotalSizeFormatted())
+                .setSecondContent("3 DB, 4 SP & 1234 files")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(InfoOverviewScreen.class);
+                        Home3Screen.this.getScreenManager().hide();
+                        PandoraBridge.storage();
                     }
                 })
                 .build();
-        data.add(jvmData);
+        data.add(storageData);
 
         data.add(new RunButton("More",
                 R.drawable.ic_more_vert_white_24dp,

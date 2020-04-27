@@ -52,7 +52,7 @@ public class RunningServicesUtils {
         return result;
     }
 
-    private static List<ActivityManager.RunningServiceInfo> getList() {
+    public static List<ActivityManager.RunningServiceInfo> getList() {
         List<ActivityManager.RunningServiceInfo> services = new ArrayList<>();
 
         String packageName = getContext().getPackageName();
@@ -65,7 +65,7 @@ public class RunningServicesUtils {
         return services;
     }
 
-    private static String getServiceString(ActivityManager.RunningServiceInfo info) {
+    public static String getServiceString(ActivityManager.RunningServiceInfo info) {
         String className = info.service.getShortClassName();
         String name = className.substring(className.lastIndexOf(".")+1);
         long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
@@ -75,16 +75,45 @@ public class RunningServicesUtils {
         return result + Humanizer.newLine();
     }
 
-    public static String getRunningServices(int pid) {
-        String result = Humanizer.newLine();
+    public static String getTitle(ActivityManager.RunningServiceInfo info) {
+        String className = info.service.getShortClassName();
+        return Humanizer.getLastPart(className, ".");
+    }
 
-        String packageName = getContext().getPackageName();
-        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (info.service.getPackageName().equals(packageName) && info.pid==pid) {
-                result += getServiceString(info);
-            }
-        }
-        return result;
+    public static String getClassName(ActivityManager.RunningServiceInfo info) {
+        return info.service.getClassName();
+    }
+
+    public static String getContent(ActivityManager.RunningServiceInfo info) {
+        StringBuffer contentBuffer = new StringBuffer();
+
+        contentBuffer.append("Started: " + info.started);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Restarting: " + info.restarting);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Foreground: " + info.foreground);
+        contentBuffer.append(Humanizer.newLine());
+
+        long startTimeMillis = Calendar.getInstance().getTimeInMillis() - info.activeSince;
+        contentBuffer.append("Active since: " +  Humanizer.getElapsedTimeLowered(startTimeMillis));
+        contentBuffer.append(Humanizer.newLine());
+
+        long lastTimeMillis = Calendar.getInstance().getTimeInMillis() - info.lastActivityTime;
+        contentBuffer.append("Last usage: " +  Humanizer.getElapsedTimeLowered(lastTimeMillis));
+        contentBuffer.append(Humanizer.newLine());
+
+        /*String elapsed = Humanizer.getElapsedTimeLowered(startTimeMillis);
+        contentBuffer.append(info.crashCount + " crashes since " + elapsed);
+        contentBuffer.append(Humanizer.newLine());*/
+
+        contentBuffer.append("Pid-Uid: " + info.pid + "-" + info.uid);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("ClassName: " + info.service.getClassName());
+        contentBuffer.append(Humanizer.newLine());
+
+        return contentBuffer.toString();
     }
 }

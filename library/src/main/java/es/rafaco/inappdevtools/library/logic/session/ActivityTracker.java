@@ -137,8 +137,7 @@ public class ActivityTracker {
     }
 
     public String getCurrentActivityPackage() {
-        return Humanizer.removeTail(getCurrent().getClass().getCanonicalName(), "."
-                + getCurrent().getClass().getSimpleName());
+        return Humanizer.packageFromClass(getCurrent().getClass());
     }
 
     public String getCurrentActivityLastEvent() {

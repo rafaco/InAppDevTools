@@ -33,6 +33,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.BroadcastReceiversScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ContentProvidersScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ServicesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.FragmentsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -101,6 +105,13 @@ public class ScreensLoader {
         screenManager.registerScreen(ViewScreen.class);
         screenManager.registerScreen(FragmentsScreen.class);
 
+        //LOGIC
+        screenManager.registerScreen(LogicScreen.class);
+        screenManager.registerScreen(ServicesScreen.class);
+        screenManager.registerScreen(ContentProvidersScreen.class);
+        screenManager.registerScreen(BroadcastReceiversScreen.class);
+        //screenManager.registerScreen(JobsScreen.class);
+
         //HISTORY
         screenManager.registerScreen(HistoryScreen.class);
         screenManager.registerScreen(SessionsScreen.class);
@@ -109,7 +120,6 @@ public class ScreensLoader {
         screenManager.registerScreen(BuildDetailScreen.class);
         screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(CrashDetailScreen.class);
-        //screenManager.registerScreen(ScreenshotsScreen.class);
 
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);

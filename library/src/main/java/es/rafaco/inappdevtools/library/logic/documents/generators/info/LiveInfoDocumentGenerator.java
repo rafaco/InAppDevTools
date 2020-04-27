@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.device.Orientation
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
-import es.rafaco.inappdevtools.library.logic.utils.RunningProvidersUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
@@ -70,7 +70,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
     public String getOverview() {
         String result = RunningTasksUtils.getTopActivity() + " on " + RunningTasksUtils.getTopActivityStatus() + Humanizer.newLine()
                 + RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities" + Humanizer.newLine()
-                + RunningServicesUtils.getCount() + " services and " + RunningProvidersUtils.getCount() + " providers" + Humanizer.newLine()
+                + RunningServicesUtils.getCount() + " services and " + RunningContentProvidersUtils.getCount() + " providers" + Humanizer.newLine()
                 + RunningProcessesUtils.getCount() + " processes with " + RunningThreadsUtils.getCount() + " threads";
         return result;
     }
@@ -130,8 +130,8 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
     public DocumentSectionData getProvidersInfo() {
         return new DocumentSectionData.Builder("Provider")
                 .setIcon(R.string.gmd_local_convenience_store)
-                .setOverview(RunningProvidersUtils.getCount() + "")
-                .add(RunningProvidersUtils.getString())
+                .setOverview(RunningContentProvidersUtils.getCount() + "")
+                .add(RunningContentProvidersUtils.getString())
                 .build();
     }
 

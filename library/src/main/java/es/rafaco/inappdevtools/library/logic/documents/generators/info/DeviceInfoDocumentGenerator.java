@@ -113,7 +113,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private DocumentSectionData getDeviceInfo() {
-        return new DocumentSectionData.Builder("Device")
+        return new DocumentSectionData.Builder("Model")
                     .setIcon(R.string.gmd_phone_android)
                     .setOverview(Build.MODEL)
                     .add("Form factor", getDeviceType())
