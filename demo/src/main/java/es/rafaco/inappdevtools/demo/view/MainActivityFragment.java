@@ -34,13 +34,11 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.demo.R;
-import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -92,5 +90,23 @@ public class MainActivityFragment extends Fragment {
                 Iadt.viewReadme();
             }
         });
+
+
+        // Dialog bouncing playground
+        /*final View finalView = view;
+        finalView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finalView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getContext(), CrashActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        startActivity(intent);
+                    }
+                }, 1000);
+            }
+        }, 1000);*/
     }
 }

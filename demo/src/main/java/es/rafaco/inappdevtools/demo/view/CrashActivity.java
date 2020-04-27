@@ -101,6 +101,14 @@ public class CrashActivity extends AppCompatActivity {
                 startCountDown();
             }
         });
+
+        // Dialog bouncing playground
+        /*customButton.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBackPressed();
+            }
+        }, 2000);*/
     }
 
     private void startCountDown() {
