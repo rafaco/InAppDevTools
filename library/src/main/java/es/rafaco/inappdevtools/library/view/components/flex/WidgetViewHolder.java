@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -92,13 +91,9 @@ public class WidgetViewHolder extends FlexibleViewHolder {
             itemView.setActivated(true);
 
             title.setText(data.getTitle());
-            title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_header));
-
             mainContent.setText(data.getMainContent());
-
-            secondContent.setVisibility(TextUtils.isEmpty(data.getSecondContent()) ? View.GONE : View.VISIBLE);
             secondContent.setText(data.getSecondContent());
-            secondContent.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_secondary));
+            secondContent.setVisibility(TextUtils.isEmpty(data.getSecondContent()) ? View.GONE : View.VISIBLE);
 
             if (data.getPerformer() != null) {
                 itemView.setClickable(true);
@@ -108,11 +103,6 @@ public class WidgetViewHolder extends FlexibleViewHolder {
                         data.getPerformer().run();
                     }
                 });
-            }
-            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.material_surface_medium));
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
             }
             
             initChart(data);

@@ -47,7 +47,8 @@
             <es.rafaco.compat.ToolBar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/iadt_shape_top_height"
+                android:layout_height="@dimen/iadt_toolbar_main_height"
+                android:layout_marginTop="@dimen/iadt_shape_stroke"
                 android:theme="@style/LibActionBarTheme"
                 app:popupTheme="@style/LibPopupMenuStyle"
                 android:contentInsetLeft="0dp"
@@ -62,7 +63,7 @@
             <es.rafaco.compat.ToolBar
                 android:id="@+id/tool_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/iadt_toolbar_second_height"
                 android:theme="@style/LibActionBarTheme"
                 app:popupTheme="@style/LibPopupMenuStyle"
                 app:collapseIcon="@drawable/ic_close_white_24dp"/>

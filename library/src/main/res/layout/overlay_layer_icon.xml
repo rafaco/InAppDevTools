@@ -27,26 +27,16 @@
         android:id="@+id/icon_wrapper"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/shape_layer_icon"
         android:layout_margin="6dp"
-        android:padding="3dp"
+        android:background="@drawable/shape_layer_icon"
         style="@style/elevated">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             tools:ignore="ContentDescription"
             android:layout_centerInParent="true"/>
 
-        <!--<TextView
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:text="Dev\nTools"
-            android:textColor="@color/charcoal"
-            android:textStyle="bold"
-            android:textSize="14dp"
-            android:textAlignment="center"
-            android:layout_centerInParent="true"/>-->
     </RelativeLayout>
 </FrameLayout>

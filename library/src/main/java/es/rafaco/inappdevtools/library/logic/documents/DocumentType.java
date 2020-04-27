@@ -48,7 +48,7 @@ public enum DocumentType {
     LIVE_INFO("Live", R.string.gmd_live_tv, LiveInfoDocumentGenerator.class, long.class),
     BUILD_INFO("Build", R.string.gmd_build, BuildInfoDocumentGenerator.class, long.class),
     REPO_INFO("Repository", R.string.gmd_kitchen, RepoInfoDocumentGenerator.class, long.class),
-    APP_INFO("App", R.string.gmd_developer_board, AppInfoDocumentGenerator.class, long.class),
+    APP_INFO("App", R.string.gmd_apps, AppInfoDocumentGenerator.class, long.class),
     OS_INFO("OS", R.string.gmd_android, OSInfoDocumentGenerator.class, long.class),
     DEVICE_INFO("Device", R.string.gmd_phone_android, DeviceInfoDocumentGenerator.class, long.class),
     TOOLS_INFO("Tools", R.string.gmd_extension, ToolsInfoDocumentGenerator.class, long.class),

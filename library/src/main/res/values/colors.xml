@@ -2,36 +2,56 @@
 <resources>
 
     <!-- Palette: from Material dark theme guide -->
+    <!--   Surfaces mixing background color with alpha overlay (https://jsfiddle.net/jwuyn90b/) -->
     <color name="material_background">#121212</color>
-    <color name="material_surface_bottom">#1D1D1D</color>
-    <color name="material_surface_bar">#1F1F1F</color>
-    <color name="material_surface_medium">#2C2C2C</color>
-    <color name="material_surface_top">#373737</color>
-    <color name="material_orange">#ffcc80</color>
-    <color name="material_blue">#FF42A5F5</color>
-    <color name="material_light_blue">#FF81d4fa</color>
+    <color name="material_surface_1dp">#1e1e1e</color>
+    <color name="material_surface_2dp">#232323</color>
+    <color name="material_surface_3dp">#252525</color>
+    <color name="material_surface_4dp">#272727</color>
+    <color name="material_surface_6dp">#2c2c2c</color>
+    <color name="material_surface_8dp">#2e2e2e</color>
+    <color name="material_surface_12dp">#333333</color>
+    <color name="material_surface_16dp">#363636</color>
+    <color name="material_surface_24dp">#383838</color>
+    <color name="material_blue_900">#0d47a1</color>
+    <color name="material_blue_600">#1e88e5</color>
+    <color name="material_blue_200">#90caf9</color>
     <color name="material_green">#FF81c784</color>
+    <color name="material_orange">#ffcc80</color>
     <color name="material_white">#FFE1E1E1</color>
-    <color name="material_white2">#BFE1E1E1</color>
-    <color name="material_white3">#80E1E1E1</color>
+    <color name="material_white_87">#DEE1E1E1</color>
+    <color name="material_white_60">#99E1E1E1</color>
+    <color name="material_white_38">#61E1E1E1</color>
     <color name="material_gray">#FF878787</color>
 
-    <!-- Theme: from Material dark theme guide -->
-    <color name="iadt_primary">@color/material_blue</color>
+    <!-- Theme: from Material dark palette -->
+    <color name="iadt_primary">@color/material_blue_600</color>
     <color name="iadt_secondary">@color/material_green</color>
 
     <color name="iadt_background">@color/material_background</color>
-    <color name="iadt_surface_bottom">@color/material_surface_bottom</color>
-    <color name="iadt_surface_medium">@color/material_surface_medium</color>
-    <color name="iadt_surface_top">@color/material_surface_top</color>
-
+    <color name="iadt_surface_bottom">@color/material_surface_2dp</color>
+    <color name="iadt_surface_medium">@color/material_surface_6dp</color>
+    <color name="iadt_surface_top">@color/material_surface_12dp</color>
+    <color name="iadt_toolbar">@color/material_surface_16dp</color>
     <color name="iadt_shape_stroke">@color/material_gray</color>
-    <color name="iadt_shape_background">@color/iadt_background</color>
 
-    <color name="text_header">@color/iadt_primary</color>
-    <color name="text_primary">@color/material_white</color>
-    <color name="text_secondary">@color/material_white2</color>
-    <color name="text_third">@color/material_white3</color>
+    <color name="iadt_text_header">@color/material_blue_600</color>
+    <color name="iadt_text_solid">@color/material_white</color>
+    <color name="iadt_text_high">@color/material_white_87</color>
+    <color name="iadt_text_low">@color/material_white_60</color>
+    <color name="iadt_text_disable">@color/material_white_38</color>
+
+    <!-- Toggle Component (LogFilter) -->
+    <color name="toggle_hover">@color/material_blue_600</color>
+    <color name="toggle_normal">@color/iadt_surface_top</color>
+    <color name="toggle_active">@color/material_blue_200</color>
+    <color name="toggle_normal_off">@color/material_gray</color>
+
+    <!-- MDToast Component. Pending review and merge with our colors -->
+    <color name="colorInfo">#29B6F6</color>
+    <color name="colorSuccess">#66BB6A</color>
+    <color name="colorWarning">#FFA726</color>
+    <color name="colorError">#EF5350</color>
 
 
     <!-- Palette: from Rally material theme sample -->
@@ -62,24 +82,4 @@
 
     <color name="charcoal">#1A2732</color>
     <color name="black">#000000</color>
-
-    <!-- MDToast colors. Pending review and merge with our colors -->
-    <color name="colorInfo">#29B6F6</color>
-    <color name="colorSuccess">#66BB6A</color>
-    <color name="colorWarning">#FFA726</color>
-    <color name="colorError">#EF5350</color>
-
-
-    <color name="iadt_accent">@color/rally_blue_med</color>
-    <color name="iadt_accent_dark">@color/rally_blue_dark</color>
-
-    <!-- Toggle -->
-    <color name="toggle_hover">@color/iadt_primary</color>
-    <color name="toggle_normal">@color/iadt_surface_top</color>
-    <color name="toggle_active">@color/iadt_secondary</color>
-    <color name="toggle_normal_off">@color/material_gray</color>
-    <color name="gainsboro">#DCdCdC</color>
-    <color name="silver">#C0C0C0</color>
-    <color name="darkgray">#a9a9a9</color>
-    <color name="gray">#808080</color>
 </resources>

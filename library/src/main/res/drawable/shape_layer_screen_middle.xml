@@ -8,5 +8,5 @@
     <stroke android:width="@dimen/iadt_shape_stroke"
         android:color="@color/iadt_shape_stroke"/>
 
-    <solid android:color="@color/iadt_shape_background"/>
+    <solid android:color="@color/iadt_background"/>
 </shape>

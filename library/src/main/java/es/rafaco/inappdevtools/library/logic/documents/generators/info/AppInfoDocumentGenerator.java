@@ -109,7 +109,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
     public DocumentSectionData getApkInfo() {
         PackageInfo pInfo = getPackageInfo();
         DocumentSectionData group = new DocumentSectionData.Builder("APK")
-                .setIcon(R.string.gmd_apps)
+                .setIcon(R.string.gmd_developer_board)
                 .setOverview(easyAppMod.getAppName() + " " + easyAppMod.getAppVersion())
                 .add("App Name", easyAppMod.getAppName())
                 .add("Package Name", easyAppMod.getPackageName())

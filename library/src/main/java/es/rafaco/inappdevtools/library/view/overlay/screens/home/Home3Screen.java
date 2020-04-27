@@ -155,7 +155,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(deviceData);
 
-        WidgetData appData = new WidgetData.Builder("Apk")
+        WidgetData appData = new WidgetData.Builder("App")
                 //.setIcon(R.string.gmd_apps)
                 .setMainContent(appHelper.getAppName())
                 .setSecondContent(appHelper.getFormattedVersionShort()

@@ -112,12 +112,15 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 contentSeparator.setVisibility(View.GONE);
                 collapsedContentView.setVisibility(View.VISIBLE);
                 cardView.setOnClickListener(null);
+                cardView.setClickable(false);
+                cardView.setFocusable(false);
+                cardView.setForeground(null);
+                //cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 0));
+                }
             }
-            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_medium));
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
-            }
             itemView.setClickable(true);
             UiUtils.setBackground(navIcon, null);
             navIcon.setVisibility(View.VISIBLE);
@@ -135,8 +138,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
             }
             else{
                 buttonGroupContainer.removeAllViews();
-                for (RunButton button :
-                        buttons) {
+                for (RunButton button : buttons) {
                         button.setColor(R.color.iadt_surface_bottom);
                 };
                 ButtonGroupData buttonGroupData = new ButtonGroupData(buttons);

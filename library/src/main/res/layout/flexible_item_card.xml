@@ -20,7 +20,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -32,8 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:elevation="6dp"
-        app:cardCornerRadius="@dimen/card_radius">
+        style="@style/IadtCard.Top">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,9 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
+                android:background="?android:attr/selectableItemBackground">
 
                 <ImageView
                     android:id="@+id/image_left"
@@ -57,9 +53,7 @@
                     android:layout_centerVertical="true"
                     android:minHeight="@dimen/card_cover_height"
                     android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:scaleType="fitCenter"
-                    android:focusable="true" />
+                    android:scaleType="fitCenter"/>
 
                 <TextView
                     android:id="@+id/icon"
@@ -111,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/TextCondensedMedium"
-                        android:textColor="@color/text_secondary"/>
+                        android:textColor="@color/iadt_text_high"/>
 
                 </LinearLayout>
             </RelativeLayout>

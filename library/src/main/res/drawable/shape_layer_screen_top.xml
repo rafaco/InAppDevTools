@@ -12,11 +12,11 @@
             <stroke android:width="@dimen/iadt_shape_stroke"
                 android:color="@color/iadt_shape_stroke"/>
 
-            <solid android:color="@color/material_surface_bar"/>
+            <solid android:color="@color/iadt_toolbar"/>
         </shape>
     </item>
 
-    <!-- Same shape but 1dp lower, to remove bottom stroke
+    <!-- Same shape but 1dp lower, to remove bottom stroke-->
     <item
         android:left="@dimen/iadt_shape_stroke"
         android:right="@dimen/iadt_shape_stroke"
@@ -31,7 +31,7 @@
             <stroke
                 android:width="0dp"/>
 
-            <solid android:color="@color/material_surface_bar"/>
+            <solid android:color="@color/iadt_toolbar"/>
         </shape>
-    </item>-->
+    </item>
 </layer-list>

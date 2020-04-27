@@ -27,11 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.icons.IconUtils;
-import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //@import androidx.cardview.widget.CardView;
@@ -39,6 +34,11 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
+
+import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class CardViewHolder extends FlexibleViewHolder {
 
@@ -103,22 +103,20 @@ public class CardViewHolder extends FlexibleViewHolder {
                 iconView.setVisibility(View.GONE);
             }
 
-
             if (data.getBgColor()>0){
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColor()));
             }
-            else{
-                if (data.getPerformer() != null){
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.material_surface_medium));
-                }else{
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+            else if (data.getPerformer() == null){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 2));
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mainContainer.setBackground(null);
                 }
             }
 
             if (data.getPerformer() != null){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
-                }
                 mainContainer.setClickable(true);
                 mainContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,7 +127,6 @@ public class CardViewHolder extends FlexibleViewHolder {
 
                 if (data.getNavCount()>-1){
                     navIcon.setText(data.getNavCount()+"");
-                    //navIcon.setTextSize(UiUtils.getPixelsFromDp(itemView.getContext(), 10));
                 }
                 else{
                     IconUtils.markAsIconContainer(navIcon, IconUtils.MATERIAL);
@@ -137,8 +134,6 @@ public class CardViewHolder extends FlexibleViewHolder {
                             : R.string.gmd_keyboard_arrow_right;
                     navIcon.setText(navIconRes);
                 }
-
-                navIcon.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_primary));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
@@ -152,11 +147,8 @@ public class CardViewHolder extends FlexibleViewHolder {
 
             if (data.getNavAddRunnable() != null){
                 IconUtils.markAsIconContainer(navAddIcon, IconUtils.MATERIAL);
-                int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon()
-                        : R.string.gmd_add;
+                int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon() : R.string.gmd_add;
                 navAddIcon.setText(navAddIconRes);
-                navAddIcon.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_primary));
-
                 navAddContainer.setClickable(true);
                 navAddContainer.setOnClickListener(new View.OnClickListener() {
                     @Override

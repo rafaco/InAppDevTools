@@ -3,17 +3,29 @@
 
     <!-- Base application theme. -->
     <style name="LibTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorPrimary">@color/iadt_surface_bottom</item>
-        <item name="colorPrimaryDark">@color/iadt_surface_top</item>
-        <item name="colorAccent">@color/iadt_accent</item>
+        <item name="colorPrimary">@color/material_blue_600</item>
+        <item name="colorPrimaryDark">@color/material_blue_900</item>
+        <item name="colorAccent">@color/material_blue_200</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
         <item name="android:textColor">@color/rally_white</item>
         <item name="android:typeface">sans</item>
         <item name="android:fontFamily" tools:targetApi="16">sans-serif-condensed</item>
-
         <item name="android:popupTheme" tools:targetApi="lollipop">@style/LibPopupMenuStyle</item>
+    </style>
+
+    <style name="LibPopupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/rally_bg_blur</item>
+    </style>
+
+    <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="android:textColorPrimary">@color/material_white</item>
+        <item name="colorControlNormal">@color/material_white</item>
+        <item name="colorControlHighlight">@color/material_blue_200</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+        <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="LibTheme.Translucent" parent="Theme.AppCompat.NoActionBar">
@@ -36,20 +48,6 @@
         <item name="android:headerDividersEnabled">true</item>
         <item name="android:typeface">sans</item>
         <!--<item name="android:background">@color/rally_bg_blur</item>-->
-    </style>
-
-    <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
-        <item name="android:textColorPrimary">@color/rally_white</item>
-        <item name="colorControlNormal">@color/rally_white</item>
-        <item name="colorControlHighlight">@color/rally_blue</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
-        <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
-        <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
-    </style>
-
-    <style name="LibPopupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:textColor">@color/rally_bg_blur</item>
     </style>
 
     <!-- Custom toolbar
@@ -95,13 +93,13 @@
     <style name="vertical_separator">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/text_secondary</item>
+        <item name="android:background">@color/iadt_text_high</item>
     </style>
 
     <style name="horizontal_separator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/text_secondary</item>
+        <item name="android:background">@color/iadt_text_high</item>
     </style>
 
     <style name="horizontal_separator_log">
@@ -109,6 +107,29 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/rally_white</item>
         <item name="android:alpha">0.1</item>
+    </style>
+
+    <style name="IadtCard">
+        <item name="cardCornerRadius">6dp</item>
+    </style>
+
+    <style name="IadtCard.Bottom">
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
+
+    </style>
+
+    <style name="IadtCard.Medium">
+        <item name="cardElevation">6dp</item>
+        <item name="cardMaxElevation">6dp</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_medium</item>
+    </style>
+
+    <style name="IadtCard.Top">
+        <item name="cardElevation">12dp</item>
+        <item name="cardMaxElevation">12dp</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_top</item>
     </style>
 
 

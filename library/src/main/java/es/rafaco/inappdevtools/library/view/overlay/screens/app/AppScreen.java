@@ -41,7 +41,7 @@ public class AppScreen extends AbstractFlexibleScreen {
 
     @Override
     public String getTitle() {
-        return "Apk";
+        return "App";
     }
 
     @Override

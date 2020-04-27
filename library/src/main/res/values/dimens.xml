@@ -4,6 +4,8 @@
     <dimen name="iadt_shape_stroke">2dp</dimen>
     <dimen name="iadt_shape_stroke_negative">-2dp</dimen>
     <dimen name="iadt_shape_radius">15dp</dimen>
+    <dimen name="iadt_toolbar_main_height">38dp</dimen>
+    <dimen name="iadt_toolbar_second_height">40dp</dimen>
     <dimen name="iadt_shape_top_height">40dp</dimen>
     <dimen name="iadt_shape_icon_size">40dp</dimen>
 
