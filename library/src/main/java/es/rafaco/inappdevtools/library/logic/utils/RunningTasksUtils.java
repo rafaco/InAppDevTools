@@ -22,6 +22,9 @@ package es.rafaco.inappdevtools.library.logic.utils;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.Build;
+import android.text.TextUtils;
+
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
@@ -31,8 +34,9 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningTasksUtils {
 
-    private static String OLD_LAUNCHER_ACTIVITY_CLASS = "com.google.android.launcher.GEL";
     private static String NEW_LAUNCHER_ACTIVITY_CLASS = "com.google.android.apps.nexuslauncher.NexusLauncherActivity";
+    private static String OLD_LAUNCHER_ACTIVITY_CLASS = "com.google.android.launcher.GEL";
+    private static String OLDER_LAUNCHER_ACTIVITY_CLASS = "com.android.launcher2.Launcher";
 
     private RunningTasksUtils() { throw new IllegalStateException("Utility class"); }
 
@@ -54,10 +58,67 @@ public class RunningTasksUtils {
         return output;
     }
 
+    public static List<ActivityManager.RunningTaskInfo> getList() {
+        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(Integer.MAX_VALUE);
+        return runningTaskInfoList;
+    }
+
     public static int getCount() {
+        return getList().size();
+    }
+
+    public static String getTopClassName(ActivityManager.RunningTaskInfo info) {
+        return info.topActivity.getClassName();
+    }
+
+    public static String getBaseClassName(ActivityManager.RunningTaskInfo info) {
+        return info.baseActivity.getClassName();
+    }
+
+    public static String getTitle(ActivityManager.RunningTaskInfo info) {
+        String tail = isLauncherTask(info) ? " (Launcher)" : "";
+        return "Task " + info.id + tail;
+    }
+
+    public static String getContent(ActivityManager.RunningTaskInfo info) {
+        StringBuffer contentBuffer = new StringBuffer();
+
+        contentBuffer.append("ID: " + info.id);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Activities: " + info.numActivities);
+        contentBuffer.append(Humanizer.newLine());
+
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            contentBuffer.append("Running activities: " + info.numRunning);
+            contentBuffer.append(Humanizer.newLine());
+        }
+
+        if (!TextUtils.isEmpty(info.description)){
+            contentBuffer.append("Description: " + info.description);
+            contentBuffer.append(Humanizer.newLine());
+        }
+
+        contentBuffer.append("Base activity: " + info.baseActivity.getShortClassName());
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Top activity: " + info.topActivity.getShortClassName());
+        contentBuffer.append(Humanizer.newLine());
+
+        return contentBuffer.toString();
+    }
+
+    private static boolean isLauncherTask(ActivityManager.RunningTaskInfo task) {
+        String baseActivityName = task.baseActivity.getClassName();
+        return baseActivityName.equals(NEW_LAUNCHER_ACTIVITY_CLASS)
+                || baseActivityName.equals(OLD_LAUNCHER_ACTIVITY_CLASS)
+                || baseActivityName.equals(OLDER_LAUNCHER_ACTIVITY_CLASS);
+    }
+
+    public static int getNotLauncherCount() {
         int count = 0;
         List<ActivityManager.RunningTaskInfo> tasks = getList();
-
         for(ActivityManager.RunningTaskInfo task : tasks){
             if (!isLauncherTask(task)) {
                 count ++;
@@ -65,6 +126,9 @@ public class RunningTasksUtils {
         }
         return count;
     }
+
+
+    //TODO: review following methods, used externally by LiveInfoDocumentGenerator
 
     public static int getActivitiesCount() {
         int count = 0;
@@ -122,16 +186,5 @@ public class RunningTasksUtils {
                 .build();
 
         return data.getEntries();
-    }
-
-    private static List<ActivityManager.RunningTaskInfo> getList() {
-        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =  manager.getRunningTasks(Integer.MAX_VALUE);
-        return runningTaskInfoList;
-    }
-
-    private static boolean isLauncherTask(ActivityManager.RunningTaskInfo task) {
-        String baseActivityName = task.baseActivity.getClassName();
-        return baseActivityName.equals(NEW_LAUNCHER_ACTIVITY_CLASS) || baseActivityName.equals(OLD_LAUNCHER_ACTIVITY_CLASS);
     }
 }

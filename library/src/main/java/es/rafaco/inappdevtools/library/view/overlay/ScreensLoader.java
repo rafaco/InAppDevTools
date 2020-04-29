@@ -19,6 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.overlay;
 
+import android.os.Process;
+
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.ToolsInfoScreen;
@@ -36,7 +38,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.BroadcastReceiversScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ContentProvidersScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ProcessesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ServicesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.TasksScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.FragmentsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -111,6 +115,8 @@ public class ScreensLoader {
         screenManager.registerScreen(ContentProvidersScreen.class);
         screenManager.registerScreen(BroadcastReceiversScreen.class);
         //screenManager.registerScreen(JobsScreen.class);
+        screenManager.registerScreen(ProcessesScreen.class);
+        screenManager.registerScreen(TasksScreen.class);
 
         //HISTORY
         screenManager.registerScreen(HistoryScreen.class);

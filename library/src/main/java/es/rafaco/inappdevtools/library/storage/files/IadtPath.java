@@ -48,4 +48,7 @@ public class IadtPath {
     public static final String LOCAL_COMMITS = SUBFOLDER + "/" + LOCAL_COMMITS_FILE;
     public static final String LOCAL_CHANGES = SUBFOLDER + "/" + LOCAL_CHANGES_FILE;
     public static final String DEPENDENCIES = SUBFOLDER + "/" + DEPENDENCIES_FILE;
+
+    public static final String ORIGINAL_MANIFEST = SOURCES + "/AndroidManifest.xml";
+    public static final String MERGED_MANIFEST = GENERATED + "/merged_manifests/AndroidManifest.xml";
 }

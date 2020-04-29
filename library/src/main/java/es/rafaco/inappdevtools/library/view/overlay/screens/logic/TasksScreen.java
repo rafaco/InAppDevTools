@@ -25,12 +25,13 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -39,9 +40,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ServicesScreen extends AbstractFlexibleScreen {
+public class TasksScreen extends AbstractFlexibleScreen {
 
-    public ServicesScreen(ScreenManager manager) {
+    public TasksScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -63,47 +64,60 @@ public class ServicesScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new OverviewData("Services",
-                "Running services declared by this apk",
-                R.string.gmd_store,
+        data.add(new OverviewData("Tasks",
+                "Stacks of activities readable by this app",
+                R.string.gmd_developer_board,
                 R.color.rally_white));
 
-        List<ActivityManager.RunningServiceInfo> serviceInfos = RunningServicesUtils.getList();
+        List<ActivityManager.RunningTaskInfo> runningItems = RunningTasksUtils.getList();
 
-        if (serviceInfos.size() == 0){
-            String title = "No running services";
+        if (runningItems.size() == 0){
+            String title = "No running tasks, that's weird :(";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)
                     .setExpandable(false);
             data.add(noServiceDataBuilder.build());
         }
         else{
-            for (ActivityManager.RunningServiceInfo info : serviceInfos) {
-
-                String title = RunningServicesUtils.getTitle(info);
-                String content = RunningServicesUtils.getContent(info);
-                DocumentSectionData.Builder serviceDataBuilder = new DocumentSectionData.Builder(title)
+            for (ActivityManager.RunningTaskInfo info : runningItems) {
+                String title = RunningTasksUtils.getTitle(info);
+                String content = RunningTasksUtils.getContent(info);
+                DocumentSectionData.Builder taskDataBuilder = new DocumentSectionData.Builder(title)
                         //.setIcon(R.string.gmd_view_carousel)
                         .setExpandable(false)
                         .add(content);
 
-                String className = RunningServicesUtils.getClassName(info);
-                final String srcPath = getSourcesManager()
-                        .getPathFromClassName(className);
-                String srcFile = Humanizer.getLastPart(srcPath, "/");
-                if (!TextUtils.isEmpty(srcFile)){
-                    serviceDataBuilder.addButton(new RunButton(srcFile,
+                String topClassName = RunningTasksUtils.getTopClassName(info);
+                final String topSrcPath = getSourcesManager()
+                        .getPathFromClassName(topClassName);
+                if (!TextUtils.isEmpty(topSrcPath)){
+                    taskDataBuilder.addButton(new RunButton("Top SRC",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
                                 public void run() {
                                     OverlayService.performNavigation(SourceDetailScreen.class,
-                                            SourceDetailScreen.buildSourceParams(srcPath, -1));
+                                            SourceDetailScreen.buildSourceParams(topSrcPath, -1));
                                 }
                             }));
                 }
 
-                data.add(serviceDataBuilder.build());
+                String baseClassName = RunningTasksUtils.getBaseClassName(info);
+                final String baseSrcPath = getSourcesManager()
+                        .getPathFromClassName(baseClassName);
+                if (!TextUtils.isEmpty(baseSrcPath)){
+                    taskDataBuilder.addButton(new RunButton("Base SRC",
+                            R.drawable.ic_code_white_24dp,
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    OverlayService.performNavigation(SourceDetailScreen.class,
+                                            SourceDetailScreen.buildSourceParams(baseSrcPath, -1));
+                                }
+                            }));
+                }
+
+                data.add(taskDataBuilder.build());
             }
         }
 

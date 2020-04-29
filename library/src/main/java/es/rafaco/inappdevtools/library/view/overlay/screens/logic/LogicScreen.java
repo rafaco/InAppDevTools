@@ -104,12 +104,12 @@ public class LogicScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add(new CardData("Processes",
-                "Linux processes running by this application",
+                "Linux processes created by this application",
                 R.string.gmd_developer_board,
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
+                        OverlayService.performNavigation(ProcessesScreen.class);
                     }
                 }).setNavCount(RunningProcessesUtils.getCount()));
 
@@ -119,7 +119,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
+                        OverlayService.performNavigation(TasksScreen.class);
                     }
                 }).setNavCount(RunningTasksUtils.getCount()));
 

@@ -20,28 +20,24 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.logic;
 
 import android.app.ActivityManager;
-import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class ServicesScreen extends AbstractFlexibleScreen {
+public class ProcessesScreen extends AbstractFlexibleScreen {
 
-    public ServicesScreen(ScreenManager manager) {
+    public ProcessesScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -63,45 +59,29 @@ public class ServicesScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        data.add(new OverviewData("Services",
-                "Running services declared by this apk",
-                R.string.gmd_store,
+        data.add(new OverviewData("Processes",
+                "Linux processes created by this application",
+                R.string.gmd_developer_board,
                 R.color.rally_white));
 
-        List<ActivityManager.RunningServiceInfo> serviceInfos = RunningServicesUtils.getList();
+        List<ActivityManager.RunningAppProcessInfo> runningItems = RunningProcessesUtils.getList();
 
-        if (serviceInfos.size() == 0){
-            String title = "No running services";
+        if (runningItems.size() == 0){
+            String title = "No running processes, that's weird :(";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)
                     .setExpandable(false);
             data.add(noServiceDataBuilder.build());
         }
         else{
-            for (ActivityManager.RunningServiceInfo info : serviceInfos) {
+            for (ActivityManager.RunningAppProcessInfo info : runningItems) {
 
-                String title = RunningServicesUtils.getTitle(info);
-                String content = RunningServicesUtils.getContent(info);
+                String title = RunningProcessesUtils.getTitle(info);
+                String content = RunningProcessesUtils.getContent(info);
                 DocumentSectionData.Builder serviceDataBuilder = new DocumentSectionData.Builder(title)
                         //.setIcon(R.string.gmd_view_carousel)
                         .setExpandable(false)
                         .add(content);
-
-                String className = RunningServicesUtils.getClassName(info);
-                final String srcPath = getSourcesManager()
-                        .getPathFromClassName(className);
-                String srcFile = Humanizer.getLastPart(srcPath, "/");
-                if (!TextUtils.isEmpty(srcFile)){
-                    serviceDataBuilder.addButton(new RunButton(srcFile,
-                            R.drawable.ic_code_white_24dp,
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    OverlayService.performNavigation(SourceDetailScreen.class,
-                                            SourceDetailScreen.buildSourceParams(srcPath, -1));
-                                }
-                            }));
-                }
 
                 data.add(serviceDataBuilder.build());
             }
@@ -128,9 +108,5 @@ public class ServicesScreen extends AbstractFlexibleScreen {
                     }
                 }));
         return data;
-    }
-
-    private SourcesManager getSourcesManager() {
-        return IadtController.get().getSourcesManager();
     }
 }

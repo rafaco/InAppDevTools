@@ -114,8 +114,7 @@ public class ContentProvidersScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        String params = SourceDetailScreen.buildSourceParams(IadtPath.SOURCES
-                                + "/AndroidManifest.xml");
+                        String params = SourceDetailScreen.buildSourceParams(IadtPath.ORIGINAL_MANIFEST);
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
@@ -124,8 +123,7 @@ public class ContentProvidersScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        String params = SourceDetailScreen.buildSourceParams(IadtPath.GENERATED
-                                + "/merged_manifests/AndroidManifest.xml");
+                        String params = SourceDetailScreen.buildSourceParams(IadtPath.MERGED_MANIFEST);
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
