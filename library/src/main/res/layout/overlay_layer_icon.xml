@@ -25,18 +25,16 @@
 
     <RelativeLayout
         android:id="@+id/icon_wrapper"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="6dp"
-        android:background="@drawable/shape_layer_icon"
-        style="@style/elevated">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/iadt_shape_icon_size"
+            android:layout_height="@dimen/iadt_shape_icon_size"
             tools:ignore="ContentDescription"
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
+
 </FrameLayout>

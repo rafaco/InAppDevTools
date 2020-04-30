@@ -62,6 +62,15 @@ public class UiUtils {
         imageView.setImageDrawable(d);
     }
 
+    public static void setAppIconAsBackground(es.rafaco.compat.CardView cardView){
+        Drawable d = getAppIconDrawable();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundModern(cardView, d);
+        }else{
+            setBackgroundLegacy(cardView, d);
+        }
+    }
+
     public static Drawable getAppIconDrawable() {
         return getContext().getPackageManager().getApplicationIcon(getContext().getApplicationInfo());
     }

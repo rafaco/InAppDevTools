@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.overlay.layers;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +36,7 @@ import android.support.annotation.NonNull;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.utils.BitmapUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
@@ -76,16 +78,18 @@ public class IconLayer extends Layer {
 
     @Override
     protected void beforeAttachView(View view) {
+        ImageView iconView = view.findViewById(R.id.icon);
+        iconWrapper = view.findViewById(R.id.icon_wrapper);
         displaySize = UiUtils.getDisplaySize(manager.getContext());
 
-        ImageView iconView = view.findViewById(R.id.icon);
-        UiUtils.setAppIconAsBackground(iconView);
+        
+        Drawable appIconDrawable = UiUtils.getAppIconDrawable();
+        BitmapUtils.setImageWithShadow(iconView, appIconDrawable);
+        //UiUtils.setAppIconAsBackground(iconView);
 
-        iconWrapper = view.findViewById(R.id.icon_wrapper);
         iconWrapper.setVisibility(View.VISIBLE);
         iconWrapper.setOnTouchListener(new IconTouchListener(this, manager));
     }
-
 
 
     /* Listen icon touch and update remove layer */
