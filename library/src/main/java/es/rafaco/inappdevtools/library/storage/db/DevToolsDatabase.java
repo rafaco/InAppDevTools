@@ -141,8 +141,27 @@ public abstract class DevToolsDatabase extends RoomDatabase {
         netContentDao().deleteAll();
 
         //Reset all sequences
-        SupportSQLiteDatabase supportSQLiteDatabase = getOpenHelper().getWritableDatabase();
-        SQLiteDatabase supportSQLiteDatabase1 = SQLiteDatabase.openOrCreateDatabase(supportSQLiteDatabase.getPath(), null, null);
-        supportSQLiteDatabase1.execSQL("delete from sqlite_sequence");
+        SupportSQLiteDatabase supportDatabase = null;
+        SQLiteDatabase database = null;
+        try {
+            supportDatabase = getOpenHelper().getWritableDatabase();
+            database = SQLiteDatabase.openOrCreateDatabase(supportDatabase.getPath(), null, null);
+            database.execSQL("delete from sqlite_sequence");
+        }
+        finally {
+            //IOUtil.closeQuietly(supportDatabase, database);
+            try {
+                if (database!=null){
+                    database.close();
+                }
+
+                if (supportDatabase!=null){
+                    supportDatabase.close();
+                }
+            }
+            catch (Exception ex) {
+                //Intentionally empty
+            }
+        }
     }
 }

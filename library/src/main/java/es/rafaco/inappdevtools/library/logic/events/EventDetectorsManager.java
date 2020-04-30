@@ -117,6 +117,9 @@ public class EventDetectorsManager {
     }
 
     public EventDetector get(Class<? extends EventDetector> className) {
+        if (eventDetectors == null)
+            return null;
+        
         for (EventDetector eventDetector : eventDetectors) {
             if (eventDetector.getClass().equals(className)){
                 return eventDetector;

@@ -38,6 +38,8 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
+import es.rafaco.inappdevtools.library.logic.events.EventDetectorsManager;
+import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
@@ -116,8 +118,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void stopAnrDetector() {
         // Early stop of AnrDetector, other get stopped later on by IadtController.beforeClose().
         // Reason: AnrDetector start new threads which is currently forbidden.
-        EventDetector anrDetector = IadtController.get().getEventManager()
-                .getEventDetectorsManager().get(ErrorAnrEventDetector.class);
+        EventManager eventManager = IadtController.get().getEventManager();
+        if (eventManager == null) return;
+
+        EventDetectorsManager eventDetectorsManager = eventManager.getEventDetectorsManager();
+        if (eventDetectorsManager == null) return;
+
+        EventDetector anrDetector = eventDetectorsManager.get(ErrorAnrEventDetector.class);
+        if (anrDetector==null) return;
+
         anrDetector.stop();
     }
 
