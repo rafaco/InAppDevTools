@@ -48,7 +48,10 @@ public class ActivityTracker {
     }
 
     public String getCurrentName() {
-        return getCurrentHistory().name;
+        ActivityTrack currentHistory = getCurrentHistory();
+        if (currentHistory==null)
+            return null;
+        return currentHistory.name;
     }
 
     public boolean isInBackground(){

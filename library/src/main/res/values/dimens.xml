@@ -8,6 +8,10 @@
     <dimen name="iadt_toolbar_second_height">40dp</dimen>
     <dimen name="iadt_shape_top_height">40dp</dimen>
     <dimen name="iadt_shape_icon_size">40dp</dimen>
+    <dimen name="iadt_icon_font_size_s">18dp</dimen>
+    <dimen name="iadt_icon_font_size_m">24dp</dimen>
+    <dimen name="iadt_icon_font_size_l">30dp</dimen>
+    <dimen name="iadt_icon_font_size_xl">40dp</dimen>
 
     <!-- Iadt features -->
     <dimen name="iadt_toast_y_offset">24dp</dimen>
@@ -22,8 +26,10 @@
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
 
-    <!-- Default cards margins-->
-    <dimen name="card_margin">5dp</dimen>
+    <!-- Default cards margins -->
+    <dimen name="card_padding_horizontal">6dp</dimen>
+    <dimen name="card_padding_vertical">3dp</dimen>
+    <dimen name="card_margin">20dp</dimen>
     <dimen name="card_radius">6dp</dimen>
     <dimen name="card_cover_height">100dp</dimen>
     <dimen name="card_cover_width">10dp</dimen>

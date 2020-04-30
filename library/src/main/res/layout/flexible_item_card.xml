@@ -20,6 +20,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -30,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
         style="@style/IadtCard.Top">
 
         <LinearLayout
@@ -41,7 +41,7 @@
             <RelativeLayout
                 android:id="@+id/main_container"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground">
 
@@ -53,20 +53,21 @@
                     android:layout_centerVertical="true"
                     android:minHeight="@dimen/card_cover_height"
                     android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    tools:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/icon"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/image_left"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="0dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="30dp"
+                    android:textSize="@dimen/iadt_icon_font_size_l"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/iadt_primary"/>
+                    android:textColor="@color/iadt_primary"
+                    tools:text="P"
+                    tools:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/nav_icon"
@@ -74,23 +75,20 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="30dp"
-                    android:textColor="@color/iadt_primary"/>
+                    android:textSize="@dimen/iadt_icon_font_size_l"
+                    android:textColor="@color/iadt_primary"
+                    tools:text=">"/>
 
                 <LinearLayout
                     android:id="@+id/details"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@id/nav_icon"
                     android:layout_toRightOf="@id/icon"
+                    android:layout_centerVertical="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -98,14 +96,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        style="@style/TextCondensedBig"/>
+                        style="@style/TextCondensedBig"
+                        tools:text="Title"/>
 
                     <TextView
                         android:id="@+id/content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="0.9"
                         style="@style/TextCondensedMedium"
-                        android:textColor="@color/iadt_text_high"/>
+                        android:textColor="@color/iadt_text_high"
+                        tools:text="Content, content and more content\nand a bit more"/>
 
                 </LinearLayout>
             </RelativeLayout>
@@ -132,10 +133,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="30dp"
-                    android:textColor="@color/iadt_primary" />
+                    android:textSize="@dimen/iadt_icon_font_size_l"
+                    android:textColor="@color/iadt_primary"
+                    tools:text="12"/>
             </LinearLayout>
 
         </LinearLayout>

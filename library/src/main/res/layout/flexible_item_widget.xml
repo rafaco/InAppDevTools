@@ -20,6 +20,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -28,9 +29,8 @@
     <es.rafaco.compat.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
@@ -38,39 +38,40 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
-                android:layout_marginTop="4dp"
-                style="@style/TextCondensedBig"
-                android:textColor="@color/iadt_text_header"/>
+                style="@style/TextCondensedMedium"
+                android:textColor="@color/iadt_text_header"
+                tools:text="Title"/>
 
             <TextView
                 android:id="@+id/main_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAlignment="center"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="@dimen/card_margin"
+                android:gravity="center"
+                android:layout_marginTop="-3dp"
+                android:lineSpacingMultiplier="0.9"
                 style="@style/TextCondensedExtraBig"
-                android:textColor="@color/iadt_text_high"/>
+                android:textColor="@color/iadt_text_high"
+                tools:text="Main Content"/>
 
             <TextView
                 android:id="@+id/second_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="@dimen/card_margin"
-                android:layout_marginHorizontal="@dimen/card_margin"
+                android:gravity="center"
+                android:layout_marginTop="-3dp"
+                android:lineSpacingMultiplier="0.9"
                 style="@style/TextCondensedMedium"
-                android:textColor="@color/iadt_text_low"/>
+                android:textColor="@color/iadt_text_low"
+                tools:text="Secondary Content"/>
 
             <FrameLayout
                 android:id="@+id/chart_container"

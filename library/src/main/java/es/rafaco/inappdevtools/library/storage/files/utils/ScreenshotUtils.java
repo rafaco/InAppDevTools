@@ -85,8 +85,10 @@ public class ScreenshotUtils {
             return fillDatabaseObject(activityTracker.getCurrentName(), imageFile.getAbsolutePath());
 
         } catch (Exception e) {
-            // Several error may come out with file handling or DOM
-            FriendlyLog.logException("Exception", e);
+            if (IadtController.get().isDebug()){
+                // Several error may come out with file handling or DOM
+                FriendlyLog.logException("Exception", e);
+            }
         }
         return null;
     }

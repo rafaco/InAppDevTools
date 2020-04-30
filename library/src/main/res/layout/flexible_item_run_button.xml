@@ -18,9 +18,13 @@
   ~ limitations under the License.
   -->
 
-<es.rafaco.compat.AppCompatButton
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<es.rafaco.compat.AppCompatButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/button"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:singleLine="true"
+    tools:text="Button with a very long text to text ellipsize, and I mean a very long one" />
 

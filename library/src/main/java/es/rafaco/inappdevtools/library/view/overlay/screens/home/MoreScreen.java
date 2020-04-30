@@ -124,13 +124,23 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Pandora Net",
+        data.add(new RunButton("PND Net",
                 R.drawable.ic_extension_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         MoreScreen.this.getScreenManager().hide();
                         PandoraBridge.network();
+                    }
+                }));
+
+        data.add(new RunButton("Pandora",
+                R.drawable.ic_extension_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        MoreScreen.this.getScreenManager().hide();
+                        PandoraBridge.open();
                     }
                 }));
 

@@ -65,8 +65,6 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
             button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             button.setAllCaps(false);
             button.setTextColor(accentColor);
-            button.setTextSize(TypedValue.COMPLEX_UNIT_PX,42);
-            //button.setTypeface(null, Typeface.BOLD);
         }
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());

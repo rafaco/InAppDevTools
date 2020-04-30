@@ -16,6 +16,7 @@
     <color name="material_blue_900">#0d47a1</color>
     <color name="material_blue_600">#1e88e5</color>
     <color name="material_blue_200">#90caf9</color>
+    <color name="material_blue_100">#BBDEFB</color>
     <color name="material_green">#FF81c784</color>
     <color name="material_orange">#ffcc80</color>
     <color name="material_white">#FFE1E1E1</color>
@@ -32,7 +33,7 @@
     <color name="iadt_surface_bottom">@color/material_surface_2dp</color>
     <color name="iadt_surface_medium">@color/material_surface_6dp</color>
     <color name="iadt_surface_top">@color/material_surface_12dp</color>
-    <color name="iadt_toolbar">@color/material_surface_16dp</color>
+    <color name="iadt_toolbar">@color/material_surface_24dp</color>
     <color name="iadt_shape_stroke">@color/material_gray</color>
 
     <color name="iadt_text_header">@color/material_blue_600</color>

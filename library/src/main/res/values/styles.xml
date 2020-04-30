@@ -111,24 +111,29 @@
 
     <style name="IadtCard">
         <item name="cardCornerRadius">6dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="contentPaddingTop">@dimen/card_padding_vertical</item>
+        <item name="contentPaddingBottom">@dimen/card_padding_vertical</item>
+        <item name="contentPaddingLeft">@dimen/card_padding_horizontal</item>
+        <item name="contentPaddingRight">@dimen/card_padding_horizontal</item>
     </style>
 
     <style name="IadtCard.Bottom">
-        <item name="cardElevation">2dp</item>
-        <item name="cardMaxElevation">2dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardMaxElevation">1dp</item>
         <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
-
     </style>
 
     <style name="IadtCard.Medium">
-        <item name="cardElevation">6dp</item>
-        <item name="cardMaxElevation">6dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="cardMaxElevation">3dp</item>
         <item name="cardBackgroundColor">@color/iadt_surface_medium</item>
     </style>
 
     <style name="IadtCard.Top">
-        <item name="cardElevation">12dp</item>
-        <item name="cardMaxElevation">12dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="cardMaxElevation">6dp</item>
         <item name="cardBackgroundColor">@color/iadt_surface_top</item>
     </style>
 

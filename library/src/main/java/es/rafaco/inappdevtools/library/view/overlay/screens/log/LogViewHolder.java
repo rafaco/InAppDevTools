@@ -129,10 +129,8 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         int cardColorId = isSelected ? R.color.iadt_surface_top : android.R.color.transparent;
         int cardColor = ContextCompat.getColor(wrapper.getContext(), cardColorId);
         card.setCardBackgroundColor(cardColor);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            card.setElevation(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
-            card.setRadius(isSelected ? UiUtils.dpToPx(card.getContext(), 12) : 0);
-        }
+        card.setRadius(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
+        card.setCardElevation(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
 
         int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
         decorator.setBackgroundColor(severityColor);

@@ -28,10 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
-//@import androidx.core.content.ContextCompat;
 //@import androidx.cardview.widget.CardView;
 //#else
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
 
@@ -115,7 +113,6 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
                 cardView.setClickable(false);
                 cardView.setFocusable(false);
                 cardView.setForeground(null);
-                //cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 0));
                 }
@@ -126,17 +123,12 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
             navIcon.setVisibility(View.VISIBLE);
 
             List<RunButton> buttons = data.getButtons();
-            if (!data.isExpandable() || buttons == null || buttons.isEmpty()){
-                buttonSeparator.setVisibility(View.GONE);
-            }
-            else {
-                buttonSeparator.setVisibility(View.VISIBLE);
-            }
-
             if (buttons == null || buttons.isEmpty()){
+                buttonSeparator.setVisibility(View.GONE);
                 buttonGroupContainer.setVisibility(View.GONE);
             }
             else{
+                buttonSeparator.setVisibility(View.VISIBLE);
                 buttonGroupContainer.removeAllViews();
                 for (RunButton button : buttons) {
                         button.setColor(R.color.iadt_surface_bottom);
