@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -257,6 +258,9 @@ public final class IadtController {
     }
 
     public boolean isEnabled() {
+        boolean isEnabledForSdk = Build.VERSION.SDK_INT >= IadtLauncher.MIN_SDK_INT;
+        if (!isEnabledForSdk)
+            return false;
         return getConfig().getBoolean(BuildConfigField.ENABLED);
     }
 

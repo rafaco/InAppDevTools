@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="es.rafaco.inappdevtools.library">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,4 +49,88 @@
 
     </application>
 
+
+    <!-- IADT compatibility: Skip 'Manifest merger failed' due to the minSdkVersion of our
+            dependencies. Our library will be automatically disabled for devices with SDK 15 or bellow -->
+    <uses-sdk
+        tools:overrideLibrary="
+            com.alorma.timeline,
+            tech.linjiang.pandora.core,
+            com.jraska.falcon,
+            github.nisrulz.easydeviceinfo.base,
+            github.nisrulz.easydeviceinfo.common,
+            android.support.design,
+            android.support.v4,
+            android.support.v7.recyclerview,
+            android.support.v7.cardview,
+            android.support.v7.appcompat,
+            android.support.v7.viewpager,
+            android.support.documentfile,
+            android.support.localbroadcastmanager,
+            android.support.print,
+            android.support.interpolator,
+            android.support.fragment,
+            android.support.graphics.drawable,
+            android.support.coreui,
+            android.support.coreutils,
+            android.support.transition,
+            android.support.mediacompat,
+            android.support.loader,
+            android.support.coordinatorlayout,
+            android.support.drawerlayout,
+            android.support.slidingpanelayout,
+            android.support.customview,
+            android.support.swiperefreshlayout,
+            android.support.asynclayoutinflater,
+            android.support.compat,
+            android.support.cursoradapter,
+            android.arch.lifecycle,
+            android.arch.paging.runtime,
+            android.arch.lifecycle.extensions,
+            android.arch.persistence.room,
+            android.arch.persistence.db.framework,
+            android.arch.persistence.db,
+            android.arch.lifecycle.livedata,
+            android.arch.lifecycle.livedata.core,
+            android.arch.core,
+            android.arch.lifecycle.viewmodel,
+            androidx.versionedparcelable,
+
+            com.google.android.material,
+            androidx.appcompat,
+            androidx.paging.runtime,
+            androidx.recyclerview,
+            androidx.cardview,
+            androidx.media,
+            androidx.lifecycle.extensions,
+            androidx.lifecycle.process,
+            androidx.lifecycle.service,
+            androidx.fragment,
+            androidx.vectordrawable,
+            androidx.legacy.coreui,
+            androidx.room,
+            androidx.legacy.coreutils,
+            androidx.loader,
+            androidx.viewpager,
+            androidx.coordinatorlayout,
+            androidx.drawerlayout,
+            androidx.slidingpanelayout,
+            androidx.customview,
+            androidx.swiperefreshlayout,
+            androidx.asynclayoutinflater,
+            androidx.transition,
+            androidx.core,
+            androidx.lifecycle,
+            com.github.mikephil.charting,
+            androidx.sqlite.db.framework,
+            androidx.sqlite.db,
+            androidx.lifecycle.livedata,
+            androidx.lifecycle.livedata.core,
+            androidx.arch.core,
+            androidx.lifecycle.viewmodel,
+            androidx.print,
+            androidx.localbroadcastmanager,
+            androidx.documentfile,
+            androidx.interpolator,
+            androidx.cursoradapter"/>
 </manifest>

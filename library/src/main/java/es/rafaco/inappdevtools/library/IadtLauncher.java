@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -49,6 +50,9 @@ import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
  */
 public class IadtLauncher extends ContentProvider {
 
+    public static final int MIN_SDK_INT = Build.VERSION_CODES.JELLY_BEAN;
+    public static final String MIN_SDK_STRING = "Jelly Bean";
+
     AssetFileReader assetFileReader;
     private String extra;
 
@@ -57,6 +61,11 @@ public class IadtLauncher extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+
+        if (!isEnabledForSdk()) {
+            Log.w(Iadt.TAG, String.format("Iadt DISABLED, sdk version %s is not supported. You have to use a device with Android %s (%s) at least.", Build.VERSION.SDK_INT, MIN_SDK_INT, MIN_SDK_STRING));
+            return false;
+        }
 
         assetFileReader = new AssetFileReader(getContext());
 
@@ -78,6 +87,10 @@ public class IadtLauncher extends ContentProvider {
 
         Log.i(Iadt.TAG, "Iadt v" + BuildConfig.VERSION_NAME + " ENABLED");
         return startLibrary();
+    }
+
+    private boolean isEnabledForSdk() {
+        return Build.VERSION.SDK_INT >= MIN_SDK_INT;
     }
 
     private boolean isPluginInstalled() {
