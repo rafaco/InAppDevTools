@@ -28,7 +28,7 @@ ext{
         - We avoid conflicts by using tools:overrideLibrary at our AndroidManifest and disabling our library when running on lower SDK.
         - Min operational sdk is currently set to 16 due to some bugs on sdk 15.
      */
-    PROJECT_MIN_SDK = 1
+    PROJECT_MIN_SDK = 14
     PROJECT_COMPILE_SDK = 28
     PROJECT_BUILD_TOOLS = '28.0.3'
     PROJECT_TARGET_SDK = 28
