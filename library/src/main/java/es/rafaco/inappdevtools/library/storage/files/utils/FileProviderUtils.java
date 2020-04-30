@@ -42,6 +42,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FileProviderUtils {
 

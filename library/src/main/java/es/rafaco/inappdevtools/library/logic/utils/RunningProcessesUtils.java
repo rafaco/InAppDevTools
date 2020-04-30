@@ -40,9 +40,6 @@ public class RunningProcessesUtils {
     public static String getString() {
         StringBuilder result = new StringBuilder("\n");
         List<ActivityManager.RunningAppProcessInfo> processes = getList();
-        if (processes == null){
-            return "";
-        }
         
         for (ActivityManager.RunningAppProcessInfo info : processes) {
             result.append(getContent(info));
@@ -72,14 +69,11 @@ public class RunningProcessesUtils {
     }
 
     public static int getCount() {
-        if (getList() == null){
-            return 0;
-        }
         return getList().size();
     }
 
     public static String getClassName(ActivityManager.RunningAppProcessInfo info) {
-        return "";
+        return Humanizer.emptyString();
     }
 
     public static String getTitle(ActivityManager.RunningAppProcessInfo info) {

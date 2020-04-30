@@ -29,6 +29,7 @@ import java.util.Map;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
@@ -131,7 +132,7 @@ public class ConfigManager {
                 JSONObject jsonObject = new JSONObject(stringMap);
                 stringObjectMap = JsonHelper.toMap(jsonObject);
             } catch (JSONException e) {
-                e.printStackTrace();
+                FriendlyLog.logException("Error getting map from configuration", e);
             }
             return stringObjectMap;
         }

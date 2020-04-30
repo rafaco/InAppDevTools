@@ -188,7 +188,7 @@ public class DialogManager {
     //region [ LISTENERS ]
 
     private void updateMode() {
-        if (isOverlayMode == getOverlayMode()){
+        if (isOverlayMode.equals(getOverlayMode())){
            return;
         }
 

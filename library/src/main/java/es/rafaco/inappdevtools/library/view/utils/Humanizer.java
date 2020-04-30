@@ -112,6 +112,10 @@ public class Humanizer {
 
     //region [ MULTILINE TEXT ]
 
+    public static String emptyString() {
+        return "";
+    }
+
     public static String newLine(){
         return System.getProperty("line.separator");
     }
@@ -342,5 +346,6 @@ public class Humanizer {
         return Humanizer.removeTail(objectClass.getCanonicalName(), "."
                 + objectClass.getSimpleName());
     }
+
 }
 

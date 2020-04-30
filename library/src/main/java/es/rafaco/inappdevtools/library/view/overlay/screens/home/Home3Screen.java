@@ -45,6 +45,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInf
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -174,7 +175,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
         try {
             list = assets.list("");
         } catch (IOException e) {
-            e.printStackTrace();
+            FriendlyLog.logException("Error counting assets", e);
         }
         
         String repoMain, repoSecond;

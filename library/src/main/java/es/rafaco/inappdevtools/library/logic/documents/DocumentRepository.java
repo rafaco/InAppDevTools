@@ -104,7 +104,7 @@ public class DocumentRepository {
         return filePath;
     }
 
-    public static String getStoredDocumentPath(DocumentType documentType, Object data){
+    private static String getStoredDocumentPath(DocumentType documentType, Object data){
         AbstractDocumentGenerator generator = getGenerator(documentType, data);
         if (generator != null &&
                 FileCreator.exists(generator.getSubfolder(), generator.getFilename())) {
@@ -141,8 +141,11 @@ public class DocumentRepository {
 
     public static CardData getCardDataLink(DocumentType documentType, final Class<? extends Screen> screenClass, final String param) {
         DocumentData reportData = DocumentRepository.getDocument(documentType);
+        if (reportData == null)
+            return null;
+
         String shortTitle = Humanizer.removeTailStartingWith(reportData.getTitle(), " from");
-        CardData card =  new CardData(shortTitle,
+        return new CardData(shortTitle,
                 reportData.getOverview(),
                 reportData.getIcon(),
                 new Runnable() {
@@ -151,6 +154,5 @@ public class DocumentRepository {
                         OverlayService.performNavigation(screenClass, param);
                     }
                 });
-        return card;
     }
 }
