@@ -137,6 +137,16 @@
         <item name="cardBackgroundColor">@color/iadt_surface_top</item>
     </style>
 
+    <style name="IadtCard.Image">
+        <item name="contentPaddingTop">0dp</item>
+        <item name="contentPaddingBottom">0dp</item>
+        <item name="contentPaddingLeft">0dp</item>
+        <item name="contentPaddingRight">0dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="cardMaxElevation">3dp</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_medium</item>
+    </style>
+
 
     <style name="TextCondensedSmall">
         <item name="android:typeface">sans</item>

@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.view.View;
 
@@ -93,9 +94,34 @@ public class ScreenshotUtils {
         return null;
     }
 
+    public static Bitmap getBitmap(){
+        Activity currentActivity = IadtController.get().getActivityTracker().getCurrent();
+        View targetView = currentActivity.getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+        Bitmap bitmap = null;
+        try {
+            bitmap = getThumbnailFromView(targetView);
+            //TODO: Falcon grab our OverlayUI also
+            //bitmap = Falcon.takeScreenshotBitmap(currentActivity);
+        }
+        catch (Exception e) {
+            if (IadtController.get().isDebug()){
+                FriendlyLog.logException("Exception on getBitmap()", e);
+            }
+        }
+        return bitmap;
+    }
+
+    public static Bitmap getThumbnailFromView(View view){
+        int width = 300;
+        int height = view.getHeight()*width/view.getWidth();
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createScaledBitmap(view.getDrawingCache(), width, height, true);
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
     public static Bitmap getBitmapFromView(View view){
         view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
         Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
         view.setDrawingCacheEnabled(false);
         return bitmap;

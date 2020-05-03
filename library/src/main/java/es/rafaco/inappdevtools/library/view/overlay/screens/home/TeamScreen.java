@@ -40,7 +40,6 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;

@@ -36,6 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:gravity="right"
+        android:showDividers="none"
+        android:divider="@color/iadt_text_high"
+        android:dividerPadding="4dp"
         android:orientation="horizontal" />
 
 </LinearLayout>

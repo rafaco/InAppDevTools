@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -38,12 +39,18 @@ public class LinkViewHolder extends FlexibleViewHolder {
     private final LinearLayout wrapper;
     AppCompatTextView icon;
     AppCompatTextView title;
+    AppCompatTextView overview;
+
+    public LinkViewHolder(View view) {
+        this(view, null);
+    }
 
     public LinkViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         wrapper = view.findViewById(R.id.link_wrapper);
         icon = view.findViewById(R.id.icon);
         title = view.findViewById(R.id.title);
+        overview = view.findViewById(R.id.overview);
     }
 
     @Override
@@ -54,7 +61,21 @@ public class LinkViewHolder extends FlexibleViewHolder {
             int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
             icon.setTextColor(contextualizedColor);
         }
+        else{
+            icon.setVisibility(View.GONE);
+        }
+
         title.setText(data.getTitle());
+
+        if ( TextUtils.isEmpty(data.overview)){
+            overview.setVisibility(View.GONE);
+        }
+        else{
+            overview.setText(data.overview);
+            int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
+            overview.setTextColor(contextualizedColor);
+            overview.setVisibility(View.VISIBLE);
+        }
 
         wrapper.setClickable(true);
         wrapper.setOnClickListener(new View.OnClickListener() {

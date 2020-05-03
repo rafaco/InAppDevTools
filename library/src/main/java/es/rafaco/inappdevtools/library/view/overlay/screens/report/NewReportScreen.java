@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;

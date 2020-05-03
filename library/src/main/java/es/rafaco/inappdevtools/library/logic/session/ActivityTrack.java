@@ -63,8 +63,12 @@ public class ActivityTrack {
         return resumeTime - creationTime;
     }
 
+    public String getLastEvent() {
+        return lastEvent.toString();
+    }
+
     public String getFormattedLastEvent() {
         String eventName = lastEvent.toString();
-        return eventName.replace("ACTIVITY_", "");
+        return eventName.replace("ACTIVITY_ON_", "");
     }
 }

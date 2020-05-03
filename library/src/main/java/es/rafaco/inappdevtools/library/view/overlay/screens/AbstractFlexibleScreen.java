@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 public abstract class AbstractFlexibleScreen extends Screen {
 
     private RecyclerView flexContainer;
-    private FlexibleAdapter flexAdapter;
+    protected FlexibleAdapter flexAdapter;
 
     public AbstractFlexibleScreen(ScreenManager manager) {
         super(manager);

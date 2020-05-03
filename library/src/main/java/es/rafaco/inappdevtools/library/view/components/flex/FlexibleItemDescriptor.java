@@ -50,13 +50,13 @@ public class FlexibleItemDescriptor {
         return view;
     }
 
-    //TODO: use this for all usages
+    //TODO: use this for all usages (without adapter)
     private FlexibleViewHolder constructViewHolder(View view) {
         FlexibleViewHolder holder = null;
         try {
             Constructor<? extends FlexibleViewHolder> constructor = viewHolderClass
-                    .getConstructor(View.class);
-            holder = constructor.newInstance(new Object[] { view });
+                    .getConstructor(View.class, FlexibleAdapter.class);
+            holder = constructor.newInstance(new Object[] { view, null });
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
         }

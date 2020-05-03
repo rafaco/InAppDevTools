@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,24 +19,29 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-public class LinkItem {
+import java.util.ArrayList;
+import java.util.List;
 
-    private final Runnable onClick;
+public class ListData {
+
     String title;
-    String overview;
-    int icon;
-    int color;
+    List<Object> items;
+    boolean showDividers = false;
+    boolean isHorizontal = false;
 
-    public LinkItem(String title, int icon, int color, Runnable onclick) {
-        this(title, null, icon, color, onclick);
+    public ListData(Object item) {
+        ArrayList<Object> items = new ArrayList<>();
+        items.add(item);
+        this.items = items;
     }
 
-    public LinkItem(String title, String overview, int icon, int color, Runnable onclick) {
+    public ListData(List<Object> items) {
+        this.items = items;
+    }
+
+    public ListData(String title, List<Object> items) {
+        this(items);
         this.title = title;
-        this.overview = overview;
-        this.icon = icon;
-        this.color = color;
-        this.onClick = onclick;
     }
 
     public String getTitle() {
@@ -47,28 +52,27 @@ public class LinkItem {
         this.title = title;
     }
 
-    public LinkItem setOverview(String overview) {
-        this.overview = overview;
-        return this;
+    public List<Object> getItems() {
+        return items;
     }
 
-    public int getIcon() {
-        return icon;
+    public void setItems(List<Object> items) {
+        this.items = items;
     }
 
-    public void setIcon(int icon) {
-        this.icon = icon;
+    public boolean isShowDividers() {
+        return showDividers;
     }
 
-    public int getColor() {
-        return color;
+    public void setShowDividers(boolean showDividers) {
+        this.showDividers = showDividers;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public boolean isHorizontal() {
+        return isHorizontal;
     }
 
-    public void onClick(){
-        if (onClick != null) onClick.run();
+    public void setHorizontal(boolean horizontal) {
+        isHorizontal = horizontal;
     }
 }

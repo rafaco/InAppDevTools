@@ -21,7 +21,6 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
@@ -44,17 +43,15 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
+import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;

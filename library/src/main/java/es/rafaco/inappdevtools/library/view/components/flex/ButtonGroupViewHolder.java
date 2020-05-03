@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 
 public class ButtonGroupViewHolder extends FlexibleViewHolder {
@@ -34,12 +33,6 @@ public class ButtonGroupViewHolder extends FlexibleViewHolder {
     private final TextView groupTitle;
     LinearLayout groupContainer;
     private ViewGroup viewGroup;
-
-    public ButtonGroupViewHolder(View view) {
-        super(view);
-        groupTitle = view.findViewById(R.id.group_title);
-        groupContainer = view.findViewById(R.id.group_container);
-    }
 
     public ButtonGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
