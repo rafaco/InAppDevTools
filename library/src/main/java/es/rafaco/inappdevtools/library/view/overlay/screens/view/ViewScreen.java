@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
@@ -44,13 +45,16 @@ import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
+import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
+import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.flex.ImageData;
+import es.rafaco.inappdevtools.library.view.components.flex.ListData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -81,17 +85,47 @@ public class ViewScreen extends Screen {
     }
 
     @Override
+    protected void onStop() {
+    }
+
+    @Override
+    protected void onDestroy() {
+    }
+
+    @Override
     protected void onResume() {
         List<Object> data = initData();
         initAdapter(data);
     }
 
+    private void initAdapter(List<Object> data) {
+        adapter = new FlexibleAdapter(2, data);
+        recyclerView = bodyView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(adapter);
+    }
+
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
+        
+        data.add("");
+        data.add("Components inspector");
+        ActivityTracker tracker = IadtController.get().getActivityTracker();
+        final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
+        addActivity(data, tracker);
+        addFragments(data, currentActivityUuuid);
+        addLogButtons(data);
 
-
+        data.add("");
         data.add("Layout inspector");
-        data.add(new RunButton("Select element",
+        addVerticalButtons(data);
+        addImage(data);
+
+        return data;
+    }
+
+    private void addVerticalButtons(List<Object> data) {
+        List<Object> verticalItems = new ArrayList<>();
+        verticalItems.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
                     @Override
@@ -100,21 +134,62 @@ public class ViewScreen extends Screen {
                         PandoraBridge.select();
                     }
                 }));
-        data.add(new RunButton("Browse hierarchy",
-                R.drawable.ic_layers_white_24dp, new Runnable() {
+        verticalItems.add(new RunButton("Browse hierarchy",
+                        R.drawable.ic_layers_white_24dp, new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewScreen.this.getScreenManager().hide();
+                        PandoraBridge.hierarchy();
+                    }
+                }));
+
+        List<RunButton> horizontalItems = new ArrayList<>();
+        horizontalItems.add(new RunButton("Rule",
+                R.drawable.ic_format_line_spacing_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewScreen.this.getScreenManager().hide();
+                        PandoraBridge.measure();
+                    }
+                }));
+        horizontalItems.add(new RunButton("Grid",
+                R.drawable.ic_grid_on_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        PandoraBridge.grid();
+                    }
+                }));
+        verticalItems.add(new ButtonGroupData(horizontalItems));
+
+        verticalItems.add(new RunButton( "Take Screenshot",
+                R.drawable.ic_add_a_photo_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().takeScreenshot();
+                    }
+                }));
+
+        data.add(new ListData(verticalItems));
+    }
+
+    private void addImage(List<Object> data) {
+        Bitmap bitmap = ScreenshotUtils.getBitmap();
+        ImageData image = new ImageData(bitmap);
+        //image.setHeight((int) UiUtils.getPixelsFromDp(getContext(), 10));
+        image.setPerformer(new Runnable() {
             @Override
             public void run() {
                 ViewScreen.this.getScreenManager().hide();
-                PandoraBridge.hierarchy();
+                PandoraBridge.select();
             }
-        }));
+        });
+        data.add(image);
+    }
 
-
-        data.add("");
-        data.add("Components inspector");
-        ActivityTracker tracker = IadtController.get().getActivityTracker();
-        final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
-
+    private void addActivity(List<Object> data, ActivityTracker tracker) {
         String activityOverview = "";
         activityOverview += "Creation time: " + tracker.getCurrentActivityStartupTime()
                 + " ("+ tracker.getCurrentActivityCreationElapsed() + ")";
@@ -127,7 +202,9 @@ public class ViewScreen extends Screen {
 
         DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(tracker.getCurrentName())
                 .setIcon(R.string.gmd_view_carousel)
-                .setExpandable(false)
+                .setOverview(tracker.getCurrentHistory().getFormattedLastEvent())
+                .setExpandable(true)
+                .setExpanded(false)
                 .add(activityOverview);
 
         final String activitySrcPath = getSourcesManager()
@@ -182,7 +259,9 @@ public class ViewScreen extends Screen {
             );
         }
         data.add(activityDataBuilder.build());
+    }
 
+    private void addFragments(List<Object> data, final long currentActivityUuuid) {
         //Fragments
         FragmentTracker fragmentTracker = IadtController.get().getFragmentTracker();
         LinkedHashMap<Long, FragmentTrack> currentActivityHistory = fragmentTracker.getCurrentActivityHistory();
@@ -209,8 +288,9 @@ public class ViewScreen extends Screen {
                         }
                     }).setNavCount(currentActivityHistory.size()));
         }
+    }
 
-
+    private void addLogButtons(List<Object> data) {
         //Logs links (TODO)
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
         data.add(new RunButton(
@@ -251,62 +331,9 @@ public class ViewScreen extends Screen {
                                 LogScreen.buildParams(uiFilter));
                     }
                 }));
-
-
-        data.add("");
-        data.add("Other tools");
-        data.add(new RunButton("Rule",
-                R.drawable.ic_format_line_spacing_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ViewScreen.this.getScreenManager().hide();
-                        PandoraBridge.measure();
-                    }
-                }));
-        data.add(new RunButton("Grid",
-                R.drawable.ic_grid_on_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        PandoraBridge.grid();
-                    }
-                }));
-        data.add(new RunButton( "Take Screenshot",
-                R.drawable.ic_add_a_photo_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().takeScreenshot();
-                    }
-                }));
-
-        data.add(new RunButton("All Screenshots",
-                R.drawable.ic_photo_library_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);
-                    }
-                }));
-
-        return data;
     }
 
     private SourcesManager getSourcesManager() {
         return IadtController.get().getSourcesManager();
-    }
-
-    private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(2, data);
-        recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onStop() {
-    }
-
-    @Override
-    protected void onDestroy() {
     }
 }
