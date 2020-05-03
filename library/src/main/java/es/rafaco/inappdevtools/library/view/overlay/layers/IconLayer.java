@@ -69,9 +69,13 @@ public class IconLayer extends Layer {
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
+        
+        //Initial position is on the right border close to top bar
         Point szWindow = UiUtils.getDisplaySize(getView().getContext());
+        int iconSize = manager.getContext().getResources()
+                .getDimensionPixelSize(R.dimen.iadt_shape_icon_size);
         params.x = szWindow.x;
-        params.y = 120;
+        params.y = (szWindow.y - iconSize) / 10;
 
         return params;
     }
