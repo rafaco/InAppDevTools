@@ -40,6 +40,7 @@ public class DocumentSectionData {
     private int icon;
     private String overview;
     private List<DocumentEntryData> entries;
+    private List<Object> internalData;
 
     //Extract to ComplexCardData
     private List<RunButton> buttons;
@@ -54,6 +55,7 @@ public class DocumentSectionData {
         this.entries = builder.entries;
         this.isExpandable = builder.isExpandable;
         this.isExpanded = builder.isExpanded;
+        this.internalData = builder.internalData;
     }
 
     public String getTitle() {
@@ -104,6 +106,14 @@ public class DocumentSectionData {
         isExpanded = expanded;
     }
 
+    public List<Object> getInternalData() {
+        return internalData;
+    }
+
+    public void setInternalData(List<Object> internalData) {
+        this.internalData = internalData;
+    }
+
     public String entriesToString(){
         String result = "";
         for (DocumentEntryData entry : entries){
@@ -135,6 +145,7 @@ public class DocumentSectionData {
         private List<DocumentEntryData> entries;
         private boolean isExpandable = true;
         private boolean isExpanded;
+        private List<Object> internalData;
 
         public Builder() {
             this("");
@@ -220,6 +231,11 @@ public class DocumentSectionData {
 
         public Builder setExpanded(boolean isExpanded) {
             this.isExpanded = isExpanded;
+            return this;
+        }
+
+        public Builder setInternalData(List<Object> internalData) {
+            this.internalData = internalData;
             return this;
         }
 

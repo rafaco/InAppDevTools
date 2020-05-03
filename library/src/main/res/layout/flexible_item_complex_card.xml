@@ -92,7 +92,7 @@
                     android:gravity="end"
                     android:layout_margin="4dp"
                     style="@style/TextCondensedBig"
-                    android:textColor="@color/iadt_text_low"
+                    android:textColor="@color/iadt_text_high"
                     tools:text="Overview"/>
 
             </RelativeLayout>
@@ -120,6 +120,18 @@
                     tools:text="Content, content and more content\nand a bit more"/>
 
             </LinearLayout>
+
+            <View
+                android:id="@+id/internal_separator"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                style="@style/horizontal_separator"/>
+
+            <FrameLayout
+                android:id="@+id/internal_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
 
             <View
                 android:id="@+id/button_separator"

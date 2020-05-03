@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -36,14 +35,13 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.flex.listener.OnlyOneExpandedListener;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 
 public abstract class AbstractDocumentScreen extends Screen {
     private FlexibleAdapter adapter;
-    private int expandedPosition = -1;
+    private OnlyOneExpandedListener helper;
 
     public AbstractDocumentScreen(ScreenManager manager) {
         super(manager);
@@ -95,34 +93,10 @@ public abstract class AbstractDocumentScreen extends Screen {
 
     private void initAdapter(List<Object> data) {
         adapter = new FlexibleAdapter(3, data);
-        adapter.setOnItemActionListener(new FlexibleAdapter.OnItemActionListener() {
-            @Override
-            public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
-                return toggleExpandedPosition(position);
-            }
-        });
+        helper = new OnlyOneExpandedListener(adapter);
+
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
-    }
-
-    public boolean toggleExpandedPosition(int position){
-        int previousPosition = expandedPosition;
-        if (previousPosition == position){
-            //Collapse currently selected
-            expandedPosition = -1;
-            return false;
-        }
-        else{
-            if (previousPosition >= 0){
-                //Collapse previously selected
-                DocumentSectionData previousData = (DocumentSectionData) adapter.getItems().get(previousPosition);
-                previousData.setExpanded(false);
-                adapter.notifyItemChanged(previousPosition);
-            }
-            //Expand current selection
-            expandedPosition = position;
-            return true;
-        }
     }
 
     @Override

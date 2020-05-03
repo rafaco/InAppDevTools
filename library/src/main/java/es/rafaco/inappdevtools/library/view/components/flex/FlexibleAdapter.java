@@ -191,7 +191,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         if (onItemActionListener != null) {
             return onItemActionListener.onItemAction(viewHolder, view, position, id);
         }
-        return false;
+        return null;
     }
 
     //endregion
