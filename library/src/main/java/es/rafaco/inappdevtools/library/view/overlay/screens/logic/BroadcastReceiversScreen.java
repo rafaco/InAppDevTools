@@ -70,7 +70,7 @@ public class BroadcastReceiversScreen extends AbstractFlexibleScreen {
 
         List<ResolveInfo> runningItems = RunningBroadcastReceiversUtils.getList();
 
-        if (runningItems.size() == 0){
+        if (runningItems.isEmpty()){
             String title = "No running providers";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)

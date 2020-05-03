@@ -66,7 +66,7 @@ public class ProcessesScreen extends AbstractFlexibleScreen {
 
         List<ActivityManager.RunningAppProcessInfo> runningItems = RunningProcessesUtils.getList();
 
-        if (runningItems.size() == 0){
+        if (runningItems.isEmpty()){
             String title = "No running processes, that's weird :(";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)

@@ -71,7 +71,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
 
         List<ActivityManager.RunningTaskInfo> runningItems = RunningTasksUtils.getList();
 
-        if (runningItems.size() == 0){
+        if (runningItems.isEmpty()){
             String title = "No running tasks, that's weird :(";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)

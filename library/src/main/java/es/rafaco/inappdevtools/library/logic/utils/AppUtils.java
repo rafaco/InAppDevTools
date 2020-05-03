@@ -196,14 +196,7 @@ public class AppUtils {
     }
 
     public static boolean isForegroundImportance(Context context){
-        List<ActivityManager.RunningAppProcessInfo> processes = RunningProcessesUtils.getList();
-        for (ActivityManager.RunningAppProcessInfo process : processes) {
-            int currentImportance = process.importance;
-            int foregroundImportance = ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
-            boolean isForeground = currentImportance <= foregroundImportance;
-            if (isForeground) return true;
-        }
-        return false;
+        return RunningProcessesUtils.isAppForeground();
     }
 
     public static boolean isLaunchedFromHistory(Intent intent){

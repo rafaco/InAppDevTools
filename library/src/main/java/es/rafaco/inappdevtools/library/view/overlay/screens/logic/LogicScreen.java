@@ -129,7 +129,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
+                        OverlayService.performNavigation(ThreadsScreen.class);
                     }
                 }).setNavCount(RunningThreadsUtils.getCount()));
 

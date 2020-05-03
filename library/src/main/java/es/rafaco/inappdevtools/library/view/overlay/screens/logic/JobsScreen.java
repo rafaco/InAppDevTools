@@ -81,7 +81,7 @@ public class JobsScreen extends AbstractFlexibleScreen {
 
         List<JobInfo> serviceInfos = RunningJobsUtils.getList();
 
-        if (serviceInfos == null || serviceInfos.size() == 0){
+        if (serviceInfos == null || serviceInfos.isEmpty()){
             String title = "No pending Jobs";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)

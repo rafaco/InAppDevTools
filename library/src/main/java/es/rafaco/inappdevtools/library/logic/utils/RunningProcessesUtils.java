@@ -106,6 +106,17 @@ public class RunningProcessesUtils {
         return contentBuffer.toString();
     }
 
+    public static boolean isAppForeground(){
+        List<ActivityManager.RunningAppProcessInfo> processes = RunningProcessesUtils.getList();
+        for (ActivityManager.RunningAppProcessInfo process : processes) {
+            int currentImportance = process.importance;
+            int foregroundImportance = ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+            boolean isForeground = currentImportance <= foregroundImportance;
+            if (isForeground) return true;
+        }
+        return false;
+    }
+
     private static String getImportanceString(ActivityManager.RunningAppProcessInfo info) {
         String importance = info.importance + " ";
         if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {

@@ -70,7 +70,7 @@ public class ServicesScreen extends AbstractFlexibleScreen {
 
         List<ActivityManager.RunningServiceInfo> serviceInfos = RunningServicesUtils.getList();
 
-        if (serviceInfos.size() == 0){
+        if (serviceInfos.isEmpty()){
             String title = "No running services";
             DocumentSectionData.Builder noServiceDataBuilder = new DocumentSectionData.Builder(title)
                     //.setIcon(R.string.gmd_view_carousel)

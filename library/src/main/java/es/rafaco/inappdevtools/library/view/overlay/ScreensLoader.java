@@ -41,6 +41,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ProcessesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ServicesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.TasksScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ThreadsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.FragmentsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -117,6 +118,7 @@ public class ScreensLoader {
         //screenManager.registerScreen(JobsScreen.class);
         screenManager.registerScreen(ProcessesScreen.class);
         screenManager.registerScreen(TasksScreen.class);
+        screenManager.registerScreen(ThreadsScreen.class);
 
         //HISTORY
         screenManager.registerScreen(HistoryScreen.class);
