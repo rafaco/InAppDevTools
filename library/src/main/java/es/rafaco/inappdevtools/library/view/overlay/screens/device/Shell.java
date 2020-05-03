@@ -63,7 +63,7 @@ public class Shell {
             process = Runtime.getRuntime().exec(command);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuffer output = new StringBuffer();
+            StringBuilder output = new StringBuilder();
             String line;
             while (!isCancelled && (line = reader.readLine())!= null) {
                 output.append(line + Humanizer.newLine());
@@ -76,7 +76,7 @@ public class Shell {
             InputStream errorStream = process.getErrorStream();
             if (errorStream!=null){
                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-                StringBuffer errorOutput = new StringBuffer();
+                StringBuilder errorOutput = new StringBuilder();
                 String errorLine;
                 while (!isCancelled && (errorLine = errorReader.readLine())!= null) {
                     errorOutput.append(errorLine + Humanizer.newLine());

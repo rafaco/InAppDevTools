@@ -26,16 +26,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningThreadGroupsUtils {
 
     private RunningThreadGroupsUtils() { throw new IllegalStateException("Utility class"); }
-
-    private static Context getContext(){
-        return IadtController.get().getContext();
-    }
 
     public static List<ThreadGroup> getList() {
         List<ThreadGroup> result = new ArrayList<>();
@@ -67,35 +62,35 @@ public class RunningThreadGroupsUtils {
     }
 
     public static String getContent(ThreadGroup info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuilder = new StringBuilder();
 
-        contentBuffer.append("Name: " + info.getName());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("Name: " + info.getName());
+        contentBuilder.append(Humanizer.newLine());
 
         ThreadGroup parent = info.getParent();
         boolean isRoot = parent!=null;
-        contentBuffer.append("Parent group: " + (!isRoot ? "null (root)" : parent.getName()));
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("Parent group: " + (!isRoot ? "null (root)" : parent.getName()));
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("Child groups count: " + info.activeGroupCount());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("Child groups count: " + info.activeGroupCount());
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("Threads count: " + info.activeCount());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("Threads count: " + info.activeCount());
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("MaxPriority: " + info.getMaxPriority());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("MaxPriority: " + info.getMaxPriority());
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("isDaemon: " + info.isDaemon());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("isDaemon: " + info.isDaemon());
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("isDestroyed: " + info.isDestroyed());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("isDestroyed: " + info.isDestroyed());
+        contentBuilder.append(Humanizer.newLine());
 
-        contentBuffer.append("toString(): " + info.toString());
-        contentBuffer.append(Humanizer.newLine());
+        contentBuilder.append("toString(): " + info.toString());
+        contentBuilder.append(Humanizer.newLine());
 
-        return contentBuffer.toString();
+        return contentBuilder.toString();
     }
 
     public static String getString() {

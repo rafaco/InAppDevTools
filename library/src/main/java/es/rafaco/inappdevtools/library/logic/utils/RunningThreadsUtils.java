@@ -19,24 +19,17 @@
 
 package es.rafaco.inappdevtools.library.logic.utils;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningThreadsUtils {
 
     private RunningThreadsUtils() { throw new IllegalStateException("Utility class"); }
-
-    private static Context getContext(){
-        return IadtController.get().getContext();
-    }
 
     public static List<Thread> getList() {
         return getAllThreads();
@@ -55,30 +48,10 @@ public class RunningThreadsUtils {
     }
 
     public static String getContent(Thread info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append(ThreadUtils.formatThread(info))
                 .append(Humanizer.newLine());
-
-        /*contentBuffer.append("PID: " + info.pid);
-        contentBuffer.append(Humanizer.newLine());
-
-        contentBuffer.append("UID: " + info.uid);
-        contentBuffer.append(Humanizer.newLine());
-
-        contentBuffer.append("Importance: " + getImportanceString(info));
-        contentBuffer.append(Humanizer.newLine());
-
-        contentBuffer.append("Name: " + info.processName);
-        contentBuffer.append(Humanizer.newLine());
-
-        for (String pkg : info.pkgList) {
-            contentBuffer.append("Pkg: ").append(pkg).append(Humanizer.newLine());
-        }
-
-        contentBuffer.append("Memory:");
-        contentBuffer.append(Humanizer.newLine());
-        contentBuffer.append(getMemoryInfoFormatted(info));*/
 
         return contentBuffer.toString();
     }

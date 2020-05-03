@@ -84,7 +84,7 @@ public class RunningContentProvidersUtils {
     }
 
     public static String getContent(ProviderInfo info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("Exported: " + info.exported);
         contentBuffer.append(Humanizer.newLine());

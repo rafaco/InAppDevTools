@@ -30,9 +30,8 @@ public class ListData {
     boolean isHorizontal = false;
 
     public ListData(Object item) {
-        ArrayList<Object> items = new ArrayList<>();
+        this.items = new ArrayList<>();
         items.add(item);
-        this.items = items;
     }
 
     public ListData(List<Object> items) {

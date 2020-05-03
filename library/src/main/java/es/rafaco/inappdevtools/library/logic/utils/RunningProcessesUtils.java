@@ -81,7 +81,7 @@ public class RunningProcessesUtils {
     }
 
     public static String getContent(ActivityManager.RunningAppProcessInfo info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("PID: " + info.pid);
         contentBuffer.append(Humanizer.newLine());
@@ -152,7 +152,7 @@ public class RunningProcessesUtils {
     }
 
     private static String getMemoryInfoFormatted(Debug.MemoryInfo debugMemoryInfo) {
-        StringBuffer resultBuffer = new StringBuffer();
+        StringBuilder resultBuffer = new StringBuilder();
         resultBuffer.append(String.format("  Dalvik: %s pss, %s shared, %s private",
                 Humanizer.parseKb(debugMemoryInfo.dalvikPss),
                 Humanizer.parseKb(debugMemoryInfo.dalvikSharedDirty),

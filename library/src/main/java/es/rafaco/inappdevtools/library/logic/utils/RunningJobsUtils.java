@@ -73,7 +73,7 @@ public class RunningJobsUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static String getServiceContent(JobInfo info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("Id: " + info.getId());
         contentBuffer.append(Humanizer.newLine());

@@ -85,7 +85,7 @@ public class RunningServicesUtils {
     }
 
     public static String getContent(ActivityManager.RunningServiceInfo info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("Started: " + info.started);
         contentBuffer.append(Humanizer.newLine());

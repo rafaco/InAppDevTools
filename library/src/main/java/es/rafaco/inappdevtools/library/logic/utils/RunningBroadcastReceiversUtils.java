@@ -67,7 +67,7 @@ public class RunningBroadcastReceiversUtils {
         ActivityInfo activityInfo = resolveInfo.activityInfo;
         //TODO: resolveInfo
 
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("Exported: " + activityInfo.exported);
         contentBuffer.append(Humanizer.newLine());

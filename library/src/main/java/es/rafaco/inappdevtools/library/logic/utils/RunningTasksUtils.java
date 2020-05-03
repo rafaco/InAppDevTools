@@ -82,7 +82,7 @@ public class RunningTasksUtils {
     }
 
     public static String getContent(ActivityManager.RunningTaskInfo info) {
-        StringBuffer contentBuffer = new StringBuffer();
+        StringBuilder contentBuffer = new StringBuilder();
 
         contentBuffer.append("ID: " + info.id);
         contentBuffer.append(Humanizer.newLine());

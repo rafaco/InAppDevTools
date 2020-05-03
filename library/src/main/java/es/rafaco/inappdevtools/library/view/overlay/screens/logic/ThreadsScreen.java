@@ -108,7 +108,7 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
                 ));
             }
             CollapsibleListData collapsible = new CollapsibleListData(internalData);
-            collapsible.setOverview(info.activeCount() + " threads");
+            collapsible.setOverview(runningItems.size() + " threads");
             List<Object> internalData2 = new ArrayList<>();
             internalData2.add(collapsible);
             groupDataBuilder.setInternalData(internalData2);

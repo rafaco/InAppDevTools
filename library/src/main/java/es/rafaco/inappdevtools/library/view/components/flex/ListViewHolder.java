@@ -53,17 +53,15 @@ public class ListViewHolder extends FlexibleViewHolder {
     }
 
     private void bindOrientation(ListData data) {
-        //TODO
-        groupContainer.setOrientation(LinearLayout.VERTICAL);
+        groupContainer.setOrientation(data.isHorizontal
+                ? LinearLayout.HORIZONTAL
+                : LinearLayout.VERTICAL);
     }
 
     private void bindDividers(ListData data) {
-        if (data.isShowDividers()) {
-            groupContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        }
-        else{
-            groupContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
-        }
+        groupContainer.setShowDividers(data.isShowDividers()
+                ? LinearLayout.SHOW_DIVIDER_MIDDLE
+                : LinearLayout.SHOW_DIVIDER_NONE);
     }
 
     private void bindTitle(ListData data) {
