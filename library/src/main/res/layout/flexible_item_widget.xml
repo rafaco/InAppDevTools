@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 style="@style/TextCondensedMedium"
                 android:textColor="@color/iadt_text_header"
-                tools:text="Title"/>
+                tools:text="TITLE"/>
 
             <TextView
                 android:id="@+id/main_content"
@@ -55,7 +55,6 @@
                 android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:layout_marginTop="-3dp"
                 android:lineSpacingMultiplier="0.9"
                 style="@style/TextCondensedExtraBig"
                 android:textColor="@color/iadt_text_high"
@@ -67,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:layout_marginTop="-3dp"
                 android:lineSpacingMultiplier="0.9"
                 style="@style/TextCondensedMedium"
                 android:textColor="@color/iadt_text_low"
