@@ -52,6 +52,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
@@ -213,8 +214,17 @@ public class CrashDetailScreen extends Screen {
         final long logId = IadtController.getDatabase().friendlyDao()
                 .findLogIdByCrashId(crash.getUid());
 
-        long crashSessionId = IadtController.getDatabase().sessionDao()
-                .findByCrashId(crash.getUid()).getUid();
+        Session crashSession = IadtController.getDatabase().sessionDao()
+                .findByCrashId(crash.getUid());
+
+        if(crashSession==null){
+            reproStepsButton.setVisibility(View.GONE);
+            logcatButton.setVisibility(View.GONE);
+            return;
+        }
+
+        //TODO: replace by crash.getSessionId()
+        long crashSessionId = crashSession.getUid();
         final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         stepsFilter.setSessionById(crashSessionId);
         reproStepsButton.setOnClickListener(new View.OnClickListener() {

@@ -52,6 +52,9 @@ public interface SessionDao {
     @Query("SELECT * FROM session ORDER BY uid DESC LIMIT 1")
     Session getLast();
 
+    @Query("SELECT uid FROM session ORDER BY uid DESC LIMIT 1")
+    long getLastId();
+
     @Query("SELECT COUNT(*) FROM session")
     int count();
 

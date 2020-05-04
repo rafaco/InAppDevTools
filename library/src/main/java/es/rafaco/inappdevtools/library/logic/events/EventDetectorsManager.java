@@ -109,6 +109,9 @@ public class EventDetectorsManager {
     }
 
     private void stopAll() {
+        if (eventDetectors==null || eventDetectors.isEmpty()){
+            return;
+        }
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "EventDetector stopping all detectors");
         for (EventDetector eventDetector : eventDetectors) {

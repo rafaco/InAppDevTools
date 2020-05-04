@@ -56,6 +56,8 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
+    private static final int MAX_TRACES_PER_EXCEPTION = 100;
+    public static final int MAX_STRING_LENGTH = 1000000;
     private final Thread.UncaughtExceptionHandler previousHandle;
     private final Context context;
     private long currentCrashId;
@@ -84,7 +86,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             printLogcatError(thread, crash);
             long crashId = storeCrash(crash);
             crash.setUid(crashId);
+
             long sessionId = updateSession(crashId);
+            crash.setSessionId(sessionId);
+            db.crashDao().update(crash);
             PendingCrashUtil.savePending();
 
             long screenshotId = saveScreenshot(crash);
@@ -159,7 +164,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 crash.setCauseExceptionAt(cause.getStackTrace()[0].toString());
             }
         }
-        crash.setStacktrace(Log.getStackTraceString(ex));
+
+        String stacktrace = Log.getStackTraceString(ex);
+        if (stacktrace.length()>MAX_STRING_LENGTH){
+            Log.w(Iadt.TAG, String.format("CrashHandle: Truncated stacktrace from %s to %s.",
+                    stacktrace.length(), MAX_STRING_LENGTH));
+            stacktrace = Humanizer.truncate(stacktrace, MAX_STRING_LENGTH);
+        }
+        crash.setStacktrace(stacktrace);
+
         crash.setThreadId(thread.getId());
         crash.setMainThread(ThreadUtils.isMain(thread));
         crash.setThreadName(thread.getName());
@@ -221,8 +234,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (isDebug()) Log.d(Iadt.TAG, "Storing stacktrace");
         List<Sourcetrace> traces = new ArrayList<>();
         StackTraceElement[] stackTrace = ex.getStackTrace();
+        boolean needTruncation = stackTrace.length > MAX_TRACES_PER_EXCEPTION;
+        int tracesToAdd = stackTrace.length;
+        if (needTruncation) {
+            Log.w(Iadt.TAG, String.format("CrashHandle: Truncated exception traces from %s to %s.",
+                    tracesToAdd, MAX_TRACES_PER_EXCEPTION));
+            tracesToAdd = MAX_TRACES_PER_EXCEPTION;
+        }
         int i=0;
-        for (; i<stackTrace.length; i++){
+        for (; i<tracesToAdd; i++){
             StackTraceElement current = stackTrace[i];
             Sourcetrace trace = new Sourcetrace();
             trace.setMethodName(current.getMethodName());
@@ -235,10 +255,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             trace.setExtra("exception");
             traces.add(trace);
         }
+        //TODO: add truncated trace to show it has been truncated
+        //if (needTruncation) traces.add(new Sourcetrace().isTruncated());
 
         if (ex.getCause()!=null){
             StackTraceElement[] causeTrace = ex.getCause().getStackTrace();
-            for (int j=0; j<causeTrace.length; j++){
+            tracesToAdd = causeTrace.length;
+            needTruncation = causeTrace.length > MAX_TRACES_PER_EXCEPTION;
+            if (needTruncation) {
+                Log.w(Iadt.TAG, String.format("CrashHandle: Truncated cause traces from %s to %s.",
+                        tracesToAdd, MAX_TRACES_PER_EXCEPTION));
+                tracesToAdd = MAX_TRACES_PER_EXCEPTION;
+            }
+            for (int j=0; j<tracesToAdd; j++){
                 StackTraceElement current = causeTrace[j];
                 Sourcetrace trace = new Sourcetrace();
                 trace.setMethodName(current.getMethodName());
@@ -252,6 +281,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 traces.add(trace);
             }
         }
+        //TODO: add truncated trace to show it has been truncated
+        //if (needTruncation) traces.add(new Sourcetrace().isTruncated());
 
         db.sourcetraceDao().insertAll(traces);
         if (isDebug()) Log.d(Iadt.TAG, "Stored " + traces.size() + " traces");

@@ -75,7 +75,6 @@
                             android:drawableTint="@color/iadt_primary"
                             android:backgroundTint="@color/iadt_surface_top"
                             tools:text="Button with icon" />
-
                 </LinearLayout>
 
         </RelativeLayout>
