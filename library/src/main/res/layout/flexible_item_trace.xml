@@ -36,11 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        style="@style/IadtCard.Medium">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,7 +57,8 @@
                 android:id="@+id/details"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/card_margin"
+                android:layout_marginHorizontal="@dimen/card_padding_horizontal"
+                android:layout_marginVertical="@dimen/card_padding_vertical"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/icon"
                 android:orientation="vertical">

@@ -126,19 +126,18 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 });
                 
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
-                }
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
+
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
                 UiUtils.setCardViewClickable(cardView, false);
                 cardView.setOnClickListener(null);
+
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(0);
-                }
+                cardView.setCardElevation(0);
+
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
                 navIcon.setVisibility(View.GONE);
             }
