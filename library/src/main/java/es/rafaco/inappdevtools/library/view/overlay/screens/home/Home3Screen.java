@@ -189,7 +189,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
             Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
             repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
         }
-        WidgetData sourcesData = new WidgetData.Builder("Source Code")
+        WidgetData sourcesData = new WidgetData.Builder("Sources")
                 .setMainContent(repoMain)
                 .setSecondContent(repoSecond)
                 .setPerformer(new Runnable() {

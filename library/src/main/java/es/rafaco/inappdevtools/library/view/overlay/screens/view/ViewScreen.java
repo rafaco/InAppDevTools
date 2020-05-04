@@ -106,26 +106,26 @@ public class ViewScreen extends Screen {
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
-        
+
         data.add("");
-        data.add("Components inspector");
+        data.add("Layout");
+        addImage(data);
+        addVerticalButtons(data);
+
+        data.add("");
+        data.add("Components");
         ActivityTracker tracker = IadtController.get().getActivityTracker();
         final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
         addActivity(data, tracker);
         addFragments(data, currentActivityUuuid);
         addLogButtons(data);
 
-        data.add("");
-        data.add("Layout inspector");
-        addVerticalButtons(data);
-        addImage(data);
-
         return data;
     }
 
     private void addVerticalButtons(List<Object> data) {
         List<Object> verticalItems = new ArrayList<>();
-        verticalItems.add(new RunButton("Select element",
+        /*verticalItems.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
                     @Override
@@ -133,7 +133,7 @@ public class ViewScreen extends Screen {
                         ViewScreen.this.getScreenManager().hide();
                         PandoraBridge.select();
                     }
-                }));
+                }));*/
         verticalItems.add(new RunButton("Browse hierarchy",
                         R.drawable.ic_layers_white_24dp, new Runnable() {
                     @Override
@@ -142,7 +142,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.hierarchy();
                     }
                 }));
-
+        
         List<RunButton> horizontalItems = new ArrayList<>();
         horizontalItems.add(new RunButton("Rule",
                 R.drawable.ic_format_line_spacing_white_24dp,

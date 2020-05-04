@@ -90,7 +90,7 @@ public class WidgetViewHolder extends FlexibleViewHolder {
 
             itemView.setActivated(true);
 
-            title.setText(data.getTitle());
+            title.setText(data.getTitle().toUpperCase());
             mainContent.setText(data.getMainContent());
             secondContent.setText(data.getSecondContent());
             secondContent.setVisibility(TextUtils.isEmpty(data.getSecondContent()) ? View.GONE : View.VISIBLE);

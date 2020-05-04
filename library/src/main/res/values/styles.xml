@@ -3,9 +3,9 @@
 
     <!-- Base application theme. -->
     <style name="LibTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorPrimary">@color/material_blue_600</item>
-        <item name="colorPrimaryDark">@color/material_blue_900</item>
-        <item name="colorAccent">@color/material_blue_200</item>
+        <item name="colorPrimary">@color/material_light_blue_600</item>
+        <item name="colorPrimaryDark">@color/material_light_blue_900</item>
+        <item name="colorAccent">@color/material_light_blue_A200</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">@color/rally_white</item>
@@ -21,7 +21,7 @@
     <style name="LibActionBarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="android:textColorPrimary">@color/material_white</item>
         <item name="colorControlNormal">@color/material_white</item>
-        <item name="colorControlHighlight">@color/material_blue_200</item>
+        <item name="colorControlHighlight">@color/material_light_blue_200</item>
         <item name="android:gravity">center_vertical</item>
         <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
         <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
@@ -144,7 +144,7 @@
         <item name="contentPaddingRight">0dp</item>
         <item name="cardElevation">3dp</item>
         <item name="cardMaxElevation">3dp</item>
-        <item name="cardBackgroundColor">@color/iadt_surface_medium</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
     </style>
 
 

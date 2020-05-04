@@ -48,7 +48,7 @@ public class SourceCodeScreen extends AbstractFlexibleScreen {
 
     @Override
     public String getTitle() {
-        return "Source Code";
+        return "Sources";
     }
 
     @Override

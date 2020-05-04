@@ -58,7 +58,7 @@
                 android:textStyle="bold"
                 android:background="@color/iadt_background"
                 tools:text="W"
-                tools:background="@color/material_blue_200"/>
+                tools:background="@color/material_light_blue_200"/>
 
             <RelativeLayout
                 android:id="@+id/header"
