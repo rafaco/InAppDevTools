@@ -62,8 +62,6 @@ public class EventDetectorsManager {
 
         initDetectors();
         startAll();
-
-        PandoraBridge.init();
     }
 
     private void initDetectors() {

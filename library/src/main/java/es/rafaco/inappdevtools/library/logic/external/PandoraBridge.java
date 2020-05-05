@@ -20,17 +20,19 @@
 package es.rafaco.inappdevtools.library.logic.external;
 
 import android.content.Context;
+import android.util.Log;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.util.Config;
-import tech.linjiang.pandora.util.Utils;
 
 public class PandoraBridge {
 
+    private static boolean isInitialised;
     private static GridLineView gridLineView;
 
     private static Context getContext(){
@@ -38,10 +40,17 @@ public class PandoraBridge {
     }
 
     public static void init() {
-        Utils.init(getContext());
+        if (isInitialised){
+            Log.w(Iadt.TAG, "Pandora init skipped, already initialised");
+            return;
+        }
+        if (IadtController.get().isDebug())
+            Log.d(Iadt.TAG, "Pandora init");
+
+        setInterceptorListener();       //Set a listener to the network interceptor
         Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
         Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
-        setInterceptorListener();
+        isInitialised = true;
     }
 
     public static void setInterceptorListener() {
