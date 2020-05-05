@@ -276,7 +276,8 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
         WidgetData storageData = new WidgetData.Builder("Storage")
                 //.setIcon(R.string.gmd_view_carousel)
-                .setMainContent(InternalFileReader.getTotalSizeFormatted())
+                //TODO: it fails on lollipop 1
+                //.setMainContent(InternalFileReader.getTotalSizeFormatted())
                 .setSecondContent("3 DB, 4 SP & 1234 files")
                 .setPerformer(new Runnable() {
                     @Override

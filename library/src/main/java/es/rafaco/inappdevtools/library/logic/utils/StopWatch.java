@@ -19,11 +19,14 @@
 
 package es.rafaco.inappdevtools.library.logic.utils;
 
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class StopWatch {
@@ -68,5 +71,15 @@ public class StopWatch {
             }
         }
         return result;
+    }
+
+    public void finishToEvent(){
+        String result = finish();
+        FriendlyLog.log(result);
+    }
+
+    public void finishToLog(){
+        String result = finish();
+        Log.i(Iadt.TAG, result);
     }
 }
