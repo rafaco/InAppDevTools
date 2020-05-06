@@ -45,6 +45,7 @@ public class RunningContentProvidersUtils {
 
         for(ProviderInfo provider : providers){
             result += provider.authority + Humanizer.newLine();
+            result += Humanizer.prependLines(getContent(provider), "   ");
         }
         return result;
     }

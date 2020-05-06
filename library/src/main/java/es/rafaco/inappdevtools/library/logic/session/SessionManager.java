@@ -210,6 +210,10 @@ public class SessionManager {
         long firstNextDate = next.getDate();
         Friendly lastSessionLog = getFriendlyDao().getLastSessionLog(firstNextDate -1);
 
+        //TODO: research why this is needed on API 15 to prevent a crash on second execution
+        if (lastSessionLog==null){
+            return -1;
+        }
         long finishDate = lastSessionLog.getDate();
         target.setFinishDate(finishDate);
         getDao().update(target);
