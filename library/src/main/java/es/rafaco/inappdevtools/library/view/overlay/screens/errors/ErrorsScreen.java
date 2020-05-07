@@ -57,7 +57,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
-import es.rafaco.inappdevtools.library.logic.events.detectors.crash.ForcedRuntimeException;
+import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.view.utils.RecyclerViewUtils;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;

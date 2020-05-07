@@ -28,6 +28,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.crash.OldCrashInterceptor;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
@@ -43,9 +44,7 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.Activity
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ScreenChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ShakeEventDetector;
-import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
-import es.rafaco.inappdevtools.library.logic.events.detectors.crash.CrashHandler;
 
 public class EventDetectorsManager {
 
@@ -57,8 +56,7 @@ public class EventDetectorsManager {
         this.eventManager = eventManager;
         this.context = eventManager.getContext();
 
-        //TODO: Refactor into a detector
-        startCrashHandler();
+        //OldCrashInterceptor.initialise(context);
 
         initDetectors();
         startAll();
@@ -132,19 +130,5 @@ public class EventDetectorsManager {
     public void destroy() {
         stopAll();
         eventDetectors = null;
-    }
-
-
-
-    //TODO: Refactor into an isolated watcher
-    private void startCrashHandler() {
-        Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
-        if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
-            if (IadtController.get().isDebug())
-                Log.d(Iadt.TAG, "Exception handler added");
-        }else{
-            Log.w(Iadt.TAG, "Exception handler already attach on thread");
-        }
     }
 }

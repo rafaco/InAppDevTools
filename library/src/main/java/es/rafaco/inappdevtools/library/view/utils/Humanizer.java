@@ -79,6 +79,23 @@ public class Humanizer {
         return text;
     }
 
+    public static String truncateLines(String text, int maxLines, boolean addTailInfo) {
+        if (!TextUtils.isEmpty(text)){
+            String[] lines = text.split(newLine());
+            int lineCount = lines.length;
+            if (lineCount>maxLines){
+                String[] truncatedLines = Arrays.copyOfRange(lines, 0, maxLines);
+                int truncatedCount = lineCount - truncatedLines.length;
+                String result = TextUtils.join(newLine(), truncatedLines);
+                if (addTailInfo){
+                    result += newLine() + "... (Truncated " + truncatedCount + " more lines)";
+                }
+                return result;
+            }
+        }
+        return text;
+    }
+
     public static int countOcurrences(String text, String character) {
         if (TextUtils.isEmpty(text)
                 || TextUtils.isEmpty(character)

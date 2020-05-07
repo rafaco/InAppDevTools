@@ -37,16 +37,20 @@ import android.support.annotation.Nullable;
 
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
+import es.rafaco.inappdevtools.library.logic.crash.CrashInterceptor;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
 /**
- * This class initialize InAppDevTools library automatically.
- * Being a ContentProvider registered in Manifest, following onCreate method get called even before
- * the creation of the host app process, removing the requirement of override Application class
- * to start our library manually. Google Firebase libraries get initialized in the same way.
+ * This class initialize InAppDevTools library automatically. It's start deciding if it should be
+ * initialised and perform the initialisation of IadtController and our CrashInterceptor.
+ *
+ * This class extends ContentProvider because they get created before any activity and even before the creation
+ * of the host app process. This technique is also used by Google Firebase libraries, removing the
+ * need of forcing the host app to override Application class or to call any initialisation method
+ * from their activities.
  */
 public class IadtLauncher extends ContentProvider {
 
@@ -62,6 +66,36 @@ public class IadtLauncher extends ContentProvider {
     @Override
     public boolean onCreate() {
 
+        if (!shouldInitialise()){
+            return false;
+        }
+
+        Log.i(Iadt.TAG, "Iadt v" + BuildConfig.VERSION_NAME + " ENABLED");
+
+        CrashInterceptor.initialise(getContext());
+        
+        boolean libraryStarted = startLibrary();
+        /*if (libraryStarted){
+            CrashInterceptor.initialise(getContext());
+        }*/
+        return libraryStarted;
+    }
+
+    private boolean startLibrary() {
+        try {
+            new IadtController(getContext());
+            return true;
+        }
+        catch (Exception e){
+            Log.e(Iadt.TAG, "IadtLauncher: exception starting library."
+                    + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    //region [ INITIAL CHECKS ]
+
+    private boolean shouldInitialise() {
         if (!isEnabledForSdk()) {
             Log.w(Iadt.TAG, String.format("Iadt DISABLED, sdk version %s is not supported. You have to use a device with Android %s (%s) at least.", Build.VERSION.SDK_INT, MIN_SDK_INT, MIN_SDK_STRING));
             return false;
@@ -78,15 +112,13 @@ public class IadtLauncher extends ContentProvider {
             Log.i(Iadt.TAG, "Iadt DISABLED by " + extra +". Nothing started");
             return false;
         }
-        
+
         if (!isVersionMatch()) {
             Log.w(Iadt.TAG, "Iadt DISABLED, version mismatch (" + extra +
                     "). Update versions in your gradle files.");
             return false;
         }
-
-        Log.i(Iadt.TAG, "Iadt v" + BuildConfig.VERSION_NAME + " ENABLED");
-        return startLibrary();
+        return true;
     }
 
     private boolean isEnabledForSdk() {
@@ -153,18 +185,7 @@ public class IadtLauncher extends ContentProvider {
         }
     }
 
-    private boolean startLibrary() {
-        try {
-            new IadtController(getContext());
-            return true;
-        }
-        catch (Exception e){
-            Log.e(Iadt.TAG, "IadtLauncher: exception starting library."
-                    + "\n" + e.getMessage() + " - " + Log.getStackTraceString(e));
-            return false;
-        }
-    }
-
+    //endregion
 
     //region [ LEGACY METHODS FROM CONTENT PROVIDER ]
 
