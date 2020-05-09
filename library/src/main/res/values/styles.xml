@@ -87,7 +87,7 @@
     </style>
 
     <style name="elevated">
-        <item name="android:elevation" tools:targetApi="21">4dp</item>
+        <item name="android:elevation" tools:targetApi="21">12dp</item>
     </style>
 
     <style name="vertical_separator">

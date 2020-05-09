@@ -42,6 +42,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_layer_screen_top"
             android:orientation="vertical"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             style="@style/elevated">
 
             <es.rafaco.compat.ToolBar
@@ -58,7 +61,8 @@
                 android:contentInsetRight="0dp"
                 android:contentInsetEnd="0dp"
                 app:contentInsetRight="0dp"
-                app:contentInsetEnd="0dp"/>
+                app:contentInsetEnd="0dp"
+                android:backgroundTint="@android:color/transparent"/>
 
             <es.rafaco.compat.ToolBar
                 android:id="@+id/tool_toolbar"
@@ -75,6 +79,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/iadt_shape_stroke_negative"
+            android:layout_marginLeft="@dimen/iadt_shape_stroke"
+            android:layout_marginRight="@dimen/iadt_shape_stroke"
             android:layout_marginBottom="@dimen/iadt_shape_stroke">
 
             <FrameLayout
@@ -92,8 +99,6 @@
                     android:id="@+id/tool_body_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/iadt_shape_stroke"
-                    android:layout_marginRight="@dimen/iadt_shape_stroke"
                     android:orientation="vertical">
                 </FrameLayout>
             </es.rafaco.compat.NestedScrollView>
@@ -102,8 +107,6 @@
                 android:id="@+id/tool_body_container2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/iadt_shape_stroke"
-                android:layout_marginRight="@dimen/iadt_shape_stroke"
                 android:orientation="vertical">
             </FrameLayout>
 
