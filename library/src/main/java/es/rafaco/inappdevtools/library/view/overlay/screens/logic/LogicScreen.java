@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;

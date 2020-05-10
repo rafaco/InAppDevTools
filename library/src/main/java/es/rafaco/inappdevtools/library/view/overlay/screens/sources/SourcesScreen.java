@@ -42,10 +42,10 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.LinkItem;
+import es.rafaco.inappdevtools.library.view.components.items.LinkItem;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -117,7 +117,7 @@ public class SourcesScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(1, data);
+        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

@@ -27,7 +27,7 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
-import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
+import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;

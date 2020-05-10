@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens;
 
-import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 

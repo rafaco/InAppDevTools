@@ -36,9 +36,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
+import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -86,7 +86,7 @@ public class ReportScreen extends Screen {
 
 
     private void initAdapter() {
-        adapter = new FlexibleAdapter(1, new ArrayList<>());
+        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, new ArrayList<>());
         flexibleContainer = getView().findViewById(R.id.flexible_contents);
         flexibleContainer.setAdapter(adapter);
     }

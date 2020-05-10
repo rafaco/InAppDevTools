@@ -44,8 +44,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -89,7 +89,7 @@ public class InfoScreen extends Screen {
         navNext = view.findViewById(R.id.info_nav_next);
         flexibleContents = view.findViewById(R.id.flexible_contents);
 
-        adapter = new FlexibleAdapter(1, new ArrayList<>());
+        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, new ArrayList<>());
         adapter.setOnItemActionListener(new FlexibleAdapter.OnItemActionListener() {
             @Override
             public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {

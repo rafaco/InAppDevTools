@@ -46,11 +46,11 @@ import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupData;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.ImageData;
-import es.rafaco.inappdevtools.library.view.components.flex.ListData;
+import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.ImageData;
+import es.rafaco.inappdevtools.library.view.components.groups.ListData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -99,7 +99,7 @@ public class ViewScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(2, data);
+        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 2, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

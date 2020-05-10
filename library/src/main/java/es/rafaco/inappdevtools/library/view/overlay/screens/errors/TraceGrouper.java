@@ -30,9 +30,9 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.TraceGroupItem;
-import es.rafaco.inappdevtools.library.view.components.flex.TraceItemData;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
+import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
 
 public class TraceGrouper {
 
@@ -90,14 +90,14 @@ public class TraceGrouper {
         if (traceData1 == null){
             return null;
         }
-        return new FlexibleAdapter(1, traceData1);
+        return new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, traceData1);
     }
 
     public FlexibleAdapter getCauseAdapter(){
         if (traceData2 == null){
             return null;
         }
-        return new FlexibleAdapter(1, traceData2);
+        return new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, traceData2);
     }
 
 

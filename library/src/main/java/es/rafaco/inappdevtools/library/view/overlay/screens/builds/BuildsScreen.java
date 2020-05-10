@@ -36,8 +36,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -95,7 +95,7 @@ public class BuildsScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        FlexibleAdapter adapter = new FlexibleAdapter(3, data);
+        FlexibleAdapter adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

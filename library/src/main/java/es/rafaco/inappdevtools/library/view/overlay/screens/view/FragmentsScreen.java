@@ -42,8 +42,8 @@ import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -192,7 +192,7 @@ public class FragmentsScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(1, data);
+        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

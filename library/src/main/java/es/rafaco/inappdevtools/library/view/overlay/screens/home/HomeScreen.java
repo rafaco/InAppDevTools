@@ -39,7 +39,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDo
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -243,7 +243,7 @@ public class HomeScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        FlexibleAdapter adapter = new FlexibleAdapter(3, data);
+        FlexibleAdapter adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

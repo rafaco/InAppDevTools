@@ -27,8 +27,8 @@ import es.rafaco.inappdevtools.library.logic.crash.CrashGenerator;
 import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
@@ -157,7 +157,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        FlexibleAdapter presetAdapter = new FlexibleAdapter(2, data);
+        FlexibleAdapter presetAdapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 2, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
         recyclerView.setAdapter(presetAdapter);
     }
