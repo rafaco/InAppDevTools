@@ -19,8 +19,13 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
+
+//#ifdef ANDROIDX
+//@import androidx.annotation.StringRes;
+//#else
+import android.support.annotation.StringRes;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;

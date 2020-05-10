@@ -19,13 +19,20 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+//#ifdef ANDROIDX
+//@import androidx.recyclerview.widget.DividerItemDecoration;
+//@import androidx.recyclerview.widget.LinearLayoutManager;
+//@import androidx.recyclerview.widget.RecyclerView;
+//#else
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+//#endif
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;

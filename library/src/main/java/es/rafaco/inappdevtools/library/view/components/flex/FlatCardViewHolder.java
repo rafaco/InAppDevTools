@@ -20,8 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -29,6 +27,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+//#ifdef ANDROIDX
+//@import androidx.cardview.widget.CardView;
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+//#endif
 
 import java.util.List;
 
