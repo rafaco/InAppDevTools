@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.components.flex;
 
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -82,7 +81,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 return;
 
 
-            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
+            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_trace_line));
             timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
 
@@ -126,7 +125,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 });
                 
                 cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
-                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 3));
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 12));
 
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
                 navIcon.setVisibility(View.VISIBLE);
@@ -135,8 +134,8 @@ public class TraceViewHolder extends FlexibleViewHolder {
                 UiUtils.setCardViewClickable(cardView, false);
                 cardView.setOnClickListener(null);
 
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
-                cardView.setCardElevation(0);
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_medium));
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
 
                 where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
                 navIcon.setVisibility(View.GONE);

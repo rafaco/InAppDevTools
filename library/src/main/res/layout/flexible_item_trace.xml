@@ -115,9 +115,7 @@
                         style="@style/TextCondensedMedium" />
 
                 </LinearLayout>
-
             </LinearLayout>
-
         </RelativeLayout>
     </es.rafaco.compat.CardView>
 </LinearLayout>

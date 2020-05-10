@@ -58,8 +58,11 @@ public class LinkViewHolder extends FlexibleViewHolder {
         final LinkItem data = (LinkItem) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
-            int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
-            icon.setTextColor(contextualizedColor);
+            if (data.getColor()>0){
+                int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
+                icon.setTextColor(contextualizedColor);
+            }
+            icon.setVisibility(View.VISIBLE);
         }
         else{
             icon.setVisibility(View.GONE);
@@ -72,8 +75,10 @@ public class LinkViewHolder extends FlexibleViewHolder {
         }
         else{
             overview.setText(data.overview);
-            int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
-            overview.setTextColor(contextualizedColor);
+            if (data.getColor()>0) {
+                int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
+                overview.setTextColor(contextualizedColor);
+            }
             overview.setVisibility(View.VISIBLE);
         }
 

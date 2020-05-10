@@ -120,14 +120,14 @@
     </style>
 
     <style name="IadtCard.Bottom">
-        <item name="cardElevation">1dp</item>
-        <item name="cardMaxElevation">1dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
         <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
     </style>
 
     <style name="IadtCard.Medium">
-        <item name="cardElevation">3dp</item>
-        <item name="cardMaxElevation">3dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardMaxElevation">4dp</item>
         <item name="cardBackgroundColor">@color/iadt_surface_medium</item>
     </style>
 
@@ -147,12 +147,22 @@
         <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
     </style>
 
+    <style name="IadtCardFlat">
+        <item name="cardCornerRadius">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/iadt_flat_card_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/iadt_flat_card_horizontal_margin</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/iadt_surface_bottom</item>
+        <item name="backgroundTint">@color/iadt_surface_bottom</item>
+    </style>
+
 
     <style name="TextCondensedSmall">
         <item name="android:typeface">sans</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed</item>
         <item name="android:textSize">13dp</item>
-        <item name="android:textColor">@color/rally_white</item>
+        <item name="android:textColor">@color/iadt_text_high</item>
     </style>
 
     <style name="TextCondensedMedium" parent="TextCondensedSmall">
@@ -171,7 +181,7 @@
         <item name="android:typeface">monospace</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
         <item name="android:textSize">8dp</item>
-        <item name="android:textColor">@color/rally_white</item>
+        <item name="android:textColor">@color/iadt_text_high</item>
     </style>
 
     <style name="TextMonospaceMedium" parent="TextMonospaceSmall">

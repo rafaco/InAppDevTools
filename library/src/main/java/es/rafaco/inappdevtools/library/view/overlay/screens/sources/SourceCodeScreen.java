@@ -26,19 +26,10 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.components.flex.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppInfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.app.ToolsInfoScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class SourceCodeScreen extends AbstractFlexibleScreen {
 

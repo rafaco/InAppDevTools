@@ -42,6 +42,8 @@ public class FlexibleLoader {
         descriptors.add(new FlexibleItemDescriptor(SelectorData.class, SelectorViewHolder.class, R.layout.flexible_item_selector));
         descriptors.add(new FlexibleItemDescriptor(EditTextData.class, EditTextViewHolder.class, R.layout.flexible_item_edit_text));
         descriptors.add(new FlexibleItemDescriptor(OverviewData.class, OverviewViewHolder.class, R.layout.flexible_item_overview));
+        descriptors.add(new FlexibleItemDescriptor(FlatCardData.class, FlatCardViewHolder.class, R.layout.flexible_item_flat_card));
+        descriptors.add(new FlexibleItemDescriptor(RecyclerListData.class, RecyclerListViewHolder.class, R.layout.flexible_item_list_recycler));
         descriptors.add(new FlexibleItemDescriptor(DocumentSectionData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
         descriptors.add(new FlexibleItemDescriptor(WidgetData.class, WidgetViewHolder.class, R.layout.flexible_item_widget));
         descriptors.add(new FlexibleItemDescriptor(WideWidgetData.class, WidgetViewHolder.class, R.layout.flexible_item_widget));

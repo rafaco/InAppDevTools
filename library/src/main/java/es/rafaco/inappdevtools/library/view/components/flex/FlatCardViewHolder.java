@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,29 +20,26 @@
 package es.rafaco.inappdevtools.library.view.components.flex;
 
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-//#ifdef ANDROIDX
-//@import androidx.cardview.widget.CardView;
-//#else
-import android.support.v7.widget.CardView;
-//#endif
 
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ComplexCardViewHolder extends FlexibleViewHolder {
+
+public class FlatCardViewHolder extends FlexibleViewHolder {
 
     protected final CardView cardView;
     protected final TextView iconView;
@@ -56,10 +53,12 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
     protected final View internalSeparator;
     protected final FrameLayout buttonGroupContainer;
     protected final View buttonSeparator;
+    protected final RelativeLayout headerArea;
 
-    public ComplexCardViewHolder(View view, FlexibleAdapter adapter) {
+    public FlatCardViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
-        this.cardView = view.findViewById(R.id.card_view);
+        this.cardView = view.findViewById(R.id.flat_card_view);
+        this.headerArea = view.findViewById(R.id.header_area);
         this.iconView = view.findViewById(R.id.icon);
         this.titleView = view.findViewById(R.id.title);
         this.overviewView = view.findViewById(R.id.overview);
@@ -75,11 +74,17 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, final int position) {
-        final DocumentSectionData data = (DocumentSectionData) abstractData;
+        final FlatCardData data = (FlatCardData) abstractData;
         if (data!=null){
 
-            itemView.setClickable(true);
-            itemView.setActivated(true);
+            itemView.setClickable(false);
+            itemView.setActivated(false);
+
+            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(),
+                    R.color.material_error));
+            cardView.setCardElevation(UiUtils.getPixelsFromDp(cardView.getContext(), 2));
+            UiUtils.addHorizontalMargin(headerArea);
+            UiUtils.addHorizontalMargin(contentView);
 
             bindHeader(data);
             bindContent(data);
@@ -90,7 +95,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         }
     }
 
-    private void bindHeader(DocumentSectionData data) {
+    private void bindHeader(FlatCardData data) {
         int icon = data.getIcon();
         if (icon>0){
             IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
@@ -107,7 +112,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         navIcon.setVisibility(View.VISIBLE);
     }
 
-    private void bindContent(DocumentSectionData data) {
+    private void bindContent(FlatCardData data) {
         String content = data.entriesToString();
         //TODO: improve entriesToString to avoid next line
         content = Humanizer.trimNewlines(content);
@@ -115,7 +120,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         contentView.setText(content);
     }
 
-    private void bindExpandedState(final int position, final DocumentSectionData data) {
+    private void bindExpandedState(final int position, final FlatCardData data) {
         if (data.isExpandable() && !data.getEntries().isEmpty()) {
             contentSeparator.setVisibility(View.VISIBLE);
             applyExpandedState(data.isExpanded());
@@ -140,7 +145,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         }
     }
 
-    private void bindInternalData(DocumentSectionData data) {
+    private void bindInternalData(FlatCardData data) {
         if (data.getInternalData()==null || data.getInternalData().isEmpty()){
             internalSeparator.setVisibility(View.GONE);
             internalContainer.setVisibility(View.GONE);
@@ -157,7 +162,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
     }
 
 
-    private void bindButtons(DocumentSectionData data) {
+    private void bindButtons(FlatCardData data) {
         List<RunButton> buttons = data.getButtons();
         if (buttons == null || buttons.isEmpty()){
             buttonSeparator.setVisibility(View.GONE);

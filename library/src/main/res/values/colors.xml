@@ -3,7 +3,7 @@
 
     <!-- Palette: from Material dark theme guide -->
     <!--   Surfaces mixing background color with alpha overlay (https://jsfiddle.net/jwuyn90b/) -->
-    <color name="material_background">#121212</color>
+    <color name="material_background">#1e1e1e</color>
     <color name="material_surface_1dp">#1e1e1e</color>
     <color name="material_surface_2dp">#232323</color>
     <color name="material_surface_3dp">#252525</color>
@@ -27,13 +27,13 @@
     <color name="material_light_blue_A200">#40c4ff</color>
     <color name="material_light_blue_A400">#00b0ff</color>
     <color name="material_light_blue_A700">#0091ea</color>
-    <color name="whatsapp_blue">#41B7F1</color>             <!--TODO: remove -->
     <color name="material_blue_900">#0d47a1</color>
     <color name="material_blue_600">#1e88e5</color>
     <color name="material_blue_200">#90caf9</color>
     <color name="material_blue_100">#BBDEFB</color>
     <color name="material_green">#FF81c784</color>
     <color name="material_orange">#ffcc80</color>
+    <color name="material_error">#b00020</color>
     <color name="material_white">#FFE1E1E1</color>
     <color name="material_white_87">#DEE1E1E1</color>
     <color name="material_white_60">#99E1E1E1</color>
@@ -42,7 +42,7 @@
 
 
     <!-- Theme: from Material dark palette -->
-    <color name="iadt_primary">@color/material_light_blue_A200</color>
+    <color name="iadt_primary">@color/material_light_blue_300</color>
     <color name="iadt_secondary">@color/material_green</color>
 
     <color name="iadt_background">@color/material_background</color>
@@ -57,6 +57,8 @@
     <color name="iadt_text_high">@color/material_white_87</color>
     <color name="iadt_text_low">@color/material_white_60</color>
     <color name="iadt_text_disable">@color/material_white_38</color>
+
+    <color name="iadt_trace_line">@color/iadt_text_high</color>
 
     <!-- Toggle Component (LogFilter) -->
     <color name="toggle_hover">@color/material_light_blue_600</color>

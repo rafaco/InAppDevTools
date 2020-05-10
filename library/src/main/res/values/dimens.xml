@@ -16,10 +16,14 @@
     <!-- Iadt features -->
     <dimen name="iadt_toast_y_offset">24dp</dimen>
 
-
     <!-- Default screen margins -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="iadt_horizontal_margin">10dp</dimen>
+    <dimen name="iadt_vertical_margin">5dp</dimen>
+    <dimen name="iadt_flat_card_horizontal_margin">-3dp</dimen> <!-- Also at values-v21 -->
+
+
+
+    <!-- TODO: remove to Demo or add prefix, could override host app ones -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_offset">10dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
@@ -40,4 +44,5 @@
     <dimen name="card_overflow_width">25dp</dimen>
     <dimen name="card_overflow_height">25dp</dimen>
     <dimen name="card_overflow_margin_top">10dp</dimen>
+
 </resources>

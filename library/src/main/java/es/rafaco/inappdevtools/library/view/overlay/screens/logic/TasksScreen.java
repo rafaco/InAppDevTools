@@ -25,7 +25,6 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
@@ -38,7 +37,6 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class TasksScreen extends AbstractFlexibleScreen {
 
