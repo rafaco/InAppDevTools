@@ -44,9 +44,6 @@
         <activity android:name=".view.activities.CrashDialogActivity"
             android:theme="@style/LibTheme.Translucent"/>
 
-        <activity android:name=".view.activities.ReportDialogActivity"
-            android:theme="@style/LibTheme.Translucent"/>
-
     </application>
 
     <!-- Compatibility with Android SDK 14:

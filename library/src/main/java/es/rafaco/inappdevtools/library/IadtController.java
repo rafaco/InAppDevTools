@@ -52,7 +52,6 @@ import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.dialogs.WelcomeDialogHelper;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
-import es.rafaco.inappdevtools.library.view.activities.ReportDialogActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.CleanAllDialog;
 import es.rafaco.inappdevtools.library.view.dialogs.DisableDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -271,12 +270,6 @@ public final class IadtController {
     //endregion
 
     //region [ METHODS FOR REPORTING ]
-
-    public void startReportDialog() {
-        Intent intent = new Intent(getContext(), ReportDialogActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
-    }
 
     public void startReportWizard() {
         OverlayService.performNavigation(NewReportScreen.class, null);

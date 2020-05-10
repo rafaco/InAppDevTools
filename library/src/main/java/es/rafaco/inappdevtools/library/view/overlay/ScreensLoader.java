@@ -29,7 +29,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.NewCrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
@@ -129,9 +129,9 @@ public class ScreensLoader {
         screenManager.registerScreen(BuildDetailScreen.class);
 
         //CRASHES
-        screenManager.registerScreen(ErrorsScreen.class);
         screenManager.registerScreen(CrashDetailScreen.class);
         screenManager.registerScreen(NewCrashScreen.class);
+        screenManager.registerScreen(CrashesScreen.class);
 
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);

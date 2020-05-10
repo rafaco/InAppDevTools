@@ -20,13 +20,8 @@
 package es.rafaco.inappdevtools.demo;
 
 import android.app.Application;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.crash.CrashGenerator;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
@@ -37,42 +32,6 @@ public class DemoApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-
-        Iadt.addRunButton(new RunButton("IndexOutOfBounds",
-                R.drawable.ic_bug_report_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        CrashGenerator.indexOutOfBounds();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("NullPointer",
-                R.drawable.ic_bug_report_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        CrashGenerator.nullPointer();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("ZeroDivision",
-                R.drawable.ic_bug_report_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        CrashGenerator.arithmeticException();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("StackOverflow",
-                R.drawable.ic_bug_report_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        CrashGenerator.stackOverflow();
-                    }
-                }));
 
 
         Iadt.addRunButton(new RunButton("Show message",

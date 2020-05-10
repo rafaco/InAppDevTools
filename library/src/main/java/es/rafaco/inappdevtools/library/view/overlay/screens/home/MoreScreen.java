@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
@@ -29,7 +30,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.NewCrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
@@ -106,11 +107,12 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Errors",
+        data.add(new RunButton("Crashes",
                 R.drawable.ic_bug_report_white_24dp,
+                R.color.rally_orange,
                 new Runnable() {
                     @Override
-                    public void run() { OverlayService.performNavigation(ErrorsScreen.class);
+                    public void run() { OverlayService.performNavigation(CrashesScreen.class);
                     }
                 }));
 

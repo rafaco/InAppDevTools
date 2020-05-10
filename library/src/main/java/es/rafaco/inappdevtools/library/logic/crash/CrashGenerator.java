@@ -19,8 +19,11 @@
 
 package es.rafaco.inappdevtools.library.logic.crash;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 public class CrashGenerator {
@@ -66,6 +69,21 @@ public class CrashGenerator {
     private static void logAdvise(String exceptionType) {
         String message = String.format("Generating a %s exception", exceptionType);
         ThreadUtils.printOverview(message);
+    }
+
+    public static void generateAnr() {
+        Log.i(Iadt.TAG, "ANR requested, sleeping main thread for a while...");
+        ThreadUtils.runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep((long) 10 * 1000);
+                } catch (InterruptedException e) {
+                    Log.e(Iadt.TAG, "Something wrong happen", e);
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
     }
 }
 
