@@ -83,21 +83,21 @@ public class TraceViewHolder extends FlexViewHolder {
                 return;
 
 
-            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_trace_line));
-            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
-            timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
+            timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
+            timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
+            timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 5));
 
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
             if (data.getPosition().equals(TraceItemData.Position.START)){
-                whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_orange));
-                timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_orange));
+                timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
                 timeline.setTimelineType(TimelineView.TYPE_START);
             }
             else if (data.getPosition().equals(TraceItemData.Position.END)){
-                whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
+                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_END);
             }else{
-                whereView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_yellow));
+                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
             exceptionView.setVisibility(TextUtils.isEmpty(data.getException()) ? View.GONE : View.VISIBLE);
@@ -108,11 +108,11 @@ public class TraceViewHolder extends FlexViewHolder {
             final Sourcetrace trace = data.getSourcetrace();
             whereView.setText(trace.getShortClassName() + "." + trace.getMethodName() + "()");
             where2View.setText(trace.getPackageName());
-            where2View.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+            where2View.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
 
             tag.setText(data.getTag());
-            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
-            UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
+            tag.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
+            UiUtils.setStrokeToDrawable(getContext(), 1, data.getColor(), tag.getBackground());
 
             where3View.setText(trace.getFileName() + ":" + trace.getLineNumber());
 
@@ -126,20 +126,20 @@ public class TraceViewHolder extends FlexViewHolder {
                     }
                 });
                 
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_top));
-                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 12));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_top));
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 12));
 
-                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
+                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_white));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
                 UiUtils.setCardViewClickable(cardView, false);
                 cardView.setOnClickListener(null);
 
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_medium));
-                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_medium));
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 6));
 
-                where3View.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_gray));
+                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_gray));
                 navIcon.setVisibility(View.GONE);
             }
         }

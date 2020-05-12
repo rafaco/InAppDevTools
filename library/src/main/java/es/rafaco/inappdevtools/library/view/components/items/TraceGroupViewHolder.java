@@ -80,14 +80,14 @@ public class TraceGroupViewHolder extends FlexViewHolder {
             });
 
             if (!data.isExpanded()){
-                timeline.setIndicatorSize(UiUtils.getPixelsFromDp(itemView.getContext(), 5));
+                timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 5));
             }else{
                 timeline.setIndicatorSize(0);
             }
 
-            timeline.setIndicatorColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
+            timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
-            timeline.setLineColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_trace_line));
+            timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
 
             if (!data.isExpanded() && data.isLastOnCollapsed()){
                 timeline.setTimelineType(TimelineView.TYPE_END);
@@ -96,8 +96,8 @@ public class TraceGroupViewHolder extends FlexViewHolder {
             }
 
             tag.setText(data.getTag());
-            tag.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getColor()));
-            UiUtils.setStrokeToDrawable(tag.getContext(), 1, data.getColor(), tag.getBackground());
+            tag.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
+            UiUtils.setStrokeToDrawable(getContext(), 1, data.getColor(), tag.getBackground());
 
             tag.setVisibility(!data.isExpanded() ? View.VISIBLE : View.GONE);
             afterTag.setVisibility(View.GONE);
@@ -105,13 +105,13 @@ public class TraceGroupViewHolder extends FlexViewHolder {
             if (!data.isExpanded()){
                 iconLabel.setText(data.getCount() + " more ");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    UiUtils.setBackground(icon, ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_down_white_24dp));
+                    UiUtils.setBackground(icon, ContextCompat.getDrawable(getContext(), R.drawable.ic_arrow_down_white_24dp));
                 }
             }
             else {
                 iconLabel.setText("Hide " + data.getCount() + " ");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    UiUtils.setBackground(icon, ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_arrow_up_white_24dp));
+                    UiUtils.setBackground(icon, ContextCompat.getDrawable(getContext(), R.drawable.ic_arrow_up_white_24dp));
                 }
             }
         }

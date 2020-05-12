@@ -141,7 +141,7 @@ public class ComplexCardViewHolder extends FlexViewHolder {
             cardView.setFocusable(false);
             cardView.setForeground(null);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 0));
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 0));
             }
         }
     }

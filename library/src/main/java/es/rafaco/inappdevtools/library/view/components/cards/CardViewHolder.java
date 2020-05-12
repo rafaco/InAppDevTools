@@ -80,7 +80,7 @@ public class CardViewHolder extends FlexViewHolder {
 
             titleView.setText(data.getTitle());
             if (data.getTitleColor()>0){
-                titleView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
+                titleView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
             }
 
             contentView.setVisibility(TextUtils.isEmpty(data.getContent()) ? View.GONE : View.VISIBLE);
@@ -98,19 +98,19 @@ public class CardViewHolder extends FlexViewHolder {
                 IconUtils.set(iconView, icon);
                 iconView.setVisibility(View.VISIBLE);
                 if (data.getTitleColor()>0){
-                    iconView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
+                    iconView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
                 }
             }else{
                 iconView.setVisibility(View.GONE);
             }
 
             if (data.getBgColor()>0){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColor()));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColor()));
             }
             else if (data.getPerformer() == null){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_bottom));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 2));
+                    cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 2));
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     mainContainer.setBackground(null);

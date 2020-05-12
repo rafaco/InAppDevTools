@@ -51,7 +51,7 @@ public class SelectorViewHolder extends FlexViewHolder {
         final SelectorData data = (SelectorData) abstractData;
         if (data!=null){
             titleView.setText(data.getTitle());
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(titleView.getContext(),
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
                     android.R.layout.simple_spinner_item, data.getOptions());
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);

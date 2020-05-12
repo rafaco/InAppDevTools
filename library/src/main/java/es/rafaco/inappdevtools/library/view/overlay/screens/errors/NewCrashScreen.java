@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
 import android.text.TextUtils;
+import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexDat
 import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -239,7 +241,6 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                 IadtController.get().startReportWizard(ReportType.CRASH, -1);
             }
         });
-
         LinearGroupFlexData cardData = new LinearGroupFlexData();
 
         CardHeaderFlexData headerData = new CardHeaderFlexData.Builder(title)
@@ -254,8 +255,8 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         messageData.setHorizontalMargin(true);
         cardData.add(messageData);
 
-
-        ButtonBorderlessFlexData buttonBorderless1 = new ButtonBorderlessFlexData("Copy",
+        List<Object> groupLinear = new ArrayList<>();
+        groupLinear.add(new ButtonBorderlessFlexData("Copy",
                 R.drawable.ic_content_copy_white_24dp,
                 new Runnable() {
                     @Override
@@ -263,9 +264,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                         ClipboardUtils.save(getContext(), composedMessage);
                         Iadt.showMessage("Exception copied to clipboard");
                     }
-                });
+                }));
 
-        ButtonBorderlessFlexData buttonBorderless2 = new ButtonBorderlessFlexData("Google it",
+        groupLinear.add(new ButtonBorderlessFlexData("Google it",
                 R.drawable.ic_google_brands,
                 new Runnable() {
                     @Override
@@ -273,22 +274,45 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                         String url = "https://www.google.com/search?q=" + composedMessage;
                         ExternalIntentUtils.viewUrl(url);
                     }
-                });
-
-        List<ButtonFlexData> groupList = new ArrayList<>();
-        groupList.add(buttonBorderless1);
-        groupList.add(buttonBorderless2);
-
-        List<Object> groupLinear = new ArrayList<>();
-        groupLinear.add(buttonBorderless1);
-        groupLinear.add(buttonBorderless2);
+                }));
         LinearGroupFlexData buttonList = new LinearGroupFlexData(groupLinear);
         buttonList.setHorizontal(true);
         cardData.add(buttonList);
 
+        SeparatorFlexData separator = new SeparatorFlexData(true);
+        separator.setVerticalMargin(true);
+        cardData.add(separator);
+
+        final FlexAdapter adapter = traceGrouper.getExceptionAdapter();
+        if (adapter != null){
+            int tracesCount = adapter.getItemCount();
+            Object o = adapter.getItems().get(0);
+
+            ButtonBorderlessFlexData tracesButton = new ButtonBorderlessFlexData(tracesCount + " traces",
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.performItemAction(null, null, 0,0);
+                        }
+                    });
+            tracesButton.setIcon(R.drawable.ic_arrow_down_white_24dp);
+            buttonList.add(tracesButton);
+            
+            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
+            traces.setHorizontalMargin(true);
+            cardData.add(traces);
+        }
+
         cardGroup.add(cardData);
         data.add(cardGroup);
         data.add("");
+
+
+
+
+
+
+
 
 
 
@@ -352,9 +376,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         collapsible.setShowDividers(false);
         internalData.add(collapsible);
 
-        FlexAdapter adapter = traceGrouper.getExceptionAdapter();
+        FlexAdapter adapter2 = traceGrouper.getExceptionAdapter();
         if (adapter != null){
-            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
+            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter2);
             traces.setHorizontalMargin(true);
             internalData.add(traces);
         }

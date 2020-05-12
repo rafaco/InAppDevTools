@@ -50,7 +50,7 @@ public class ImageViewHolder extends FlexViewHolder {
 
             /*titleView.setText(data.getTitle());
             if (data.getTitleColor()>0){
-                titleView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
+                titleView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
             }*/
 
             if (data.getHeight()>=0){

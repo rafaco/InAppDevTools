@@ -45,6 +45,8 @@ import es.rafaco.inappdevtools.library.view.components.items.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
@@ -103,6 +105,7 @@ public class FlexLoader {
         descriptors.add(new FlexDescriptor(ButtonFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_item_button));
         descriptors.add(new FlexDescriptor(ButtonBorderlessFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_button_borderless));
         descriptors.add(new FlexDescriptor(CardHeaderFlexData.class, CardHeaderFlexViewHolder.class, R.layout.flex_card_header));
+        descriptors.add(new FlexDescriptor(SeparatorFlexData.class, SeparatorFlexViewHolder.class, R.layout.flex_separator));
 
         return descriptors;
     }

@@ -92,7 +92,7 @@ public class FlexItemViewHolder extends FlexViewHolder {
         }
     }
 
-    private void bindMargins(FlexData data) {
+    protected void bindMargins(FlexData data) {
         if (data.isHorizontalMargin()!=null){
             MarginUtils.setHorizontalMargin(itemView, data.isHorizontalMargin());
         }
@@ -104,7 +104,7 @@ public class FlexItemViewHolder extends FlexViewHolder {
 
     private void bindBackgroundColor(FlexData data) {
         if (data.getBackgroundColor()>0) {
-            int contextualizedColor = ContextCompat.getColor(itemView.getContext(), data.getBackgroundColor());
+            int contextualizedColor = ContextCompat.getColor(getContext(), data.getBackgroundColor());
             itemView.setBackgroundColor(contextualizedColor);
         }
     }

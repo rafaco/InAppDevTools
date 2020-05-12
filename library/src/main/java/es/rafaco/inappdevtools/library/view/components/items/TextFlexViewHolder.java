@@ -59,11 +59,11 @@ public class TextFlexViewHolder extends FlexItemViewHolder {
             textView.setText(data.getText());
 
         if (data.getFontColor()>0) {
-            int contextualizedColor = ContextCompat.getColor(textView.getContext(), data.getFontColor());
+            int contextualizedColor = ContextCompat.getColor(getContext(), data.getFontColor());
             textView.setTextColor(contextualizedColor);
         }
 
-        Resources resources = textView.getContext().getResources();
+        Resources resources = getContext().getResources();
         int sizeDimens;
         switch (data.getSize()){
             case SMALL:

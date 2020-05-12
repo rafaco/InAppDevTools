@@ -61,7 +61,7 @@ public class LinkViewHolder extends FlexViewHolder {
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
             if (data.getColor()>0){
-                int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
+                int contextualizedColor = ContextCompat.getColor(getContext(), data.getColor());
                 icon.setTextColor(contextualizedColor);
             }
             icon.setVisibility(View.VISIBLE);
@@ -78,7 +78,7 @@ public class LinkViewHolder extends FlexViewHolder {
         else{
             overview.setText(data.overview);
             if (data.getColor()>0) {
-                int contextualizedColor = ContextCompat.getColor(icon.getContext(), data.getColor());
+                int contextualizedColor = ContextCompat.getColor(getContext(), data.getColor());
                 overview.setTextColor(contextualizedColor);
             }
             overview.setVisibility(View.VISIBLE);

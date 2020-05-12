@@ -59,9 +59,8 @@ public class ConfigViewHolder extends FlexViewHolder {
     @Override
     public void bindTo(Object abstractData, int position) {
         final ConfigData configData = (ConfigData) abstractData;
-        Context context = title.getContext();
         title.setText(configData.getConfig().getKey());
-        subtitle.setText(context.getText(configData.getConfig().getDesc()));
+        subtitle.setText(getContext().getText(configData.getConfig().getDesc()));
 
         if (configData.getConfig().getValueType() == boolean.class){
             switchButton.setVisibility(View.VISIBLE);
@@ -84,7 +83,7 @@ public class ConfigViewHolder extends FlexViewHolder {
 
             editButton.setImageDrawable(UiUtils.getDrawable(R.drawable.pd_edit));
 
-            int contextualizedColor = ContextCompat.getColor(editButton.getContext(), R.color.rally_white);
+            int contextualizedColor = ContextCompat.getColor(getContext(), R.color.rally_white);
             editButton.setColorFilter(contextualizedColor);
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override

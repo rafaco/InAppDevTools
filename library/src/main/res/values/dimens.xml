@@ -19,6 +19,7 @@
     <dimen name="iadt_text_size_xl">21dp</dimen>
 
     <!-- Iadt features -->
+    <dimen name="iadt_separator_stroke">1dp</dimen>
     <dimen name="iadt_toast_y_offset">24dp</dimen>
 
     <!-- Default screen margins -->

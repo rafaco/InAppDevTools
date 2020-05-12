@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,4 +53,8 @@ public abstract class FlexViewHolder extends RecyclerView.ViewHolder {
     public void onCreate(ViewGroup viewGroup, int viewType){}
 
     public abstract void bindTo(Object abstractData, int position);
+
+    public Context getContext(){
+        return itemView.getContext();
+    }
 }

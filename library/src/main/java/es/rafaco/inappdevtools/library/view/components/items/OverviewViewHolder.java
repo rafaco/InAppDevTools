@@ -66,7 +66,7 @@ public class OverviewViewHolder extends FlexViewHolder {
             }
 
             if (data.getColor()>0){
-                int contextualColor = ContextCompat.getColor(overviewTitleView.getContext(), data.getColor());
+                int contextualColor = ContextCompat.getColor(getContext(), data.getColor());
                 overviewTitleView.setTextColor(contextualColor);
                 overviewIconView.setTextColor(contextualColor);
             }

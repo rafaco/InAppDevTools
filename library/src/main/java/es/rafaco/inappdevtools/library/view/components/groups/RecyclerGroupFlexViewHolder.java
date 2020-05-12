@@ -70,7 +70,7 @@ public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
         int orientation = data.isHorizontal
                 ? LinearLayout.HORIZONTAL
                 : LinearLayout.VERTICAL;
-        LinearLayoutManager lm = new LinearLayoutManager(groupContainer.getContext(),
+        LinearLayoutManager lm = new LinearLayoutManager(getContext(),
                     orientation, false);
         groupContainer.setLayoutManager(lm);
     }
@@ -82,7 +82,7 @@ public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
         int orientation = data.isHorizontal
                 ? LinearLayout.HORIZONTAL
                 : LinearLayout.VERTICAL;
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(groupContainer.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
                 orientation);
         groupContainer.addItemDecoration(dividerItemDecoration);
     }

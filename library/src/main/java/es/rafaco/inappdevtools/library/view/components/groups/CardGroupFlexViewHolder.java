@@ -68,9 +68,9 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
 
     private void bindMargins(CardGroupFlexData data) {
         if (data.isFullWidth()){
-            cardView.setRadius(UiUtils.getPixelsFromDp(itemView.getContext(),0));
+            cardView.setRadius(UiUtils.getPixelsFromDp(getContext(),0));
             cardView.setUseCompatPadding(false);
-            int flatCardMargin = (int) cardView.getContext().getResources()
+            int flatCardMargin = (int) getContext().getResources()
                     .getDimension(R.dimen.iadt_flat_card_horizontal_margin);
             MarginUtils.setHorizontalMargin(cardView, flatCardMargin);
         }
@@ -81,16 +81,16 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
 
     private void bindBgColor(CardGroupFlexData data) {
         if (data.getBgColorResource()>0){
-            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColorResource()));
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColorResource()));
         }
         else if (data.getPerformer() == null){
-            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.iadt_surface_bottom));
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_bottom));
         }
     }
 
     private void bindElevation(CardGroupFlexData data) {
         if (data.getElevationDp()>=0){
-            cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), data.getElevationDp()));
+            cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), data.getElevationDp()));
         }
     }
 
@@ -112,7 +112,7 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
         }
 
         //TODO: remove
-        childrenContainer.setBackgroundColor(ContextCompat.getColor(itemView.getContext(),
+        childrenContainer.setBackgroundColor(ContextCompat.getColor(getContext(),
                 R.color.material_green));
     }
 

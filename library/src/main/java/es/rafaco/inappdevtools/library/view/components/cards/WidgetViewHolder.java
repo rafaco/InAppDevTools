@@ -56,18 +56,18 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 public class WidgetViewHolder extends FlexViewHolder {
 
     private final int[] NET_COLORS = {
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_green),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_gray),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange),
+            ContextCompat.getColor(getContext(), R.color.rally_green),
+            ContextCompat.getColor(getContext(), R.color.rally_gray),
+            ContextCompat.getColor(getContext(), R.color.rally_orange),
     };
 
     private final int[] LOG_COLORS = {
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_white),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_blue),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_green),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_yellow),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange),
-            ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_orange_dark),
+            ContextCompat.getColor(getContext(), R.color.rally_white),
+            ContextCompat.getColor(getContext(), R.color.rally_blue),
+            ContextCompat.getColor(getContext(), R.color.rally_green),
+            ContextCompat.getColor(getContext(), R.color.rally_yellow),
+            ContextCompat.getColor(getContext(), R.color.rally_orange),
+            ContextCompat.getColor(getContext(), R.color.rally_orange_dark),
     };
 
     private final CardView cardView;
@@ -126,10 +126,9 @@ public class WidgetViewHolder extends FlexViewHolder {
     }
 
     private void initLogChart() {
-        Context context = itemView.getContext();
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                (int) UiUtils.getPixelsFromDp(context, 20));
-        HorizontalBarChart chart = new HorizontalBarChart(context);
+                (int) UiUtils.getPixelsFromDp(getContext(), 20));
+        HorizontalBarChart chart = new HorizontalBarChart(getContext());
         chart.setLayoutParams(params);
         chartContainer.addView(chart);
         chartContainer.setVisibility(View.VISIBLE);
@@ -152,7 +151,7 @@ public class WidgetViewHolder extends FlexViewHolder {
         chart.animateXY(0,0);
 
         Session currentSession = IadtController.get().getSessionManager().getCurrent();
-        SessionDocumentGenerator generator = new SessionDocumentGenerator(context, DocumentType.SESSION, currentSession);
+        SessionDocumentGenerator generator = new SessionDocumentGenerator(getContext(), DocumentType.SESSION, currentSession);
         SessionAnalysis analysis = generator.getAnalysis();
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
@@ -174,17 +173,16 @@ public class WidgetViewHolder extends FlexViewHolder {
         BarData data = new BarData(dataSets);
         chart.setDrawValueAboveBar(false);
         data.setValueTextSize(0f);
-        data.setValueTextColor(ContextCompat.getColor(context, R.color.rally_white));
+        data.setValueTextColor(ContextCompat.getColor(getContext(), R.color.rally_white));
         data.setBarWidth(0.8f);
         
         chart.setData(data);
     }
 
     private void initNetworkChart() {
-        Context context = itemView.getContext();
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                (int) UiUtils.getPixelsFromDp(context, 20));
-        HorizontalBarChart chart = new HorizontalBarChart(context);
+                (int) UiUtils.getPixelsFromDp(getContext(), 20));
+        HorizontalBarChart chart = new HorizontalBarChart(getContext());
         chart.setLayoutParams(params);
         chartContainer.addView(chart);
         chartContainer.setVisibility(View.VISIBLE);
@@ -222,7 +220,7 @@ public class WidgetViewHolder extends FlexViewHolder {
         BarData data = new BarData(dataSets);
         chart.setDrawValueAboveBar(false);
         data.setValueTextSize(0f);
-        data.setValueTextColor(ContextCompat.getColor(context, R.color.rally_white));
+        data.setValueTextColor(ContextCompat.getColor(getContext(), R.color.rally_white));
         data.setBarWidth(1f);
 
         chart.setData(data);

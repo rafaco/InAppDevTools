@@ -54,9 +54,9 @@ public class ButtonFlexViewHolder extends FlexItemViewHolder {
         final ButtonFlexData data = (ButtonFlexData) abstractData;
         boolean isCustomBackground = data.getColor() > 0;
         int color = isCustomBackground ? data.getColor() : R.color.iadt_surface_top;
-        int accentColor = ContextCompat.getColor(button.getContext(), R.color.iadt_primary);
+        int accentColor = ContextCompat.getColor(getContext(), R.color.iadt_primary);
 
-        int backgroundColor = ContextCompat.getColor(button.getContext(), color);
+        int backgroundColor = ContextCompat.getColor(getContext(), color);
         button.getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
 
 
@@ -70,11 +70,11 @@ public class ButtonFlexViewHolder extends FlexItemViewHolder {
         }
 
         if (data.getIcon()>0){
-            Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
+            Drawable icon = getContext().getResources().getDrawable(data.getIcon());
             if (!isCustomBackground || data.isWrapContent())
                 icon.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
             button.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null);
-            button.setCompoundDrawablePadding((int) UiUtils.dpToPx(button.getContext(), 5));
+            button.setCompoundDrawablePadding((int) UiUtils.dpToPx(getContext(), 5));
         }
 
         button.setText(data.getTitle());
@@ -85,7 +85,7 @@ public class ButtonFlexViewHolder extends FlexItemViewHolder {
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            button.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
+            button.setElevation(UiUtils.getPixelsFromDp(getContext(), 6));
         }
 
         if (abstractData instanceof ButtonBorderlessFlexData){
