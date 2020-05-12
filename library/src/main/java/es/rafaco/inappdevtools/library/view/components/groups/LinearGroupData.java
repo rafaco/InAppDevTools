@@ -22,24 +22,24 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListData {
+import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
+
+public class LinearGroupData extends FlexGroupData {
 
     String title;
-    List<Object> items;
     boolean showDividers = false;
     boolean isHorizontal = false;
 
-    public ListData(Object item) {
-        this.items = new ArrayList<>();
-        items.add(item);
+    public LinearGroupData() {
+        this(new ArrayList<>());
     }
 
-    public ListData(List<Object> items) {
-        this.items = items;
+    public LinearGroupData(List<Object> children) {
+        this(null, children);
     }
 
-    public ListData(String title, List<Object> items) {
-        this(items);
+    public LinearGroupData(String title, List<Object> children) {
+        super(children);
         this.title = title;
     }
 
@@ -49,14 +49,6 @@ public class ListData {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public List<Object> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Object> items) {
-        this.items = items;
     }
 
     public boolean isShowDividers() {

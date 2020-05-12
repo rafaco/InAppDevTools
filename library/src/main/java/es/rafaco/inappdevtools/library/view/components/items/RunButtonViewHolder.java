@@ -58,15 +58,19 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         final RunButton data = (RunButton) abstractData;
         boolean isCustomBackground = data.getColor() > 0;
         int color = isCustomBackground ? data.getColor() : R.color.iadt_surface_top;
-        int backgroundColor = ContextCompat.getColor(button.getContext(), color);
         int accentColor = ContextCompat.getColor(button.getContext(), R.color.iadt_primary);
+
+        int backgroundColor = ContextCompat.getColor(button.getContext(), color);
         button.getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
+
+
         if (data.isWrapContent()){
             //Change width to WRAP_CONTENT and remove WEIGHT
             button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             button.setAllCaps(false);
             button.setTextColor(accentColor);
         }
+
         if (data.getIcon()>0){
             Drawable icon = button.getContext().getResources().getDrawable(data.getIcon());
             if (!isCustomBackground || data.isWrapContent())

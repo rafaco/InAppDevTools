@@ -32,7 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
+import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 
 public abstract class AbstractFlexibleScreen extends Screen {
 
@@ -75,7 +75,7 @@ public abstract class AbstractFlexibleScreen extends Screen {
         flexAdapter = new FlexibleAdapter(getLayout(), getSpanCount(), new ArrayList<>());
         flexContainer = bodyView.findViewById(R.id.flexible);
         flexContainer.setHasFixedSize(true);
-        if(!hasHorizontalMargin()) UiUtils.removeHorizontalMargin(flexContainer);
+        if(!hasHorizontalMargin()) MarginUtils.removeHorizontalMargin(flexContainer);
         flexContainer.setAdapter(flexAdapter);
     }
 

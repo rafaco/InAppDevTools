@@ -21,22 +21,16 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.groups.ListData;
-
-public class CollapsibleListData extends ListData {
+public class CollapsibleLinearGroupData extends LinearGroupData {
 
     private String overview;
     private boolean expanded = false;
 
-    public CollapsibleListData(Object item) {
-        super(item);
-    }
-
-    public CollapsibleListData(List<Object> items) {
+    public CollapsibleLinearGroupData(List<Object> items) {
         super(items);
     }
 
-    public CollapsibleListData(String title, List<Object> items) {
+    public CollapsibleLinearGroupData(String title, List<Object> items) {
         super(title, items);
     }
 

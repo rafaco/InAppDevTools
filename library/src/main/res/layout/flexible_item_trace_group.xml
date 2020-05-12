@@ -61,14 +61,14 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="10dp"
-                style="@style/TextCondensedSmall" />
+                style="@style/TextCondensed.Small" />
 
             <TextView
                 android:id="@+id/after_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/rally_gray"
-                style="@style/TextCondensedSmall" />
+                style="@style/TextCondensed.Small" />
 
             <TextView
                 android:id="@+id/icon_label"
@@ -78,7 +78,7 @@
                 android:layout_gravity="end"
                 android:gravity="end"
                 android:textColor="@color/rally_gray"
-                style="@style/TextCondensedMedium" />
+                style="@style/TextCondensed.Medium" />
 
         </LinearLayout>
     </RelativeLayout>

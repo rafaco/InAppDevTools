@@ -19,7 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-public class LinkItem {
+public class LinkItemData {
 
     private final Runnable onClick;
     String title;
@@ -27,11 +27,11 @@ public class LinkItem {
     int icon;
     int color;
 
-    public LinkItem(String title, int icon, int color, Runnable onclick) {
+    public LinkItemData(String title, int icon, int color, Runnable onclick) {
         this(title, null, icon, color, onclick);
     }
 
-    public LinkItem(String title, String overview, int icon, int color, Runnable onclick) {
+    public LinkItemData(String title, String overview, int icon, int color, Runnable onclick) {
         this.title = title;
         this.overview = overview;
         this.icon = icon;
@@ -47,7 +47,7 @@ public class LinkItem {
         this.title = title;
     }
 
-    public LinkItem setOverview(String overview) {
+    public LinkItemData setOverview(String overview) {
         this.overview = overview;
         return this;
     }

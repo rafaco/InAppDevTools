@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ This source file is part of InAppDevTools, which is available under
   ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
   ~
-  ~ Copyright 2018-2019 Rafael Acosta Alvarez
+  ~ Copyright 2018-2020 Rafael Acosta Alvarez
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,27 +19,22 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
+<es.rafaco.compat.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/group_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/TextCondensed.Large"/>
+    android:layout_gravity="center"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    style="@style/IadtCard.Medium">
 
     <LinearLayout
-        android:id="@+id/group_container"
+        android:id="@+id/children_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:gravity="right"
-        android:showDividers="none"
-        android:divider="@color/iadt_text_high"
-        android:dividerPadding="4dp"
-        android:orientation="horizontal" />
+        android:orientation="vertical"/>
 
-</LinearLayout>
+</es.rafaco.compat.CardView>

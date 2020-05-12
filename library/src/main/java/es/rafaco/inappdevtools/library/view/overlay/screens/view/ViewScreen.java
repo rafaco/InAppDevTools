@@ -50,7 +50,7 @@ import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
-import es.rafaco.inappdevtools.library.view.components.groups.ListData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -172,7 +172,7 @@ public class ViewScreen extends Screen {
                     }
                 }));
 
-        data.add(new ListData(verticalItems));
+        data.add(new LinearGroupData(verticalItems));
     }
 
     private void addImage(List<Object> data) {

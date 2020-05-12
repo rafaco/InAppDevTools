@@ -42,7 +42,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.view.components.items.LinkItem;
+import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.logic.sources.SourceEntry;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
@@ -216,7 +216,7 @@ public class SourcesScreen extends Screen {
     //region [ FLEXIBLE ITEMS ]
 
     private List<Object> addShortSearchResult(List<Object> data) {
-        data.add(new LinkItem(
+        data.add(new LinkItemData(
                 "Type 2 characters at least...",
                 R.string.gmd_pause,
                 R.color.rally_white,
@@ -231,7 +231,7 @@ public class SourcesScreen extends Screen {
     }
 
     private List<Object> addEmptySearchResult(List<Object> data) {
-        data.add(new LinkItem(
+        data.add(new LinkItemData(
                 "No results found",
                 R.string.gmd_stop,
                 R.color.rally_white,
@@ -249,7 +249,7 @@ public class SourcesScreen extends Screen {
 
         if (filter != null) { // Not root
 
-            data.add(new LinkItem(
+            data.add(new LinkItemData(
                     "Go to root",
                     R.string.gmd_home,
                     R.color.rally_white,
@@ -262,7 +262,7 @@ public class SourcesScreen extends Screen {
             ));
 
             if (filter.getDeepLevel() != 0){
-                data.add(new LinkItem(
+                data.add(new LinkItemData(
                         "Up from " + PathUtils.removeLastSlash(filter.getName()),
                         R.string.gmd_arrow_upward,
                         R.color.rally_white,
@@ -286,7 +286,7 @@ public class SourcesScreen extends Screen {
                 label = label.replace(filter.getName(), "");
             }
 
-            data.add(new LinkItem(label,
+            data.add(new LinkItemData(label,
                     entry.isDirectory() ? R.string.gmd_folder_filled : R.string.gmd_insert_drive_file,
                     entry.isDirectory() ? R.color.rally_yellow : R.color.rally_blue_med,
                     entry.isDirectory() ? new Runnable() {

@@ -21,7 +21,6 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.DividerItemDecoration;
@@ -35,43 +34,39 @@ import android.support.v7.widget.RecyclerView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
+import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
 
-public class RecyclerListViewHolder extends FlexibleViewHolder {
+public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
 
-    private final TextView groupTitle;
     RecyclerView groupContainer;
     FlexibleAdapter internalAdapter;
 
-    public RecyclerListViewHolder(View view, FlexibleAdapter adapter) {
+    public RecyclerGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
-        groupTitle = view.findViewById(R.id.group_title);
         groupContainer = view.findViewById(R.id.group_container);
     }
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final RecyclerListData data = (RecyclerListData) abstractData;
+        super.bindTo(abstractData, position);
+        
+        final RecyclerGroupData data = (RecyclerGroupData) abstractData;
         if (data==null){
-            groupTitle.setVisibility(View.GONE);
             groupContainer.setVisibility(View.GONE);
             return;
         }
 
-        bindMargins(data);
         bindOrientation(data);
         bindDividers(data);
         bindAdapter(data);
+
+        itemView.setClickable(false);
+        itemView.setFocusable(false);
+        groupContainer.setClickable(false);
+        groupContainer.setFocusable(false);
     }
 
-    private void bindMargins(RecyclerListData data) {
-        if (data.hasHorizontalMargin){
-            UiUtils.addHorizontalMargin(itemView);
-        }
-    }
-
-    private void bindOrientation(RecyclerListData data) {
+    private void bindOrientation(RecyclerGroupData data) {
         int orientation = data.isHorizontal
                 ? LinearLayout.HORIZONTAL
                 : LinearLayout.VERTICAL;
@@ -80,7 +75,7 @@ public class RecyclerListViewHolder extends FlexibleViewHolder {
         groupContainer.setLayoutManager(lm);
     }
 
-    private void bindDividers(RecyclerListData data) {
+    private void bindDividers(RecyclerGroupData data) {
         if (!data.showDividers)
             return;
 
@@ -92,16 +87,16 @@ public class RecyclerListViewHolder extends FlexibleViewHolder {
         groupContainer.addItemDecoration(dividerItemDecoration);
     }
 
-    private void bindAdapter(RecyclerListData data) {
+    private void bindAdapter(RecyclerGroupData data) {
         if (data.getAdapter() != null){
             internalAdapter = data.getAdapter();
         }
         else if(data.getAdapterLayout()!=null
                 && data.getAdapterSpanCount()>0
-                && data.getAdapterData()!=null){
+                && data.getChildren()!=null){
             internalAdapter = new FlexibleAdapter(data.adapterLayout,
                     data.getAdapterSpanCount(),
-                    data.getAdapterData());
+                    data.getChildren());
         }
         groupContainer.setAdapter(internalAdapter);
     }

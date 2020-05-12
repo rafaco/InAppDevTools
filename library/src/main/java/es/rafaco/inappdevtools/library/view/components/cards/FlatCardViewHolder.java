@@ -45,9 +45,10 @@ import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.view.components.groups.ListData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 
@@ -95,8 +96,8 @@ public class FlatCardViewHolder extends FlexibleViewHolder {
             cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(),
                     R.color.rally_orange_alpha));
             cardView.setCardElevation(UiUtils.getPixelsFromDp(cardView.getContext(), 2));
-            UiUtils.addHorizontalMargin(headerArea);
-            UiUtils.addHorizontalMargin(contentView);
+            MarginUtils.setHorizontalMargin(headerArea);
+            MarginUtils.setHorizontalMargin(contentView);
 
             bindHeader(data);
             bindContent(data);
@@ -167,9 +168,9 @@ public class FlatCardViewHolder extends FlexibleViewHolder {
         internalSeparator.setVisibility(View.VISIBLE);
         internalContainer.setVisibility(View.VISIBLE);
         internalContainer.removeAllViews();
-        ListData internalList = new ListData(data.getInternalData());
+        LinearGroupData internalList = new LinearGroupData(data.getInternalData());
         internalList.setShowDividers(true);
-        FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ListData.class);
+        FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
         desc.addToView(internalList, internalContainer);
     }
 

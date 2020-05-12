@@ -28,6 +28,8 @@ import android.view.ViewGroup;
 //#else
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
 //#endif
 
 public abstract class FlexibleViewHolder extends RecyclerView.ViewHolder {
@@ -48,6 +50,8 @@ public abstract class FlexibleViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.parentAdapter = adapter;
     }
+
     public void onCreate(ViewGroup viewGroup, int viewType){}
+
     public abstract void bindTo(Object abstractData, int position);
 }

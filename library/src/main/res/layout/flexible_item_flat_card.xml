@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="4dp"
                     android:textStyle="bold"
-                    style="@style/TextCondensedBig"
+                    style="@style/TextCondensed.Large"
                     android:textColor="@color/iadt_text_high"
                     tools:text="Title"/>
 
@@ -89,7 +89,7 @@
                     android:textAlignment="textEnd"
                     android:gravity="end"
                     android:layout_margin="4dp"
-                    style="@style/TextCondensedBig"
+                    style="@style/TextCondensed.Large"
                     android:textColor="@color/iadt_text_high"
                     tools:text="Overview"/>
 
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    style="@style/TextCondensedMedium"
+                    style="@style/TextCondensed.Medium"
                     tools:text="Content, content and more content\nand a bit more"/>
 
             </LinearLayout>

@@ -67,27 +67,27 @@
                     android:id="@+id/exception"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextCondensedMedium"/>
+                    style="@style/TextCondensed.Medium"/>
 
                 <TextView
                     android:id="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextCondensedMedium" />
+                    style="@style/TextCondensed.Medium" />
 
                 <TextView
                     android:id="@+id/where"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_yellow"
-                    style="@style/TextCondensedMedium" />
+                    style="@style/TextCondensed.Medium" />
 
                 <TextView
                     android:id="@+id/where2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_blue"
-                    style="@style/TextCondensedSmall"/>
+                    style="@style/TextCondensed.Small"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                         android:textColor="@color/rally_gray"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="10dp"
-                        style="@style/TextCondensedSmall" />
+                        style="@style/TextCondensed.Small" />
 
                     <TextView
                         android:id="@+id/where3"
@@ -112,7 +112,7 @@
                         android:layout_gravity="end"
                         android:gravity="end"
                         android:textColor="@color/rally_gray"
-                        style="@style/TextCondensedMedium" />
+                        style="@style/TextCondensed.Medium" />
 
                 </LinearLayout>
             </LinearLayout>

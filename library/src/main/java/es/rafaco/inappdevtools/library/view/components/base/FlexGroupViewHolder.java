@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,24 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components.items;
+package es.rafaco.inappdevtools.library.view.components.base;
 
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
-import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 
-public class HeaderViewHolder extends FlexibleViewHolder {
+public class FlexGroupViewHolder extends FlexItemViewHolder {
 
-    TextView titleView;
-
-    public HeaderViewHolder(View view, FlexibleAdapter adapter) {
+    public FlexGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
-        this.titleView = view.findViewById(R.id.title);
     }
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        String data = (String) abstractData;
-        titleView.setVisibility(TextUtils.isEmpty(data) ? View.GONE : View.VISIBLE);
-        if (data != null) titleView.setText(data);
+        super.bindTo(abstractData, position);
+
+        FlexGroupData data = (FlexGroupData) abstractData;
+
+        //TODO: nothing needed by now
     }
 }

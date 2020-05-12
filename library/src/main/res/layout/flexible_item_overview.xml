@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/overview_icon"
         android:textStyle="bold"
-        style="@style/TextCondensedExtraBig"
+        style="@style/TextCondensed.ExtraLarge"
         android:textColor="@color/iadt_text_high"/>
 
     <TextView
@@ -50,7 +50,7 @@
         android:layout_alignLeft="@id/overview_title"
         android:layout_gravity="end"
         android:layout_marginBottom="10dp"
-        style="@style/TextCondensedBig"
+        style="@style/TextCondensed.Large"
         android:textColor="@color/iadt_text_low"/>
 
 </RelativeLayout>

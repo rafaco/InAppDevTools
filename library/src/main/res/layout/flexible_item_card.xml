@@ -99,14 +99,14 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        style="@style/TextCondensedBig"
+                        style="@style/TextCondensed.Large"
                         tools:text="Title very long to force ellipsize on tools"/>
 
                     <TextView
                         android:id="@+id/content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/TextCondensedMedium"
+                        style="@style/TextCondensed.Medium"
                         android:textColor="@color/iadt_text_high"
                         tools:text="Content, content and more content\nand a bit more"/>
 

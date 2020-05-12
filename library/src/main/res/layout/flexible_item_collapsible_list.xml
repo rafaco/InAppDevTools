@@ -39,7 +39,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
             android:textStyle="bold"
-            style="@style/TextCondensedBig"
+            style="@style/TextCondensed.Large"
             android:textColor="@color/iadt_text_high"
             tools:text="Title"/>
 
@@ -64,7 +64,7 @@
             android:textAlignment="textEnd"
             android:gravity="end"
             android:layout_margin="4dp"
-            style="@style/TextCondensedBig"
+            style="@style/TextCondensed.Large"
             android:textColor="@color/iadt_text_high"
             tools:text="Overview"/>
 

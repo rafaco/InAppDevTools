@@ -17,75 +17,77 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components.groups;
+package es.rafaco.inappdevtools.library.view.components.cards;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
+import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class CollapsibleListViewHolder extends ListViewHolder {
+public class CardHeaderViewHolder extends FlexibleViewHolder {
 
-    private final RelativeLayout headerContainer;
-    private final TextView overviewView;
-    private final ImageView navIcon;
-    private final LinearLayout collapsibleContainer;
-    private final View contentSeparator;
-    private final TextView contentView;
+    protected final RelativeLayout headerArea;
+    protected final TextView iconView;
+    protected final TextView titleView;
+    protected final TextView overviewView;
+    protected final ImageView navIcon;
 
-    public CollapsibleListViewHolder(View view, FlexibleAdapter adapter) {
+    public CardHeaderViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
-        this.headerContainer = view.findViewById(R.id.header_container);
+        this.headerArea = view.findViewById(R.id.header_area);
+        this.iconView = view.findViewById(R.id.icon);
+        this.titleView = view.findViewById(R.id.title);
         this.overviewView = view.findViewById(R.id.overview);
         this.navIcon = view.findViewById(R.id.nav_icon);
-        this.collapsibleContainer = view.findViewById(R.id.collapsible_container);
-        this.contentSeparator = view.findViewById(R.id.content_separator);
-        this.contentView = view.findViewById(R.id.content);
     }
 
     @Override
-    public void bindTo(Object abstractData, int position) {
-        super.bindTo(abstractData, position);
-        final CollapsibleListData data = (CollapsibleListData) abstractData;
+    public void bindTo(Object abstractData, final int position) {
+        final CardHeaderData data = (CardHeaderData) abstractData;
+        if (data!=null){
+            MarginUtils.setHorizontalMargin(itemView);
 
-        itemView.setClickable(true);
-        itemView.setActivated(true);
+            bindHeader(data);
+            bindExpandedState(data);
+        }
+    }
 
+    private void bindHeader(CardHeaderData data) {
+        int icon = data.getIcon();
+        if (icon>0){
+            IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
+            iconView.setText(icon);
+            iconView.setVisibility(View.VISIBLE);
+        }else{
+            iconView.setVisibility(View.GONE);
+        }
+
+        titleView.setText(data.getTitle());
         overviewView.setText(data.getOverview());
 
         UiUtils.setBackground(navIcon, null);
         navIcon.setVisibility(View.VISIBLE);
-
-        bindExpandedState(data);
     }
 
-    private void bindExpandedState(final CollapsibleListData data) {
-        contentSeparator.setVisibility(View.VISIBLE);
-        applyExpandedState(data.isExpanded());
-        headerContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean newState = !data.isExpanded();
-                    data.setExpanded(newState);
-                    applyExpandedState(newState);
-                }
-            });
+    private void bindExpandedState(CardHeaderData data) {
+        if (data.isExpandable()) {
+            applyExpandedState(data.isExpanded());
+        }
     }
 
     private void applyExpandedState(Boolean isExpanded) {
         if (!isExpanded){
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.iadt_primary);
-            collapsibleContainer.setVisibility(View.GONE);
         }
         else {
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_up_white_24dp, R.color.iadt_primary);
-            collapsibleContainer.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -17,33 +17,32 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components;
+package es.rafaco.inappdevtools.library.view.components.base;
 
-import java.util.ArrayList;
-import java.util.List;
+import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 
 public class FlexItemData {
 
     String id;
-    List<FlexItemData> children;
 
-    //TODO: remove??
+    int spamOnParent;
+    boolean fullSpamOnParent = false;
+
+    int leftMargin;
+    int rightMargin;
+    int topMargin;
+    int bottomMargin;
+    Boolean horizontalMargin = null;
+    Boolean verticalMargin = null;
+    int backgroundColor;
+
     Class<? extends FlexibleViewHolder> viewHolderClass;
     int layoutResourceId;
 
-    boolean fullSpamOnParent = false;
-    boolean horizontalMargin = false;
-    boolean verticalMargin = false;
-
-    public FlexItemData(String id){
-        this(id, new ArrayList<FlexItemData>());
-    }
-
-    public FlexItemData(String id, List<FlexItemData> children) {
-        this.id = id;
-        this.children = children;
-        viewHolderClass = null;
-        layoutResourceId = -1;
+    public FlexItemData() {
+        this.id = null;
+        this.viewHolderClass = null;
+        this.layoutResourceId = -1;
     }
 
     public String getId() {
@@ -52,14 +51,6 @@ public class FlexItemData {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<FlexItemData> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<FlexItemData> children) {
-        this.children = children;
     }
 
     public Class<? extends FlexibleViewHolder> getViewHolderClass() {
@@ -86,7 +77,7 @@ public class FlexItemData {
         this.fullSpamOnParent = fullSpamOnParent;
     }
 
-    public boolean isHorizontalMargin() {
+    public Boolean isHorizontalMargin() {
         return horizontalMargin;
     }
 
@@ -94,11 +85,19 @@ public class FlexItemData {
         this.horizontalMargin = horizontalMargin;
     }
 
-    public boolean isVerticalMargin() {
+    public Boolean isVerticalMargin() {
         return verticalMargin;
     }
 
     public void setVerticalMargin(boolean verticalMargin) {
         this.verticalMargin = verticalMargin;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

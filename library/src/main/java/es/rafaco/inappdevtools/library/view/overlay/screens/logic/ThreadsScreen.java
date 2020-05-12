@@ -28,8 +28,8 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadGroupsUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleListData;
-import es.rafaco.inappdevtools.library.view.components.items.LinkItem;
+import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.listener.OnlyOneExpandedListener;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -94,7 +94,7 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
             List<Object> internalData = new ArrayList<>();
             List<Thread> runningItems = RunningThreadsUtils.getThreadsFromGroup(info);
             for (Thread thread : runningItems) {
-                internalData.add(new LinkItem(
+                internalData.add(new LinkItemData(
                         RunningThreadsUtils.formatOneLine(thread),
                         RunningThreadsUtils.formatOneLineOverview(thread),
                         -1,
@@ -107,7 +107,7 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
                         }
                 ));
             }
-            CollapsibleListData collapsible = new CollapsibleListData(internalData);
+            CollapsibleLinearGroupData collapsible = new CollapsibleLinearGroupData(internalData);
             collapsible.setOverview(runningItems.size() + " threads");
             List<Object> internalData2 = new ArrayList<>();
             internalData2.add(collapsible);

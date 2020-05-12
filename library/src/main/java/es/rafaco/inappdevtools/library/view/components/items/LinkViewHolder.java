@@ -57,7 +57,7 @@ public class LinkViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final LinkItem data = (LinkItem) abstractData;
+        final LinkItemData data = (LinkItemData) abstractData;
         if (data.getIcon()>0){
             IconUtils.set(icon, data.getIcon());
             if (data.getColor()>0){

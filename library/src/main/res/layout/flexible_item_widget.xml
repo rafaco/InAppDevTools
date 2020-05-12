@@ -45,7 +45,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextCondensedMedium"
+                style="@style/TextCondensed.Medium"
                 android:textColor="@color/iadt_text_header"
                 tools:text="TITLE"/>
 
@@ -56,7 +56,7 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:lineSpacingMultiplier="0.9"
-                style="@style/TextCondensedExtraBig"
+                style="@style/TextCondensed.ExtraLarge"
                 android:textColor="@color/iadt_text_high"
                 tools:text="Main Content"/>
 
@@ -67,7 +67,7 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:lineSpacingMultiplier="0.9"
-                style="@style/TextCondensedMedium"
+                style="@style/TextCondensed.Medium"
                 android:textColor="@color/iadt_text_low"
                 tools:text="Secondary Content"/>
 

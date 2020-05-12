@@ -40,14 +40,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/rally_orange"
-                style="@style/TextCondensedBig" />
+                style="@style/TextCondensed.Large" />
 
             <TextView
                 android:id="@+id/detail_session"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_when"
-                style="@style/TextCondensedMedium"
+                style="@style/TextCondensed.Medium"
                 android:visibility="gone"/>
 
             <TextView
@@ -55,21 +55,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_session"
-                style="@style/TextCondensedMedium" />
+                style="@style/TextCondensed.Medium" />
 
             <TextView
                 android:id="@+id/detail_last_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_foreground"
-                style="@style/TextCondensedMedium" />
+                style="@style/TextCondensed.Medium" />
 
             <TextView
                 android:id="@+id/detail_thread"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_last_activity"
-                style="@style/TextCondensedMedium" />
+                style="@style/TextCondensed.Medium" />
 
             <ImageView
                 android:id="@+id/thumbnail"
@@ -139,14 +139,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="@color/rally_orange"
-            style="@style/TextCondensedBig" />
+            style="@style/TextCondensed.Large" />
 
         <TextView
             android:id="@+id/detail_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            style="@style/TextCondensedMedium" />
+            style="@style/TextCondensed.Medium" />
 
         <LinearLayout
             android:id="@+id/message_buttons1"
@@ -191,14 +191,14 @@
             android:layout_height="wrap_content"
             android:textColor="@color/rally_orange"
             android:layout_marginTop="20dp"
-            style="@style/TextCondensedBig" />
+            style="@style/TextCondensed.Large" />
 
         <TextView
             android:id="@+id/detail_subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            style="@style/TextCondensedMedium" />
+            style="@style/TextCondensed.Medium" />
 
         <LinearLayout
             android:id="@+id/message_buttons2"

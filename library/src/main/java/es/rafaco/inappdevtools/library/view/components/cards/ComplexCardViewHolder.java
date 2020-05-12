@@ -43,7 +43,7 @@ import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.view.components.groups.ListData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -156,9 +156,9 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         internalSeparator.setVisibility(View.VISIBLE);
         internalContainer.setVisibility(View.VISIBLE);
         internalContainer.removeAllViews();
-        ListData internalList = new ListData(data.getInternalData());
+        LinearGroupData internalList = new LinearGroupData(data.getInternalData());
         internalList.setShowDividers(true);
-        FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ListData.class);
+        FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
         desc.addToView(internalList, internalContainer);
     }
 

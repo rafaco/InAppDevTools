@@ -19,30 +19,37 @@
 
 package es.rafaco.inappdevtools.library.view.components.groups;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 
-public class RecyclerListData {
+public class RecyclerGroupData extends FlexGroupData {
 
     FlexibleAdapter adapter;
-
     FlexibleAdapter.Layout adapterLayout;
     int adapterSpanCount;
-    List<Object> adapterData;
 
     boolean showDividers = false;
     boolean isHorizontal = false;
-    boolean hasHorizontalMargin = false;
 
-    public RecyclerListData(FlexibleAdapter adapter) {
+    public RecyclerGroupData(){
+        this(FlexibleAdapter.Layout.LINEAR, 1, new ArrayList<Object>());
+    }
+
+    public RecyclerGroupData(FlexibleAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public RecyclerListData(FlexibleAdapter.Layout layout, int spanCount, List<Object> data) {
+    public RecyclerGroupData(FlexibleAdapter.Layout layout, int spanCount) {
+        this(layout, spanCount, new ArrayList<Object>());
+    }
+
+    public RecyclerGroupData(FlexibleAdapter.Layout layout, int spanCount, List<Object> children) {
+        super(children);
         this.adapterLayout = layout;
         this.adapterSpanCount = spanCount;
-        this.adapterData = data;
     }
 
     public FlexibleAdapter getAdapter() {
@@ -69,14 +76,6 @@ public class RecyclerListData {
         this.adapterSpanCount = adapterSpanCount;
     }
 
-    public List<Object> getAdapterData() {
-        return adapterData;
-    }
-
-    public void setAdapterData(List<Object> adapterData) {
-        this.adapterData = adapterData;
-    }
-
     public boolean isShowDividers() {
         return showDividers;
     }
@@ -91,13 +90,5 @@ public class RecyclerListData {
 
     public void setHorizontal(boolean horizontal) {
         isHorizontal = horizontal;
-    }
-
-    public boolean isHasHorizontalMargin() {
-        return hasHorizontalMargin;
-    }
-
-    public void setHasHorizontalMargin(boolean hasHorizontalMargin) {
-        this.hasHorizontalMargin = hasHorizontalMargin;
     }
 }

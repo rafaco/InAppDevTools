@@ -13,6 +13,11 @@
     <dimen name="iadt_icon_font_size_l">30dp</dimen>
     <dimen name="iadt_icon_font_size_xl">40dp</dimen>
 
+    <dimen name="iadt_text_size_s">13dp</dimen>
+    <dimen name="iadt_text_size_m">15dp</dimen>
+    <dimen name="iadt_text_size_l">17dp</dimen>
+    <dimen name="iadt_text_size_xl">21dp</dimen>
+
     <!-- Iadt features -->
     <dimen name="iadt_toast_y_offset">24dp</dimen>
 

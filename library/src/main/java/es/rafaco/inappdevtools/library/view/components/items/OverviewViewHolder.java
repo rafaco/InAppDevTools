@@ -19,15 +19,15 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
 //#else
 import android.support.v4.content.ContextCompat;
 //#endif
-
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;

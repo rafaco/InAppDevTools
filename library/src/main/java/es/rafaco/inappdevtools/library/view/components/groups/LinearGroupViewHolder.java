@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,14 +29,14 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
 
-public class ListViewHolder extends FlexibleViewHolder {
+public class LinearGroupViewHolder extends FlexGroupViewHolder {
 
     private final TextView groupTitle;
     LinearLayout groupContainer;
 
-    public ListViewHolder(View view, FlexibleAdapter adapter) {
+    public LinearGroupViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         groupTitle = view.findViewById(R.id.group_title);
         groupContainer = view.findViewById(R.id.group_container);
@@ -43,7 +44,9 @@ public class ListViewHolder extends FlexibleViewHolder {
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final ListData data = (ListData) abstractData;
+        super.bindTo(abstractData, position);
+
+        final LinearGroupData data = (LinearGroupData) abstractData;
         if (data==null){
             groupTitle.setVisibility(View.GONE);
             groupContainer.setVisibility(View.GONE);
@@ -56,19 +59,21 @@ public class ListViewHolder extends FlexibleViewHolder {
         bindItems(data);
     }
 
-    private void bindOrientation(ListData data) {
-        groupContainer.setOrientation(data.isHorizontal
-                ? LinearLayout.HORIZONTAL
-                : LinearLayout.VERTICAL);
+    private void bindOrientation(LinearGroupData data) {
+        int orientation = data.isHorizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
+        int layoutWidth = LinearLayout.LayoutParams.MATCH_PARENT;
+        int layoutHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
+        groupContainer.setOrientation(orientation);
+        groupContainer.setLayoutParams(new LinearLayout.LayoutParams(layoutWidth, layoutHeight));
     }
 
-    private void bindDividers(ListData data) {
+    private void bindDividers(LinearGroupData data) {
         groupContainer.setShowDividers(data.isShowDividers()
                 ? LinearLayout.SHOW_DIVIDER_MIDDLE
                 : LinearLayout.SHOW_DIVIDER_NONE);
     }
 
-    private void bindTitle(ListData data) {
+    private void bindTitle(LinearGroupData data) {
         boolean showTitle = !TextUtils.isEmpty(data.getTitle());
         if (showTitle) {
             groupTitle.setText(data.getTitle());
@@ -76,13 +81,14 @@ public class ListViewHolder extends FlexibleViewHolder {
         groupTitle.setVisibility(showTitle ? View.VISIBLE : View.GONE);
     }
 
-    private void bindItems(ListData data) {
-        if (data.getItems() == null && data.getItems().isEmpty()) {
+    private void bindItems(LinearGroupData data) {
+        if (data.getChildren() == null || data.getChildren().isEmpty()) {
+            groupContainer.removeAllViews();
             return;
         }
 
-        for (int i = 0; i<data.getItems().size(); i++){
-            Object currentItem = data.getItems().get(i);
+        for (int i = 0; i<data.getChildren().size(); i++){
+            Object currentItem = data.getChildren().get(i);
             FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(currentItem.getClass());
             if (desc != null){
                 desc.addToView(currentItem, groupContainer);

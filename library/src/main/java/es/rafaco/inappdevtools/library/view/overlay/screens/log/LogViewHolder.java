@@ -148,7 +148,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
         }else{
-            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
+            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensed_Small));
             title.setTypeface(title.getTypeface(), Typeface.BOLD);
             title.setTextColor(severityColor);
         }

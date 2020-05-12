@@ -1,0 +1,76 @@
+<!--
+  ~ This source file is part of InAppDevTools, which is available under
+  ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+  ~
+  ~ Copyright 2018-2020 Rafael Acosta Alvarez
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/header_area"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    tools:background="@color/iadt_surface_top">
+
+    <TextView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/iadt_icon_font_size_m"
+        android:layout_marginRight="4dp"
+        android:textColor="@color/iadt_text_high"
+        tools:text="C"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icon"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        style="@style/TextCondensed.Large"
+        android:textColor="@color/iadt_text_high"
+        tools:text="Title"/>
+
+    <ImageView
+        android:id="@+id/nav_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="4dp"
+        android:textSize="@dimen/iadt_icon_font_size_m"
+        android:textColor="@color/iadt_primary"
+        tools:src="@drawable/ic_arrow_right_white_24dp"/>
+
+    <TextView
+        android:id="@+id/overview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/nav_icon"
+        android:layout_toRightOf="@id/title"
+        android:layout_centerVertical="true"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:layout_marginLeft="4dp"
+        style="@style/TextCondensed.Large"
+        android:textColor="@color/iadt_text_high"
+        tools:text="Overview"/>
+
+</RelativeLayout>

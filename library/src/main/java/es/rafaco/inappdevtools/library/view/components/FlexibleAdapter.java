@@ -45,7 +45,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.components.items.HeaderViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.TextViewHolder;
 
 public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
@@ -127,7 +127,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
                 .inflate(desc.layoutResourceId, viewGroup, false);
         FlexibleViewHolder holder = constructViewHolder(desc, view);
         if (holder==null){
-            return new HeaderViewHolder(viewGroup, this);
+            return new TextViewHolder(viewGroup, this);
         }
         holder.onCreate(viewGroup, viewType);
         return holder;

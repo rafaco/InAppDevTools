@@ -3,7 +3,7 @@
   ~ This source file is part of InAppDevTools, which is available under
   ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
   ~
-  ~ Copyright 2018-2019 Rafael Acosta Alvarez
+  ~ Copyright 2018-2020 Rafael Acosta Alvarez
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,27 +18,13 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/title"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/group_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/TextCondensed.Large"/>
-
-    <LinearLayout
-        android:id="@+id/group_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:gravity="right"
-        android:showDividers="none"
-        android:divider="@color/iadt_text_high"
-        android:dividerPadding="4dp"
-        android:orientation="horizontal" />
-
-</LinearLayout>
+    android:layout_marginHorizontal="@dimen/iadt_horizontal_margin"
+    android:layout_marginVertical="@dimen/iadt_vertical_margin"
+    style="@style/TextCondensed"
+    tools:text="This a paragraph to be used as placeholder in the design view of Android Studio.\nAnd this is another paragraph."
+    tools:background="@color/iadt_surface_top"/>

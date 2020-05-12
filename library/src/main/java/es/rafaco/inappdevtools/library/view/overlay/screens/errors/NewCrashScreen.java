@@ -37,13 +37,17 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderData;
 import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleListData;
+import es.rafaco.inappdevtools.library.view.components.groups.CardGroupData;
+import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.items.LinkItem;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
-import es.rafaco.inappdevtools.library.view.components.groups.RecyclerListData;
+import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.TextItemData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -222,6 +226,69 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         String message = crash.getMessage();
         final String composedMessage = title + ". " + message;
 
+
+
+        CardGroupData cardGroup = new CardGroupData();
+        cardGroup.setFullWidth(true);
+        cardGroup.setVerticalMargin(true);
+        cardGroup.setPerformer(new Runnable() {
+            @Override
+            public void run() {
+                IadtController.get().startReportWizard(ReportType.CRASH, -1);
+            }
+        });
+
+        LinearGroupData cardData = new LinearGroupData();
+
+        CardHeaderData headerData = new CardHeaderData.Builder(title)
+                .setExpandable(false)
+                .setExpanded(true)
+                .setOverview("Exception")
+                .build();
+        cardData.add(headerData);
+
+        TextItemData messageData = new TextItemData(message);
+        messageData.setSize(TextItemData.Size.LARGE);
+        cardData.add(messageData);
+
+        List<RunButton> messageButtons = new ArrayList<>();
+        messageButtons.add(new RunButton("Copy",
+                R.drawable.ic_content_copy_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ClipboardUtils.save(getContext(), composedMessage);
+                        Iadt.showMessage("Exception copied to clipboard");
+                    }
+                }));
+
+        messageButtons.add(new RunButton("Google it",
+                R.drawable.ic_google_brands,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        String url = "https://www.google.com/search?q=" + composedMessage;
+                        ExternalIntentUtils.viewUrl(url);
+                    }
+                }));
+
+        ButtonGroupData buttonGroupData = new ButtonGroupData(messageButtons);
+        buttonGroupData.setBorderless(true);
+        cardData.add(buttonGroupData);
+
+        LinearGroupData demoButtons = new LinearGroupData();
+        demoButtons.setHorizontal(true);
+        TextItemData algoData = new TextItemData("Algo...");
+        demoButtons.add(algoData);
+        demoButtons.add(algoData);
+        cardData.add(demoButtons);
+
+        cardGroup.add(cardData);
+        data.add(cardGroup);
+        data.add("");
+
+
+
         FlatCardData.Builder cardBuilder = new FlatCardData.Builder(title)
                 .add(message)
                 .setExpandable(false)
@@ -250,7 +317,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
 
         List<Object> stacktraces = new ArrayList<>();
-        stacktraces.add(new LinkItem(
+        stacktraces.add(new LinkItemData(
                 "Prueba",
                 "Overview",
                 -1,
@@ -262,7 +329,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                     }
                 }
         ));
-        stacktraces.add(new LinkItem(
+        stacktraces.add(new LinkItemData(
                 "Prueba2",
                 "Overview",
                 -1,
@@ -277,23 +344,20 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         List<Object> internalData = new ArrayList<>();
 
-        CollapsibleListData collapsible = new CollapsibleListData(stacktraces);
+        CollapsibleLinearGroupData collapsible = new CollapsibleLinearGroupData(stacktraces);
         collapsible.setOverview(stacktraces.size() + " traces");
         collapsible.setShowDividers(false);
         internalData.add(collapsible);
 
         FlexibleAdapter adapter = traceGrouper.getExceptionAdapter();
         if (adapter != null){
-            RecyclerListData traces = new RecyclerListData(adapter);
-            traces.setHasHorizontalMargin(true);
+            RecyclerGroupData traces = new RecyclerGroupData(adapter);
+            traces.setHorizontalMargin(true);
             internalData.add(traces);
         }
 
         cardBuilder.setInternalData(internalData);
-        
-        data.add("");
         data.add(cardBuilder.build());
-
     }
 
     private void initCauseException(List<Object> data, Crash crash, TraceGrouper traceGrouper) {
@@ -322,8 +386,8 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         FlexibleAdapter adapter = traceGrouper.getCauseAdapter();
         if (adapter != null){
-            RecyclerListData traces = new RecyclerListData(adapter);
-            traces.setHasHorizontalMargin(true);
+            RecyclerGroupData traces = new RecyclerGroupData(adapter);
+            traces.setHorizontalMargin(true);
             internalData.add(traces);
         }
 
