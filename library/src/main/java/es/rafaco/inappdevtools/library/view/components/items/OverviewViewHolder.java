@@ -59,8 +59,7 @@ public class OverviewViewHolder extends FlexibleViewHolder {
             overviewContentView.setText(data.getContent());
 
             if (data.getIcon()>0){
-                IconUtils.markAsIconContainer(overviewIconView, IconUtils.MATERIAL);
-                overviewIconView.setText(data.getIcon());
+                IconUtils.set(overviewIconView, data.getIcon());
                 overviewIconView.setVisibility(View.VISIBLE);
             }else{
                 overviewIconView.setVisibility(View.GONE);

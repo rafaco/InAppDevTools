@@ -95,8 +95,7 @@ public class CardViewHolder extends FlexibleViewHolder {
 
             int icon = data.getIcon();
             if (icon>0){
-                IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
-                iconView.setText(data.getIcon());
+                IconUtils.set(iconView, icon);
                 iconView.setVisibility(View.VISIBLE);
                 if (data.getTitleColor()>0){
                     iconView.setTextColor(ContextCompat.getColor(itemView.getContext(), data.getTitleColor()));
@@ -131,10 +130,9 @@ public class CardViewHolder extends FlexibleViewHolder {
                     navIcon.setText(data.getNavCount()+"");
                 }
                 else{
-                    IconUtils.markAsIconContainer(navIcon, IconUtils.MATERIAL);
                     int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
                             : R.string.gmd_keyboard_arrow_right;
-                    navIcon.setText(navIconRes);
+                    IconUtils.set(navIcon, navIconRes);
                 }
                 navIcon.setVisibility(View.VISIBLE);
             }
@@ -148,9 +146,8 @@ public class CardViewHolder extends FlexibleViewHolder {
             }
 
             if (data.getNavAddRunnable() != null){
-                IconUtils.markAsIconContainer(navAddIcon, IconUtils.MATERIAL);
                 int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon() : R.string.gmd_add;
-                navAddIcon.setText(navAddIconRes);
+                IconUtils.set(navAddIcon, navAddIconRes);
                 navAddContainer.setClickable(true);
                 navAddContainer.setOnClickListener(new View.OnClickListener() {
                     @Override

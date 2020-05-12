@@ -62,8 +62,7 @@ public class CardHeaderViewHolder extends FlexibleViewHolder {
     private void bindHeader(CardHeaderData data) {
         int icon = data.getIcon();
         if (icon>0){
-            IconUtils.markAsIconContainer(iconView, IconUtils.MATERIAL);
-            iconView.setText(icon);
+            IconUtils.set(iconView, icon);
             iconView.setVisibility(View.VISIBLE);
         }else{
             iconView.setVisibility(View.GONE);

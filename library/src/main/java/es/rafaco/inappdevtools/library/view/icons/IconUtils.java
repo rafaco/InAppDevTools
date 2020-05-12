@@ -38,8 +38,13 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 public class IconUtils {
 
     public static final String ROOT = "fonts/";
-    public static final String FONTAWESOME = ROOT + "fa-solid-900.ttf";
     public static final String MATERIAL = ROOT + "MaterialIcons-Regular.ttf";
+    //public static final String FONTAWESOME = ROOT + "fa-solid-900.ttf";
+
+    //Disabled icons at TextViews. A workaround to allow Layout Inspection with AndroidStudio
+    private static final boolean DISABLED = false;
+    private static final String DISABLED_REPLACEMENT = "@";
+
 
     public static Typeface getTypeface(Context context) {
         return Typeface.createFromAsset(context.getAssets(), MATERIAL);
@@ -74,6 +79,10 @@ public class IconUtils {
     }
 
     public static void set(TextView textView, int stringIcon){
+        if (DISABLED){
+            textView.setText(DISABLED_REPLACEMENT);
+            return;
+        }
         markAsIconContainer(textView, IconUtils.MATERIAL);
         textView.setText(stringIcon);
     }
