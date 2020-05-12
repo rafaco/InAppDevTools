@@ -27,13 +27,13 @@ import java.lang.reflect.Constructor;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
-public class FlexibleItemDescriptor {
+public class FlexDescriptor {
 
     public final Class<?> dataClass;
-    public final Class<? extends FlexibleViewHolder> viewHolderClass;
+    public final Class<? extends FlexViewHolder> viewHolderClass;
     public final int layoutResourceId;
 
-    public FlexibleItemDescriptor(Class<?> dataClass, Class<? extends FlexibleViewHolder> viewHolderClass, int layoutResourceId) {
+    public FlexDescriptor(Class<?> dataClass, Class<? extends FlexViewHolder> viewHolderClass, int layoutResourceId) {
         this.dataClass = dataClass;
         this.viewHolderClass = viewHolderClass;
         this.layoutResourceId = layoutResourceId;
@@ -42,7 +42,7 @@ public class FlexibleItemDescriptor {
     public View addToView(Object data, ViewGroup container) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         View view =  inflater.inflate(layoutResourceId, container, false);
-        FlexibleViewHolder holder = constructViewHolder(view);
+        FlexViewHolder holder = constructViewHolder(view);
         holder.onCreate(container, -1);
         holder.bindTo(data, -1);
         container.addView(view);
@@ -50,11 +50,11 @@ public class FlexibleItemDescriptor {
     }
 
     //TODO: use this for all usages (without adapter)
-    private FlexibleViewHolder constructViewHolder(View view) {
-        FlexibleViewHolder holder = null;
+    private FlexViewHolder constructViewHolder(View view) {
+        FlexViewHolder holder = null;
         try {
-            Constructor<? extends FlexibleViewHolder> constructor = viewHolderClass
-                    .getConstructor(View.class, FlexibleAdapter.class);
+            Constructor<? extends FlexViewHolder> constructor = viewHolderClass
+                    .getConstructor(View.class, FlexAdapter.class);
             holder = constructor.newInstance(new Object[] { view, null });
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);

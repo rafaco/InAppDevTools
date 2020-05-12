@@ -24,16 +24,16 @@ import es.rafaco.compat.TextInputLayout;
 import android.view.View;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
 
-public class EditTextViewHolder extends FlexibleViewHolder {
+public class EditTextViewHolder extends FlexViewHolder {
 
     private final TextInputEditText editText;
     private final TextInputLayout layout;
 
-    public EditTextViewHolder(View view, FlexibleAdapter adapter) {
+    public EditTextViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
 
         //this.titleView = view.findViewById(R.id.title);

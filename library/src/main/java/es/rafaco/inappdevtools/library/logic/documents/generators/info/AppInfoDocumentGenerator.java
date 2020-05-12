@@ -41,7 +41,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
 import es.rafaco.inappdevtools.library.logic.utils.AppInfoUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
@@ -159,7 +159,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Features", features)
                 .add("Instrumentations", instrumentations)
                 .add("Libraries", "Coming soon")
-                .addButton(new ButtonBorderlessData("Original",
+                .addButton(new ButtonBorderlessFlexData("Original",
                         R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override
@@ -168,7 +168,7 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
                                 OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }
                         }))
-                .addButton(new ButtonBorderlessData("Merged",
+                .addButton(new ButtonBorderlessFlexData("Merged",
                         R.drawable.ic_local_library_white_24dp,
                         new Runnable() {
                             @Override

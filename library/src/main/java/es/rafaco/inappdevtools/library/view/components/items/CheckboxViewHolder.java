@@ -23,14 +23,14 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
-public class CheckboxViewHolder extends FlexibleViewHolder {
+public class CheckboxViewHolder extends FlexViewHolder {
 
     CheckBox checkBox;
 
-    public CheckboxViewHolder(View view, FlexibleAdapter adapter) {
+    public CheckboxViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.checkBox = view.findViewById(R.id.checkBox);
     }

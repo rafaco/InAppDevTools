@@ -30,14 +30,14 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 
 public abstract class AbstractFlexibleScreen extends Screen {
 
     private RecyclerView flexContainer;
-    protected FlexibleAdapter flexAdapter;
+    protected FlexAdapter flexAdapter;
 
     public AbstractFlexibleScreen(ScreenManager manager) {
         super(manager);
@@ -72,15 +72,15 @@ public abstract class AbstractFlexibleScreen extends Screen {
     }
 
     private void initAdapter(ViewGroup bodyView) {
-        flexAdapter = new FlexibleAdapter(getLayout(), getSpanCount(), new ArrayList<>());
+        flexAdapter = new FlexAdapter(getLayout(), getSpanCount(), new ArrayList<>());
         flexContainer = bodyView.findViewById(R.id.flexible);
         flexContainer.setHasFixedSize(true);
         if(!hasHorizontalMargin()) MarginUtils.removeHorizontalMargin(flexContainer);
         flexContainer.setAdapter(flexAdapter);
     }
 
-    public FlexibleAdapter.Layout getLayout(){
-        return FlexibleAdapter.Layout.GRID;
+    public FlexAdapter.Layout getLayout(){
+        return FlexAdapter.Layout.GRID;
     }
 
     public int getSpanCount(){
@@ -91,7 +91,7 @@ public abstract class AbstractFlexibleScreen extends Screen {
         return true;
     }
 
-    public void setFullWidthSolver(FlexibleAdapter.FullWidthSolver solver) {
+    public void setFullWidthSolver(FlexAdapter.FullWidthSolver solver) {
         flexAdapter.setFullWidthSolver(solver);
     }
 

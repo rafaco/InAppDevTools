@@ -36,8 +36,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -329,7 +329,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         data.add("//TODO: WORK IN PROGRESS");
         data.add("");
         data.add("Choose screenshots and press continue:");
-        data.add(new ButtonData("Continue",
+        data.add(new ButtonFlexData("Continue",
                 new Runnable() {
                     @Override
                     public void run() {
@@ -450,9 +450,9 @@ public class NewReportScreen extends AbstractFlexibleScreen {
 
         data.add("");
 
-        LinearGroupData linearGroupData = new LinearGroupData();
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData("Save",
+        linearGroupData.add(new ButtonFlexData("Save",
                 R.drawable.ic_save_white_24dp,
                 new Runnable() {
                     @Override
@@ -460,7 +460,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                         onSaveReport();
                     }
                 }));
-        linearGroupData.add(new ButtonData("Next",
+        linearGroupData.add(new ButtonFlexData("Next",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green,
                 new Runnable() {

@@ -24,7 +24,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningBroadcastReceiversUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
@@ -145,7 +145,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("Shortcuts");
-        data.add(new ButtonData("Clean all...",
+        data.add(new ButtonFlexData("Clean all...",
                 R.drawable.ic_delete_forever_white_24dp,
                 new Runnable() {
                     @Override
@@ -154,7 +154,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Disable Iadt...",
+        data.add(new ButtonFlexData("Disable Iadt...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override

@@ -36,13 +36,13 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTrack;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -52,7 +52,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FragmentsScreen extends Screen {
 
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
     private RecyclerView recyclerView;
 
     public FragmentsScreen(ScreenManager manager) {
@@ -124,7 +124,7 @@ public class FragmentsScreen extends Screen {
                 final String srcPath = getSourcesManager().getPathFromClassName(track.className);
                 String fileName = Humanizer.getLastPart(srcPath, "/");
                 if (TextUtils.isEmpty(srcPath)){
-                    fragmentDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
+                    fragmentDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -134,7 +134,7 @@ public class FragmentsScreen extends Screen {
                             }));
                 }
                 else{
-                    fragmentDataBuilder.addButton(new ButtonBorderlessData(fileName,
+                    fragmentDataBuilder.addButton(new ButtonBorderlessFlexData(fileName,
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -150,7 +150,7 @@ public class FragmentsScreen extends Screen {
                 final String layoutPath = getSourcesManager().getLayoutPathFromLayoutName(layoutName);
                 String layoutFile = Humanizer.getLastPart(layoutPath, "/");
                 if (TextUtils.isEmpty(layoutPath)) {
-                    fragmentDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
+                    fragmentDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -161,7 +161,7 @@ public class FragmentsScreen extends Screen {
                     );
                 }
                 else{
-                    fragmentDataBuilder.addButton(new ButtonBorderlessData(layoutFile,
+                    fragmentDataBuilder.addButton(new ButtonBorderlessFlexData(layoutFile,
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -192,7 +192,7 @@ public class FragmentsScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, data);
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

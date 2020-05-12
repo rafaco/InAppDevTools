@@ -43,13 +43,13 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
-import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
@@ -180,16 +180,16 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         }
 
         if(isSelected && getLinkedIdStep(data)!=null){
-            LinearGroupData linearGroupData = new LinearGroupData();
+            LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
             linearGroupData.setHorizontal(true);
-            linearGroupData.add(new ButtonData(
+            linearGroupData.add(new ButtonFlexData(
                     "Details", new Runnable() {
                 @Override
                 public void run() {
                     OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
                 }
             }));
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
+            FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(linearGroupData, buttonGroupContainer);
 
             buttonGroupContainer.setVisibility(View.VISIBLE);

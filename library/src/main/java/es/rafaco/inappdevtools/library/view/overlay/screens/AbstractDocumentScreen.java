@@ -35,12 +35,12 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.listener.OnlyOneExpandedListener;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 
 public abstract class AbstractDocumentScreen extends Screen {
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
     private OnlyOneExpandedListener helper;
 
     public AbstractDocumentScreen(ScreenManager manager) {
@@ -92,7 +92,7 @@ public abstract class AbstractDocumentScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 3, data);
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
         helper = new OnlyOneExpandedListener(adapter);
 
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);

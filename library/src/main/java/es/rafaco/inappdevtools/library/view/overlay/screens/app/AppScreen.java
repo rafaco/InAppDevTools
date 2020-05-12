@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -71,7 +71,7 @@ public class AppScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("App shortcuts");
-        data.add(new ButtonData("Restart app",
+        data.add(new ButtonFlexData("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {
                     @Override
@@ -80,7 +80,7 @@ public class AppScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Force close app",
+        data.add(new ButtonFlexData("Force close app",
                 R.drawable.ic_warning_white_24dp,
                 new Runnable() {
                     @Override

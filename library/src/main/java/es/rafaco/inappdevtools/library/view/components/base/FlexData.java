@@ -19,14 +19,14 @@
 
 package es.rafaco.inappdevtools.library.view.components.base;
 
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
-public class FlexItemData {
+public class FlexData {
 
     public enum LayoutInParent { FULL_BOTH, WRAP_BOTH, FULL_WIDTH, FULL_HEIGHT, SAME_WIDTH, SAME_HEIGHT }
 
     String id;
-    Class<? extends FlexibleViewHolder> viewHolderClass;
+    Class<? extends FlexViewHolder> viewHolderClass;
     int layoutResourceId;
 
     LayoutInParent layoutInParent;
@@ -42,7 +42,7 @@ public class FlexItemData {
     Boolean verticalMargin = null;
     int backgroundColor;
 
-    public FlexItemData() {
+    public FlexData() {
         this.id = null;
         this.viewHolderClass = null;
         this.layoutResourceId = -1;
@@ -56,11 +56,11 @@ public class FlexItemData {
         this.id = id;
     }
 
-    public Class<? extends FlexibleViewHolder> getViewHolderClass() {
+    public Class<? extends FlexViewHolder> getViewHolderClass() {
         return viewHolderClass;
     }
 
-    public void setViewHolderClass(Class<? extends FlexibleViewHolder> viewHolderClass) {
+    public void setViewHolderClass(Class<? extends FlexViewHolder> viewHolderClass) {
         this.viewHolderClass = viewHolderClass;
     }
 

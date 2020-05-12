@@ -38,18 +38,18 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
-import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ComplexCardViewHolder extends FlexibleViewHolder {
+public class ComplexCardViewHolder extends FlexViewHolder {
 
     protected final CardView cardView;
     protected final TextView iconView;
@@ -64,7 +64,7 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
     protected final FrameLayout buttonGroupContainer;
     protected final View buttonSeparator;
 
-    public ComplexCardViewHolder(View view, FlexibleAdapter adapter) {
+    public ComplexCardViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.cardView = view.findViewById(R.id.card_view);
         this.iconView = view.findViewById(R.id.icon);
@@ -156,15 +156,15 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
         internalSeparator.setVisibility(View.VISIBLE);
         internalContainer.setVisibility(View.VISIBLE);
         internalContainer.removeAllViews();
-        LinearGroupData internalList = new LinearGroupData(data.getInternalData());
+        LinearGroupFlexData internalList = new LinearGroupFlexData(data.getInternalData());
         internalList.setShowDividers(true);
-        FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
+        FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
         desc.addToView(internalList, internalContainer);
     }
 
 
     private void bindButtons(DocumentSectionData data) {
-        List<FlexItemData> buttons = data.getButtons();
+        List<FlexData> buttons = data.getButtons();
         if (buttons == null || buttons.isEmpty()){
             buttonSeparator.setVisibility(View.GONE);
             buttonGroupContainer.setVisibility(View.GONE);
@@ -174,16 +174,16 @@ public class ComplexCardViewHolder extends FlexibleViewHolder {
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonGroupContainer.removeAllViews();
             List<Object> castedButtons = new ArrayList<>();
-            for (FlexItemData button : buttons) {
-                if (button instanceof ButtonData){
-                    ((ButtonData)button).setColor(R.color.iadt_surface_bottom);
+            for (FlexData button : buttons) {
+                if (button instanceof ButtonFlexData){
+                    ((ButtonFlexData)button).setColor(R.color.iadt_surface_bottom);
                 }
                 castedButtons.add(button);
             }
-            LinearGroupData buttonGroupData = new LinearGroupData(castedButtons);
+            LinearGroupFlexData buttonGroupData = new LinearGroupFlexData(castedButtons);
             buttonGroupData.setHorizontal(true);
-            buttonGroupData.setChildLayout(FlexItemData.LayoutInParent.WRAP_BOTH);
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
+            buttonGroupData.setChildLayout(FlexData.LayoutInParent.WRAP_BOTH);
+            FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(buttonGroupData, buttonGroupContainer);
         }
     }

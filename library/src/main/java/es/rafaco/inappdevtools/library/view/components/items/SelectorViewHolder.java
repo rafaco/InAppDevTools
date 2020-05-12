@@ -25,8 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
@@ -34,12 +34,12 @@ import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 //#else
 //#endif
 
-public class SelectorViewHolder extends FlexibleViewHolder {
+public class SelectorViewHolder extends FlexViewHolder {
 
     private final TextView titleView;
     private final Spinner spinner;
 
-    public SelectorViewHolder(View view, FlexibleAdapter adapter) {
+    public SelectorViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
 
         this.titleView = view.findViewById(R.id.title);

@@ -40,17 +40,17 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -60,7 +60,7 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class ViewScreen extends Screen {
 
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
     private RecyclerView recyclerView;
 
     public ViewScreen(ScreenManager manager) {
@@ -99,7 +99,7 @@ public class ViewScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 2, data);
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 2, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
@@ -134,7 +134,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.select();
                     }
                 }));*/
-        verticalItems.add(new ButtonData("Browse hierarchy",
+        verticalItems.add(new ButtonFlexData("Browse hierarchy",
                         R.drawable.ic_layers_white_24dp, new Runnable() {
                     @Override
                     public void run() {
@@ -143,9 +143,9 @@ public class ViewScreen extends Screen {
                     }
                 }));
 
-        LinearGroupData horizontalGroup = new LinearGroupData();
+        LinearGroupFlexData horizontalGroup = new LinearGroupFlexData();
         horizontalGroup.setHorizontal(true);
-        horizontalGroup.add(new ButtonData("Rule",
+        horizontalGroup.add(new ButtonFlexData("Rule",
                 R.drawable.ic_format_line_spacing_white_24dp,
                 new Runnable() {
                     @Override
@@ -154,7 +154,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.measure();
                     }
                 }));
-        horizontalGroup.add(new ButtonData("Grid",
+        horizontalGroup.add(new ButtonFlexData("Grid",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override
@@ -164,7 +164,7 @@ public class ViewScreen extends Screen {
                 }));
         verticalItems.add(horizontalGroup);
 
-        verticalItems.add(new ButtonData( "Take Screenshot",
+        verticalItems.add(new ButtonFlexData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -173,7 +173,7 @@ public class ViewScreen extends Screen {
                     }
                 }));
 
-        data.add(new LinearGroupData(verticalItems));
+        data.add(new LinearGroupFlexData(verticalItems));
     }
 
     private void addImage(List<Object> data) {
@@ -212,7 +212,7 @@ public class ViewScreen extends Screen {
                 .getPathFromClassName(tracker.getCurrentHistory().className);
         String activitySrcFile = Humanizer.getLastPart(activitySrcPath, "/");
         if (TextUtils.isEmpty(activitySrcFile)){
-            activityDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
+            activityDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -222,7 +222,7 @@ public class ViewScreen extends Screen {
                     }));
         }
         else{
-            activityDataBuilder.addButton(new ButtonBorderlessData(activitySrcFile,
+            activityDataBuilder.addButton(new ButtonBorderlessFlexData(activitySrcFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -237,7 +237,7 @@ public class ViewScreen extends Screen {
         final String activityResPath = getSourcesManager().getLayoutPathFromLayoutName(activityLayoutName);
         String activityResFile = Humanizer.getLastPart(activityResPath, "/");
         if (TextUtils.isEmpty(activityResFile)) {
-            activityDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
+            activityDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -248,7 +248,7 @@ public class ViewScreen extends Screen {
             );
         }
         else{
-            activityDataBuilder.addButton(new ButtonBorderlessData(activityResFile,
+            activityDataBuilder.addButton(new ButtonBorderlessFlexData(activityResFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -294,7 +294,7 @@ public class ViewScreen extends Screen {
     private void addLogButtons(List<Object> data) {
         //Logs links (TODO)
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
-        data.add(new ButtonData(
+        data.add(new ButtonFlexData(
                 "Navigation",
                 R.drawable.ic_location_on_white_24dp,
                 R.color.rally_green_alpha,
@@ -314,7 +314,7 @@ public class ViewScreen extends Screen {
                                 LogScreen.buildParams(filter.getUiFilter()));
                     }
                 }));
-        data.add(new ButtonData(
+        data.add(new ButtonFlexData(
                 "Lifecycle",
                 R.drawable.ic_format_align_left_white_24dp,
                 R.color.rally_blue_med_alpha,

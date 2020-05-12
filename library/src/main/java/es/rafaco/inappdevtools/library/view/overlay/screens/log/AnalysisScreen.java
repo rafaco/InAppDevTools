@@ -32,7 +32,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
@@ -69,7 +69,7 @@ public class AnalysisScreen extends Screen {
     }
 
     private void initAdapter(int resourceId, List<Object> data) {
-        FlexibleAdapter adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, data);
+        FlexAdapter adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
         RecyclerView recyclerView = bodyView.findViewById(resourceId);
         recyclerView.setAdapter(adapter);
     }

@@ -22,9 +22,9 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
 
-public class CardGroupData extends FlexGroupData {
+public class CardGroupFlexData extends GroupFlexData {
 
     Runnable performer;
     int bgColorResource;
@@ -32,15 +32,15 @@ public class CardGroupData extends FlexGroupData {
     boolean noContentPadding;
     boolean isFullWidth;
 
-    public CardGroupData() {
+    public CardGroupFlexData() {
         this(new ArrayList<Object>(), null);
     }
 
-    public CardGroupData(List<Object> children) {
+    public CardGroupFlexData(List<Object> children) {
         this(children, null);
     }
 
-    public CardGroupData(List<Object> children, Runnable performer) {
+    public CardGroupFlexData(List<Object> children, Runnable performer) {
         super(children);
         this.performer = performer;
         setHorizontalMargin(true);
@@ -51,7 +51,7 @@ public class CardGroupData extends FlexGroupData {
         return performer;
     }
 
-    public CardGroupData setPerformer(Runnable performer) {
+    public CardGroupFlexData setPerformer(Runnable performer) {
         this.performer = performer;
         return this;
     }
@@ -60,7 +60,7 @@ public class CardGroupData extends FlexGroupData {
         return bgColorResource;
     }
 
-    public CardGroupData setBgColorResource(int bg_color) {
+    public CardGroupFlexData setBgColorResource(int bg_color) {
         this.bgColorResource = bg_color;
         return this;
     }
@@ -69,7 +69,7 @@ public class CardGroupData extends FlexGroupData {
         return elevationDp;
     }
 
-    public CardGroupData setElevationDp(float elevationDp) {
+    public CardGroupFlexData setElevationDp(float elevationDp) {
         this.elevationDp = elevationDp;
         return this;
     }

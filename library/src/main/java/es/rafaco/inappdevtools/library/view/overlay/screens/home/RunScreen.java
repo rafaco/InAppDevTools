@@ -37,10 +37,10 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -48,7 +48,7 @@ import es.rafaco.inappdevtools.library.logic.external.chuck.HttpBinService;
 
 public class RunScreen extends Screen {
 
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
     private RecyclerView recyclerView;
 
     public RunScreen(ScreenManager manager) {
@@ -83,14 +83,14 @@ public class RunScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 2, data);
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 2, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
 
     private void addCustomItems(List<Object> data) {
         data.add("Your buttons");
-        List<ButtonData> buttons = IadtController.get().getRunnableManager().getAll();
+        List<ButtonFlexData> buttons = IadtController.get().getRunnableManager().getAll();
         if (buttons.isEmpty()){
             data.add("(No buttons added by this app)");
         }else{
@@ -100,7 +100,7 @@ public class RunScreen extends Screen {
 
     private void addDevToolsItems(List<Object> data) {
         data.add("Iadt");
-        data.add(new ButtonData( "Take Screenshot",
+        data.add(new ButtonFlexData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -109,7 +109,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new ButtonData("Codepoint",
+        data.add(new ButtonFlexData("Codepoint",
                 R.drawable.ic_pan_tool_white_24dp,
                 new Runnable() {
                     @Override
@@ -118,7 +118,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new ButtonData("Simulate...",
+        data.add(new ButtonFlexData("Simulate...",
                 R.drawable.ic_input_white_24dp,
                 new Runnable() {
                     @Override
@@ -127,7 +127,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new ButtonData("DISABLE...",
+        data.add(new ButtonFlexData("DISABLE...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override
@@ -136,7 +136,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new ButtonData("Restart app",
+        data.add(new ButtonFlexData("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {
                     @Override
@@ -145,7 +145,7 @@ public class RunScreen extends Screen {
                     }
                 }));
 
-        data.add(new ButtonData("Force close app",
+        data.add(new ButtonFlexData("Force close app",
                 R.drawable.ic_warning_white_24dp,
                 new Runnable() {
                     @Override
@@ -158,7 +158,7 @@ public class RunScreen extends Screen {
 
     private void addAndroidItems(List<Object> data) {
         data.add("Android shortcuts");
-        data.add(new ButtonData("App Info",
+        data.add(new ButtonFlexData("App Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
@@ -167,7 +167,7 @@ public class RunScreen extends Screen {
                         AppUtils.openAppSettings(RunScreen.this.getContext());
                     }
                 }));
-        data.add(new ButtonData("Dev Options",
+        data.add(new ButtonFlexData("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
                 new Runnable() {
                     @Override

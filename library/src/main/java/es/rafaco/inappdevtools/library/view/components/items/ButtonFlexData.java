@@ -19,9 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 
-public class ButtonData extends FlexItemData {
+public class ButtonFlexData extends FlexData {
     String title;
     Runnable performer;
     Runnable callback;
@@ -29,22 +29,22 @@ public class ButtonData extends FlexItemData {
     int color;
     boolean wrapContent = false;
 
-    public ButtonData(String title, Runnable performer) {
+    public ButtonFlexData(String title, Runnable performer) {
         this.title = title;
         this.performer = performer;
     }
 
-    public ButtonData(String title, int icon, Runnable performer) {
+    public ButtonFlexData(String title, int icon, Runnable performer) {
         this(title, performer);
         this.icon = icon;
     }
 
-    public ButtonData(String title, int icon, int colorResId, Runnable performer) {
+    public ButtonFlexData(String title, int icon, int colorResId, Runnable performer) {
         this(title, icon, performer);
         this.color = colorResId;
     }
 
-    public ButtonData(String title, int icon, Runnable performer, Runnable callback) {
+    public ButtonFlexData(String title, int icon, Runnable performer, Runnable callback) {
         this(title, icon, performer);
         this.callback = callback;
     }

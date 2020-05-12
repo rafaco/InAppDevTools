@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 
@@ -56,10 +56,10 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
         return objectList;
     }
 
-    private LinearGroupData getButtonList() {
-        LinearGroupData linearGroupData = new LinearGroupData();
+    private LinearGroupFlexData getButtonList() {
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData("Clean all...",
+        linearGroupData.add(new ButtonFlexData("Clean all...",
                 R.drawable.ic_delete_forever_white_24dp,
                 new Runnable() {
                     @Override
@@ -67,7 +67,7 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
                         IadtController.get().cleanAll();
                     }
                 }));
-        linearGroupData.add(new ButtonData("Disable Iadt...",
+        linearGroupData.add(new ButtonFlexData("Disable Iadt...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override

@@ -25,7 +25,7 @@ package es.rafaco.inappdevtools.library.view.components.cards;
 import android.support.annotation.StringRes;
 //#endif
 
-public class CardHeaderData {
+public class CardHeaderFlexData {
 
     private String title;
     private int icon;
@@ -33,7 +33,7 @@ public class CardHeaderData {
     private boolean isExpandable;
     private boolean isExpanded;
 
-    public CardHeaderData(CardHeaderData.Builder builder) {
+    public CardHeaderFlexData(CardHeaderFlexData.Builder builder) {
         this.title = builder.name;
         this.icon = builder.icon;
         this.overview = builder.overview;
@@ -84,28 +84,28 @@ public class CardHeaderData {
             this.name = name;
         }
 
-        public CardHeaderData.Builder setIcon(@StringRes int icon) {
+        public CardHeaderFlexData.Builder setIcon(@StringRes int icon) {
             this.icon = icon;
             return this;
         }
 
-        public CardHeaderData.Builder setOverview(String text) {
+        public CardHeaderFlexData.Builder setOverview(String text) {
             this.overview = text;
             return this;
         }
 
-        public CardHeaderData.Builder setExpandable(boolean isExpandable) {
+        public CardHeaderFlexData.Builder setExpandable(boolean isExpandable) {
             this.isExpandable = isExpandable;
             return this;
         }
 
-        public CardHeaderData.Builder setExpanded(boolean isExpanded) {
+        public CardHeaderFlexData.Builder setExpanded(boolean isExpanded) {
             this.isExpanded = isExpanded;
             return this;
         }
 
-        public CardHeaderData build() {
-            return new CardHeaderData(this);
+        public CardHeaderFlexData build() {
+            return new CardHeaderFlexData(this);
         }
     }
 }

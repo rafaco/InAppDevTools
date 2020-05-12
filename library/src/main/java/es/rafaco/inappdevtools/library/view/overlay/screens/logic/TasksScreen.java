@@ -28,8 +28,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -90,7 +90,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
                 final String topSrcPath = getSourcesManager()
                         .getPathFromClassName(topClassName);
                 if (!TextUtils.isEmpty(topSrcPath)){
-                    taskDataBuilder.addButton(new ButtonBorderlessData("Top SRC",
+                    taskDataBuilder.addButton(new ButtonBorderlessFlexData("Top SRC",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -105,7 +105,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
                 final String baseSrcPath = getSourcesManager()
                         .getPathFromClassName(baseClassName);
                 if (!TextUtils.isEmpty(baseSrcPath)){
-                    taskDataBuilder.addButton(new ButtonBorderlessData("Base SRC",
+                    taskDataBuilder.addButton(new ButtonBorderlessFlexData("Base SRC",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -122,7 +122,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("View AndroidManifest");
-        data.add(new ButtonData("Original",
+        data.add(new ButtonFlexData("Original",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -131,7 +131,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
-        data.add(new ButtonData("Merged",
+        data.add(new ButtonFlexData("Merged",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override

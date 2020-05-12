@@ -25,10 +25,10 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.crash.CrashGenerator;
 import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
@@ -121,7 +121,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }).setBgColor(cardBackground));
 
-        data.add(new ButtonData("IndexOutOfBounds",
+        data.add(new ButtonFlexData("IndexOutOfBounds",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -130,7 +130,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new ButtonData("NullPointer",
+        data.add(new ButtonFlexData("NullPointer",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -139,7 +139,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new ButtonData("ZeroDivision",
+        data.add(new ButtonFlexData("ZeroDivision",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -148,7 +148,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new ButtonData("StackOverflow",
+        data.add(new ButtonFlexData("StackOverflow",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -157,7 +157,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        FlexibleAdapter presetAdapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 2, data);
+        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 2, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
         recyclerView.setAdapter(presetAdapter);
     }

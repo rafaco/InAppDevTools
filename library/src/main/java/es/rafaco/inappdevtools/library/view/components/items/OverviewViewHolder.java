@@ -30,18 +30,18 @@ import android.support.v4.content.ContextCompat;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
-public class OverviewViewHolder extends FlexibleViewHolder {
+public class OverviewViewHolder extends FlexViewHolder {
 
     private RelativeLayout overviewView;
     private TextView overviewTitleView;
     private TextView overviewIconView;
     private TextView overviewContentView;
 
-    public OverviewViewHolder(View view, FlexibleAdapter adapter) {
+    public OverviewViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         overviewView = view.findViewById(R.id.overview);
         overviewContentView = view.findViewById(R.id.overview_content);

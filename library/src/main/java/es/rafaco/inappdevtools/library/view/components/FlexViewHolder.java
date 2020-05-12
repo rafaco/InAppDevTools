@@ -28,25 +28,23 @@ import android.view.ViewGroup;
 //#else
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
 //#endif
 
-public abstract class FlexibleViewHolder extends RecyclerView.ViewHolder {
+public abstract class FlexViewHolder extends RecyclerView.ViewHolder {
 
     //TODO: remove usages and param from constructor (used at traces)
-    protected FlexibleAdapter parentAdapter;
+    protected FlexAdapter parentAdapter;
 
     //Constructor used when creating from other viewHolders, like RunButtons and RunButtonGroup
     // at ComplexCard
     //It should be the only one and we should stop passing adapter to the view holders
-    public FlexibleViewHolder(@NonNull View itemView) {
+    public FlexViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
     //Constructor used when creating from the adapter
     //We should stop passing adapter to the view holders, needed at current traces
-    public FlexibleViewHolder(@NonNull View itemView, @NonNull FlexibleAdapter adapter) {
+    public FlexViewHolder(@NonNull View itemView, @NonNull FlexAdapter adapter) {
         super(itemView);
         this.parentAdapter = adapter;
     }

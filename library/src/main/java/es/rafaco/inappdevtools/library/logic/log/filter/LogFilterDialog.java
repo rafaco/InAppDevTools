@@ -47,7 +47,7 @@ import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 
 public class LogFilterDialog {
@@ -164,7 +164,7 @@ public class LogFilterDialog {
                     }
                 }).setBgColor(cardBackground));
 
-        FlexibleAdapter presetAdapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, data);
+        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
         recyclerView.setAdapter(presetAdapter);
 

@@ -22,16 +22,16 @@ package es.rafaco.inappdevtools.library.view.components.base;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlexGroupData extends FlexItemData {
+public class GroupFlexData extends FlexData {
 
     //TODO: replace by List<FlexItemData> after all items refactored
     protected List<Object> children;
 
-    public FlexGroupData(){
+    public GroupFlexData(){
         this(new ArrayList<Object>());
     }
 
-    public FlexGroupData(List<Object> children) {
+    public GroupFlexData(List<Object> children) {
         super();
         this.children = children;
     }

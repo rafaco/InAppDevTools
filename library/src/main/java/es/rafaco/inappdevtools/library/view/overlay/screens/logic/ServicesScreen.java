@@ -28,8 +28,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -93,7 +93,7 @@ public class ServicesScreen extends AbstractFlexibleScreen {
                         .getPathFromClassName(className);
                 String srcFile = Humanizer.getLastPart(srcPath, "/");
                 if (!TextUtils.isEmpty(srcFile)){
-                    serviceDataBuilder.addButton(new ButtonBorderlessData(srcFile,
+                    serviceDataBuilder.addButton(new ButtonBorderlessFlexData(srcFile,
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -110,7 +110,7 @@ public class ServicesScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("View AndroidManifest");
-        data.add(new ButtonData("Original",
+        data.add(new ButtonFlexData("Original",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -119,7 +119,7 @@ public class ServicesScreen extends AbstractFlexibleScreen {
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
-        data.add(new ButtonData("Merged",
+        data.add(new ButtonFlexData("Merged",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override

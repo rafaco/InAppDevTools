@@ -44,13 +44,13 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDoc
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.cards.WideWidgetData;
 import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -85,8 +85,8 @@ public class Home3Screen extends AbstractFlexibleScreen {
         return 2;
     }
 
-    public FlexibleAdapter.Layout getLayout(){
-        return FlexibleAdapter.Layout.STAGGERED;
+    public FlexAdapter.Layout getLayout(){
+        return FlexAdapter.Layout.STAGGERED;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
 
     @Override
     protected void onAdapterStart() {
-        setFullWidthSolver(new FlexibleAdapter.FullWidthSolver() {
+        setFullWidthSolver(new FlexAdapter.FullWidthSolver() {
             @Override
             public boolean isFullWidth(int position) {
                 return false;//position == 0;
@@ -285,7 +285,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(storageData);
 
-        data.add(new ButtonData("More",
+        data.add(new ButtonFlexData("More",
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override

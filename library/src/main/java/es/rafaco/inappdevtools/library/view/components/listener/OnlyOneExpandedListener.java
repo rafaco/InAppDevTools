@@ -24,20 +24,20 @@ import android.view.View;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
-public class OnlyOneExpandedListener implements FlexibleAdapter.OnItemActionListener{
+public class OnlyOneExpandedListener implements FlexAdapter.OnItemActionListener{
 
     public static final int NOTHING_EXPANDED = -1;
-    FlexibleAdapter adapter;
+    FlexAdapter adapter;
     private int expandedPosition;
 
-    public OnlyOneExpandedListener(FlexibleAdapter adapter) {
+    public OnlyOneExpandedListener(FlexAdapter adapter) {
         this(adapter, NOTHING_EXPANDED);
     }
 
-    public OnlyOneExpandedListener(FlexibleAdapter adapter, int initialExpandedPosition) {
+    public OnlyOneExpandedListener(FlexAdapter adapter, int initialExpandedPosition) {
         this.adapter = adapter;
         this.expandedPosition = initialExpandedPosition;
         adapter.setOnItemActionListener(this);
@@ -62,7 +62,7 @@ public class OnlyOneExpandedListener implements FlexibleAdapter.OnItemActionList
     }
 
     @Override
-    public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
+    public Object onItemAction(FlexViewHolder viewHolder, View view, int position, long id) {
         return toggleExpandedPosition(position);
     }
 

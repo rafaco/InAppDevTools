@@ -36,13 +36,13 @@ import android.support.v7.widget.CardView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class CardViewHolder extends FlexibleViewHolder {
+public class CardViewHolder extends FlexViewHolder {
 
     private final LinearLayout itemContent;
     private final CardView cardView;
@@ -56,7 +56,7 @@ public class CardViewHolder extends FlexibleViewHolder {
     private final TextView navAddIcon;
     private View navAddSeparator;
 
-    public CardViewHolder(View view, FlexibleAdapter adapter) {
+    public CardViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.itemContent = view.findViewById(R.id.item_content);
         this.cardView = view.findViewById(R.id.card_view);

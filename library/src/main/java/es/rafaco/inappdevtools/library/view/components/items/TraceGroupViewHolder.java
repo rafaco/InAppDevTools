@@ -35,12 +35,12 @@ import android.support.v4.content.ContextCompat;
 import com.alorma.timeline.TimelineView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.screens.errors.TraceGrouper;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class TraceGroupViewHolder extends FlexibleViewHolder {
+public class TraceGroupViewHolder extends FlexViewHolder {
 
     private final LinearLayout details;
     TimelineView timeline;
@@ -49,7 +49,7 @@ public class TraceGroupViewHolder extends FlexibleViewHolder {
     TextView iconLabel;
     ImageView icon;
 
-    public TraceGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public TraceGroupViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.timeline = view.findViewById(R.id.timeline);
         this.details = view.findViewById(R.id.details);

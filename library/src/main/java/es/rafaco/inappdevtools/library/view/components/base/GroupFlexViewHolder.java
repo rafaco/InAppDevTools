@@ -17,27 +17,24 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components.items;
+package es.rafaco.inappdevtools.library.view.components.base;
 
-public class ButtonBorderlessData extends ButtonData {
+import android.view.View;
 
-    public ButtonBorderlessData(String title, Runnable performer) {
-        super(title, performer);
-        setWrapContent(true);
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+
+public class GroupFlexViewHolder extends FlexItemViewHolder {
+
+    public GroupFlexViewHolder(View view, FlexAdapter adapter) {
+        super(view, adapter);
     }
 
-    public ButtonBorderlessData(String title, int icon, Runnable performer) {
-        super(title, icon, performer);
-        setWrapContent(true);
-    }
+    @Override
+    public void bindTo(Object abstractData, int position) {
+        super.bindTo(abstractData, position);
 
-    public ButtonBorderlessData(String title, int icon, int colorResId, Runnable performer) {
-        super(title, icon, colorResId, performer);
-        setWrapContent(true);
-    }
+        GroupFlexData data = (GroupFlexData) abstractData;
 
-    public ButtonBorderlessData(String title, int icon, Runnable performer, Runnable callback) {
-        super(title, icon, performer, callback);
-        setWrapContent(true);
+        //TODO: nothing needed by now
     }
 }

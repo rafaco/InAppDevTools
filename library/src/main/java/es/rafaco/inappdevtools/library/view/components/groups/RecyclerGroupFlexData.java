@@ -22,49 +22,49 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 
-public class RecyclerGroupData extends FlexGroupData {
+public class RecyclerGroupFlexData extends GroupFlexData {
 
-    FlexibleAdapter adapter;
-    FlexibleAdapter.Layout adapterLayout;
+    FlexAdapter adapter;
+    FlexAdapter.Layout adapterLayout;
     int adapterSpanCount;
 
     boolean showDividers = false;
     boolean isHorizontal = false;
 
-    public RecyclerGroupData(){
-        this(FlexibleAdapter.Layout.LINEAR, 1, new ArrayList<Object>());
+    public RecyclerGroupFlexData(){
+        this(FlexAdapter.Layout.LINEAR, 1, new ArrayList<Object>());
     }
 
-    public RecyclerGroupData(FlexibleAdapter adapter) {
+    public RecyclerGroupFlexData(FlexAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public RecyclerGroupData(FlexibleAdapter.Layout layout, int spanCount) {
+    public RecyclerGroupFlexData(FlexAdapter.Layout layout, int spanCount) {
         this(layout, spanCount, new ArrayList<Object>());
     }
 
-    public RecyclerGroupData(FlexibleAdapter.Layout layout, int spanCount, List<Object> children) {
+    public RecyclerGroupFlexData(FlexAdapter.Layout layout, int spanCount, List<Object> children) {
         super(children);
         this.adapterLayout = layout;
         this.adapterSpanCount = spanCount;
     }
 
-    public FlexibleAdapter getAdapter() {
+    public FlexAdapter getAdapter() {
         return adapter;
     }
 
-    public void setAdapter(FlexibleAdapter adapter) {
+    public void setAdapter(FlexAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public FlexibleAdapter.Layout getAdapterLayout() {
+    public FlexAdapter.Layout getAdapterLayout() {
         return adapterLayout;
     }
 
-    public void setAdapterLayout(FlexibleAdapter.Layout adapterLayout) {
+    public void setAdapterLayout(FlexAdapter.Layout adapterLayout) {
         this.adapterLayout = adapterLayout;
     }
 

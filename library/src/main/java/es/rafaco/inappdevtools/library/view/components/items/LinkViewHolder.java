@@ -32,11 +32,11 @@ import android.support.v7.widget.AppCompatTextView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 
-public class LinkViewHolder extends FlexibleViewHolder {
+public class LinkViewHolder extends FlexViewHolder {
 
     private final LinearLayout wrapper;
     AppCompatTextView icon;
@@ -47,7 +47,7 @@ public class LinkViewHolder extends FlexibleViewHolder {
         this(view, null);
     }
 
-    public LinkViewHolder(View view, FlexibleAdapter adapter) {
+    public LinkViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         wrapper = view.findViewById(R.id.link_wrapper);
         icon = view.findViewById(R.id.icon);

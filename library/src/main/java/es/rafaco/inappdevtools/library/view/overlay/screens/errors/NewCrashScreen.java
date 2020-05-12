@@ -29,8 +29,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -38,16 +38,16 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderData;
-import es.rafaco.inappdevtools.library.view.components.groups.CardGroupData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
-import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.TextData;
+import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -164,9 +164,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
     private void addButtons(List<Object> data, final Crash crash) {
 
-        LinearGroupData firstGroup = new LinearGroupData();
+        LinearGroupFlexData firstGroup = new LinearGroupFlexData();
         firstGroup.setHorizontal(true);
-        firstGroup.add(new ButtonData("Report now!",
+        firstGroup.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green_alpha,
                 new Runnable() {
@@ -187,9 +187,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         }
         final long crashSessionId = crashSession.getUid(); //TODO: replace by crash.getSessionId()
 
-        LinearGroupData secondGroup = new LinearGroupData();
+        LinearGroupFlexData secondGroup = new LinearGroupFlexData();
         secondGroup.setHorizontal(true);
-        secondGroup.add(new ButtonData("Repro Steps",
+        secondGroup.add(new ButtonFlexData("Repro Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
                 new Runnable() {
                     @Override
@@ -200,7 +200,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                                 LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
                     }
                 }));
-        secondGroup.add(new ButtonData("All Logs",
+        secondGroup.add(new ButtonFlexData("All Logs",
                 R.drawable.ic_format_align_left_white_24dp,
                 new Runnable() {
                     @Override
@@ -230,7 +230,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
 
 
-        CardGroupData cardGroup = new CardGroupData();
+        CardGroupFlexData cardGroup = new CardGroupFlexData();
         cardGroup.setFullWidth(true);
         cardGroup.setVerticalMargin(true);
         cardGroup.setPerformer(new Runnable() {
@@ -240,21 +240,22 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
             }
         });
 
-        LinearGroupData cardData = new LinearGroupData();
+        LinearGroupFlexData cardData = new LinearGroupFlexData();
 
-        CardHeaderData headerData = new CardHeaderData.Builder(title)
+        CardHeaderFlexData headerData = new CardHeaderFlexData.Builder(title)
                 .setExpandable(false)
                 .setExpanded(true)
                 .setOverview("Exception")
                 .build();
         cardData.add(headerData);
 
-        TextData messageData = new TextData(message);
-        messageData.setSize(TextData.Size.LARGE);
+        TextFlexData messageData = new TextFlexData(message);
+        messageData.setSize(TextFlexData.Size.LARGE);
+        messageData.setHorizontalMargin(true);
         cardData.add(messageData);
 
 
-        ButtonBorderlessData buttonBorderless1 = new ButtonBorderlessData("Copy",
+        ButtonBorderlessFlexData buttonBorderless1 = new ButtonBorderlessFlexData("Copy",
                 R.drawable.ic_content_copy_white_24dp,
                 new Runnable() {
                     @Override
@@ -264,7 +265,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                     }
                 });
 
-        ButtonBorderlessData buttonBorderless2 = new ButtonBorderlessData("Google it",
+        ButtonBorderlessFlexData buttonBorderless2 = new ButtonBorderlessFlexData("Google it",
                 R.drawable.ic_google_brands,
                 new Runnable() {
                     @Override
@@ -274,14 +275,14 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                     }
                 });
 
-        List<ButtonData> groupList = new ArrayList<>();
+        List<ButtonFlexData> groupList = new ArrayList<>();
         groupList.add(buttonBorderless1);
         groupList.add(buttonBorderless2);
 
         List<Object> groupLinear = new ArrayList<>();
         groupLinear.add(buttonBorderless1);
         groupLinear.add(buttonBorderless2);
-        LinearGroupData buttonList = new LinearGroupData(groupLinear);
+        LinearGroupFlexData buttonList = new LinearGroupFlexData(groupLinear);
         buttonList.setHorizontal(true);
         cardData.add(buttonList);
 
@@ -297,7 +298,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                 .setExpanded(true)
                 .setOverview("Exception");
 
-        cardBuilder.addButton(new ButtonData("Copy",
+        cardBuilder.addButton(new ButtonFlexData("Copy",
                 R.drawable.ic_content_copy_white_24dp,
                 new Runnable() {
                     @Override
@@ -307,7 +308,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        cardBuilder.addButton(new ButtonData("Google it",
+        cardBuilder.addButton(new ButtonFlexData("Google it",
                 R.drawable.ic_google_brands,
                 new Runnable() {
                     @Override
@@ -351,9 +352,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         collapsible.setShowDividers(false);
         internalData.add(collapsible);
 
-        FlexibleAdapter adapter = traceGrouper.getExceptionAdapter();
+        FlexAdapter adapter = traceGrouper.getExceptionAdapter();
         if (adapter != null){
-            RecyclerGroupData traces = new RecyclerGroupData(adapter);
+            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
             traces.setHorizontalMargin(true);
             internalData.add(traces);
         }
@@ -386,9 +387,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         List<Object> internalData = new ArrayList<>();
 
-        FlexibleAdapter adapter = traceGrouper.getCauseAdapter();
+        FlexAdapter adapter = traceGrouper.getCauseAdapter();
         if (adapter != null){
-            RecyclerGroupData traces = new RecyclerGroupData(adapter);
+            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
             traces.setHorizontalMargin(true);
             internalData.add(traces);
         }

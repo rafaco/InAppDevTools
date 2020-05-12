@@ -24,13 +24,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 
-public class FlexItemViewHolder extends FlexibleViewHolder {
+public class FlexItemViewHolder extends FlexViewHolder {
 
-    public FlexItemViewHolder(View view, FlexibleAdapter adapter) {
+    public FlexItemViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
     }
 
@@ -38,10 +38,10 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
     public void bindTo(Object abstractData, int position) {
 
         //TODO: remove this bug out, currently needed for String headers
-        if (!(abstractData instanceof FlexItemData)) {
+        if (!(abstractData instanceof FlexData)) {
             return;
         }
-        FlexItemData data = (FlexItemData) abstractData;
+        FlexData data = (FlexData) abstractData;
 
         bindLayout(data);
         bindGravity(data);
@@ -49,7 +49,7 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         bindBackgroundColor(data);
     }
 
-    private void bindLayout(FlexItemData data) {
+    private void bindLayout(FlexData data) {
         if (data.getLayoutInParent() == null)
             return;
 
@@ -84,7 +84,7 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         itemView.setLayoutParams(layoutParams);
     }
 
-    private void bindGravity(FlexItemData data) {
+    private void bindGravity(FlexData data) {
         if (data.getGravity()>0){
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemView.getLayoutParams();
             layoutParams.gravity = data.getGravity();
@@ -92,7 +92,7 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         }
     }
 
-    private void bindMargins(FlexItemData data) {
+    private void bindMargins(FlexData data) {
         if (data.isHorizontalMargin()!=null){
             MarginUtils.setHorizontalMargin(itemView, data.isHorizontalMargin());
         }
@@ -102,7 +102,7 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         }
     }
 
-    private void bindBackgroundColor(FlexItemData data) {
+    private void bindBackgroundColor(FlexData data) {
         if (data.getBackgroundColor()>0) {
             int contextualizedColor = ContextCompat.getColor(itemView.getContext(), data.getBackgroundColor());
             itemView.setBackgroundColor(contextualizedColor);

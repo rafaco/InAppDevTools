@@ -45,28 +45,28 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.view.components.items.TextViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.TextFlexViewHolder;
 
-public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
+public class FlexAdapter extends RecyclerView.Adapter<FlexViewHolder> {
 
     public enum Layout { LINEAR, GRID, STAGGERED }
 
     private Layout layout;
     private final int spanCount;
     private FullWidthSolver fullWidthSolver;
-    private List<FlexibleItemDescriptor> descriptors;
+    private List<FlexDescriptor> descriptors;
     private List<Object> items;
     private OnItemActionListener onItemActionListener;
 
-    public FlexibleAdapter(List<Object> data) {
+    public FlexAdapter(List<Object> data) {
         this(Layout.LINEAR, 1, data);
     }
 
-    public FlexibleAdapter(Layout layout, int spanCount, List<Object> data) {
+    public FlexAdapter(Layout layout, int spanCount, List<Object> data) {
         this.layout = layout;
         this.spanCount = spanCount;
         this.items = data;
-        this.descriptors = FlexibleLoader.getAllDescriptors();
+        this.descriptors = FlexLoader.getAllDescriptors();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
                 public int getSpanSize(int position) {
                     boolean isFull = (fullWidthSolver!=null)
                             ? isFullWidthItem(position)
-                            : FlexibleLoader.isFullSpan(getItemDataClass(position));
+                            : FlexLoader.isFullSpan(getItemDataClass(position));
                     return (isFull ? manager.getSpanCount() : 1);
                 }
             });
@@ -111,7 +111,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     public int getItemViewType(int position) {
         Object item = items.get(position);
         for (int i=0; i<descriptors.size(); i++){
-            FlexibleItemDescriptor descriptor = descriptors.get(i);
+            FlexDescriptor descriptor = descriptors.get(i);
             if (item.getClass().equals(descriptor.dataClass)){
                 return i;
             }
@@ -121,23 +121,23 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
 
     @NonNull
     @Override
-    public FlexibleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        FlexibleItemDescriptor desc = descriptors.get(viewType);
+    public FlexViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        FlexDescriptor desc = descriptors.get(viewType);
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(desc.layoutResourceId, viewGroup, false);
-        FlexibleViewHolder holder = constructViewHolder(desc, view);
+        FlexViewHolder holder = constructViewHolder(desc, view);
         if (holder==null){
-            return new TextViewHolder(viewGroup, this);
+            return new TextFlexViewHolder(viewGroup, this);
         }
         holder.onCreate(viewGroup, viewType);
         return holder;
     }
 
-    private FlexibleViewHolder constructViewHolder(FlexibleItemDescriptor desc, View view) {
-        FlexibleViewHolder holder = null;
+    private FlexViewHolder constructViewHolder(FlexDescriptor desc, View view) {
+        FlexViewHolder holder = null;
         try {
-            Constructor<? extends FlexibleViewHolder> ctor = desc.viewHolderClass
-                    .getConstructor(View.class, FlexibleAdapter.class);
+            Constructor<? extends FlexViewHolder> ctor = desc.viewHolderClass
+                    .getConstructor(View.class, FlexAdapter.class);
             holder = ctor.newInstance(view, this);
         } catch (Exception e) {
             FriendlyLog.logException("Exception", e);
@@ -146,9 +146,9 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FlexibleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FlexViewHolder holder, int position) {
         Object viewData = items.get(position);
-        FlexibleItemDescriptor desc = descriptors.get(getItemViewType(position));
+        FlexDescriptor desc = descriptors.get(getItemViewType(position));
 
         if (layout.equals(Layout.STAGGERED) && isFullWidthItem(position)) {
             StaggeredGridLayoutManager.LayoutParams layoutParams;
@@ -156,7 +156,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
             layoutParams.setFullSpan(true);
         }
 
-        FlexibleViewHolder castedHolder = desc.viewHolderClass.cast(holder);
+        FlexViewHolder castedHolder = desc.viewHolderClass.cast(holder);
         Object castedData = desc.dataClass.cast(viewData);
         castedHolder.bindTo(castedData, position);
     }
@@ -180,7 +180,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
     //region [ ITEM ACTION ]
 
     public interface OnItemActionListener {
-        Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id);
+        Object onItemAction(FlexViewHolder viewHolder, View view, int position, long id);
     }
 
     public void setOnItemActionListener(@Nullable OnItemActionListener listener) {
@@ -191,7 +191,7 @@ public class FlexibleAdapter extends RecyclerView.Adapter<FlexibleViewHolder> {
         return onItemActionListener;
     }
 
-    public Object performItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
+    public Object performItemAction(FlexViewHolder viewHolder, View view, int position, long id) {
         if (onItemActionListener != null) {
             return onItemActionListener.onItemAction(viewHolder, view, position, id);
         }

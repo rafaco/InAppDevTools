@@ -30,7 +30,7 @@ import android.support.annotation.StringRes;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -43,7 +43,7 @@ public class DocumentSectionData {
     private List<Object> internalData;
 
     //Extract to ComplexCardData
-    private List<FlexItemData> buttons;
+    private List<FlexData> buttons;
     private boolean isExpandable;
     private boolean isExpanded;
 
@@ -70,7 +70,7 @@ public class DocumentSectionData {
         return overview;
     }
 
-    public List<FlexItemData> getButtons() {
+    public List<FlexData> getButtons() {
         return buttons;
     }
 
@@ -141,7 +141,7 @@ public class DocumentSectionData {
         private String name;
         private int icon;
         private String overview;
-        private List<FlexItemData> buttons;
+        private List<FlexData> buttons;
         private List<DocumentEntryData> entries;
         private boolean isExpandable = true;
         private boolean isExpanded;
@@ -167,7 +167,7 @@ public class DocumentSectionData {
             return this;
         }
 
-        public Builder addButton(FlexItemData button) {
+        public Builder addButton(FlexData button) {
             this.buttons.add(button);
             return this;
         }

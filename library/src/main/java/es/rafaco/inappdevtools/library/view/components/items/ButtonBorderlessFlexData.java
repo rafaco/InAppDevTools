@@ -17,36 +17,27 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components.groups;
+package es.rafaco.inappdevtools.library.view.components.items;
 
-import java.util.List;
+public class ButtonBorderlessFlexData extends ButtonFlexData {
 
-public class CollapsibleLinearGroupData extends LinearGroupFlexData {
-
-    private String overview;
-    private boolean expanded = false;
-
-    public CollapsibleLinearGroupData(List<Object> items) {
-        super(items);
+    public ButtonBorderlessFlexData(String title, Runnable performer) {
+        super(title, performer);
+        setWrapContent(true);
     }
 
-    public CollapsibleLinearGroupData(String title, List<Object> items) {
-        super(title, items);
+    public ButtonBorderlessFlexData(String title, int icon, Runnable performer) {
+        super(title, icon, performer);
+        setWrapContent(true);
     }
 
-    public String getOverview() {
-        return overview;
+    public ButtonBorderlessFlexData(String title, int icon, int colorResId, Runnable performer) {
+        super(title, icon, colorResId, performer);
+        setWrapContent(true);
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
+    public ButtonBorderlessFlexData(String title, int icon, Runnable performer, Runnable callback) {
+        super(title, icon, performer, callback);
+        setWrapContent(true);
     }
 }

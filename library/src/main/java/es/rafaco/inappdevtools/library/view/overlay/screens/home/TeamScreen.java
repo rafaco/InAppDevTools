@@ -40,7 +40,7 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
@@ -145,7 +145,7 @@ public class TeamScreen extends AbstractFlexibleScreen {
         }
         else{
             for (final String key: links.keySet()) {
-                data.add(new ButtonData(key,
+                data.add(new ButtonFlexData(key,
                         R.drawable.ic_public_white_24dp,
                         new Runnable() {
                             @Override
@@ -158,7 +158,7 @@ public class TeamScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("Actions");
-        List<ButtonData> buttons = IadtController.get().getRunnableManager().getAll();
+        List<ButtonFlexData> buttons = IadtController.get().getRunnableManager().getAll();
         if (buttons.isEmpty()){
             data.add("     No actions provided.");
         }else{

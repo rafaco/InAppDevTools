@@ -25,17 +25,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 
-public class ImageViewHolder extends FlexibleViewHolder {
+public class ImageViewHolder extends FlexViewHolder {
 
     private final ImageView imageView;
 
-    public ImageViewHolder(View view, FlexibleAdapter adapter) {
+    public ImageViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.imageView = view.findViewById(R.id.image);
         //this.titleView = view.findViewById(R.id.title);

@@ -49,11 +49,11 @@ import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class WidgetViewHolder extends FlexibleViewHolder {
+public class WidgetViewHolder extends FlexViewHolder {
 
     private final int[] NET_COLORS = {
             ContextCompat.getColor(IadtController.get().getContext(), R.color.rally_green),
@@ -76,7 +76,7 @@ public class WidgetViewHolder extends FlexibleViewHolder {
     private final TextView secondContent;
     private final FrameLayout chartContainer;
 
-    public WidgetViewHolder(View view, FlexibleAdapter adapter) {
+    public WidgetViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.cardView = view.findViewById(R.id.card_view);
         this.title = view.findViewById(R.id.title);

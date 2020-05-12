@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigField;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -160,7 +160,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VENDOR))
                 .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
                 .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
-                .addButton(new ButtonBorderlessData("Plugins",
+                .addButton(new ButtonBorderlessFlexData("Plugins",
                         R.drawable.ic_format_align_left_white_24dp,
                         new Runnable() {
                             @Override
@@ -170,7 +170,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                                 OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }
                         }))
-                .addButton(new ButtonBorderlessData("Dependencies",
+                .addButton(new ButtonBorderlessFlexData("Dependencies",
                         R.drawable.ic_format_align_left_white_24dp,
                         new Runnable() {
                             @Override

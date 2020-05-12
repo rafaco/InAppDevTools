@@ -37,13 +37,13 @@ import com.alorma.timeline.TimelineView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class TraceViewHolder extends FlexibleViewHolder {
+public class TraceViewHolder extends FlexViewHolder {
 
     private final LinearLayout itemContent;
     private final CardView cardView;
@@ -56,7 +56,7 @@ public class TraceViewHolder extends FlexibleViewHolder {
     private final TextView where3View;
     private final TextView tag;
 
-    public TraceViewHolder(View view, FlexibleAdapter adapter) {
+    public TraceViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.itemContent = view.findViewById(R.id.item_content);
         this.cardView = view.findViewById(R.id.card_view);

@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -73,10 +73,10 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
         return objectList;
     }
 
-    private LinearGroupData getButtonList() {
-        LinearGroupData linearGroupData = new LinearGroupData();
+    private LinearGroupFlexData getButtonList() {
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData(
+        linearGroupData.add(new ButtonFlexData(
                 "Sessions",
                 R.drawable.ic_timeline_white_24dp,
                 R.color.rally_purple,

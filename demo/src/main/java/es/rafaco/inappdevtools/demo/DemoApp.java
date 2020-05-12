@@ -22,7 +22,7 @@ package es.rafaco.inappdevtools.demo;
 import android.app.Application;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 public class DemoApp extends Application {
@@ -34,7 +34,7 @@ public class DemoApp extends Application {
         super.onCreate();
 
 
-        Iadt.addRunButton(new ButtonData("Show message",
+        Iadt.addRunButton(new ButtonFlexData("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
@@ -49,7 +49,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonData("Select API...",
+        Iadt.addRunButton(new ButtonFlexData("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
@@ -58,7 +58,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonData("Add dummy thread",
+        Iadt.addRunButton(new ButtonFlexData("Add dummy thread",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
@@ -73,7 +73,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonData("Add dummy async",
+        Iadt.addRunButton(new ButtonFlexData("Add dummy async",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override

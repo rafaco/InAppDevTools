@@ -34,8 +34,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
@@ -67,7 +67,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
 
         data.add("Take screenshots of your running activities, we will auto take a shot of your crashes. You can include them in your reports or share it directly.");
 
-        ButtonData take = new ButtonData( "Take Screenshot",
+        ButtonFlexData take = new ButtonFlexData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,7 +76,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
                     }
                 });
 
-        ButtonData filter = new ButtonData( "Filter by session",
+        ButtonFlexData filter = new ButtonFlexData( "Filter by session",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
@@ -85,7 +85,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
                     }
                 });
 
-        LinearGroupData linearGroupData = new LinearGroupData();
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
         linearGroupData.add(take);
         linearGroupData.add(filter);

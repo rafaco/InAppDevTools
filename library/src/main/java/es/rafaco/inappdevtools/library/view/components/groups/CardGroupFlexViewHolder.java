@@ -23,11 +23,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
-import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -39,12 +39,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 //#endif
 
-public class CardGroupViewHolder extends FlexGroupViewHolder {
+public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
 
     private final CardView cardView;
     private final LinearLayout childrenContainer;
 
-    public CardGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public CardGroupFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.cardView = view.findViewById(R.id.card_view);
         this.childrenContainer = view.findViewById(R.id.children_container);
@@ -54,7 +54,7 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
 
-        final CardGroupData data = (CardGroupData) abstractData;
+        final CardGroupFlexData data = (CardGroupFlexData) abstractData;
         if (data!=null){
             bindMargins(data);
             bindElevation(data);
@@ -66,7 +66,7 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
         }
     }
 
-    private void bindMargins(CardGroupData data) {
+    private void bindMargins(CardGroupFlexData data) {
         if (data.isFullWidth()){
             cardView.setRadius(UiUtils.getPixelsFromDp(itemView.getContext(),0));
             cardView.setUseCompatPadding(false);
@@ -79,7 +79,7 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
         }
     }
 
-    private void bindBgColor(CardGroupData data) {
+    private void bindBgColor(CardGroupFlexData data) {
         if (data.getBgColorResource()>0){
             cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), data.getBgColorResource()));
         }
@@ -88,13 +88,13 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
         }
     }
 
-    private void bindElevation(CardGroupData data) {
+    private void bindElevation(CardGroupFlexData data) {
         if (data.getElevationDp()>=0){
             cardView.setCardElevation(UiUtils.getPixelsFromDp(itemView.getContext(), data.getElevationDp()));
         }
     }
 
-    private void bindPerformer(final CardGroupData data) {
+    private void bindPerformer(final CardGroupFlexData data) {
         if (data.getPerformer() != null){
             cardView.setClickable(true);
             cardView.setFocusable(true);
@@ -116,7 +116,7 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
                 R.color.material_green));
     }
 
-    private void bindContentPadding(CardGroupData data) {
+    private void bindContentPadding(CardGroupFlexData data) {
         if (data.isNoContentPadding()){
             cardView.setContentPadding(0,0,0,0);
             cardView.setPadding(0,0,0,0);
@@ -124,21 +124,21 @@ public class CardGroupViewHolder extends FlexGroupViewHolder {
         }
     }
 
-    private void bindChildren(CardGroupData data) {
+    private void bindChildren(CardGroupFlexData data) {
         childrenContainer.removeAllViews();
         if (data.getChildren()==null && data.getChildren().isEmpty()) {
             return;
         }
 
         if (data.getChildren().size() == 1
-                && data.getChildren().get(0) instanceof FlexGroupData){
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(data.getChildren().get(0).getClass());
+                && data.getChildren().get(0) instanceof GroupFlexData){
+            FlexDescriptor desc = FlexLoader.getDescriptor(data.getChildren().get(0).getClass());
             desc.addToView(data.getChildren().get(0), cardView);
         }
         else{
-            LinearGroupData childrenGroup = new LinearGroupData(data.getChildren());
+            LinearGroupFlexData childrenGroup = new LinearGroupFlexData(data.getChildren());
             childrenGroup.setBackgroundColor(R.color.rally_orange);
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
+            FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(childrenGroup, cardView);
         }
     }

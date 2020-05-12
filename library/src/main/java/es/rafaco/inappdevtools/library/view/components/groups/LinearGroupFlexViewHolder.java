@@ -25,18 +25,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
-import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 
-public class LinearGroupViewHolder extends FlexGroupViewHolder {
+public class LinearGroupFlexViewHolder extends GroupFlexViewHolder {
 
     private final TextView groupTitle;
     LinearLayout groupContainer;
 
-    public LinearGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public LinearGroupFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         groupTitle = view.findViewById(R.id.group_title);
         groupContainer = view.findViewById(R.id.group_container);
@@ -46,7 +46,7 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
 
-        final LinearGroupData data = (LinearGroupData) abstractData;
+        final LinearGroupFlexData data = (LinearGroupFlexData) abstractData;
         if (data==null){
             groupTitle.setVisibility(View.GONE);
             groupContainer.setVisibility(View.GONE);
@@ -60,26 +60,26 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
         bindItems(data);
     }
 
-    private void bindOrientationAndLayout(LinearGroupData data) {
+    private void bindOrientationAndLayout(LinearGroupFlexData data) {
         int orientation = data.isHorizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
         groupContainer.setOrientation(orientation);
 
         //Set default childLayout for selected orientation
         if (data.getChildLayout()==null){
-            FlexItemData.LayoutInParent defaultLayout = data.isHorizontal
-                    ? FlexItemData.LayoutInParent.SAME_WIDTH
-                    : FlexItemData.LayoutInParent.FULL_WIDTH;
+            FlexData.LayoutInParent defaultLayout = data.isHorizontal
+                    ? FlexData.LayoutInParent.SAME_WIDTH
+                    : FlexData.LayoutInParent.FULL_WIDTH;
             data.setChildLayout(defaultLayout);
         }
     }
 
-    private void bindDividers(LinearGroupData data) {
+    private void bindDividers(LinearGroupFlexData data) {
         groupContainer.setShowDividers(data.isShowDividers()
                 ? LinearLayout.SHOW_DIVIDER_MIDDLE
                 : LinearLayout.SHOW_DIVIDER_NONE);
     }
 
-    private void bindTitle(LinearGroupData data) {
+    private void bindTitle(LinearGroupFlexData data) {
         boolean showTitle = !TextUtils.isEmpty(data.getTitle());
         if (showTitle) {
             groupTitle.setText(data.getTitle());
@@ -87,7 +87,7 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
         groupTitle.setVisibility(showTitle ? View.VISIBLE : View.GONE);
     }
 
-    private void bindItems(LinearGroupData data) {
+    private void bindItems(LinearGroupFlexData data) {
         if (data.getChildren() == null || data.getChildren().isEmpty()) {
             groupContainer.removeAllViews();
             return;
@@ -95,11 +95,11 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
 
         for (int i = 0; i<data.getChildren().size(); i++){
             Object currentItem = data.getChildren().get(i);
-            if (data.getChildLayout()!=null && currentItem instanceof FlexItemData){
-                ((FlexItemData) currentItem).setLayoutInParent(data.getChildLayout());
+            if (data.getChildLayout()!=null && currentItem instanceof FlexData){
+                ((FlexData) currentItem).setLayoutInParent(data.getChildLayout());
             }
 
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(currentItem.getClass());
+            FlexDescriptor desc = FlexLoader.getDescriptor(currentItem.getClass());
             if (desc != null){
                 desc.addToView(currentItem, groupContainer);
             }

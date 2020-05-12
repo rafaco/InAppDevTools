@@ -33,15 +33,15 @@ import android.support.v7.widget.RecyclerView;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexViewHolder;
 
-public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
+public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
 
     RecyclerView groupContainer;
-    FlexibleAdapter internalAdapter;
+    FlexAdapter internalAdapter;
 
-    public RecyclerGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public RecyclerGroupFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         groupContainer = view.findViewById(R.id.group_container);
     }
@@ -50,7 +50,7 @@ public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
         
-        final RecyclerGroupData data = (RecyclerGroupData) abstractData;
+        final RecyclerGroupFlexData data = (RecyclerGroupFlexData) abstractData;
         if (data==null){
             groupContainer.setVisibility(View.GONE);
             return;
@@ -66,7 +66,7 @@ public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
         groupContainer.setFocusable(false);
     }
 
-    private void bindOrientation(RecyclerGroupData data) {
+    private void bindOrientation(RecyclerGroupFlexData data) {
         int orientation = data.isHorizontal
                 ? LinearLayout.HORIZONTAL
                 : LinearLayout.VERTICAL;
@@ -75,7 +75,7 @@ public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
         groupContainer.setLayoutManager(lm);
     }
 
-    private void bindDividers(RecyclerGroupData data) {
+    private void bindDividers(RecyclerGroupFlexData data) {
         if (!data.showDividers)
             return;
 
@@ -87,14 +87,14 @@ public class RecyclerGroupViewHolder extends FlexGroupViewHolder {
         groupContainer.addItemDecoration(dividerItemDecoration);
     }
 
-    private void bindAdapter(RecyclerGroupData data) {
+    private void bindAdapter(RecyclerGroupFlexData data) {
         if (data.getAdapter() != null){
             internalAdapter = data.getAdapter();
         }
         else if(data.getAdapterLayout()!=null
                 && data.getAdapterSpanCount()>0
                 && data.getChildren()!=null){
-            internalAdapter = new FlexibleAdapter(data.adapterLayout,
+            internalAdapter = new FlexAdapter(data.adapterLayout,
                     data.getAdapterSpanCount(),
                     data.getChildren());
         }

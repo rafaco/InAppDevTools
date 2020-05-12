@@ -27,8 +27,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -72,10 +72,10 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
         return objectList;
     }
 
-    private LinearGroupData getFirstButtonGroupData(final Session session) {
-        LinearGroupData linearGroupData = new LinearGroupData();
+    private LinearGroupFlexData getFirstButtonGroupData(final Session session) {
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData(
+        linearGroupData.add(new ButtonFlexData(
                 "Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
                 R.color.rally_green_alpha,
@@ -89,7 +89,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
                                 LogScreen.buildParams(stepsFilter.getUiFilter()));
                     }
                 }));
-        linearGroupData.add(new ButtonData(
+        linearGroupData.add(new ButtonFlexData(
                 "Logs",
                 R.drawable.ic_format_align_left_white_24dp,
                 R.color.rally_blue_med,
@@ -106,10 +106,10 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
         return linearGroupData;
     }
 
-    private LinearGroupData getSecondButtonGroupData(final Session session) {
-        LinearGroupData linearGroupData = new LinearGroupData();
+    private LinearGroupFlexData getSecondButtonGroupData(final Session session) {
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData(
+        linearGroupData.add(new ButtonFlexData(
                 "Build Info",
                 R.drawable.ic_build_white_24dp,
                 R.color.rally_purple,
@@ -122,7 +122,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
                 }));
 
         if (session.getCrashId()>0){
-            linearGroupData.add(new ButtonData(
+            linearGroupData.add(new ButtonFlexData(
                     "Crash Detail",
                     R.drawable.ic_bug_report_white_24dp,
                     R.color.rally_orange,

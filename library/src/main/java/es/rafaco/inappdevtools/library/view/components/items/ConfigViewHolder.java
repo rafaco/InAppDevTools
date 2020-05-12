@@ -27,8 +27,8 @@ import android.widget.Switch;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 //#ifdef ANDROIDX
@@ -39,7 +39,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v4.content.ContextCompat;
 //#endif
 
-public class ConfigViewHolder extends FlexibleViewHolder {
+public class ConfigViewHolder extends FlexViewHolder {
 
     AppCompatTextView title;
     AppCompatTextView subtitle;
@@ -47,7 +47,7 @@ public class ConfigViewHolder extends FlexibleViewHolder {
     ImageView editButton;
     AppCompatTextView textValue;
 
-    public ConfigViewHolder(View view, FlexibleAdapter adapter) {
+    public ConfigViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         title = view.findViewById(R.id.title);
         subtitle = view.findViewById(R.id.subtitle);

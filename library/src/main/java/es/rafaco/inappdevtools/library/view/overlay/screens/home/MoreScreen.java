@@ -24,7 +24,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -64,7 +64,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 " - Home 2 is a proposal in progress\n" +
                 " - All other items has been mixed at Log Screen\n");
 
-        data.add(new ButtonData("Original Home",
+        data.add(new ButtonFlexData("Original Home",
                 R.drawable.ic_format_list_bulleted_white_24dp,
                 new Runnable() {
                     @Override
@@ -72,7 +72,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Home 3",
+        data.add(new ButtonFlexData("Home 3",
                 R.drawable.ic_timeline_white_24dp,
                 new Runnable() {
                     @Override
@@ -82,7 +82,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
 
 
         data.add("");
-        data.add(new ButtonData("Builds",
+        data.add(new ButtonFlexData("Builds",
                 R.drawable.ic_build_white_24dp,
                 new Runnable() {
                     @Override
@@ -90,7 +90,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Sessions",
+        data.add(new ButtonFlexData("Sessions",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
@@ -98,7 +98,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Screens",
+        data.add(new ButtonFlexData("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -106,7 +106,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Crashes",
+        data.add(new ButtonFlexData("Crashes",
                 R.drawable.ic_bug_report_white_24dp,
                 R.color.rally_orange,
                 new Runnable() {
@@ -115,7 +115,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Crash",
+        data.add(new ButtonFlexData("Crash",
                 R.drawable.ic_bug_report_white_24dp,
                 R.color.rally_orange,
                 new Runnable() {
@@ -126,7 +126,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
 
 
         data.add("");
-        data.add(new ButtonData("Network",
+        data.add(new ButtonFlexData("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -135,7 +135,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("PND Net",
+        data.add(new ButtonFlexData("PND Net",
                 R.drawable.ic_extension_white_24dp,
                 new Runnable() {
                     @Override
@@ -145,7 +145,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new ButtonData("Pandora",
+        data.add(new ButtonFlexData("Pandora",
                 R.drawable.ic_extension_white_24dp,
                 new Runnable() {
                     @Override

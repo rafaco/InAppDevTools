@@ -36,9 +36,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -47,7 +47,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 public class ReportScreen extends Screen {
 
     private RecyclerView flexibleContainer;
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
 
     public ReportScreen(ScreenManager manager) {
         super(manager);
@@ -86,7 +86,7 @@ public class ReportScreen extends Screen {
 
 
     private void initAdapter() {
-        adapter = new FlexibleAdapter(FlexibleAdapter.Layout.GRID, 1, new ArrayList<>());
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, new ArrayList<>());
         flexibleContainer = getView().findViewById(R.id.flexible_contents);
         flexibleContainer.setAdapter(adapter);
     }
@@ -101,7 +101,7 @@ public class ReportScreen extends Screen {
         data.add("");
         data.add("Send reports directly to the development team of this app. You can include logs and other useful information for them.");
         data.add("");
-        data.add(new ButtonData("New Report",
+        data.add(new ButtonFlexData("New Report",
                 R.drawable.ic_add_circle_outline_white_24dp,
                 R.color.rally_green,
                 new Runnable() {
@@ -113,7 +113,7 @@ public class ReportScreen extends Screen {
 
         int reportsCount = IadtController.getDatabase().reportDao().getAll().size();
         if (reportsCount>=1){
-            data.add(new ButtonData("Previous Reports",
+            data.add(new ButtonFlexData("Previous Reports",
                     R.drawable.ic_format_list_bulleted_white_24dp,
                     new Runnable() {
                         @Override
@@ -125,9 +125,9 @@ public class ReportScreen extends Screen {
         data.add("");
 
         data.add("Related features:");
-        LinearGroupData linearGroupData = new LinearGroupData();
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonData("Take Screen",
+        linearGroupData.add(new ButtonFlexData("Take Screen",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -135,7 +135,7 @@ public class ReportScreen extends Screen {
                         onTakeScreen();
                     }
                 }));
-        linearGroupData.add(new ButtonData("Start new session",
+        linearGroupData.add(new ButtonFlexData("Start new session",
                 R.drawable.ic_flag_white_24dp,
                 new Runnable() {
                     @Override

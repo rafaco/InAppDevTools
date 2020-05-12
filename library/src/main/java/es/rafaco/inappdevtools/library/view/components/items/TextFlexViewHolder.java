@@ -27,14 +27,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
 
-public class TextViewHolder extends FlexItemViewHolder {
+public class TextFlexViewHolder extends FlexItemViewHolder {
 
     TextView textView;
 
-    public TextViewHolder(View view, FlexibleAdapter adapter) {
+    public TextFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.textView = view.findViewById(R.id.title);
     }
@@ -43,12 +43,12 @@ public class TextViewHolder extends FlexItemViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
 
-        TextData data;
+        TextFlexData data;
         if (abstractData instanceof String) {
-            data = new TextData((String) abstractData);
+            data = new TextFlexData((String) abstractData);
         }
-        else if (abstractData instanceof TextData) {
-            data = (TextData) abstractData;
+        else if (abstractData instanceof TextFlexData) {
+            data = (TextFlexData) abstractData;
         }
         else
             return;

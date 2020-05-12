@@ -24,7 +24,7 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 
 public class RunnableManager {
 
@@ -37,22 +37,22 @@ public class RunnableManager {
 
     //region [ CUSTOM RUNNABLES ]
 
-    private List<ButtonData> buttonDataList;
+    private List<ButtonFlexData> buttonDataList;
 
-    public void add(ButtonData config){
+    public void add(ButtonFlexData config){
         if (buttonDataList == null)
             buttonDataList = new ArrayList<>();
         buttonDataList.add(config);
     }
 
-    public boolean remove(ButtonData target){
+    public boolean remove(ButtonFlexData target){
         if (buttonDataList !=null && buttonDataList.contains(target)) {
             return buttonDataList.remove(target);
         }
         return false;
     }
 
-    public List<ButtonData> getAll(){
+    public List<ButtonFlexData> getAll(){
         if (buttonDataList == null)
             buttonDataList = new ArrayList<>();
         return buttonDataList;

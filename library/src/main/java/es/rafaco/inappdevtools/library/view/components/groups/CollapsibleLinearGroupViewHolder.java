@@ -26,11 +26,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class CollapsibleLinearGroupViewHolder extends LinearGroupViewHolder {
+public class CollapsibleLinearGroupViewHolder extends LinearGroupFlexViewHolder {
 
     private final RelativeLayout headerContainer;
     private final TextView overviewView;
@@ -39,7 +39,7 @@ public class CollapsibleLinearGroupViewHolder extends LinearGroupViewHolder {
     private final View contentSeparator;
     private final TextView contentView;
 
-    public CollapsibleLinearGroupViewHolder(View view, FlexibleAdapter adapter) {
+    public CollapsibleLinearGroupViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.headerContainer = view.findViewById(R.id.header_container);
         this.overviewView = view.findViewById(R.id.overview);

@@ -34,15 +34,15 @@ import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ButtonViewHolder extends FlexItemViewHolder {
+public class ButtonFlexViewHolder extends FlexItemViewHolder {
 
     AppCompatButton button;
 
-    public ButtonViewHolder(View view, FlexibleAdapter adapter) {
+    public ButtonFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         button = view.findViewById(R.id.button);
     }
@@ -51,7 +51,7 @@ public class ButtonViewHolder extends FlexItemViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
 
-        final ButtonData data = (ButtonData) abstractData;
+        final ButtonFlexData data = (ButtonFlexData) abstractData;
         boolean isCustomBackground = data.getColor() > 0;
         int color = isCustomBackground ? data.getColor() : R.color.iadt_surface_top;
         int accentColor = ContextCompat.getColor(button.getContext(), R.color.iadt_primary);
@@ -88,7 +88,7 @@ public class ButtonViewHolder extends FlexItemViewHolder {
             button.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
         }
 
-        if (abstractData instanceof ButtonBorderlessData){
+        if (abstractData instanceof ButtonBorderlessFlexData){
             button.setAllCaps(false);
             button.setTextColor(accentColor);
         }

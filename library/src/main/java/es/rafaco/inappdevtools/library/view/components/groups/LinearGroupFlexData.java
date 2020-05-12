@@ -22,25 +22,25 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.view.components.base.FlexGroupData;
-import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 
-public class LinearGroupData extends FlexGroupData {
+public class LinearGroupFlexData extends GroupFlexData {
 
     String title;
     boolean showDividers = false;
     boolean isHorizontal = false;
-    FlexItemData.LayoutInParent childLayout;
+    FlexData.LayoutInParent childLayout;
 
-    public LinearGroupData() {
+    public LinearGroupFlexData() {
         this(new ArrayList<>());
     }
 
-    public LinearGroupData(List<Object> children) {
+    public LinearGroupFlexData(List<Object> children) {
         this(null, children);
     }
 
-    public LinearGroupData(String title, List<Object> children) {
+    public LinearGroupFlexData(String title, List<Object> children) {
         super(children);
         this.title = title;
     }

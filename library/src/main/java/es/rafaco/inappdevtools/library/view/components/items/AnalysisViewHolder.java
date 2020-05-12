@@ -24,16 +24,16 @@ import android.view.View;
 import es.rafaco.compat.AppCompatTextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
-import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
-public class AnalysisViewHolder extends FlexibleViewHolder {
+public class AnalysisViewHolder extends FlexViewHolder {
 
     private final AppCompatTextView nameView;
     private final AppCompatTextView countView;
     private final AppCompatTextView percentageView;
 
-    public AnalysisViewHolder(View view, FlexibleAdapter adapter) {
+    public AnalysisViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.nameView = view.findViewById(R.id.name);
         this.countView = view.findViewById(R.id.count);
