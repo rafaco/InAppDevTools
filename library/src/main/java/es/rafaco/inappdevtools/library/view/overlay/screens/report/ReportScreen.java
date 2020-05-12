@@ -36,8 +36,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -101,7 +101,7 @@ public class ReportScreen extends Screen {
         data.add("");
         data.add("Send reports directly to the development team of this app. You can include logs and other useful information for them.");
         data.add("");
-        data.add(new RunButton("New Report",
+        data.add(new ButtonData("New Report",
                 R.drawable.ic_add_circle_outline_white_24dp,
                 R.color.rally_green,
                 new Runnable() {
@@ -113,7 +113,7 @@ public class ReportScreen extends Screen {
 
         int reportsCount = IadtController.getDatabase().reportDao().getAll().size();
         if (reportsCount>=1){
-            data.add(new RunButton("Previous Reports",
+            data.add(new ButtonData("Previous Reports",
                     R.drawable.ic_format_list_bulleted_white_24dp,
                     new Runnable() {
                         @Override
@@ -125,8 +125,9 @@ public class ReportScreen extends Screen {
         data.add("");
 
         data.add("Related features:");
-        List<RunButton> prepareButtons = new ArrayList<>();
-        prepareButtons.add(new RunButton("Take Screen",
+        LinearGroupData linearGroupData = new LinearGroupData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonData("Take Screen",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -134,7 +135,7 @@ public class ReportScreen extends Screen {
                         onTakeScreen();
                     }
                 }));
-        prepareButtons.add(new RunButton("Start new session",
+        linearGroupData.add(new ButtonData("Start new session",
                 R.drawable.ic_flag_white_24dp,
                 new Runnable() {
                     @Override
@@ -142,7 +143,7 @@ public class ReportScreen extends Screen {
                         onNewSession();
                     }
                 }));
-        data.add(new ButtonGroupData(prepareButtons));
+        data.add(linearGroupData);
         data.add("");
 
         return data;

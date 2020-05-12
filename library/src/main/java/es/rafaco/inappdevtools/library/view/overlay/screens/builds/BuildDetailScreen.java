@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -68,15 +68,15 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getButtonGroupData());
+        objectList.add(1, getButtonList());
         objectList.add(2, "");
         return objectList;
     }
 
-
-    private ButtonGroupData getButtonGroupData() {
-        List<RunButton> buttons = new ArrayList<>();
-        buttons.add(new RunButton(
+    private LinearGroupData getButtonList() {
+        LinearGroupData linearGroupData = new LinearGroupData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonData(
                 "Sessions",
                 R.drawable.ic_timeline_white_24dp,
                 R.color.rally_purple,
@@ -85,6 +85,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
                     public void run() {OverlayService.performNavigation(SessionsScreen.class, buildId + "");
                     }
                 }));
-        return new ButtonGroupData(buttons);
+
+        return linearGroupData;
     }
 }

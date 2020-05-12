@@ -24,7 +24,6 @@ import android.content.Context;
 //#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
 //#else
-import android.support.annotation.NonNull;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
@@ -34,7 +33,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
@@ -138,7 +137,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Git name", gitInfo.getString(GitInfo.USER_NAME))
                 .add("Git email", gitInfo.getString(GitInfo.USER_EMAIL))
                 .add("Git version", gitInfo.getString(GitInfo.VERSION))
-                .addButton(new RunButton("Write Email",
+                .addButton(new ButtonBorderlessData("Write Email",
                         R.drawable.ic_email_white_24dp,
                         new Runnable() {
                             @Override
@@ -167,7 +166,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Tag Info", gitInfo.getString(GitInfo.TAG_INFO))
                 .add(" - Last commit:")
                 .add(gitInfo.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
-        group.addButton(new RunButton("Browse repo",
+        group.addButton(new ButtonBorderlessData("Browse repo",
                 R.drawable.ic_public_white_24dp,
                 new Runnable() {
                     @Override
@@ -193,7 +192,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         int local_commits_count = Humanizer.countLines(local_commits);
         group.setOverview(local_commits_count + " commits ahead");
         group.add(local_commits);
-        group.addButton(new RunButton("View Commits",
+        group.addButton(new ButtonBorderlessData("View Commits",
                 R.drawable.ic_add_circle_outline_white_24dp,
                 new Runnable() {
                     @Override
@@ -223,7 +222,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
         group.setOverview(file_changes_count + " files");
         group.add(file_status);
-        group.addButton(new RunButton("View Diffs",
+        group.addButton(new ButtonBorderlessData("View Diffs",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override

@@ -25,7 +25,7 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 
@@ -82,7 +82,7 @@ public class Iadt {
 
     //region [ INTEGRATIONS ]
 
-    public static void addRunButton(RunButton runnable){
+    public static void addRunButton(ButtonData runnable){
         if(!isEnabled()) return;
         getController().getRunnableManager().add(runnable);
     }

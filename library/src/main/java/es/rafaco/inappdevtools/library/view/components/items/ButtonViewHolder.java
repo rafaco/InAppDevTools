@@ -34,28 +34,24 @@ import android.support.v7.widget.AppCompatButton;
 //#endif
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class RunButtonViewHolder extends FlexibleViewHolder {
+public class ButtonViewHolder extends FlexItemViewHolder {
 
     AppCompatButton button;
 
-    public RunButtonViewHolder(View view) {
-        super(view);
-        button = view.findViewById(R.id.button);
-    }
-
-    public RunButtonViewHolder(View view, FlexibleAdapter adapter) {
+    public ButtonViewHolder(View view, FlexibleAdapter adapter) {
         super(view, adapter);
         button = view.findViewById(R.id.button);
     }
 
     @Override
     public void bindTo(Object abstractData, int position) {
-        final RunButton data = (RunButton) abstractData;
+        super.bindTo(abstractData, position);
+
+        final ButtonData data = (ButtonData) abstractData;
         boolean isCustomBackground = data.getColor() > 0;
         int color = isCustomBackground ? data.getColor() : R.color.iadt_surface_top;
         int accentColor = ContextCompat.getColor(button.getContext(), R.color.iadt_primary);
@@ -67,6 +63,8 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         if (data.isWrapContent()){
             //Change width to WRAP_CONTENT and remove WEIGHT
             button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            //TODO: remove. Used in old borderless from buttonGroup
             button.setAllCaps(false);
             button.setTextColor(accentColor);
         }
@@ -88,6 +86,11 @@ public class RunButtonViewHolder extends FlexibleViewHolder {
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             button.setElevation(UiUtils.getPixelsFromDp(itemView.getContext(), 6));
+        }
+
+        if (abstractData instanceof ButtonBorderlessData){
+            button.setAllCaps(false);
+            button.setTextColor(accentColor);
         }
     }
 }

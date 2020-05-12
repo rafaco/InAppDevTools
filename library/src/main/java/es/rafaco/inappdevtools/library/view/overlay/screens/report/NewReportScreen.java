@@ -36,8 +36,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
@@ -53,7 +53,6 @@ import es.rafaco.inappdevtools.library.view.components.items.SelectorData;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-
 
 public class NewReportScreen extends AbstractFlexibleScreen {
 
@@ -330,7 +329,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         data.add("//TODO: WORK IN PROGRESS");
         data.add("");
         data.add("Choose screenshots and press continue:");
-        data.add(new RunButton("Continue",
+        data.add(new ButtonData("Continue",
                 new Runnable() {
                     @Override
                     public void run() {
@@ -451,8 +450,9 @@ public class NewReportScreen extends AbstractFlexibleScreen {
 
         data.add("");
 
-        List<RunButton> reportButtons = new ArrayList<>();
-        reportButtons.add(new RunButton("Save",
+        LinearGroupData linearGroupData = new LinearGroupData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonData("Save",
                 R.drawable.ic_save_white_24dp,
                 new Runnable() {
                     @Override
@@ -460,7 +460,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                         onSaveReport();
                     }
                 }));
-        reportButtons.add(new RunButton("Next",
+        linearGroupData.add(new ButtonData("Next",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green,
                 new Runnable() {
@@ -469,7 +469,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                         onContentFormNext();
                     }
                 }));
-        data.add(new ButtonGroupData(reportButtons));
+        data.add(linearGroupData);
 
         return data;
     }

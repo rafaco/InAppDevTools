@@ -31,7 +31,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
@@ -101,7 +101,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add(RunningTasksUtils.getTopActivityInfo());
 
         //TODO: when multiple buttons supported -> Add inspect source
-        builder.addButton(new RunButton("Inspect View",
+        builder.addButton(new ButtonBorderlessData("Inspect View",
                 R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
                         @Override

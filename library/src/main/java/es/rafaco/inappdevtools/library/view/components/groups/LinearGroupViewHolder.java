@@ -21,7 +21,6 @@ package es.rafaco.inappdevtools.library.view.components.groups;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +29,7 @@ import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.components.base.FlexGroupViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
 
 public class LinearGroupViewHolder extends FlexGroupViewHolder {
 
@@ -53,18 +53,24 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
             return;
         }
 
-        bindOrientation(data);
+        //bindGravity()
+        bindOrientationAndLayout(data);
         bindDividers(data);
         bindTitle(data);
         bindItems(data);
     }
 
-    private void bindOrientation(LinearGroupData data) {
+    private void bindOrientationAndLayout(LinearGroupData data) {
         int orientation = data.isHorizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
-        int layoutWidth = LinearLayout.LayoutParams.MATCH_PARENT;
-        int layoutHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
         groupContainer.setOrientation(orientation);
-        groupContainer.setLayoutParams(new LinearLayout.LayoutParams(layoutWidth, layoutHeight));
+
+        //Set default childLayout for selected orientation
+        if (data.getChildLayout()==null){
+            FlexItemData.LayoutInParent defaultLayout = data.isHorizontal
+                    ? FlexItemData.LayoutInParent.SAME_WIDTH
+                    : FlexItemData.LayoutInParent.FULL_WIDTH;
+            data.setChildLayout(defaultLayout);
+        }
     }
 
     private void bindDividers(LinearGroupData data) {
@@ -89,6 +95,10 @@ public class LinearGroupViewHolder extends FlexGroupViewHolder {
 
         for (int i = 0; i<data.getChildren().size(); i++){
             Object currentItem = data.getChildren().get(i);
+            if (data.getChildLayout()!=null && currentItem instanceof FlexItemData){
+                ((FlexItemData) currentItem).setLayoutInParent(data.getChildLayout());
+            }
+
             FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(currentItem.getClass());
             if (desc != null){
                 desc.addToView(currentItem, groupContainer);

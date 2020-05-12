@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.logic.runnables;
+package es.rafaco.inappdevtools.library.view.components.items;
 
-public class RunButton {
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+
+public class ButtonData extends FlexItemData {
     String title;
     Runnable performer;
     Runnable callback;
@@ -27,22 +29,22 @@ public class RunButton {
     int color;
     boolean wrapContent = false;
 
-    public RunButton(String title, Runnable performer) {
+    public ButtonData(String title, Runnable performer) {
         this.title = title;
         this.performer = performer;
     }
 
-    public RunButton(String title, int icon, Runnable performer) {
+    public ButtonData(String title, int icon, Runnable performer) {
         this(title, performer);
         this.icon = icon;
     }
 
-    public RunButton(String title, int icon, int colorResId, Runnable performer) {
+    public ButtonData(String title, int icon, int colorResId, Runnable performer) {
         this(title, icon, performer);
         this.color = colorResId;
     }
 
-    public RunButton(String title, int icon, Runnable performer, Runnable callback) {
+    public ButtonData(String title, int icon, Runnable performer, Runnable callback) {
         this(title, icon, performer);
         this.callback = callback;
     }

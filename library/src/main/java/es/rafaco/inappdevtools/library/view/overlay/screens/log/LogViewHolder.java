@@ -43,8 +43,8 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -180,15 +180,17 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         }
 
         if(isSelected && getLinkedIdStep(data)!=null){
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ButtonGroupData.class);
-            ButtonGroupData buttonGroupData = new ButtonGroupData(new RunButton(
+            LinearGroupData linearGroupData = new LinearGroupData();
+            linearGroupData.setHorizontal(true);
+            linearGroupData.add(new ButtonData(
                     "Details", new Runnable() {
                 @Override
                 public void run() {
                     OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
                 }
             }));
-            desc.addToView(buttonGroupData, buttonGroupContainer);
+            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
+            desc.addToView(linearGroupData, buttonGroupContainer);
 
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);

@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTrack;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
@@ -124,7 +124,7 @@ public class FragmentsScreen extends Screen {
                 final String srcPath = getSourcesManager().getPathFromClassName(track.className);
                 String fileName = Humanizer.getLastPart(srcPath, "/");
                 if (TextUtils.isEmpty(srcPath)){
-                    fragmentDataBuilder.addButton(new RunButton("Unavailable",
+                    fragmentDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -134,7 +134,7 @@ public class FragmentsScreen extends Screen {
                             }));
                 }
                 else{
-                    fragmentDataBuilder.addButton(new RunButton(fileName,
+                    fragmentDataBuilder.addButton(new ButtonBorderlessData(fileName,
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -150,7 +150,7 @@ public class FragmentsScreen extends Screen {
                 final String layoutPath = getSourcesManager().getLayoutPathFromLayoutName(layoutName);
                 String layoutFile = Humanizer.getLastPart(layoutPath, "/");
                 if (TextUtils.isEmpty(layoutPath)) {
-                    fragmentDataBuilder.addButton(new RunButton("Unavailable",
+                    fragmentDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override
@@ -161,7 +161,7 @@ public class FragmentsScreen extends Screen {
                     );
                 }
                 else{
-                    fragmentDataBuilder.addButton(new RunButton(layoutFile,
+                    fragmentDataBuilder.addButton(new ButtonBorderlessData(layoutFile,
                             R.drawable.ic_code_white_24dp,
                             new Runnable() {
                                 @Override

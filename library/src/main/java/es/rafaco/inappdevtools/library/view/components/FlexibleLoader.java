@@ -24,15 +24,14 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderViewHolder;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.AnalysisViewHolder;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.CheckboxData;
@@ -46,7 +45,7 @@ import es.rafaco.inappdevtools.library.view.components.items.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
 import es.rafaco.inappdevtools.library.view.components.cards.FlatCardViewHolder;
-import es.rafaco.inappdevtools.library.view.components.items.TextItemData;
+import es.rafaco.inappdevtools.library.view.components.items.TextData;
 import es.rafaco.inappdevtools.library.view.components.items.TextViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
 import es.rafaco.inappdevtools.library.view.components.items.ImageViewHolder;
@@ -58,7 +57,7 @@ import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewViewHolder;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupViewHolder;
-import es.rafaco.inappdevtools.library.view.components.items.RunButtonViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.SelectorData;
 import es.rafaco.inappdevtools.library.view.components.items.SelectorViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
@@ -76,7 +75,6 @@ public class FlexibleLoader {
         List<FlexibleItemDescriptor> descriptors = new ArrayList<>();
 
         descriptors.add(new FlexibleItemDescriptor(ImageData.class, ImageViewHolder.class, R.layout.flexible_item_image));
-        descriptors.add(new FlexibleItemDescriptor(RunButton.class, RunButtonViewHolder.class, R.layout.flexible_item_run_button));
         descriptors.add(new FlexibleItemDescriptor(SelectorData.class, SelectorViewHolder.class, R.layout.flexible_item_selector));
         descriptors.add(new FlexibleItemDescriptor(EditTextData.class, EditTextViewHolder.class, R.layout.flexible_item_edit_text));
         descriptors.add(new FlexibleItemDescriptor(OverviewData.class, OverviewViewHolder.class, R.layout.flexible_item_overview));
@@ -90,19 +88,22 @@ public class FlexibleLoader {
 
         descriptors.add(new FlexibleItemDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
         descriptors.add(new FlexibleItemDescriptor(DocumentSectionData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
-        descriptors.add(new FlexibleItemDescriptor(ButtonGroupData.class, ButtonGroupViewHolder.class, R.layout.flexible_item_button_group));
         descriptors.add(new FlexibleItemDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
 
         descriptors.add(new FlexibleItemDescriptor(CollapsibleLinearGroupData.class, CollapsibleLinearGroupViewHolder.class, R.layout.flexible_item_collapsible_list));
         descriptors.add(new FlexibleItemDescriptor(FlatCardData.class, FlatCardViewHolder.class, R.layout.flexible_item_flat_card));
 
-
+        //MODERN
         descriptors.add(new FlexibleItemDescriptor(LinearGroupData.class, LinearGroupViewHolder.class, R.layout.flexible_group_linear));
         descriptors.add(new FlexibleItemDescriptor(RecyclerGroupData.class, RecyclerGroupViewHolder.class, R.layout.flexible_group_recycler));
         descriptors.add(new FlexibleItemDescriptor(CardGroupData.class, CardGroupViewHolder.class, R.layout.flexible_group_card));
         descriptors.add(new FlexibleItemDescriptor(CardHeaderData.class, CardHeaderViewHolder.class, R.layout.flexible_item_card_header));
-        descriptors.add(new FlexibleItemDescriptor(TextItemData.class, TextViewHolder.class, R.layout.flexible_item_text));
+        descriptors.add(new FlexibleItemDescriptor(TextData.class, TextViewHolder.class, R.layout.flexible_item_text));
         descriptors.add(new FlexibleItemDescriptor(String.class, TextViewHolder.class, R.layout.flexible_item_text));
+
+        descriptors.add(new FlexibleItemDescriptor(ButtonData.class, ButtonViewHolder.class, R.layout.flexible_item_button));
+        descriptors.add(new FlexibleItemDescriptor(ButtonBorderlessData.class, ButtonViewHolder.class, R.layout.flexible_item_button_borderless));
+
         return descriptors;
     }
 
@@ -117,7 +118,7 @@ public class FlexibleLoader {
 
     public static boolean isFullSpan(Class<?> itemDataClass) {
         if (itemDataClass.equals(String.class)
-                || itemDataClass.equals(ButtonGroupData.class)
+                || itemDataClass.equals(LinearGroupData.class)
                 || itemDataClass.equals(OverviewData.class)
                 || itemDataClass.equals(DocumentSectionData.class)
                 || itemDataClass.equals(WideWidgetData.class)

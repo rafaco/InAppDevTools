@@ -44,7 +44,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDoc
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
@@ -285,7 +285,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
                 .build();
         data.add(storageData);
 
-        data.add(new RunButton("More",
+        data.add(new ButtonData("More",
                 R.drawable.ic_more_vert_white_24dp,
                 new Runnable() {
                     @Override

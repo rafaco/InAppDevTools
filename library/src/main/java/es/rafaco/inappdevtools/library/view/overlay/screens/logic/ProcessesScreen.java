@@ -26,7 +26,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
@@ -89,7 +89,7 @@ public class ProcessesScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("View AndroidManifest");
-        data.add(new RunButton("Original",
+        data.add(new ButtonData("Original",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -98,7 +98,7 @@ public class ProcessesScreen extends AbstractFlexibleScreen {
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
                 }));
-        data.add(new RunButton("Merged",
+        data.add(new ButtonData("Merged",
                 R.drawable.ic_local_library_white_24dp,
                 new Runnable() {
                     @Override

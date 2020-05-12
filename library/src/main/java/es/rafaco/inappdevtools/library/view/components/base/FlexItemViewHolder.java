@@ -21,6 +21,8 @@ package es.rafaco.inappdevtools.library.view.components.base;
 
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
@@ -41,6 +43,56 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         }
         FlexItemData data = (FlexItemData) abstractData;
 
+        bindLayout(data);
+        bindGravity(data);
+        bindMargins(data);
+        bindBackgroundColor(data);
+    }
+
+    private void bindLayout(FlexItemData data) {
+        if (data.getLayoutInParent() == null)
+            return;
+
+        LinearLayout.LayoutParams layoutParams;
+        switch (data.getLayoutInParent()) {
+            case FULL_BOTH:
+                layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
+                break;
+            case WRAP_BOTH:
+                layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                break;
+            case SAME_WIDTH:
+                layoutParams = new LinearLayout.LayoutParams(0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+                break;
+            case SAME_HEIGHT:
+                layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0, 1);
+                break;
+            case FULL_HEIGHT:
+                layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
+                break;
+            case FULL_WIDTH:
+            default:
+                layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                break;
+        }
+        itemView.setLayoutParams(layoutParams);
+    }
+
+    private void bindGravity(FlexItemData data) {
+        if (data.getGravity()>0){
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemView.getLayoutParams();
+            layoutParams.gravity = data.getGravity();
+            itemView.setLayoutParams(layoutParams);
+        }
+    }
+
+    private void bindMargins(FlexItemData data) {
         if (data.isHorizontalMargin()!=null){
             MarginUtils.setHorizontalMargin(itemView, data.isHorizontalMargin());
         }
@@ -48,7 +100,9 @@ public class FlexItemViewHolder extends FlexibleViewHolder {
         if (data.isVerticalMargin()!=null){
             MarginUtils.setVerticalMargin(itemView, data.isVerticalMargin());
         }
+    }
 
+    private void bindBackgroundColor(FlexItemData data) {
         if (data.getBackgroundColor()>0) {
             int contextualizedColor = ContextCompat.getColor(itemView.getContext(), data.getBackgroundColor());
             itemView.setBackgroundColor(contextualizedColor);

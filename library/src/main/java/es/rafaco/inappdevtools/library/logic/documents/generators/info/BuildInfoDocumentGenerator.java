@@ -36,7 +36,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfigField;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -152,7 +152,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public DocumentSectionData getBuildEnvironment() {
-        DocumentSectionData group = new DocumentSectionData.Builder("Environment")
+        return new DocumentSectionData.Builder("Environment")
                 .setIcon(R.string.gmd_extension)
                 .setOverview("Gradle " + buildInfo.getString(BuildInfo.GRADLE_VERSION))
                 .add("Gradle", buildInfo.getString(BuildInfo.GRADLE_VERSION))
@@ -160,7 +160,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Java version", buildInfo.getString(BuildInfo.JAVA_VENDOR))
                 .add("Android Gradle plugin", buildInfo.getString(BuildInfo.ANDROID_PLUGIN_VERSION))
                 .add("Iadt plugin", buildInfo.getString(BuildInfo.IADT_PLUGIN_VERSION))
-                .addButton(new RunButton("Plugins",
+                .addButton(new ButtonBorderlessData("Plugins",
                         R.drawable.ic_format_align_left_white_24dp,
                         new Runnable() {
                             @Override
@@ -170,7 +170,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                                 OverlayService.performNavigation(SourceDetailScreen.class, params);
                             }
                         }))
-                .addButton(new RunButton("Dependencies",
+                .addButton(new ButtonBorderlessData("Dependencies",
                         R.drawable.ic_format_align_left_white_24dp,
                         new Runnable() {
                             @Override
@@ -181,7 +181,6 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
                             }
                         }))
                 .build();
-        return group;
     }
 
 

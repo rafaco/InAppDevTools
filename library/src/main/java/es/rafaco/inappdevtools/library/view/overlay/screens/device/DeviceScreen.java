@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -74,7 +74,7 @@ public class DeviceScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("Android shortcuts");
-        data.add(new RunButton("App Info",
+        data.add(new ButtonData("App Info",
                 R.drawable.ic_info_white_24dp,
                 new Runnable() {
                     @Override
@@ -83,7 +83,7 @@ public class DeviceScreen extends AbstractFlexibleScreen {
                         AppUtils.openAppSettings(DeviceScreen.this.getContext());
                     }
                 }));
-        data.add(new RunButton("Dev Options",
+        data.add(new ButtonData("Dev Options",
                 R.drawable.ic_developer_mode_white_24dp,
                 new Runnable() {
                     @Override

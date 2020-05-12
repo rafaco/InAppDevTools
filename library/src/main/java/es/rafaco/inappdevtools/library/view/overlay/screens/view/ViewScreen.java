@@ -40,13 +40,13 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
@@ -134,7 +134,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.select();
                     }
                 }));*/
-        verticalItems.add(new RunButton("Browse hierarchy",
+        verticalItems.add(new ButtonData("Browse hierarchy",
                         R.drawable.ic_layers_white_24dp, new Runnable() {
                     @Override
                     public void run() {
@@ -142,9 +142,10 @@ public class ViewScreen extends Screen {
                         PandoraBridge.hierarchy();
                     }
                 }));
-        
-        List<RunButton> horizontalItems = new ArrayList<>();
-        horizontalItems.add(new RunButton("Rule",
+
+        LinearGroupData horizontalGroup = new LinearGroupData();
+        horizontalGroup.setHorizontal(true);
+        horizontalGroup.add(new ButtonData("Rule",
                 R.drawable.ic_format_line_spacing_white_24dp,
                 new Runnable() {
                     @Override
@@ -153,7 +154,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.measure();
                     }
                 }));
-        horizontalItems.add(new RunButton("Grid",
+        horizontalGroup.add(new ButtonData("Grid",
                 R.drawable.ic_grid_on_white_24dp,
                 new Runnable() {
                     @Override
@@ -161,9 +162,9 @@ public class ViewScreen extends Screen {
                         PandoraBridge.grid();
                     }
                 }));
-        verticalItems.add(new ButtonGroupData(horizontalItems));
+        verticalItems.add(horizontalGroup);
 
-        verticalItems.add(new RunButton( "Take Screenshot",
+        verticalItems.add(new ButtonData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -211,7 +212,7 @@ public class ViewScreen extends Screen {
                 .getPathFromClassName(tracker.getCurrentHistory().className);
         String activitySrcFile = Humanizer.getLastPart(activitySrcPath, "/");
         if (TextUtils.isEmpty(activitySrcFile)){
-            activityDataBuilder.addButton(new RunButton("Unavailable",
+            activityDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -221,7 +222,7 @@ public class ViewScreen extends Screen {
                     }));
         }
         else{
-            activityDataBuilder.addButton(new RunButton(activitySrcFile,
+            activityDataBuilder.addButton(new ButtonBorderlessData(activitySrcFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -236,7 +237,7 @@ public class ViewScreen extends Screen {
         final String activityResPath = getSourcesManager().getLayoutPathFromLayoutName(activityLayoutName);
         String activityResFile = Humanizer.getLastPart(activityResPath, "/");
         if (TextUtils.isEmpty(activityResFile)) {
-            activityDataBuilder.addButton(new RunButton("Unavailable",
+            activityDataBuilder.addButton(new ButtonBorderlessData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -247,7 +248,7 @@ public class ViewScreen extends Screen {
             );
         }
         else{
-            activityDataBuilder.addButton(new RunButton(activityResFile,
+            activityDataBuilder.addButton(new ButtonBorderlessData(activityResFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -293,7 +294,7 @@ public class ViewScreen extends Screen {
     private void addLogButtons(List<Object> data) {
         //Logs links (TODO)
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
-        data.add(new RunButton(
+        data.add(new ButtonData(
                 "Navigation",
                 R.drawable.ic_location_on_white_24dp,
                 R.color.rally_green_alpha,
@@ -313,7 +314,7 @@ public class ViewScreen extends Screen {
                                 LogScreen.buildParams(filter.getUiFilter()));
                     }
                 }));
-        data.add(new RunButton(
+        data.add(new ButtonData(
                 "Lifecycle",
                 R.drawable.ic_format_align_left_white_24dp,
                 R.color.rally_blue_med_alpha,

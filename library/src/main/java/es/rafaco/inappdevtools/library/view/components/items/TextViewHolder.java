@@ -43,12 +43,12 @@ public class TextViewHolder extends FlexItemViewHolder {
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
 
-        TextItemData data;
+        TextData data;
         if (abstractData instanceof String) {
-            data = new TextItemData((String) abstractData);
+            data = new TextData((String) abstractData);
         }
-        else if (abstractData instanceof TextItemData) {
-            data = (TextItemData) abstractData;
+        else if (abstractData instanceof TextData) {
+            data = (TextData) abstractData;
         }
         else
             return;

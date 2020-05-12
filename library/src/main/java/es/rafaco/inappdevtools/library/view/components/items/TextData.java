@@ -21,7 +21,7 @@ package es.rafaco.inappdevtools.library.view.components.items;
 
 import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
 
-public class TextItemData extends FlexItemData {
+public class TextData extends FlexItemData {
 
     public enum Size { SMALL, MEDIUM, LARGE, EXTRA_LARGE }
 
@@ -29,15 +29,15 @@ public class TextItemData extends FlexItemData {
     int fontColor;
     Size size;
 
-    public TextItemData(String text) {
+    public TextData(String text) {
         this(text, -1);
     }
 
-    public TextItemData(String text, int fontColor) {
+    public TextData(String text, int fontColor) {
         this(text, fontColor, Size.LARGE);
     }
 
-    public TextItemData(String text, int fontColor, Size size) {
+    public TextData(String text, int fontColor, Size size) {
         super();
         this.text = text;
         this.fontColor = fontColor;

@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 
@@ -51,14 +51,15 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getFirstButtonGroupData());
+        objectList.add(1, getButtonList());
         objectList.add(2, "");
         return objectList;
     }
 
-    private ButtonGroupData getFirstButtonGroupData() {
-        List<RunButton> buttons = new ArrayList<>();
-        buttons.add(new RunButton("Clean all...",
+    private LinearGroupData getButtonList() {
+        LinearGroupData linearGroupData = new LinearGroupData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonData("Clean all...",
                 R.drawable.ic_delete_forever_white_24dp,
                 new Runnable() {
                     @Override
@@ -66,8 +67,7 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
                         IadtController.get().cleanAll();
                     }
                 }));
-
-        buttons.add(new RunButton("Disable Iadt...",
+        linearGroupData.add(new ButtonData("Disable Iadt...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override
@@ -75,6 +75,6 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
                         IadtController.get().disable();
                     }
                 }));
-        return new ButtonGroupData(buttons);
+        return linearGroupData;
     }
 }

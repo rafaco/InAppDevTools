@@ -24,7 +24,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -104,7 +104,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
 
         data.add("");
         data.add("Shortcuts");
-        data.add(new RunButton("Clean all...",
+        data.add(new ButtonData("Clean all...",
                 R.drawable.ic_delete_forever_white_24dp,
                 new Runnable() {
                     @Override
@@ -113,7 +113,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Disable Iadt...",
+        data.add(new ButtonData("Disable Iadt...",
                 R.drawable.ic_power_white_24dp,
                 new Runnable() {
                     @Override

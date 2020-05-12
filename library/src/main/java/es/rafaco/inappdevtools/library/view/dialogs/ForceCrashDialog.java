@@ -25,7 +25,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.crash.CrashGenerator;
 import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
@@ -121,7 +121,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }).setBgColor(cardBackground));
 
-        data.add(new RunButton("IndexOutOfBounds",
+        data.add(new ButtonData("IndexOutOfBounds",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -130,7 +130,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new RunButton("NullPointer",
+        data.add(new ButtonData("NullPointer",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -139,7 +139,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new RunButton("ZeroDivision",
+        data.add(new ButtonData("ZeroDivision",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override
@@ -148,7 +148,7 @@ public class ForceCrashDialog extends IadtDialogBuilder {
                     }
                 }));
 
-        data.add(new RunButton("StackOverflow",
+        data.add(new ButtonData("StackOverflow",
                 R.drawable.ic_bug_report_white_24dp,
                 new Runnable() {
                     @Override

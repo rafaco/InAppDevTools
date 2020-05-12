@@ -23,8 +23,14 @@ import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
 
 public class FlexItemData {
 
-    String id;
+    public enum LayoutInParent { FULL_BOTH, WRAP_BOTH, FULL_WIDTH, FULL_HEIGHT, SAME_WIDTH, SAME_HEIGHT }
 
+    String id;
+    Class<? extends FlexibleViewHolder> viewHolderClass;
+    int layoutResourceId;
+
+    LayoutInParent layoutInParent;
+    int gravity;
     int spamOnParent;
     boolean fullSpamOnParent = false;
 
@@ -35,9 +41,6 @@ public class FlexItemData {
     Boolean horizontalMargin = null;
     Boolean verticalMargin = null;
     int backgroundColor;
-
-    Class<? extends FlexibleViewHolder> viewHolderClass;
-    int layoutResourceId;
 
     public FlexItemData() {
         this.id = null;
@@ -67,6 +70,22 @@ public class FlexItemData {
 
     public void setLayoutResourceId(int layoutResourceId) {
         this.layoutResourceId = layoutResourceId;
+    }
+
+    public LayoutInParent getLayoutInParent() {
+        return layoutInParent;
+    }
+
+    public void setLayoutInParent(LayoutInParent layoutInParent) {
+        this.layoutInParent = layoutInParent;
+    }
+
+    public int getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(int gravity) {
+        this.gravity = gravity;
     }
 
     public boolean isFullSpamOnParent() {

@@ -39,18 +39,17 @@ import android.support.v7.widget.CardView;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonData;
 import es.rafaco.inappdevtools.library.view.components.FlexibleAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexibleItemDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexibleLoader;
 import es.rafaco.inappdevtools.library.view.components.FlexibleViewHolder;
-import es.rafaco.inappdevtools.library.view.components.groups.ButtonGroupData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupData;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-
 
 public class FlatCardViewHolder extends FlexibleViewHolder {
 
@@ -175,7 +174,7 @@ public class FlatCardViewHolder extends FlexibleViewHolder {
 
 
     private void bindButtons(FlatCardData data) {
-        List<RunButton> buttons = data.getButtons();
+        List<FlexItemData> buttons = data.getButtons();
         if (buttons == null || buttons.isEmpty()){
             buttonSeparator.setVisibility(View.GONE);
             buttonGroupContainer.setVisibility(View.GONE);
@@ -184,13 +183,15 @@ public class FlatCardViewHolder extends FlexibleViewHolder {
             buttonSeparator.setVisibility(View.VISIBLE);
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonGroupContainer.removeAllViews();
-            for (RunButton button : buttons) {
-                button.setColor(R.color.iadt_surface_bottom);
+            for (FlexItemData button : buttons) {
+                if (button instanceof ButtonData) {
+                    ((ButtonData) button).setColor(R.color.iadt_surface_bottom);
+                }
             }
-            ButtonGroupData buttonGroupData = new ButtonGroupData(buttons);
-            buttonGroupData.setWrapContent(true);
-            buttonGroupData.setBorderless(true);
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ButtonGroupData.class);
+            LinearGroupData buttonGroupData = new LinearGroupData();
+            buttonGroupData.setHorizontal(true);
+            buttonGroupData.setChildLayout(FlexItemData.LayoutInParent.WRAP_BOTH);
+            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(LinearGroupData.class);
             desc.addToView(buttonGroupData, buttonGroupContainer);
         }
     }
