@@ -45,6 +45,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexViewHolder;
 
 public class FlexAdapter extends RecyclerView.Adapter<FlexViewHolder> {
@@ -86,10 +87,7 @@ public class FlexAdapter extends RecyclerView.Adapter<FlexViewHolder> {
             manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    boolean isFull = (fullWidthSolver!=null)
-                            ? isFullWidthItem(position)
-                            : FlexLoader.isFullSpan(getItemDataClass(position));
-                    return (isFull ? manager.getSpanCount() : 1);
+                    return (isFullWidthItem(position) ? manager.getSpanCount() : 1);
                 }
             });
             return manager;
@@ -203,7 +201,7 @@ public class FlexAdapter extends RecyclerView.Adapter<FlexViewHolder> {
     //region [ FULL WIDTH SOLVER ]
 
     public interface FullWidthSolver {
-        boolean isFullWidth(int position);
+        Boolean isFullWidth(int position);
     }
 
     public void setFullWidthSolver(FullWidthSolver solver) {
@@ -211,10 +209,25 @@ public class FlexAdapter extends RecyclerView.Adapter<FlexViewHolder> {
     }
 
     protected boolean isFullWidthItem(int position) {
-        if (fullWidthSolver!=null){
-            return fullWidthSolver.isFullWidth(position);
+        //Solve first from this specific item data
+        Object itemData = getItems().get(position);
+        if (itemData instanceof FlexData){
+            Boolean fullSpanOnData = ((FlexData)itemData).isFullSpan();
+            if (fullSpanOnData != null){
+                return fullSpanOnData;
+            }
         }
-        return false;
+
+        //Fallback to custom solver if it has been provided
+        if (fullWidthSolver!=null){
+            Boolean fullSpanFromSolver = fullWidthSolver.isFullWidth(position);
+            if (fullSpanFromSolver != null){
+                return fullSpanFromSolver;
+            }
+        }
+
+        //Fallback to default option for this data class, as defined at FlexLoader
+        return FlexLoader.isFullSpan(getItemDataClass(position));
     }
 
     //endregion

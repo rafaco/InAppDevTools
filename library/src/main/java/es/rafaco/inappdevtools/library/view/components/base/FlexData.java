@@ -23,17 +23,15 @@ import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 
 public class FlexData {
 
-    public enum LayoutInParent { FULL_BOTH, WRAP_BOTH, FULL_WIDTH, FULL_HEIGHT, SAME_WIDTH, SAME_HEIGHT }
+    public enum LayoutType { FULL_BOTH, WRAP_BOTH, FULL_WIDTH, FULL_HEIGHT, SAME_WIDTH, SAME_HEIGHT }
 
     String id;
     Class<? extends FlexViewHolder> viewHolderClass;
     int layoutResourceId;
+    Boolean fullSpan;
 
-    LayoutInParent layoutInParent;
+    LayoutType layoutType;
     int gravity;
-    int spamOnParent;
-    boolean fullSpamOnParent = false;
-
     Boolean horizontalMargin = null;
     Boolean verticalMargin = null;
     int[] margins;
@@ -69,28 +67,46 @@ public class FlexData {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public LayoutInParent getLayoutInParent() {
-        return layoutInParent;
+    public LayoutType getLayoutType() {
+        return layoutType;
     }
 
-    public void setLayoutInParent(LayoutInParent layoutInParent) {
-        this.layoutInParent = layoutInParent;
+    public void setLayoutType(LayoutType layoutType) {
+        this.layoutType = layoutType;
     }
 
+    /**Get gravity for this item view
+     *
+     * @return standard gravity int from android.view.Gravity constants
+     */
     public int getGravity() {
         return gravity;
     }
 
+    /**Set gravity for this item view
+     *
+     * @param gravity: standard gravity int from android.view.Gravity constants
+     */
     public void setGravity(int gravity) {
         this.gravity = gravity;
     }
 
-    public boolean isFullSpamOnParent() {
-        return fullSpamOnParent;
+    /**Check if this item should use full width within its parent. Only used when parent is a
+     * RecyclerView with Grid or StaggeredGrid layout.
+     *
+     * @return true or false if this item should use or not full width. Null for default behaviour.
+     */
+    public Boolean isFullSpan() {
+        return fullSpan;
     }
 
-    public void setFullSpamOnParent(boolean fullSpamOnParent) {
-        this.fullSpamOnParent = fullSpamOnParent;
+    /**Set if this item should use full width within its parent. Only used when parent is a
+     * RecyclerView with Grid or StaggeredGrid layout.
+     *
+     * @param fullSpan true or false to use or not full width. Null for default behaviour.
+     */
+    public void setFullSpan(Boolean fullSpan) {
+        this.fullSpan = fullSpan;
     }
 
     public Boolean isHorizontalMargin() {

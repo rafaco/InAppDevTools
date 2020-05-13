@@ -107,7 +107,7 @@ public class Home3Screen extends AbstractFlexibleScreen {
     protected void onAdapterStart() {
         setFullWidthSolver(new FlexAdapter.FullWidthSolver() {
             @Override
-            public boolean isFullWidth(int position) {
+            public Boolean isFullWidth(int position) {
                 return false;//position == 0;
             }
         });

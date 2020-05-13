@@ -55,11 +55,11 @@ public class FlexItemViewHolder extends FlexViewHolder {
     }
 
     private void bindLayout(FlexData data) {
-        if (data.getLayoutInParent() == null)
+        if (data.getLayoutType() == null)
             return;
 
         LinearLayout.LayoutParams layoutParams;
-        switch (data.getLayoutInParent()) {
+        switch (data.getLayoutType()) {
             case FULL_BOTH:
                 layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);

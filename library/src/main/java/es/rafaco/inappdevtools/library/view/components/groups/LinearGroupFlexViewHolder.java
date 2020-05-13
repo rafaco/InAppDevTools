@@ -66,9 +66,9 @@ public class LinearGroupFlexViewHolder extends GroupFlexViewHolder {
 
         //Set default childLayout for selected orientation
         if (data.getChildLayout()==null){
-            FlexData.LayoutInParent defaultLayout = data.isHorizontal
-                    ? FlexData.LayoutInParent.SAME_WIDTH
-                    : FlexData.LayoutInParent.FULL_WIDTH;
+            FlexData.LayoutType defaultLayout = data.isHorizontal
+                    ? FlexData.LayoutType.SAME_WIDTH
+                    : FlexData.LayoutType.FULL_WIDTH;
             data.setChildLayout(defaultLayout);
         }
     }
@@ -96,7 +96,7 @@ public class LinearGroupFlexViewHolder extends GroupFlexViewHolder {
         for (int i = 0; i<data.getChildren().size(); i++){
             Object currentItem = data.getChildren().get(i);
             if (data.getChildLayout()!=null && currentItem instanceof FlexData){
-                ((FlexData) currentItem).setLayoutInParent(data.getChildLayout());
+                ((FlexData) currentItem).setLayoutType(data.getChildLayout());
             }
 
             FlexDescriptor desc = FlexLoader.getDescriptor(currentItem.getClass());

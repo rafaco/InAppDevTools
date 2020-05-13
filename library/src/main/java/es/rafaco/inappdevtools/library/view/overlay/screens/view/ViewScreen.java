@@ -124,7 +124,9 @@ public class ViewScreen extends Screen {
     }
 
     private void addVerticalButtons(List<Object> data) {
-        List<Object> verticalItems = new ArrayList<>();
+        LinearGroupFlexData verticalButtons = new LinearGroupFlexData();
+        verticalButtons.setFullSpan(false);
+
         /*verticalItems.add(new RunButton("Select element",
                 R.drawable.ic_touch_app_white_24dp,
                 new Runnable() {
@@ -134,7 +136,7 @@ public class ViewScreen extends Screen {
                         PandoraBridge.select();
                     }
                 }));*/
-        verticalItems.add(new ButtonFlexData("Browse hierarchy",
+        verticalButtons.add(new ButtonFlexData("Browse hierarchy",
                         R.drawable.ic_layers_white_24dp, new Runnable() {
                     @Override
                     public void run() {
@@ -162,9 +164,9 @@ public class ViewScreen extends Screen {
                         PandoraBridge.grid();
                     }
                 }));
-        verticalItems.add(horizontalGroup);
+        verticalButtons.add(horizontalGroup);
 
-        verticalItems.add(new ButtonFlexData( "Take Screenshot",
+        verticalButtons.add(new ButtonFlexData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -173,7 +175,7 @@ public class ViewScreen extends Screen {
                     }
                 }));
 
-        data.add(new LinearGroupFlexData(verticalItems));
+        data.add(verticalButtons);
     }
 
     private void addImage(List<Object> data) {

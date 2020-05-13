@@ -182,7 +182,7 @@ public class ComplexCardViewHolder extends FlexViewHolder {
             }
             LinearGroupFlexData buttonGroupData = new LinearGroupFlexData(castedButtons);
             buttonGroupData.setHorizontal(true);
-            buttonGroupData.setChildLayout(FlexData.LayoutInParent.WRAP_BOTH);
+            buttonGroupData.setChildLayout(FlexData.LayoutType.WRAP_BOTH);
             FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(buttonGroupData, buttonGroupContainer);
         }

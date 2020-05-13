@@ -23,14 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 
 public class LinearGroupFlexData extends GroupFlexData {
 
     String title;
     boolean showDividers = false;
     boolean isHorizontal = false;
-    FlexData.LayoutInParent childLayout;
+    LayoutType childLayout;
 
     public LinearGroupFlexData() {
         this(new ArrayList<>());
@@ -69,11 +68,11 @@ public class LinearGroupFlexData extends GroupFlexData {
         isHorizontal = horizontal;
     }
 
-    public LayoutInParent getChildLayout() {
+    public LayoutType getChildLayout() {
         return childLayout;
     }
 
-    public void setChildLayout(LayoutInParent childLayout) {
+    public void setChildLayout(LayoutType childLayout) {
         this.childLayout = childLayout;
     }
 }
