@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
@@ -33,7 +34,6 @@ import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -42,9 +42,11 @@ import android.widget.TextView;
 //#ifdef ANDROIDX
 //@import androidx.cardview.widget.CardView;
 //@import androidx.core.content.ContextCompat;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //@import androidx.annotation.RequiresApi;
 //#else
 import android.support.v4.content.ContextCompat;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.annotation.RequiresApi;
 //#endif
@@ -158,21 +160,21 @@ public class UiUtils {
     }
 
     public static void setCardViewClickable(CardView cardView, boolean isClickable){
-        Context context = cardView.getContext();
+        ContextWrapper ctw = new ContextThemeWrapper(cardView.getContext(), R.style.LibTheme);
         Drawable drawable;
         if(isClickable) {
             TypedValue outValue = new TypedValue();
-            context.getTheme().resolveAttribute(
-                    android.R.attr.selectableItemBackground, outValue, true);
-
-            drawable = getDrawable(outValue.resourceId);
+            ctw.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+            int backgroundResource = outValue.resourceId;
+            drawable = getDrawable(backgroundResource);
         }
         else{
             drawable = null;
         }
         cardView.setClickable(isClickable);
         cardView.setFocusable(isClickable);
-        cardView.setActivated(isClickable);
+        //cardView.setActivated(isClickable);
         cardView.setForeground(drawable);
     }
 

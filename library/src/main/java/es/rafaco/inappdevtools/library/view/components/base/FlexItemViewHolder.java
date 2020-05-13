@@ -19,10 +19,15 @@
 
 package es.rafaco.inappdevtools.library.view.components.base;
 
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
@@ -85,14 +90,21 @@ public class FlexItemViewHolder extends FlexViewHolder {
     }
 
     private void bindGravity(FlexData data) {
-        if (data.getGravity()>0){
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemView.getLayoutParams();
-            layoutParams.gravity = data.getGravity();
-            itemView.setLayoutParams(layoutParams);
+        if (data.getGravity()>0){  //ViewGroup.MarginLayoutParams  RecyclerView.LayoutParams
+            if (itemView.getLayoutParams() instanceof LinearLayout.LayoutParams){
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemView.getLayoutParams();
+                layoutParams.gravity = data.getGravity();
+                itemView.setLayoutParams(layoutParams);
+            }
         }
     }
 
     protected void bindMargins(FlexData data) {
+        if (data.margins!=null && data.margins.length == 4){
+            MarginUtils.setMargins(itemView,
+                    data.margins[0], data.margins[1], data.margins[2], data.margins[3]);
+        }
+
         if (data.isHorizontalMargin()!=null){
             MarginUtils.setHorizontalMargin(itemView, data.isHorizontalMargin());
         }

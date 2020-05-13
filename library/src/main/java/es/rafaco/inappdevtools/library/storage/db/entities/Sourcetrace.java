@@ -140,4 +140,12 @@ public class Sourcetrace {
         if(getClassName() == null) return null;
         return getClassName().substring(getClassName().lastIndexOf(".")+1);
     }
+
+    public String formatClassAndMethod() {
+        return getShortClassName() + "." + getMethodName() + "()";
+    }
+
+    public String formatFileAndLine() {
+        return getFileName() + ":" + getLineNumber();
+    }
 }

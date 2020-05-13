@@ -32,11 +32,13 @@ import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
+//@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 //#endif
 
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

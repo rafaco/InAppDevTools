@@ -80,7 +80,7 @@ public class TraceGroupViewHolder extends FlexViewHolder {
             });
 
             if (!data.isExpanded()){
-                timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 5));
+                timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 6));
             }else{
                 timeline.setIndicatorSize(0);
             }

@@ -34,12 +34,9 @@ public class FlexData {
     int spamOnParent;
     boolean fullSpamOnParent = false;
 
-    int leftMargin;
-    int rightMargin;
-    int topMargin;
-    int bottomMargin;
     Boolean horizontalMargin = null;
     Boolean verticalMargin = null;
+    int[] margins;
     int backgroundColor;
 
     public FlexData() {
@@ -110,6 +107,14 @@ public class FlexData {
 
     public void setVerticalMargin(boolean verticalMargin) {
         this.verticalMargin = verticalMargin;
+    }
+
+    public int[] getMargins() {
+        return margins;
+    }
+
+    public void setMargins(int left, int top, int right, int bottom) {
+        this.margins = new int[] { left, top, right, bottom };
     }
 
     public int getBackgroundColor() {

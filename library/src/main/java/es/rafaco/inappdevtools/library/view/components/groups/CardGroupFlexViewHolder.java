@@ -97,7 +97,9 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
     private void bindPerformer(final CardGroupFlexData data) {
         if (data.getPerformer() != null){
             cardView.setClickable(true);
-            cardView.setFocusable(true);
+            cardView.setActivated(true);
+            cardView.setFocusable(false);
+            cardView.setFocusableInTouchMode(false);
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

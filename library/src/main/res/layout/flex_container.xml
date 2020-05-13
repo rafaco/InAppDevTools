@@ -18,13 +18,7 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/title"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/iadt_horizontal_margin"
-    android:layout_marginVertical="@dimen/iadt_vertical_margin"
-    style="@style/TextCondensed"
-    tools:text="This a paragraph to be used as placeholder in the design view of Android Studio.\nAnd this is another paragraph."
-    tools:background="@color/iadt_surface_top"/>
+    android:layout_height="wrap_content"/>

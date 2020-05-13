@@ -19,9 +19,14 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;

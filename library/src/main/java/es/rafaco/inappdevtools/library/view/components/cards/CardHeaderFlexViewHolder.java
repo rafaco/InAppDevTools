@@ -77,16 +77,25 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
 
     private void bindExpandedState(CardHeaderFlexData data) {
         if (data.isExpandable()) {
-            applyExpandedState(data.isExpanded());
+            applyExpandedStateToNavIcon(data.isExpanded());
         }
     }
 
-    private void applyExpandedState(Boolean isExpanded) {
+    public void applyExpandedStateToNavIcon(Boolean isExpanded) {
         if (!isExpanded){
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.iadt_primary);
         }
         else {
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_up_white_24dp, R.color.iadt_primary);
+        }
+    }
+
+    public void applyExpandedStateToText(Boolean isExpanded) {
+        if (!isExpanded){
+            titleView.setVisibility(View.VISIBLE);
+        }
+        else {
+            titleView.setVisibility(View.GONE);
         }
     }
 }

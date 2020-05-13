@@ -21,6 +21,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/ic_arrow_right_white_24dp"
+                android:backgroundTint="@color/iadt_primary"
                 android:layout_centerVertical="true" />
 
             <LinearLayout
@@ -67,27 +69,31 @@
                     android:id="@+id/exception"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextCondensed.Medium"/>
+                    style="@style/TextCondensed.Medium"
+                    tools:text="Exception"/>
 
                 <TextView
                     android:id="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextCondensed.Medium" />
+                    style="@style/TextCondensed.Medium"
+                    tools:text="Message"/>
 
                 <TextView
                     android:id="@+id/where"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_yellow"
-                    style="@style/TextCondensed.Medium" />
+                    style="@style/TextCondensed.Medium"
+                    tools:text="Where"/>
 
                 <TextView
                     android:id="@+id/where2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_blue"
-                    style="@style/TextCondensed.Small"/>
+                    style="@style/TextCondensed.Small"
+                    tools:text="Where2"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
@@ -99,10 +105,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_corner"
-                        android:textColor="@color/rally_gray"
+                        android:textColor="@color/iadt_text_low"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="10dp"
-                        style="@style/TextCondensed.Small" />
+                        style="@style/TextCondensed.Small"
+                        tools:text="Your App"/>
 
                     <TextView
                         android:id="@+id/where3"
@@ -111,8 +118,9 @@
                         android:textAlignment="textEnd"
                         android:layout_gravity="end"
                         android:gravity="end"
-                        android:textColor="@color/rally_gray"
-                        style="@style/TextCondensed.Medium" />
+                        android:textColor="@color/iadt_text_low"
+                        style="@style/TextCondensed.Medium"
+                        tools:text="SomeClass.java:345"/>
 
                 </LinearLayout>
             </LinearLayout>

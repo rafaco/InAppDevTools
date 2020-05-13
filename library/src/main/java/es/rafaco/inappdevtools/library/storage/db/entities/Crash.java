@@ -253,4 +253,30 @@ public class Crash implements Serializable {
     public void setReported(boolean reported) {
         isReported = reported;
     }
+
+
+    //region [ RELOCATE: CAUSE FORMATTER ]
+
+    public static final String CAUSED_BY = "Caused by:";
+
+    public String getCaused() {
+        String[] split = getStacktrace().split("\n\t");
+        for (int i=0; i<split.length; i++){
+            String line = split[i];
+            if (line.contains(CAUSED_BY)){
+                return line.substring(line.indexOf(CAUSED_BY));
+            }
+        }
+        return null;
+    }
+
+    public String getMessageWithoutCause() {
+        String cause = getCaused();
+        if (cause != null && message != null && message.contains(cause)) {
+            return message.replace(cause, "(...)");
+        }
+        return message;
+    }
+
+    //endregion
 }

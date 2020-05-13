@@ -19,14 +19,15 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
 
-import android.arch.persistence.room.InvalidationTracker;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
 //#ifdef ANDROIDX
-//@import androidx.recyclerview.widget.RecyclerView;
+//@import androidx.room.InvalidationTracker;
+//@import androidx.annotation.NonNull;
 //#else
+import android.arch.persistence.room.InvalidationTracker;
+import android.support.annotation.NonNull;
 //#endif
 
 import java.util.ArrayList;

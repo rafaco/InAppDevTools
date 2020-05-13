@@ -68,7 +68,6 @@ public class CrashDetailScreen extends Screen {
 
     private Crash crash;
     private TextView out;
-    private CrashHelper helper;
     private TextView title;
     private TextView subtitle;
     private TextView title2;
@@ -117,7 +116,6 @@ public class CrashDetailScreen extends Screen {
 
     @Override
     protected void onCreate() {
-        helper = new CrashHelper();
     }
 
     @Override
@@ -247,11 +245,8 @@ public class CrashDetailScreen extends Screen {
     }
 
     private void initExceptionDetails() {
-        String message = crash.getMessage();
-        String cause = helper.getCaused(crash);
-        if (cause!=null && message!=null && message.contains(cause)){
-            message = message.replace(cause, "(...)");
-        }
+        String cause = crash.getCaused();
+        String message = crash.getMessageWithoutCause();
 
         title.setText(crash.getException());
         subtitle.setText(message);

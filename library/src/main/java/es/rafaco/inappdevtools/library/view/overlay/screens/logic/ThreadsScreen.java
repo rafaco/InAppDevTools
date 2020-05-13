@@ -28,7 +28,9 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadGroupsUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.listener.OnlyOneExpandedListener;
@@ -107,14 +109,24 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
                         }
                 ));
             }
-            CollapsibleLinearGroupData collapsible = new CollapsibleLinearGroupData(internalData);
-            collapsible.setOverview(runningItems.size() + " threads");
-            List<Object> internalData2 = new ArrayList<>();
-            internalData2.add(collapsible);
-            groupDataBuilder.setInternalData(internalData2);
-            data.add(groupDataBuilder.build());
+
+            CardHeaderFlexData collapsibleHeader = new CardHeaderFlexData.Builder("")
+                    .setExpandable(true)
+                    .setExpanded(false)
+                    .setOverview(runningItems.size() + " threads")
+                    .build();
+            RecyclerGroupFlexData collapsibleContent = new RecyclerGroupFlexData();
+            collapsibleContent.setChildren(internalData);
+            collapsibleContent.setHorizontalMargin(true);
+
+            CollapsibleFlexData collapsibleData = new CollapsibleFlexData(collapsibleHeader,
+                    collapsibleContent, false);
+            collapsibleContent.setHorizontalMargin(false);
+            List<Object> internalDataList = new ArrayList<>();
+            internalDataList.add(collapsibleData);
+            groupDataBuilder.setInternalData(internalDataList);
             
-            //data.add(new VerticalListData("Threads", internalData));
+            data.add(groupDataBuilder.build());
         }
 
         return data;

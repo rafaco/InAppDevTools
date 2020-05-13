@@ -20,11 +20,18 @@
 package es.rafaco.inappdevtools.library.view.components.items;
 
 import android.content.res.Resources;
-import android.support.v4.content.ContextCompat;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
@@ -81,5 +88,11 @@ public class TextFlexViewHolder extends FlexItemViewHolder {
                 break;
         }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(sizeDimens));
+
+        if (data.getGravity() == Gravity.RIGHT){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+            }
+        }
     }
 }

@@ -25,7 +25,9 @@ package es.rafaco.inappdevtools.library.view.components.cards;
 import android.support.annotation.StringRes;
 //#endif
 
-public class CardHeaderFlexData {
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+
+public class CardHeaderFlexData extends FlexData {
 
     private String title;
     private int icon;

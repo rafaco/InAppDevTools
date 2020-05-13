@@ -26,6 +26,31 @@
     android:layout_marginBottom="5dp"
     tools:background="@color/iadt_surface_top">
 
+    <ImageView
+        android:id="@+id/nav_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="4dp"
+        android:textSize="@dimen/iadt_icon_font_size_m"
+        android:textColor="@color/iadt_primary"
+        tools:src="@drawable/ic_arrow_down_white_24dp"/>
+
+    <TextView
+        android:id="@+id/overview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/nav_icon"
+        android:layout_centerVertical="true"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:singleLine="true"
+        android:layout_marginLeft="4dp"
+        style="@style/TextCondensed.Large"
+        android:textColor="@color/iadt_primary"
+        tools:text="Overview"/>
+
     <TextView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
@@ -39,38 +64,18 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/icon"
+        android:layout_toLeftOf="@id/overview"
         android:layout_centerVertical="true"
+        android:gravity="left"
         android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         style="@style/TextCondensed.Large"
         android:textColor="@color/iadt_text_high"
-        tools:text="Title"/>
-
-    <ImageView
-        android:id="@+id/nav_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="4dp"
-        android:textSize="@dimen/iadt_icon_font_size_m"
-        android:textColor="@color/iadt_primary"
-        tools:src="@drawable/ic_arrow_right_white_24dp"/>
-
-    <TextView
-        android:id="@+id/overview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/nav_icon"
-        android:layout_toRightOf="@id/title"
-        android:layout_centerVertical="true"
-        android:textAlignment="textEnd"
-        android:gravity="end"
-        android:layout_marginLeft="4dp"
-        style="@style/TextCondensed.Large"
-        android:textColor="@color/iadt_text_high"
-        tools:text="Overview"/>
+        tools:text="Title, a very long one to test ellipsize on title with shor"/>
 
 </RelativeLayout>

@@ -17,36 +17,22 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.components.groups;
+package es.rafaco.inappdevtools.library.view.components.base;
 
-import java.util.List;
+public class ContainerFlexData extends FlexData {
 
-public class CollapsibleLinearGroupData extends LinearGroupFlexData {
+    protected FlexData child;
 
-    private String overview;
-    private boolean expanded = false;
-
-    public CollapsibleLinearGroupData(List<Object> items) {
-        super(items);
+    public ContainerFlexData(FlexData child) {
+        super();
+        this.child = child;
     }
 
-    public CollapsibleLinearGroupData(String title, List<Object> items) {
-        super(title, items);
+    public FlexData getChild() {
+        return child;
     }
 
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
+    public void setChild(FlexData child) {
+        this.child = child;
     }
 }

@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;

@@ -85,7 +85,7 @@ public class TraceViewHolder extends FlexViewHolder {
 
             timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
             timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
-            timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 5));
+            timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 6));
 
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
             if (data.getPosition().equals(TraceItemData.Position.START)){
@@ -106,7 +106,7 @@ public class TraceViewHolder extends FlexViewHolder {
             messageView.setText(data.getMessage());
 
             final Sourcetrace trace = data.getSourcetrace();
-            whereView.setText(trace.getShortClassName() + "." + trace.getMethodName() + "()");
+            whereView.setText(trace.formatClassAndMethod());
             where2View.setText(trace.getPackageName());
             where2View.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
 
@@ -114,7 +114,7 @@ public class TraceViewHolder extends FlexViewHolder {
             tag.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
             UiUtils.setStrokeToDrawable(getContext(), 1, data.getColor(), tag.getBackground());
 
-            where3View.setText(trace.getFileName() + ":" + trace.getLineNumber());
+            where3View.setText(trace.formatFileAndLine());
 
             if (data.isOpenable()){
                 UiUtils.setCardViewClickable(cardView, false);
@@ -129,7 +129,7 @@ public class TraceViewHolder extends FlexViewHolder {
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_top));
                 cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 12));
 
-                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_white));
+                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_high));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
@@ -139,7 +139,7 @@ public class TraceViewHolder extends FlexViewHolder {
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_medium));
                 cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 6));
 
-                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_gray));
+                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_low));
                 navIcon.setVisibility(View.GONE);
             }
         }

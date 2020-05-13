@@ -158,7 +158,7 @@ public class TraceGrouper {
         else if (item.getTag().equals(IADT_TAG))
             return R.color.rally_blue;
         else
-            return R.color.rally_gray;
+            return R.color.iadt_text_low;
     }
 
     public static void propagateExpandedState(TraceGroupItem group, List<Object> data) {

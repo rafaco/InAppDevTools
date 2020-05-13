@@ -24,6 +24,8 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
+import es.rafaco.inappdevtools.library.view.components.base.ContainerFlexData;
+import es.rafaco.inappdevtools.library.view.components.base.ContainerFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
@@ -36,15 +38,13 @@ import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.CheckboxData;
 import es.rafaco.inappdevtools.library.view.components.items.CheckboxViewHolder;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.ComplexCardViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.ConfigData;
 import es.rafaco.inappdevtools.library.view.components.items.ConfigViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextViewHolder;
-import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
-import es.rafaco.inappdevtools.library.view.components.cards.FlatCardViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
@@ -76,6 +76,9 @@ public class FlexLoader {
     public static List<FlexDescriptor> getAllDescriptors() {
         List<FlexDescriptor> descriptors = new ArrayList<>();
 
+        /* OLD COMPONENTS
+         * Refactor pending, they don't extends FlexData/FlexItemViewHolder
+         */
         descriptors.add(new FlexDescriptor(ImageData.class, ImageViewHolder.class, R.layout.flexible_item_image));
         descriptors.add(new FlexDescriptor(SelectorData.class, SelectorViewHolder.class, R.layout.flexible_item_selector));
         descriptors.add(new FlexDescriptor(EditTextData.class, EditTextViewHolder.class, R.layout.flexible_item_edit_text));
@@ -91,21 +94,23 @@ public class FlexLoader {
 
         descriptors.add(new FlexDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
         descriptors.add(new FlexDescriptor(DocumentSectionData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
-        descriptors.add(new FlexDescriptor(FlatCardData.class, FlatCardViewHolder.class, R.layout.flexible_item_flat_card));
-        descriptors.add(new FlexDescriptor(CollapsibleLinearGroupData.class, CollapsibleLinearGroupViewHolder.class, R.layout.flexible_item_collapsible_list));
 
-        //MODERN GROUPS
+        //GROUPS
         descriptors.add(new FlexDescriptor(LinearGroupFlexData.class, LinearGroupFlexViewHolder.class, R.layout.flex_group_linear));
         descriptors.add(new FlexDescriptor(RecyclerGroupFlexData.class, RecyclerGroupFlexViewHolder.class, R.layout.flex_group_recycler));
         descriptors.add(new FlexDescriptor(CardGroupFlexData.class, CardGroupFlexViewHolder.class, R.layout.flex_group_card));
 
-        //MODERN ITEMS
+        //ITEMS
         descriptors.add(new FlexDescriptor(String.class, TextFlexViewHolder.class, R.layout.flex_text));
         descriptors.add(new FlexDescriptor(TextFlexData.class, TextFlexViewHolder.class, R.layout.flex_text));
         descriptors.add(new FlexDescriptor(ButtonFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_item_button));
         descriptors.add(new FlexDescriptor(ButtonBorderlessFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_button_borderless));
         descriptors.add(new FlexDescriptor(CardHeaderFlexData.class, CardHeaderFlexViewHolder.class, R.layout.flex_card_header));
         descriptors.add(new FlexDescriptor(SeparatorFlexData.class, SeparatorFlexViewHolder.class, R.layout.flex_separator));
+        descriptors.add(new FlexDescriptor(CollapsibleFlexData.class, CollapsibleFlexViewHolder.class, R.layout.flex_collapsible));
+
+        //CONTAINERS
+        descriptors.add(new FlexDescriptor(ContainerFlexData.class, ContainerFlexViewHolder.class, R.layout.flex_container));
 
         return descriptors;
     }

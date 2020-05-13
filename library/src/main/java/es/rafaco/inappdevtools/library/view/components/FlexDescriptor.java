@@ -39,14 +39,16 @@ public class FlexDescriptor {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public View addToView(Object data, ViewGroup container) {
+    public FlexViewHolder addToView(Object data, ViewGroup container) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         View view =  inflater.inflate(layoutResourceId, container, false);
         FlexViewHolder holder = constructViewHolder(view);
-        holder.onCreate(container, -1);
-        holder.bindTo(data, -1);
-        container.addView(view);
-        return view;
+        if (holder!=null){
+            holder.onCreate(container, -1);
+            holder.bindTo(data, -1);
+            container.addView(view);
+        }
+        return holder;
     }
 
     //TODO: use this for all usages (without adapter)

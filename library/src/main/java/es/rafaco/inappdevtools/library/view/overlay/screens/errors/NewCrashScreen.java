@@ -41,20 +41,21 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.groups.CollapsibleLinearGroupData;
-import es.rafaco.inappdevtools.library.view.components.cards.FlatCardData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
+import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class NewCrashScreen extends AbstractFlexibleScreen {
 
@@ -118,8 +119,9 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         addButtons(data, crash);
 
         TraceGrouper traceGrouper = initTraceGrouper(crash);
-        initTopException(data, crash, traceGrouper);
-        initCauseException(data, crash, traceGrouper);
+
+        initExceptionCard(data, crash, traceGrouper, false);
+        initExceptionCard(data, crash, traceGrouper, true);
 
         return data;
     }
@@ -137,7 +139,6 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         content.append("Last activity: " + crash.getLastActivity());
         content.append(Humanizer.newLine());
         content.append("Thread: " + crash.getThreadName());
-        content.append(Humanizer.newLine());
 
         data.add(new OverviewData(title,
                 content.toString(),
@@ -168,6 +169,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         LinearGroupFlexData firstGroup = new LinearGroupFlexData();
         firstGroup.setHorizontal(true);
+        firstGroup.setHorizontalMargin(true);
         firstGroup.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green_alpha,
@@ -191,6 +193,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         LinearGroupFlexData secondGroup = new LinearGroupFlexData();
         secondGroup.setHorizontal(true);
+        secondGroup.setHorizontalMargin(true);
         secondGroup.add(new ButtonFlexData("Repro Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
                 new Runnable() {
@@ -218,35 +221,54 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
     private TraceGrouper initTraceGrouper(Crash crash) {
         List<Sourcetrace> traces = DevToolsDatabase.getInstance().sourcetraceDao().filterCrash(crash.getUid());
-
         TraceGrouper grouper = new TraceGrouper();
         grouper.process(traces);
-
         return grouper;
     }
 
-    private void initTopException(List<Object> data, Crash crash, TraceGrouper traceGrouper) {
-        String title = crash.getException();
-        String message = crash.getMessage();
-        final String composedMessage = title + ". " + message;
+    private void initExceptionCard(List<Object> data, Crash crash, TraceGrouper traceGrouper, boolean isCause) {
 
+        String title, message;
+        final String composedMessage;
+        final FlexAdapter adapter;
 
+        TextFlexData overCard = new TextFlexData("");
+        overCard.setGravity(Gravity.RIGHT);
+        int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 14); //standard+innerCard
+        int topMargin = (int) UiUtils.dpToPx(getContext(), 4);
+        int buttonMargin = (int) UiUtils.dpToPx(getContext(), -4);
+        overCard.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);
 
+        if (!isCause){
+            title = crash.getException();
+            message = crash.getMessage();
+            composedMessage = title + ". " + message;
+            adapter = traceGrouper.getExceptionAdapter();
+            overCard.setText("Exception");
+            data.add(overCard);
+        }
+        else{
+            title = crash.getCauseException();
+            message = crash.getCauseMessage();
+            if (TextUtils.isEmpty(title) && TextUtils.isEmpty(message)){
+                return;
+            }
+            composedMessage = title + ". " + message;
+            adapter = traceGrouper.getCauseAdapter();
+            overCard.setText("Cause");
+            data.add(overCard);
+        }
+        
         CardGroupFlexData cardGroup = new CardGroupFlexData();
         cardGroup.setFullWidth(true);
         cardGroup.setVerticalMargin(true);
-        cardGroup.setPerformer(new Runnable() {
-            @Override
-            public void run() {
-                IadtController.get().startReportWizard(ReportType.CRASH, -1);
-            }
-        });
+        cardGroup.setBgColorResource(R.color.rally_orange_alpha);
         LinearGroupFlexData cardData = new LinearGroupFlexData();
 
         CardHeaderFlexData headerData = new CardHeaderFlexData.Builder(title)
                 .setExpandable(false)
                 .setExpanded(true)
-                .setOverview("Exception")
+                //.setOverview("Exception")
                 .build();
         cardData.add(headerData);
 
@@ -283,144 +305,33 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         separator.setVerticalMargin(true);
         cardData.add(separator);
 
-        final FlexAdapter adapter = traceGrouper.getExceptionAdapter();
-        if (adapter != null){
+        if (adapter != null && adapter.getItemCount()>0){
             int tracesCount = adapter.getItemCount();
-            Object o = adapter.getItems().get(0);
+            String tracesTitle = "";
+            Object firstTrace = adapter.getItems().get(0);
+            if (firstTrace instanceof TraceGroupItem)
+                firstTrace = adapter.getItems().get(1);
+            if (firstTrace instanceof TraceItemData){
+                Sourcetrace firstSourcetrace = ((TraceItemData) firstTrace).getSourcetrace();
+                tracesTitle = firstSourcetrace.formatClassAndMethod();
+            }
 
-            ButtonBorderlessFlexData tracesButton = new ButtonBorderlessFlexData(tracesCount + " traces",
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.performItemAction(null, null, 0,0);
-                        }
-                    });
-            tracesButton.setIcon(R.drawable.ic_arrow_down_white_24dp);
-            buttonList.add(tracesButton);
+            CardHeaderFlexData tracesHeaderData = new CardHeaderFlexData.Builder(tracesTitle)
+                    .setExpandable(true)
+                    .setExpanded(false)
+                    .setOverview(tracesCount + "")
+                    .build();
             
-            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
-            traces.setHorizontalMargin(true);
-            cardData.add(traces);
+            RecyclerGroupFlexData tracesContentData = new RecyclerGroupFlexData(adapter);
+            tracesContentData.setHorizontalMargin(true);
+
+            CollapsibleFlexData collapsibleData = new CollapsibleFlexData(tracesHeaderData,
+                    tracesContentData, false);
+            cardData.add(collapsibleData);
         }
 
         cardGroup.add(cardData);
         data.add(cardGroup);
-        data.add("");
-
-
-
-
-
-
-
-
-
-
-        FlatCardData.Builder cardBuilder = new FlatCardData.Builder(title)
-                .add(message)
-                .setExpandable(false)
-                .setExpanded(true)
-                .setOverview("Exception");
-
-        cardBuilder.addButton(new ButtonFlexData("Copy",
-                R.drawable.ic_content_copy_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ClipboardUtils.save(getContext(), composedMessage);
-                        Iadt.showMessage("Exception copied to clipboard");
-                    }
-                }));
-
-        cardBuilder.addButton(new ButtonFlexData("Google it",
-                R.drawable.ic_google_brands,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        String url = "https://www.google.com/search?q=" + composedMessage;
-                        ExternalIntentUtils.viewUrl(url);
-                    }
-                }));
-
-
-        List<Object> stacktraces = new ArrayList<>();
-        stacktraces.add(new LinkItemData(
-                "Prueba",
-                "Overview",
-                -1,
-                -1,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO
-                    }
-                }
-        ));
-        stacktraces.add(new LinkItemData(
-                "Prueba2",
-                "Overview",
-                -1,
-                -1,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO
-                    }
-                }
-        ));
-
-        List<Object> internalData = new ArrayList<>();
-
-        CollapsibleLinearGroupData collapsible = new CollapsibleLinearGroupData(stacktraces);
-        collapsible.setOverview(stacktraces.size() + " traces");
-        collapsible.setShowDividers(false);
-        internalData.add(collapsible);
-
-        FlexAdapter adapter2 = traceGrouper.getExceptionAdapter();
-        if (adapter != null){
-            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter2);
-            traces.setHorizontalMargin(true);
-            internalData.add(traces);
-        }
-
-        cardBuilder.setInternalData(internalData);
-        data.add(cardBuilder.build());
     }
-
-    private void initCauseException(List<Object> data, Crash crash, TraceGrouper traceGrouper) {
-
-        /*
-        CrashHelper helper = new CrashHelper();
-        String cause = helper.getCaused(crash);
-        String message;
-        if (cause != null && message != null && message.contains(cause)) {
-            message = message.replace(cause, "(...)");
-        }
-        if (cause!=null){
-
-        */
-        
-        String title = crash.getCauseException();
-        String message = crash.getCauseMessage();
-
-        FlatCardData.Builder cardBuilder = new FlatCardData.Builder(title)
-                .add(message)
-                .setExpandable(false)
-                .setExpanded(true)
-                .setOverview("Cause");
-
-        List<Object> internalData = new ArrayList<>();
-
-        FlexAdapter adapter = traceGrouper.getCauseAdapter();
-        if (adapter != null){
-            RecyclerGroupFlexData traces = new RecyclerGroupFlexData(adapter);
-            traces.setHorizontalMargin(true);
-            internalData.add(traces);
-        }
-
-        cardBuilder.setInternalData(internalData);
-
-        data.add("");
-        data.add(cardBuilder.build());
-    }
+    
 }
