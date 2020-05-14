@@ -60,8 +60,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public static final int MAX_STRING_LENGTH = 1000000;
     private final Thread.UncaughtExceptionHandler nextHandler; //pandora
     private final Context context;
-    private long currentCrashId;
-    private long friendlyLogId;
 
     public CrashHandler(Context context, Thread.UncaughtExceptionHandler nextHandler) {
         this.context = context;
@@ -80,8 +78,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             boolean isBackgroundException = ex instanceof CrashInterceptor.BackgroundException;
             Throwable exception = isBackgroundException ? ex.getCause() : ex;
 
-            friendlyLogId = FriendlyLog.logCrash(exception.getMessage());
+            long friendlyLogId = FriendlyLog.logCrashInitial(exception.getMessage());
             Crash crash = buildCrash(exception);
+            crash.setLogcatId(friendlyLogId);
             CrashInterceptor.ThreadInfo threadInfo;
             if (isBackgroundException) {
                 threadInfo = ((CrashInterceptor.BackgroundException) ex).threadInfo;
@@ -90,7 +89,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
             addThreadInfo(crash, threadInfo);
             printLogcatError(crash);
-            storeCrash(crash);
+            saveCrash(crash);
+            updateSessionManager(crash);
+            FriendlyLog.logCrashDetails(crash);
 
             if (isFullRestart()){
                 PendingCrashUtil.savePending();
@@ -132,7 +133,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private DevToolsDatabase getDb(){
-        return IadtController.get().getDatabase();
+        return IadtController.getDatabase();
     }
 
     private boolean isDebug(){
@@ -223,30 +224,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Log.e(Iadt.TAG, "STACKTRACE: " + crash.getStacktrace());
     }
 
-    private void storeCrash(Crash crash) {
-        long crashId = saveCrash(crash);
-        crash.setUid(crashId);
-
-        long sessionId = updateSession(crashId);
-        crash.setSessionId(sessionId);
-        getDb().crashDao().update(crash);
-    }
-
-    //TODO: currentCrashId never get used, why?
-    //TODO: double get sessionId
-    private long saveCrash(final Crash crash) {
+    private void saveCrash(Crash crash) {
         long sessionId = IadtController.get().getSessionManager().getCurrentUid();
         crash.setSessionId(sessionId);
-        currentCrashId = getDb().crashDao().insert(crash);
-        FriendlyLog.logCrashDetails(friendlyLogId, currentCrashId, crash);
-        return currentCrashId;
+        long crashId = getDb().crashDao().insert(crash);
+        crash.setUid(crashId);
     }
 
-    private long updateSession(long crashId) {
+    private void updateSessionManager(Crash crash) {
         Session session = IadtController.get().getSessionManager().getCurrent();
-        session.setCrashId(crashId);
+        session.setCrashId(crash.getUid());
         IadtController.get().getSessionManager().updateCurrent(session);
-        return session.getUid();
     }
 
     private void storeScreenshot(Crash crash) {

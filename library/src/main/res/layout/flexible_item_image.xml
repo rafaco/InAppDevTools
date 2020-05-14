@@ -18,65 +18,43 @@
   ~ limitations under the License.
   -->
 
-<es.rafaco.compat.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:maxHeight="120dp"
-    android:layout_gravity="center"
-    android:backgroundTint="@color/iadt_surface_top"
-    style="@style/IadtCard.Image">
+    android:layout_height="143dp"
+    android:layout_gravity="center">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:duplicateParentState="true">
+        <es.rafaco.compat.CardView
+            android:id="@+id/card_view"
+            android:layout_width="wrap_content"
+            android:layout_height="143dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/iadt_surface_top"
+            style="@style/IadtCard.Image">
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:scaleType="centerCrop"
-                    android:layout_centerInParent="true"/>
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="143dp"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:scaleType="fitCenter"/>
 
-                <!--<ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerInParent="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_touch_app_white_24dp"
-                    android:background="@color/iadt_surface_medium"
-                    android:alpha="0.8"/>-->
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:scaleType="fitCenter"
+                            android:tint="@color/iadt_primary"
+                            android:background="@color/iadt_surface_medium"
+                            android:padding="5dp"
+                            android:alpha="0.8"/>
+        </es.rafaco.compat.CardView>
+</FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/top_overflow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:clickable="false"
-                    android:alpha="1">
-
-                        <es.rafaco.compat.AppCompatButton
-                            android:id="@+id/button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:clickable="false"
-                            android:text="TOUCH INSPECTION"
-                            android:drawableLeft="@drawable/ic_touch_app_white_24dp"
-                            android:drawableTint="@color/iadt_primary"
-                            android:backgroundTint="@color/iadt_surface_top"
-                            tools:text="Button with icon" />
-                </LinearLayout>
-
-        </RelativeLayout>
-</es.rafaco.compat.CardView>
 

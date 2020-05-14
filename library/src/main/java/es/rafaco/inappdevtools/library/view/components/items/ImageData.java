@@ -22,12 +22,17 @@ package es.rafaco.inappdevtools.library.view.components.items;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
-public class ImageData {
-    String title;
-    int height = -1;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+
+public class ImageData extends FlexData {
+
     String imagePath;
     Drawable imageDrawable;
     Bitmap imageBitmap;
+
+    String title;
+    int height = -1;
+    int icon;
     Runnable performer;
 
     public ImageData(String imagePath) {
@@ -57,6 +62,14 @@ public class ImageData {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 
     public Runnable getPerformer() {

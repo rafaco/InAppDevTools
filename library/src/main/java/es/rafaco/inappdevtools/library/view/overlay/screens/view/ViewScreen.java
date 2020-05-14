@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -49,14 +50,18 @@ import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
+import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class ViewScreen extends Screen {
 
@@ -107,13 +112,16 @@ public class ViewScreen extends Screen {
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
 
-        data.add("");
-        data.add("Layout");
-        addImage(data);
-        addVerticalButtons(data);
+        data.add(new OverviewData("Current view",
+                null,
+                R.string.gmd_visibility,
+                R.color.iadt_text_high));
 
-        data.add("");
-        data.add("Components");
+        data.add(new HeaderFlexData("Layout inspector"));
+        addVerticalButtons(data);
+        addImage(data);
+
+        data.add(new HeaderFlexData("Components"));
         ActivityTracker tracker = IadtController.get().getActivityTracker();
         final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
         addActivity(data, tracker);
@@ -127,15 +135,16 @@ public class ViewScreen extends Screen {
         LinearGroupFlexData verticalButtons = new LinearGroupFlexData();
         verticalButtons.setFullSpan(false);
 
-        /*verticalItems.add(new RunButton("Select element",
+        verticalButtons.add(new ButtonFlexData("Inspect by touch",
                 R.drawable.ic_touch_app_white_24dp,
+                R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
                         ViewScreen.this.getScreenManager().hide();
                         PandoraBridge.select();
                     }
-                }));*/
+                }));
         verticalButtons.add(new ButtonFlexData("Browse hierarchy",
                         R.drawable.ic_layers_white_24dp, new Runnable() {
                     @Override
@@ -166,15 +175,6 @@ public class ViewScreen extends Screen {
                 }));
         verticalButtons.add(horizontalGroup);
 
-        verticalButtons.add(new ButtonFlexData( "Take Screenshot",
-                R.drawable.ic_add_a_photo_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().takeScreenshot();
-                    }
-                }));
-
         data.add(verticalButtons);
     }
 
@@ -182,11 +182,11 @@ public class ViewScreen extends Screen {
         Bitmap bitmap = ScreenshotUtils.getBitmap();
         ImageData image = new ImageData(bitmap);
         //image.setHeight((int) UiUtils.getPixelsFromDp(getContext(), 10));
+        image.setIcon(R.drawable.ic_add_a_photo_white_24dp);
         image.setPerformer(new Runnable() {
             @Override
             public void run() {
-                ViewScreen.this.getScreenManager().hide();
-                PandoraBridge.select();
+                IadtController.get().takeScreenshot();
             }
         });
         data.add(image);

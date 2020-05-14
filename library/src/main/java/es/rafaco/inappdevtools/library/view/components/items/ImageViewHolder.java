@@ -26,23 +26,25 @@ import android.widget.ImageView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-
-public class ImageViewHolder extends FlexViewHolder {
+public class ImageViewHolder extends FlexItemViewHolder {
 
     private final ImageView imageView;
+    private final ImageView iconView;
 
     public ImageViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.imageView = view.findViewById(R.id.image);
-        //this.titleView = view.findViewById(R.id.title);
+        this.iconView = view.findViewById(R.id.icon);
     }
 
     @Override
     public void bindTo(Object abstractData, int position) {
+        super.bindTo(abstractData, position);
+
         final ImageData data = (ImageData) abstractData;
         if (data!=null){
 
@@ -70,6 +72,14 @@ public class ImageViewHolder extends FlexViewHolder {
             }
             else {
                 imageView.setVisibility(View.GONE);
+            }
+
+            if (data.icon > 0){
+                iconView.setImageResource(data.getIcon());
+                iconView.setVisibility(View.VISIBLE);
+            }
+            else{
+                iconView.setVisibility(View.GONE);
             }
 
             if (data.getPerformer() != null){

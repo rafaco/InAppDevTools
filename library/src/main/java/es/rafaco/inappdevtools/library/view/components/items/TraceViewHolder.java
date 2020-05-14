@@ -117,7 +117,7 @@ public class TraceViewHolder extends FlexViewHolder {
             where3View.setText(trace.formatFileAndLine());
 
             if (data.isOpenable()){
-                UiUtils.setCardViewClickable(cardView, false);
+                cardView.setClickable(true);
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -133,8 +133,8 @@ public class TraceViewHolder extends FlexViewHolder {
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
-                UiUtils.setCardViewClickable(cardView, false);
                 cardView.setOnClickListener(null);
+                cardView.setClickable(false);
 
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_medium));
                 cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 6));

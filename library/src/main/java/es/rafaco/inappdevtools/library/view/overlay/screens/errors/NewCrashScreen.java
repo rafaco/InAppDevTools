@@ -30,6 +30,8 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
@@ -37,13 +39,13 @@ import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
-import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ImageData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
@@ -107,23 +109,25 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData(Crash crash) {
         List<Object> data = new ArrayList<>();
         if (crash == null){
-            data.add(new OverviewData("Crash not found",
-                    "This is weird :(",
-                    R.string.gmd_bug_report,
-                    R.color.iadt_text_low));
-            return null;
+            addEmptyOverview(data);
+            return data;
         }
 
         addOverview(data, crash);
-        addScreenshot(data, crash);
-        addButtons(data, crash);
+        addImageAndButtons(data, crash);
 
         TraceGrouper traceGrouper = initTraceGrouper(crash);
-
         initExceptionCard(data, crash, traceGrouper, false);
         initExceptionCard(data, crash, traceGrouper, true);
 
         return data;
+    }
+
+    private void addEmptyOverview(List<Object> data) {
+        data.add(new OverviewData("Crash not found",
+                "This is weird :(",
+                R.string.gmd_bug_report,
+                R.color.iadt_text_low));
     }
 
     private void addOverview(List<Object> data, Crash crash) {
@@ -146,31 +150,36 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                 R.color.rally_orange));
     }
 
-    private void addScreenshot(List<Object> data, final Crash crash) {
-        /*AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                long screenId = crash.getScreenId();
-                final Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
-                if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
-                    new ImageLoaderAsyncTask(thumbnail).execute(screenshot.getPath());
-                    thumbnail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            FileProviderUtils.viewExternally("", screenshot.getPath() );
-                        }
-                    });
-                }
-            }
-        });*/
+    private void addImageAndButtons(List<Object> data, final Crash crash) {
+        LinearGroupFlexData horizontalContainer = new LinearGroupFlexData();
+        horizontalContainer.setHorizontal(true);
+        horizontalContainer.setHorizontalMargin(true);
+        addVerticalButtons(horizontalContainer, crash);
+        addImage(horizontalContainer, crash);
+        data.add(horizontalContainer);
     }
 
-    private void addButtons(List<Object> data, final Crash crash) {
+    private void addImage(LinearGroupFlexData data, Crash crash) {
+        long screenId = crash.getScreenId();
+        final Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
+        if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
+            ImageData image = new ImageData(screenshot.getPath());
+            image.setIcon(R.drawable.ic_photo_library_white_24dp);
+            image.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    FileProviderUtils.viewExternally("", screenshot.getPath() );
+                }
+            });
+            data.add(image);
+        }
+    }
 
-        LinearGroupFlexData firstGroup = new LinearGroupFlexData();
-        firstGroup.setHorizontal(true);
-        firstGroup.setHorizontalMargin(true);
-        firstGroup.add(new ButtonFlexData("Report now!",
+    private void addVerticalButtons(LinearGroupFlexData data, final Crash crash) {
+        LinearGroupFlexData verticalButtons = new LinearGroupFlexData();
+        verticalButtons.setFullSpan(false);
+
+        verticalButtons.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green_alpha,
                 new Runnable() {
@@ -179,44 +188,33 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                         IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
                     }
                 }));
-        data.add(firstGroup);
-
 
         final long logId = IadtController.getDatabase().friendlyDao()
                 .findLogIdByCrashId(crash.getUid());
-        Session crashSession = IadtController.getDatabase().sessionDao()
-                .findByCrashId(crash.getUid());
-        if(crashSession==null){
-            return;
-        }
-        final long crashSessionId = crashSession.getUid(); //TODO: replace by crash.getSessionId()
 
-        LinearGroupFlexData secondGroup = new LinearGroupFlexData();
-        secondGroup.setHorizontal(true);
-        secondGroup.setHorizontalMargin(true);
-        secondGroup.add(new ButtonFlexData("Repro Steps",
+        verticalButtons.add(new ButtonFlexData("Repro Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-                        stepsFilter.setSessionById(crashSessionId);
+                        stepsFilter.setSessionById(crash.getSessionId());
                         OverlayService.performNavigation(LogScreen.class,
                                 LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
                     }
                 }));
-        secondGroup.add(new ButtonFlexData("All Logs",
+        verticalButtons.add(new ButtonFlexData("Full Logs",
                 R.drawable.ic_format_align_left_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
-                        logsFilter.setSessionById(crashSessionId);
+                        logsFilter.setSessionById(crash.getSessionId());
                         OverlayService.performNavigation(LogScreen.class,
                                 LogScreen.buildParams(logsFilter.getUiFilter(), logId));
                     }
                 }));
-        data.add(secondGroup);
+        data.add(verticalButtons);
     }
 
     private TraceGrouper initTraceGrouper(Crash crash) {
@@ -236,7 +234,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         overCard.setGravity(Gravity.RIGHT);
         int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 14); //standard+innerCard
         int topMargin = (int) UiUtils.dpToPx(getContext(), 4);
-        int buttonMargin = (int) UiUtils.dpToPx(getContext(), -4);
+        int buttonMargin = (int) UiUtils.dpToPx(getContext(), 0);
         overCard.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);
 
         if (!isCause){
@@ -333,5 +331,4 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         cardGroup.add(cardData);
         data.add(cardGroup);
     }
-    
 }

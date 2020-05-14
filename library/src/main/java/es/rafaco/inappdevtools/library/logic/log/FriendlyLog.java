@@ -332,7 +332,7 @@ public class FriendlyLog {
         return -1;
     }
 
-    public static long logCrash(String message) {
+    public static long logCrashInitial(String message) {
         final Friendly log = new Friendly();
         log.setDate(new Date().getTime());
         log.setSeverity("E");
@@ -340,15 +340,15 @@ public class FriendlyLog {
         log.setSubcategory("Crash");
         log.setMessage(message);
         logAtLogcat(log);
-        return IadtController.get().getDatabase().friendlyDao().insert(log);
+        return IadtController.getDatabase().friendlyDao().insert(log);
     }
 
-    public static void logCrashDetails(long friendlyLogId, long crashId, Crash crash) {
-        final Friendly log = IadtController.get().getDatabase().friendlyDao().findById(friendlyLogId);
+    public static void logCrashDetails(Crash crash) {
+        final Friendly log = IadtController.getDatabase().friendlyDao().findById(crash.getLogcatId());
         log.setDate(crash.getDate());
         log.setMessage("Session " + crash.getSessionId() + " crashed: " + crash.getMessage());
-        log.setLinkedId(crashId);
-        IadtController.get().getDatabase().friendlyDao().update(log);
+        log.setLinkedId(crash.getUid());
+        IadtController.getDatabase().friendlyDao().update(log);
     }
 
     public static void logAnr(long anrId, Anr anr) {
@@ -413,7 +413,7 @@ public class FriendlyLog {
                     @Override
                     public void run() {
                         //IadtController.get().getDatabase().friendlyDao().update(startLog);
-                        IadtController.get().getDatabase().friendlyDao().insert(endLog);
+                        IadtController.getDatabase().friendlyDao().insert(endLog);
                     }
                 });
     }

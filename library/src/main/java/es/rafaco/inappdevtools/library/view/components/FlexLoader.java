@@ -45,6 +45,7 @@ import es.rafaco.inappdevtools.library.view.components.items.ConfigData;
 import es.rafaco.inappdevtools.library.view.components.items.ConfigViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextData;
 import es.rafaco.inappdevtools.library.view.components.items.EditTextViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
@@ -103,6 +104,7 @@ public class FlexLoader {
         //ITEMS
         descriptors.add(new FlexDescriptor(String.class, TextFlexViewHolder.class, R.layout.flex_text));
         descriptors.add(new FlexDescriptor(TextFlexData.class, TextFlexViewHolder.class, R.layout.flex_text));
+        descriptors.add(new FlexDescriptor(HeaderFlexData.class, TextFlexViewHolder.class, R.layout.flex_text));
         descriptors.add(new FlexDescriptor(ButtonFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_item_button));
         descriptors.add(new FlexDescriptor(ButtonBorderlessFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_button_borderless));
         descriptors.add(new FlexDescriptor(CardHeaderFlexData.class, CardHeaderFlexViewHolder.class, R.layout.flex_card_header));
@@ -126,6 +128,7 @@ public class FlexLoader {
 
     public static boolean isFullSpan(Class<?> itemDataClass) {
         if (itemDataClass.equals(String.class)
+                || itemDataClass.equals(HeaderFlexData.class)
                 || itemDataClass.equals(LinearGroupFlexData.class)
                 || itemDataClass.equals(OverviewData.class)
                 || itemDataClass.equals(DocumentSectionData.class)
