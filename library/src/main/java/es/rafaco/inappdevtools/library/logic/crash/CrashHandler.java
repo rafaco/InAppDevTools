@@ -51,7 +51,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -171,7 +171,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             if (isFullRestart())
                 IadtController.get().restartApp(true);
             else
-                OverlayService.performNavigation(CrashDetailScreen.class);
+                OverlayService.performNavigation(CrashScreen.class);
         }
     }
 

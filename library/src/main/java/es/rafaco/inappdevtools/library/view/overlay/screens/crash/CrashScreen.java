@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
+package es.rafaco.inappdevtools.library.view.overlay.screens.crash;
 
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -28,6 +28,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -59,9 +61,9 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class NewCrashScreen extends AbstractFlexibleScreen {
+public class CrashScreen extends AbstractFlexibleScreen {
 
-    public NewCrashScreen(ScreenManager manager) {
+    public CrashScreen(ScreenManager manager) {
         super(manager);
     }
 
@@ -77,14 +79,13 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
     @Override
     protected void onAdapterStart() {
-        Crash data = getData(getCrashIdFromParam());
+        Crash data = getData();
         List<Object> flexData =  getFlexibleData(data);
         updateAdapter(flexData);
     }
 
     private boolean isJustCrashed() {
-        //TODO:
-        return false;
+        return TextUtils.isEmpty(getParam());
     }
 
     private long getCrashIdFromParam() {
@@ -93,16 +94,10 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
         return -1;
     }
 
-    private Crash getData(long crashId) {
+    private Crash getData() {
         Crash result = null;
         CrashDao crashDao = IadtController.getDatabase().crashDao();
-        result = (crashId>0) ? crashDao.findById(crashId) : crashDao.getLast();
-
-        if (result == null){
-            return result;
-        }
-        //TODO: do something or remove previous bug out
-
+        result = (isJustCrashed()) ? crashDao.getLast() : crashDao.findById(getCrashIdFromParam());
         return result;
     }
 
@@ -181,7 +176,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         verticalButtons.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
-                R.color.rally_green_alpha,
+                R.color.rally_orange,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -194,6 +189,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         verticalButtons.add(new ButtonFlexData("Repro Steps",
                 R.drawable.ic_format_list_numbered_white_24dp,
+                R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -205,6 +201,7 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
                 }));
         verticalButtons.add(new ButtonFlexData("Full Logs",
                 R.drawable.ic_format_align_left_white_24dp,
+                R.color.rally_blue_med,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -330,5 +327,11 @@ public class NewCrashScreen extends AbstractFlexibleScreen {
 
         cardGroup.add(cardData);
         data.add(cardGroup);
+    }
+
+    //TODO: restore share crash?
+    private void share(Crash crash){
+        Iadt.showMessage("Sharing crash document");
+        DocumentRepository.shareDocument(DocumentType.CRASH, crash);
     }
 }

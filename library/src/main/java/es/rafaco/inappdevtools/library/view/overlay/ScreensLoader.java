@@ -19,18 +19,14 @@
 
 package es.rafaco.inappdevtools.library.view.overlay;
 
-import android.os.Process;
-
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.app.ToolsInfoScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashesScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.NewCrashScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
@@ -129,15 +125,13 @@ public class ScreensLoader {
         screenManager.registerScreen(BuildDetailScreen.class);
 
         //CRASHES
-        screenManager.registerScreen(CrashDetailScreen.class);
-        screenManager.registerScreen(NewCrashScreen.class);
+        screenManager.registerScreen(CrashScreen.class);
         screenManager.registerScreen(CrashesScreen.class);
 
         //Under classification
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
         screenManager.registerScreen(LogScreen.class);
-        screenManager.registerScreen(AnrDetailScreen.class);
         screenManager.registerScreen(RunScreen.class);
         screenManager.registerScreen(MoreScreen.class);
         screenManager.registerScreen(AnalysisScreen.class);

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
+package es.rafaco.inappdevtools.library.view.overlay.screens.crash;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -37,7 +37,7 @@ import com.alorma.timeline.TimelineView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.TraceGrouper;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.TraceGrouper;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class TraceGroupViewHolder extends FlexViewHolder {

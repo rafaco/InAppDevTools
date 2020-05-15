@@ -24,7 +24,6 @@ import android.graphics.Typeface;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
-//@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.appcompat.widget.AppCompatTextView;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
@@ -52,7 +51,7 @@ import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -233,7 +232,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
 
     private NavigationStep getLinkedIdStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
-            return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
+            return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
         }
         /* TODO: enable ANR screen
         else if(data.getSubcategory().equals("Anr")){

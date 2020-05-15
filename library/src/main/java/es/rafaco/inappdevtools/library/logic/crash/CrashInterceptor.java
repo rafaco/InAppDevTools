@@ -20,14 +20,12 @@
 package es.rafaco.inappdevtools.library.logic.crash;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.activities.CrashDialogActivity;
 
 /**
  * This class intercept any crash in your app and process them using CrashHandler.
@@ -154,10 +152,10 @@ public class CrashInterceptor implements Runnable {
         }
     }
 
-    void showCrashDisplayActivity(Throwable e) {
+    /*void showCrashDisplayActivity(Throwable e) {
         Intent i = new Intent(context, CrashDialogActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("e", e);
         context.startActivity(i);
-    }
+    }*/
 }

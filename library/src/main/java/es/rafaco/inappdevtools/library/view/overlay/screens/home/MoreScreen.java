@@ -29,15 +29,12 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashesScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.NewCrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
 public class MoreScreen extends AbstractFlexibleScreen {
-
-
+    
     public MoreScreen(ScreenManager manager) {
         super(manager);
     }
@@ -103,24 +100,6 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() { OverlayService.performNavigation(ScreenshotsScreen.class);
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Crashes",
-                R.drawable.ic_bug_report_white_24dp,
-                R.color.rally_orange,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(CrashesScreen.class);
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Crash",
-                R.drawable.ic_bug_report_white_24dp,
-                R.color.rally_orange,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(NewCrashScreen.class);
                     }
                 }));
 

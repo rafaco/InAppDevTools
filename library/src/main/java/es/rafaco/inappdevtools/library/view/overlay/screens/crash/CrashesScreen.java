@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.library.view.overlay.screens.errors;
+package es.rafaco.inappdevtools.library.view.overlay.screens.crash;
 
 import android.os.AsyncTask;
 import android.view.MenuItem;
@@ -99,7 +99,7 @@ public class CrashesScreen extends AbstractFlexibleScreen {
                     new Runnable() {
                         @Override
                         public void run() {
-                            OverlayService.performNavigation(NewCrashScreen.class,
+                            OverlayService.performNavigation(CrashScreen.class,
                                     crash.getUid() + "");
                         }
                     });

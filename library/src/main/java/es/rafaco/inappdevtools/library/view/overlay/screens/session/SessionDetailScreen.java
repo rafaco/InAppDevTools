@@ -34,7 +34,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
 public class SessionDetailScreen extends AbstractDocumentScreen {
@@ -129,7 +129,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
                     new Runnable() {
                         @Override
                         public void run() {
-                            OverlayService.performNavigation(CrashDetailScreen.class,
+                            OverlayService.performNavigation(CrashScreen.class,
                                     session.getCrashId() + "");
                         }
                     }));

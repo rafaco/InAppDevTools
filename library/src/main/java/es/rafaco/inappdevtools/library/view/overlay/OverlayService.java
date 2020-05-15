@@ -39,7 +39,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 
 public class OverlayService extends Service {
 
@@ -161,7 +161,7 @@ public class OverlayService extends Service {
 
     private void onInit() {
         if (PendingCrashUtil.isPending()){
-            overlayManager.navigateTo(CrashDetailScreen.class.getSimpleName(), null);
+            overlayManager.navigateTo(CrashScreen.class.getSimpleName(), null);
             PendingCrashUtil.clearPending();
         }
         else{
