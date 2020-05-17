@@ -112,10 +112,6 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
             cardView.setClickable(false);
             cardView.setFocusable(false);
         }
-
-        //TODO: remove
-        childrenContainer.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.material_green));
     }
 
     private void bindContentPadding(CardGroupFlexData data) {
@@ -132,16 +128,17 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
             return;
         }
 
+        Object targetData;
         if (data.getChildren().size() == 1
                 && data.getChildren().get(0) instanceof GroupFlexData){
-            FlexDescriptor desc = FlexLoader.getDescriptor(data.getChildren().get(0).getClass());
-            desc.addToView(data.getChildren().get(0), cardView);
+            targetData = data.getChildren().get(0);
         }
         else{
             LinearGroupFlexData childrenGroup = new LinearGroupFlexData(data.getChildren());
-            childrenGroup.setBackgroundColor(R.color.rally_orange);
-            FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
-            desc.addToView(childrenGroup, cardView);
+            targetData = childrenGroup;
         }
+
+        FlexDescriptor desc = FlexLoader.getDescriptor(targetData.getClass());
+        desc.addToView(targetData, cardView);
     }
 }

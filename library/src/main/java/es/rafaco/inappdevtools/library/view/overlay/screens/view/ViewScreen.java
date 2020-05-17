@@ -179,14 +179,14 @@ public class ViewScreen extends Screen {
     }
 
     private void addImage(List<Object> data) {
-        Bitmap bitmap = ScreenshotUtils.getBitmap();
+        Bitmap bitmap = ScreenshotUtils.getBitmap(false);
         ImageData image = new ImageData(bitmap);
         //image.setHeight((int) UiUtils.getPixelsFromDp(getContext(), 10));
-        image.setIcon(R.drawable.ic_add_a_photo_white_24dp);
+        image.setIcon(R.drawable.ic_search_white_24dp);
         image.setPerformer(new Runnable() {
             @Override
             public void run() {
-                IadtController.get().takeScreenshot();
+                OverlayService.performNavigation(ZoomScreen.class);
             }
         });
         data.add(image);

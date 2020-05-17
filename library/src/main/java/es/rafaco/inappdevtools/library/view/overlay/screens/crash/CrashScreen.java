@@ -19,9 +19,11 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.crash;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,7 +178,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
 
         verticalButtons.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
-                R.color.rally_orange,
+                R.color.rally_orange_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -201,7 +203,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
                 }));
         verticalButtons.add(new ButtonFlexData("Full Logs",
                 R.drawable.ic_format_align_left_white_24dp,
-                R.color.rally_blue_med,
+                R.color.iadt_primary,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -314,6 +316,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
             CardHeaderFlexData tracesHeaderData = new CardHeaderFlexData.Builder(tracesTitle)
                     .setExpandable(true)
                     .setExpanded(false)
+                    .setHiddenTitleWhenExpanded(true)
                     .setOverview(tracesCount + "")
                     .build();
             

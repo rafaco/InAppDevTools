@@ -123,6 +123,9 @@ dependencies {
     api "com.github.nisrulz:easydeviceinfo-base:2.4.1"
     //api 'com.opencsv:opencsv:4.2' // Using org.apache.commons
 
+    supportApi 'com.github.MikeOrtiz:TouchImageView:1.4.1' // Support
+    androidxApi 'com.github.MikeOrtiz:TouchImageView:3.0.1' // Android
+
     //Test
     testImplementation "junit:junit:$JUNIT_VERSION"
     androidTestAndroidxImplementation "androidx.test:runner:$ANDROIDX_TEST_RUNNER"

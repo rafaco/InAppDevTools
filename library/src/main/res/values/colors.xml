@@ -3,7 +3,8 @@
 
     <!-- Palette: from Material dark theme guide -->
     <!--   Surfaces mixing background color with alpha overlay (https://jsfiddle.net/jwuyn90b/) -->
-    <color name="material_background">#1e1e1e</color>
+    <color name="material_background_original">#1e1e1e</color>
+    <color name="material_background">#1F1C1C</color>
     <color name="material_surface_1dp">#1e1e1e</color>
     <color name="material_surface_2dp">#232323</color>
     <color name="material_surface_3dp">#252525</color>

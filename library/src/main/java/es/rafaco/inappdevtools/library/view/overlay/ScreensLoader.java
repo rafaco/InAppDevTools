@@ -62,6 +62,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 
 
 public class ScreensLoader {
@@ -129,6 +130,7 @@ public class ScreensLoader {
         screenManager.registerScreen(CrashesScreen.class);
 
         //Under classification
+        screenManager.registerScreen(ZoomScreen.class);
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);
         screenManager.registerScreen(LogScreen.class);

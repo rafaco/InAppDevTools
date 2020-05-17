@@ -19,6 +19,8 @@
 
 package es.rafaco.inappdevtools.library.view.components;
 
+import android.view.ViewGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +124,14 @@ public class FlexLoader {
             if (descriptor.dataClass.equals(dataClass)){
                 return descriptor;
             }
+        }
+        return null;
+    }
+
+    public static FlexViewHolder addToView(Object data, ViewGroup container) {
+        FlexDescriptor desc = FlexLoader.getDescriptor(data.getClass());
+        if (desc!=null){
+            return desc.addToView(data, container);
         }
         return null;
     }

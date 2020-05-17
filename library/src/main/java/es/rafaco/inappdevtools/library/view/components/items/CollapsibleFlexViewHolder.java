@@ -116,8 +116,7 @@ public class CollapsibleFlexViewHolder extends FlexItemViewHolder {
         //TODO: implement expandable
         if (headerViewHolder instanceof CardHeaderFlexViewHolder){
             CardHeaderFlexViewHolder cardHeaderViewHolder = (CardHeaderFlexViewHolder) headerViewHolder;
-            cardHeaderViewHolder.applyExpandedStateToNavIcon(isExpanded);
-            cardHeaderViewHolder.applyExpandedStateToText(isExpanded);
+            cardHeaderViewHolder.applyExpandedState(isExpanded);
         }
 
         if (!isExpanded){

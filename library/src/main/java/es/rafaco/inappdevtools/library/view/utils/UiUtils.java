@@ -24,6 +24,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -36,6 +37,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -233,5 +235,20 @@ public class UiUtils {
         } else {
             return getContext().getResources().getDrawable(icon);
         }
+    }
+
+    public static void setupIconButton(ImageButton button, int iconId, View.OnClickListener listener) {
+        UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.shape_dialog));
+        //UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
+        int contextualizedColor = ContextCompat.getColor(getContext(), R.color.iadt_primary);
+        //button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+        if (iconId>0){
+            Drawable icon = button.getContext().getResources().getDrawable(iconId);
+            icon.setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+            button.setImageDrawable(icon);
+        }
+        //button.setText(data.getTitle());
+
+        button.setOnClickListener(listener);
     }
 }

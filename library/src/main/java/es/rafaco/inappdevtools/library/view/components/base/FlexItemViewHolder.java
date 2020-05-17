@@ -52,6 +52,13 @@ public class FlexItemViewHolder extends FlexViewHolder {
         bindGravity(data);
         bindMargins(data);
         bindBackgroundColor(data);
+        bindAlpha(data);
+    }
+
+    private void bindAlpha(FlexData data) {
+        if (data.getAlpha() > 0f && data.getAlpha() < 1f){
+            itemView.setAlpha(data.getAlpha());
+        }
     }
 
     private void bindLayout(FlexData data) {

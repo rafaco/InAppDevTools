@@ -38,6 +38,7 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
     protected final TextView titleView;
     protected final TextView overviewView;
     protected final ImageView navIcon;
+    protected boolean hiddenTitleWhenExpanded;
 
     public CardHeaderFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
@@ -76,26 +77,25 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
     }
 
     private void bindExpandedState(CardHeaderFlexData data) {
+        hiddenTitleWhenExpanded = data.isHiddenTitleWhenExpanded();
         if (data.isExpandable()) {
-            applyExpandedStateToNavIcon(data.isExpanded());
+            applyExpandedState(data.isExpanded());
         }
     }
 
-    public void applyExpandedStateToNavIcon(Boolean isExpanded) {
+    public void applyExpandedState(Boolean isExpanded) {
+        if (hiddenTitleWhenExpanded && isExpanded){
+            titleView.setVisibility(View.GONE);
+        }
+        else{
+            titleView.setVisibility(View.VISIBLE);
+        }
+
         if (!isExpanded){
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_down_white_24dp, R.color.iadt_primary);
         }
         else {
             IconUtils.applyToImageView(navIcon, R.drawable.ic_arrow_up_white_24dp, R.color.iadt_primary);
-        }
-    }
-
-    public void applyExpandedStateToText(Boolean isExpanded) {
-        if (!isExpanded){
-            titleView.setVisibility(View.VISIBLE);
-        }
-        else {
-            titleView.setVisibility(View.GONE);
         }
     }
 }

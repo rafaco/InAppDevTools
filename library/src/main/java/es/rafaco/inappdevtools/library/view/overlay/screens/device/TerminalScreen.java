@@ -119,19 +119,19 @@ public class TerminalScreen extends Screen {
             }
         });
         
-        setupButton(btnRun, R.drawable.ic_play_arrow_white_24dp, new View.OnClickListener(){
+        UiUtils.setupIconButton(btnRun, R.drawable.ic_play_arrow_white_24dp, new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 onRun();
             }
         });
-        setupButton(btnCancel, R.drawable.ic_stop_white_24dp, new View.OnClickListener(){
+        UiUtils.setupIconButton(btnCancel, R.drawable.ic_stop_white_24dp, new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 onCancel();
             }
         });
-        setupButton(btnClear, R.drawable.ic_delete_forever_white_24dp, new View.OnClickListener(){
+        UiUtils.setupIconButton(btnClear, R.drawable.ic_delete_forever_white_24dp, new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 clearOutput();
@@ -139,19 +139,7 @@ public class TerminalScreen extends Screen {
         });
     }
 
-    private void setupButton(ImageButton button, int iconId, View.OnClickListener listener) {
-        UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.rounded_corner));
-        UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
-        //int contextualizedColor = ContextCompat.getColor(getContext(), R.color.rally_bg_solid);
-        //button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
-        if (iconId>0){
-            //Drawable icon = button.getContext().getResources().getDrawable(iconId);
-            button.setImageResource(iconId);
-        }
-        //button.setText(data.getTitle());
 
-        button.setOnClickListener(listener);
-    }
 
     private void onRun() {
         command = input.getText().toString();

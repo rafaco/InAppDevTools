@@ -36,11 +36,14 @@ public class FlexData {
     Boolean verticalMargin = null;
     int[] margins;
     int backgroundColor;
+    float alpha;
+
 
     public FlexData() {
         this.id = null;
         this.viewHolderClass = null;
         this.layoutResourceId = -1;
+        this.alpha = -1f;
     }
 
     public String getId() {
@@ -139,5 +142,13 @@ public class FlexData {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
     }
 }

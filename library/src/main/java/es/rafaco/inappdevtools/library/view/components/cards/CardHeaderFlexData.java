@@ -34,6 +34,7 @@ public class CardHeaderFlexData extends FlexData {
     private String overview;
     private boolean isExpandable;
     private boolean isExpanded;
+    private boolean hiddenTitleWhenExpanded;
 
     public CardHeaderFlexData(CardHeaderFlexData.Builder builder) {
         this.title = builder.name;
@@ -41,6 +42,7 @@ public class CardHeaderFlexData extends FlexData {
         this.overview = builder.overview;
         this.isExpandable = builder.isExpandable;
         this.isExpanded = builder.isExpanded;
+        this.hiddenTitleWhenExpanded = builder.hiddenTitleWhenExpanded;
     }
 
     public String getTitle() {
@@ -71,12 +73,22 @@ public class CardHeaderFlexData extends FlexData {
         isExpanded = expanded;
     }
 
+    public void setHiddenTitleWhenExpanded(boolean hiddenTitleWhenExpanded) {
+        this.hiddenTitleWhenExpanded = hiddenTitleWhenExpanded;
+    }
+
+    public boolean isHiddenTitleWhenExpanded() {
+        return hiddenTitleWhenExpanded;
+    }
+
+
     public static class Builder {
         private String name;
         private int icon;
         private String overview;
         private boolean isExpandable = true;
         private boolean isExpanded;
+        private boolean hiddenTitleWhenExpanded;
 
         public Builder() {
             this("");
@@ -103,6 +115,11 @@ public class CardHeaderFlexData extends FlexData {
 
         public CardHeaderFlexData.Builder setExpanded(boolean isExpanded) {
             this.isExpanded = isExpanded;
+            return this;
+        }
+
+        public CardHeaderFlexData.Builder setHiddenTitleWhenExpanded(boolean hiddenTitleWhenExpanded) {
+            this.hiddenTitleWhenExpanded = hiddenTitleWhenExpanded;
             return this;
         }
 

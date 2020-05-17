@@ -94,14 +94,19 @@ public class ScreenshotUtils {
         return null;
     }
 
-    public static Bitmap getBitmap(){
+    public static Bitmap getBitmap(boolean fullSize){
         Activity currentActivity = IadtController.get().getActivityTracker().getCurrent();
         View targetView = currentActivity.getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
         Bitmap bitmap = null;
         try {
-            bitmap = getThumbnailFromView(targetView);
-            //TODO: Falcon grab our OverlayUI also
-            //bitmap = Falcon.takeScreenshotBitmap(currentActivity);
+            if (fullSize){
+                bitmap = getBitmapFromView(targetView);
+                //TODO: Falcon grab our OverlayUI also
+                //bitmap = Falcon.takeScreenshotBitmap(currentActivity);
+            }
+            else{
+                bitmap = getThumbnailFromView(targetView);
+            }
         }
         catch (Exception e) {
             if (IadtController.get().isDebug()){
