@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import java.util.Date;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
@@ -50,17 +51,16 @@ public class AppEventDetector extends EventDetector {
 
                 //TODO: relocate to session manager?
                 Session session = IadtController.get().getSessionManager().getCurrent();
-                FriendlyLog.log("I", "Iadt", "Init",
-                        "Session " + session.getUid() + " started");
+                FriendlyLog.logSessionStart(session.getUid());
             }
         });
 
         eventManager.subscribe(Event.APP_NEW_BUILD, new EventManager.Listener(){
             @Override
             public void onEvent(Event event, Object param) {
-                FriendlyLog.log("V", "Iadt", "NewBuild",
-                        "New compilation from " + Humanizer.getElapsedTimeLowered((long)param));
-
+                long buildId = IadtController.get().getBuildManager().getCurrentId();
+                long sessionId = IadtController.get().getSessionManager().getCurrentUid();
+                FriendlyLog.logBuildStart(buildId, sessionId, (long)param);
                 CacheUtils.deleteAll(getContext());
             }
         });

@@ -39,6 +39,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetFormatter;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FriendlyLog {
 
@@ -330,6 +331,42 @@ public class FriendlyLog {
             return R.drawable.ic_android_white_24dp;
         }
         return -1;
+    }
+
+    public static long logBuildStart(long buildId, long sessionId, long buildTime) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("V");
+        log.setCategory("Iadt");
+        log.setSubcategory("NewBuild");
+        log.setMessage("Build " + buildId + " initialised, compiled " + Humanizer.getElapsedTimeLowered(buildTime));
+        log.setLinkedId(buildId);
+        logAtLogcat(log);
+        return IadtController.getDatabase().friendlyDao().insert(log);
+    }
+
+    public static long logScreenshot(long screenshotId) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("I");
+        log.setCategory("Iadt");
+        log.setSubcategory("Screenshot");
+        log.setMessage("Screenshot taken");
+        log.setLinkedId(screenshotId);
+        logAtLogcat(log);
+        return IadtController.getDatabase().friendlyDao().insert(log);
+    }
+
+    public static long logSessionStart(long sessionId) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("I");
+        log.setCategory("Iadt");
+        log.setSubcategory("Init");
+        log.setMessage("Session " + sessionId + " started");
+        log.setLinkedId(sessionId);
+        logAtLogcat(log);
+        return IadtController.getDatabase().friendlyDao().insert(log);
     }
 
     public static long logCrashInitial(String message) {

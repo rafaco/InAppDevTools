@@ -182,7 +182,7 @@ public class ViewScreen extends Screen {
         Bitmap bitmap = ScreenshotUtils.getBitmap(false);
         ImageData image = new ImageData(bitmap);
         //image.setHeight((int) UiUtils.getPixelsFromDp(getContext(), 10));
-        image.setIcon(R.drawable.ic_search_white_24dp);
+        image.setIcon(R.drawable.ic_zoom_out_map_white_24dp);
         image.setPerformer(new Runnable() {
             @Override
             public void run() {

@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -29,6 +30,8 @@ import com.ortiz.touchview.TouchImageView;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
@@ -37,8 +40,13 @@ import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexDat
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class ZoomScreen extends Screen {
@@ -47,6 +55,7 @@ public class ZoomScreen extends Screen {
     private ImageButton zoomInButton;
     private ImageButton zoomOutButton;
     private LinearLayout bottomSheetContainer;
+    private Screenshot screen;
 
     public ZoomScreen(ScreenManager manager) {
         super(manager);
@@ -54,7 +63,10 @@ public class ZoomScreen extends Screen {
 
     @Override
     protected void onCreate() {
-
+        if (!TextUtils.isEmpty(getParam())){
+            Long screenId = Long.parseLong(getParam());
+            screen = IadtController.getDatabase().screenshotDao().findById(screenId);
+        }
     }
 
     @Override
@@ -70,9 +82,24 @@ public class ZoomScreen extends Screen {
     }
 
     private void initImage() {
-        Bitmap bitmap = ScreenshotUtils.getBitmap(true);
-        mImageView.setImageBitmap(bitmap);
-        mImageView.setMaxZoom(20f);
+        if (screen == null){
+            Bitmap bitmap = ScreenshotUtils.getBitmap(true);
+            mImageView.setImageBitmap(bitmap);
+            mImageView.setMinZoom(0.9f);
+            mImageView.setMaxZoom(20f);
+            mImageView.setZoom(0.9f);
+        }
+        else{
+            new ImageLoaderAsyncTask(mImageView,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mImageView.setMaxZoom(10f);
+                            mImageView.setMinZoom(0.9f);
+                            mImageView.setZoom(0.9f);
+                        }
+                    }).execute(screen.getPath());
+        }
     }
 
     private void initZoomButtons() {
@@ -87,9 +114,7 @@ public class ZoomScreen extends Screen {
         UiUtils.setupIconButton(zoomOutButton, R.drawable.ic_remove_circle_outline_white_24dp, new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                float scale = Math.max(mImageView.getCurrentZoom() - 10, mImageView.getMinZoom());
-                if (scale != mImageView.getCurrentZoom())
-                 mImageView.setZoom(scale);
+                OnZoomClicked(false);
             }
         });
     }
@@ -104,8 +129,26 @@ public class ZoomScreen extends Screen {
     }
 
     private void initBottomSheet() {
-        String title = "Current view snapshot";
-        String message = "Pinch to zoom, double tap to restore";
+        String title, message;
+        if (screen == null){
+            title = "Current view snapshot";
+            message = "Pinch to zoom, double tap to restore";
+        }
+        else{
+            title = "Screnshot " + screen.getUid();
+            if (screen.getCrashId()>0){
+                title +=  " (Crash)";
+            }
+
+            message = screen.getActivityName()
+                    + " " + Humanizer.getElapsedTimeLowered(screen.getDate())
+                    + Humanizer.newLine()
+                    + "Session " + screen.getSessionId() + Humanizer.newLine();
+
+            if (screen.getCrashId()>0){
+                message += "Crash " + screen.getCrashId() + Humanizer.newLine();
+            }
+        }
 
         CardGroupFlexData cardData = new CardGroupFlexData();
         cardData.setFullWidth(false);
@@ -135,23 +178,62 @@ public class ZoomScreen extends Screen {
 
         LinearGroupFlexData buttonList = new LinearGroupFlexData();
         buttonList.setHorizontal(true);
-        buttonList.add(new ButtonBorderlessFlexData("Take shot",
-                R.drawable.ic_add_a_photo_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().takeScreenshot();
-                    }
-                }));
+        if (screen == null){
+            buttonList.add(new ButtonBorderlessFlexData("Refresh",
+                    R.drawable.ic_refresh_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            initImage();
+                        }
+                    }));
 
-        buttonList.add(new ButtonBorderlessFlexData("Refresh",
-                R.drawable.ic_refresh_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        initImage();
-                    }
-                }));
+            buttonList.add(new ButtonBorderlessFlexData("Take shot",
+                    R.drawable.ic_add_a_photo_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            IadtController.get().takeScreenshot(new Runnable() {
+                                @Override
+                                public void run() {
+                                    afterScreenshotTaken();
+                                }
+                            });
+                        }
+                    }));
+        }
+        else{
+            buttonList.add(new ButtonBorderlessFlexData("Session",
+                    R.drawable.ic_timeline_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(SessionDetailScreen.class,
+                                    screen.getSessionId() + "");
+                        }
+                    }));
+
+            if (screen.getCrashId()>0){
+                buttonList.add(new ButtonBorderlessFlexData("Crash",
+                        R.drawable.ic_bug_report_white_24dp,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                OverlayService.performNavigation(CrashScreen.class,
+                                        screen.getCrashId() + "");
+                            }
+                        }));
+            }
+
+            buttonList.add(new ButtonBorderlessFlexData("Share",
+                    R.drawable.ic_share_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            FileProviderUtils.sendExternally("", screen.getPath() );
+                        }
+                    }));
+        }
         collapsedList.add(buttonList);
 
         CollapsibleFlexData collapsibleData = new CollapsibleFlexData(headerData,
@@ -159,6 +241,13 @@ public class ZoomScreen extends Screen {
         cardData.add(collapsibleData);
         
         FlexLoader.addToView(cardData, bottomSheetContainer);
+    }
+
+    private void afterScreenshotTaken() {
+        long screenshotId = IadtController.getDatabase().screenshotDao()
+                .getLast().getUid();
+        OverlayService.performNavigation(ZoomScreen.class,
+                screenshotId + "");
     }
 
     private void onCardClicked() {
@@ -182,7 +271,7 @@ public class ZoomScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return "Zoom";
+        return TextUtils.isEmpty(getParam()) ? "Screen Zoom" : "Screenshot";
     }
 
     @Override

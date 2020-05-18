@@ -303,14 +303,21 @@ public final class IadtController {
         IadtController.get().restartApp(false);
     }
 
+
     public void takeScreenshot() {
+        takeScreenshot(null);
+    }
+
+    public void takeScreenshot(final Runnable callback) {
         if (!isEnabled()) return;
         boolean isOverlayRunning = getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
                 && OverlayService.isInitialize();
 
         if (!isOverlayRunning){
             Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
-            FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
+            FriendlyLog.logScreenshot(screenshot.getUid());
+            if (callback!=null) callback.run();
+            return;
         }
 
         getOverlayHelper().hideAll();
@@ -319,11 +326,12 @@ public final class IadtController {
             @Override
             public void run() {
                 final Screenshot screenshot = ScreenshotUtils.takeAndSave(false);
-                FriendlyLog.log("I", "Iadt", "Screenshot","Screenshot taken");
+                FriendlyLog.logScreenshot(screenshot.getUid());
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         getOverlayHelper().restoreAll();
+                        if (callback!=null) callback.run();
                     }
                 }, 200);
             }

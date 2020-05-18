@@ -245,6 +245,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private long saveScreenshot(Crash crash){
         Screenshot screenshot = ScreenshotUtils.take(true);
+        screenshot.setCrashId(crash.getUid());
         if (screenshot != null){
             long screenId = getDb().screenshotDao().insert(screenshot);
             if (screenId > 0){

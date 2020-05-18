@@ -27,7 +27,7 @@
         <es.rafaco.compat.CardView
             android:id="@+id/card_view"
             android:layout_width="wrap_content"
-            android:layout_height="143dp"
+            android:layout_height="140dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/iadt_surface_top"
             style="@style/IadtCard.Image">
@@ -35,12 +35,12 @@
                         <ImageView
                             android:id="@+id/image"
                             android:layout_width="wrap_content"
-                            android:layout_height="143dp"
+                            android:layout_height="140dp"
                             android:layout_gravity="center"
                             android:layout_centerInParent="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:clickable="true"
-                            android:scaleType="fitCenter"/>
+                            android:scaleType="centerCrop"/>
 
                         <ImageView
                             android:id="@+id/icon"

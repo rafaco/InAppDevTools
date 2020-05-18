@@ -60,6 +60,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -161,11 +162,12 @@ public class CrashScreen extends AbstractFlexibleScreen {
         final Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
         if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
             ImageData image = new ImageData(screenshot.getPath());
-            image.setIcon(R.drawable.ic_photo_library_white_24dp);
+            image.setIcon(R.drawable.ic_zoom_out_map_white_24dp);
             image.setPerformer(new Runnable() {
                 @Override
                 public void run() {
-                    FileProviderUtils.viewExternally("", screenshot.getPath() );
+                    OverlayService.performNavigation(ZoomScreen.class,
+                            screenshot.getUid() + "");
                 }
             });
             data.add(image);

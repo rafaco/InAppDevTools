@@ -41,9 +41,12 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class ScreenshotsScreen extends AbstractFlexibleScreen {
@@ -100,31 +103,36 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
             final Screenshot screenshot = screenshots.get(i);
 
             String title = String.format("Screenshot %s", screenshot.getUid());
-            if (screenshot.getPath().contains("crash_")){
+            if (screenshot.getCrashId()>0){
                 title +=  " (Crash)";
             }
 
-            String content = "Activity: " + screenshot.getActivityName()
+            String content = screenshot.getActivityName()
+                    + " " + Humanizer.getElapsedTimeLowered(screenshot.getDate())
                     + Humanizer.newLine()
-                    + "Session: " + screenshot.getSessionId()
-                    + Humanizer.newLine()
-                    + "Elapsed: " + Humanizer.getElapsedTime(screenshot.getDate());
+                    + "Session " + screenshot.getSessionId() + Humanizer.newLine();
+
+            if (screenshot.getCrashId()>0){
+                content += "Crash " + screenshot.getCrashId() + Humanizer.newLine();
+            }
 
             CardData cardData = new CardData(title,
                     new Runnable() {
                         @Override
                         public void run() {
-                            onCardClick(screenshot);
+                            OverlayService.performNavigation(ZoomScreen.class,
+                                    screenshot.getUid() + "");
+                            //onCardClick(screenshot);
                         }
                     });
             cardData.setContent(content);
             cardData.setImagePath(screenshot.getPath());
-            cardData.setNavIcon(R.string.gmd_open_in_new);
+            cardData.setNavIcon(R.string.gmd_zoom_out_map);
 
             if (screenshot.getSessionId() == currentSession) {
                 cardData.setBgColor(R.color.rally_blue_dark);
             }
-            else if (screenshot.getPath().contains("crash_")){
+            else if (screenshot.getCrashId()>0){
                 cardData.setBgColor(R.color.rally_orange_alpha);
             }
             else {

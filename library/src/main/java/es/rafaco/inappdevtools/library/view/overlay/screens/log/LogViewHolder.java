@@ -51,8 +51,11 @@ import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -226,6 +229,10 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             details += "Source: " + "Iadt Event" + Humanizer.newLine();
             details += "Category: " + data.getCategory() + Humanizer.newLine();
             details += "Subcategory: " + data.getSubcategory();
+
+            if (data.getLinkedId()>0){
+                details += Humanizer.newLine() + "LinkedId: " + data.getLinkedId();
+            }
         }
         return details;
     }
@@ -233,6 +240,15 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     private NavigationStep getLinkedIdStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("Screenshot")){
+            return new NavigationStep(ZoomScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("Init")){
+            return new NavigationStep(SessionDetailScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("NewBuild")){
+            return new NavigationStep(BuildDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
         /* TODO: enable ANR screen
         else if(data.getSubcategory().equals("Anr")){

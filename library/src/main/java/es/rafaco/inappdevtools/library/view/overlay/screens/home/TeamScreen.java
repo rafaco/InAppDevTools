@@ -127,13 +127,12 @@ public class TeamScreen extends AbstractFlexibleScreen {
                 .setNavAdd(R.string.gmd_add_a_photo, new Runnable() {
                     @Override
                     public void run() {
-                        IadtController.get().takeScreenshot();;
-                        bodyView.postDelayed(new Runnable() {
+                        IadtController.get().takeScreenshot(new Runnable() {
                             @Override
                             public void run() {
                                 onAdapterStart();
                             }
-                        }, 1000);
+                        });
                     }
                 }));
         
