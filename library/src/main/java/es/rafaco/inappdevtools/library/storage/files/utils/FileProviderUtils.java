@@ -127,6 +127,8 @@ public class FileProviderUtils {
 
     public static void addPlainText(Intent intent, String text) {
         //intent.setType("text/html");
+        /*ArrayList<CharSequence> charSequences = new ArrayList<>();
+        charSequences.add(text);*/
         intent.putExtra(Intent.EXTRA_TEXT, text);
     }
 

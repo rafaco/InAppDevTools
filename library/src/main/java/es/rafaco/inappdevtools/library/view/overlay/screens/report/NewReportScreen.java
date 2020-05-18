@@ -106,8 +106,6 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         updateAdapter(getSenderOptionsData());
     }
 
-
-
     private CardData getOverview() {
         CardData card = new CardData(ReportFormatter.getTitle(report),
                 ReportFormatter.getAttachmentDescription(report),
@@ -126,13 +124,11 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         return card;
     }
 
-
-
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        OverviewData header = new OverviewData("Did you reproduce the issue? When?",
-                "Select the session when it happen to include all data available as context to help our developers",
+        OverviewData header = new OverviewData("Did you reproduce the issue?",
+                "Select a crash or the session when it happen, we will include collected data to help our developers",
                         R.string.gmd_attach_file,
                         R.color.rally_white);
         data.add(header);
@@ -167,7 +163,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         }
         else {
             crashCard = new CardData("Last crashed session",
-                    "Report session " + lastCrash.getSessionId() + " crashed "
+                    "Session " + lastCrash.getSessionId() + " crashed "
                             + Humanizer.getElapsedTimeLowered(lastCrash.getDate()) + "."
                             + Humanizer.newLine()
                             + Humanizer.truncate(lastCrash.getMessage(), 90),
@@ -189,8 +185,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         int sessions = IadtController.getDatabase().sessionDao().getAll().size();
         int crashes = IadtController.getDatabase().crashDao().getAll().size();
         CardData sessionCard = new CardData("Select other session",
-                "Select a previous session to include\n"
-                + sessions + " sessions available (" + crashes + " with crash)",
+                sessions + " sessions available (" + crashes + " with crash)",
                 R.string.gmd_history,
                 new Runnable() {
                     @Override
