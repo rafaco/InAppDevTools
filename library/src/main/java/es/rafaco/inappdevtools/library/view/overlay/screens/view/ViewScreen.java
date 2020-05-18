@@ -74,7 +74,7 @@ public class ViewScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return "View";
+        return "";
     }
 
     @Override
@@ -111,9 +111,10 @@ public class ViewScreen extends Screen {
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
+        ActivityTracker tracker = IadtController.get().getActivityTracker();
 
         data.add(new OverviewData("Current view",
-                null,
+                tracker.getCurrentName() + " on top",
                 R.string.gmd_visibility,
                 R.color.iadt_text_high));
 
@@ -122,10 +123,10 @@ public class ViewScreen extends Screen {
         addImage(data);
 
         data.add(new HeaderFlexData("Components"));
-        ActivityTracker tracker = IadtController.get().getActivityTracker();
-        final long currentActivityUuuid = tracker.getCurrentHistory().uuid;
+
+        final long currentActivityUuid = tracker.getCurrentHistory().uuid;
         addActivity(data, tracker);
-        addFragments(data, currentActivityUuuid);
+        addFragments(data, currentActivityUuid);
         addLogButtons(data);
 
         return data;

@@ -30,13 +30,7 @@ public class ButtonFlexData extends FlexData {
     boolean wrapContent = false;
 
     public ButtonFlexData(String title, Runnable performer) {
-        this.title = title;
-        this.performer = performer;
-    }
-
-    public ButtonFlexData(String title, int icon, Runnable performer) {
-        this(title, performer);
-        this.icon = icon;
+        this(title, -1, performer);
     }
 
     public ButtonFlexData(String title, int icon, int colorResId, Runnable performer) {
@@ -47,6 +41,13 @@ public class ButtonFlexData extends FlexData {
     public ButtonFlexData(String title, int icon, Runnable performer, Runnable callback) {
         this(title, icon, performer);
         this.callback = callback;
+    }
+
+    public ButtonFlexData(String title, int icon, Runnable performer) {
+        super();
+        this.title = title;
+        this.performer = performer;
+        this.icon = icon;
     }
 
     public String getTitle() {

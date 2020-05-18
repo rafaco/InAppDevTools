@@ -238,17 +238,18 @@ public class UiUtils {
     }
 
     public static void setupIconButton(ImageButton button, int iconId, View.OnClickListener listener) {
-        UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.shape_dialog));
+
+        int backgroundColor = ContextCompat.getColor(getContext(), R.color.iadt_surface_top);
+        button.getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
+        //UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.shape_dialog));
         //UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
-        int contextualizedColor = ContextCompat.getColor(getContext(), R.color.iadt_primary);
-        //button.getBackground().setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+
         if (iconId>0){
             Drawable icon = button.getContext().getResources().getDrawable(iconId);
-            icon.setColorFilter(contextualizedColor, PorterDuff.Mode.MULTIPLY);
+            int accentColor = ContextCompat.getColor(getContext(), R.color.iadt_primary);
+            icon.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
             button.setImageDrawable(icon);
         }
-        //button.setText(data.getTitle());
-
         button.setOnClickListener(listener);
     }
 }

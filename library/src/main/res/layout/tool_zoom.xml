@@ -31,31 +31,13 @@
         android:scaleType="centerCrop"/>
 
     <LinearLayout
+        android:id="@+id/floating_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/zoom_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:contentDescription="Zoom In"
-            android:elevation="@dimen/cardview_default_elevation"/>
-
-        <ImageButton
-            android:id="@+id/zoom_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:contentDescription="Zoom Out"
-            android:elevation="@dimen/cardview_default_elevation"/>
-
     </LinearLayout>
 
     <LinearLayout

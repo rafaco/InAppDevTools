@@ -38,6 +38,8 @@ import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexViewH
 import es.rafaco.inappdevtools.library.view.components.items.AnalysisViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonIconFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonIconFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.CheckboxData;
 import es.rafaco.inappdevtools.library.view.components.items.CheckboxViewHolder;
 import es.rafaco.inappdevtools.library.view.components.cards.ComplexCardViewHolder;
@@ -109,6 +111,7 @@ public class FlexLoader {
         descriptors.add(new FlexDescriptor(HeaderFlexData.class, TextFlexViewHolder.class, R.layout.flex_text));
         descriptors.add(new FlexDescriptor(ButtonFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_item_button));
         descriptors.add(new FlexDescriptor(ButtonBorderlessFlexData.class, ButtonFlexViewHolder.class, R.layout.flex_button_borderless));
+        descriptors.add(new FlexDescriptor(ButtonIconFlexData.class, ButtonIconFlexViewHolder.class, R.layout.flex_item_button_icon));
         descriptors.add(new FlexDescriptor(CardHeaderFlexData.class, CardHeaderFlexViewHolder.class, R.layout.flex_card_header));
         descriptors.add(new FlexDescriptor(SeparatorFlexData.class, SeparatorFlexViewHolder.class, R.layout.flex_separator));
         descriptors.add(new FlexDescriptor(CollapsibleFlexData.class, CollapsibleFlexViewHolder.class, R.layout.flex_collapsible));

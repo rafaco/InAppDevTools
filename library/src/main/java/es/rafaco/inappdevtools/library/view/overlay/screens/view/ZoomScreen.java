@@ -21,9 +21,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.ortiz.touchview.TouchImageView;
@@ -38,6 +36,7 @@ import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonIconFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -52,13 +51,22 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 public class ZoomScreen extends Screen {
 
     private TouchImageView mImageView;
-    private ImageButton zoomInButton;
-    private ImageButton zoomOutButton;
+    private LinearLayout floatingButtons;
     private LinearLayout bottomSheetContainer;
     private Screenshot screen;
 
     public ZoomScreen(ScreenManager manager) {
         super(manager);
+    }
+
+    @Override
+    public String getTitle() {
+        return TextUtils.isEmpty(getParam()) ? "Live Zoom" : "Screenshot";
+    }
+
+    @Override
+    public int getBodyLayoutId() {
+        return R.layout.tool_zoom;
     }
 
     @Override
@@ -72,8 +80,7 @@ public class ZoomScreen extends Screen {
     @Override
     protected void onStart(ViewGroup bodyView) {
         mImageView = bodyView.findViewById(R.id.image_view);
-        zoomInButton = bodyView.findViewById(R.id.zoom_in);
-        zoomOutButton = bodyView.findViewById(R.id.zoom_out);
+        floatingButtons = bodyView.findViewById(R.id.floating_buttons);
         bottomSheetContainer = bodyView.findViewById(R.id.internal_bottom_sheet);
 
         initImage();
@@ -103,20 +110,26 @@ public class ZoomScreen extends Screen {
     }
 
     private void initZoomButtons() {
-        UiUtils.setupIconButton(zoomInButton, R.drawable.ic_add_circle_outline_white_24dp,
-                new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                OnZoomClicked(true);
-            }
-        });
 
-        UiUtils.setupIconButton(zoomOutButton, R.drawable.ic_remove_circle_outline_white_24dp, new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                OnZoomClicked(false);
-            }
-        });
+        ButtonIconFlexData zoomInButton = new ButtonIconFlexData(R.drawable.ic_add_circle_outline_white_24dp,
+                R.color.iadt_surface_top,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OnZoomClicked(true);
+                    }
+                });
+        FlexLoader.addToView(zoomInButton, floatingButtons);
+
+        ButtonIconFlexData zoomOutButton = new ButtonIconFlexData(R.drawable.ic_remove_circle_outline_white_24dp,
+                R.color.iadt_surface_top,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OnZoomClicked(false);
+                    }
+                });
+        FlexLoader.addToView(zoomOutButton, floatingButtons);
     }
 
     private void OnZoomClicked(boolean isZoomIn) {
@@ -132,7 +145,7 @@ public class ZoomScreen extends Screen {
         String title, message;
         if (screen == null){
             title = "Current view snapshot";
-            message = "Pinch to zoom, double tap to restore";
+            message = "Pinch or double tap to zoom" + Humanizer.newLine() + "Drag to move";
         }
         else{
             title = "Screnshot " + screen.getUid();
@@ -267,15 +280,5 @@ public class ZoomScreen extends Screen {
     @Override
     protected void onDestroy() {
 
-    }
-
-    @Override
-    public String getTitle() {
-        return TextUtils.isEmpty(getParam()) ? "Screen Zoom" : "Screenshot";
-    }
-
-    @Override
-    public int getBodyLayoutId() {
-        return R.layout.tool_zoom;
     }
 }
