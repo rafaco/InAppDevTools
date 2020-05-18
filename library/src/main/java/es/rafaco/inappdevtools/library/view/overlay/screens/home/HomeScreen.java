@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2019 Rafael Acosta Alvarez
+ * Copyright 2018-2020 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,43 +19,57 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.home;
 
+import android.content.res.AssetManager;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
-//#ifdef ANDROIDX
-//@import androidx.recyclerview.widget.RecyclerView;
-//#else
-import android.support.v7.widget.RecyclerView;
-//#endif
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
+import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
+import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
+import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.cards.WideWidgetData;
+import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.device.TerminalScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.info.InfoOverviewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.app.AppScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-public class HomeScreen extends Screen {
+public class HomeScreen extends AbstractFlexibleScreen {
+
+    private TimerTask updateTimerTask;
+    private Timer updateTimer;
 
     public HomeScreen(ScreenManager manager) {
         super(manager);
@@ -67,194 +81,288 @@ public class HomeScreen extends Screen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.flexible_container; }
+    public int getSpanCount() {
+        return 2;
+    }
 
-    @Override
-    protected void onCreate() {
-        //Nothing needed
+    public FlexAdapter.Layout getLayout(){
+        return FlexAdapter.Layout.STAGGERED;
     }
 
     @Override
-    protected void onStart(ViewGroup view) {
-        List<Object> data = initData();
-        initAdapter(data);
+    protected void onStart(ViewGroup bodyView) {
+        super.onStart(bodyView);
+
+        //TODO: Home icon resize not working on first navigation
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getScreenManager().getScreenLayer().toggleBackButton(false);
+            }
+        }, 100);
     }
 
-    private List<Object> initData() {
+    @Override
+    protected void onAdapterStart() {
+        setFullWidthSolver(new FlexAdapter.FullWidthSolver() {
+            @Override
+            public Boolean isFullWidth(int position) {
+                return false;//position == 0;
+            }
+        });
+        updateAdapter(getFlexibleData());
+    }
+
+    private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
         AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
+        BuildInfoDocumentGenerator buildReporter = ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO));
+        RepoInfoDocumentGenerator repoReporter = ((RepoInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.REPO_INFO));
         DeviceInfoDocumentGenerator deviceHelper = ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO));
+        OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
+        ConfigManager configManager = IadtController.get().getConfig();
 
-        String welcome = appHelper.getFormattedAppLong() + "\n"
-                + deviceHelper.getFormattedDeviceLong();
-        data.add(welcome);
-
-        data.add(new ButtonFlexData("Info",
-                R.drawable.ic_info_white_24dp,
-                new Runnable() {
+        String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
+        if (TextUtils.isEmpty(teamName))
+            teamName = "Resources";
+        WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
+                //.setIcon(R.string.gmd_people)
+                .setMainContent(teamName)
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(InfoOverviewScreen.class);
+                        OverlayService.performNavigation(TeamScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(teamData);
 
-        data.add(new ButtonFlexData("Run",
-                R.drawable.ic_run_white_24dp,
-                new Runnable() {
+        WidgetData deviceData = new WidgetData.Builder("Device")
+                //.setIcon(R.string.gmd_phone)
+                .setMainContent(osHelper.getOneLineOverview())
+                .setSecondContent(deviceHelper.getFormattedDevice())
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(RunScreen.class);
+                        OverlayService.performNavigation(DeviceScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(deviceData);
 
-        data.add(new ButtonFlexData("Report",
-                R.drawable.ic_send_white_24dp,
-                new Runnable() {
+        WidgetData appData = new WidgetData.Builder("App")
+                //.setIcon(R.string.gmd_apps)
+                .setMainContent(appHelper.getAppName())
+                .setSecondContent(appHelper.getFormattedVersionShort()
+                        + " " + buildReporter.getFriendlyBuildType())
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(ReportScreen.class);
+                        OverlayService.performNavigation(AppScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(appData);
 
-        data.add("Inspect");
-        data.add(new ButtonFlexData("Build",
-                R.drawable.ic_build_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        long currentSessionId = IadtController.get().getSessionManager()
-                                .getCurrentUid();
-                        OverlayService.performNavigation(BuildDetailScreen.class,
-                                currentSessionId + "");
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Session",
-                R.drawable.ic_timeline_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        long currentSessionId = IadtController.get().getSessionManager()
-                                .getCurrentUid();
-                        OverlayService.performNavigation(SessionDetailScreen.class,
-                                currentSessionId + "");
-                    }
-                }));
-
-        ButtonFlexData sources = new ButtonFlexData("Sources",
-                R.drawable.ic_local_library_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(SourcesScreen.class);
-                    }
-                });
-        if (!IadtController.get().getSourcesManager().canSourceInspection()){
-            sources.setColor(R.color.rally_gray);
-            sources.setPerformer(new Runnable() {
-                @Override
-                public void run() {
-                    Iadt.showMessage("Source inspection is DISABLED");
-                }
-            });
+        AssetManager assets = getContext().getAssets();
+        String[] list = new String[0];
+        try {
+            list = assets.list("");
+        } catch (IOException e) {
+            FriendlyLog.logException("Error counting assets", e);
         }
-        data.add(sources);
-
         
-        data.add(new ButtonFlexData("View",
-                R.drawable.ic_view_carousel_white_24dp,
-                new Runnable() {
+        String repoMain, repoSecond;
+        boolean isGitInfo = repoReporter.isGitEnabled();
+        if (!isGitInfo){
+            repoMain = "No Git Info";
+            repoSecond = list.length + " assets";
+        }
+        else{
+            repoMain = repoReporter.getBranchAndTag();
+            Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
+            repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
+        }
+        WidgetData sourcesData = new WidgetData.Builder("Sources")
+                .setMainContent(repoMain)
+                .setSecondContent(repoSecond)
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SourceCodeScreen.class);
+                    }
+                })
+                .build();
+        data.add(sourcesData);
+
+        WidgetData viewData = new WidgetData.Builder("View")
+                //.setIcon(R.string.gmd_view_carousel)
+                .setMainContent(IadtController.get().getActivityTracker().getCurrentName())
+                .setSecondContent("3 fragments")
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(ViewScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(viewData);
 
-        data.add(new ButtonFlexData("Logs",
-                R.drawable.ic_format_align_left_white_24dp,
-                new Runnable() {
+        WidgetData jvmData = new WidgetData.Builder("Logic")
+                //.setIcon(R.string.gmd_view_carousel)
+                .setMainContent(RunningThreadsUtils.getCount() + " threads")
+                .setSecondContent(RunningProcessesUtils.getCount() + " process and " + RunningTasksUtils.getCount() + " tasks")
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(LogicScreen.class);
+                    }
+                })
+                .build();
+        data.add(jvmData);
+
+        int logsCount = IadtController.getDatabase().friendlyDao().count(); //TODO: filter by session
+        WidgetData logsData = new WidgetData.Builder("Logs")
+                //.setIcon(R.string.gmd_view_carousel)
+                .setMainContent(Humanizer.plural(logsCount, "log"))
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(LogScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(logsData);
 
-        data.add(new ButtonFlexData("Network",
-                R.drawable.ic_cloud_queue_white_24dp,
-                new Runnable() {
+        NetSummaryDao netSummaryDao = IadtController.getDatabase().netSummaryDao();
+        long currentSession = IadtController.get().getSessionManager().getCurrentUid();
+        int netCount = netSummaryDao.countBySession(currentSession);
+        long netSize = netSummaryDao.sizeBySession(currentSession);
+        int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
+        WidgetData networkData = new WidgetData.Builder("Network")
+                //.setIcon(R.string.gmd_view_carousel)
+                .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
+                .setSecondContent(netCount +" req. and "
+                        + Humanizer.plural(netErrors, "error"))
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(NetScreen.class);
                     }
-                }));
+                })
+                .build();
+        data.add(networkData);
 
-        data.add(new ButtonFlexData("Storage",
-                R.drawable.ic_storage_white_24dp,
-                new Runnable() {
+        int sessionCount = IadtController.getDatabase().sessionDao().count();
+        int buildCount = IadtController.getDatabase().buildDao().count();
+        WidgetData historyData = new WidgetData.Builder("History")
+                //.setIcon(R.string.gmd_view_carousel)
+                .setMainContent(Humanizer.plural(sessionCount, "Session"))
+                .setSecondContent(Humanizer.plural(buildCount, "Build"))
+                .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        //OverlayService.performNavigation(StorageScreen.class);
+                        OverlayService.performNavigation(HistoryScreen.class);
+                    }
+                })
+                .build();
+        data.add(historyData);
+
+        WidgetData storageData = new WidgetData.Builder("Storage")
+                //.setIcon(R.string.gmd_view_carousel)
+                //TODO: it fails on lollipop 1
+                //.setMainContent(InternalFileReader.getTotalSizeFormatted())
+                .setSecondContent("3 DB, 4 SP & 1234 files")
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
                         HomeScreen.this.getScreenManager().hide();
                         PandoraBridge.storage();
                     }
-                }));
+                })
+                .build();
+        data.add(storageData);
 
-        data.add(new ButtonFlexData("Terminal",
-                R.drawable.ic_computer_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(TerminalScreen.class);
-                    }
-                }));
-
-
-
-        data.add("");
-        data.add(new ButtonFlexData("Builds",
-                R.drawable.ic_build_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(BuildsScreen.class);
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Sessions",
-                R.drawable.ic_timeline_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(SessionsScreen.class);
-                    }
-                }));
-
-        data.add(new ButtonFlexData("More",
-                R.drawable.ic_more_vert_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(MoreScreen.class);
-                    }
-                }));
+        if (isDebug()){
+            data.add(new ButtonFlexData("More",
+                    R.drawable.ic_more_vert_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() { OverlayService.performNavigation(MoreScreen.class);
+                        }
+                    }));
+        }
 
         return data;
     }
 
-    private void initAdapter(List<Object> data) {
-        FlexAdapter adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
-        RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
+
+    //region [ UPDATER ]
+
+    @Override
+    protected void onPause() {
+        cancelTimerTask();
+    }
+
+    @Override
+    protected void onResume() {
+        startUpdateTimer();
     }
 
     @Override
     protected void onStop() {
-        //Nothing needed
+        //Deliberately empty
     }
 
     @Override
     protected void onDestroy() {
-        //Nothing needed
+        cancelTimerTask();
     }
+
+    //endregion
+
+    //region [ UPDATE TIMER ]
+
+    private void startUpdateTimer() {
+        if (updateTimerTask!=null){
+            destroyTimer();
+        }
+        updateTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAdapter(getFlexibleData());
+                        //if (isDebug()) Log.v(Iadt.TAG, "Home3Screen updated");
+                        startUpdateTimer();
+                    }
+                });
+            }
+        };
+        updateTimer = new Timer("Iadt-HomeUpdate-Timer", false);
+        updateTimer.schedule(updateTimerTask, 5 * 1000L);
+    }
+
+
+    private void cancelTimerTask() {
+        if (updateTimerTask!=null){
+            updateTimerTask.cancel();
+            updateTimerTask = null;
+        }
+    }
+
+    private void destroyTimer() {
+        cancelTimerTask();
+        if (updateTimer!=null){
+            updateTimer.cancel();
+            updateTimer.purge();
+            updateTimer = null;
+        }
+    }
+
+    //endregion
 }

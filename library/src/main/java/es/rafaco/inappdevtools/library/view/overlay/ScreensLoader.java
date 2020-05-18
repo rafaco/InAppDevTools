@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.DeviceScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.Home3Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.home.HomeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.BroadcastReceiversScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ContentProvidersScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
@@ -72,7 +72,7 @@ public class ScreensLoader {
      */
     static void registerAllScreens(ScreenManager screenManager) {
         //HOME
-        screenManager.registerScreen(Home3Screen.class);
+        screenManager.registerScreen(HomeScreen.class);
 
         //TOPBAR
         screenManager.registerScreen(ConfigScreen.class);

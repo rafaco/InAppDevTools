@@ -57,25 +57,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - Home 2 is a proposal in progress\n" +
-                " - All other items has been mixed at Log Screen\n");
-
-        data.add(new ButtonFlexData("Original Home",
-                R.drawable.ic_format_list_bulleted_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(HomeScreen.class);
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Home 3",
-                R.drawable.ic_timeline_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(Home3Screen.class);
-                    }
-                }));
+        data.add("Playgrounds and works in progress:");
 
 
         data.add("");
