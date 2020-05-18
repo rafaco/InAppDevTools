@@ -337,7 +337,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
                         // FriendlyLog.logException("onQueryTextChange with: " + query, ignored);
                     }
                 } else {
-                    codeViewer.findAllAsync(null);
+                    codeViewer.findAllAsync("");
                     try {
                         Method m = WebView.class.getMethod(SET_FIND_IS_UP, Boolean.TYPE);
                         m.invoke(codeViewer, false);
@@ -352,7 +352,7 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         toolbarSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                codeViewer.findAllAsync(null);
+                codeViewer.findAllAsync("");
                 try {
                     Method m = WebView.class.getMethod(SET_FIND_IS_UP, Boolean.TYPE);
                     m.invoke(codeViewer, false);
