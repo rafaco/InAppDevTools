@@ -24,8 +24,10 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
@@ -33,6 +35,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScreen;
 
 public class BuildDetailScreen extends AbstractDocumentScreen {
 
@@ -76,6 +79,15 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     private LinearGroupFlexData getButtonList() {
         LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
         linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonFlexData(
+                "Repo status",
+                R.drawable.ic_code_white_24dp,
+                R.color.rally_blue_med,
+                new Runnable() {
+                    @Override
+                    public void run() {OverlayService.performNavigation(RepoInfoScreen.class, getDocumentParam() + "");
+                    }
+                }));
         linearGroupData.add(new ButtonFlexData(
                 "Sessions",
                 R.drawable.ic_timeline_white_24dp,

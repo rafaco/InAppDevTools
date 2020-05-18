@@ -112,8 +112,9 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             builder.add(getGitUnavailableInfo());
         }
         else{
-            builder.add(getGitRepoInfo())
-                    .add(getGitUserInfo())
+            builder.add(getGitUserInfo())
+                    .add(getGitRepoInfo())
+                    .add(getGitLastCommitInfo())
                     .add(getGitLocalRepoInfo())
                     .add(getGitLocalChangesInfo());
         }
@@ -131,7 +132,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public DocumentSectionData getGitUserInfo() {
-        DocumentSectionData group = new DocumentSectionData.Builder("Local User")
+        DocumentSectionData group = new DocumentSectionData.Builder("Git User")
                 .setIcon(R.string.gmd_person)
                 .setOverview(gitInfo.getString(GitInfo.USER_NAME))
                 .add("Git name", gitInfo.getString(GitInfo.USER_NAME))
@@ -151,21 +152,13 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     public DocumentSectionData getGitRepoInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Remote repo")
-                .setIcon(R.string.gmd_assignment_turned_in);
-
-        if (!isGitEnabled()){
-            group.setOverview("N/A");
-            group.add("No git repository found at build folder");
-            return group.build();
-        }
+                .setIcon(R.string.gmd_public);
 
         group.setOverview(gitInfo.getString(GitInfo.LOCAL_BRANCH) + "-" + gitInfo.getString(GitInfo.TAG_LAST));
         group.add("Git url", gitInfo.getString(GitInfo.REMOTE_URL))
                 .add("Branch", gitInfo.getString(GitInfo.LOCAL_BRANCH))
                 .add("Last Tag", gitInfo.getString(GitInfo.TAG_LAST))
-                .add("Tag Info", gitInfo.getString(GitInfo.TAG_INFO))
-                .add(" - Last commit:")
-                .add(gitInfo.getString(GitInfo.REMOTE_LAST).replace("\n\n", "\n-> "));
+                .add("Tag Info", gitInfo.getString(GitInfo.TAG_INFO));
         group.addButton(new ButtonBorderlessFlexData("Browse repo",
                 R.drawable.ic_public_white_24dp,
                 new Runnable() {
@@ -174,6 +167,17 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                         ExternalIntentUtils.viewUrl(gitInfo.getString(GitInfo.REMOTE_URL));
                     }
                 }));
+        return group.build();
+    }
+
+    public DocumentSectionData getGitLastCommitInfo() {
+        DocumentSectionData.Builder group = new DocumentSectionData.Builder("Last remote commit")
+                .setIcon(R.string.gmd_assignment_turned_in);
+
+        String commitId = Humanizer.removeHead(gitInfo.getString(GitInfo.REMOTE_LAST), "commit ");
+        commitId = Humanizer.truncate(commitId, 8, "");
+        group.setOverview(commitId);
+        group.add(gitInfo.getString(GitInfo.REMOTE_LAST));
         return group.build();
     }
 

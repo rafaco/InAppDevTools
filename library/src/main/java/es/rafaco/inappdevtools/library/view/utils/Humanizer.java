@@ -73,8 +73,12 @@ public class Humanizer {
     }
 
     public static String truncate(String text, int maxLength) {
-        if (!TextUtils.isEmpty(text) && text.length()>3-1 && text.length()>maxLength){
-            return text.substring(0, maxLength-3-1) + "...";
+        return truncate(text, maxLength, "...");
+    }
+    public static String truncate(String text, int maxLength, String tail) {
+        int tailLength = tail.length();
+        if (!TextUtils.isEmpty(text) && text.length()>tailLength-1 && text.length()>maxLength){
+            return text.substring(0, maxLength-tailLength-1) + tail;
         }
         return text;
     }
