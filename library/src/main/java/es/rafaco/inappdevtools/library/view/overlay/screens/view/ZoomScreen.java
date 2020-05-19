@@ -32,7 +32,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.cards.HeaderIconFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
@@ -168,10 +168,6 @@ public class ZoomScreen extends Screen {
         cardData.setElevationDp(12);
         cardData.setVerticalMargin(false);
         cardData.setHorizontalMargin(false);
-        /*int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 10);
-        int topMargin = (int) UiUtils.dpToPx(getContext(), 4);
-        int buttonMargin = (int) UiUtils.dpToPx(getContext(), 200);
-        cardData.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);*/
         cardData.setPerformer(new Runnable() {
             @Override
             public void run() {
@@ -179,7 +175,7 @@ public class ZoomScreen extends Screen {
             }
         });
 
-        CardHeaderFlexData headerData = new CardHeaderFlexData.Builder(title)
+        HeaderIconFlexData headerData = new HeaderIconFlexData.Builder(title)
                 .setExpandable(true)
                 .setExpanded(true)
                 .build();

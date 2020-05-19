@@ -28,8 +28,6 @@ import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexViewHolder;
 
 public class CollapsibleFlexViewHolder extends FlexItemViewHolder {
 
@@ -62,11 +60,10 @@ public class CollapsibleFlexViewHolder extends FlexItemViewHolder {
             headerContainer.setVisibility(View.GONE);
         else{
             headerContainer.removeAllViews();
-            //TODO: implement expandable
-            if (data.getHeader() instanceof CardHeaderFlexData){
-                ((CardHeaderFlexData)data.getHeader()).setExpanded(data.isExpanded());
+            if (data.getHeader() instanceof ICollapsibleData){
+                ((ICollapsibleData)data.getHeader()).setExpanded(data.isExpanded());
             }
-            FlexDescriptor desc = FlexLoader.getDescriptor(CardHeaderFlexData.class);
+            FlexDescriptor desc = FlexLoader.getDescriptor(data.getHeader().getClass());
             if (desc != null){
                 headerViewHolder = desc.addToView(data.getHeader(), headerContainer);
             }
@@ -113,9 +110,8 @@ public class CollapsibleFlexViewHolder extends FlexItemViewHolder {
         //data.getHeader().setExpanded(isExpanded);
         //headerViewHolder.bindTo(data.getHeader(), -1);
 
-        //TODO: implement expandable
-        if (headerViewHolder instanceof CardHeaderFlexViewHolder){
-            CardHeaderFlexViewHolder cardHeaderViewHolder = (CardHeaderFlexViewHolder) headerViewHolder;
+        if (headerViewHolder instanceof ICollapsibleViewHolder){
+            ICollapsibleViewHolder cardHeaderViewHolder = (ICollapsibleViewHolder) headerViewHolder;
             cardHeaderViewHolder.applyExpandedState(isExpanded);
         }
 
@@ -127,5 +123,14 @@ public class CollapsibleFlexViewHolder extends FlexItemViewHolder {
             if (data.isSeparator()) separatorContainer.setVisibility(View.VISIBLE);
             contentContainer.setVisibility(View.VISIBLE);
         }
+    }
+
+    public interface ICollapsibleViewHolder {
+        void applyExpandedState(Boolean isExpanded);
+    }
+
+    public interface ICollapsibleData {
+        void setExpanded(boolean expanded);
+        boolean isExpanded();
     }
 }

@@ -41,7 +41,8 @@ public class IconUtils {
     public static final String MATERIAL = ROOT + "MaterialIcons-Regular.ttf";
     //public static final String FONTAWESOME = ROOT + "fa-solid-900.ttf";
 
-    //Disabled icons at TextViews. A workaround to allow Layout Inspection with AndroidStudio
+    //Disabled all usages of font icons.
+    //TODO: Layout Inspection tool from AndroidStudio get weird characters, this is a workaround
     private static final boolean DISABLED = false;
     private static final String DISABLED_REPLACEMENT = "@";
 
@@ -87,6 +88,14 @@ public class IconUtils {
         textView.setText(stringIcon);
     }
 
+    public static void applyToTextView(TextView view, int icon, int color) {
+        if (color>0) {
+            int contextualizedColor = ContextCompat.getColor(view.getContext(), color);
+            view.setTextColor(contextualizedColor);
+        }
+
+        set(view, icon);
+    }
     public static void applyToImageView(ImageView view, int icon, int color) {
         view.setImageDrawable(UiUtils.getDrawable(icon));
         if (color>0){

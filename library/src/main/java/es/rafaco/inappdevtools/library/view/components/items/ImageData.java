@@ -36,14 +36,17 @@ public class ImageData extends FlexData {
     Runnable performer;
 
     public ImageData(String imagePath) {
+        super();
         this.imagePath = imagePath;
     }
 
     public ImageData(Drawable imageDrawable) {
+        super();
         this.imageDrawable = imageDrawable;
     }
 
     public ImageData(Bitmap imageBitmap) {
+        super();
         this.imageBitmap = imageBitmap;
     }
 

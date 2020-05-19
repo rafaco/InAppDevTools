@@ -28,7 +28,7 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadGroupsUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.cards.HeaderIconFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.LinkItemData;
@@ -70,7 +70,7 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
 
         data.add(new OverviewData("Threads",
                 "Linux threads of execution",
-                R.string.gmd_developer_board,
+                R.string.gmd_line_style,
                 R.color.rally_white));
 
         List<ThreadGroup> runningGroupsItems = RunningThreadGroupsUtils.getList();
@@ -110,7 +110,7 @@ public class ThreadsScreen extends AbstractFlexibleScreen {
                 ));
             }
 
-            CardHeaderFlexData collapsibleHeader = new CardHeaderFlexData.Builder("")
+            HeaderIconFlexData collapsibleHeader = new HeaderIconFlexData.Builder("")
                     .setExpandable(true)
                     .setExpanded(false)
                     .setOverview(runningItems.size() + " threads")

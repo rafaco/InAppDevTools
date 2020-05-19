@@ -26,12 +26,14 @@ import android.widget.TextView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
-import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
+import es.rafaco.inappdevtools.library.view.components.base.FlexItemViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class CardHeaderFlexViewHolder extends FlexViewHolder {
+public class HeaderIconFlexViewHolder extends FlexItemViewHolder
+        implements CollapsibleFlexViewHolder.ICollapsibleViewHolder {
 
     protected final RelativeLayout headerArea;
     protected final TextView iconView;
@@ -40,7 +42,7 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
     protected final ImageView navIcon;
     protected boolean hiddenTitleWhenExpanded;
 
-    public CardHeaderFlexViewHolder(View view, FlexAdapter adapter) {
+    public HeaderIconFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
         this.headerArea = view.findViewById(R.id.header_area);
         this.iconView = view.findViewById(R.id.icon);
@@ -51,7 +53,9 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
 
     @Override
     public void bindTo(Object abstractData, final int position) {
-        final CardHeaderFlexData data = (CardHeaderFlexData) abstractData;
+        super.bindTo(abstractData, position);
+
+        final HeaderIconFlexData data = (HeaderIconFlexData) abstractData;
         if (data!=null){
             MarginUtils.setHorizontalMargin(itemView);
 
@@ -60,7 +64,7 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
         }
     }
 
-    private void bindHeader(CardHeaderFlexData data) {
+    private void bindHeader(HeaderIconFlexData data) {
         int icon = data.getIcon();
         if (icon>0){
             IconUtils.set(iconView, icon);
@@ -76,7 +80,7 @@ public class CardHeaderFlexViewHolder extends FlexViewHolder {
         navIcon.setVisibility(View.VISIBLE);
     }
 
-    private void bindExpandedState(CardHeaderFlexData data) {
+    private void bindExpandedState(HeaderIconFlexData data) {
         hiddenTitleWhenExpanded = data.isHiddenTitleWhenExpanded();
         if (data.isExpandable()) {
             applyExpandedState(data.isExpanded());

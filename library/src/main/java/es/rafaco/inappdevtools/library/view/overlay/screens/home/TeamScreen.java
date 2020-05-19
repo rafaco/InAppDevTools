@@ -41,8 +41,6 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
-import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
@@ -54,7 +52,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScre
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.ReportScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class TeamScreen extends AbstractFlexibleScreen {
 

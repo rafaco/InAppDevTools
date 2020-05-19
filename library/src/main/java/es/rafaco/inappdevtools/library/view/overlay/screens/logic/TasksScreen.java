@@ -65,7 +65,7 @@ public class TasksScreen extends AbstractFlexibleScreen {
 
         data.add(new OverviewData("Tasks",
                 "Stacks of activities readable by this app",
-                R.string.gmd_developer_board,
+                R.string.gmd_layers,
                 R.color.rally_white));
 
         List<ActivityManager.RunningTaskInfo> runningItems = RunningTasksUtils.getList();

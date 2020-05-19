@@ -31,6 +31,7 @@ public class SeparatorFlexData extends FlexData {
     }
 
     public SeparatorFlexData(boolean isHorizontal) {
+        super();
         this.isHorizontal = isHorizontal;
     }
 

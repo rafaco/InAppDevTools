@@ -20,7 +20,6 @@
 package es.rafaco.inappdevtools.library.view.components.items;
 
 import es.rafaco.inappdevtools.library.view.components.base.FlexData;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
 
 public class CollapsibleFlexData extends FlexData {
 

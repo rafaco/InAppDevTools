@@ -26,8 +26,9 @@ import android.support.annotation.StringRes;
 //#endif
 
 import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexViewHolder;
 
-public class CardHeaderFlexData extends FlexData {
+public class HeaderIconFlexData extends FlexData implements CollapsibleFlexViewHolder.ICollapsibleData {
 
     private String title;
     private int icon;
@@ -36,7 +37,8 @@ public class CardHeaderFlexData extends FlexData {
     private boolean isExpanded;
     private boolean hiddenTitleWhenExpanded;
 
-    public CardHeaderFlexData(CardHeaderFlexData.Builder builder) {
+    public HeaderIconFlexData(HeaderIconFlexData.Builder builder) {
+        super();
         this.title = builder.name;
         this.icon = builder.icon;
         this.overview = builder.overview;
@@ -98,33 +100,33 @@ public class CardHeaderFlexData extends FlexData {
             this.name = name;
         }
 
-        public CardHeaderFlexData.Builder setIcon(@StringRes int icon) {
+        public HeaderIconFlexData.Builder setIcon(@StringRes int icon) {
             this.icon = icon;
             return this;
         }
 
-        public CardHeaderFlexData.Builder setOverview(String text) {
+        public HeaderIconFlexData.Builder setOverview(String text) {
             this.overview = text;
             return this;
         }
 
-        public CardHeaderFlexData.Builder setExpandable(boolean isExpandable) {
+        public HeaderIconFlexData.Builder setExpandable(boolean isExpandable) {
             this.isExpandable = isExpandable;
             return this;
         }
 
-        public CardHeaderFlexData.Builder setExpanded(boolean isExpanded) {
+        public HeaderIconFlexData.Builder setExpanded(boolean isExpanded) {
             this.isExpanded = isExpanded;
             return this;
         }
 
-        public CardHeaderFlexData.Builder setHiddenTitleWhenExpanded(boolean hiddenTitleWhenExpanded) {
+        public HeaderIconFlexData.Builder setHiddenTitleWhenExpanded(boolean hiddenTitleWhenExpanded) {
             this.hiddenTitleWhenExpanded = hiddenTitleWhenExpanded;
             return this;
         }
 
-        public CardHeaderFlexData build() {
-            return new CardHeaderFlexData(this);
+        public HeaderIconFlexData build() {
+            return new HeaderIconFlexData(this);
         }
     }
 }

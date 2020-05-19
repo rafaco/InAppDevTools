@@ -27,8 +27,6 @@
     android:layout_gravity="center"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
     style="@style/IadtCard.Medium">
 
     <LinearLayout

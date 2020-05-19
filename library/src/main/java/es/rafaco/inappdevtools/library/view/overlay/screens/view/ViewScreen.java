@@ -21,13 +21,12 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 //#endif
 
 import java.util.ArrayList;
@@ -41,6 +40,8 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
+import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
@@ -48,8 +49,8 @@ import es.rafaco.inappdevtools.library.logic.session.FragmentTrack;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
-import es.rafaco.inappdevtools.library.view.components.cards.CardData;
-import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderDoubleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
@@ -57,16 +58,13 @@ import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
-import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.TasksScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public class ViewScreen extends Screen {
-
-    private FlexAdapter adapter;
-    private RecyclerView recyclerView;
+public class ViewScreen extends AbstractFlexibleScreen {
 
     public ViewScreen(ScreenManager manager) {
         super(manager);
@@ -78,15 +76,23 @@ public class ViewScreen extends Screen {
     }
 
     @Override
-    public int getBodyLayoutId() { return R.layout.flexible_container; }
+    public int getSpanCount(){
+        return 2;
+    }
+    
+    @Override
+    public boolean hasHorizontalMargin(){
+        return false;
+    }
 
     @Override
     protected void onCreate() {
     }
 
     @Override
-    protected void onStart(ViewGroup view) {
-
+    protected void onAdapterStart() {
+        List<Object> data = initData();
+        updateAdapter(data);
     }
 
     @Override
@@ -99,40 +105,39 @@ public class ViewScreen extends Screen {
 
     @Override
     protected void onResume() {
-        List<Object> data = initData();
-        initAdapter(data);
-    }
 
-    private void initAdapter(List<Object> data) {
-        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 2, data);
-        recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
     }
 
     private List<Object> initData() {
         List<Object> data = new ArrayList<>();
         ActivityTracker tracker = IadtController.get().getActivityTracker();
 
-        data.add(new OverviewData("Current view",
+        OverviewData overviewData = new OverviewData("Current view",
                 tracker.getCurrentName() + " on top",
                 R.string.gmd_visibility,
-                R.color.iadt_text_high));
+                R.color.iadt_text_high);
+        overviewData.setHorizontalMargin(true);
+        data.add(overviewData);
 
         HeaderFlexData header = new HeaderFlexData("Layout");
         header.setFullSpan(false);
+        header.setGravity(Gravity.CENTER);
         data.add(header);
 
         HeaderFlexData header2 = new HeaderFlexData("Output");
         header2.setFullSpan(false);
+        header2.setGravity(Gravity.CENTER);
         data.add(header2);
-
-
+        
         addVerticalButtons(data);
         addImage(data);
 
-        data.add(new HeaderFlexData("Components"));
-
+        HeaderFlexData header3 = new HeaderFlexData("Components");
+        header3.setGravity(Gravity.CENTER);
+        data.add(header3);
+        
         final long currentActivityUuid = tracker.getCurrentHistory().uuid;
+        addTasks(data);
         addActivity(data, tracker);
         addFragments(data, currentActivityUuid);
         addLogButtons(data);
@@ -143,6 +148,7 @@ public class ViewScreen extends Screen {
     private void addVerticalButtons(List<Object> data) {
         LinearGroupFlexData verticalButtons = new LinearGroupFlexData();
         verticalButtons.setFullSpan(false);
+        verticalButtons.setHorizontalMargin(true);
 
         verticalButtons.add(new ButtonFlexData("Inspect by touch",
                 R.drawable.ic_touch_app_white_24dp,
@@ -201,29 +207,66 @@ public class ViewScreen extends Screen {
         data.add(image);
     }
 
+    private void addTasks(List<Object> data) {
+        CardGroupFlexData cardData = new CardGroupFlexData();
+        cardData.setFullSpan(true);
+        cardData.setBgColorResource(R.color.iadt_surface_top);
+        cardData.setElevationDp(6);
+        cardData.setPerformer(new Runnable() {
+            @Override
+            public void run() {
+                OverlayService.performNavigation(TasksScreen.class);
+            }
+        });
+
+        HeaderDoubleFlexData headerData = new HeaderDoubleFlexData(
+                "Tasks",
+                "Stacks of activities",
+                R.string.gmd_layers,
+                null);
+        headerData.setNavCount(RunningTasksUtils.getCount());
+        cardData.add(headerData);
+        data.add(cardData);
+    }
+
     private void addActivity(List<Object> data, ActivityTracker tracker) {
         String activityOverview = "";
-        activityOverview += "Creation time: " + tracker.getCurrentActivityStartupTime()
-                + " ("+ tracker.getCurrentActivityCreationElapsed() + ")";
         activityOverview += Humanizer.newLine();
         activityOverview += "Last event: " + tracker.getCurrentActivityLastEvent();
         activityOverview += Humanizer.newLine();
         activityOverview += "Pkg: " + tracker.getCurrentActivityPackage();
         activityOverview += Humanizer.newLine();
         activityOverview += "Instances this session: " + tracker.getCurrentActivityInstanceCount();
+        activityOverview += Humanizer.newLine();
+        activityOverview += "Time on first creation: " + tracker.getCurrentActivityStartupTime()
+                + " ("+ tracker.getCurrentActivityCreationElapsed() + ")";
 
-        DocumentSectionData.Builder activityDataBuilder = new DocumentSectionData.Builder(tracker.getCurrentName())
-                .setIcon(R.string.gmd_view_carousel)
-                .setOverview(tracker.getCurrentHistory().getFormattedLastEvent())
-                .setExpandable(true)
-                .setExpanded(false)
-                .add(activityOverview);
+
+        CardGroupFlexData cardData = new CardGroupFlexData();
+        cardData.setFullSpan(true);
+        cardData.setBgColorResource(R.color.iadt_surface_top);
+        cardData.setElevationDp(6);
+
+        HeaderDoubleFlexData headerData = new HeaderDoubleFlexData(
+                tracker.getCurrentName(),
+                "Activity",
+                R.string.gmd_view_carousel,
+                null);
+
+        LinearGroupFlexData collapsedList = new LinearGroupFlexData();
+        TextFlexData contentData = new TextFlexData(activityOverview);
+        contentData.setSize(TextFlexData.Size.LARGE);
+        contentData.setHorizontalMargin(true);
+        collapsedList.add(contentData);
+
+        LinearGroupFlexData buttonList = new LinearGroupFlexData();
+        buttonList.setHorizontal(true);
 
         final String activitySrcPath = getSourcesManager()
                 .getPathFromClassName(tracker.getCurrentHistory().className);
         String activitySrcFile = Humanizer.getLastPart(activitySrcPath, "/");
         if (TextUtils.isEmpty(activitySrcFile)){
-            activityDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
+            buttonList.add(new ButtonBorderlessFlexData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -233,7 +276,7 @@ public class ViewScreen extends Screen {
                     }));
         }
         else{
-            activityDataBuilder.addButton(new ButtonBorderlessFlexData(activitySrcFile,
+            buttonList.add(new ButtonBorderlessFlexData(activitySrcFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -248,7 +291,7 @@ public class ViewScreen extends Screen {
         final String activityResPath = getSourcesManager().getLayoutPathFromLayoutName(activityLayoutName);
         String activityResFile = Humanizer.getLastPart(activityResPath, "/");
         if (TextUtils.isEmpty(activityResFile)) {
-            activityDataBuilder.addButton(new ButtonBorderlessFlexData("Unavailable",
+            buttonList.add(new ButtonBorderlessFlexData("Unavailable",
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -259,7 +302,7 @@ public class ViewScreen extends Screen {
             );
         }
         else{
-            activityDataBuilder.addButton(new ButtonBorderlessFlexData(activityResFile,
+            buttonList.add(new ButtonBorderlessFlexData(activityResFile,
                     R.drawable.ic_code_white_24dp,
                     new Runnable() {
                         @Override
@@ -270,14 +313,20 @@ public class ViewScreen extends Screen {
                     })
             );
         }
-        data.add(activityDataBuilder.build());
+        collapsedList.add(buttonList);
+
+        CollapsibleFlexData collapsibleData = new CollapsibleFlexData(headerData,
+                collapsedList, false);
+        cardData.add(collapsibleData);
+
+        data.add(cardData);
     }
 
     private void addFragments(List<Object> data, final long currentActivityUuuid) {
         //Fragments
         FragmentTracker fragmentTracker = IadtController.get().getFragmentTracker();
-        LinkedHashMap<Long, FragmentTrack> currentActivityHistory = fragmentTracker.getCurrentActivityHistory();
-        boolean hasFragments = (currentActivityHistory != null && currentActivityHistory.size() > 0);
+        LinkedHashMap<Long, FragmentTrack> fragmentHistory = fragmentTracker.getCurrentActivityHistory();
+        boolean hasFragments = (fragmentHistory != null && fragmentHistory.size() > 0);
         if (!hasFragments){
             DocumentSectionData.Builder fragmentsDataBuilder = new DocumentSectionData.Builder("No Fragments")
                     .setExpandable(false)
@@ -285,12 +334,16 @@ public class ViewScreen extends Screen {
             data.add(fragmentsDataBuilder.build());
         }
         else {
-            String fragmentOverview = currentActivityHistory.values().iterator().next().name;
-            if (currentActivityHistory.size() > 1) {
-                fragmentOverview += " and " + (currentActivityHistory.size() - 1) + "more";
+            String fragmentOverview = fragmentHistory.values().iterator().next().name;
+            if (fragmentHistory.size() == 1) {
+                fragmentOverview = "Only " + fragmentOverview;
             }
-            data.add(new CardData("Fragments",
-                    fragmentOverview,
+            else if (fragmentHistory.size() > 1) {
+                fragmentOverview += " and others";
+            }
+
+            /*data.add(new CardData(fragmentOverview,
+                    "Fragments",
                     R.string.gmd_extension,
                     new Runnable() {
                         @Override
@@ -298,14 +351,39 @@ public class ViewScreen extends Screen {
                             OverlayService.performNavigation(FragmentsScreen.class,
                                     currentActivityUuuid + "");
                         }
-                    }).setNavCount(currentActivityHistory.size()));
+                    }).setNavCount(fragmentHistory.size()));*/
+
+            CardGroupFlexData cardData = new CardGroupFlexData();
+            cardData.setFullSpan(true);
+            cardData.setBgColorResource(R.color.iadt_surface_top);
+            cardData.setElevationDp(6);
+            cardData.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    OverlayService.performNavigation(FragmentsScreen.class,
+                            currentActivityUuuid + "");
+                }
+            });
+
+            HeaderDoubleFlexData headerData = new HeaderDoubleFlexData(
+                    fragmentOverview,
+                    "Fragments",
+                    R.string.gmd_extension,
+                    null);
+            headerData.setNavCount(fragmentHistory.size());
+            cardData.add(headerData);
+            data.add(cardData);
         }
     }
 
     private void addLogButtons(List<Object> data) {
         //Logs links (TODO)
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
-        data.add(new ButtonFlexData(
+        LinearGroupFlexData buttonList = new LinearGroupFlexData();
+        buttonList.setHorizontal(true);
+        buttonList.setHorizontalMargin(true);
+
+        buttonList.add(new ButtonFlexData(
                 "Navigation",
                 R.drawable.ic_location_on_white_24dp,
                 R.color.rally_green_alpha,
@@ -325,7 +403,7 @@ public class ViewScreen extends Screen {
                                 LogScreen.buildParams(filter.getUiFilter()));
                     }
                 }));
-        data.add(new ButtonFlexData(
+        buttonList.add(new ButtonFlexData(
                 "Lifecycle",
                 R.drawable.ic_format_align_left_white_24dp,
                 R.color.rally_blue_med_alpha,
@@ -343,6 +421,7 @@ public class ViewScreen extends Screen {
                                 LogScreen.buildParams(uiFilter));
                     }
                 }));
+        data.add(buttonList);
     }
 
     private SourcesManager getSourcesManager() {

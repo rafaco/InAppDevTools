@@ -19,11 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.crash;
 
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,6 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
-import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
@@ -44,7 +41,7 @@ import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
-import es.rafaco.inappdevtools.library.view.components.cards.CardHeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.cards.HeaderIconFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
@@ -264,7 +261,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
         cardGroup.setBgColorResource(R.color.rally_orange_alpha);
         LinearGroupFlexData cardData = new LinearGroupFlexData();
 
-        CardHeaderFlexData headerData = new CardHeaderFlexData.Builder(title)
+        HeaderIconFlexData headerData = new HeaderIconFlexData.Builder(title)
                 .setExpandable(false)
                 .setExpanded(true)
                 //.setOverview("Exception")
@@ -315,7 +312,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
                 tracesTitle = firstSourcetrace.formatClassAndMethod();
             }
 
-            CardHeaderFlexData tracesHeaderData = new CardHeaderFlexData.Builder(tracesTitle)
+            HeaderIconFlexData tracesHeaderData = new HeaderIconFlexData.Builder(tracesTitle)
                     .setExpandable(true)
                     .setExpanded(false)
                     .setHiddenTitleWhenExpanded(true)

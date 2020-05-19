@@ -19,7 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-public class OverviewData {
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+
+public class OverviewData extends FlexData {
 
     String title;
     String content;
@@ -29,6 +31,7 @@ public class OverviewData {
     String performerText;
 
     public OverviewData(String title, String content, int icon, int color) {
+        super();
         this.title = title;
         this.content = content;
         this.icon = icon;
