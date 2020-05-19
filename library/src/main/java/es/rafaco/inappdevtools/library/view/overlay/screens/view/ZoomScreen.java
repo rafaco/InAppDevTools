@@ -46,7 +46,6 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.ImageLoaderAsyncTask;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class ZoomScreen extends Screen {
 
@@ -61,7 +60,8 @@ public class ZoomScreen extends Screen {
 
     @Override
     public String getTitle() {
-        return TextUtils.isEmpty(getParam()) ? "Live Zoom" : "Screenshot";
+        //return TextUtils.isEmpty(getParam()) ? "Live Zoom" : "Screenshot";
+        return "";
     }
 
     @Override
@@ -92,18 +92,18 @@ public class ZoomScreen extends Screen {
         if (screen == null){
             Bitmap bitmap = ScreenshotUtils.getBitmap(true);
             mImageView.setImageBitmap(bitmap);
-            mImageView.setMinZoom(0.9f);
+            //mImageView.setMinZoom(0.7f);
             mImageView.setMaxZoom(20f);
-            mImageView.setZoom(0.9f);
+            //mImageView.setZoom(0.9f);
         }
         else{
             new ImageLoaderAsyncTask(mImageView,
                     new Runnable() {
                         @Override
                         public void run() {
-                            mImageView.setMaxZoom(10f);
-                            mImageView.setMinZoom(0.9f);
-                            mImageView.setZoom(0.9f);
+                            mImageView.setMaxZoom(20f);
+                            //mImageView.setMinZoom(0.7f);
+                            //mImageView.setZoom(0.9f);
                         }
                     }).execute(screen.getPath());
         }
@@ -164,13 +164,14 @@ public class ZoomScreen extends Screen {
         }
 
         CardGroupFlexData cardData = new CardGroupFlexData();
-        cardData.setFullWidth(false);
+        cardData.setFullWidth(true);
         cardData.setElevationDp(12);
-        cardData.setVerticalMargin(true);
-        int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 10);
+        cardData.setVerticalMargin(false);
+        cardData.setHorizontalMargin(false);
+        /*int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 10);
         int topMargin = (int) UiUtils.dpToPx(getContext(), 4);
         int buttonMargin = (int) UiUtils.dpToPx(getContext(), 200);
-        cardData.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);
+        cardData.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);*/
         cardData.setPerformer(new Runnable() {
             @Override
             public void run() {

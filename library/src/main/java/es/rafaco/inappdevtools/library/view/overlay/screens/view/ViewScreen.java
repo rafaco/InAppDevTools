@@ -118,7 +118,15 @@ public class ViewScreen extends Screen {
                 R.string.gmd_visibility,
                 R.color.iadt_text_high));
 
-        data.add(new HeaderFlexData("Layout inspector"));
+        HeaderFlexData header = new HeaderFlexData("Layout");
+        header.setFullSpan(false);
+        data.add(header);
+
+        HeaderFlexData header2 = new HeaderFlexData("Output");
+        header2.setFullSpan(false);
+        data.add(header2);
+
+
         addVerticalButtons(data);
         addImage(data);
 

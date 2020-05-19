@@ -78,90 +78,112 @@ public class CardViewHolder extends FlexViewHolder {
 
             itemView.setActivated(true);
 
-            titleView.setText(data.getTitle());
+            bindTitle(data);
+            bindContent(data);
+            bindImage(data);
+            bindMainIcon(data);
+            bindBackgroundColor(data);
+            bindMainPerformer(data);
+            bindExtraPerformer(data);
+        }
+    }
+
+    private void bindTitle(CardData data) {
+        titleView.setText(data.getTitle());
+        if (data.getTitleColor()>0){
+            titleView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
+        }
+    }
+
+    private void bindContent(CardData data) {
+        contentView.setVisibility(TextUtils.isEmpty(data.getContent()) ? View.GONE : View.VISIBLE);
+        contentView.setText(data.getContent());
+    }
+
+    private void bindImage(CardData data) {
+        if (!TextUtils.isEmpty(data.getImagePath())){
+            new ImageLoaderAsyncTask(imageView).execute(data.getImagePath());
+        }
+        else {
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    private void bindMainIcon(CardData data) {
+        int icon = data.getIcon();
+        if (icon>0){
+            IconUtils.set(iconView, icon);
+            iconView.setVisibility(View.VISIBLE);
             if (data.getTitleColor()>0){
-                titleView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
+                iconView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
             }
+        }else{
+            iconView.setVisibility(View.GONE);
+        }
+    }
 
-            contentView.setVisibility(TextUtils.isEmpty(data.getContent()) ? View.GONE : View.VISIBLE);
-            contentView.setText(data.getContent());
-
-            if (!TextUtils.isEmpty(data.getImagePath())){
-                new ImageLoaderAsyncTask(imageView).execute(data.getImagePath());
+    private void bindBackgroundColor(CardData data) {
+        if (data.getBgColor()>0){
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColor()));
+        }
+        else if (data.getPerformer() == null){
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_bottom));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 2));
             }
-            else {
-                imageView.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mainContainer.setBackground(null);
             }
+        }
+    }
 
-            int icon = data.getIcon();
-            if (icon>0){
-                IconUtils.set(iconView, icon);
-                iconView.setVisibility(View.VISIBLE);
-                if (data.getTitleColor()>0){
-                    iconView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
+    private void bindMainPerformer(final CardData data) {
+        if (data.getPerformer() != null){
+            mainContainer.setClickable(true);
+            mainContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    data.getPerformer().run();
                 }
-            }else{
-                iconView.setVisibility(View.GONE);
-            }
+            });
 
-            if (data.getBgColor()>0){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColor()));
-            }
-            else if (data.getPerformer() == null){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_bottom));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 2));
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mainContainer.setBackground(null);
-                }
-            }
-
-            if (data.getPerformer() != null){
-                mainContainer.setClickable(true);
-                mainContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        data.getPerformer().run();
-                    }
-                });
-
-                if (data.getNavCount()>-1){
-                    navIcon.setText(data.getNavCount()+"");
-                }
-                else{
-                    int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
-                            : R.string.gmd_keyboard_arrow_right;
-                    IconUtils.set(navIcon, navIconRes);
-                }
-                navIcon.setVisibility(View.VISIBLE);
+            if (data.getNavCount()>-1){
+                navIcon.setText(data.getNavCount()+"");
             }
             else{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    cardView.setElevation(0);
-                }
-                mainContainer.setClickable(false);
-                mainContainer.setOnClickListener(null);
-                navIcon.setVisibility(View.GONE);
+                int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
+                        : R.string.gmd_keyboard_arrow_right;
+                IconUtils.set(navIcon, navIconRes);
             }
+            navIcon.setVisibility(View.VISIBLE);
+        }
+        else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cardView.setElevation(0);
+            }
+            mainContainer.setClickable(false);
+            mainContainer.setOnClickListener(null);
+            navIcon.setVisibility(View.GONE);
+        }
+    }
 
-            if (data.getNavAddRunnable() != null){
-                int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon() : R.string.gmd_add;
-                IconUtils.set(navAddIcon, navAddIconRes);
-                navAddContainer.setClickable(true);
-                navAddContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        data.getNavAddRunnable().run();
-                    }
-                });
-                navAddContainer.setVisibility(View.VISIBLE);
-                navAddSeparator.setVisibility(View.VISIBLE);
-            }
-            else{
-                navAddContainer.setVisibility(View.GONE);
-                navAddSeparator.setVisibility(View.GONE);
-            }
+    private void bindExtraPerformer(final CardData data) {
+        if (data.getNavAddRunnable() != null){
+            int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon() : R.string.gmd_add;
+            IconUtils.set(navAddIcon, navAddIconRes);
+            navAddContainer.setClickable(true);
+            navAddContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    data.getNavAddRunnable().run();
+                }
+            });
+            navAddContainer.setVisibility(View.VISIBLE);
+            navAddSeparator.setVisibility(View.VISIBLE);
+        }
+        else{
+            navAddContainer.setVisibility(View.GONE);
+            navAddSeparator.setVisibility(View.GONE);
         }
     }
 }
