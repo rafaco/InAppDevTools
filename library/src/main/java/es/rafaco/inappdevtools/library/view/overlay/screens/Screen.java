@@ -74,6 +74,9 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
         return true;
     }
     public boolean canGoBack() { return true; }
+    protected Class<? extends Screen> getMasterScreenClass(){
+        return null;
+    }
 
     public Screen(ScreenManager manager) {
         this.manager = manager;

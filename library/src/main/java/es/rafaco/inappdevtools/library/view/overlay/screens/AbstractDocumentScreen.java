@@ -36,6 +36,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.listener.OnlyOneExpandedListener;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 
@@ -86,9 +87,26 @@ public abstract class AbstractDocumentScreen extends Screen {
 
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
+        objectList.add(0, buildOverviewData(reportData));
         objectList.add(1, "");
         return objectList;
+    }
+
+    protected OverviewData buildOverviewData(DocumentData reportData){
+        if (getMasterScreenClass()==null){
+            return reportData.getOverviewData();
+        }
+        else{
+            OverviewData overviewData = reportData.getOverviewData();
+            overviewData.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    getScreenManager().goTo(getMasterScreenClass(), null);
+                }
+            });
+            //overviewData.setPerformerText("Show all");
+            return overviewData;
+        }
     }
 
     private void initAdapter(List<Object> data) {

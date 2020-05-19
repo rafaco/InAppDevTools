@@ -22,6 +22,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.app;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
 public class AppInfoScreen extends AbstractDocumentScreen {
 
@@ -37,5 +40,10 @@ public class AppInfoScreen extends AbstractDocumentScreen {
     @Override
     protected DocumentType getDocumentType() {
         return DocumentType.APP_INFO;
+    }
+
+    @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return BuildsScreen.class;
     }
 }

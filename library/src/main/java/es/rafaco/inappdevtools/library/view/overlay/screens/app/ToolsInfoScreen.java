@@ -30,6 +30,8 @@ import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexDat
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 
 public class ToolsInfoScreen extends AbstractDocumentScreen {
 
@@ -48,9 +50,14 @@ public class ToolsInfoScreen extends AbstractDocumentScreen {
     }
 
     @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return BuildsScreen.class;
+    }
+
+    @Override
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
+        objectList.add(0, buildOverviewData(reportData));
         objectList.add(1, getButtonList());
         objectList.add(2, "");
         return objectList;

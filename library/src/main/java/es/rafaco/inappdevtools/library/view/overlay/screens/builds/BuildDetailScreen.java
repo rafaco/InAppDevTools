@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScreen;
 
@@ -61,6 +62,11 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
         return Long.parseLong(getParam());
     }
 
+    @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return BuildsScreen.class;
+    }
+
     protected long getRealBuildIdParam() {
         long sessionId = (long) getDocumentParam();
         Build build = IadtController.getDatabase().buildDao().findBySessionId(sessionId);
@@ -70,7 +76,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     @Override
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
+        objectList.add(0, buildOverviewData(reportData));
         objectList.add(1, getButtonList());
         objectList.add(2, "");
         return objectList;

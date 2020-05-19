@@ -33,6 +33,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
@@ -56,6 +57,11 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
     }
 
     @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return SessionsScreen.class;
+    }
+
+    @Override
     protected Object getDocumentParam() {
         int sessionUid = Integer.parseInt(getParam());
         session = IadtController.get().getSessionManager().getSessionWithOverview(sessionUid);
@@ -65,7 +71,7 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
     @Override
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
+        objectList.add(0, buildOverviewData(reportData));
         objectList.add(1, getFirstButtonGroupData(session));
         objectList.add(2, getSecondButtonGroupData(session));
         objectList.add(3, "");

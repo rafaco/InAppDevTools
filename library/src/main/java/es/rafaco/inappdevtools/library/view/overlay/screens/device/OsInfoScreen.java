@@ -22,6 +22,8 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.device;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 
 public class OsInfoScreen extends AbstractDocumentScreen {
 
@@ -37,5 +39,10 @@ public class OsInfoScreen extends AbstractDocumentScreen {
     @Override
     protected DocumentType getDocumentType() {
         return DocumentType.OS_INFO;
+    }
+
+    @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return DeviceScreen.class;
     }
 }

@@ -25,6 +25,8 @@ public class OverviewData {
     String content;
     int icon;
     int color;
+    Runnable performer;
+    String performerText;
 
     public OverviewData(String title, String content, int icon, int color) {
         this.title = title;
@@ -63,5 +65,21 @@ public class OverviewData {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Runnable getPerformer() {
+        return performer;
+    }
+
+    public void setPerformer(Runnable performer) {
+        this.performer = performer;
+    }
+
+    public String getPerformerText() {
+        return performerText;
+    }
+
+    public void setPerformerText(String performerText) {
+        this.performerText = performerText;
     }
 }
