@@ -38,7 +38,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/iadt_shape_radius">
 
-        <com.ortiz.touchview.TouchImageView
+        <es.rafaco.compat.TouchImageView
             android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

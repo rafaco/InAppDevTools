@@ -24,8 +24,7 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.ortiz.touchview.TouchImageView;
-
+import es.rafaco.compat.TouchImageView;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;

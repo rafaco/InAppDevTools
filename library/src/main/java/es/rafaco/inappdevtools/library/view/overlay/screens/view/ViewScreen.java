@@ -21,12 +21,12 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.view;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.Gravity;
 
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 //#endif
 
 import java.util.ArrayList;
