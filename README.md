@@ -199,4 +199,3 @@ limitations under the License.
 This project modify, include and use products with separate copyright
 notices and license terms. For details, see [LICENSE](LICENSE)
 
-[![Analytics](https://ga-beacon.appspot.com/UA-152907025-2/readme)](https://github.com/rafaco/InAppDevTools)
