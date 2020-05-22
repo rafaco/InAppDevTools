@@ -80,7 +80,7 @@ public abstract class IadtDatabase extends RoomDatabase {
     public static final String DB_NAME = "inappdevtools.db";
     private static IadtDatabase INSTANCE;
 
-    public static IadtDatabase getInstance() {
+    public static IadtDatabase get() {
         if (INSTANCE == null) {
             Context context = IadtController.get().getContext();
             INSTANCE = Room.databaseBuilder(context, IadtDatabase.class, DB_NAME)

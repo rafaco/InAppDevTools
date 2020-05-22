@@ -34,6 +34,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -94,7 +95,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
 
         data.add("");
 
-        ScreenshotDao screenshotDao = IadtController.getDatabase().screenshotDao();
+        ScreenshotDao screenshotDao = IadtDatabase.get().screenshotDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         final List<Screenshot> screenshots = screenshotDao.getAll();
         for (int i = 0; i<screenshots.size(); i++) {

@@ -30,6 +30,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
@@ -244,7 +245,7 @@ public class LogFilterHelper {
                 result += "from previous session" + ", ";
             }
             else{
-                long target = IadtController.getDatabase().sessionDao().count() - uiFilter.getSessionInt() + 1L;
+                long target = IadtDatabase.get().sessionDao().count() - uiFilter.getSessionInt() + 1L;
                 Session selected = getSessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
             }
@@ -289,7 +290,7 @@ public class LogFilterHelper {
     }
 
     private SessionDao getSessionDao() {
-        return IadtController.getDatabase().sessionDao();
+        return IadtDatabase.get().sessionDao();
     }
 
     //endregion

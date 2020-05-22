@@ -44,6 +44,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDoc
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -223,7 +224,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(jvmData);
 
-        int logsCount = IadtController.getDatabase().friendlyDao().count(); //TODO: filter by session
+        int logsCount = IadtDatabase.get().friendlyDao().count(); //TODO: filter by session
         WidgetData logsData = new WidgetData.Builder("Logs")
                 //.setIcon(R.string.gmd_view_carousel)
                 .setMainContent(Humanizer.plural(logsCount, "log"))
@@ -236,7 +237,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(logsData);
 
-        NetSummaryDao netSummaryDao = IadtController.getDatabase().netSummaryDao();
+        NetSummaryDao netSummaryDao = IadtDatabase.get().netSummaryDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         int netCount = netSummaryDao.countBySession(currentSession);
         long netSize = netSummaryDao.sizeBySession(currentSession);
@@ -255,8 +256,8 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(networkData);
 
-        int sessionCount = IadtController.getDatabase().sessionDao().count();
-        int buildCount = IadtController.getDatabase().buildDao().count();
+        int sessionCount = IadtDatabase.get().sessionDao().count();
+        int buildCount = IadtDatabase.get().buildDao().count();
         WidgetData historyData = new WidgetData.Builder("History")
                 //.setIcon(R.string.gmd_view_carousel)
                 .setMainContent(Humanizer.plural(sessionCount, "Session"))

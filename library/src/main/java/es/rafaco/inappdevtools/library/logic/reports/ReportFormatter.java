@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.logic.reports;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -81,7 +82,7 @@ public class ReportFormatter {
                 status = "Running";
             }
             else if (report.getSessionId() > 0 &&
-                    IadtController.getDatabase().sessionDao()
+                    IadtDatabase.get().sessionDao()
                             .findById(report.getSessionId()).getCrashId() > 0){
                 status = "Crashed";
             }

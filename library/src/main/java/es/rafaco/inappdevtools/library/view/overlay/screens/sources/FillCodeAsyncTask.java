@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.sources;
 import android.os.AsyncTask;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.files.utils.InternalFileReader;
 
@@ -55,7 +56,7 @@ public class FillCodeAsyncTask extends AsyncTask<String, String, String> {
             long traceId = params.id;
             if (traceId>0){
                 //Calculate finalPath and finalLineNumber from traceId
-                Sourcetrace sourcetrace = IadtController.getDatabase().sourcetraceDao()
+                Sourcetrace sourcetrace = IadtDatabase.get().sourcetraceDao()
                         .findById(traceId);
                 params.path = IadtController.get().getSourcesManager()
                         .getPathFromClassName(sourcetrace.getClassName());

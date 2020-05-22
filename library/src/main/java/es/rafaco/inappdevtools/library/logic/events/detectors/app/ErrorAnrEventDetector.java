@@ -30,11 +30,11 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 
 public class ErrorAnrEventDetector extends EventDetector {
@@ -96,7 +96,7 @@ public class ErrorAnrEventDetector extends EventDetector {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                long anrId = IadtController.getDatabase().anrDao().insert(anr);
+                long anrId = IadtDatabase.get().anrDao().insert(anr);
                 FriendlyLog.logAnr(anrId, anr);
             }
         });

@@ -51,6 +51,7 @@ import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.Shell;
@@ -216,7 +217,7 @@ public class LogcatReaderService extends JobIntentService {
         if (filterByDate){
             String logcatTime = DateUtils.formatLogcatDate(LastLogcatUtil.get());
             command += " -t '" + logcatTime + "'";
-            previousStartDateLines = IadtController.getDatabase().friendlyDao().filterByDate(LastLogcatUtil.get());
+            previousStartDateLines = IadtDatabase.get().friendlyDao().filterByDate(LastLogcatUtil.get());
         }else{
             previousStartDateLines = new ArrayList<>();
         }
@@ -445,7 +446,7 @@ public class LogcatReaderService extends JobIntentService {
     private void onQueueProcessed(List<Friendly> logsToInsert) {
         if (!isCancelled){
             if (!logsToInsert.isEmpty()){
-                IadtController.getDatabase().friendlyDao().insertAll(logsToInsert);
+                IadtDatabase.get().friendlyDao().insertAll(logsToInsert);
 
                 insertedCounter += logsToInsert.size();
                 lastInsertTime = DateUtils.getLong();

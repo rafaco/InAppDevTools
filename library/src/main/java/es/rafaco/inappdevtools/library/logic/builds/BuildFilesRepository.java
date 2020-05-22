@@ -24,6 +24,7 @@ import android.content.Context;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppBuildConfig;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
@@ -98,7 +99,7 @@ public class BuildFilesRepository {
     }
 
     public static Build getBuildForSession(long sessionId){
-        return IadtController.getDatabase().buildDao().findBySessionId(sessionId);
+        return IadtDatabase.get().buildDao().findBySessionId(sessionId);
     }
 
     public static String getSubfolderForBuild(long buildId){

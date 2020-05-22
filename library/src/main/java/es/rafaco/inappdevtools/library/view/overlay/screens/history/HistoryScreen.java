@@ -24,6 +24,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -58,7 +59,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        int buildCount = IadtController.getDatabase().buildDao().count();
+        int buildCount = IadtDatabase.get().buildDao().count();
         data.add(new CardData("Builds",
                 "Compilations used and their changes",
                 R.string.gmd_build,
@@ -69,7 +70,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(buildCount));
 
-        int sessionCount = IadtController.getDatabase().sessionDao().count();
+        int sessionCount = IadtDatabase.get().sessionDao().count();
         data.add(new CardData("Sessions",
                 "From app open to fully close",
                 R.string.gmd_history,
@@ -80,7 +81,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(sessionCount));
 
-        int crashCount = IadtController.getDatabase().crashDao().count();
+        int crashCount = IadtDatabase.get().crashDao().count();
         data.add(new CardData("Crashes",
                 "Unexpected exits caused by an unhandled exception",
                 R.string.gmd_bug_report,
@@ -91,7 +92,7 @@ public class HistoryScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(crashCount));
 
-        int screenshotsCount = IadtController.getDatabase().screenshotDao().count();
+        int screenshotsCount = IadtDatabase.get().screenshotDao().count();
         data.add(new CardData("Screenshots",
                 "Taken by users or when crash happen",
                 R.string.gmd_photo_library,

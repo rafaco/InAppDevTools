@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.dialogs;
 import android.content.DialogInterface;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
 
@@ -58,7 +59,7 @@ public class CleanAllDialog extends IadtDialogBuilder {
     private void performCleanAll() {
         IadtController.get().beforeClose();
 
-        IadtController.getDatabase().deleteAll();
+        IadtDatabase.get().deleteAll();
         DevToolsPrefs.deleteAll();
         FileProviderUtils.deleteAll();
 

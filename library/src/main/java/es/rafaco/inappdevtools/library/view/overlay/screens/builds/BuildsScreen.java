@@ -30,11 +30,11 @@ import java.util.List;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
@@ -68,7 +68,7 @@ public class BuildsScreen extends Screen {
     }
 
     private List<CardData> initData() {
-        List<Build> builds = IadtController.getDatabase().buildDao().getAll();
+        List<Build> builds = IadtDatabase.get().buildDao().getAll();
 
         List<CardData> cards = new ArrayList<>();
         for (int i = 0; i < builds.size(); i++) {

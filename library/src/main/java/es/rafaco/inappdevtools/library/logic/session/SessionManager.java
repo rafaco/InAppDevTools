@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -60,11 +61,11 @@ public class SessionManager {
     }
 
     private SessionDao getDao() {
-        return IadtController.getDatabase().sessionDao();
+        return IadtDatabase.get().sessionDao();
     }
 
     private FriendlyDao getFriendlyDao() {
-        return IadtController.getDatabase().friendlyDao();
+        return IadtDatabase.get().friendlyDao();
     }
 
     public Context getContext() {

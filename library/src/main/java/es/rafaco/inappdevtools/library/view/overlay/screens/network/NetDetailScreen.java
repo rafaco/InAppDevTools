@@ -22,9 +22,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.network;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
 
@@ -47,7 +47,7 @@ public class NetDetailScreen extends AbstractDocumentScreen {
     @Override
     protected Object getDocumentParam() {
         int summaryUid = Integer.parseInt(getParam());
-        return IadtController.getDatabase().netSummaryDao().findById(summaryUid);
+        return IadtDatabase.get().netSummaryDao().findById(summaryUid);
     }
 
     @Override

@@ -44,8 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -224,7 +224,7 @@ public class LogFilterDialog {
         lastSelectedSessionId = (filter.getSessionInt() < 3)? sessions.get(filter.getSessionInt())
             : R.id.session_other;
 
-        final boolean isFirstSession = IadtController.getDatabase().sessionDao().count()==1;
+        final boolean isFirstSession = IadtDatabase.get().sessionDao().count()==1;
         if (isFirstSession) sessionGroup.findViewById(R.id.session_previous).setVisibility(View.GONE);
         sessionGroup.check(lastSelectedSessionId);
         sessionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

@@ -36,6 +36,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
@@ -149,7 +150,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         currentSessionCard.setTitleColor(R.color.rally_blue);
         data.add(currentSessionCard);
 
-        final Crash lastCrash = IadtController.getDatabase().crashDao().getLast();
+        final Crash lastCrash = IadtDatabase.get().crashDao().getLast();
         CardData crashCard;
         if (lastCrash==null){
             //TODO: use real pending, excluding reported ones
@@ -181,8 +182,8 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         }
         data.add(crashCard);
 
-        int sessions = IadtController.getDatabase().sessionDao().getAll().size();
-        int crashes = IadtController.getDatabase().crashDao().getAll().size();
+        int sessions = IadtDatabase.get().sessionDao().getAll().size();
+        int crashes = IadtDatabase.get().crashDao().getAll().size();
         CardData sessionCard = new CardData("Select other session",
                 sessions + " sessions available (" + crashes + " with crash)",
                 R.string.gmd_history,
@@ -239,7 +240,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         data.add(overview);
         data.add("Choose a crash:");
 
-        List<Crash> crashes = IadtController.getDatabase().crashDao().getAll();
+        List<Crash> crashes = IadtDatabase.get().crashDao().getAll();
         if (crashes.size()==0){
             CardData cardData = new CardData("No crash detected",
                     new Runnable() {
@@ -333,7 +334,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                 }));
         data.add("");
 
-        ScreenshotDao screenshotDao = IadtController.getDatabase().screenshotDao();
+        ScreenshotDao screenshotDao = IadtDatabase.get().screenshotDao();
         final List<Screenshot> screenshots = screenshotDao.getAll();
 
         data.addAll(screenshots);
@@ -542,9 +543,9 @@ public class NewReportScreen extends AbstractFlexibleScreen {
     private void saveReport() {
         report.setDate(DateUtils.getLong());
         if (report.getUid()>0){
-            IadtController.getDatabase().reportDao().update(report);
+            IadtDatabase.get().reportDao().update(report);
         }else{
-            long id = IadtController.getDatabase().reportDao().insert(report);
+            long id = IadtDatabase.get().reportDao().insert(report);
             report.setUid(id);
         }
     }

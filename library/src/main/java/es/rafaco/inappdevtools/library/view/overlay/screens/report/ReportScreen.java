@@ -36,6 +36,7 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
@@ -111,7 +112,7 @@ public class ReportScreen extends Screen {
                     }
                 }));
 
-        int reportsCount = IadtController.getDatabase().reportDao().getAll().size();
+        int reportsCount = IadtDatabase.get().reportDao().getAll().size();
         if (reportsCount>=1){
             data.add(new ButtonFlexData("Previous Reports",
                     R.drawable.ic_format_list_bulleted_white_24dp,

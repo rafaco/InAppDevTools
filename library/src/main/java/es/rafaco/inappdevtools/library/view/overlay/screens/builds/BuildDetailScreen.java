@@ -22,12 +22,10 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.builds;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
@@ -69,7 +67,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
 
     protected long getRealBuildIdParam() {
         long sessionId = (long) getDocumentParam();
-        Build build = IadtController.getDatabase().buildDao().findBySessionId(sessionId);
+        Build build = IadtDatabase.get().buildDao().findBySessionId(sessionId);
         return build.getUid();
     }
 

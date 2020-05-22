@@ -133,7 +133,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private IadtDatabase getDb(){
-        return IadtController.getDatabase();
+        return IadtDatabase.get();
     }
 
     private boolean isDebug(){

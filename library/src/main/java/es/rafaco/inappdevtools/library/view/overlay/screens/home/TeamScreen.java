@@ -41,6 +41,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
@@ -107,7 +108,7 @@ public class TeamScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(notesData);
 
-        int reportCount = IadtController.getDatabase().reportDao().count();
+        int reportCount = IadtDatabase.get().reportDao().count();
         data.add(new CardData("Reports",
                 "Send report to this team",
                 R.string.gmd_send,
@@ -124,7 +125,7 @@ public class TeamScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        int screenshotsCount = IadtController.getDatabase().screenshotDao().count();
+        int screenshotsCount = IadtDatabase.get().screenshotDao().count();
         data.add(new CardData("Screenshots",
                 "Taken on crash or manually",
                 R.string.gmd_photo_library,

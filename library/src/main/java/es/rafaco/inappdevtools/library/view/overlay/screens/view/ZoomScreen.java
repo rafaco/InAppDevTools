@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.TouchImageView;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
@@ -72,7 +73,7 @@ public class ZoomScreen extends Screen {
     protected void onCreate() {
         if (!TextUtils.isEmpty(getParam())){
             Long screenId = Long.parseLong(getParam());
-            screen = IadtController.getDatabase().screenshotDao().findById(screenId);
+            screen = IadtDatabase.get().screenshotDao().findById(screenId);
         }
     }
 
@@ -253,7 +254,7 @@ public class ZoomScreen extends Screen {
     }
 
     private void afterScreenshotTaken() {
-        long screenshotId = IadtController.getDatabase().screenshotDao()
+        long screenshotId = IadtDatabase.get().screenshotDao()
                 .getLast().getUid();
         OverlayService.performNavigation(ZoomScreen.class,
                 screenshotId + "");

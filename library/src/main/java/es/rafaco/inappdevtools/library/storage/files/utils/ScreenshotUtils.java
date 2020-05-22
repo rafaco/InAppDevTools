@@ -68,7 +68,7 @@ public class ScreenshotUtils {
     }
 
     private static IadtDatabase getDb() {
-        return IadtController.getDatabase();
+        return IadtDatabase.get();
     }
 
     private static Screenshot grabAndSaveFile(String subfolder, String filename) {
@@ -153,7 +153,7 @@ public class ScreenshotUtils {
                     new Runnable() {
                         @Override
                         public void run() {
-                            IadtController.getDatabase().screenshotDao().insert(screenshot);
+                            IadtDatabase.get().screenshotDao().insert(screenshot);
                         }
                     });
         }

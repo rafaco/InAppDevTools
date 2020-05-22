@@ -44,6 +44,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -197,7 +198,7 @@ public class WidgetViewHolder extends FlexViewHolder {
         chart.animateXY(0,0);
         //chart.animateXY(2000, 1000);
 
-        NetSummaryDao netSummaryDao = IadtController.getDatabase().netSummaryDao();
+        NetSummaryDao netSummaryDao = IadtDatabase.get().netSummaryDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         long errorsCount = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
         long successCount = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.COMPLETE);

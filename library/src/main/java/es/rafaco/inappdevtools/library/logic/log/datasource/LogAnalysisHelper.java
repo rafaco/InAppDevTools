@@ -27,9 +27,9 @@ import java.util.List;
 import android.arch.persistence.db.SimpleSQLiteQuery;
 //#endif
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogBackFilter;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 
 public class LogAnalysisHelper {
@@ -38,12 +38,12 @@ public class LogAnalysisHelper {
     }
 
     public List<AnalysisData> getSessionResult(){
-        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseSession();
+        List<AnalysisData> analysisData = IadtDatabase.get().friendlyDao().analiseSession();
         return analysisData;
     }
 
     public List<AnalysisData> getSeverityResult(){
-        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseSeverity();
+        List<AnalysisData> analysisData = IadtDatabase.get().friendlyDao().analiseSeverity();
         for (AnalysisData item: analysisData) {
             String name = item.getName();
             item.setName(FriendlyLog.convertCharToLongString(name) + " (" + name + ")");
@@ -52,23 +52,23 @@ public class LogAnalysisHelper {
     }
 
     public List<AnalysisData> getCategoryResult(){
-        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseEventCategory();
+        List<AnalysisData> analysisData = IadtDatabase.get().friendlyDao().analiseEventCategory();
         return analysisData;
     }
 
     public List<AnalysisData> getLogcatTagResult(){
-        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseLogcatTag();
+        List<AnalysisData> analysisData = IadtDatabase.get().friendlyDao().analiseLogcatTag();
         return analysisData;
     }
 
     public List<AnalysisData> getCurrentFilterOverview(LogBackFilter backFilter) {
         LogQueryHelper helper = new LogQueryHelper(backFilter);
         SimpleSQLiteQuery currentFilterSize = helper.getFilterSizeQuery();
-        List<AnalysisData> analysisData = IadtController.getDatabase().friendlyDao().analiseWithQuery(currentFilterSize);
+        List<AnalysisData> analysisData = IadtDatabase.get().friendlyDao().analiseWithQuery(currentFilterSize);
         return analysisData;
     }
 
     public int getTotalLogSize() {
-        return IadtController.getDatabase().friendlyDao().count();
+        return IadtDatabase.get().friendlyDao().count();
     }
 }

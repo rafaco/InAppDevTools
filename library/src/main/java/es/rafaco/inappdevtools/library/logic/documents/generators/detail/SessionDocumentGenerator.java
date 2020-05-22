@@ -33,6 +33,7 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -175,7 +176,7 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
         LogFilterHelper logFilterHelper = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         logFilterHelper.setSessionById(session.getUid());
         LogQueryHelper logQueryHelper = new LogQueryHelper(logFilterHelper.getBackFilter());
-        FriendlyDao dao = IadtController.getDatabase().friendlyDao();
+        FriendlyDao dao = IadtDatabase.get().friendlyDao();
         List<Friendly> rawData = dao.filterListWithQuery(logQueryHelper.getFilterQuery());
         int count = 0;
         for (Friendly step: rawData) {

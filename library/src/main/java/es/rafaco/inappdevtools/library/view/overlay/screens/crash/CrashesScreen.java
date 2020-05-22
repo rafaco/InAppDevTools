@@ -38,6 +38,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.dialogs.ForceCrashDialog;
@@ -75,7 +76,7 @@ public class CrashesScreen extends AbstractFlexibleScreen {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                List<Crash> crashes = IadtController.getDatabase().crashDao().getAll();
+                List<Crash> crashes = IadtDatabase.get().crashDao().getAll();
                 final List<Object> array = prepareData(crashes);
                 ThreadUtils.runOnMain(new Runnable() {
                     @Override
@@ -121,7 +122,7 @@ public class CrashesScreen extends AbstractFlexibleScreen {
                 requestData();
             }
         };
-        tracker = IadtController.get().getDatabase().getInvalidationTracker();
+        tracker = IadtDatabase.get().getInvalidationTracker();
         tracker.addObserver(crashObserver);
     }
 

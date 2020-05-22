@@ -24,9 +24,9 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -56,7 +56,7 @@ public class ReportsScreen extends AbstractFlexibleScreen {
         data.add("");
         data.add("Select report to edit:");
         data.add("");
-        List<Report> reports = IadtController.getDatabase().reportDao().getAll();
+        List<Report> reports = IadtDatabase.get().reportDao().getAll();
         for (int i = 0; i<reports.size(); i++) {
             final Report report = reports.get(i);
             CardData cardData = new CardData(buildTitleString(report),

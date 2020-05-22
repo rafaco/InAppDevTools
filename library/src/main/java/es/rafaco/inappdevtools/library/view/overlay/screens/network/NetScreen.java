@@ -51,6 +51,7 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.external.chuck.HttpBinService;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
@@ -137,7 +138,7 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
                 .setPageSize(25 * 2)
                 .build();
 
-        NetSummaryDao dao =IadtController.getDatabase().netSummaryDao();
+        NetSummaryDao dao = IadtDatabase.get().netSummaryDao();
         dataSourceFactory = new NetDataSourceFactory(dao, filter);
 
         LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig);

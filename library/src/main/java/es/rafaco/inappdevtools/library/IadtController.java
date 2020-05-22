@@ -138,11 +138,10 @@ public final class IadtController {
         dialogManager = new DialogManager((context));
 
         if (isDebug()){
-            ThreadUtils.runOnBack("Iadt-InitBack",
-                    new Runnable() {
+            ThreadUtils.runOnBack("Iadt-InitBack", new Runnable() {
                 @Override
                 public void run() {
-                    IadtDatabase.getInstance().printOverview();
+                    IadtDatabase.get().printOverview();
                 }
             });
         }
@@ -252,10 +251,6 @@ public final class IadtController {
 
     public OverlayHelper getOverlayHelper() {
         return overlayHelper;
-    }
-
-    public static IadtDatabase getDatabase() {
-        return IadtDatabase.getInstance();
     }
 
     public boolean isEnabled() {

@@ -32,6 +32,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
@@ -95,7 +96,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
 
     private Crash getData() {
         Crash result = null;
-        CrashDao crashDao = IadtController.getDatabase().crashDao();
+        CrashDao crashDao = IadtDatabase.get().crashDao();
         result = (isJustCrashed()) ? crashDao.getLast() : crashDao.findById(getCrashIdFromParam());
         return result;
     }
@@ -155,7 +156,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
 
     private void addImage(LinearGroupFlexData data, Crash crash) {
         long screenId = crash.getScreenId();
-        final Screenshot screenshot = IadtController.get().getDatabase().screenshotDao().findById(screenId);
+        final Screenshot screenshot = IadtDatabase.get().screenshotDao().findById(screenId);
         if (screenshot !=null && !TextUtils.isEmpty(screenshot.getPath())){
             ImageData image = new ImageData(screenshot.getPath());
             image.setIcon(R.drawable.ic_zoom_out_map_white_24dp);
@@ -184,7 +185,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        final long logId = IadtController.getDatabase().friendlyDao()
+        final long logId = IadtDatabase.get().friendlyDao()
                 .findLogIdByCrashId(crash.getUid());
 
         verticalButtons.add(new ButtonFlexData("Repro Steps",
@@ -215,7 +216,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
     }
 
     private TraceGrouper initTraceGrouper(Crash crash) {
-        List<Sourcetrace> traces = IadtController.getDatabase().sourcetraceDao().filterCrash(crash.getUid());
+        List<Sourcetrace> traces = IadtDatabase.get().sourcetraceDao().filterCrash(crash.getUid());
         TraceGrouper grouper = new TraceGrouper();
         grouper.process(traces);
         return grouper;
