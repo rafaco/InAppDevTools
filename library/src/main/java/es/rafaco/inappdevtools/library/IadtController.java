@@ -49,7 +49,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentPrefs;
 import es.rafaco.inappdevtools.library.view.dialogs.WelcomeDialogHelper;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.CleanAllDialog;
@@ -151,7 +151,7 @@ public final class IadtController {
 
     private boolean shouldDelayInitFull() {
         return !AppUtils.isForegroundImportance(context) ||
-                !PrivacyConsentUtil.isAccepted() ||
+                !PrivacyConsentPrefs.isAccepted() ||
                 !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
     }
 

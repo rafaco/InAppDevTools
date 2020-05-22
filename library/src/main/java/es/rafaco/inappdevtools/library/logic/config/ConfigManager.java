@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
 public class ConfigManager {
 
@@ -73,8 +73,8 @@ public class ConfigManager {
     }
 
     public boolean getBoolean(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getBoolean(config.getKey(), false);
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getBoolean(config.getKey(), false);
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getBoolean(config.getKey());
@@ -85,13 +85,13 @@ public class ConfigManager {
     }
 
     public void setBoolean(BuildConfigField config, boolean value) {
-        DevToolsPrefs.setBoolean(config.getKey(), value);
+        IadtPrefs.setBoolean(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public String getString(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getString(config.getKey(), "");
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getString(config.getKey(), "");
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getString(config.getKey());
@@ -102,13 +102,13 @@ public class ConfigManager {
     }
 
     public void setString(BuildConfigField config, String value) {
-        DevToolsPrefs.setString(config.getKey(), value);
+        IadtPrefs.setString(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public long getLong(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getLong(config.getKey(), 0);
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getLong(config.getKey(), 0);
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getLong(config.getKey());
@@ -119,14 +119,14 @@ public class ConfigManager {
     }
 
     public void setLong(BuildConfigField config, long value) {
-        DevToolsPrefs.setLong(config.getKey(), value);
+        IadtPrefs.setLong(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public Map getMap(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
+        if (IadtPrefs.contains(config.getKey())){
             //TODO: not tested
-            String stringMap = DevToolsPrefs.getString(config.getKey(), "");
+            String stringMap = IadtPrefs.getString(config.getKey(), "");
             Map<String, Object> stringObjectMap = new HashMap<String, Object>();
             try {
                 JSONObject jsonObject = new JSONObject(stringMap);
@@ -148,7 +148,7 @@ public class ConfigManager {
         //TODO: not tested and it only seems to work with Map<String, String>
         JSONObject jsonObject = new JSONObject(value);
         String stringMap = jsonObject.toString();
-        DevToolsPrefs.setString(config.getKey(), stringMap);
+        IadtPrefs.setString(config.getKey(), stringMap);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

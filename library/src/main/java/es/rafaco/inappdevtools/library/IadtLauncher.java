@@ -41,7 +41,7 @@ import es.rafaco.inappdevtools.library.logic.crash.CrashInterceptor;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
 /**
  * This class initialize InAppDevTools library automatically. It's start deciding if it should be
@@ -160,7 +160,7 @@ public class IadtLauncher extends ContentProvider {
             String enableKey = BuildConfigField.ENABLED.getKey();
 
             SharedPreferences iadtSharedPrefs = getContext()
-                    .getSharedPreferences(DevToolsPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+                    .getSharedPreferences(IadtPrefs.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
 
             String buildConfigContent = assetFileReader.getFileContents(IadtPath.BUILD_CONFIG);
             JsonHelper iadtBuildConfig = new JsonHelper(buildConfigContent);

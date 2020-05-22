@@ -19,17 +19,17 @@
 
 package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
-public class FirstStartUtil {
+public class LastLogcatPrefs {
 
-    public static final String PREF_VALUE_KEY = "IS_FIRST_START";
+    public static final String PREF_VALUE_KEY = "LAST_LOGCAT";
 
-    public static boolean isFirstStart(){
-        return DevToolsPrefs.getBoolean(PREF_VALUE_KEY, true);
+    public static Long get(){
+        return IadtPrefs.getLong(PREF_VALUE_KEY, 0);
     }
 
-    public static void saveFirstStart(){
-        DevToolsPrefs.setBoolean(PREF_VALUE_KEY, false);
+    public static void set(long value){
+        IadtPrefs.setLong(PREF_VALUE_KEY, value);
     }
 }

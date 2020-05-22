@@ -22,7 +22,7 @@ package es.rafaco.inappdevtools.library.view.dialogs;
 import android.content.DialogInterface;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentPrefs;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.app.AlertDialog;
@@ -45,7 +45,7 @@ public abstract class WelcomePrivacyDialog extends IadtDialogBuilder {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        PrivacyConsentUtil.saveAccepted();
+                        PrivacyConsentPrefs.saveAccepted();
                         onAccepted();
                     }
                 })

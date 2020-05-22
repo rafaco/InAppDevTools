@@ -53,7 +53,7 @@ import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.LastLogcatPrefs;
 import es.rafaco.inappdevtools.library.view.overlay.screens.device.Shell;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -213,11 +213,11 @@ public class LogcatReaderService extends JobIntentService {
             command += " -d";
         }
 
-        boolean filterByDate = LastLogcatUtil.get() != 0;
+        boolean filterByDate = LastLogcatPrefs.get() != 0;
         if (filterByDate){
-            String logcatTime = DateUtils.formatLogcatDate(LastLogcatUtil.get());
+            String logcatTime = DateUtils.formatLogcatDate(LastLogcatPrefs.get());
             command += " -t '" + logcatTime + "'";
-            previousStartDateLines = IadtDatabase.get().friendlyDao().filterByDate(LastLogcatUtil.get());
+            previousStartDateLines = IadtDatabase.get().friendlyDao().filterByDate(LastLogcatPrefs.get());
         }else{
             previousStartDateLines = new ArrayList<>();
         }
@@ -452,7 +452,7 @@ public class LogcatReaderService extends JobIntentService {
                 lastInsertTime = DateUtils.getLong();
 
                 long lastLogcatData = logsToInsert.get(logsToInsert.size()-1).getDate();
-                LastLogcatUtil.set(lastLogcatData);
+                LastLogcatPrefs.set(lastLogcatData);
 
                 if (LogScreen.isLogDebug()) Log.v(Iadt.TAG, "LogcatReaderService processQueue Inserted " + logsToInsert.size() + " lines");
             }

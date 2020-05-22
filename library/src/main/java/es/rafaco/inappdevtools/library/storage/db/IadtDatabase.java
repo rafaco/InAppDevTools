@@ -58,7 +58,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.DatabaseVersionUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.DatabaseVersionPrefs;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 @Database(version = DatabaseVersion.VALUE,
@@ -97,12 +97,12 @@ public abstract class IadtDatabase extends RoomDatabase {
     }
 
     public static void checkVersion() {
-        int storedVersion = DatabaseVersionUtil.get();
+        int storedVersion = DatabaseVersionPrefs.get();
         if (storedVersion == DatabaseVersion.VALUE){
             return; //Up to date
         }
 
-        DatabaseVersionUtil.set(DatabaseVersion.VALUE);
+        DatabaseVersionPrefs.set(DatabaseVersion.VALUE);
         if (storedVersion > 0){
             Log.i(Iadt.TAG, "IadtDatabase schema changed. Cleaning internal files and database.");
             //Destructive migration of db will be performed by Room.databaseBuilder

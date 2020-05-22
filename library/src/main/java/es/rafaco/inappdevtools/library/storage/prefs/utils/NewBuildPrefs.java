@@ -24,9 +24,9 @@ import es.rafaco.inappdevtools.library.logic.config.BuildInfo;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
-public class NewBuildUtil {
+public class NewBuildPrefs {
 
     public static final String LAST_BUILD_TIME = "LAST_BUILD_TIME";
     public static final String BUILD_INFO_SHOWN = "BUILD_INFO_SHOWN";
@@ -50,7 +50,7 @@ public class NewBuildUtil {
 
     private static void update(){
 
-        long lastBuildTime = DevToolsPrefs.getLong(LAST_BUILD_TIME, -1);
+        long lastBuildTime = IadtPrefs.getLong(LAST_BUILD_TIME, -1);
         String fileContents = new AssetFileReader(IadtController.get().getContext())
                 .getFileContents(IadtPath.BUILD_INFO);
         JsonHelper buildInfo = new JsonHelper(fileContents);
@@ -74,28 +74,28 @@ public class NewBuildUtil {
     }
 
     private static void storeBuildTime(){
-        DevToolsPrefs.setLong(LAST_BUILD_TIME, buildTimeOnMemory);
+        IadtPrefs.setLong(LAST_BUILD_TIME, buildTimeOnMemory);
     }
 
 
 
     public static boolean isBuildInfoShown(){
-        return DevToolsPrefs.getBoolean(BUILD_INFO_SHOWN, false);
+        return IadtPrefs.getBoolean(BUILD_INFO_SHOWN, false);
     }
 
     public static void saveBuildInfoShown(){
-        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, true);
+        IadtPrefs.setBoolean(BUILD_INFO_SHOWN, true);
     }
 
     public static boolean isBuildInfoSkipped(){
-        return DevToolsPrefs.getBoolean(BUILD_INFO_SKIPPED, false);
+        return IadtPrefs.getBoolean(BUILD_INFO_SKIPPED, false);
     }
 
     public static void saveBuildInfoSkip() {
-        DevToolsPrefs.setBoolean(BUILD_INFO_SKIPPED, true);
+        IadtPrefs.setBoolean(BUILD_INFO_SKIPPED, true);
     }
 
     private static void clearBuildInfoShown() {
-        DevToolsPrefs.setBoolean(BUILD_INFO_SHOWN, false);
+        IadtPrefs.setBoolean(BUILD_INFO_SHOWN, false);
     }
 }

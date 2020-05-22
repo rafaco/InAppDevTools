@@ -41,9 +41,9 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysisRaw;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashPrefs;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class SessionManager {
@@ -101,20 +101,20 @@ public class SessionManager {
         session.setPid(pid);
         session.setBuildId(IadtController.get().getBuildManager().getCurrentId());
 
-        if (FirstStartUtil.isFirstStart()){
-            FirstStartUtil.saveFirstStart();
+        if (FirstStartPrefs.isFirstStart()){
+            FirstStartPrefs.saveFirstStart();
             session.setFirstStart(true);
         }else{
             session.setFirstStart(false);
         }
 
-        if (NewBuildUtil.isNewBuild()){
+        if (NewBuildPrefs.isNewBuild()){
             session.setNewBuild(true);
         }else{
             session.setNewBuild(false);
         }
 
-        if (PendingCrashUtil.isPending()){
+        if (PendingCrashPrefs.isPending()){
             session.setPendingCrash(true);
         }else{
             session.setPendingCrash(false);

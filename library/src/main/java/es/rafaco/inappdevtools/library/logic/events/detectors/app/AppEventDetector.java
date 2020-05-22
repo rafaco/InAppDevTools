@@ -21,17 +21,15 @@ package es.rafaco.inappdevtools.library.logic.events.detectors.app;
 
 import java.util.Date;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.utils.CacheUtils;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class AppEventDetector extends EventDetector {
 
@@ -45,8 +43,8 @@ public class AppEventDetector extends EventDetector {
         eventManager.subscribe(Event.APP_NEW_SESSION, new EventManager.OneShotListener(){
             @Override
             public void onEvent(Event event, Object param) {
-                if (NewBuildUtil.isNewBuild()) {
-                    eventManager.fire(Event.APP_NEW_BUILD, NewBuildUtil.getBuildTime());
+                if (NewBuildPrefs.isNewBuild()) {
+                    eventManager.fire(Event.APP_NEW_BUILD, NewBuildPrefs.getBuildTime());
                 }
 
                 //TODO: relocate to session manager?

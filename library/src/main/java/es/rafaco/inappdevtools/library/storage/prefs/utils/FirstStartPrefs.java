@@ -19,17 +19,17 @@
 
 package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
-public class PrivacyConsentUtil {
+public class FirstStartPrefs {
 
-    public static final String PREF_VALUE_KEY = "IS_PRIVACY_ACCEPTED";
+    public static final String PREF_VALUE_KEY = "IS_FIRST_START";
 
-    public static boolean isAccepted(){
-        return DevToolsPrefs.getBoolean(PREF_VALUE_KEY, false);
+    public static boolean isFirstStart(){
+        return IadtPrefs.getBoolean(PREF_VALUE_KEY, true);
     }
 
-    public static void saveAccepted(){
-        DevToolsPrefs.setBoolean(PREF_VALUE_KEY, true);
+    public static void saveFirstStart(){
+        IadtPrefs.setBoolean(PREF_VALUE_KEY, false);
     }
 }

@@ -26,7 +26,7 @@ import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.storage.db.entities.BuildDao;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
 
 public class BuildManager {
 
@@ -48,7 +48,7 @@ public class BuildManager {
     }
 
     public boolean isNew() {
-        return NewBuildUtil.isNewBuild();
+        return NewBuildPrefs.isNewBuild();
     }
 
     public Build getCurrent() {
@@ -61,7 +61,7 @@ public class BuildManager {
 
     private Build createNewBuild() {
         Build newBuild = new Build();
-        newBuild.setDate(NewBuildUtil.getBuildTime());
+        newBuild.setDate(NewBuildPrefs.getBuildTime());
         long newBuildId = getDao().insert(newBuild);
         newBuild.setUid(newBuildId);
         return newBuild;

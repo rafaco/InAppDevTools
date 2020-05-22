@@ -27,7 +27,7 @@ import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
 //Idea extracted from https://stackoverflow.com/a/50791431/10209414
 public class FragmentUUID {
@@ -62,10 +62,10 @@ public class FragmentUUID {
     }
 
     private static long generateUUID() {
-         _lastUUID = DevToolsPrefs.getLong(PREFS_KEY, INVALID_UUID);
+         _lastUUID = IadtPrefs.getLong(PREFS_KEY, INVALID_UUID);
         long result = ++_lastUUID;
         if (result != INVALID_UUID) {
-            DevToolsPrefs.setLong(PREFS_KEY, result);
+            IadtPrefs.setLong(PREFS_KEY, result);
         } else {
             throw new RuntimeException("You have somehow managed to create a total of 9223372036854775807 fragments during lifetime of your app! =)");
         }

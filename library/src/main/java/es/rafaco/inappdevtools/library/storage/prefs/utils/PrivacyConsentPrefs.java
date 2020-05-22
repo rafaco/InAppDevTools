@@ -19,17 +19,17 @@
 
 package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
-public class LastLogcatUtil {
+public class PrivacyConsentPrefs {
 
-    public static final String PREF_VALUE_KEY = "LAST_LOGCAT";
+    public static final String PREF_VALUE_KEY = "IS_PRIVACY_ACCEPTED";
 
-    public static Long get(){
-        return DevToolsPrefs.getLong(PREF_VALUE_KEY, 0);
+    public static boolean isAccepted(){
+        return IadtPrefs.getBoolean(PREF_VALUE_KEY, false);
     }
 
-    public static void set(long value){
-        DevToolsPrefs.setLong(PREF_VALUE_KEY, value);
+    public static void saveAccepted(){
+        IadtPrefs.setBoolean(PREF_VALUE_KEY, true);
     }
 }

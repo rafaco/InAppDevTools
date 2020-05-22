@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright 2018-2019 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,21 @@
 
 package es.rafaco.inappdevtools.library.storage.prefs.utils;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
-public class DatabaseVersionUtil {
+public class PendingCrashPrefs {
 
-    public static final String PREF_VALUE_KEY = "DATABASE_VERSION";
+    public static final String PREF_VALUE_KEY = "PENDING_CRASH";
 
-    public static int get(){
-        return DevToolsPrefs.getInt(PREF_VALUE_KEY, -1);
+    public static void savePending(){
+        IadtPrefs.setBoolean(PREF_VALUE_KEY, true);
     }
 
-    public static void set(int value){
-        DevToolsPrefs.setInt(PREF_VALUE_KEY, value);
+    public static boolean isPending(){
+        return IadtPrefs.getBoolean(PREF_VALUE_KEY, false);
+    }
+
+    public static void clearPending(){
+        IadtPrefs.setBoolean(PREF_VALUE_KEY, false);
     }
 }

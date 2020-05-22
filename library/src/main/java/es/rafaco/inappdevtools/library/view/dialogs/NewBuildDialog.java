@@ -32,7 +32,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfo
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -83,13 +83,13 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    NewBuildUtil.saveBuildInfoSkip();
+                    NewBuildPrefs.saveBuildInfoSkip();
                     onDismiss();
                 }
             });
         }
 
-        NewBuildUtil.saveBuildInfoShown();
+        NewBuildPrefs.saveBuildInfoShown();
     }
 
     public void onDismiss() {

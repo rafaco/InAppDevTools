@@ -24,7 +24,7 @@ import android.content.SharedPreferences;
 
 import es.rafaco.inappdevtools.library.IadtController;
 
-public class DevToolsPrefs {
+public class IadtPrefs {
 
     public static final String SHARED_PREFS_KEY = "iadt";
 

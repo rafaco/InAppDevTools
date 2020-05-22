@@ -24,8 +24,8 @@ import android.content.DialogInterface;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentPrefs;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 
 public class WelcomeDialogHelper {
@@ -49,21 +49,21 @@ public class WelcomeDialogHelper {
 
     private boolean shouldShowNewBuild() {
         Session session = IadtController.get().getSessionManager().getCurrent();
-        return session.isNewBuild() && !NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown();
+        return session.isNewBuild() && !NewBuildPrefs.isBuildInfoSkipped() && !NewBuildPrefs.isBuildInfoShown();
     }
 
     private boolean isWelcomeCompulsory() {
-        return !PrivacyConsentUtil.isAccepted()
+        return !PrivacyConsentPrefs.isAccepted()
                 || !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
     }
 
     private void showAuto(){
         Session session = IadtController.get().getSessionManager().getCurrent();
 
-        if (!NewBuildUtil.isBuildInfoSkipped() && !NewBuildUtil.isBuildInfoShown()){
+        if (!NewBuildPrefs.isBuildInfoSkipped() && !NewBuildPrefs.isBuildInfoShown()){
             showNewBuildDialog(true);
         }
-        else if (!PrivacyConsentUtil.isAccepted()){
+        else if (!PrivacyConsentPrefs.isAccepted()){
             showPrivacyDialog(true);
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
