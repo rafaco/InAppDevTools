@@ -40,7 +40,6 @@ import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexDat
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -334,7 +333,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                 }));
         data.add("");
 
-        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        ScreenshotDao screenshotDao = IadtController.getDatabase().screenshotDao();
         final List<Screenshot> screenshots = screenshotDao.getAll();
 
         data.addAll(screenshots);

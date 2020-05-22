@@ -57,9 +57,12 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.storage.db.entities.SourcetraceDao;
+import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.DatabaseVersionUtil;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
-@Database(version = 30, exportSchema = false,
+@Database(version = DatabaseVersion.VALUE,
+        exportSchema = false,
         entities = {
                 Build.class,
                 Session.class,
@@ -72,26 +75,39 @@ import es.rafaco.inappdevtools.library.view.utils.Humanizer;
                 NetSummary.class,
                 NetContent.class,
         })
-public abstract class DevToolsDatabase extends RoomDatabase {
+public abstract class IadtDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "inappdevtools.db";
-    private static DevToolsDatabase INSTANCE;
+    private static IadtDatabase INSTANCE;
 
-    public static DevToolsDatabase getInstance() {
+    public static IadtDatabase getInstance() {
         if (INSTANCE == null) {
             Context context = IadtController.get().getContext();
-            INSTANCE =
-                    Room.databaseBuilder(context, DevToolsDatabase.class, DB_NAME)
-                            //TODO: Research alternatives, on crash we can't create new threads
-                            .allowMainThreadQueries()
-                            .fallbackToDestructiveMigration()
-                            .build();
+            INSTANCE = Room.databaseBuilder(context, IadtDatabase.class, DB_NAME)
+                    //TODO: Research alternatives, on crash we can't create new threads
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return INSTANCE;
     }
 
     public static void destroyInstance() {
         INSTANCE = null;
+    }
+
+    public static void checkVersion() {
+        int storedVersion = DatabaseVersionUtil.get();
+        if (storedVersion == DatabaseVersion.VALUE){
+            return; //Up to date
+        }
+
+        DatabaseVersionUtil.set(DatabaseVersion.VALUE);
+        if (storedVersion > 0){
+            Log.i(Iadt.TAG, "IadtDatabase schema changed. Cleaning internal files and database.");
+            //Destructive migration of db will be performed by Room.databaseBuilder
+            FileProviderUtils.deleteAll();
+        }
     }
 
 

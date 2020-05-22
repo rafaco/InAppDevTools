@@ -42,11 +42,11 @@ import es.rafaco.inappdevtools.library.logic.events.EventDetectorsManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
@@ -132,7 +132,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         anrDetector.stop();
     }
 
-    private DevToolsDatabase getDb(){
+    private IadtDatabase getDb(){
         return IadtController.getDatabase();
     }
 

@@ -30,9 +30,9 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogAnalysisHelper;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.AnalysisData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterHelper {
@@ -244,8 +244,8 @@ public class LogFilterHelper {
                 result += "from previous session" + ", ";
             }
             else{
-                long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1L;
-                Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
+                long target = IadtController.getDatabase().sessionDao().count() - uiFilter.getSessionInt() + 1L;
+                Session selected = getSessionDao().findById(target);
                 result += "from session " + Humanizer.ordinal((int)selected.getUid()) + ", ";
             }
         }
@@ -288,6 +288,10 @@ public class LogFilterHelper {
         return result;
     }
 
+    private SessionDao getSessionDao() {
+        return IadtController.getDatabase().sessionDao();
+    }
+
     //endregion
 
     //region [ BACK FILTER POPULATION ]
@@ -318,11 +322,11 @@ public class LogFilterHelper {
             backFilter.setToDate(-1);
         }
         else{ //Previous and others
-            long target = DevToolsDatabase.getInstance().sessionDao().count() - uiFilter.getSessionInt() + 1L;
-            Session selected = DevToolsDatabase.getInstance().sessionDao().findById(target);
+            long target = getSessionDao().count() - uiFilter.getSessionInt() + 1L;
+            Session selected = getSessionDao().findById(target);
             if (selected != null) backFilter.setFromDate(selected.getDate());
             
-            Session next = DevToolsDatabase.getInstance().sessionDao().findById(target + 1);
+            Session next = getSessionDao().findById(target + 1);
             if (next != null) backFilter.setToDate(next.getDate());
         }
         if (isDebug())

@@ -77,7 +77,6 @@ import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
@@ -177,7 +176,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 .setPageSize(25 * 2)
                 .build();
 
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        FriendlyDao dao = IadtController.getDatabase().friendlyDao();
         dataSourceFactory = new LogDataSourceFactory(dao, getFilter().getBackFilter());
 
         LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder<>(dataSourceFactory, myPagingConfig);

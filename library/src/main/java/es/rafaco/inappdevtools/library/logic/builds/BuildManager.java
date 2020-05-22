@@ -21,9 +21,9 @@ package es.rafaco.inappdevtools.library.logic.builds;
 
 import android.content.Context;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.storage.db.entities.BuildDao;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
@@ -80,7 +80,7 @@ public class BuildManager {
     }
 
     private BuildDao getDao() {
-        return DevToolsDatabase.getInstance().buildDao();
+        return IadtController.getDatabase().buildDao();
     }
 
     public Context getContext() {

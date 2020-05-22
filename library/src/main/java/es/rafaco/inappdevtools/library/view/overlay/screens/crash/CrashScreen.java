@@ -37,7 +37,6 @@ import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFle
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.CrashDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
@@ -216,7 +215,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
     }
 
     private TraceGrouper initTraceGrouper(Crash crash) {
-        List<Sourcetrace> traces = DevToolsDatabase.getInstance().sourcetraceDao().filterCrash(crash.getUid());
+        List<Sourcetrace> traces = IadtController.getDatabase().sourcetraceDao().filterCrash(crash.getUid());
         TraceGrouper grouper = new TraceGrouper();
         grouper.process(traces);
         return grouper;

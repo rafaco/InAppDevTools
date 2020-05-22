@@ -48,6 +48,14 @@ public class DevToolsPrefs {
         getPrefs().edit().putBoolean(key, value).apply();
     }
 
+    public static int getInt(String key, int defValue){
+        return getPrefs().getInt(key, defValue);
+    }
+
+    public static void setInt(String key, int value){
+        getPrefs().edit().putInt(key, value).apply();
+    }
+
     public static long getLong(String key, long defValue){
         return getPrefs().getLong(key, defValue);
     }
@@ -66,5 +74,9 @@ public class DevToolsPrefs {
 
     public static void deleteAll() {
         getPrefs().edit().clear().commit();
+    }
+
+    public static String getOverview() {
+        return "SharedPrefs " + SHARED_PREFS_KEY + " contains " + getPrefs().getAll().size() + " entries.";
     }
 }

@@ -35,7 +35,6 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 
 public class ErrorAnrEventDetector extends EventDetector {
@@ -97,8 +96,7 @@ public class ErrorAnrEventDetector extends EventDetector {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DevToolsDatabase db = IadtController.get().getDatabase();
-                long anrId = db.anrDao().insert(anr);
+                long anrId = IadtController.getDatabase().anrDao().insert(anr);
                 FriendlyLog.logAnr(anrId, anr);
             }
         });

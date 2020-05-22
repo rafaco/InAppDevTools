@@ -40,6 +40,7 @@ import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.session.FragmentTracker;
 import es.rafaco.inappdevtools.library.logic.session.SessionManager;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.logic.runnables.RunnableManager;
@@ -47,7 +48,6 @@ import es.rafaco.inappdevtools.library.logic.sources.SourcesManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentUtil;
 import es.rafaco.inappdevtools.library.view.dialogs.WelcomeDialogHelper;
@@ -99,6 +99,8 @@ public final class IadtController {
     private void init(Context context) {
         this.context = context.getApplicationContext();
 
+        IadtDatabase.checkVersion();
+
         boolean isEssentialUp = initEssential();
         if (!isEssentialUp)
             return;
@@ -140,7 +142,7 @@ public final class IadtController {
                     new Runnable() {
                 @Override
                 public void run() {
-                    DevToolsDatabase.getInstance().printOverview();
+                    IadtDatabase.getInstance().printOverview();
                 }
             });
         }
@@ -252,8 +254,8 @@ public final class IadtController {
         return overlayHelper;
     }
 
-    public static DevToolsDatabase getDatabase() {
-        return DevToolsDatabase.getInstance();
+    public static IadtDatabase getDatabase() {
+        return IadtDatabase.getInstance();
     }
 
     public boolean isEnabled() {

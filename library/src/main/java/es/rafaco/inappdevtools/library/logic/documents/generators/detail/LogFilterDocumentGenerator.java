@@ -23,6 +23,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
@@ -30,12 +31,8 @@ import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.storage.db.entities.Report;
-import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterDocumentGenerator extends AbstractDocumentGenerator {
 
@@ -82,7 +79,7 @@ public class LogFilterDocumentGenerator extends AbstractDocumentGenerator {
 
     private void extractRawData(LogFilterHelper logFilterHelper) {
         LogQueryHelper logQueryHelper = new LogQueryHelper(logFilterHelper.getBackFilter());
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        FriendlyDao dao = IadtController.getDatabase().friendlyDao();
         rawData = dao.filterListWithQuery(logQueryHelper.getFilterQuery());
     }
 

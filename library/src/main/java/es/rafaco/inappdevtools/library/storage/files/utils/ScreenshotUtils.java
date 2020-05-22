@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 
 public class ScreenshotUtils {
@@ -52,19 +52,23 @@ public class ScreenshotUtils {
         String subfolder;
         String filename;
         if (isFromCrash){
-            long sessionId = DevToolsDatabase.getInstance().sessionDao().count();
+            long sessionId = getDb().sessionDao().count();
             subfolder = "session/" + sessionId;
-            long fileId = DevToolsDatabase.getInstance().crashDao().count();
+            long fileId = getDb().crashDao().count();
             filename = "crash_" + fileId + "_screenshot";
         }
         else{
-            long sessionId = DevToolsDatabase.getInstance().sessionDao().count();
+            long sessionId = getDb().sessionDao().count();
             subfolder = "session/" + sessionId;
-            long fileId = DevToolsDatabase.getInstance().screenshotDao().count() + 1L ;
+            long fileId = getDb().screenshotDao().count() + 1L ;
             filename = "screenshot_" + fileId;
         }
 
         return grabAndSaveFile(subfolder, filename);
+    }
+
+    private static IadtDatabase getDb() {
+        return IadtController.getDatabase();
     }
 
     private static Screenshot grabAndSaveFile(String subfolder, String filename) {

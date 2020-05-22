@@ -36,7 +36,6 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
@@ -45,7 +44,6 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -96,7 +94,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
 
         data.add("");
 
-        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        ScreenshotDao screenshotDao = IadtController.getDatabase().screenshotDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         final List<Screenshot> screenshots = screenshotDao.getAll();
         for (int i = 0; i<screenshots.size(); i++) {
