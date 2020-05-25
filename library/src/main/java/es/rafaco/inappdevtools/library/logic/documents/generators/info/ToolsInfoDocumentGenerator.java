@@ -76,6 +76,7 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add(getDbInfo())
                 .add(getBuildConfig())
                 .add(getBuildInfo())
+                .add(getGitInfo())
                 .build();
     }
 
@@ -90,7 +91,15 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
     private DocumentSectionData getBuildInfo() {
         String content = BuildFilesRepository.getBuildInfoHelper(sessionId).getAll();
         return new DocumentSectionData.Builder("Generated BuildInfo")
-                .setIcon(R.string.gmd_settings_system_daydream)
+                .setIcon(R.string.gmd_build)
+                .add(content)
+                .build();
+    }
+
+    private DocumentSectionData getGitInfo() {
+        String content = BuildFilesRepository.getGitInfoHelper(sessionId).getAll();
+        return new DocumentSectionData.Builder("Generated GitInfo")
+                .setIcon(R.string.gmd_kitchen)
                 .add(content)
                 .build();
     }

@@ -20,11 +20,7 @@
 package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
-
-//#ifdef ANDROIDX
-//@import androidx.annotation.NonNull;
-//#else
-//#endif
+import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
@@ -33,6 +29,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
@@ -112,11 +109,12 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             builder.add(getGitUnavailableInfo());
         }
         else{
-            builder.add(getGitUserInfo())
-                    .add(getGitRepoInfo())
-                    .add(getGitLastCommitInfo())
-                    .add(getGitLocalRepoInfo())
-                    .add(getGitLocalChangesInfo());
+            builder
+                    .add(getLocalRepoInfo())
+                    .add(getLocalChangesInfo())
+                    .add(getLocalCommitsInfo())
+                    .add(getRemoteLastCommitInfo())
+                    .add(getRemoteRepoInfo());
         }
 
         return builder.build();
@@ -131,34 +129,33 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group;
     }
 
-    public DocumentSectionData getGitUserInfo() {
-        DocumentSectionData group = new DocumentSectionData.Builder("Git User")
-                .setIcon(R.string.gmd_person)
-                .setOverview(gitInfo.getString(GitInfo.USER_NAME))
-                .add("Git name", gitInfo.getString(GitInfo.USER_NAME))
-                .add("Git email", gitInfo.getString(GitInfo.USER_EMAIL))
-                .add("Git version", gitInfo.getString(GitInfo.VERSION))
-                .addButton(new ButtonBorderlessFlexData("Write Email",
-                        R.drawable.ic_email_white_24dp,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                ExternalIntentUtils.composeEmail(gitInfo.getString(GitInfo.USER_EMAIL), "Email from IADT");
-                            }
-                        }))
-                .build();
-        return group;
-    }
-
-    public DocumentSectionData getGitRepoInfo() {
+    public DocumentSectionData getRemoteRepoInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Remote repo")
                 .setIcon(R.string.gmd_public);
 
-        group.setOverview(gitInfo.getString(GitInfo.LOCAL_BRANCH) + "-" + gitInfo.getString(GitInfo.TAG_LAST));
-        group.add("Git url", gitInfo.getString(GitInfo.REMOTE_URL))
+        if (TextUtils.isEmpty(gitInfo.getString(GitInfo.REMOTE_NAME))){
+            group.setOverview("N/A");
+            group.add("There are not remote repository configured.");
+            return group.build();
+        }
+
+        group.setOverview(gitInfo.getString(GitInfo.LOCAL_BRANCH) + "-" + gitInfo.getString(GitInfo.TAG_NAME));
+        group   .add("Name", gitInfo.getString(GitInfo.REMOTE_NAME))
+                .add("Url", gitInfo.getString(GitInfo.REMOTE_URL))
+                .add("")
+                .add("Head", gitInfo.getString(GitInfo.REMOTE_HEAD))
+                .add("Head commits", gitInfo.getString(GitInfo.REMOTE_HEAD_COUNT))
+                .add("")
                 .add("Branch", gitInfo.getString(GitInfo.LOCAL_BRANCH))
-                .add("Last Tag", gitInfo.getString(GitInfo.TAG_LAST))
-                .add("Tag Info", gitInfo.getString(GitInfo.TAG_INFO));
+                .add("Branch commits", gitInfo.getString(GitInfo.REMOTE_BRANCH_COUNT))
+                .add("")
+                .add("Tag", gitInfo.getString(GitInfo.TAG_NAME))
+                .add("Tag distance", gitInfo.getString(GitInfo.TAG_DISTANCE))
+                .add("Tag last commit", gitInfo.getString(GitInfo.TAG_LAST_COMMIT))
+                .add("Tag dirty", gitInfo.getString(GitInfo.TAG_DIRTY))
+                .add("Tag Description", gitInfo.getString(GitInfo.TAG_DESCRIPTION))
+        ;
+
         group.addButton(new ButtonBorderlessFlexData("Browse repo",
                 R.drawable.ic_public_white_24dp,
                 new Runnable() {
@@ -170,18 +167,59 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group.build();
     }
 
-    public DocumentSectionData getGitLastCommitInfo() {
+    public DocumentSectionData getRemoteLastCommitInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Last remote commit")
                 .setIcon(R.string.gmd_assignment_turned_in);
 
-        String commitId = Humanizer.removeHead(gitInfo.getString(GitInfo.REMOTE_LAST), "commit ");
+        String commitId = Humanizer.removeHead(gitInfo.getString(GitInfo.REMOTE_LAST_COMMIT), "commit ");
         commitId = Humanizer.truncate(commitId, 8, "");
-        group.setOverview(commitId);
-        group.add(gitInfo.getString(GitInfo.REMOTE_LAST));
+        group.setOverview(commitId)
+                .add("Last Fetch", DateUtils.formatFull(gitInfo.getLong(GitInfo.REMOTE_LAST_FETCH_TIME)))
+                .add("Last commit", gitInfo.getString(GitInfo.LAST_COMMIT_TIME))
+                .add("")
+                .add(gitInfo.getString(GitInfo.REMOTE_LAST_COMMIT));
         return group.build();
     }
 
-    public DocumentSectionData getGitLocalRepoInfo() {
+    public DocumentSectionData getLocalRepoInfo() {
+        String userEmail = gitInfo.getString(GitInfo.USER_EMAIL);
+        String localBranch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
+        DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local repo")
+                .setIcon(R.string.gmd_computer)
+                .setOverview(localBranch)
+                .add("Head branch", localBranch)
+                .add("Head commits count", gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT));
+
+        if (gitInfo.getBoolean(GitInfo.HAS_REMOTE)){
+            group.add("Distance to remote branch", gitInfo.getString(GitInfo.REMOTE_BRANCH_DISTANCE))
+                    .add("Distance to remote head", gitInfo.getString(GitInfo.REMOTE_HEAD_DISTANCE));
+        }
+
+        group.add("")
+                .add("Tag", Humanizer.unavailable(gitInfo.getString(GitInfo.TAG_NAME), "N/A"))
+                .add("Tag distance", gitInfo.getString(GitInfo.TAG_DISTANCE))
+                .add()
+                .add("User name", gitInfo.getString(GitInfo.USER_NAME))
+                .add("User email", userEmail)
+                .add("")
+                .add("VCS", "Git")
+                .add("Version", gitInfo.getString(GitInfo.VERSION))
+                .add("Path", gitInfo.getString(GitInfo.PATH));
+        
+        if (!TextUtils.isEmpty(userEmail)){
+            group.addButton(new ButtonBorderlessFlexData("Write Email",
+                    R.drawable.ic_email_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            ExternalIntentUtils.composeEmail(gitInfo.getString(GitInfo.USER_EMAIL), "Email from IADT");
+                        }
+                    }));
+        }
+        return group.build();
+    }
+
+    public DocumentSectionData getLocalCommitsInfo() {
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Local commits")
                 .setIcon(R.string.gmd_assignment_ind);
 
@@ -192,16 +230,31 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             return group.build();
         }
 
+
         String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
+        String local_log = gitInfo.getString(GitInfo.LOCAL_BRANCH_GRAPH);
         group.setOverview(local_commits_count + " commits ahead");
-        group.add(local_commits);
-        group.addButton(new ButtonBorderlessFlexData("View Commits",
-                R.drawable.ic_add_circle_outline_white_24dp,
+        group.add(local_log);
+
+
+        group.addButton(new ButtonBorderlessFlexData("View Files",
+                R.drawable.ic_format_list_bulleted_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.LOCAL_COMMITS_FILE);
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_TXT_FILE);
+                        String params = SourceDetailScreen.buildInternalParams(path);
+                        OverlayService.performNavigation(SourceDetailScreen.class, params);
+                    }
+                }));
+
+        group.addButton(new ButtonBorderlessFlexData("View Diffs",
+                R.drawable.ic_code_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_DIFF_FILE);
                         String params = SourceDetailScreen.buildInternalParams(path);
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
@@ -210,13 +263,14 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         return group.build();
     }
 
-    public DocumentSectionData getGitLocalChangesInfo() {
+    public DocumentSectionData getLocalChangesInfo() {
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        String file_status = gitInfo.getString(GitInfo.LOCAL_CHANGES);
-        int file_changes_count = Humanizer.countLines(file_status);
+        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
+        int file_untracked_count = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT);
 
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Uncommitted changes")
-                .setIcon(R.string.gmd_assignment_late);
+                .setIcon(R.string.gmd_assignment_late)
+                .setExpandable(false);
 
         if (!hasLocalChanges){
             group.setOverview("CLEAN");
@@ -224,14 +278,28 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             return group.build();
         }
 
-        group.setOverview(file_changes_count + " files");
-        group.add(file_status);
+        group.setOverview(Humanizer.plural(file_changes_count + file_untracked_count, "file"));
+        group.add(gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS));
+        group.add(file_untracked_count + " new files (untracked)");
+
+
+        group.addButton(new ButtonBorderlessFlexData("View Files",
+                R.drawable.ic_format_list_bulleted_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_TXT);
+                        String params = SourceDetailScreen.buildInternalParams(path);
+                        OverlayService.performNavigation(SourceDetailScreen.class, params);
+                    }
+                }));
+
         group.addButton(new ButtonBorderlessFlexData("View Diffs",
                 R.drawable.ic_code_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.LOCAL_CHANGES_FILE);
+                        String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_DIFF_FILE);
                         String params = SourceDetailScreen.buildInternalParams(path);
                         OverlayService.performNavigation(SourceDetailScreen.class, params);
                     }
@@ -258,7 +326,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             return "No available";
         }
         String branch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
-        String tag = gitInfo.getString(GitInfo.TAG_LAST);
+        String tag = gitInfo.getString(GitInfo.TAG_NAME);
         return String.format("%s %s", branch, tag);
     }
 
@@ -270,8 +338,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        String file_status = gitInfo.getString(GitInfo.LOCAL_CHANGES);
-        int file_changes_count = Humanizer.countLines(file_status);
+        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
 
         if (!hasLocalCommits && !hasLocalChanges){
             return "No local changes";

@@ -35,19 +35,25 @@ public class IadtPath {
     public static final String APP_BUILD_CONFIG_FILE = "app_build_config.json";
     public static final String BUILD_INFO_FILE = "build_info.json";
     public static final String BUILD_CONFIG_FILE = "build_config.json";
-    public static final String GIT_INFO_FILE = "git_info.json";
     public static final String PLUGIN_LIST_FILE = "gradle_plugins.txt";
-    public static final String LOCAL_COMMITS_FILE = "local_commits.txt";
-    public static final String LOCAL_CHANGES_FILE = "local_changes.diff";
     public static final String DEPENDENCIES_FILE = "gradle_dependencies.txt";
+    public static final String GIT_INFO_JSON_FILE = "git_info.json";
+    public static final String GIT_REMOTE_BRANCH_TXT_FILE = "git_remote_branch.txt";
+    public static final String GIT_LOCAL_BRANCH_DIFF_FILE = "git_local_branch.diff";
+    public static final String GIT_LOCAL_BRANCH_TXT_FILE = "git_local_branch.txt";
+    public static final String GIT_LOCAL_CHANGES_DIFF_FILE = "git_local_changes.diff";
+    public static final String GIT_LOCAL_CHANGES_TXT_FILE = "git_local_changes.txt";
 
     public static final String BUILD_INFO = SUBFOLDER + "/" + BUILD_INFO_FILE;
     public static final String BUILD_CONFIG = SUBFOLDER + "/" + BUILD_CONFIG_FILE;
-    public static final String GIT_INFO = SUBFOLDER + "/" + GIT_INFO_FILE;
     public static final String PLUGIN_LIST = SUBFOLDER + "/" + PLUGIN_LIST_FILE;
-    public static final String LOCAL_COMMITS = SUBFOLDER + "/" + LOCAL_COMMITS_FILE;
-    public static final String LOCAL_CHANGES = SUBFOLDER + "/" + LOCAL_CHANGES_FILE;
     public static final String DEPENDENCIES = SUBFOLDER + "/" + DEPENDENCIES_FILE;
+    public static final String GIT_INFO_JSON = SUBFOLDER + "/" + GIT_INFO_JSON_FILE;
+    public static final String GIT_REMOTE_BRANCH_TXT = SUBFOLDER + "/" + GIT_REMOTE_BRANCH_TXT_FILE;
+    public static final String GIT_LOCAL_BRANCH_TXT = SUBFOLDER + "/" + GIT_LOCAL_BRANCH_TXT_FILE;
+    public static final String GIT_LOCAL_BRANCH_DIFF = SUBFOLDER + "/" + GIT_LOCAL_BRANCH_DIFF_FILE;
+    public static final String GIT_LOCAL_CHANGES_DIFF = SUBFOLDER + "/" + GIT_LOCAL_CHANGES_DIFF_FILE;
+    public static final String GIT_LOCAL_CHANGES_TXT = SUBFOLDER + "/" + GIT_LOCAL_CHANGES_TXT_FILE;
 
     public static final String ORIGINAL_MANIFEST = SOURCES + "/AndroidManifest.xml";
     public static final String MERGED_MANIFEST = GENERATED + "/merged_manifests/AndroidManifest.xml";

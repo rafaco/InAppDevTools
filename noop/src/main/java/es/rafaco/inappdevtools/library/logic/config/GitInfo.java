@@ -22,17 +22,40 @@ package es.rafaco.inappdevtools.library.logic.config;
 public class GitInfo {
     public static final String ENABLED = "";
     public static final String VERSION = "";
+    public static final String PATH = "";
     public static final String USER_NAME = "";
     public static final String USER_EMAIL = "";
+
+    public static final String HAS_REMOTE = "";
     public static final String REMOTE_NAME = "";
     public static final String REMOTE_URL = "";
-    public static final String REMOTE_LAST = "";
-    public static final String TAG_LAST = "";
-    public static final String TAG_INFO = "";
+    public static final String REMOTE_HEAD = "";
+    public static final String REMOTE_HEAD_COUNT = "";
+    public static final String REMOTE_HEAD_DISTANCE = "";
+    public static final String REMOTE_BRANCH_COUNT = "";
+    public static final String REMOTE_BRANCH_DISTANCE = "";
+
+    public static final String REMOTE_LAST_FETCH_TIME = "";
+    public static final String REMOTE_LAST_COMMIT = "";
+
+    public static final String HAS_TAG = "";
+    public static final String TAG_DESCRIPTION = "";
+    public static final String TAG_NAME = "";
     public static final String TAG_DISTANCE = "";
+    public static final String TAG_LAST_COMMIT = "";
+    public static final String TAG_DIRTY = "";
+
     public static final String LOCAL_BRANCH = "";
+    public static final String LOCAL_BRANCH_COUNT = "";
+    public static final String LOCAL_BRANCH_GRAPH = "";
     public static final String HAS_LOCAL_COMMITS = "";
     public static final String LOCAL_COMMITS = "";
     public static final String HAS_LOCAL_CHANGES = "";
-    public static final String LOCAL_CHANGES = "";
+    public static final String LOCAL_UNTRACKED_COUNT = "";
+    public static final String LOCAL_UNTRACKED = "";
+    public static final String LOCAL_CHANGES_COUNT = "";
+    public static final String LOCAL_CHANGES_STATS = "";
+
+    public static final String FIRST_COMMIT_TIME = "";
+    public static final String LAST_COMMIT_TIME = "";
 }

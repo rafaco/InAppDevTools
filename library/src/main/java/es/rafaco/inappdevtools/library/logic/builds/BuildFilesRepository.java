@@ -53,7 +53,7 @@ public class BuildFilesRepository {
     public static JsonHelper getGitInfoHelper(long sessionId){
         long buildId = getBuildIdForSession(sessionId);
         String buildFolder = getSubfolderForBuild(buildId);
-        String buildFile = buildFolder + "/" + IadtPath.GIT_INFO_FILE;
+        String buildFile = buildFolder + "/" + IadtPath.GIT_INFO_JSON_FILE;
         String content = new InternalFileReader().getContent(buildFile);
         return new JsonHelper(content);
     }
@@ -80,11 +80,14 @@ public class BuildFilesRepository {
         AssetFileReader copier = new AssetFileReader(getContext());
         copier.copyToInternal(IadtPath.BUILD_INFO, destinationFolder);
         copier.copyToInternal(IadtPath.BUILD_CONFIG, destinationFolder);
-        copier.copyToInternal(IadtPath.GIT_INFO, destinationFolder);
-        copier.copyToInternal(IadtPath.LOCAL_CHANGES, destinationFolder);
-        copier.copyToInternal(IadtPath.LOCAL_COMMITS, destinationFolder);
         copier.copyToInternal(IadtPath.PLUGIN_LIST, destinationFolder);
         copier.copyToInternal(IadtPath.DEPENDENCIES, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_INFO_JSON, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_REMOTE_BRANCH_TXT, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_LOCAL_BRANCH_DIFF, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_LOCAL_BRANCH_TXT, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_LOCAL_CHANGES_DIFF, destinationFolder);
+        copier.copyToInternal(IadtPath.GIT_LOCAL_CHANGES_TXT, destinationFolder);
 
         String jsonValues = AppBuildConfig.toJson(getContext());
         FileCreator.withContent(destinationFolder, IadtPath.APP_BUILD_CONFIG_FILE, jsonValues);
