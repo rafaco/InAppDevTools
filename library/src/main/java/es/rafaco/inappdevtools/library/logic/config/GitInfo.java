@@ -32,6 +32,7 @@ public class GitInfo {
     public static final String REMOTE_HEAD = "REMOTE_HEAD";
     public static final String REMOTE_HEAD_COUNT = "REMOTE_HEAD_COUNT";
     public static final String REMOTE_HEAD_DISTANCE = "REMOTE_HEAD_DISTANCE";
+    public static final String REMOTE_BRANCH = "REMOTE_BRANCH";
     public static final String REMOTE_BRANCH_COUNT = "REMOTE_BRANCH_COUNT";
     public static final String REMOTE_BRANCH_DISTANCE = "REMOTE_BRANCH_DISTANCE";
 

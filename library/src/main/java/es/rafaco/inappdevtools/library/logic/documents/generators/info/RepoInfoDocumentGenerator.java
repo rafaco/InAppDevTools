@@ -30,10 +30,13 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
+import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -103,7 +106,8 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
     public DocumentData getData() {
         DocumentData.Builder builder = new DocumentData.Builder(getDocumentType())
                 .setTitle(getTitle())
-                .setOverview(getOverview());
+                .setOverview(getOverview())
+                .setScreenItem(getTimeLineCards());
 
         if (!isGitEnabled()){
             builder.add(getGitUnavailableInfo());
@@ -127,6 +131,104 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add("Git command was not reachable on build time or your project is not in a Git repository.")
                 .build();
         return group;
+    }
+
+    public FlexData getTimeLineCards() {
+        //List<TraceItemData> result = new ArrayList<>();
+
+        LinearGroupFlexData timeLine = new LinearGroupFlexData();
+        timeLine.setHorizontalMargin(false);
+        timeLine.setVerticalMargin(false);
+
+        TraceItemData local = new TraceItemData();
+        local.setColor(R.color.rally_orange);
+        local.setPosition(TraceItemData.Position.START);
+        local.setFullSpan(true);
+        local.setTag("Local changes");
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        if (hasLocalChanges) {
+            int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
+            int file_untracked_count = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT);
+            int total = file_changes_count + file_untracked_count;
+
+            local.setTitle("Local changes:  + " + total + " files");
+            local.setSubtitle(gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS) + " " + file_untracked_count + " new files (untracked)");
+            local.setLink("View Diffs");
+            local.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_DIFF_FILE);
+                    String params = SourceDetailScreen.buildInternalParams(path);
+                    OverlayService.performNavigation(SourceDetailScreen.class, params);
+                }
+            });
+        }
+        timeLine.add(local);
+
+        TraceItemData localBranch = new TraceItemData();
+        localBranch.setColor(R.color.rally_yellow);
+        localBranch.setPosition(TraceItemData.Position.MIDDLE);
+        localBranch.setFullSpan(true);
+        String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
+        int local_commits_count = Humanizer.countLines(local_commits);
+        localBranch.setTitle("Local commits:  + " + local_commits_count + " commits");
+        localBranch.setSubtitle(gitInfo.getString(GitInfo.LOCAL_BRANCH) + ": "
+                + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT) + " commits" );
+        localBranch.setTag("Local Branch");
+        localBranch.setLink("View Commits");
+        localBranch.setPerformer(new Runnable() {
+            @Override
+            public void run() {
+                String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_DIFF_FILE);
+                String params = SourceDetailScreen.buildInternalParams(path);
+                OverlayService.performNavigation(SourceDetailScreen.class, params);
+            }
+        });
+        timeLine.add(localBranch);
+
+        boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
+        if (hasRemote){
+            TraceItemData remoteBranch = new TraceItemData();
+            remoteBranch.setColor(R.color.rally_blue_med);
+            remoteBranch.setPosition(TraceItemData.Position.MIDDLE);
+            remoteBranch.setFullSpan(true);
+            remoteBranch.setTitle("Top remote commit");
+            remoteBranch.setSubtitle("Commit " + gitInfo.getString(GitInfo.REMOTE_BRANCH_COUNT)
+                    + " from " + gitInfo.getString(GitInfo.REMOTE_BRANCH));
+            remoteBranch.setTag("Remote Branch");
+            remoteBranch.setLink("View Commits");
+            remoteBranch.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
+                    String params = SourceDetailScreen.buildInternalParams(path);
+                    OverlayService.performNavigation(SourceDetailScreen.class, params);
+                }
+            });
+            timeLine.add(remoteBranch);
+
+
+            TraceItemData remoteHead = new TraceItemData();
+            remoteHead.setColor(R.color.material_green);
+            remoteHead.setPosition(TraceItemData.Position.END);
+            remoteHead.setFullSpan(true);
+            remoteHead.setTitle("Remote head:  - " + gitInfo.getInt(GitInfo.REMOTE_HEAD_DISTANCE) + " commits");
+            remoteHead.setSubtitle(gitInfo.getString(GitInfo.REMOTE_HEAD) + ", "
+                    + gitInfo.getString(GitInfo.REMOTE_HEAD_COUNT) + " commits" );
+            remoteHead.setTag("Remote Head");
+            remoteHead.setLink("View Commits");
+            remoteHead.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
+                    String params = SourceDetailScreen.buildInternalParams(path);
+                    OverlayService.performNavigation(SourceDetailScreen.class, params);
+                }
+            });
+            timeLine.add(remoteHead);
+        }
+
+        return timeLine;
     }
 
     public DocumentSectionData getRemoteRepoInfo() {

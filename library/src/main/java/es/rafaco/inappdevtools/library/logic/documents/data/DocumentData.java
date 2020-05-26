@@ -32,6 +32,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -41,12 +42,14 @@ public class DocumentData {
     private int icon;
     private String overview;
     private List<DocumentSectionData> sections;
+    private FlexData screenItem;
 
     public DocumentData(Builder builder) {
         this.title = builder.title;
         this.icon = builder.icon;
-        this.sections = builder.sections;
         this.overview = builder.overview;
+        this.screenItem = builder.screenItem;
+        this.sections = builder.sections;
     }
 
     public String getTitle() {
@@ -110,11 +113,23 @@ public class DocumentData {
         return result;
     }
 
+    public boolean hasScreenItems() {
+        return screenItem != null;
+    }
+
+    public FlexData getScreenItem() {
+        return screenItem;
+    }
+    public void setScreenItem(FlexData item) {
+        this.screenItem = item;
+    }
+
     public static class Builder {
         private String title;
         private int icon;
         private String overview;
         private List<DocumentSectionData> sections;
+        private FlexData screenItem;
 
         public Builder(DocumentType documentType) {
             this.title = documentType.getName();
@@ -144,11 +159,16 @@ public class DocumentData {
             return this;
         }
 
+        public Builder setScreenItem(FlexData screenItem) {
+            this.screenItem = screenItem;
+            return this;
+        }
+
         public Builder setSections(List<DocumentSectionData> sections) {
             this.sections = sections;
             return this;
         }
-        
+
         public Builder add(DocumentSectionData entry) {
             this.sections.add(entry);
             return this;

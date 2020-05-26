@@ -22,55 +22,84 @@ package es.rafaco.inappdevtools.library.view.components.items;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 
-public class TraceItemData {
+public class TraceItemData extends FlexData {
 
-    public enum Position { START, MIDDLE, END}
-    private Sourcetrace sourcetrace;
-    private String exception;
-    private String message;
+    public enum Position { START, MIDDLE, END;}
     private Position position = Position.MIDDLE;
-    private String tag;
     private boolean expanded = true;
     private boolean alwaysExpanded = false;
     private boolean isGrouped = false;
-    private String fullPath;
     private int color;
+    private Runnable performer;
+
+    private long linkedId;
+    private String className;
+    private String extra;
+    private String title;
+    private String subtitle;
+    private String tag;
+    private String link;
+
+    public TraceItemData(){
+        super();
+    }
 
     public TraceItemData(Sourcetrace sourcetrace) {
-        this.sourcetrace = sourcetrace;
+        this();
+        this.title = sourcetrace.formatClassAndMethod();
+        this.subtitle = sourcetrace.getPackageName();
+        this.link = sourcetrace.formatFileAndLine();
+
+        this.linkedId = sourcetrace.getUid();
+        this.className = sourcetrace.getClassName();
+        this.extra = sourcetrace.getExtra();
+        this.performer = new Runnable(){
+            @Override
+            public void run() {
+                OverlayService.performNavigation(SourceDetailScreen.class,
+                        SourceDetailScreen.buildTraceParams(linkedId));
+            }
+        };
     }
 
-    public Sourcetrace getSourcetrace() {
-        return sourcetrace;
+    public long getLinkedId() {
+        return linkedId;
     }
 
-    public void setSourcetrace(Sourcetrace stacktrace) {
-        this.sourcetrace = stacktrace;
+    public String getClassName() {
+        return className;
     }
 
-    public String getException() {
-        return exception;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public void setException(String exception) {
-        this.exception = exception;
+    public String getExtra() {
+        return extra;
     }
 
-    public String getMessage() {
-        return message;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getTitle() {
+        return title;
     }
 
-    public Position getPosition() {
-        return position;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public String getTag() {
@@ -79,6 +108,32 @@ public class TraceItemData {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public boolean isExpanded() {
@@ -106,22 +161,18 @@ public class TraceItemData {
     }
 
     public boolean isOpenable() {
-        return !TextUtils.isEmpty(fullPath);
+        return !TextUtils.isEmpty(link);
     }
 
-    public String getFullPath() {
-        return fullPath;
+    public void setPerformer(Runnable performer) {
+        this.performer = performer;
     }
 
-    public void setFullPath(String fullPath) {
-        this.fullPath = fullPath;
+    public void setLinkedId(long linkedId) {
+        this.linkedId = linkedId;
     }
 
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
+    public Runnable getPerformer() {
+        return performer;
     }
 }

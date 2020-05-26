@@ -308,8 +308,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
             if (firstTrace instanceof TraceGroupItem)
                 firstTrace = adapter.getItems().get(1);
             if (firstTrace instanceof TraceItemData){
-                Sourcetrace firstSourcetrace = ((TraceItemData) firstTrace).getSourcetrace();
-                tracesTitle = firstSourcetrace.formatClassAndMethod();
+                tracesTitle = ((TraceItemData) firstTrace).getTitle();
             }
 
             HeaderIconFlexData tracesHeaderData = new HeaderIconFlexData.Builder(tracesTitle)

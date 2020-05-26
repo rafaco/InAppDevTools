@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.components.items;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,11 +35,8 @@ import android.support.v7.widget.CardView;
 import com.alorma.timeline.TimelineView;
 
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
-import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class TraceViewHolder extends FlexViewHolder {
@@ -49,11 +45,9 @@ public class TraceViewHolder extends FlexViewHolder {
     private final CardView cardView;
     private final TimelineView timeline;
     private final ImageView navIcon;
-    private final TextView exceptionView;
-    private final TextView messageView;
-    private final TextView whereView;
-    private final TextView where2View;
-    private final TextView where3View;
+    private final TextView title;
+    private final TextView subtitle;
+    private final TextView link;
     private final TextView tag;
 
     public TraceViewHolder(View view, FlexAdapter adapter) {
@@ -61,13 +55,11 @@ public class TraceViewHolder extends FlexViewHolder {
         this.itemContent = view.findViewById(R.id.item_content);
         this.cardView = view.findViewById(R.id.card_view);
         this.timeline = view.findViewById(R.id.timeline);
-        this.exceptionView = view.findViewById(R.id.exception);
-        this.messageView = view.findViewById(R.id.message);
-        this.whereView = view.findViewById(R.id.where);
-        this.where2View = view.findViewById(R.id.where2);
-        this.where3View = view.findViewById(R.id.where3);
-        this.navIcon = view.findViewById(R.id.icon);
+        this.title = view.findViewById(R.id.title);
+        this.subtitle = view.findViewById(R.id.subtitle);
         this.tag = view.findViewById(R.id.tag);
+        this.link = view.findViewById(R.id.link);
+        this.navIcon = view.findViewById(R.id.icon);
     }
 
     @Override
@@ -82,54 +74,50 @@ public class TraceViewHolder extends FlexViewHolder {
             if (!data.isExpanded())
                 return;
 
+            int color = (data.getColor()>0) ? data.getColor() : R.color.iadt_text_low;
 
             timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
-            timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
+            timeline.setIndicatorColor(ContextCompat.getColor(getContext(), color));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 6));
 
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
             if (data.getPosition().equals(TraceItemData.Position.START)){
-                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_orange));
-                timeline.setIndicatorColor(ContextCompat.getColor(getContext(), data.getColor()));
+                title.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_orange));
+                timeline.setIndicatorColor(ContextCompat.getColor(getContext(), color));
                 timeline.setTimelineType(TimelineView.TYPE_START);
             }
             else if (data.getPosition().equals(TraceItemData.Position.END)){
-                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
+                title.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_END);
             }else{
-                whereView.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
+                title.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
-            exceptionView.setVisibility(TextUtils.isEmpty(data.getException()) ? View.GONE : View.VISIBLE);
-            exceptionView.setText(data.getException());
-            messageView.setVisibility(TextUtils.isEmpty(data.getMessage()) ? View.GONE : View.VISIBLE);
-            messageView.setText(data.getMessage());
 
-            final Sourcetrace trace = data.getSourcetrace();
-            whereView.setText(trace.formatClassAndMethod());
-            where2View.setText(trace.getPackageName());
-            where2View.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
+            title.setText(data.getTitle());
+            subtitle.setText(data.getSubtitle());
+            if (data.getColor()>0)
+                subtitle.setTextColor(ContextCompat.getColor(getContext(), color));
 
             tag.setText(data.getTag());
-            tag.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
-            UiUtils.setStrokeToDrawable(getContext(), 1, data.getColor(), tag.getBackground());
+            tag.setTextColor(ContextCompat.getColor(getContext(), color));
+            UiUtils.setStrokeToDrawable(getContext(), 1, color, tag.getBackground());
 
-            where3View.setText(trace.formatFileAndLine());
+            link.setText(data.getLink());
 
-            if (data.isOpenable()){
+            if (data.isOpenable() && data.getPerformer()!=null){
                 cardView.setClickable(true);
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        OverlayService.performNavigation(SourceDetailScreen.class,
-                                SourceDetailScreen.buildTraceParams(trace.getUid()));
+                        data.getPerformer().run();
                     }
                 });
                 
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_top));
                 cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 12));
 
-                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_high));
+                link.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_high));
                 navIcon.setVisibility(View.VISIBLE);
             }
             else{
@@ -139,7 +127,7 @@ public class TraceViewHolder extends FlexViewHolder {
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_medium));
                 cardView.setCardElevation(UiUtils.getPixelsFromDp(getContext(), 6));
 
-                where3View.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_low));
+                link.setTextColor(ContextCompat.getColor(getContext(), R.color.iadt_text_low));
                 navIcon.setVisibility(View.GONE);
             }
         }

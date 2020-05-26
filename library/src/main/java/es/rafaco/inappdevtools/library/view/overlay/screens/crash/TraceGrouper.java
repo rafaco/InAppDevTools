@@ -111,8 +111,8 @@ public class TraceGrouper {
             TraceItemData item = new TraceItemData(traces.get(i));
             fillClassifier(item);
 
-            if (item.getSourcetrace().getExtra()!=null &&
-                    item.getSourcetrace().getExtra().equals("cause")){
+            if (item.getExtra()!=null &&
+                    item.getExtra().equals("cause")){
                 causeFound = true;
             }
 
@@ -126,7 +126,7 @@ public class TraceGrouper {
             initMatcher();
 
         String classifier = null;
-        String className = item.getSourcetrace().getClassName();
+        String className = item.getClassName();
         for (HashMap.Entry<String, String> entry : matcher.entrySet()) {
             if (className.startsWith(entry.getKey())) {
                 classifier = entry.getValue();
@@ -136,7 +136,7 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : OTHER_TAG);
         item.setColor(getColor(item));
-        item.setFullPath(IadtController.get().getSourcesManager().getPathFromClassName(item.getSourcetrace().getClassName()));
+        item.setLink(IadtController.get().getSourcesManager().getPathFromClassName(item.getClassName()));
     }
 
     private void initMatcher() {

@@ -66,21 +66,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/exception"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextCondensed.Medium"
-                    tools:text="Exception"/>
-
-                <TextView
-                    android:id="@+id/message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextCondensed.Medium"
-                    tools:text="Message"/>
-
-                <TextView
-                    android:id="@+id/where"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_yellow"
@@ -88,7 +74,7 @@
                     tools:text="Where"/>
 
                 <TextView
-                    android:id="@+id/where2"
+                    android:id="@+id/subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_blue"
@@ -112,11 +98,11 @@
                         tools:text="Your App"/>
 
                     <TextView
-                        android:id="@+id/where3"
+                        android:id="@+id/link"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAlignment="textEnd"
-                        android:layout_gravity="end"
+                        android:layout_gravity="end|bottom"
                         android:gravity="end"
                         android:textColor="@color/iadt_text_low"
                         style="@style/TextCondensed.Medium"

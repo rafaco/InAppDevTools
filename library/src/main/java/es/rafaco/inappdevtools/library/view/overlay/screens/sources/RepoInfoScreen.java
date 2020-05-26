@@ -71,6 +71,10 @@ public class RepoInfoScreen extends AbstractDocumentScreen {
         objectList.add(0, buildOverviewData(reportData));
         objectList.add(1, getButtonList());
         objectList.add(2, "");
+        if (reportData.hasScreenItems()) {
+            objectList.add(3, reportData.getScreenItem());
+            objectList.add(4, "");
+        }
         return objectList;
     }
 
