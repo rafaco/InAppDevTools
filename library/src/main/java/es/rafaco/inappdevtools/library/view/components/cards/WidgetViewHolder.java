@@ -51,6 +51,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexViewHolder;
+import es.rafaco.inappdevtools.library.view.icons.IconUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class WidgetViewHolder extends FlexViewHolder {
@@ -75,6 +76,7 @@ public class WidgetViewHolder extends FlexViewHolder {
     private final TextView title;
     private final TextView secondContent;
     private final FrameLayout chartContainer;
+    private final TextView icon;
 
     public WidgetViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
@@ -83,6 +85,7 @@ public class WidgetViewHolder extends FlexViewHolder {
         this.mainContent = view.findViewById(R.id.main_content);
         this.secondContent = view.findViewById(R.id.second_content);
         this.chartContainer = view.findViewById(R.id.chart_container);
+        this.icon = view.findViewById(R.id.icon);
     }
 
     @Override
@@ -108,6 +111,10 @@ public class WidgetViewHolder extends FlexViewHolder {
             }
             
             initChart(data);
+
+            if (data.getIcon()>0){
+                IconUtils.set(icon, data.getIcon());
+            }
         }
     }
 

@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools.library.view.components.cards;
 //#ifdef ANDROIDX
 //@import androidx.annotation.StringRes;
 //#else
+import android.support.annotation.StringRes;
 //#endif
 
 public class WidgetData {
@@ -29,10 +30,12 @@ public class WidgetData {
     private String title;
     private String mainContent;
     private String secondContent;
+    private int icon;
     private Runnable performer;
 
     public WidgetData(Builder builder) {
         this.title = builder.title;
+        this.icon = builder.icon;
         this.mainContent = builder.mainContent;
         this.secondContent = builder.secondContent;
         this.performer = builder.performer;
@@ -40,6 +43,10 @@ public class WidgetData {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getIcon() {
+        return icon;
     }
 
     public String getMainContent() {
@@ -57,6 +64,7 @@ public class WidgetData {
 
     public static class Builder {
         private String title;
+        private int icon;
         private String mainContent;
         private String secondContent;
         private Runnable performer;
@@ -67,6 +75,11 @@ public class WidgetData {
 
         public Builder(String title) {
             this.title = title;
+        }
+
+        public Builder setIcon(@StringRes int icon) {
+            this.icon = icon;
+            return this;
         }
 
         public Builder setMainContent(String text) {

@@ -129,7 +129,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         if (TextUtils.isEmpty(teamName))
             teamName = "Resources";
         WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
-                //.setIcon(R.string.gmd_people)
+                .setIcon(R.string.gmd_people)
                 .setMainContent(teamName)
                 .setPerformer(new Runnable() {
                     @Override
@@ -141,7 +141,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(teamData);
 
         WidgetData deviceData = new WidgetData.Builder("Device")
-                //.setIcon(R.string.gmd_phone)
+                .setIcon(R.string.gmd_phone)
                 .setMainContent(osHelper.getOneLineOverview())
                 .setSecondContent(deviceHelper.getFormattedDevice())
                 .setPerformer(new Runnable() {
@@ -154,7 +154,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(deviceData);
 
         WidgetData appData = new WidgetData.Builder("App")
-                //.setIcon(R.string.gmd_apps)
+                .setIcon(R.string.gmd_apps)
                 .setMainContent(appHelper.getAppName())
                 .setSecondContent(appHelper.getFormattedVersionShort()
                         + " " + buildReporter.getFriendlyBuildType())
@@ -187,6 +187,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
             repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
         }
         WidgetData sourcesData = new WidgetData.Builder("Sources")
+                .setIcon(R.string.gmd_code)
                 .setMainContent(repoMain)
                 .setSecondContent(repoSecond)
                 .setPerformer(new Runnable() {
@@ -199,7 +200,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(sourcesData);
 
         WidgetData viewData = new WidgetData.Builder("View")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_view_carousel)
                 .setMainContent(IadtController.get().getActivityTracker().getCurrentName())
                 .setSecondContent("3 fragments")
                 .setPerformer(new Runnable() {
@@ -212,7 +213,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(viewData);
 
         WidgetData jvmData = new WidgetData.Builder("Logic")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_location_city)
                 .setMainContent(RunningThreadsUtils.getCount() + " threads")
                 .setSecondContent(RunningProcessesUtils.getCount() + " process and " + RunningTasksUtils.getCount() + " tasks")
                 .setPerformer(new Runnable() {
@@ -226,7 +227,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
 
         int logsCount = IadtDatabase.get().friendlyDao().count(); //TODO: filter by session
         WidgetData logsData = new WidgetData.Builder("Logs")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_sort)
                 .setMainContent(Humanizer.plural(logsCount, "log"))
                 .setPerformer(new Runnable() {
                     @Override
@@ -243,7 +244,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         long netSize = netSummaryDao.sizeBySession(currentSession);
         int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
         WidgetData networkData = new WidgetData.Builder("Network")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_cloud)
                 .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
                 .setSecondContent(netCount +" req. and "
                         + Humanizer.plural(netErrors, "error"))
@@ -259,7 +260,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         int sessionCount = IadtDatabase.get().sessionDao().count();
         int buildCount = IadtDatabase.get().buildDao().count();
         WidgetData historyData = new WidgetData.Builder("History")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_history)
                 .setMainContent(Humanizer.plural(sessionCount, "Session"))
                 .setSecondContent(Humanizer.plural(buildCount, "Build"))
                 .setPerformer(new Runnable() {
@@ -272,7 +273,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(historyData);
 
         WidgetData storageData = new WidgetData.Builder("Storage")
-                //.setIcon(R.string.gmd_view_carousel)
+                .setIcon(R.string.gmd_storage)
                 //TODO: it fails on lollipop 1
                 //.setMainContent(InternalFileReader.getTotalSizeFormatted())
                 .setSecondContent("3 DB, 4 SP & 1234 files")

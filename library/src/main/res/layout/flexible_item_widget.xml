@@ -36,47 +36,67 @@
         android:focusable="true"
         style="@style/IadtCard.Medium">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/standard_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextCondensed.Medium"
+                    android:textColor="@color/iadt_text_header"
+                    tools:text="TITLE"/>
+
+                <TextView
+                    android:id="@+id/main_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="0.9"
+                    style="@style/TextCondensed.ExtraLarge"
+                    android:textColor="@color/iadt_text_high"
+                    tools:text="Main Content"/>
+
+                <TextView
+                    android:id="@+id/second_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="0.9"
+                    style="@style/TextCondensed.Medium"
+                    android:textColor="@color/iadt_text_low"
+                    tools:text="Secondary Content"/>
+
+                <FrameLayout
+                    android:id="@+id/chart_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextCondensed.Medium"
-                android:textColor="@color/iadt_text_header"
-                tools:text="TITLE"/>
-
-            <TextView
-                android:id="@+id/main_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:lineSpacingMultiplier="0.9"
-                style="@style/TextCondensed.ExtraLarge"
-                android:textColor="@color/iadt_text_high"
-                tools:text="Main Content"/>
-
-            <TextView
-                android:id="@+id/second_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:lineSpacingMultiplier="0.9"
-                style="@style/TextCondensed.Medium"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="-1dp"
+                android:layout_marginRight="-1dp"
                 android:textColor="@color/iadt_text_low"
-                tools:text="Secondary Content"/>
+                android:textSize="@dimen/iadt_icon_font_size_xl"
+                android:alpha="0.2"
+                tools:text="P"/>
 
-            <FrameLayout
-                android:id="@+id/chart_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
-
-        </LinearLayout>
+        </RelativeLayout>
     </es.rafaco.compat.CardView>
 </LinearLayout>
