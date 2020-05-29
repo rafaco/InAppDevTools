@@ -19,9 +19,14 @@
 
 package es.rafaco.inappdevtools.library.view.components.base;
 
-import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewGroup;
+
+//#ifdef ANDROIDX
+//@import androidx.annotation.CallSuper;
+//#else
+import android.support.annotation.CallSuper;
+//#endif
 
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
