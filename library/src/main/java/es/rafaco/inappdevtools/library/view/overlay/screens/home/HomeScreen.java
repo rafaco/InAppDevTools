@@ -87,7 +87,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
     }
 
     public FlexAdapter.Layout getLayout(){
-        return FlexAdapter.Layout.STAGGERED;
+        return FlexAdapter.Layout.GRID;
     }
 
     @Override
@@ -140,18 +140,20 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(teamData);
 
-        WidgetData deviceData = new WidgetData.Builder("Device")
-                .setIcon(R.string.gmd_phone)
-                .setMainContent(osHelper.getOneLineOverview())
-                .setSecondContent(deviceHelper.getFormattedDevice())
+        int sessionCount = IadtDatabase.get().sessionDao().count();
+        int buildCount = IadtDatabase.get().buildDao().count();
+        WidgetData historyData = new WidgetData.Builder("History")
+                .setIcon(R.string.gmd_history)
+                .setMainContent(Humanizer.plural(sessionCount, "Session"))
+                .setSecondContent(Humanizer.plural(buildCount, "Build"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(DeviceScreen.class);
+                        OverlayService.performNavigation(HistoryScreen.class);
                     }
                 })
                 .build();
-        data.add(deviceData);
+        data.add(historyData);
 
         WidgetData appData = new WidgetData.Builder("App")
                 .setIcon(R.string.gmd_apps)
@@ -167,37 +169,18 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(appData);
 
-        AssetManager assets = getContext().getAssets();
-        String[] list = new String[0];
-        try {
-            list = assets.list("");
-        } catch (IOException e) {
-            FriendlyLog.logException("Error counting assets", e);
-        }
-        
-        String repoMain, repoSecond;
-        boolean isGitInfo = repoReporter.isGitEnabled();
-        if (!isGitInfo){
-            repoMain = "No Git Info";
-            repoSecond = list.length + " assets";
-        }
-        else{
-            repoMain = repoReporter.getBranchAndTag();
-            Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
-            repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
-        }
-        WidgetData sourcesData = new WidgetData.Builder("Sources")
-                .setIcon(R.string.gmd_code)
-                .setMainContent(repoMain)
-                .setSecondContent(repoSecond)
+        WidgetData deviceData = new WidgetData.Builder("Device")
+                .setIcon(R.string.gmd_phone_android)
+                .setMainContent(osHelper.getOneLineOverview())
+                .setSecondContent(deviceHelper.getFormattedDevice())
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(SourceCodeScreen.class);
+                        OverlayService.performNavigation(DeviceScreen.class);
                     }
                 })
                 .build();
-        data.add(sourcesData);
+        data.add(deviceData);
 
         WidgetData viewData = new WidgetData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
@@ -244,7 +227,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
         long netSize = netSummaryDao.sizeBySession(currentSession);
         int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
         WidgetData networkData = new WidgetData.Builder("Network")
-                .setIcon(R.string.gmd_cloud)
+                .setIcon(R.string.gmd_filter_drama)
                 .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
                 .setSecondContent(netCount +" req. and "
                         + Humanizer.plural(netErrors, "error"))
@@ -257,21 +240,38 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(networkData);
 
-        int sessionCount = IadtDatabase.get().sessionDao().count();
-        int buildCount = IadtDatabase.get().buildDao().count();
-        WidgetData historyData = new WidgetData.Builder("History")
-                .setIcon(R.string.gmd_history)
-                .setMainContent(Humanizer.plural(sessionCount, "Session"))
-                .setSecondContent(Humanizer.plural(buildCount, "Build"))
+        AssetManager assets = getContext().getAssets();
+        String[] list = new String[0];
+        try {
+            list = assets.list("");
+        } catch (IOException e) {
+            FriendlyLog.logException("Error counting assets", e);
+        }
+
+        String repoMain, repoSecond;
+        boolean isGitInfo = repoReporter.isGitEnabled();
+        if (!isGitInfo){
+            repoMain = "No Git Info";
+            repoSecond = list.length + " assets";
+        }
+        else{
+            repoMain = repoReporter.getBranchAndTag();
+            Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
+            repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
+        }
+        WidgetData sourcesData = new WidgetData.Builder("Sources")
+                .setIcon(R.string.gmd_code)
+                .setMainContent(repoMain)
+                .setSecondContent(repoSecond)
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
-                        OverlayService.performNavigation(HistoryScreen.class);
+                        OverlayService.performNavigation(SourceCodeScreen.class);
                     }
                 })
                 .build();
-        data.add(historyData);
-
+        data.add(sourcesData);
+        
         WidgetData storageData = new WidgetData.Builder("Storage")
                 .setIcon(R.string.gmd_storage)
                 //TODO: it fails on lollipop 1

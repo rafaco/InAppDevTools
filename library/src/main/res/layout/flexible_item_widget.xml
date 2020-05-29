@@ -22,14 +22,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <es.rafaco.compat.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
@@ -51,8 +51,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextCondensed.Medium"
-                    android:textColor="@color/iadt_text_header"
-                    tools:text="TITLE"/>
+                    android:textColor="@color/iadt_primary"
+                    tools:text="TITLE"
+                    android:alpha="0.4"/>
 
                 <TextView
                     android:id="@+id/main_content"
@@ -92,8 +93,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="-1dp"
                 android:layout_marginRight="-1dp"
-                android:textColor="@color/iadt_text_low"
-                android:textSize="@dimen/iadt_icon_font_size_xl"
+                android:textColor="@color/iadt_primary"
+                android:textSize="50dp"
                 android:alpha="0.2"
                 tools:text="P"/>
 
