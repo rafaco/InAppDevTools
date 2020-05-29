@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.components.groups;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import es.rafaco.inappdevtools.library.R;
@@ -62,7 +63,6 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
             bindPerformer(data);
 
             bindContentPadding(data);
-            bindChildren(data);
         }
     }
 
@@ -122,7 +122,7 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
         }
     }
 
-    private void bindChildren(CardGroupFlexData data) {
+    /*private void bindChildren(CardGroupFlexData data) {
         childrenContainer.removeAllViews();
         if (data.getChildren()==null && data.getChildren().isEmpty()) {
             return;
@@ -140,5 +140,10 @@ public class CardGroupFlexViewHolder extends GroupFlexViewHolder {
 
         FlexDescriptor desc = FlexLoader.getDescriptor(targetData.getClass());
         desc.addToView(targetData, cardView);
+    }*/
+
+    @Override
+    public ViewGroup getChildrenContainer() {
+        return childrenContainer;
     }
 }

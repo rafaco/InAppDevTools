@@ -69,6 +69,8 @@ import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexV
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.SelectorData;
 import es.rafaco.inappdevtools.library.view.components.items.SelectorViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.TimelineFlexViewHolder;
+import es.rafaco.inappdevtools.library.view.components.items.TimelineFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
 import es.rafaco.inappdevtools.library.view.components.items.TraceGroupViewHolder;
 import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
@@ -93,14 +95,15 @@ public class FlexLoader {
         descriptors.add(new FlexDescriptor(WidgetData.class, WidgetViewHolder.class, R.layout.flexible_item_widget));
         descriptors.add(new FlexDescriptor(WideWidgetData.class, WidgetViewHolder.class, R.layout.flexible_item_widget));
         descriptors.add(new FlexDescriptor(LinkItemData.class, LinkViewHolder.class, R.layout.flexible_item_link));
-        descriptors.add(new FlexDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
-        descriptors.add(new FlexDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
         descriptors.add(new FlexDescriptor(AnalysisData.class, AnalysisViewHolder.class, R.layout.flexible_item_analysis));
         descriptors.add(new FlexDescriptor(ConfigData.class, ConfigViewHolder.class, R.layout.flexible_item_config));
         descriptors.add(new FlexDescriptor(CheckboxData.class, CheckboxViewHolder.class, R.layout.flexible_item_checkbox));
 
         descriptors.add(new FlexDescriptor(DocumentSectionData.class, ComplexCardViewHolder.class, R.layout.flexible_item_complex_card));
         descriptors.add(new FlexDescriptor(CardData.class, CardViewHolder.class, R.layout.flexible_item_card));
+        descriptors.add(new FlexDescriptor(TraceItemData.class, TraceViewHolder.class, R.layout.flexible_item_trace));
+        descriptors.add(new FlexDescriptor(TraceGroupItem.class, TraceGroupViewHolder.class, R.layout.flexible_item_trace_group));
+        descriptors.add(new FlexDescriptor(TimelineFlexData.class, TimelineFlexViewHolder.class, R.layout.flex_item_timeline));
 
         //GROUPS
         descriptors.add(new FlexDescriptor(LinearGroupFlexData.class, LinearGroupFlexViewHolder.class, R.layout.flex_group_linear));

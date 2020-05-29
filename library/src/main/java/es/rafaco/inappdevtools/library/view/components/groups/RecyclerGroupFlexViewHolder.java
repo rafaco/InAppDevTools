@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.components.groups;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 //#ifdef ANDROIDX
@@ -34,6 +35,7 @@ import android.support.v7.widget.RecyclerView;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.base.GroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.base.GroupFlexViewHolder;
 
 public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
@@ -85,6 +87,16 @@ public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
                 orientation);
         groupContainer.addItemDecoration(dividerItemDecoration);
+    }
+
+    @Override
+    protected void bindChildren(GroupFlexData data) {
+        //Do nothing
+    }
+
+    @Override
+    public ViewGroup getChildrenContainer() {
+        return groupContainer;
     }
 
     private void bindAdapter(RecyclerGroupFlexData data) {

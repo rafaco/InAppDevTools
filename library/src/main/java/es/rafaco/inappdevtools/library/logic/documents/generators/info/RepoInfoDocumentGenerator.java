@@ -22,6 +22,9 @@ package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.config.GitInfo;
@@ -36,7 +39,8 @@ import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFle
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
+import es.rafaco.inappdevtools.library.view.components.items.TimelineFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.TimelineFlexHelper;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -134,101 +138,197 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     public FlexData getTimeLineCards() {
-        //List<TraceItemData> result = new ArrayList<>();
+        LinearGroupFlexData result = new LinearGroupFlexData();
 
-        LinearGroupFlexData timeLine = new LinearGroupFlexData();
-        timeLine.setHorizontalMargin(false);
-        timeLine.setVerticalMargin(false);
-
-        TraceItemData local = new TraceItemData();
-        local.setColor(R.color.rally_orange);
-        local.setPosition(TraceItemData.Position.START);
-        local.setFullSpan(true);
-        local.setTag("Local changes");
+        TimelineFlexData localTimeline;
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        if (hasLocalChanges) {
+        if (!hasLocalChanges) {
+            localTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.START,
+                    R.color.iadt_text_low,
+                    R.string.gmd_assignment_late,
+                    "No local files changed",
+                    -1,
+                    null,
+                    null);
+        }
+        else{
             int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
             int file_untracked_count = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT);
-            int total = file_changes_count + file_untracked_count;
+            int unstaggedCount = file_changes_count + file_untracked_count;
 
-            local.setTitle("Local changes:  + " + total + " files");
-            local.setSubtitle(gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS) + " " + file_untracked_count + " new files (untracked)");
-            local.setLink("View Diffs");
-            local.setPerformer(new Runnable() {
-                @Override
-                public void run() {
-                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_DIFF_FILE);
-                    String params = SourceDetailScreen.buildInternalParams(path);
-                    OverlayService.performNavigation(SourceDetailScreen.class, params);
-                }
-            });
+            String title = "Local files changed";
+            String message = file_untracked_count + " untracked files\n" + gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS);
+            List<Object> buttons = new ArrayList<>();
+            buttons.add(new ButtonBorderlessFlexData("View Files",
+                    R.drawable.ic_format_list_bulleted_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_TXT_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
+
+            buttons.add(new ButtonBorderlessFlexData("View Diffs",
+                    R.drawable.ic_code_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_CHANGES_DIFF_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
+
+            localTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.START,
+                    R.color.rally_orange,
+                    R.string.gmd_assignment_late,
+                    title,
+                    unstaggedCount,
+                    message,
+                    buttons);
         }
-        timeLine.add(local);
+        result.add(localTimeline);
 
-        TraceItemData localBranch = new TraceItemData();
-        localBranch.setColor(R.color.rally_yellow);
-        localBranch.setPosition(TraceItemData.Position.MIDDLE);
-        localBranch.setFullSpan(true);
+
+        TimelineFlexData localRepoTimeline;
         String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
         int local_commits_count = Humanizer.countLines(local_commits);
-        localBranch.setTitle("Local commits:  + " + local_commits_count + " commits");
-        localBranch.setSubtitle(gitInfo.getString(GitInfo.LOCAL_BRANCH) + ": "
-                + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT) + " commits" );
-        localBranch.setTag("Local Branch");
-        localBranch.setLink("View Commits");
-        localBranch.setPerformer(new Runnable() {
-            @Override
-            public void run() {
-                String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_DIFF_FILE);
-                String params = SourceDetailScreen.buildInternalParams(path);
-                OverlayService.performNavigation(SourceDetailScreen.class, params);
-            }
-        });
-        timeLine.add(localBranch);
+        boolean hasLocalCommits = local_commits_count > 0;
+        if (!hasLocalCommits) {
+            localRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
+                    R.color.iadt_text_low,
+                    R.string.gmd_assignment_ind,
+                    "No local commits",
+                    -1,
+                    "",
+                    null);
+        }
+        else{
+            List<Object> localRepoButtons = new ArrayList<>();
+            localRepoButtons.add(new ButtonBorderlessFlexData("View Commits",
+                    R.drawable.ic_format_list_bulleted_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_TXT_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
+
+            localRepoButtons.add(new ButtonBorderlessFlexData("View Diffs",
+                    R.drawable.ic_code_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_LOCAL_BRANCH_DIFF_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
+
+            localRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
+                    R.color.rally_yellow,
+                    R.string.gmd_assignment_ind,
+                    "Local commits",
+                    local_commits_count,
+                    "Branch: " + gitInfo.getString(GitInfo.LOCAL_BRANCH)
+                            + "\nTotal commits: " + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT),
+                    localRepoButtons);
+        }
+        result.add(localRepoTimeline);
 
         boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
-        if (hasRemote){
-            TraceItemData remoteBranch = new TraceItemData();
-            remoteBranch.setColor(R.color.rally_blue_med);
-            remoteBranch.setPosition(TraceItemData.Position.MIDDLE);
-            remoteBranch.setFullSpan(true);
-            remoteBranch.setTitle("Top remote commit");
-            remoteBranch.setSubtitle("Commit " + gitInfo.getString(GitInfo.REMOTE_BRANCH_COUNT)
-                    + " from " + gitInfo.getString(GitInfo.REMOTE_BRANCH));
-            remoteBranch.setTag("Remote Branch");
-            remoteBranch.setLink("View Commits");
-            remoteBranch.setPerformer(new Runnable() {
-                @Override
-                public void run() {
-                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
-                    String params = SourceDetailScreen.buildInternalParams(path);
-                    OverlayService.performNavigation(SourceDetailScreen.class, params);
-                }
-            });
-            timeLine.add(remoteBranch);
+        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
 
+        TimelineFlexData remoteRepoTimeline;
+        if (!hasRemote) {
+            remoteRepoTimeline = TimelineFlexHelper.buildRepoItem(
+                    hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
+                    R.color.iadt_text_low,
+                    R.string.gmd_assignment,
+                    "No remote repo",
+                    -1,
+                    "",
+                    null);
+        }
+        else{
+            List<Object> remoteRepoButtons = new ArrayList<>();
+            remoteRepoButtons.add(new ButtonBorderlessFlexData("View Commits",
+                    R.drawable.ic_format_list_bulleted_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
 
-            TraceItemData remoteHead = new TraceItemData();
-            remoteHead.setColor(R.color.material_green);
-            remoteHead.setPosition(TraceItemData.Position.END);
-            remoteHead.setFullSpan(true);
-            remoteHead.setTitle("Remote head:  - " + gitInfo.getInt(GitInfo.REMOTE_HEAD_DISTANCE) + " commits");
-            remoteHead.setSubtitle(gitInfo.getString(GitInfo.REMOTE_HEAD) + ", "
-                    + gitInfo.getString(GitInfo.REMOTE_HEAD_COUNT) + " commits" );
-            remoteHead.setTag("Remote Head");
-            remoteHead.setLink("View Commits");
-            remoteHead.setPerformer(new Runnable() {
-                @Override
-                public void run() {
-                    String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
-                    String params = SourceDetailScreen.buildInternalParams(path);
-                    OverlayService.performNavigation(SourceDetailScreen.class, params);
-                }
-            });
-            timeLine.add(remoteHead);
+            remoteRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
+                    R.color.material_green,
+                    R.string.gmd_assignment, //TODO: why is not integration_instructions??
+                    "Remote branch",
+                    0, //gitInfo.getInt(GitInfo.REMOTE_BRANCH_COUNT),
+                    "Branch: " + gitInfo.getString(GitInfo.REMOTE_BRANCH)
+                            + "\nTotal commits: " + gitInfo.getString(GitInfo.REMOTE_BRANCH_COUNT),
+                    remoteRepoButtons);
+        }
+        result.add(remoteRepoTimeline);
+
+        if (hasRemote) {
+            List<Object> remoteHeadButtons = new ArrayList<>();
+            remoteHeadButtons.add(new ButtonBorderlessFlexData("View Commits",
+                    R.drawable.ic_format_list_bulleted_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String path = BuildFilesRepository.getBuildFile(sessionId, IadtPath.GIT_REMOTE_BRANCH_TXT_FILE);
+                            String params = SourceDetailScreen.buildInternalParams(path);
+                            OverlayService.performNavigation(SourceDetailScreen.class, params);
+                        }
+                    }));
+
+            int remoteHeadRelativeDistance = gitInfo.getInt(GitInfo.REMOTE_HEAD_DISTANCE) - gitInfo.getInt(GitInfo.REMOTE_BRANCH_DISTANCE);
+            TimelineFlexData remoteHeadTimeline = TimelineFlexHelper.buildRepoItem(
+                    hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
+                    R.color.iadt_text_high,
+                    R.string.gmd_assignment_turned_in,
+                    "Remote head",
+                    -remoteHeadRelativeDistance,
+                    "Branch: " + gitInfo.getString(GitInfo.REMOTE_HEAD)
+                            + "\nTotal commits: " + gitInfo.getString(GitInfo.REMOTE_HEAD_COUNT),
+                    remoteHeadButtons);
+            result.add(remoteHeadTimeline);
         }
 
-        return timeLine;
+        TimelineFlexData tagTimeline;
+
+        if (!hasTag) {
+            tagTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.END,
+                    R.color.iadt_text_low,
+                    R.string.gmd_assignment_ind,
+                    "No tag",
+                    null,
+                    "",
+                    null);
+        }
+        else{
+            int tagRelativeDistance = gitInfo.getInt(GitInfo.TAG_DISTANCE) - gitInfo.getInt(GitInfo.REMOTE_BRANCH_DISTANCE);
+            tagTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.END,
+                    R.color.iadt_primary,
+                    R.string.gmd_local_offer,
+                    "Last tag",
+                    -tagRelativeDistance,
+                    "Tag: " + gitInfo.getString(GitInfo.TAG_NAME)
+                            + "\nCommit Id: " + gitInfo.getString(GitInfo.TAG_LAST_COMMIT),
+                    null);
+        }
+        result.add(tagTimeline);
+
+        return result;
     }
 
     public DocumentSectionData getRemoteRepoInfo() {

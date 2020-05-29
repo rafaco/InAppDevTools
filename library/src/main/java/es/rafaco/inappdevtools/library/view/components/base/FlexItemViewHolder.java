@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.components.base;
 
+import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -39,7 +40,7 @@ public class FlexItemViewHolder extends FlexViewHolder {
         super(view, adapter);
     }
 
-    @Override
+    @CallSuper
     public void bindTo(Object abstractData, int position) {
 
         //TODO: remove this bug out, currently needed for String headers

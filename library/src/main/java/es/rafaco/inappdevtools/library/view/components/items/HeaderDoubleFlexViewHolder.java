@@ -112,8 +112,8 @@ public class HeaderDoubleFlexViewHolder extends FlexItemViewHolder
         if (icon>0){
             IconUtils.set(iconView, icon);
             iconView.setVisibility(View.VISIBLE);
-            if (data.getTitleColor()>0){
-                iconView.setTextColor(ContextCompat.getColor(getContext(), data.getTitleColor()));
+            if (data.getAccentColor()>0){
+                iconView.setTextColor(ContextCompat.getColor(getContext(), data.getAccentColor()));
             }
         }else{
             iconView.setVisibility(View.GONE);
@@ -121,17 +121,20 @@ public class HeaderDoubleFlexViewHolder extends FlexItemViewHolder
     }
 
     private void bindMainIcon(final HeaderDoubleFlexData data) {
-        if (data.getNavCount()>-1){
+        int color = (data.getAccentColor()>0) ? data.getAccentColor() : R.color.iadt_primary;
+        int contextualizedColor = ContextCompat.getColor(navIcon.getContext(), color);
+        navIcon.setTextColor(contextualizedColor);
+
+        if (data.getNavCount()!=null){
             navIcon.setText(data.getNavCount()+"");
         }
         else{
-            int navIconRes = data.getNavIcon()>0 ? data.getNavIcon()
-                    : R.string.gmd_keyboard_arrow_right;
-            IconUtils.applyToTextView(navIcon, navIconRes, R.color.iadt_primary);
+            int navIconRes = data.getNavIcon()>0 ? data.getNavIcon() : R.string.gmd_keyboard_arrow_right;
+            IconUtils.set(navIcon, navIconRes);
         }
         navIcon.setVisibility(View.VISIBLE);
 
-        if (data.getNavCount()>-1 || data.getNavIcon()>0){
+        if (data.getNavCount()!=null || data.getNavIcon()>0){
             overwrittenCollapsableIcon = true;
         }
     }
@@ -156,7 +159,8 @@ public class HeaderDoubleFlexViewHolder extends FlexItemViewHolder
     private void bindExtraPerformer(final HeaderDoubleFlexData data) {
         if (data.getNavAddRunnable() != null){
             int navAddIconRes = data.getNavAddIcon()>0 ? data.getNavAddIcon() : R.string.gmd_add;
-            IconUtils.set(navAddIcon, navAddIconRes);
+            int color = (data.getAccentColor()>0) ? data.getAccentColor() : R.color.iadt_primary;
+            IconUtils.applyToTextView(navAddIcon, navAddIconRes, color);
             navAddContainer.setClickable(true);
             navAddContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -186,7 +190,6 @@ public class HeaderDoubleFlexViewHolder extends FlexItemViewHolder
 
         if (!isExpanded){
             IconUtils.applyToTextView(navIcon, R.string.gmd_keyboard_arrow_down, R.color.iadt_primary);
-
         }
         else {
             IconUtils.applyToTextView(navIcon, R.string.gmd_keyboard_arrow_up, R.color.iadt_primary);

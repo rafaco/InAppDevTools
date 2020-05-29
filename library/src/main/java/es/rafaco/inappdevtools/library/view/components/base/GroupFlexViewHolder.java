@@ -20,10 +20,13 @@
 package es.rafaco.inappdevtools.library.view.components.base;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 
-public class GroupFlexViewHolder extends FlexItemViewHolder {
+public abstract class GroupFlexViewHolder extends FlexItemViewHolder {
 
     public GroupFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
@@ -34,7 +37,28 @@ public class GroupFlexViewHolder extends FlexItemViewHolder {
         super.bindTo(abstractData, position);
 
         GroupFlexData data = (GroupFlexData) abstractData;
-
-        //TODO: nothing needed by now
+        bindChildren(data);
     }
+
+    protected void bindChildren(GroupFlexData data) {
+        getChildrenContainer().removeAllViews();
+        if (data.getChildren()==null || data.getChildren().isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i<data.getChildren().size(); i++){
+            Object childData = data.getChildren().get(i);
+            FlexDescriptor desc = FlexLoader.getDescriptor(childData.getClass());
+
+            beforeAddChildView(desc, data, childData);
+            if (desc != null){
+                desc.addToView(childData, getChildrenContainer());
+            }
+        }
+    }
+
+    protected void beforeAddChildView(FlexDescriptor desc, Object parentData, Object childData) {
+    }
+
+    public abstract ViewGroup getChildrenContainer();
 }

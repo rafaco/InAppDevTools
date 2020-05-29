@@ -19,35 +19,43 @@
 
 package es.rafaco.inappdevtools.library.view.components.base;
 
+import android.support.annotation.CallSuper;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 
-public class ContainerFlexViewHolder extends FlexItemViewHolder {
+public abstract class ContainerFlexViewHolder extends FlexItemViewHolder {
 
     public ContainerFlexViewHolder(View view, FlexAdapter adapter) {
         super(view, adapter);
     }
 
-    @Override
+    @CallSuper
     public void bindTo(Object abstractData, int position) {
         super.bindTo(abstractData, position);
         ContainerFlexData data = (ContainerFlexData) abstractData;
         bindChild(data);
     }
 
+    public abstract ViewGroup getChildContainer();
+
     private void bindChild(ContainerFlexData data) {
+        if (getChildContainer() == null){
+            //TODO: log develop warning
+            return;
+        }
+
+        getChildContainer().removeAllViews();
         if (data.getChild() == null) {
-            ((FrameLayout) itemView).removeAllViews();
             return;
         }
 
         FlexDescriptor desc = FlexLoader.getDescriptor(data.getChild().getClass());
         if (desc != null){
-            desc.addToView(data.getChild(), ((FrameLayout) itemView));
+            desc.addToView(data.getChild(), getChildContainer());
         }
     }
 }
