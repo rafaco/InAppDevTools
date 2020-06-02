@@ -54,6 +54,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.cards.WideWidgetData;
 import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
+import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -182,6 +183,53 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(deviceData);
 
+
+        AssetManager assets = getContext().getAssets();
+        String[] list = new String[0];
+        try {
+            list = assets.list("");
+        } catch (IOException e) {
+            FriendlyLog.logException("Error counting assets", e);
+        }
+        String repoMain, repoSecond;
+        boolean isGitInfo = repoReporter.isGitEnabled();
+        if (!isGitInfo){
+            repoMain = "No Git repo";
+            repoSecond = list.length + " assets";
+        }
+        else{
+            repoMain = repoReporter.getWidgetMainText();
+            repoSecond = repoReporter.getWidgetSecondText();
+        }
+        WidgetData sourcesData = new WidgetData.Builder("Sources")
+                .setIcon(R.string.gmd_code)
+                .setMainContent(repoMain)
+                .setSecondContent(repoSecond)
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SourceCodeScreen.class);
+                    }
+                })
+                .build();
+        data.add(sourcesData);
+
+        WidgetData storageData = new WidgetData.Builder("Storage")
+                .setIcon(R.string.gmd_storage)
+                //TODO: it fails on lollipop 1
+                //.setMainContent(InternalFileReader.getTotalSizeFormatted())
+                .setSecondContent("3 DB, 4 SP & 1234 files")
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        HomeScreen.this.getScreenManager().hide();
+                        PandoraBridge.storage();
+                    }
+                })
+                .build();
+        data.add(storageData);
+
+        
         WidgetData viewData = new WidgetData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
                 .setMainContent(IadtController.get().getActivityTracker().getCurrentName())
@@ -207,6 +255,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(jvmData);
+
 
         int logsCount = IadtDatabase.get().friendlyDao().count(); //TODO: filter by session
         WidgetData logsData = new WidgetData.Builder("Logs")
@@ -240,53 +289,7 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 .build();
         data.add(networkData);
 
-        AssetManager assets = getContext().getAssets();
-        String[] list = new String[0];
-        try {
-            list = assets.list("");
-        } catch (IOException e) {
-            FriendlyLog.logException("Error counting assets", e);
-        }
-
-        String repoMain, repoSecond;
-        boolean isGitInfo = repoReporter.isGitEnabled();
-        if (!isGitInfo){
-            repoMain = "No Git Info";
-            repoSecond = list.length + " assets";
-        }
-        else{
-            repoMain = repoReporter.getBranchAndTag();
-            Boolean anyLocalChange = repoReporter.hasLocalCommitsOrChanges();
-            repoSecond = anyLocalChange ? "+ Local changes" : "No changes";
-        }
-        WidgetData sourcesData = new WidgetData.Builder("Sources")
-                .setIcon(R.string.gmd_code)
-                .setMainContent(repoMain)
-                .setSecondContent(repoSecond)
-                .setPerformer(new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(SourceCodeScreen.class);
-                    }
-                })
-                .build();
-        data.add(sourcesData);
         
-        WidgetData storageData = new WidgetData.Builder("Storage")
-                .setIcon(R.string.gmd_storage)
-                //TODO: it fails on lollipop 1
-                //.setMainContent(InternalFileReader.getTotalSizeFormatted())
-                .setSecondContent("3 DB, 4 SP & 1234 files")
-                .setPerformer(new Runnable() {
-                    @Override
-                    public void run() {
-                        HomeScreen.this.getScreenManager().hide();
-                        PandoraBridge.storage();
-                    }
-                })
-                .build();
-        data.add(storageData);
-
         if (isDebug()){
             data.add(new ButtonFlexData("More",
                     R.drawable.ic_more_vert_white_24dp,

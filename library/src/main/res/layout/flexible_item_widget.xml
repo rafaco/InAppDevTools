@@ -52,8 +52,9 @@
                     android:layout_height="wrap_content"
                     style="@style/TextCondensed.Medium"
                     android:textColor="@color/iadt_primary"
-                    tools:text="TITLE"
-                    android:alpha="0.4"/>
+                    android:textStyle="bold"
+                    android:alpha="0.4"
+                    tools:text="TITLE"/>
 
                 <TextView
                     android:id="@+id/main_content"
@@ -94,8 +95,8 @@
                 android:layout_marginTop="-1dp"
                 android:layout_marginRight="-1dp"
                 android:textColor="@color/iadt_primary"
-                android:textSize="50dp"
-                android:alpha="0.2"
+                android:textSize="@dimen/iadt_icon_font_size_l"
+                android:alpha="0.3"
                 tools:text="P"/>
 
         </RelativeLayout>

@@ -91,6 +91,17 @@ public class DialogManager {
         show();
     }
 
+    public void loadNonOverlay(IadtDialogBuilder builder){
+        dismiss();
+        Activity currentActivity = getCurrentActivity();
+        if (currentActivity==null){
+            return; // Will build when activity available (by listener)
+        }
+        currentActivityHash = currentActivity.toString();
+        currentDialog = builder.createDialog(context);
+        show();
+    }
+
     private boolean isLoaded() {
         return builder != null;
     }
