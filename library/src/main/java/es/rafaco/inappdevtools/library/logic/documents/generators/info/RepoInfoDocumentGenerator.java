@@ -144,11 +144,11 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
         if (!hasLocalChanges) {
             localTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.START,
-                    R.color.iadt_text_low,
+                    R.color.material_green,
                     R.string.gmd_assignment_late,
                     "No local files changed",
                     "Build folder",
-                    -1,
+                    "",
                     null,
                     null);
         }
@@ -183,7 +183,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.string.gmd_assignment_late,
                     "Local files changed",
                     "Build folder",
-                    gitInfo.getInt(GitInfo.LOCAL_TOTAL_COUNT),
+                    Humanizer.signed(gitInfo.getInt(GitInfo.LOCAL_TOTAL_COUNT)),
                     message,
                     buttons);
         }
@@ -200,7 +200,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.string.gmd_assignment_ind,
                     "No local commits",
                     "Local branch",
-                    -1,
+                    "",
                     "",
                     null);
         }
@@ -233,7 +233,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.string.gmd_assignment_ind,
                     gitInfo.getString(GitInfo.LOCAL_BRANCH),
                     "Local branch",
-                    local_commits_count,
+                    Humanizer.signed(local_commits_count),
                     "Branch: " + gitInfo.getString(GitInfo.LOCAL_BRANCH)
                             + "\nTotal commits: " + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT),
                     localRepoButtons);
@@ -243,21 +243,21 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
         boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
 
-        TimelineFlexData remoteRepoTimeline;
+        TimelineFlexData remoteBranchTimeline;
         if (!hasRemote) {
-            remoteRepoTimeline = TimelineFlexHelper.buildRepoItem(
+            remoteBranchTimeline = TimelineFlexHelper.buildRepoItem(
                     hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
                     R.color.iadt_text_low,
                     R.string.gmd_assignment,
                     "No remote repo",
                     "Remote branch",
-                    -1,
+                    null,
                     "",
                     null);
         }
         else{
-            List<Object> remoteRepoButtons = new ArrayList<>();
-            remoteRepoButtons.add(new ButtonBorderlessFlexData("View Commits",
+            List<Object> remoteBranchButtons = new ArrayList<>();
+            remoteBranchButtons.add(new ButtonBorderlessFlexData("View Commits",
                     R.drawable.ic_format_list_bulleted_white_24dp,
                     new Runnable() {
                         @Override
@@ -268,17 +268,17 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                         }
                     }));
 
-            remoteRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
+            remoteBranchTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
                     R.color.material_green,
-                    R.string.gmd_assignment, //TODO: why is not integration_instructions??
+                    R.string.gmd_assignment, //TODO: Update icons, there is not integration_instructions
                     gitInfo.getString(GitInfo.REMOTE_BRANCH),
                     "Remote branch",
-                    0, //gitInfo.getInt(GitInfo.REMOTE_BRANCH_COUNT),
+                    "", //gitInfo.getInt(GitInfo.REMOTE_BRANCH_COUNT),
                     "Branch: " + gitInfo.getString(GitInfo.REMOTE_BRANCH)
                             + "\nTotal commits: " + gitInfo.getString(GitInfo.REMOTE_BRANCH_COUNT),
-                    remoteRepoButtons);
+                    remoteBranchButtons);
         }
-        result.add(remoteRepoTimeline);
+        result.add(remoteBranchTimeline);
 
         if (hasRemote) {
             List<Object> remoteHeadButtons = new ArrayList<>();
@@ -294,13 +294,15 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     }));
 
             int remoteHeadRelativeDistance = gitInfo.getInt(GitInfo.REMOTE_HEAD_DISTANCE) - gitInfo.getInt(GitInfo.REMOTE_BRANCH_DISTANCE);
+            String remoteHeadCount = Humanizer.signed(-remoteHeadRelativeDistance);
+            int remoteHeadColour = (remoteHeadRelativeDistance == 0) ? R.color.material_green : R.color.iadt_text_high;
             TimelineFlexData remoteHeadTimeline = TimelineFlexHelper.buildRepoItem(
                     hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
-                    R.color.iadt_text_high,
+                    remoteHeadColour,
                     R.string.gmd_assignment_turned_in,
                     gitInfo.getString(GitInfo.REMOTE_HEAD),
                     "Remote head",
-                    -remoteHeadRelativeDistance,
+                    remoteHeadCount,
                     "Branch: " + gitInfo.getString(GitInfo.REMOTE_HEAD)
                             + "\nTotal commits: " + gitInfo.getString(GitInfo.REMOTE_HEAD_COUNT),
                     remoteHeadButtons);
@@ -321,12 +323,14 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
         else{
             int tagRelativeDistance = gitInfo.getInt(GitInfo.TAG_DISTANCE) - gitInfo.getInt(GitInfo.REMOTE_BRANCH_DISTANCE);
+            String tagCount = Humanizer.signed(-tagRelativeDistance);
+            int tagColour = (tagRelativeDistance == 0) ? R.color.material_green : R.color.iadt_text_high;
             tagTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.END,
-                    R.color.iadt_primary,
+                    tagColour,
                     R.string.gmd_local_offer,
                     gitInfo.getString(GitInfo.TAG_NAME),
                     "Tag",
-                    -tagRelativeDistance,
+                    tagCount,
                     "Tag: " + gitInfo.getString(GitInfo.TAG_NAME)
                             + "\nCommit Id: " + gitInfo.getString(GitInfo.TAG_LAST_COMMIT),
                     null);

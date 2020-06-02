@@ -22,6 +22,8 @@ package es.rafaco.inappdevtools.library.view.utils;
 import android.text.TextUtils;
 
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -368,5 +370,10 @@ public class Humanizer {
                 + objectClass.getSimpleName());
     }
 
+    public static String signed(Number number) {
+        if (number == null) return "";
+        NumberFormat plusMinusNF = new DecimalFormat("+ #;- #");
+        return plusMinusNF.format(number);
+    }
 }
 

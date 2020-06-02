@@ -30,7 +30,7 @@ public class HeaderDoubleFlexData extends FlexData implements CollapsibleFlexVie
     String imagePath;
     int icon;
     int navIcon;
-    Integer navCount;
+    String navCount;
     int bgColor;
     int accentColor;
     int titleColor;
@@ -100,11 +100,16 @@ public class HeaderDoubleFlexData extends FlexData implements CollapsibleFlexVie
         this.navIcon = navIcon;
     }
 
-    public Integer getNavCount() {
+    public String getNavCount() {
         return navCount;
     }
 
     public HeaderDoubleFlexData setNavCount(Integer navCount) {
+        this.navCount = (navCount != null) ? navCount.toString() : null;
+        return this;
+    }
+
+    public HeaderDoubleFlexData setNavCount(String navCount) {
         this.navCount = navCount;
         return this;
     }

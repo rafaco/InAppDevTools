@@ -31,7 +31,7 @@ public class TimelineFlexHelper {
     public static TimelineFlexData buildRepoItem(TimelineFlexData.Position position,
                                                  int color, int icon, String title,
                                                  String subtitle,
-                                                 Integer count, String message, List<Object> buttons){
+                                                 String count, String message, List<Object> buttons){
 
         CardGroupFlexData cardGroup = new CardGroupFlexData();
         cardGroup.setBgColorResource(R.color.iadt_surface_top);
@@ -40,7 +40,7 @@ public class TimelineFlexHelper {
         if (count == null){
             headerData.setNavIcon(R.string.gmd_remove);
         }
-        else if (count == 0){
+        else if (count.equals("")){
             headerData.setNavIcon(R.string.gmd_done);
         }
         else{

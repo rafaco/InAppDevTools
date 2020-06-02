@@ -271,6 +271,7 @@ class BuildInfoTask extends IadtBaseTask {
     }
 
     private int countLines(String multiLineString){
+        if (multiLineString.isEmpty()) return 0
         multiLineString.split('\n').size()
     }
 
