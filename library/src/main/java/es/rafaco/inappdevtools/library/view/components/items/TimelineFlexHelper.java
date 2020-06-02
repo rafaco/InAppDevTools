@@ -30,19 +30,25 @@ public class TimelineFlexHelper {
 
     public static TimelineFlexData buildRepoItem(TimelineFlexData.Position position,
                                                  int color, int icon, String title,
+                                                 String subtitle,
                                                  Integer count, String message, List<Object> buttons){
 
         CardGroupFlexData cardGroup = new CardGroupFlexData();
         cardGroup.setBgColorResource(R.color.iadt_surface_top);
 
         HeaderDoubleFlexData headerData = new HeaderDoubleFlexData(title, null, icon,null);
-        if (count == 0){
+        if (count == null){
+            headerData.setNavIcon(R.string.gmd_remove);
+        }
+        else if (count == 0){
             headerData.setNavIcon(R.string.gmd_done);
-        }else{
+        }
+        else{
             headerData.setNavCount(count);
         }
         headerData.setAccentColor(color);
         headerData.setTitleColor(color);
+        headerData.setContent(subtitle);
         //cardGroup.add(headerData);
 
         LinearGroupFlexData collapsedContent = new LinearGroupFlexData();

@@ -147,17 +147,14 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.color.iadt_text_low,
                     R.string.gmd_assignment_late,
                     "No local files changed",
+                    "Build folder",
                     -1,
                     null,
                     null);
         }
         else{
-            int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
-            int file_untracked_count = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT);
-            int unstaggedCount = file_changes_count + file_untracked_count;
-
-            String title = "Local files changed";
-            String message = file_untracked_count + " untracked files\n" + gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS);
+            String message = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT) + " untracked files.\n"
+                    + gitInfo.getString(GitInfo.LOCAL_TRACKED_STATS)+ ".";
             List<Object> buttons = new ArrayList<>();
             buttons.add(new ButtonBorderlessFlexData("View Files",
                     R.drawable.ic_format_list_bulleted_white_24dp,
@@ -184,8 +181,9 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             localTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.START,
                     R.color.rally_orange,
                     R.string.gmd_assignment_late,
-                    title,
-                    unstaggedCount,
+                    "Local files changed",
+                    "Build folder",
+                    gitInfo.getInt(GitInfo.LOCAL_TOTAL_COUNT),
                     message,
                     buttons);
         }
@@ -201,6 +199,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.color.iadt_text_low,
                     R.string.gmd_assignment_ind,
                     "No local commits",
+                    "Local branch",
                     -1,
                     "",
                     null);
@@ -232,7 +231,8 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             localRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
                     R.color.rally_yellow,
                     R.string.gmd_assignment_ind,
-                    "Local commits",
+                    gitInfo.getString(GitInfo.LOCAL_BRANCH),
+                    "Local branch",
                     local_commits_count,
                     "Branch: " + gitInfo.getString(GitInfo.LOCAL_BRANCH)
                             + "\nTotal commits: " + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT),
@@ -250,6 +250,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.color.iadt_text_low,
                     R.string.gmd_assignment,
                     "No remote repo",
+                    "Remote branch",
                     -1,
                     "",
                     null);
@@ -270,6 +271,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             remoteRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
                     R.color.material_green,
                     R.string.gmd_assignment, //TODO: why is not integration_instructions??
+                    gitInfo.getString(GitInfo.REMOTE_BRANCH),
                     "Remote branch",
                     0, //gitInfo.getInt(GitInfo.REMOTE_BRANCH_COUNT),
                     "Branch: " + gitInfo.getString(GitInfo.REMOTE_BRANCH)
@@ -296,6 +298,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
                     R.color.iadt_text_high,
                     R.string.gmd_assignment_turned_in,
+                    gitInfo.getString(GitInfo.REMOTE_HEAD),
                     "Remote head",
                     -remoteHeadRelativeDistance,
                     "Branch: " + gitInfo.getString(GitInfo.REMOTE_HEAD)
@@ -311,6 +314,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.color.iadt_text_low,
                     R.string.gmd_assignment_ind,
                     "No tag",
+                    "Tag",
                     null,
                     "",
                     null);
@@ -320,7 +324,8 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             tagTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.END,
                     R.color.iadt_primary,
                     R.string.gmd_local_offer,
-                    "Last tag",
+                    gitInfo.getString(GitInfo.TAG_NAME),
+                    "Tag",
                     -tagRelativeDistance,
                     "Tag: " + gitInfo.getString(GitInfo.TAG_NAME)
                             + "\nCommit Id: " + gitInfo.getString(GitInfo.TAG_LAST_COMMIT),
@@ -467,7 +472,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     public DocumentSectionData getLocalChangesInfo() {
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
+        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_TRACKED_COUNT);
         int file_untracked_count = gitInfo.getInt(GitInfo.LOCAL_UNTRACKED_COUNT);
 
         DocumentSectionData.Builder group = new DocumentSectionData.Builder("Uncommitted changes")
@@ -481,7 +486,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
 
         group.setOverview(Humanizer.plural(file_changes_count + file_untracked_count, "file"));
-        group.add(gitInfo.getString(GitInfo.LOCAL_CHANGES_STATS));
+        group.add(gitInfo.getString(GitInfo.LOCAL_UNSTAGED_STATS));
         group.add(file_untracked_count + " new files (untracked)");
 
 
@@ -528,8 +533,65 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
             return "No available";
         }
         String branch = gitInfo.getString(GitInfo.LOCAL_BRANCH);
-        String tag = gitInfo.getString(GitInfo.TAG_NAME);
-        return String.format("%s %s", branch, tag);
+        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
+        String tag = hasTag ? " " + gitInfo.getString(GitInfo.TAG_NAME) : "";
+        return branch + tag;
+    }
+
+    public String getWidgetMainText() {
+        return gitInfo.getString(GitInfo.LOCAL_BRANCH);
+
+        /*String countTail = "";
+        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
+        int tagDistance = gitInfo.getInt(GitInfo.TAG_DISTANCE);
+        if (hasTag && tagDistance > 0){
+            countTail = " +" + tagDistance;
+        }
+        return getBranchAndTag() + countTail;*/
+    }
+
+    public String getWidgetSecondText() {
+        if (!isGitEnabled()){
+            return "";
+        }
+        boolean hasLocalCommits = gitInfo.getBoolean(GitInfo.HAS_LOCAL_COMMITS);
+        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
+        boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
+        int remoteHeadDistance = gitInfo.getInt(GitInfo.REMOTE_HEAD_DISTANCE);
+        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
+        int tagDistance = gitInfo.getInt(GitInfo.TAG_DISTANCE);
+
+        String distanceDescription = "";
+        if (hasTag){
+            distanceDescription = gitInfo.getString(GitInfo.TAG_NAME);
+            if (tagDistance > 0) {
+                distanceDescription += " + " + tagDistance;
+            }
+            distanceDescription += Humanizer.newLine();
+        }
+        else if (hasRemote){
+            distanceDescription = gitInfo.getString(GitInfo.REMOTE_HEAD);
+            if (remoteHeadDistance > 0) {
+                distanceDescription += " + " + remoteHeadDistance;
+            }
+            distanceDescription += Humanizer.newLine();
+        }
+
+        if (hasLocalChanges){
+            return distanceDescription + "+ local changes";
+        }
+        else if (hasLocalCommits){
+            return distanceDescription + "+ local commits";
+        }
+        else if (hasTag && tagDistance == 0){
+            return distanceDescription + "Tag source";
+        }
+        else if (hasRemote && remoteHeadDistance == 0){
+            return distanceDescription + "Remote head source";
+        }
+        else{
+            return distanceDescription + "Remote branch source";
+        }
     }
 
     public String getLocalOverview(){
@@ -540,7 +602,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         int local_commits_count = Humanizer.countLines(local_commits);
         boolean hasLocalCommits = local_commits_count > 0;
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_CHANGES_COUNT);
+        int file_changes_count = gitInfo.getInt(GitInfo.LOCAL_TRACKED_COUNT);
 
         if (!hasLocalCommits && !hasLocalChanges){
             return "No local changes";
@@ -556,18 +618,6 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
 
         return result;
-    }
-
-    public Boolean hasLocalCommitsOrChanges(){
-        if (!isGitEnabled()){
-            return null;
-        }
-        boolean hasLocalCommits = gitInfo.getBoolean(GitInfo.HAS_LOCAL_COMMITS);
-        boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
-        if (!hasLocalCommits && !hasLocalChanges){
-            return false;
-        }
-        return true;
     }
 
 }

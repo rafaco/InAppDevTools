@@ -53,9 +53,13 @@ public class GitInfo {
     public static final String LOCAL_COMMITS = "";
     public static final String HAS_LOCAL_CHANGES = "";
     public static final String LOCAL_UNTRACKED_COUNT = "";
+    public static final String LOCAL_TRACKED_COUNT = "";
+    public static final String LOCAL_TOTAL_COUNT = "";
     public static final String LOCAL_UNTRACKED = "";
-    public static final String LOCAL_CHANGES_COUNT = "";
-    public static final String LOCAL_CHANGES_STATS = "";
+    public static final String LOCAL_UNSTAGED_STATS = "";
+    public static final String LOCAL_STAGED_STATS = "";
+    public static final String LOCAL_TRACKED_STATS = "";
+
 
     public static final String FIRST_COMMIT_TIME = "";
     public static final String LAST_COMMIT_TIME = "";

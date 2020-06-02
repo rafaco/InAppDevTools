@@ -175,8 +175,10 @@ class BuildInfoTask extends IadtBaseTask {
         def localChangesTxt = configUtils.shell('git status --short')
         def localCommitsDiff = configUtils.shell('git log ' + remoteBranchFull + '..HEAD -p')
         def localUntracked = configUtils.shell('git ls-files -o --exclude-standard')
-        def localUntrackedCount = countLines(localUntracked);
-        def localChangesCount = countLines(localChangesTxt) - localUntrackedCount;
+
+        def localTotalCount = countLines(localChangesTxt)
+        def localUntrackedCount = countLines(localUntracked)
+        def localTrackedCount =  localTotalCount - localUntrackedCount
 
 
         def localCommits = configUtils.shell('git cherry -v')
@@ -222,8 +224,11 @@ class BuildInfoTask extends IadtBaseTask {
                 HAS_LOCAL_CHANGES   : localChangesTxt != '',
                 LOCAL_UNTRACKED_COUNT : localUntrackedCount,
                 LOCAL_UNTRACKED : localUntracked,
-                LOCAL_CHANGES_COUNT : localChangesCount,
-                LOCAL_CHANGES_STATS :  configUtils.shell('git diff --shortstat'),
+                LOCAL_TRACKED_COUNT : localTrackedCount,
+                LOCAL_TOTAL_COUNT :  localTotalCount,
+                LOCAL_UNSTAGED_STATS :  configUtils.shell('git diff --shortstat'),
+                LOCAL_STAGED_STATS :  configUtils.shell('git diff --shortstat --cached'),
+                LOCAL_TRACKED_STATS :  configUtils.shell('git diff --shortstat HEAD'),
 
                 FIRST_COMMIT_TIME      : configUtils.shell('git log --reverse --format=%cd || head -1'),
                 LAST_COMMIT_TIME      : configUtils.shell('git log -1 --format=%cd'),
