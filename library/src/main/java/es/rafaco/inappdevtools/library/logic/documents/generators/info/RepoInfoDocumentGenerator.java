@@ -140,6 +140,9 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
     public FlexData getTimeLineCards() {
         LinearGroupFlexData result = new LinearGroupFlexData();
 
+        boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
+        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
+
         TimelineFlexData localTimeline;
         boolean hasLocalChanges = gitInfo.getBoolean(GitInfo.HAS_LOCAL_CHANGES);
         if (!hasLocalChanges) {
@@ -191,12 +194,12 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
 
         TimelineFlexData localRepoTimeline;
-        String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
-        int local_commits_count = Humanizer.countLines(local_commits);
-        boolean hasLocalCommits = local_commits_count > 0;
+        int localBranchCount = (hasRemote) ? gitInfo.getInt(GitInfo.REMOTE_BRANCH_DISTANCE)
+                : gitInfo.getInt(GitInfo.LOCAL_BRANCH_COUNT);
+        boolean hasLocalCommits = localBranchCount > 0;
         if (!hasLocalCommits) {
             localRepoTimeline = TimelineFlexHelper.buildRepoItem(TimelineFlexData.Position.MIDDLE,
-                    R.color.iadt_text_low,
+                    R.color.material_green,
                     R.string.gmd_assignment_ind,
                     "No local commits",
                     "Local branch",
@@ -233,20 +236,18 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
                     R.string.gmd_assignment_ind,
                     gitInfo.getString(GitInfo.LOCAL_BRANCH),
                     "Local branch",
-                    Humanizer.signed(local_commits_count),
+                    Humanizer.signed(localBranchCount),
                     "Branch: " + gitInfo.getString(GitInfo.LOCAL_BRANCH)
                             + "\nTotal commits: " + gitInfo.getString(GitInfo.LOCAL_BRANCH_COUNT),
                     localRepoButtons);
         }
         result.add(localRepoTimeline);
 
-        boolean hasRemote = gitInfo.getBoolean(GitInfo.HAS_REMOTE);
-        boolean hasTag = !TextUtils.isEmpty(gitInfo.getString(GitInfo.TAG_NAME));
 
         TimelineFlexData remoteBranchTimeline;
         if (!hasRemote) {
             remoteBranchTimeline = TimelineFlexHelper.buildRepoItem(
-                    hasTag ? TimelineFlexData.Position.MIDDLE : TimelineFlexData.Position.END,
+                    TimelineFlexData.Position.MIDDLE,
                     R.color.iadt_text_low,
                     R.string.gmd_assignment,
                     "No remote repo",
@@ -443,7 +444,7 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
 
 
         String local_commits = gitInfo.getString(GitInfo.LOCAL_COMMITS);
-        int local_commits_count = Humanizer.countLines(local_commits);
+        int local_commits_count = gitInfo.getInt(GitInfo.LOCAL_BRANCH_COUNT);
         String local_log = gitInfo.getString(GitInfo.LOCAL_BRANCH_GRAPH);
         group.setOverview(local_commits_count + " commits ahead");
         group.add(local_log);

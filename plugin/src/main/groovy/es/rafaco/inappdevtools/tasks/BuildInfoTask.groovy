@@ -153,6 +153,7 @@ class BuildInfoTask extends IadtBaseTask {
             return
         }
 
+        def gitPath = configUtils.shell('git rev-parse --show-toplevel')
         //def localBranch = configUtils.shell("git name-rev --name-only HEAD")
         def localBranch = configUtils.shell("git rev-parse --abbrev-ref HEAD")
         def remoteName = configUtils.shell('git config --get branch.' + localBranch + '.remote')
@@ -175,15 +176,11 @@ class BuildInfoTask extends IadtBaseTask {
         def localChangesTxt = configUtils.shell('git status --short')
         def localCommitsDiff = configUtils.shell('git log ' + remoteBranchFull + '..HEAD -p')
         def localUntracked = configUtils.shell('git ls-files -o --exclude-standard')
+        def localCommits = configUtils.shell('git cherry -v')
 
         def localTotalCount = countLines(localChangesTxt)
         def localUntrackedCount = countLines(localUntracked)
         def localTrackedCount =  localTotalCount - localUntrackedCount
-
-
-        def localCommits = configUtils.shell('git cherry -v')
-
-        def gitPath = configUtils.shell('git rev-parse --show-toplevel')
 
         File fetchFile = new File(gitPath + "/.git/FETCH_HEAD");
 
@@ -216,7 +213,7 @@ class BuildInfoTask extends IadtBaseTask {
                 TAG_DIRTY       : tagParser.isDirty(),
 
                 LOCAL_BRANCH    : localBranch,
-                LOCAL_BRANCH_COUNT  : localBranchCount,
+                LOCAL_BRANCH_COUNT  : localBranchCount.toInteger(),
                 LOCAL_BRANCH_GRAPH  : localBranchGraph,
                 HAS_LOCAL_COMMITS   : localCommits != '',
                 LOCAL_COMMITS       : localCommits,
