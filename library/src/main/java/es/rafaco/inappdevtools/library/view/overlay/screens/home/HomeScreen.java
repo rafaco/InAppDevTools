@@ -126,36 +126,24 @@ public class HomeScreen extends AbstractFlexibleScreen {
         OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
         ConfigManager configManager = IadtController.get().getConfig();
 
-        String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
-        if (TextUtils.isEmpty(teamName))
-            teamName = "Resources";
-        WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
-                .setIcon(R.string.gmd_people)
-                .setMainContent(teamName)
-                .setPerformer(new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(TeamScreen.class);
-                    }
-                })
-                .build();
-        data.add(teamData);
+        addApp(data, appHelper, buildReporter);
+        addDevice(data, deviceHelper, osHelper);
+        addView(data);
+        addLogic(data);
+        addLog(data);
+        addNetwork(data);
+        addSources(data, repoReporter);
+        addStorage(data);
+        addTeam(data, configManager);
+        addHistory(data);
+        addMore(data);
 
-        int sessionCount = IadtDatabase.get().sessionDao().count();
-        int buildCount = IadtDatabase.get().buildDao().count();
-        WidgetData historyData = new WidgetData.Builder("History")
-                .setIcon(R.string.gmd_history)
-                .setMainContent(Humanizer.plural(sessionCount, "Session"))
-                .setSecondContent(Humanizer.plural(buildCount, "Build"))
-                .setPerformer(new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(HistoryScreen.class);
-                    }
-                })
-                .build();
-        data.add(historyData);
+        return data;
+    }
 
+    //region [ WIDGETS ]
+
+    private void addApp(List<Object> data, AppInfoDocumentGenerator appHelper, BuildInfoDocumentGenerator buildReporter) {
         WidgetData appData = new WidgetData.Builder("App")
                 .setIcon(R.string.gmd_apps)
                 .setMainContent(appHelper.getAppName())
@@ -169,7 +157,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(appData);
+    }
 
+    private void addDevice(List<Object> data, DeviceInfoDocumentGenerator deviceHelper, OSInfoDocumentGenerator osHelper) {
         WidgetData deviceData = new WidgetData.Builder("Device")
                 .setIcon(R.string.gmd_phone_android)
                 .setMainContent(osHelper.getOneLineOverview())
@@ -182,8 +172,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(deviceData);
+    }
 
-
+    private void addSources(List<Object> data, RepoInfoDocumentGenerator repoReporter) {
         AssetManager assets = getContext().getAssets();
         String[] list = new String[0];
         try {
@@ -213,7 +204,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(sourcesData);
+    }
 
+    private void addStorage(List<Object> data) {
         WidgetData storageData = new WidgetData.Builder("Storage")
                 .setIcon(R.string.gmd_storage)
                 //TODO: it fails on lollipop 1
@@ -228,8 +221,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(storageData);
+    }
 
-        
+    private void addView(List<Object> data) {
         WidgetData viewData = new WidgetData.Builder("View")
                 .setIcon(R.string.gmd_view_carousel)
                 .setMainContent(IadtController.get().getActivityTracker().getCurrentName())
@@ -242,7 +236,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(viewData);
+    }
 
+    private void addLogic(List<Object> data) {
         WidgetData jvmData = new WidgetData.Builder("Logic")
                 .setIcon(R.string.gmd_location_city)
                 .setMainContent(RunningThreadsUtils.getCount() + " threads")
@@ -255,8 +251,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(jvmData);
+    }
 
-
+    private void addLog(List<Object> data) {
         int logsCount = IadtDatabase.get().friendlyDao().count(); //TODO: filter by session
         WidgetData logsData = new WidgetData.Builder("Logs")
                 .setIcon(R.string.gmd_sort)
@@ -269,7 +266,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(logsData);
+    }
 
+    private void addNetwork(List<Object> data) {
         NetSummaryDao netSummaryDao = IadtDatabase.get().netSummaryDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         int netCount = netSummaryDao.countBySession(currentSession);
@@ -288,8 +287,43 @@ public class HomeScreen extends AbstractFlexibleScreen {
                 })
                 .build();
         data.add(networkData);
+    }
 
-        
+    private void addHistory(List<Object> data) {
+        int sessionCount = IadtDatabase.get().sessionDao().count();
+        int buildCount = IadtDatabase.get().buildDao().count();
+        WidgetData historyData = new WidgetData.Builder("History")
+                .setIcon(R.string.gmd_history)
+                .setMainContent(Humanizer.plural(sessionCount, "Session"))
+                .setSecondContent(Humanizer.plural(buildCount, "Build"))
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(HistoryScreen.class);
+                    }
+                })
+                .build();
+        data.add(historyData);
+    }
+
+    private void addTeam(List<Object> data, ConfigManager configManager) {
+        String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
+        if (TextUtils.isEmpty(teamName))
+            teamName = "Resources";
+        WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
+                .setIcon(R.string.gmd_people)
+                .setMainContent(teamName)
+                .setPerformer(new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(TeamScreen.class);
+                    }
+                })
+                .build();
+        data.add(teamData);
+    }
+
+    private void addMore(List<Object> data) {
         if (isDebug()){
             data.add(new ButtonFlexData("More",
                     R.drawable.ic_more_vert_white_24dp,
@@ -299,10 +333,9 @@ public class HomeScreen extends AbstractFlexibleScreen {
                         }
                     }));
         }
-
-        return data;
     }
 
+    //endregion
 
     //region [ UPDATER ]
 

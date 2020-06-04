@@ -53,7 +53,7 @@
                     style="@style/TextCondensed.Medium"
                     android:textColor="@color/iadt_primary"
                     android:textStyle="bold"
-                    android:alpha="0.4"
+                    android:alpha="0.7"
                     tools:text="TITLE"/>
 
                 <TextView
@@ -96,7 +96,7 @@
                 android:layout_marginRight="-1dp"
                 android:textColor="@color/iadt_primary"
                 android:textSize="@dimen/iadt_icon_font_size_l"
-                android:alpha="0.3"
+                android:alpha="0.6"
                 tools:text="P"/>
 
         </RelativeLayout>
