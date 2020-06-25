@@ -27,9 +27,9 @@ import es.rafaco.inappdevtools.library.logic.utils.RunningBroadcastReceiversUtil
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
-import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
 import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -58,7 +58,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        data.add("Components");
+        data.add(new HeaderFlexData("Android Components"));
         data.add(new CardData("Services",
                 "Perform long-running operations in the background",
                 R.string.gmd_store,
@@ -99,7 +99,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(RunningBroadcastReceiversUtils.getCount()));
 
-        data.add("");
+        data.add(new HeaderFlexData("Java Components"));
         data.add(new CardData("Processes",
                 "Linux processes created by this application",
                 R.string.gmd_developer_board,
@@ -110,7 +110,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(RunningProcessesUtils.getCount()));
 
-        data.add(new CardData("Tasks",
+        /*data.add(new CardData("Tasks",
                 "Stacks of activities",
                 R.string.gmd_layers,
                 new Runnable() {
@@ -118,7 +118,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     public void run() {
                         OverlayService.performNavigation(TasksScreen.class);
                     }
-                }).setNavCount(RunningTasksUtils.getCount()));
+                }).setNavCount(RunningTasksUtils.getCount()));*/
 
         data.add(new CardData("Threads",
                 "Linux threads of execution",

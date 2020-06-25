@@ -32,7 +32,7 @@ public class HeaderFlexData extends TextFlexData {
 
         Context context = IadtController.get().getContext();
         int horizontalMargin = (int) UiUtils.dpToPx(context, 14); //standard+innerCard
-        int topMargin = (int) UiUtils.dpToPx(context, 6);
+        int topMargin = (int) UiUtils.dpToPx(context, 10);
         int buttonMargin = (int) UiUtils.dpToPx(context, -4);
         setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);
     }
