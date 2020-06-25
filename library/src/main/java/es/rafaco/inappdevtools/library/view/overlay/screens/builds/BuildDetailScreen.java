@@ -26,8 +26,8 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
@@ -75,33 +75,28 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, buildOverviewData(reportData));
-        objectList.add(1, getButtonList());
-        objectList.add(2, "");
+        objectList.add(getSecondaryButtonsList());
         return objectList;
     }
 
-    private LinearGroupFlexData getButtonList() {
-        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
-        linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonFlexData(
-                "Repo status",
-                R.drawable.ic_code_white_24dp,
-                R.color.rally_blue_med,
+    private LinearGroupFlexData getSecondaryButtonsList() {
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        composer.add("Repository status",
+                R.string.gmd_kitchen,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {OverlayService.performNavigation(RepoInfoScreen.class, getDocumentParam() + "");
                     }
-                }));
-        linearGroupData.add(new ButtonFlexData(
-                "Sessions",
-                R.drawable.ic_timeline_white_24dp,
-                R.color.rally_purple,
+                });
+        composer.add("Sessions from this build",
+                R.string.gmd_timeline,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {OverlayService.performNavigation(SessionsScreen.class, buildId + "");
                     }
-                }));
-
-        return linearGroupData;
+                });
+        return composer.compose();
     }
 }

@@ -41,6 +41,7 @@ import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
@@ -140,7 +141,7 @@ public class ViewScreen extends AbstractFlexibleScreen {
         addTasks(data);
         addActivity(data, tracker);
         addFragments(data, currentActivityUuid);
-        addLogButtons(data);
+        data.add(getSecondaryButtonsList());
 
         return data;
     }
@@ -376,17 +377,13 @@ public class ViewScreen extends AbstractFlexibleScreen {
         }
     }
 
-    private void addLogButtons(List<Object> data) {
-        //Logs links (TODO)
+    private LinearGroupFlexData getSecondaryButtonsList() {
         final long currentSessionUid = IadtController.get().getSessionManager().getCurrentUid();
-        LinearGroupFlexData buttonList = new LinearGroupFlexData();
-        buttonList.setHorizontal(true);
-        buttonList.setHorizontalMargin(true);
-
-        buttonList.add(new ButtonFlexData(
-                "Navigation",
-                R.drawable.ic_location_on_white_24dp,
-                R.color.rally_green_alpha,
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        composer.setHorizontalMargins(true);
+        composer.add("Logs: Navigation Events",
+                R.string.gmd_location_on,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -402,11 +399,10 @@ public class ViewScreen extends AbstractFlexibleScreen {
                         OverlayService.performNavigation(LogScreen.class,
                                 LogScreen.buildParams(filter.getUiFilter()));
                     }
-                }));
-        buttonList.add(new ButtonFlexData(
-                "Lifecycle",
-                R.drawable.ic_format_align_left_white_24dp,
-                R.color.rally_blue_med_alpha,
+                });
+        composer.add("Logs: Lifecycle Events",
+                R.string.gmd_format_align_left,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -420,8 +416,8 @@ public class ViewScreen extends AbstractFlexibleScreen {
                         OverlayService.performNavigation(LogScreen.class,
                                 LogScreen.buildParams(uiFilter));
                     }
-                }));
-        data.add(buttonList);
+                });
+        return composer.compose();
     }
 
     private SourcesManager getSourcesManager() {

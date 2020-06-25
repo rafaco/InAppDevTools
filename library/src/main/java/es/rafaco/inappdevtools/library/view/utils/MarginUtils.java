@@ -42,22 +42,12 @@ public class MarginUtils {
     }
 
     public static void setHorizontalMargin(View view, boolean enabled) {
-        int value = 0;
-        if (enabled){
-            Context context = IadtController.get().getContext();
-            value = (int) context.getResources().getDimension(R.dimen.iadt_horizontal_margin);
-        }
-
+        int value = enabled ? getHorizontalMargin() : 0;
         setHorizontalMargin(view, value);
     }
 
     public static void setVerticalMargin(View view, boolean enabled) {
-        int value = 0;
-        if (enabled){
-            Context context = IadtController.get().getContext();
-            value = (int) context.getResources().getDimension(R.dimen.iadt_vertical_margin);
-        }
-
+        int value = enabled ? getVerticalMargin() : 0;
         setVerticalMargin(view, value);
     }
 
@@ -86,15 +76,11 @@ public class MarginUtils {
     }
 
     public static void setHorizontalMargin(View view) {
-        Context context = IadtController.get().getContext();
-        int defaultMargin = (int) context.getResources().getDimension(R.dimen.iadt_horizontal_margin);
-        setHorizontalMargin(view, defaultMargin);
+        setHorizontalMargin(view, getHorizontalMargin() );
     }
 
     public static void setVerticalMargin(View view) {
-        Context context = IadtController.get().getContext();
-        int defaultMargin = (int) context.getResources().getDimension(R.dimen.iadt_vertical_margin);
-        setVerticalMargin(view, defaultMargin);
+        setVerticalMargin(view, getVerticalMargin() );
     }
 
     public static void removeHorizontalMargin(View view) {
@@ -103,5 +89,15 @@ public class MarginUtils {
 
     public static void removeVerticalMargin(View view) {
         setVerticalMargin(view, 0);
+    }
+
+    public static int getHorizontalMargin() {
+        Context context = IadtController.get().getContext();
+        return (int) context.getResources().getDimension(R.dimen.iadt_horizontal_margin);
+    }
+
+    public static int getVerticalMargin() {
+        Context context = IadtController.get().getContext();
+        return (int) context.getResources().getDimension(R.dimen.iadt_vertical_margin);
     }
 }

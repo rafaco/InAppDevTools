@@ -27,8 +27,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
@@ -69,29 +69,24 @@ public class RepoInfoScreen extends AbstractDocumentScreen {
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
         objectList.add(0, buildOverviewData(reportData));
-        objectList.add(1, getButtonList());
-        objectList.add(2, "");
         if (reportData.hasScreenItems()) {
-            objectList.add(3, reportData.getScreenItem());
-            objectList.add(4, "");
+            objectList.add(1, reportData.getScreenItem());
         }
+        objectList.add(getSecondaryButtonsList());
         return objectList;
     }
 
-    private LinearGroupFlexData getButtonList() {
-        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
-        linearGroupData.setHorizontal(true);
-        linearGroupData.add(new ButtonFlexData(
-                "Build",
-                R.drawable.ic_build_white_24dp,
-                R.color.rally_blue_med,
+    private LinearGroupFlexData getSecondaryButtonsList() {
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        composer.add("Build",
+                R.string.gmd_build,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(BuildDetailScreen.class, getDocumentParam() + "");
                     }
-                }));
-
-        return linearGroupData;
+                });
+        return composer.compose();
     }
 }

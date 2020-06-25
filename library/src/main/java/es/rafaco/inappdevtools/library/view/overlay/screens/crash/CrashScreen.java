@@ -34,6 +34,7 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
@@ -115,6 +116,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
         initExceptionCard(data, crash, traceGrouper, false);
         initExceptionCard(data, crash, traceGrouper, true);
 
+        addSecondaryButtons(data, crash);
         return data;
     }
 
@@ -177,39 +179,11 @@ public class CrashScreen extends AbstractFlexibleScreen {
 
         verticalButtons.add(new ButtonFlexData("Report now!",
                 R.drawable.ic_send_white_24dp,
-                R.color.rally_orange_alpha,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
-                    }
-                }));
-
-        final long logId = IadtDatabase.get().friendlyDao()
-                .findLogIdByCrashId(crash.getUid());
-
-        verticalButtons.add(new ButtonFlexData("Repro Steps",
-                R.drawable.ic_format_list_numbered_white_24dp,
                 R.color.rally_green_alpha,
                 new Runnable() {
                     @Override
                     public void run() {
-                        LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-                        stepsFilter.setSessionById(crash.getSessionId());
-                        OverlayService.performNavigation(LogScreen.class,
-                                LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
-                    }
-                }));
-        verticalButtons.add(new ButtonFlexData("Full Logs",
-                R.drawable.ic_format_align_left_white_24dp,
-                R.color.iadt_primary,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
-                        logsFilter.setSessionById(crash.getSessionId());
-                        OverlayService.performNavigation(LogScreen.class,
-                                LogScreen.buildParams(logsFilter.getUiFilter(), logId));
+                        IadtController.get().startReportWizard(ReportType.CRASH, crash.getUid());
                     }
                 }));
         data.add(verticalButtons);
@@ -330,6 +304,40 @@ public class CrashScreen extends AbstractFlexibleScreen {
         data.add(cardGroup);
     }
 
+    private void addSecondaryButtons(List<Object> data, final Crash crash) {
+        final long logId = IadtDatabase.get().friendlyDao()
+                .findLogIdByCrashId(crash.getUid());
+
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        composer.add("Reproduction Steps",
+                R.string.gmd_format_list_numbered,
+                R.color.rally_green_alpha,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+                        stepsFilter.setSessionById(crash.getSessionId());
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(stepsFilter.getUiFilter(), logId));
+                    }
+                });
+        composer.add("All logs",
+                R.string.gmd_format_align_left,
+                R.color.iadt_primary,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        LogFilterHelper logsFilter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
+                        logsFilter.setSessionById(crash.getSessionId());
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(logsFilter.getUiFilter(), logId));
+                    }
+                });
+        composer.getContainer().setHorizontalMargin(true);
+        composer.getContainer().setVerticalMargin(true);
+        data.add(composer.compose());
+    }
+    
     //TODO: restore share crash?
     private void share(Crash crash){
         Iadt.showMessage("Sharing crash document");

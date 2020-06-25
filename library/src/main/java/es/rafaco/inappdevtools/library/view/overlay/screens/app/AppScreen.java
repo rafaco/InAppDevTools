@@ -70,7 +70,7 @@ public class AppScreen extends AbstractFlexibleScreen {
                 ToolsInfoScreen.class, null));
 
         data.add("");
-        data.add("App shortcuts");
+        data.add("App actions   ");
         data.add(new ButtonFlexData("Restart app",
                 R.drawable.ic_replay_white_24dp,
                 new Runnable() {

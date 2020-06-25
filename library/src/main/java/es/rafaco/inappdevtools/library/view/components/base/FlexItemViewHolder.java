@@ -103,7 +103,6 @@ public class FlexItemViewHolder extends FlexViewHolder {
             if (itemView.getLayoutParams() instanceof LinearLayout.LayoutParams){
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemView.getLayoutParams();
                 layoutParams.gravity = data.getGravity();
-                itemView.setLayoutParams(layoutParams);
             }
         }
     }

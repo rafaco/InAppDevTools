@@ -22,9 +22,7 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningBroadcastReceiversUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
@@ -35,7 +33,6 @@ import es.rafaco.inappdevtools.library.view.components.cards.CardData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
 
 public class LogicScreen extends AbstractFlexibleScreen {
 
@@ -133,7 +130,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     }
                 }).setNavCount(RunningThreadsUtils.getCount()));
 
-        data.add(new CardData("Java Memory",
+        /*data.add(new CardData("Java Memory",
                 "//TODO",
                 R.string.gmd_memory,
                 new Runnable() {
@@ -141,27 +138,7 @@ public class LogicScreen extends AbstractFlexibleScreen {
                     public void run() {
                         OverlayService.performNavigation(BuildsScreen.class);
                     }
-                }).setNavCount(512));
-
-        data.add("");
-        data.add("Shortcuts");
-        data.add(new ButtonFlexData("Clean all...",
-                R.drawable.ic_delete_forever_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().cleanAll();
-                    }
-                }));
-
-        data.add(new ButtonFlexData("Disable Iadt...",
-                R.drawable.ic_power_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().disable();
-                    }
-                }));
+                }).setNavCount(512));*/
         return data;
     }
 }

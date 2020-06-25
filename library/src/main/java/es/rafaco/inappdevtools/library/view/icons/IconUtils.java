@@ -29,8 +29,12 @@ import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
+//@import androidx.annotation.StringRes;
+//@import androidx.annotation.ColorRes;
 //#else
 import android.support.v4.content.ContextCompat;
+import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
 //#endif
 
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -88,8 +92,8 @@ public class IconUtils {
         textView.setText(stringIcon);
     }
 
-    public static void applyToTextView(TextView view, int icon, int color) {
-        if (color>0) {
+    public static void applyToTextView(TextView view, @StringRes int icon, @ColorRes int color) {
+        if (color!=0) {
             int contextualizedColor = ContextCompat.getColor(view.getContext(), color);
             view.setTextColor(contextualizedColor);
         }
