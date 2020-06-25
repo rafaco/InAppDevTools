@@ -28,7 +28,6 @@ import android.widget.TextView;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
-import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.components.base.GroupFlexViewHolder;
 import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 
@@ -55,22 +54,15 @@ public class LinearGroupFlexViewHolder extends GroupFlexViewHolder {
         }
 
         //bindGravity()
-        bindOrientationAndLayout(data);
+        bindOrientation(data);
         bindDividers(data);
         bindTitle(data);
     }
 
-    private void bindOrientationAndLayout(LinearGroupFlexData data) {
+    private void bindOrientation(LinearGroupFlexData data) {
+        //ChildrenLayout for this orientation is set on beforeAddChildView
         int orientation = data.isHorizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
         groupContainer.setOrientation(orientation);
-
-        //Set default childLayout for selected orientation
-        if (data.getChildLayout()==null){
-            FlexData.LayoutType defaultLayout = data.isHorizontal
-                    ? FlexData.LayoutType.SAME_WIDTH
-                    : FlexData.LayoutType.FULL_WIDTH;
-            data.setChildLayout(defaultLayout);
-        }
     }
 
     private void bindDividers(LinearGroupFlexData data) {
@@ -95,8 +87,15 @@ public class LinearGroupFlexViewHolder extends GroupFlexViewHolder {
     @Override
     protected void beforeAddChildView(FlexDescriptor desc, Object parentData, Object childData) {
         LinearGroupFlexData parent = (LinearGroupFlexData) parentData;
-        if (parent.getChildLayout()!=null && childData instanceof FlexData){
-            ((FlexData) childData).setLayoutType(parent.getChildLayout());
+        if (childData instanceof FlexData){
+            FlexData.LayoutType childLayout;
+            if (parent.getChildLayout()!=null){
+                childLayout = parent.getChildLayout();
+            }else{
+                childLayout = parent.isHorizontal ? FlexData.LayoutType.SAME_WIDTH
+                        : FlexData.LayoutType.FULL_WIDTH;
+            }
+            ((FlexData) childData).setLayoutType(childLayout);
         }
     }
 }
