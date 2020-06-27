@@ -45,6 +45,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoD
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.storage.files.utils.InternalFileReader;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -54,7 +55,6 @@ import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.cards.WideWidgetData;
 import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
-import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -209,9 +209,8 @@ public class HomeScreen extends AbstractFlexibleScreen {
     private void addStorage(List<Object> data) {
         WidgetData storageData = new WidgetData.Builder("Storage")
                 .setIcon(R.string.gmd_storage)
-                //TODO: it fails on lollipop 1
-                //.setMainContent(InternalFileReader.getTotalSizeFormatted())
-                .setSecondContent("3 DB, 4 SP & 1234 files")
+                .setMainContent(InternalFileReader.getTotalSizeFormatted())
+                .setSecondContent("DB - SharedPrefs - Files")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {

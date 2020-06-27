@@ -32,6 +32,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.PathUtils;
 
@@ -85,9 +86,16 @@ public class InternalFileReader {
         long size = getFolderSize(dir);
         return Humanizer.humanReadableByteCount(size, false);
     }
+
     public static long getFolderSize(File dir) {
+        File[] entries = dir.listFiles();
+        boolean isEmpty = entries==null || entries.length==0;
+        if (isEmpty) {
+            return 0;
+        }
+
         long size = 0;
-        for (File file : dir.listFiles()) {
+        for (File file : entries) {
             if (file.isFile()) {
                 size += file.length();
             }
