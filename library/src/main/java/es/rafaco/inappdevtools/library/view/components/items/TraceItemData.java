@@ -43,6 +43,7 @@ public class TraceItemData extends FlexData {
     private String subtitle;
     private String tag;
     private String link;
+    private String linkPath;
 
     public TraceItemData(){
         super();
@@ -161,7 +162,7 @@ public class TraceItemData extends FlexData {
     }
 
     public boolean isOpenable() {
-        return !TextUtils.isEmpty(link);
+        return !TextUtils.isEmpty(linkPath);
     }
 
     public void setPerformer(Runnable performer) {
@@ -174,5 +175,13 @@ public class TraceItemData extends FlexData {
 
     public Runnable getPerformer() {
         return performer;
+    }
+
+    public String getLinkPath() {
+        return linkPath;
+    }
+
+    public void setLinkPath(String linkPath) {
+        this.linkPath = linkPath;
     }
 }

@@ -136,7 +136,7 @@ public class TraceGrouper {
 
         item.setTag( (classifier!=null) ? classifier : OTHER_TAG);
         item.setColor(getColor(item));
-        item.setLink(IadtController.get().getSourcesManager().getPathFromClassName(item.getClassName()));
+        item.setLinkPath(IadtController.get().getSourcesManager().getPathFromClassName(item.getClassName()));
     }
 
     private void initMatcher() {
