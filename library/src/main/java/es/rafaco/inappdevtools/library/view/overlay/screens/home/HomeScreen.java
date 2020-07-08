@@ -45,6 +45,7 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoD
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.storage.files.utils.InternalFileReader;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
@@ -253,10 +254,14 @@ public class HomeScreen extends AbstractFlexibleScreen {
     }
 
     private void addLog(List<Object> data) {
-        int logsCount = IadtDatabase.get().friendlyDao().count(); //TODO: filter by session
+        SessionAnalysis sessionAnalysis = IadtController.get().getSessionManager().calculateCurrentSessionAnalysis();
+        int totalCount = sessionAnalysis.getTotal();
+        int totalErrors = sessionAnalysis.getEventError() + sessionAnalysis.getLogcatError();
+        int totalWarnings = sessionAnalysis.getEventWarning() + sessionAnalysis.getLogcatWarning();
         WidgetData logsData = new WidgetData.Builder("Logs")
                 .setIcon(R.string.gmd_sort)
-                .setMainContent(Humanizer.plural(logsCount, "log"))
+                .setMainContent(Humanizer.plural(totalCount, "entry"))
+                .setSecondContent(Humanizer.plural(totalErrors, "error") + " and " + Humanizer.plural(totalWarnings, "warning"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {

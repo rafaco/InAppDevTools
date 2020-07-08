@@ -354,13 +354,16 @@ public class Humanizer {
         if (isSingular)
             return count + " " + singularName;
 
-        String[] esPluralSuffixes = {"s", "ss", "sh", "ch", "x", "z"};
+        String[] esPluralSuffixes = {"s", "ss", "sh", "ch", "x", "z", "y"};
         boolean isEsPlural = false;
         for (String esPluralSuffix: esPluralSuffixes) {
             if (singularName.endsWith(esPluralSuffix)) {
                 isEsPlural = true;
                 break;
             }
+        }
+        if (singularName.endsWith("y")){
+            singularName = singularName.substring(0, singularName.length() - 1) + "i";
         }
         return count + " " + singularName + (isEsPlural ? "es" : "s");
     }

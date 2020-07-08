@@ -278,7 +278,7 @@ public class SessionManager {
     }
 
     public SessionAnalysis calculateCurrentSessionAnalysis() {
-        long startDate = getCurrent().getDetectionDate();
+        long startDate = getCurrent().getDate();
         List<SessionAnalysisRaw> logcatResume = getDao().analiseLiveSessionLogcat(startDate);
         List<SessionAnalysisRaw> eventResume = getDao().analiseLiveSessionEvents(startDate);
         SessionAnalysis analysis = SessionAnalysis.buildFromRaw(logcatResume, eventResume);
