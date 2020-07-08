@@ -46,20 +46,20 @@ import es.rafaco.inappdevtools.library.view.components.cards.HeaderIconFlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
-import es.rafaco.inappdevtools.library.view.components.items.CollapsibleFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ImageData;
 import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
 import es.rafaco.inappdevtools.library.view.components.groups.RecyclerGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.SeparatorFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
-import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
-import es.rafaco.inappdevtools.library.view.components.items.TraceItemData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.utils.MarginUtils;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
 public class CrashScreen extends AbstractFlexibleScreen {
@@ -203,9 +203,9 @@ public class CrashScreen extends AbstractFlexibleScreen {
         final FlexAdapter adapter;
 
         TextFlexData overCard = new TextFlexData("");
-        overCard.setGravity(Gravity.RIGHT);
+        overCard.setGravity(Gravity.LEFT);
         int horizontalMargin = (int) UiUtils.dpToPx(getContext(), 14); //standard+innerCard
-        int topMargin = (int) UiUtils.dpToPx(getContext(), 4);
+        int topMargin = (int) UiUtils.dpToPx(getContext(), 20);
         int buttonMargin = (int) UiUtils.dpToPx(getContext(), 0);
         overCard.setMargins(horizontalMargin, topMargin, horizontalMargin, buttonMargin);
 
@@ -240,6 +240,8 @@ public class CrashScreen extends AbstractFlexibleScreen {
                 .setExpanded(true)
                 //.setOverview("Exception")
                 .build();
+        headerData.setMargins(MarginUtils.getHorizontalMargin(), 2*MarginUtils.getVerticalMargin(),
+                MarginUtils.getHorizontalMargin(), MarginUtils.getVerticalMargin());
         cardData.add(headerData);
 
         TextFlexData messageData = new TextFlexData(message);
@@ -276,28 +278,14 @@ public class CrashScreen extends AbstractFlexibleScreen {
         cardData.add(separator);
 
         if (adapter != null && adapter.getItemCount()>0){
-            int tracesCount = adapter.getItemCount();
-            String tracesTitle = "";
-            Object firstTrace = adapter.getItems().get(0);
-            if (firstTrace instanceof TraceGroupItem)
-                firstTrace = adapter.getItems().get(1);
-            if (firstTrace instanceof TraceItemData){
-                tracesTitle = ((TraceItemData) firstTrace).getTitle();
-            }
-
-            HeaderIconFlexData tracesHeaderData = new HeaderIconFlexData.Builder(tracesTitle)
-                    .setExpandable(true)
-                    .setExpanded(false)
-                    .setHiddenTitleWhenExpanded(true)
-                    .setOverview(tracesCount + "")
-                    .build();
-            
             RecyclerGroupFlexData tracesContentData = new RecyclerGroupFlexData(adapter);
             tracesContentData.setHorizontalMargin(true);
-
-            CollapsibleFlexData collapsibleData = new CollapsibleFlexData(tracesHeaderData,
-                    tracesContentData, false);
-            cardData.add(collapsibleData);
+            cardData.add(tracesContentData);
+        }else{
+            TextFlexData emptyTraces = new TextFlexData("No stacktrace available :(");
+            emptyTraces.setSize(TextFlexData.Size.LARGE);
+            emptyTraces.setHorizontalMargin(true);
+            cardData.add(emptyTraces);
         }
 
         cardGroup.add(cardData);
@@ -308,10 +296,22 @@ public class CrashScreen extends AbstractFlexibleScreen {
         final long logId = IadtDatabase.get().friendlyDao()
                 .findLogIdByCrashId(crash.getUid());
 
-        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("More");
+
+        if (crash.getScreenId()>0){
+            composer.add("Screenshot",
+                    R.string.gmd_photo,
+                    R.color.iadt_text_high,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(ZoomScreen.class, crash.getScreenId() + "");
+                        }
+                    });
+        }
         composer.add("Reproduction Steps",
                 R.string.gmd_format_list_numbered,
-                R.color.rally_green_alpha,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -323,7 +323,7 @@ public class CrashScreen extends AbstractFlexibleScreen {
                 });
         composer.add("All logs",
                 R.string.gmd_format_align_left,
-                R.color.iadt_primary,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
@@ -331,6 +331,24 @@ public class CrashScreen extends AbstractFlexibleScreen {
                         logsFilter.setSessionById(crash.getSessionId());
                         OverlayService.performNavigation(LogScreen.class,
                                 LogScreen.buildParams(logsFilter.getUiFilter(), logId));
+                    }
+                });
+        composer.add("Session",
+                R.string.gmd_history,
+                R.color.iadt_text_high,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SessionDetailScreen.class, crash.getSessionId() + "");
+                    }
+                });
+        composer.add("Build",
+                R.string.gmd_build,
+                R.color.iadt_text_high,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(BuildDetailScreen.class, crash.getSessionId() + "");
                     }
                 });
         composer.getContainer().setHorizontalMargin(true);
