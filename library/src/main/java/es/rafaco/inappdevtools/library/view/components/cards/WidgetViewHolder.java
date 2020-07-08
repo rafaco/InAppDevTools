@@ -115,6 +115,10 @@ public class WidgetViewHolder extends FlexViewHolder {
             if (data.getIcon()>0){
                 IconUtils.set(icon, data.getIcon());
             }
+
+            if (data.getBgColor()>0){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColor()));
+            }
         }
     }
 

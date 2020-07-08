@@ -291,18 +291,23 @@ public class HomeScreen extends AbstractFlexibleScreen {
     private void addHistory(List<Object> data) {
         int sessionCount = IadtDatabase.get().sessionDao().count();
         int buildCount = IadtDatabase.get().buildDao().count();
-        WidgetData historyData = new WidgetData.Builder("History")
+        int crashCount = IadtDatabase.get().crashDao().count();
+        boolean hasCrash = crashCount>0;
+
+        WidgetData.Builder historyBuilder = new WidgetData.Builder("History")
                 .setIcon(R.string.gmd_history)
-                .setMainContent(Humanizer.plural(sessionCount, "Session"))
-                .setSecondContent(Humanizer.plural(buildCount, "Build"))
+                .setBgColor(hasCrash ? R.color.rally_orange_alpha: R.color.iadt_surface_medium)
+                .setMainContent(hasCrash ? Humanizer.plural(crashCount, "Crash"):
+                        Humanizer.plural(sessionCount, "Session"))
+                .setSecondContent(hasCrash ? Humanizer.plural(sessionCount, "Session"):
+                        Humanizer.plural(buildCount, "Build"))
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(HistoryScreen.class);
                     }
-                })
-                .build();
-        data.add(historyData);
+                });
+        data.add(historyBuilder.build());
     }
 
     private void addTeam(List<Object> data, ConfigManager configManager) {

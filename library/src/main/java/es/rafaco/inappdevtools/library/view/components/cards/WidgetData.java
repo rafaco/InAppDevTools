@@ -31,6 +31,7 @@ public class WidgetData {
     private String mainContent;
     private String secondContent;
     private int icon;
+    private int bgColor;
     private Runnable performer;
 
     public WidgetData(Builder builder) {
@@ -39,6 +40,8 @@ public class WidgetData {
         this.mainContent = builder.mainContent;
         this.secondContent = builder.secondContent;
         this.performer = builder.performer;
+        this.bgColor = builder.bgColor;
+
     }
 
     public String getTitle() {
@@ -61,13 +64,23 @@ public class WidgetData {
         return performer;
     }
 
+    public int getBgColor() {
+        return bgColor;
+    }
+
+    public void setBgColor(int bgColor) {
+        this.bgColor = bgColor;
+    }
+
 
     public static class Builder {
         private String title;
         private int icon;
+        private int bgColor;
         private String mainContent;
         private String secondContent;
         private Runnable performer;
+
 
         public Builder() {
             this("");
@@ -79,6 +92,11 @@ public class WidgetData {
 
         public Builder setIcon(@StringRes int icon) {
             this.icon = icon;
+            return this;
+        }
+
+        public Builder setBgColor(int color) {
+            this.bgColor = color;
             return this;
         }
 
