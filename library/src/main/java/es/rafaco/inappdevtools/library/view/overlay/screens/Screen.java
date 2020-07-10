@@ -192,6 +192,10 @@ public abstract class Screen implements Toolbar.OnMenuItemClickListener {
         if (bodyView !=null) bodyView.setVisibility(visibility);
     }
 
+    public void showProgress(boolean isVisible){
+        getScreenManager().getScreenLayer().showProgress(isVisible);
+    }
+
     public boolean haveHead() {
         return getHeadLayoutId() != -1 && headView !=null;
     }

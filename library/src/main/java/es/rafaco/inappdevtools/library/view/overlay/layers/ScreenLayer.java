@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatImageView;
@@ -56,6 +57,7 @@ public class ScreenLayer extends Layer {
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
     private Toolbar toolbar;
+    private ProgressBar progressBar;
     private LinearLayout fullContainer;
 
     public ScreenLayer(LayerManager manager) {
@@ -104,6 +106,7 @@ public class ScreenLayer extends Layer {
     private void initScroll() {
         bodyScroll = getView().findViewById(R.id.scroll_view);
         bodyContainer = getView().findViewById(R.id.tool_body_container);
+        progressBar = getView().findViewById(R.id.progressBar);
         fullContainer = getView().findViewById(R.id.full_container);
     }
 
@@ -263,6 +266,10 @@ public class ScreenLayer extends Layer {
 
     public View getFullContainer() {
         return fullContainer;
+    }
+
+    public void showProgress(boolean isVisible){
+        progressBar.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
     }
 
     //endregion

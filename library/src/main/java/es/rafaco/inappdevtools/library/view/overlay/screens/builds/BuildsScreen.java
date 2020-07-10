@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.builds;
 
+import android.os.AsyncTask;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class BuildsScreen extends Screen {
 
+    private AsyncTask<Long, String, List<Object>> currentTask;
+
     public BuildsScreen(ScreenManager manager) {
         super(manager);
     }
@@ -63,14 +66,35 @@ public class BuildsScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        List<?> data = initData();
-        initAdapter((List<Object>) data);
+        showProgress(true);
+
+        if (currentTask != null){
+            currentTask.cancel(true);
+        }
+        currentTask = new AsyncTask<Long, String, List<Object>>(){
+            @Override
+            protected List<Object> doInBackground(Long... objects) {
+                List<Object> data = initData();
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(final List<Object> data) {
+                super.onPostExecute(data);
+                if (!currentTask.isCancelled()){
+                    initAdapter((List<Object>) data);
+                    showProgress(false);
+                }
+                currentTask = null;
+            }
+        };
+        currentTask.execute();
     }
 
-    private List<CardData> initData() {
+    private List<Object> initData() {
         List<Build> builds = IadtDatabase.get().buildDao().getAll();
 
-        List<CardData> cards = new ArrayList<>();
+        List<Object> cards = new ArrayList<>();
         for (int i = 0; i < builds.size(); i++) {
             final Build build = builds.get(i);
             boolean isCurrent = (i==0);
@@ -102,7 +126,7 @@ public class BuildsScreen extends Screen {
 
     @Override
     protected void onStop() {
-        //Nothing needed
+        showProgress(false);
     }
 
     @Override
