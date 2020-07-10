@@ -20,9 +20,14 @@
 package es.rafaco.inappdevtools.library.view.components.cards;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.FrameLayout;
+
+//#ifdef ANDROIDX
+//@import androidx.core.content.ContextCompat;
+//#else
+import android.support.v4.content.ContextCompat;
+//#endif
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarData;
