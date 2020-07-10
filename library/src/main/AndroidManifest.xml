@@ -117,7 +117,6 @@
            androidx.transition,
            androidx.core,
            androidx.lifecycle,
-           com.github.mikephil.charting,
            androidx.sqlite.db.framework,
            androidx.sqlite.db,
            androidx.lifecycle.livedata,
