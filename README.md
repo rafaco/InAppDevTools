@@ -6,7 +6,7 @@
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
 </p>
 
-**A library to enhances the internal compilations of Android apps with tools for their development team. It allows to report, inspect and debug your running app from the same screen when it's running. No cable needed, our UI shows over your app.**
+**A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
 
 - Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
 - View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
