@@ -6,7 +6,7 @@
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
 </p>
 
-**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows to report, inspect and debug your app from the same screen when it's running. No cable needed, our UI shows over your app.**
+**A library to enhances the internal compilations of Android apps with tools for their development team. It allows to report, inspect and debug your running app from the same screen when it's running. No cable needed, our UI shows over your app.**
 
 - Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
 - View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
@@ -17,7 +17,9 @@
 - Easy installation and configuration. No Application class override needed, all from Gradle.
 - Customize our tools to your needs, add buttons to run your methods and use our dev helpers.
 
-**Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
+*Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
+
+*Shortlink: [`https://git.io/JJsLX`](https://git.io/JJsLX)*
 
 <p align="center">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
