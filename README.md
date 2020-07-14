@@ -8,6 +8,8 @@
 
 **A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
 
+Conceptually this's similar to Chrome DevTools but inside your app instead of in your browser. It allows to inspect, analyze and modify a running app from within it. Our interface get shown over your activities while you use them, helping you to understand what's really happening underneath in order to highlight issues and bug causes. 
+
 - Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
 - View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
 - Reports crashes or issues directly to developers, including a zip with logs, screenshots and other info.
