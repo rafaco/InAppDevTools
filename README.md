@@ -8,12 +8,12 @@
 
 **A library to enhances the internal compilations of Android apps with tools for their development team. It allows to report, inspect and debug your running app from the same screen when it's running. No cable needed, our UI shows over your app.**
 
-- Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
-- View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
-- Inspect your standard logs, view layout, source code (original and generated) and storage (db, SharedPrefs and Files).
-- Modify your app behaviour on runtime editing values at your view layout, db or SharedPrefs.
 - Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
+- View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
 - Reports crashes or issues directly to developers, including a zip with logs, screenshots and other info.
+- Inspect your standard logs, view layout, source code (original and generated) and storage (db, SharedPrefs and Files).
+- Auto log events and create reproduction steps (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
+- Modify your app behaviour on runtime by editing your view layout or changing values in your db or SharedPrefs.
 - Easy installation and configuration. No Application class override needed, all from Gradle.
 - Customize our tools to your needs, add buttons to run your methods and use our dev helpers.
 
