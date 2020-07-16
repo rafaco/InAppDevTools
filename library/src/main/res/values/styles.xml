@@ -138,6 +138,7 @@
     </style>
 
     <style name="IadtCard.Image">
+        <item name="cardCornerRadius">3dp</item>
         <item name="contentPaddingTop">0dp</item>
         <item name="contentPaddingBottom">0dp</item>
         <item name="contentPaddingLeft">0dp</item>
