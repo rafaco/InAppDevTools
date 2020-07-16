@@ -31,8 +31,6 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 
 *Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
 
-*Shortlink: [`https://git.io/IADT`](https://git.io/IADT)*
-
 <p align="center">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
 </p>
