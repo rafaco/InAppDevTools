@@ -29,6 +29,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.utils.ReflexionUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.TraceGroupItem;
@@ -142,7 +143,7 @@ public class TraceGrouper {
     private void initMatcher() {
         matcher = new HashMap<>();
         AppInfoDocumentGenerator infoHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
-        matcher.put(BuildConfig.APPLICATION_ID, IADT_TAG); //Our library
+        matcher.put(getLibraryPackageName(), IADT_TAG); //Our library
         matcher.put(infoHelper.getPackageName(), YOUR_APP_TAG); //Host app
         matcher.put(infoHelper.getInternalPackageName(), YOUR_APP_TAG); //Host app
         matcher.put("androidx.", ANDROIDX_LIB_TAG);
@@ -150,6 +151,21 @@ public class TraceGrouper {
         matcher.put("com.android", ANDROID_TAG);
         matcher.put("android.", ANDROID_TAG);
         matcher.put("java.", ANDROID_TAG);
+    }
+
+    private String getLibraryPackageName() {
+        // Starting from Android Studio 4, Gradle 6 or Android Gradle Plugin 4:
+        // APPLICATION_ID has been deprecated for libraries and replaced by LIBRARY_PACKAGE_NAME
+
+        if (ReflexionUtils.doesClassContainField(BuildConfig.class,
+                "LIBRARY_PACKAGE_NAME")) {
+            return ReflexionUtils.getStringFieldFromClass(BuildConfig.class,
+                    "LIBRARY_PACKAGE_NAME");
+        }
+        else {
+            return ReflexionUtils.getStringFieldFromClass(BuildConfig.class,
+                    "APPLICATION_ID");
+        }
     }
 
     private int getColor(TraceItemData item) {

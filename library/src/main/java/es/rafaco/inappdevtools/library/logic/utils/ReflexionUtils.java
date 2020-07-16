@@ -155,4 +155,29 @@ public class ReflexionUtils {
             }
         }
     }
+
+    public static boolean doesClassContainField(Class<?> target, String fieldName) {
+        for (Field field : target.getFields()) {
+            if (field.getName().equals(fieldName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getStringFieldFromClass(Class<?> target, String fieldName) {
+        try {
+            Field field;
+            field = target.getField(fieldName);
+            Class<?> fieldType = field.getType();
+            if(fieldType == String.class){
+                return (String) field.get(null);
+            }
+        } catch (NoSuchFieldException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+        return null;
+    }
 }
