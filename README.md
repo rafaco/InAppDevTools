@@ -1,9 +1,19 @@
-# InAppDevTools ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=version&style=flat-square)  [![Maturity](https://img.shields.io/badge/maturity-alpha-orange.svg?style=flat-square)](https://github.com/rafaco/InAppDevTools/commits)  [![Project Stats](https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif)](https://www.openhub.net/p/InAppDevTools)
-
-<!---[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/887) -->
+<!-- # InAppDevTools -->
+<p align="center">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="75%">
+</p>
 
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
+  <a href="https://github.com/rafaco/InAppDevTools/releases" alt="Version">
+      <img src="https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=Version&style=flat-square"/></a>
+  <a href="https://github.com/rafaco/InAppDevTools/commits" alt="Maturity">
+      <img src="https://img.shields.io/badge/Maturity-development-orange.svg?style=flat-square"/></a>
+  <a href="https://git.io/IADT" alt="ShortLink">
+      <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat-square"/></a>
+  <!-- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal">
+      <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> -->
+  <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
+      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>
 </p>
 
 **A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
