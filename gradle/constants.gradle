@@ -29,9 +29,9 @@ ext{
         - Min operational sdk is currently set to 16 due to some bugs on sdk 15.
      */
     PROJECT_MIN_SDK = 14
-    PROJECT_COMPILE_SDK = 28
+    PROJECT_COMPILE_SDK = 29
     PROJECT_BUILD_TOOLS = '29.0.2'
-    PROJECT_TARGET_SDK = 28
+    PROJECT_TARGET_SDK = 29
     PROJECT_TARGET_COMPATIBILITY = JavaVersion.VERSION_1_7
     PROJECT_SOURCE_COMPATIBILITY = JavaVersion.VERSION_1_7
 
