@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.events.IadtEvent;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class StopWatch {
@@ -74,8 +74,12 @@ public class StopWatch {
     }
 
     public void finishToEvent(){
-        String result = finish();
-        FriendlyLog.log(result);
+        new IadtEvent()
+                .setMessage(finish())
+                .setCategory("Iadt")
+                .setSubcategory("StopWatch")
+                .setSeverity("I")
+                .fire();
     }
 
     public void finishToLog(){

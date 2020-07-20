@@ -85,12 +85,15 @@ public class FriendlyLog {
         insertOnBackground(log);
     }
 
-    private static void logAtLogcat(Friendly log) {
+    public static void log(Friendly log) {
+        logAtLogcat(log);
+        insertOnBackground(log);
+    }
 
+    private static void logAtLogcat(Friendly log) {
         if (!IadtController.get().getConfig().getBoolean(BuildConfigField.INJECT_EVENTS_ON_LOGCAT)){
             return;
         }
-
         runLogMethod(log);
     }
 
@@ -323,6 +326,9 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("Delete")){
                 return R.drawable.ic_delete_forever_white_24dp;
             }
+            /*else if (log.getSubcategory().equals("StopWatch")){
+                return R.drawable.iadt_logo;
+            }*/
             return R.drawable.ic_developer_mode_white_24dp;
         }
         else if (log.getCategory().equals("Log")){

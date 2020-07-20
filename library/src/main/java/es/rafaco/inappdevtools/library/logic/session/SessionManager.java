@@ -325,7 +325,7 @@ public class SessionManager {
             filePaths.add(DocumentRepository.getDocumentPath(documentType, sessionId));
         }
         if (IadtController.get().isDebug() && watch!=null)
-            FriendlyLog.log(watch.finish());
+            watch.finishToEvent();
         return filePaths;
     }
 
