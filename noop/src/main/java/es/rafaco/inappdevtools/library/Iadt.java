@@ -24,7 +24,7 @@ import android.view.GestureDetector;
 
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 
 public class Iadt {
 
@@ -61,7 +61,7 @@ public class Iadt {
 
     //region [ INTEGRATIONS ]
 
-    public static void addRunButton(RunButton runnable){}
+    public static void addTeamAction(ButtonFlexData runnable){}
     public static GestureDetector getGestureDetector() {
         return null;
     } //TODO

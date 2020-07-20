@@ -82,7 +82,7 @@ public class Iadt {
 
     //region [ INTEGRATIONS ]
 
-    public static void addRunButton(ButtonFlexData runnable){
+    public static void addTeamAction(ButtonFlexData runnable){
         if(!isEnabled()) return;
         getController().getRunnableManager().add(runnable);
     }

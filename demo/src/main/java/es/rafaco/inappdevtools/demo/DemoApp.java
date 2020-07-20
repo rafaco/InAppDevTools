@@ -34,7 +34,7 @@ public class DemoApp extends Application {
         super.onCreate();
 
 
-        Iadt.addRunButton(new ButtonFlexData("Show message",
+        Iadt.addTeamAction(new ButtonFlexData("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
@@ -49,7 +49,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonFlexData("Select API...",
+        Iadt.addTeamAction(new ButtonFlexData("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
@@ -58,7 +58,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonFlexData("Add dummy thread",
+        Iadt.addTeamAction(new ButtonFlexData("Add dummy thread",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
@@ -73,7 +73,7 @@ public class DemoApp extends Application {
                     }
                 }));
 
-        Iadt.addRunButton(new ButtonFlexData("Add dummy async",
+        Iadt.addTeamAction(new ButtonFlexData("Add dummy async",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
