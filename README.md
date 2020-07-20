@@ -70,30 +70,33 @@ dependencies {
     debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'
     //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
 }
+inappdevtools {
+    enabled = true
+    teamName = 'YourTeam'
+    teamEmail = 'youremail@yourdomain.com'
+    notes = 'First compilation notes, replace me on following ones.'
+}
 ```
 
-Choose only one between `androidx` or `support` artifacts, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
-
-Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
+1. Choose only one artifact between `androidx` or `support`, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
+2. `inappdevtools` is our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure. Fill your team name and email for reports by now.
+3. Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
 - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
+- [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
 - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
-
+<!--
 ## Configuration <a name="configuration"/>
 
 You can easily configure our library behaviour at **build time** by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values.
 ```gradle
 apply plugin: 'es.rafaco.inappdevtools'
 
-inappdevtools {
-    enabled = true
-    notes = 'This compilation fix the following issues:..'
-    teamEmail = 'email@domain.com'
-}
+
 ```
 All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.
 
@@ -102,18 +105,18 @@ You can also override your build configuration at **run time** from our UI (Over
 Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
 Iadt.restartApp();
 ```
+-->
 
 ## Important considerations
 
 ### Debug vs Release compilation
 
-Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug compilations are for internal use and your release ones are for production, but you can adjust it.
+Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug builds are your internal compilations and release ones are for production. So, with default configuration:
 
-You can disable our library and plugin in your **debug builds** by setting `enabled = false` in configuration or using our `noop` library. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#1-enabled).
+ * Your **`Debug` builds** will have this **library ENABLED**.
+ * Your **`Release` builds** will have this **library DISABLED** and we have a **release protection mechanism** to auto-disable everything on your release builds even if you enable it by mistake.
 
-We have a **release protection mechanism** to auto-disable everything on your release builds even if you forget to use our `noop` artifact or if your configuration have `enabled = true`. On release builds, our plugin will not perform any of their tasks and our `androidx` and `support` libraries will behave like the `noop` one.
-
-To enable our library and plugin in your **release builds** you have to explicitly override our protection mechanism by setting `enabledOnRelease = true` in configuration. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#2-enabled-on-release).
+You can adjust which builds enable or library and which ones have it disabled. You can also override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
 
 ### Source code exposition <a name="exposed_sources"/>
 
@@ -123,40 +126,76 @@ You can adjust this behaviour to your needs, excluding some sources or disabling
 
 
 ## Usage <a name="usage"/>
-After the [setup](#setup) you only need to *Run* a debug build of your app into a real device or emulator. Our welcome dialog will pop up.
+After the [setup](#setup) you only need to *Run* a debug build of your app into a real device or emulator.
 
-### Invocation <a name="invocation"/>
+Our **welcome dialog** will pop up on first start and every time you deploy a new build over the device. It gives some information, allow to disable our tools, help user in accepting permissions required.
+
+You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground.
+
+If your **app crash**, our UI will automatically popup showing full details about the crash and allowing to report it.
+
+<!-- ### Invocation <a name="invocation"/>
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device with your app on foreground
 - Tap our floating icon
-- Or programmatically calling `Iadt.show();`
+- Or programmatically calling `Iadt.show();` -->
 
 
 ## Integrations
 
-### Include compilation notes
-You can provide any text to describe your compilation using `notes` configuration. This is very useful to describe changes or to provide instructions and it will be show on first dialog and on BuildInfo panel. 
+There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored in your release compilations (disabled config or noop artifacts).
+
+### Compilation notes
+You can provide any text to describe your current build or compilation by using `notes` configuration. This is very useful to describe changes or to provide instructions. This message will be show on welcome dialog, team screen and build screen.
 ```gradle
 inappdevtools {
     notes = "This is a NOTE about this compilation:\n" +
             " - Multiline supported"
 ```
 
-### Add run button
-Add your own buttons to our Run screen. You have to provide a title and Runnable object, when you can perform any logic or call any of your app methods. 
+### Team configuration
+You can customize a lot of things in our 'Team Screen' using Gradle configuration.
 ```gradle
-Iadt.addRunButton(new RunButton("Your text",
-        new Runnable() {
-            @Override
-            public void run() {
-                YourClass.yourMethod();
-            }
-        }));
+inappdevtools {
+    teamName = "DemoTeam"
+    teamEmail = 'inappdevtools@gmail.com'
+    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
+    teamLinks = [ website   : "http://inappdevtools.org",
+                  repo      : "https://github.com/rafaco/InAppDevTools",
+                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
+                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
+}
 ```
-Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in). You can also specify an icon, a background color or a callback.
+
+### Team actions
+You can also add handy buttons to the 'Team screen' to perform any logic or call any of your methods. Define it using a ```ButtonFlexData``` instance, when you can specify some details for your button (message, icon, color...) and the action itself in a ```Runnable```. Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
+
+```java
+ Iadt.addTeamAction(new ButtonFlexData("Show message",
+                R.drawable.ic_run_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        YourClass.yourMethod("param");
+                    }
+                }));
+```
+
+### Custom events
+You can create and fire your own events manually. These events will be shown on our log screen mixed with your logcat logs and our events. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
+
+```java
+ new IadtEvent()
+      .setMessage("Custom event sample: User logged in")
+      .setExtra(userName)
+      .setCategory("YourCategory")
+      .setSubcategory("UserLogIn")
+      .setSeverity("I")
+      .fire();
+```
 
 
-## Contributing and building instructions [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+## Contributing and building instructions
 
 First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving us a :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:.
 
