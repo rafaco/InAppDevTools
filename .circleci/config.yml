@@ -27,8 +27,8 @@ jobs:
 
 
     - run:
-        name: Download Support Dependencies
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=false
+        name: Download Dependencies
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
     - run:
         name: Assemble COMPAT SupportDebug
@@ -40,9 +40,6 @@ jobs:
         name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug
 
-    - run:
-        name: Download AndroidX Dependencies
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
     - run:
         name: Assemble COMPAT AndroidxDebug
