@@ -67,25 +67,25 @@ jobs:
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
-          
+
       - run:
-          name: Lint report LIBRARY SupportDebug
-          command: ./gradlew :library:lintSupportDebug
+          name: Lint report LIBRARY Androidx Debug
+          command: ./gradlew :library:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
       - store_artifacts:
           name: Saving Lint report
           path: library/build/reports
           destination: library/reports
 
       - run:
-          name: Lint report DEMO SupportDebug
-          command: ./gradlew :demo:lintSupportDebug
+          name: Lint report DEMO Androidx Debug
+          command: ./gradlew :demo:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
       - store_artifacts:
           name: Saving Lint report
           path: demo/build/reports
           destination: demo/reports
       - run:
           name: Sonar report ALL SupportDebug and upload to SonarCloud
-          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info
+          command: ./gradlew :demo:assembleAndroidxDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
