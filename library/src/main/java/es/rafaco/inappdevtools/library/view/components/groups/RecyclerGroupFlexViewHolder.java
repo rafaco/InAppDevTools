@@ -70,8 +70,8 @@ public class RecyclerGroupFlexViewHolder extends GroupFlexViewHolder {
 
     private void bindOrientation(RecyclerGroupFlexData data) {
         int orientation = data.isHorizontal
-                ? LinearLayout.HORIZONTAL
-                : LinearLayout.VERTICAL;
+                ? RecyclerView.HORIZONTAL
+                : RecyclerView.VERTICAL;
         LinearLayoutManager lm = new LinearLayoutManager(getContext(),
                     orientation, false);
         groupContainer.setLayoutManager(lm);
