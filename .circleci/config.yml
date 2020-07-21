@@ -17,10 +17,6 @@ jobs:
     - restore_cache:
         key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
-    - run:
-        name: Download Dependencies (AndroidX)
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
-
     #Not needed: Plugin build already included in project (using includBuild)
     #- run:
     #    name: Assemble Plugin
@@ -28,6 +24,11 @@ jobs:
     - run:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
+
+
+    - run:
+        name: Download Support Dependencies
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=false
 
     - run:
         name: Assemble COMPAT SupportDebug
@@ -38,6 +39,10 @@ jobs:
     - run:
         name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug
+
+    - run:
+        name: Download AndroidX Dependencies
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
     - run:
         name: Assemble COMPAT AndroidxDebug
