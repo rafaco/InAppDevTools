@@ -64,12 +64,14 @@ apply plugin: 'es.rafaco.inappdevtools'
 android {
     ...
 }
+
 dependencies {
     releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'
     
     debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'
     //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
 }
+
 inappdevtools {
     enabled = true
     teamName = 'YourTeam'
