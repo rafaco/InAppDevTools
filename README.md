@@ -37,59 +37,60 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 
 ## Setup <a name="setup"/>
 
-Include our plugin and our libraries in your Gradle files and that's it! We will pop up in your debug compilations.
+You only need to modify 2 gradle files. On your **root build.gradle** file:
 
-On your **root build.gradle** file:
+1. Add our plugin in your `plugins`
+2. Add jitpack to `allprojects` `repositories`
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.56" apply false
+    id "es.rafaco.inappdevtools" version "0.0.56" apply false           // 1.
 }
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io"}
+        maven { url "https://jitpack.io"}                               // 2.
     }
 }
 ```
 
 On your **app** module **build.gradle** file:
 
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
+
 ```gradle
 apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'                                 //(1)
+apply plugin: 'es.rafaco.inappdevtools'                                 // 1.
 
 android {
     ...
 }
 
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'         //(2)
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'         // 2.
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'        //(3)
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'        // 3.
     //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
 }
 
-inappdevtools {                                                         //(4)
+inappdevtools {                                                         // 4.
     enabled = true
-    notes = 'First compilation notes, replace me on the following ones.'
     teamName = 'YourTeam'
     teamEmail = 'youremail@yourdomain.com
+    notes = 'First build note, replace me on the next ones.'
 }
 ```
 
-1. Apply our plugin
-2. Add our `noop` for your release builds
-3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
-4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
+Important considerations about this setup:
 
-> Please, read followings considerations before continue:
->
->* **This library will be enabled on your debug builds** and disabled for your releases. You can adjust which of your builds enable us. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
->* **Your source code will be exposed on your debug builds**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK files. You can exclude some sources or disable related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
->* **Your release builds are protected**. All our features get safely disabled, your sources will not be included and your apk size will be minimally increased. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
+* **This library will be enabled on your debug builds** and disabled for your releases. You can adjust which of your builds enable us. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
+* **Your source code will be exposed on your debug builds**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK files. You can exclude some sources or disable related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
+* **Your release builds are protected**. All our features get safely disabled, your sources will not be exposed and your apk size will be minimally increased. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
 
 Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
@@ -99,24 +100,6 @@ For extended setup details visit our wiki:
 - [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
 - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
-
-<!--
-## Configuration <a name="configuration"/>
-
-You can easily configure our library behaviour at **build time** by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values.
-```gradle
-apply plugin: 'es.rafaco.inappdevtools'
-
-
-```
-All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.
-
-You can also override your build configuration at **run time** from our UI (Overlay toolbar > More > Setting) or programmatically calling us from your sources. Runtime values will be lost when cleaning your app data, restoring the build ones from our gradle extension.
-```java
-Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
-Iadt.restartApp();
-```
--->
 
 ## Usage <a name="usage"/>
 
