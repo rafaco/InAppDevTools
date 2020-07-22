@@ -40,6 +40,13 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 
 You only need to modify 2 gradle files. On your **root build.gradle** file:
 
+<details><summary align="right">Show lines legend</summary><p>
+ 
+1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
+2. Add jitpack to `allprojects`, `repositories`.
+
+</p></details>
+
 ```gradle
 buidscript {...}
 
@@ -53,14 +60,17 @@ allprojects {
     }
 }
 ```
-<details><summary align="right">Show lines legend</summary><p>
- 
-1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
-2. Add jitpack to `allprojects`, `repositories`.
-
-</p></details>
 
 On your **app** module **build.gradle** file:
+
+<details><summary align="right">Show lines legend</summary><p>
+ 
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
+
+</p></details>
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -84,15 +94,6 @@ inappdevtools {                                                         // 4.
     notes = 'First build note, replace me on the next ones.'
 }
 ```
-
-<details><summary align="right">Show lines legend</summary><p>
- 
-1. Apply our plugin
-2. Add our `noop` for your release builds
-3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
-4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
-
-</p></details>
 
 Important considerations about this setup:
 
