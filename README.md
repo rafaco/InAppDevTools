@@ -63,8 +63,8 @@ allprojects {
 
 On your **app** module **build.gradle** file:
 
-<details><summary align="right">Show lines legend</summary><p>
- 
+<details><summary align="right">Show line legend</summary><p>
+
 1. Apply our plugin
 2. Add our `noop` for your release builds
 3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
