@@ -88,16 +88,17 @@ inappdevtools {                                                         // 4.
 
 Important considerations about this setup:
 
-* **This library will be enabled on your debug builds** and disabled for your releases. You can adjust which of your builds enable us. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
-* **Your source code will be exposed on your debug builds**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK files. You can exclude some sources or disable related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
-* **Your release builds are protected**. All our features get safely disabled, your sources will not be exposed and your apk size will be minimally increased. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
+* This library will be **enabled on your Debug APKs** with all features and **your source code will be exposed** throw our UI.
+* Your **Release APKs are protected**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
 
-Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
+Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
 - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
 - [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
+- [Redefine which are your internal compilations](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation)
+- [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
 - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
