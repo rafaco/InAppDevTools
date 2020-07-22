@@ -111,20 +111,17 @@ Iadt.restartApp();
 
 ## Important considerations
 
-### Debug vs Release compilation
+### Enabled on Debug builds
 
-Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug builds are your internal compilations and release ones are for production. So, with default configuration:
-
- * Your **`Debug` builds** will have this **library ENABLED**.
- * Your **`Release` builds** will have this **library DISABLED** and we have a **release protection mechanism** to auto-disable everything on your release builds even if you enable it by mistake.
-
-You can adjust which builds enable or library and which ones have it disabled. You can also override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
+Our default configuration assume that your debug builds are your internal compilations, then **our library will be enabled on your debug builds**. You can adjust which of your builds enable our library. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
 
 ### Source code exposition <a name="exposed_sources"/>
 
-When this library is enabled, **your source code get exposed to anyone who get your APK**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled.
+**Your source code get exposed when our library is enabled** (debug builds initially). It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled. You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
 
-You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection) .
+### Release protection
+
+We disable everything by default on your releases and your apk size is not increased (`noop` artifact). We also have a **release protection mechanism** to auto-disable everything on your release builds even if you enable it by mistake. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
 
 
 ## Usage <a name="usage"/>
