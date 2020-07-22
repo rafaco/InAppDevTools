@@ -40,13 +40,6 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 
 You only need to modify 2 gradle files. On your **root build.gradle** file:
 
-<details><summary align="right">Show lines legend</summary><p>
- 
-1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
-2. Add jitpack to `allprojects`, `repositories`.
-
-</p></details>
-
 ```gradle
 buidscript {...}
 
@@ -60,17 +53,14 @@ allprojects {
     }
 }
 ```
+<details><summary align="center">Show details</summary><p>
+ 
+1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
+2. Add jitpack to `allprojects`, `repositories`.
+
+</br></p></details>
 
 On your **app** module **build.gradle** file:
-
-<details><summary align="right">Show line legend</summary><p>
-
-1. Apply our plugin
-2. Add our `noop` for your release builds
-3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
-4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
-
-</p></details>
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -94,6 +84,14 @@ inappdevtools {                                                         // 4.
     notes = 'First build note, replace me on the next ones.'
 }
 ```
+<details><summary align="center">Show details</summary><p>
+
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our configuration closure `inappdevtools` and fill your email at least.
+
+</br></p></details>
 
 Important considerations about this setup:
 
@@ -102,18 +100,15 @@ Important considerations about this setup:
 
 Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
-<details><summary align="right">Show wiki links</summary><p>
-
 For extended setup details visit our wiki:
-- [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
-- [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
-- [Redefine which are your internal compilations](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation)
-- [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
-- [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
-- [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
-</p></details>
+ - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
+ - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
+ - [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
+ - [Redefine which are your internal compilations](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation)
+ - [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
+ - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
+ - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
 
 ## Usage <a name="usage"/>
