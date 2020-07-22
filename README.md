@@ -135,9 +135,10 @@ After the [setup](#setup) process, you only need to *Run* a debug build of your 
 
 Our **welcome dialog** will pop up on first start and every time you deploy a new build over the device. It gives some information, allow to disable our tools, help user in accepting permissions required.
 
-</td><td width="40%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Welcome_Screen.png"></td></tr></table>
+</td><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Welcome_Screen.png"></td></tr></table>
 
-<table border="0"><tr><td width="40%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Home_Screen.png"></td><td>
+
+<table border="0"><tr><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Home_Screen.png"></td><td>
 
 You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground. 
 
