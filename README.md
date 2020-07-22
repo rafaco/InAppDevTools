@@ -35,12 +35,10 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
 </p>
 
+
 ## Setup <a name="setup"/>
 
 You only need to modify 2 gradle files. On your **root build.gradle** file:
-
-1. Add our plugin in your `plugins`
-2. Add jitpack to `allprojects` `repositories`
 
 ```gradle
 buidscript {...}
@@ -55,13 +53,14 @@ allprojects {
     }
 }
 ```
+<details><summary align="right">Show lines legend</summary><p>
+ 
+1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
+2. Add jitpack to `allprojects`, `repositories`.
+
+</p></details>
 
 On your **app** module **build.gradle** file:
-
-1. Apply our plugin
-2. Add our `noop` for your release builds
-3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
-4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
 
 ```gradle
 apply plugin: 'com.android.application'
@@ -86,12 +85,23 @@ inappdevtools {                                                         // 4.
 }
 ```
 
+<details><summary align="right">Show lines legend</summary><p>
+ 
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
+
+</p></details>
+
 Important considerations about this setup:
 
 * This library will be **enabled on your Debug APKs** with all features and **your source code will be exposed** throw our UI.
 * Your **Release APKs are protected**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
 
 Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
+
+<details><summary align="right">Show wiki links</summary><p>
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
@@ -101,6 +111,9 @@ For extended setup details visit our wiki:
 - [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
 - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
 - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
+
+</p></details>
+
 
 ## Usage <a name="usage"/>
 
