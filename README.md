@@ -59,30 +59,39 @@ On your **app** module **build.gradle** file:
 
 ```gradle
 apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'
+apply plugin: 'es.rafaco.inappdevtools'                                 //(1)
 
 android {
     ...
 }
 
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'         //(2)
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'        //(3)
     //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
 }
 
-inappdevtools {
+inappdevtools {                                                         //(4)
     enabled = true
+    notes = 'First compilation notes, replace me on the following ones.'
     teamName = 'YourTeam'
-    teamEmail = 'youremail@yourdomain.com'
-    notes = 'First compilation notes, replace me on following ones.'
+    teamEmail = 'youremail@yourdomain.com
 }
 ```
 
-1. Choose only one artifact between `androidx` or `support`, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
-2. `inappdevtools` is our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure. Fill your team name and email for reports by now.
-3. Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure and fill your email at least.
+
+> Please, read followings considerations before continue:
+>
+>* **This library will be enabled on your debug builds** and disabled for your releases. You can adjust which of your builds enable us. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
+>* **Your source code will be exposed on your debug builds**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK files. You can exclude some sources or disable related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
+>* **Your release builds are protected**. All our features get safely disabled, your sources will not be included and your apk size will be minimally increased. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation).
+
+Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
 - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
@@ -108,21 +117,6 @@ Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
 Iadt.restartApp();
 ```
 -->
-
-## Important considerations
-
-### Enabled on Debug builds
-
-Our default configuration assume that your debug builds are your internal compilations, then **our library will be enabled on your debug builds**. You can adjust which of your builds enable our library. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
-
-### Source code exposition <a name="exposed_sources"/>
-
-**Your source code get exposed when our library is enabled** (debug builds initially). It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled. You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection).
-
-### Release protection
-
-We disable everything by default on your releases and your apk size is not increased (`noop` artifact). We also have a **release protection mechanism** to auto-disable everything on your release builds even if you enable it by mistake. You can override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
-
 
 ## Usage <a name="usage"/>
 
