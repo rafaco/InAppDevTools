@@ -93,10 +93,10 @@ inappdevtools {                                                         // 4.
 
 </br></p></details>
 
-Important considerations about this setup:
+Important changes made to your project builds:
 
-* This library will be **enabled on your Debug APKs** with all features and **your source code will be exposed** throw our UI.
-* Your **Release APKs are protected**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
+* **Enabled on your Debug builds**. All features will be available and **your source code will be exposed** throw our UI and in your APK files.
+* **Disabled on your Release builds**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
 
 Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
