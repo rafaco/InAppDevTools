@@ -57,6 +57,7 @@ import es.rafaco.inappdevtools.library.view.dialogs.DisableDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSender;
 import es.rafaco.inappdevtools.library.view.overlay.screens.report.NewReportScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 
 /**
  * This class is the main internal interface of InAppDevTools.
@@ -329,6 +330,25 @@ public final class IadtController {
                     public void run() {
                         getOverlayHelper().restoreAll();
                         if (callback!=null) callback.run();
+                    }
+                }, 200);
+            }
+        }, 200);
+    }
+
+    public void takeLibraryScreenshot(){
+        //getOverlayHelper().showMain();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScreenshotUtils.takeAndSaveOverlay();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Screenshot screenshot = IadtDatabase.get().screenshotDao().getLast();
+                        FriendlyLog.logScreenshot(screenshot.getUid());
+                        OverlayService.performNavigation(ZoomScreen.class, screenshot.getUid()+"");
                     }
                 }, 200);
             }

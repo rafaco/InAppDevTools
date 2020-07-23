@@ -255,6 +255,12 @@ public class ScreenLayer extends Layer {
         else if (selected == R.id.action_config) {
             OverlayService.performNavigation(ConfigScreen.class);
         }
+        else if (selected == R.id.action_app_screenshot) {
+            IadtController.get().takeScreenshot();
+        }
+        else if (selected == R.id.action_lib_screenshot) {
+            IadtController.get().takeLibraryScreenshot();
+        }
         else if (selected == R.id.action_share) {
             ExternalIntentUtils.shareLibrary();
         }

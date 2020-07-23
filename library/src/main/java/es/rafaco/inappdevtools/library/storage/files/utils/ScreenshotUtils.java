@@ -21,6 +21,8 @@ package es.rafaco.inappdevtools.library.storage.files.utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.util.Pair;
 import android.view.View;
 
 import com.jraska.falcon.Falcon;
@@ -35,6 +37,8 @@ import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
+import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class ScreenshotUtils {
 
@@ -94,6 +98,51 @@ public class ScreenshotUtils {
                 // Several error may come out with file handling or DOM
                 FriendlyLog.logException("Exception", e);
             }
+        }
+        return null;
+    }
+
+    public static Screenshot takeAndSaveOverlay() {
+        long sessionId = getDb().sessionDao().count();
+        String subfolder = "session/" + sessionId;
+        long fileId = getDb().screenshotDao().count() + 1L ;
+        String filename = "screen_" + fileId;
+
+        Screenshot screenshot = grabAndSaveOverlay(subfolder, filename);
+        saveDatabaseEntry(screenshot);
+        return screenshot;
+    }
+
+    private static Screenshot grabAndSaveOverlay(String subfolder, String filename) {
+        Pair<String, View> selectedRootView = ViewHierarchyUtils.getLayerRootView(ScreenLayer.class);
+        if (selectedRootView == null){
+            return null;
+        }
+
+        String selectedName = (String) selectedRootView.second.getTag();
+        View selectedView = selectedRootView.second;
+
+        String screenName = IadtController.get().getNavigationManager()
+                .getCurrent().getStringClassName();
+
+        try {
+            Bitmap bitmap = Bitmap.createBitmap(selectedView.getWidth(), selectedView.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(bitmap);
+            selectedView.draw(c);
+
+            File imageFile = FileCreator.prepare(subfolder, filename + ".png");
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 0 ;/* ignored for PNG */
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            MediaScannerUtils.scan(imageFile);
+
+            return fillDatabaseObject(screenName, imageFile.getAbsolutePath());
+        } catch (Exception e) {
+            // Several error may come out with file handling or DOM
+            FriendlyLog.logException("Exception", e);
         }
         return null;
     }
