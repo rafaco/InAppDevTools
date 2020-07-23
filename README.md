@@ -35,104 +35,100 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
  <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
 </p>
 
+
 ## Setup <a name="setup"/>
 
-Include our plugin and our libraries in your Gradle files and that's it! We will pop up in your debug compilations.
-
-On your **root build.gradle** file:
+You only need to modify 2 gradle files. On your **root build.gradle** file:
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.56" apply false
+    id "es.rafaco.inappdevtools" version "0.0.56" apply false           // 1.
 }
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io"}
+        maven { url "https://jitpack.io"}                               // 2.
     }
 }
 ```
+<details><summary align="center">Show details</summary><p>
+ 
+1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
+2. Add jitpack to `allprojects`, `repositories`.
+
+</br></p></details>
 
 On your **app** module **build.gradle** file:
 
 ```gradle
 apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'
+apply plugin: 'es.rafaco.inappdevtools'                                 // 1.
 
 android {
     ...
 }
+
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'         // 2.
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'        // 3.
     //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
 }
-inappdevtools {
+
+inappdevtools {                                                         // 4.
     enabled = true
     teamName = 'YourTeam'
-    teamEmail = 'youremail@yourdomain.com'
-    notes = 'First compilation notes, replace me on following ones.'
+    teamEmail = 'youremail@yourdomain.com
+    notes = 'First build note, replace me on the next ones.'
 }
 ```
+<details><summary align="center">Show details</summary><p>
 
-1. Choose only one artifact between `androidx` or `support`, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
-2. `inappdevtools` is our [configuration](https://github.com/rafaco/InAppDevTools/wiki/Configurations) closure. Fill your team name and email for reports by now.
-3. Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our configuration closure `inappdevtools` and fill your email at least.
+
+</br></p></details>
+
+Important considerations about this setup:
+
+* This library will be **enabled on your Debug APKs** with all features and **your source code will be exposed** throw our UI.
+* Your **Release APKs are protected**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
+
+Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
 For extended setup details visit our wiki:
-- [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
-- [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
-- [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
-- [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
-<!--
-## Configuration <a name="configuration"/>
-
-You can easily configure our library behaviour at **build time** by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values.
-```gradle
-apply plugin: 'es.rafaco.inappdevtools'
-
-
-```
-All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.
-
-You can also override your build configuration at **run time** from our UI (Overlay toolbar > More > Setting) or programmatically calling us from your sources. Runtime values will be lost when cleaning your app data, restoring the build ones from our gradle extension.
-```java
-Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
-Iadt.restartApp();
-```
--->
-
-## Important considerations
-
-### Debug vs Release compilation
-
-Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug builds are your internal compilations and release ones are for production. So, with default configuration:
-
- * Your **`Debug` builds** will have this **library ENABLED**.
- * Your **`Release` builds** will have this **library DISABLED** and we have a **release protection mechanism** to auto-disable everything on your release builds even if you enable it by mistake.
-
-You can adjust which builds enable or library and which ones have it disabled. You can also override our protection mechanism. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations/_edit#debug-vs-release-compilation).
-
-### Source code exposition <a name="exposed_sources"/>
-
-When this library is enabled, **your source code get exposed to anyone who get your APK**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled.
-
-You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection) .
+ - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
+ - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
+ - [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
+ - [Redefine which are your internal compilations](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation)
+ - [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
+ - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
+ - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
 
 ## Usage <a name="usage"/>
-After the [setup](#setup) you only need to *Run* a debug build of your app into a real device or emulator.
+
+<table border="0"><tr><td>
+
+After the [setup](#setup) process, you only need to *Run* a debug build of your app into a real device or emulator. 
 
 Our **welcome dialog** will pop up on first start and every time you deploy a new build over the device. It gives some information, allow to disable our tools, help user in accepting permissions required.
 
-You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground.
+</td><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Welcome_Screen.png"></td></tr></table>
 
-If your **app crash**, our UI will automatically popup showing full details about the crash and allowing to report it.
+
+<table border="0"><tr><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Home_Screen.png"></td><td>
+
+You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground. 
+
+If your app crash, our UI will **automatically popup** showing full details about the crash and allowing to report it.
+
+</td></tr></table>
 
 <!-- ### Invocation <a name="invocation"/>
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
