@@ -141,16 +141,8 @@ On crash our UI will automatically popup but you can also invoke it at any time 
 
 There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored in your release compilations (disabled config or noop artifacts).
 
-### Compilation notes
-You can provide any text to describe your current build or compilation by using `notes` configuration. This is very useful to describe changes or to provide instructions. This message will be show on welcome dialog, team screen and build screen.
-```gradle
-inappdevtools {
-    notes = "This is a NOTE about this compilation:\n" +
-            " - Multiline supported"
-```
-
-### Team configuration
-You can customize a lot of things in our 'Team Screen' using Gradle configuration.
+### Customize your Team
+You can customize a lot of things in our 'Team Screen' using Gradle configuration. For field details, visit [configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations).
 ```gradle
 inappdevtools {
     teamName = "DemoTeam"
@@ -163,7 +155,6 @@ inappdevtools {
 }
 ```
 
-### Team actions
 You can also add handy buttons to the 'Team screen' to perform any logic or call any of your methods. Define it using a ```ButtonFlexData``` instance, when you can specify some details for your button (message, icon, color...) and the action itself in a ```Runnable```. Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
 
 ```java
@@ -172,21 +163,29 @@ You can also add handy buttons to the 'Team screen' to perform any logic or call
                 new Runnable() {
                     @Override
                     public void run() {
-                        YourClass.yourMethod("param");
+                        YourClass.yourMethod("someParam");
                     }
                 }));
 ```
 
-### Custom events
+### Add note to your builds
+You can provide any text to describe your current build or compilation by using `notes` configuration. This is very useful to describe changes or to provide instructions to testers. This message will be show on welcome dialog, team screen and build screen.
+```gradle
+inappdevtools {
+    notes = "This is a NOTE about this compilation:\n" +
+            " - Multiline supported"
+```
+
+### Fire your events
 You can create and fire your own events manually. These events will be shown on our log screen mixed with your logcat logs and our events. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
 
 ```java
  new IadtEvent()
-      .setMessage("Custom event sample: User logged in")
-      .setExtra(userName)
-      .setCategory("YourCategory")
-      .setSubcategory("UserLogIn")
+      .setMessage("User logged in: " + userData.getName())
+      .setExtra(userData.toString())
       .setSeverity("I")
+      .setCategory("User")
+      .setSubcategory("LogIn")
       .fire();
 ```
 
