@@ -78,7 +78,7 @@ public class StopWatch {
                 .setMessage(finish())
                 .setCategory("Iadt")
                 .setSubcategory("StopWatch")
-                .setSeverity("I")
+                .setSeverity("D")
                 .fire();
     }
 

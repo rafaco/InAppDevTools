@@ -23,6 +23,7 @@ import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.ViewGroup;
 
 import java.io.IOException;
@@ -56,6 +57,7 @@ import es.rafaco.inappdevtools.library.storage.db.entities.NetSummaryDao;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.cards.WideWidgetData;
 import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
@@ -127,17 +129,20 @@ public class HomeScreen extends AbstractFlexibleScreen {
         OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
         ConfigManager configManager = IadtController.get().getConfig();
 
+        addTeam(data, configManager);
+        addHistory(data);
+
         addApp(data, appHelper, buildReporter);
         addDevice(data, deviceHelper, osHelper);
+        addSources(data, repoReporter);
+        addStorage(data);
+
         addView(data);
         addLogic(data);
         addLog(data);
         addNetwork(data);
-        addSources(data, repoReporter);
-        addStorage(data);
-        addTeam(data, configManager);
-        addHistory(data);
-        addMore(data);
+
+        //addMore(data);
 
         return data;
     }
@@ -318,10 +323,11 @@ public class HomeScreen extends AbstractFlexibleScreen {
     private void addTeam(List<Object> data, ConfigManager configManager) {
         String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
         if (TextUtils.isEmpty(teamName))
-            teamName = "Resources";
+            teamName = "Undefined";
         WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
                 .setIcon(R.string.gmd_people)
                 .setMainContent(teamName)
+                .setSecondContent("Resources")
                 .setPerformer(new Runnable() {
                     @Override
                     public void run() {

@@ -336,23 +336,9 @@ public class ViewScreen extends AbstractFlexibleScreen {
         }
         else {
             String fragmentOverview = fragmentHistory.values().iterator().next().name;
-            if (fragmentHistory.size() == 1) {
-                fragmentOverview = "Only " + fragmentOverview;
+            if (fragmentHistory.size() > 1) {
+                fragmentOverview += " and " + (fragmentHistory.size()-1) + " more";
             }
-            else if (fragmentHistory.size() > 1) {
-                fragmentOverview += " and others";
-            }
-
-            /*data.add(new CardData(fragmentOverview,
-                    "Fragments",
-                    R.string.gmd_extension,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            OverlayService.performNavigation(FragmentsScreen.class,
-                                    currentActivityUuuid + "");
-                        }
-                    }).setNavCount(fragmentHistory.size()));*/
 
             CardGroupFlexData cardData = new CardGroupFlexData();
             cardData.setFullSpan(true);
