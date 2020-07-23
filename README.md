@@ -93,10 +93,10 @@ inappdevtools {                                                         // 4.
 
 </br></p></details>
 
-Important changes made to your project builds:
+Important changes to your project output from now on:
 
-* **Enabled on your Debug builds**. All features will be available and **your source code will be exposed** throw our UI and in your APK files.
-* **Disabled on your Release builds**. All our features get safely disabled, your sources aren't exposed and your apk size will be minimally increased.
+* **Iadt enabled on your Debug builds**: all features will be available and **your source code will be exposed** throw our UI and in your APK files.
+* **Iadt disabled on your Release builds**: no feature will be available, your sources aren't exposed and your APK size will be minimally increased.
 
 Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
