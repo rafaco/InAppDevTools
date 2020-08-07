@@ -4,6 +4,8 @@
 </p>
 
 <p align="center">
+  <a href="https://www.android.com/" alt="Platform">
+      <img src="https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square"/></a>
   <a href="https://github.com/rafaco/InAppDevTools/releases" alt="Version">
       <img src="https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=Version&style=flat-square"/></a>
   <a href="https://github.com/rafaco/InAppDevTools/commits" alt="Maturity">
@@ -11,9 +13,9 @@
   <a href="https://git.io/IADT" alt="ShortLink">
       <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat-square"/></a>
   <!-- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal">
-      <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> -->
+      <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> 
   <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
-      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>
+      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>-->
 </p>
 
 **A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
@@ -93,14 +95,14 @@ inappdevtools {                                                         // 4.
 
 </br></p></details>
 
-Important changes to your project output from now on:
+From now on, when building your project artifacts:
 
-* **Iadt is enabled on Debug builds**: all features will be available and **your source code will be exposed** throw our UI and in your APK files.
-* **Iadt is disabled on Release builds**: no feature will be available, your sources aren't exposed and your APK size will be minimally increased.
+* **Iadt will be enabled on your Debug builds**: all features will be available and **your source code will be exposed** throw our UI and in your APK files.
+* **Iadt will be disabled on your Release builds**: no feature will be available, your sources aren't exposed and your APK size will be minimally increased.
 
 Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
-For extended setup details visit our wiki:
+For additional setup details visit our wiki:
 
  - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
  - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
@@ -139,7 +141,7 @@ On crash our UI will automatically popup but you can also invoke it at any time 
 
 ## Integrations
 
-There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored in your release compilations (disabled config or noop artifacts).
+There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored when our library is disabled (release builds, disabled configuration or using noop artifacts).
 
 ### Customize your Team
 You can customize a lot of things in our 'Team Screen' using Gradle configuration. For field details, visit [configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations).
