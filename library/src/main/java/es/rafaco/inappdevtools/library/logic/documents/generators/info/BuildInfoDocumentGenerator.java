@@ -208,6 +208,6 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     public String getBuildOverviewForWelcome() {
         String firstLine = getFriendlyBuildType();
         String secondLine = getFriendlyElapsedTime();
-        return firstLine + " build from " + secondLine;
+        return firstLine + " built " + secondLine;
     }
 }

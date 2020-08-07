@@ -79,7 +79,7 @@ public abstract class IadtDialogBuilder {
     }
 
     private void setContext(Context baseContext){
-        context = new ContextThemeWrapper(baseContext, R.style.LibTheme_Dialog);
+        context = new ContextThemeWrapper(baseContext, R.style.LibTheme);
     }
 
     protected Context getContext(){

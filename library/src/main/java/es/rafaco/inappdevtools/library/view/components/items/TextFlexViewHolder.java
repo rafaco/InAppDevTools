@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.components.items;
 
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -97,6 +98,14 @@ public class TextFlexViewHolder extends FlexItemViewHolder {
         else if (data.getGravity() == Gravity.CENTER){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+        }
+
+        if (data.getBold()!=null) {
+            if (data.getBold() == true) {
+                textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+            } else if (data.getBold() == false) {
+                textView.setTypeface(Typeface.create(textView.getTypeface(), Typeface.NORMAL));
             }
         }
     }

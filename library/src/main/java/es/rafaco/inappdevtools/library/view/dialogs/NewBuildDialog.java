@@ -20,7 +20,22 @@
 package es.rafaco.inappdevtools.library.view.dialogs;
 
 import android.content.DialogInterface;
+
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+
+//#ifdef ANDROIDX
+//@import androidx.appcompat.app.AlertDialog;
+//@import androidx.recyclerview.widget.RecyclerView;
+//#else
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AlertDialog;
+//#endif
+
+import java.util.ArrayList;
+import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
@@ -29,18 +44,13 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.documents.generators.info.OSInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
-
-//#ifdef ANDROIDX
-//@import androidx.appcompat.app.AlertDialog;
-//#else
-import android.support.v7.app.AlertDialog;
-//#endif
 
 public abstract class NewBuildDialog extends IadtDialogBuilder {
 
@@ -50,23 +60,20 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
 
     @Override
     public void onBuilderCreated(AlertDialog.Builder builder) {
-        String welcomeText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO)).getAppNameAndVersions();
-        welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO)).getBuildOverviewForWelcome();
-        welcomeText += "." + Humanizer.newLine();
-        welcomeText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO)).getSecondLineOverview();
-        welcomeText += " ";
-        welcomeText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO)).getOneLineOverview();
-        welcomeText += ".";
+        String buildText = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO)).getAppNameAndVersions();
+        buildText += Humanizer.newLine();
+        buildText += ((BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO)).getBuildOverviewForWelcome();
+        /*buildText += "." + Humanizer.newLine();
+        buildText += ((DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO)).getSecondLineOverview();
+        buildText += " ";
+        buildText += ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO)).getOneLineOverview();
+        buildText += ".";*/
 
         String notes = IadtController.get().getConfig().getString(BuildConfigField.NOTES);
-        if (!TextUtils.isEmpty(notes)){
-            welcomeText += Humanizer.fullStop();
-            welcomeText += notes;
-        }
 
-        builder.setTitle(R.string.welcome_welcome_title)
-                .setMessage(welcomeText)
+        builder
+                .setTitle(R.string.library_name)
+                .setMessage(R.string.welcome_welcome_message)
                 .setIcon(UiUtils.getAppIconResourceId())
                 .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -88,6 +95,27 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
                 }
             });
         }
+
+        List<Object> data = new ArrayList<>();
+        TextFlexData buildInfo = new TextFlexData(buildText);
+        buildInfo.setGravity(Gravity.CENTER);
+        buildInfo.setBold(true);
+        buildInfo.setSize(TextFlexData.Size.EXTRA_LARGE);
+        buildInfo.setFontColor(R.color.iadt_text_high);
+        data.add(buildInfo);
+
+        if (!TextUtils.isEmpty(notes)) {
+            data.add(new HeaderFlexData("Build note:"));
+            data.add(new TextFlexData(notes));
+        }
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View dialogView = inflater.inflate(R.layout.flexible_container, null);
+        builder.setView(dialogView);
+
+        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(presetAdapter);
 
         NewBuildPrefs.saveBuildInfoShown();
     }

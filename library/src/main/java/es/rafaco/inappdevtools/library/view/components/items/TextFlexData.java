@@ -28,6 +28,7 @@ public class TextFlexData extends FlexData {
     String text;
     int fontColor;
     Size size;
+    Boolean bold;
 
     public TextFlexData(String text) {
         this(text, -1);
@@ -66,5 +67,13 @@ public class TextFlexData extends FlexData {
 
     public void setSize(Size size) {
         this.size = size;
+    }
+
+    public Boolean getBold() {
+        return bold;
+    }
+
+    public void setBold(Boolean bold) {
+        this.bold = bold;
     }
 }
