@@ -23,7 +23,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 
-public class IadtEvent {
+public class IadtEventBuilder {
 
     private long date;
     private String severity = "V";
@@ -33,25 +33,30 @@ public class IadtEvent {
     private String extra;
     private long linkedId;
 
-    public IadtEvent(long date) {
+    public IadtEventBuilder(long date) {
         this.date = date;
     }
 
-    public IadtEvent() {
+    public IadtEventBuilder() {
         setDateNow();
     }
 
-    public IadtEvent setDateNow() {
+    public IadtEventBuilder(String message) {
+        setDateNow();
+        setMessage(message);
+    }
+
+    public IadtEventBuilder setDateNow() {
         date = DateUtils.getLong();
         return this;
     }
 
-    public IadtEvent setDate(long date) {
+    public IadtEventBuilder setDate(long date) {
         this.date = date;
         return this;
     }
 
-    public IadtEvent setMessage(String message) {
+    public IadtEventBuilder setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -61,27 +66,27 @@ public class IadtEvent {
      * @param severity (V, D, I, W, E, F, WTF)
      * @return
      */
-    public IadtEvent setSeverity(String severity) {
+    public IadtEventBuilder setSeverity(String severity) {
         this.severity = severity;
         return this;
     }
 
-    public IadtEvent setCategory(String category) {
+    public IadtEventBuilder setCategory(String category) {
         this.category = category;
         return this;
     }
 
-    public IadtEvent setSubcategory(String subcategory) {
+    public IadtEventBuilder setSubcategory(String subcategory) {
         this.subcategory = subcategory;
         return this;
     }
 
-    public IadtEvent setExtra(String extra) {
+    public IadtEventBuilder setExtra(String extra) {
         this.extra = extra;
         return this;
     }
 
-    public IadtEvent setLinkedId(long linkedId) {
+    public IadtEventBuilder setLinkedId(long linkedId) {
         this.linkedId = linkedId;
         return this;
     }

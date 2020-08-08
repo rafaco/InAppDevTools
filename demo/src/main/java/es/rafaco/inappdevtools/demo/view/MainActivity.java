@@ -38,7 +38,6 @@ import android.support.v7.widget.Toolbar;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.demo.R;
 import es.rafaco.inappdevtools.demo.api.DemoAPI;
-import es.rafaco.inappdevtools.library.logic.events.IadtEvent;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -54,19 +53,16 @@ public class MainActivity extends AppCompatActivity {
         demoAPI.start(getApplicationContext());
 
         //Custom event samples
-        new IadtEvent()
-                .setMessage("Custom event sample1: Verbose event on default category (Custom-Default)")
+        Iadt.buildEvent("Custom event sample1: Verbose event on default category (Custom-Default)")
                 .fire();
 
-        new IadtEvent()
-                .setMessage("Custom event sample 2: Repro step (Info) with custom category and subcategory")
+        Iadt.buildEvent("Custom event sample 2: Repro step (Info) with custom category and subcategory")
                 .setCategory("YourCategory")
                 .setSubcategory("YourSubcategory")
                 .setSeverity("I")
                 .fire();
 
-        new IadtEvent()
-                .setMessage("Custom event sample 3: Warning with same category but another subcategory")
+        Iadt.buildEvent("Custom event sample 3: Warning with same category but another subcategory")
                 .setCategory("YourCategory")
                 .setSubcategory("AnotherSubcategory")
                 .setSeverity("W")

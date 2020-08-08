@@ -297,7 +297,7 @@ public final class IadtController {
     }
 
     public void newSession() {
-        Iadt.showMessage("Starting a new Session (restarting)");
+        Iadt.buildMessage("Starting a new Session (restarting)").isInfo().fire();
         IadtController.get().restartApp(false);
     }
 

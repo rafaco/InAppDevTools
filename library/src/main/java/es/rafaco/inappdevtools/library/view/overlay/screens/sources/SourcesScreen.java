@@ -351,7 +351,8 @@ public class SourcesScreen extends Screen {
         }
         else if (selected == R.id.action_copy) {
             ClipboardUtils.save(getContext(), getContentOverview());
-            Iadt.showMessage("Content overview copied to clipboard");
+            Iadt.buildMessage("Content overview copied to clipboard")
+                    .isInfo().fire();
         }
         return super.onMenuItemClick(item);
     }

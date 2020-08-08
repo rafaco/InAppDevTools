@@ -80,10 +80,10 @@ public class WelcomeOverlayDialog extends IadtDialogBuilder {
     }
 
     public void onPermissionRevoked() {
-        Iadt.showMessage(R.string.draw_other_app_permission_denied);
+        Iadt.buildMessage(R.string.draw_other_app_permission_denied).isError().fire();
     }
 
     public void onCancel() {
-        Iadt.showMessage(R.string.draw_other_app_permission_denied);
+        Iadt.buildMessage(R.string.draw_other_app_permission_denied).isError().fire();
     }
 }

@@ -256,7 +256,8 @@ public class CrashScreen extends AbstractFlexibleScreen {
                     @Override
                     public void run() {
                         ClipboardUtils.save(getContext(), composedMessage);
-                        Iadt.showMessage("Exception copied to clipboard");
+                        Iadt.buildMessage("Exception copied to clipboard")
+                                .isInfo().fire();
                     }
                 }));
 
@@ -358,7 +359,8 @@ public class CrashScreen extends AbstractFlexibleScreen {
     
     //TODO: restore share crash?
     private void share(Crash crash){
-        Iadt.showMessage("Sharing crash document");
+        Iadt.buildMessage("Sharing crash document")
+                .isInfo().fire();
         DocumentRepository.shareDocument(DocumentType.CRASH, crash);
     }
 }

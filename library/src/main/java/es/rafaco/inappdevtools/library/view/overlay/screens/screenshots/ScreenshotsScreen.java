@@ -83,7 +83,8 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Coming soon");
+                        Iadt.buildMessage("Coming soon")
+                                .isInfo().fire();
                     }
                 });
 

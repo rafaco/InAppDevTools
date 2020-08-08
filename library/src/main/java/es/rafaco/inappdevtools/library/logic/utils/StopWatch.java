@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.events.IadtEvent;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class StopWatch {
@@ -74,8 +73,7 @@ public class StopWatch {
     }
 
     public void finishToEvent(){
-        new IadtEvent()
-                .setMessage(finish())
+        Iadt.buildEvent(finish())
                 .setCategory("Iadt")
                 .setSubcategory("StopWatch")
                 .setSeverity("D")

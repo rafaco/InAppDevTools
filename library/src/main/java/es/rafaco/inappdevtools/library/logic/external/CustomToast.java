@@ -20,24 +20,17 @@
 package es.rafaco.inappdevtools.library.logic.external;
 
 import android.content.Context;
-import android.util.Pair;
 import android.view.Gravity;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.valdesekamdem.library.mdtoast.MDToast;
 
-import java.util.List;
-
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
-import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class CustomToast {
 
-    public static final int TYPE_INFO = 0;
-    public static final int TYPE_SUCCESS = 1;
+    public static final int TYPE_DEV = 0;
+    public static final int TYPE_INFO = 1;
     public static final int TYPE_WARNING = 2;
     public static final int TYPE_ERROR = 3;
 
@@ -52,8 +45,7 @@ public class CustomToast {
                 //toast.getView().getParent().getWindow().setType(Layer.getLayoutType());
                 toast.show();
 
-                List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
-
+                /*List<Pair<String, View>> rootViews = ViewHierarchyUtils.getRootViews(false);
                 if(rootViews != null){
                     for (Pair<String, View> rootView : rootViews){
                         if(rootView.first.contains("Toast")){
@@ -62,7 +54,7 @@ public class CustomToast {
                             //((View)rootView.second).
                         }
                     }
-                }
+                }*/
             }
         });
     }

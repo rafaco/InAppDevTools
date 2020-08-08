@@ -188,7 +188,8 @@ public class ReportSender {
         List<String> filesToSend;
         if (reportFilesMap.isEmpty()) {
             //TODO: No report files
-            Iadt.showError("Unable to send an empty report");
+            Iadt.buildMessage("Unable to send an empty report")
+                    .isError().fire();
             return null;
         }
         else if(reportFilesMap.size() == 1

@@ -87,7 +87,8 @@ public class ConfigViewHolder extends FlexViewHolder {
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Iadt.showMessage("TODO: Not already implemented");
+                    Iadt.buildMessage("TODO: Not already implemented")
+                            .isWarning().fire();
                 }
             });
             textValue.setText((String) configData.getInitialValue());

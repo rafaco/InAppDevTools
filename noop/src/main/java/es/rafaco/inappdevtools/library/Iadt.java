@@ -23,6 +23,8 @@ import android.content.Context;
 import android.view.GestureDetector;
 
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
+import es.rafaco.inappdevtools.library.logic.events.IadtEventBuilder;
+import es.rafaco.inappdevtools.library.logic.events.IadtMessageBuilder;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 
@@ -69,13 +71,23 @@ public class Iadt {
 
     //endregion
 
-    //region [ TOAST & LOG ]
+    //region [ MESSAGES & EVENTS ]
 
-    public static void showMessage(int stringId) {}
-    public static void showMessage(String text) {}
-    public static void showWarning(String text) {}
-    public static void showError(String text) {}
-    public static void trackUserAction(String text) {}
+    public static IadtMessageBuilder buildMessage(int textResource) {
+        return new IadtMessageBuilder(textResource);
+    }
+
+    public static IadtMessageBuilder buildMessage(String text) {
+        return new IadtMessageBuilder(text);
+    }
+
+    public static IadtEventBuilder buildEvent(String text) {
+        return new IadtEventBuilder(text);
+    }
+
+    public static void trackUserAction(String text) {
+        return;
+    }
 
     //endregion
 

@@ -39,13 +39,13 @@ public class DemoApp extends Application {
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Mostrando mensaje...");
+                        Iadt.buildMessage("Mostrando mensaje...").fire();
                     }
                 },
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Mensaje mostrado!");
+                        Iadt.buildMessage("Mensaje mostrado!").fire();
                     }
                 }));
 
@@ -54,7 +54,7 @@ public class DemoApp extends Application {
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Not already implemented");
+                        Iadt.buildMessage("Not already implemented").fire();
                     }
                 }));
 
@@ -67,7 +67,7 @@ public class DemoApp extends Application {
                         ThreadUtils.addDummy("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
+                                Iadt.buildMessage("Finished DemoDummy " + threadCounter).fire();
                             }
                         });
                     }
@@ -82,7 +82,7 @@ public class DemoApp extends Application {
                         ThreadUtils.addDummyAsync("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
+                                Iadt.buildMessage("Finished DemoDummy " + threadCounter).fire();
                             }
                         });
                     }

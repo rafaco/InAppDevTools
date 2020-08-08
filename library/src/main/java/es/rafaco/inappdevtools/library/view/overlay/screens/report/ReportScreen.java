@@ -159,7 +159,8 @@ public class ReportScreen extends Screen {
                         new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Iadt.showMessage("Restart from ReportScreen");
+                                Iadt.buildMessage("Restart from ReportScreen")
+                                        .isInfo().fire();
                                 IadtController.get().restartApp(false);
                             }})
                 .setNegativeButton("Cancel",

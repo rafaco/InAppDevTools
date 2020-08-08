@@ -26,7 +26,6 @@ import android.view.Gravity;
 //#ifdef ANDROIDX
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
-import android.support.v7.widget.RecyclerView;
 //#endif
 
 import java.util.ArrayList;
@@ -272,7 +271,8 @@ public class ViewScreen extends AbstractFlexibleScreen {
                     new Runnable() {
                         @Override
                         public void run() {
-                            Iadt.showMessage("Activity source not found");
+                            Iadt.buildMessage("Activity source not found")
+                                    .isInfo().fire();
                         }
                     }));
         }
@@ -297,7 +297,8 @@ public class ViewScreen extends AbstractFlexibleScreen {
                     new Runnable() {
                         @Override
                         public void run() {
-                            Iadt.showMessage("Layout xml not found");
+                            Iadt.buildMessage("Layout xml not found")
+                                    .isInfo().fire();
                         }
                     })
             );

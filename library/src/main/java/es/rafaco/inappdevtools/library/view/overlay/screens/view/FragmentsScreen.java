@@ -129,7 +129,8 @@ public class FragmentsScreen extends Screen {
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    Iadt.showMessage("Activity source not found");
+                                    Iadt.buildMessage("Activity source not found")
+                                            .isInfo().fire();
                                 }
                             }));
                 }
@@ -155,7 +156,8 @@ public class FragmentsScreen extends Screen {
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    Iadt.showMessage("Layout xml not found");
+                                    Iadt.buildMessage("Layout xml not found")
+                                            .isWarning().fire();
                                 }
                             })
                     );

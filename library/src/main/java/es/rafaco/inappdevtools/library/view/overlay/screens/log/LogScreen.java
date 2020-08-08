@@ -481,7 +481,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             Friendly data = adapter.getCurrentList().get(position);
 
             if (action == R.id.action_search) {
-                Iadt.showMessage("Searching for log message");
+                Iadt.buildMessage("Searching for log message")
+                        .isInfo().fire();
                 ExternalIntentUtils.search(data.getMessage());
                 return true;
             }
@@ -494,12 +495,14 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
                 return true;
             }*/
             else if (action == R.id.action_share) {
-                Iadt.showMessage("Sharing log overview");
+                Iadt.buildMessage("Sharing log overview")
+                        .isInfo().fire();
                 DocumentRepository.shareDocument(DocumentType.LOG_ITEM, data.getUid());
                 return true;
             }
             else if (action == R.id.action_copy) {
-                Iadt.showMessage("Copied log message to clipboard");
+                Iadt.buildMessage("Copied log message to clipboard")
+                        .isInfo().fire();
                 ClipboardUtils.save(IadtController.get().getContext(), data.getMessage());
                 return true;
             }
@@ -550,7 +553,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
             onClearButton();
         }*/
         else{
-            Iadt.showMessage("Not already implemented");
+            Iadt.buildMessage("Not already implemented")
+                                .isInfo().fire();
         }
         return super.onMenuItemClick(item);
     }

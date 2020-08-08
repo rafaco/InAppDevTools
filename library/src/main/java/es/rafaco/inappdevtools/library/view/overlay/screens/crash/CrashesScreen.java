@@ -139,8 +139,8 @@ public class CrashesScreen extends AbstractFlexibleScreen {
             IadtController.get().getDialogManager().load(new ForceCrashDialog());
         }
         else if (selected == R.id.action_send) {
-            //TODO: send all errors
-            Iadt.showMessage("Not already implemented");
+            Iadt.buildMessage("TODO: Not already implemented")
+                    .isWarning().fire();
         }
         return super.onMenuItemClick(item);
     }

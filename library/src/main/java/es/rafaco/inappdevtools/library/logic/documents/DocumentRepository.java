@@ -136,7 +136,8 @@ public class DocumentRepository {
         if (document!=null && !TextUtils.isEmpty(path))
             FileProviderUtils.sendExternally(document.getTitle(), path);
         else
-            Iadt.showError("Unable to build the document to share");
+            Iadt.buildMessage("Unable to build the document to share")
+                    .isError().fire();
     }
 
     public static CardData getCardDataLink(DocumentType documentType, final Class<? extends Screen> screenClass, final String param) {

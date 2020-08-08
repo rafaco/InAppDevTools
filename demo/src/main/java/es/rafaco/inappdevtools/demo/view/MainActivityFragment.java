@@ -70,6 +70,18 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        CardView card_messages = view.findViewById(R.id.card_view_messages);
+        card_messages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Iadt.trackUserAction("User clicked on Messages section");
+                Intent intent = new Intent(getContext(), MessagesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(intent);
+            }
+        });
+
         CardView card_browse = view.findViewById(R.id.card_view_browse);
         card_browse.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -236,7 +236,8 @@ public class NetScreen extends Screen implements NetViewHolder.Listener {
             onShareButton();
         }
         else{
-            Iadt.showMessage("Not already implemented");
+            Iadt.buildMessage("Not already implemented")
+                                .isInfo().fire();
         }
         return super.onMenuItemClick(item);
     }

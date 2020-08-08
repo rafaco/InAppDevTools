@@ -11,4 +11,10 @@
     <color name="demo_yellow">#FFCF44</color>
     <color name="demo_white">#E7E7E7</color>
 
+    <!--TODO: duplicated from MDToast-->
+    <color name="toastDev">#29B6F6</color>
+    <color name="toastInfo">#66BB6A</color>
+    <color name="toastWarning">#FFA726</color>
+    <color name="toastError">#EF5350</color>
+
 </resources>

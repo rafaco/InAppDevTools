@@ -292,7 +292,8 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     @Override
     public void onLanguageDetected(Language language, int relevance) {
-        Iadt.showMessage("Detected language: " + language + " relevance: " + relevance);
+        Iadt.buildMessage("Detected language: " + language + " relevance: " + relevance)
+                .isInfo().fire();
     }
 
     @Override
@@ -304,7 +305,8 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
     public void onLineClicked(int lineNumber, String content) {
         String text = "Line " + lineNumber + " of " +  getParams().path + ":\n" + content;
         ClipboardUtils.save(getContext(), text);
-        Iadt.showMessage("Line " + lineNumber + " copied to clipboard");
+        Iadt.buildMessage("Line " + lineNumber + " copied to clipboard")
+                .isInfo().fire();
     }
 
     //endregion
@@ -429,16 +431,19 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
         File localFile = controller.getSourcesManager().getLocalFile(getParams().path);
 
         if (isSourceUnavailable){
-            Iadt.showMessage("Nothing to share");
+            Iadt.buildMessage("Nothing to share")
+                    .isInfo().fire();
         }
         else if (localFile==null) {
-            Iadt.showMessage("Unable to get file path");
+            Iadt.buildMessage("Unable to get file path")
+                    .isInfo().fire();
         }
         else{
             String title = "Source: " + getParams().path;
             String path = localFile.getAbsolutePath();
             if (path == null){
-                Iadt.showMessage("Unable to get file path");
+                Iadt.buildMessage("Unable to get file path")
+                        .isInfo().fire();
                 return;
             }
             FileProviderUtils.sendExternally(title, path);
@@ -447,11 +452,13 @@ public class SourceDetailScreen extends Screen implements CodeView.OnHighlightLi
 
     private void onCopyButton() {
         if (isSourceUnavailable){
-            Iadt.showMessage("Nothing to copy");
+            Iadt.buildMessage("Nothing to copy")
+                    .isInfo().fire();
         }
         else{
             ClipboardUtils.save(getContext(), codeViewer.getCode());
-            Iadt.showMessage("Content copied to clipboard");
+            Iadt.buildMessage("Content copied to clipboard")
+                    .isInfo().fire();
         }
     }
 

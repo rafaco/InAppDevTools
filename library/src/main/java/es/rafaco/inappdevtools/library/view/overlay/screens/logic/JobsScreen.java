@@ -108,7 +108,8 @@ public class JobsScreen extends AbstractFlexibleScreen {
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    Iadt.showMessage("Source not found");
+                                    Iadt.buildMessage("Source not found")
+                                            .isInfo().fire();
                                 }
                             }));
                 }
