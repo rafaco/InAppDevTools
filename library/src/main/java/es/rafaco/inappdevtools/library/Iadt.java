@@ -126,7 +126,7 @@ public class Iadt {
 
     public static void trackUserAction(String text) {
         if (!isEnabled()) return;
-        new IadtEventBuilder(text)
+        buildEvent(text)
                 .setSeverity("I")
                 .setCategory("User")
                 .setSubcategory("Action")

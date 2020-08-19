@@ -337,7 +337,10 @@ public class FriendlyLog {
             }
             return R.drawable.ic_android_white_24dp;
         }
-        return -1;
+        else if (!log.getCategory().equals("Logcat")){
+            return R.drawable.ic_live_help_24;  //DEFAULT EVENT
+        }
+        return -1;                              //LOGCAT (No icon)
     }
 
     public static long logBuildStart(long buildId, long sessionId, long buildTime) {
