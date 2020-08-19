@@ -143,54 +143,70 @@ On crash our UI will automatically popup but you can also invoke it at any time 
 
 There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored when our library is disabled (release builds, disabled configuration or using noop artifacts).
 
-### Customize your Team
-You can customize a lot of things in our 'Team Screen' using Gradle configuration. For field details, visit [configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations).
+### Customize your team info
+You can customize a lot of things in the 'Team Screen' of your compilations by using our Gradle configuration. For field details, visit [configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations).
 ```gradle
 inappdevtools {
     teamName = "DemoTeam"
     teamEmail = 'inappdevtools@gmail.com'
     teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
     teamLinks = [ website   : "http://inappdevtools.org",
-                  repo      : "https://github.com/rafaco/InAppDevTools",
-                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
-                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
+                  repo      : "https://github.com/rafaco/InAppDevTools"]
 }
 ```
 
-You can also add handy buttons to the 'Team screen' to perform any logic or call any of your methods. Define it using a ```ButtonFlexData``` instance, when you can specify some details for your button (message, icon, color...) and the action itself in a ```Runnable```. Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
+### Add team actions
+You can easily add buttons into your 'Team screen' to perform any logic or to call any of your methods. Pass a ```ButtonFlexData``` instance to ```Iadt.addTeamAction()```, with your action in a ```Runnable``` and details for the button (message, icon, color...). Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
 
 ```java
- Iadt.addTeamAction(new ButtonFlexData("Show message",
-                R.drawable.ic_run_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        YourClass.yourMethod("someParam");
-                    }
-                }));
+Iadt.addTeamAction(new ButtonFlexData("Show message",
+        R.drawable.ic_run_white_24dp,
+        new Runnable() {
+            @Override
+            public void run() {
+                YourClass.yourMethod("someParam");
+            }
+        }));
 ```
 
-### Add note to your builds
-You can provide any text to describe your current build or compilation by using `notes` configuration. This is very useful to describe changes or to provide instructions to testers. This message will be show on welcome dialog, team screen and build screen.
+### Add build notes
+You can provide a text to describe your compilation, their changes or to provide instructions. It will be shown at welcome dialog, team screen and build screen.
+
+Use our `notes` configuration in Gradle or across `Iadt` class:
 ```gradle
 inappdevtools {
     notes = "This is a NOTE about this compilation:\n" +
             " - Multiline supported"
 ```
-
-### Fire your events
-You can create and fire your own events manually. These events will be shown on our log screen mixed with your logcat logs and our events. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
-
 ```java
- new IadtEvent()
-      .setMessage("User logged in: " + userData.getName())
-      .setExtra(userData.toString())
-      .setSeverity("I")
-      .setCategory("User")
-      .setSubcategory("LogIn")
-      .fire();
+Iadt.getConfig()
+    .setString(BuildConfigField.NOTES, 
+            "This is a NOTE about this compilation:\n" +
+            " - Multiline supported");
 ```
 
+### Show internal messages
+You can show special toast messages on your internal compilations only (library enabled) that will never be shown on your external ones (release builds).
+
+Your internal users can easily distinguish them from the standard toast as they are shown in a top position and they are colored base on the severity. This messages will auto generate an event.
+
+```java
+Iadt.buildMessage("This is a DEV message").fire();              //Light blue
+Iadt.buildMessage("This is a ERROR message").isError().fire();  //Red
+```
+
+### Fire your own events
+You can create and fire your own events manually. These events will be shown on our log screen like the auto-generated events and mixed with your logcat logs. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
+
+```java
+new IadtEvent()
+    .setMessage("User logged in: " + userData.getName())
+    .setExtra(userData.toString())
+    .setSeverity("I")
+    .setCategory("User")
+    .setSubcategory("LogIn")
+    .fire();
+```
 
 ## Contributing and building instructions
 
