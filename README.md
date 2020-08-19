@@ -172,17 +172,16 @@ Iadt.addTeamAction(new ButtonFlexData("Show message",
 ### Add build notes
 You can provide a text to describe your compilation, their changes or to provide instructions. It will be shown at welcome dialog, team screen and build screen.
 
-Use our `notes` configuration in Gradle or across `Iadt` class:
+Use our `notes` configuration in Gradle or modify `BuildConfigField.NOTES` at runtime:
 ```gradle
 inappdevtools {
-    notes = "This is a NOTE about this compilation:\n" +
-            " - Multiline supported"
+    notes = "This is a SAMPLE NOTE provided at buildtime by our Gradle extension"
+}
 ```
 ```java
 Iadt.getConfig()
     .setString(BuildConfigField.NOTES, 
-            "This is a NOTE about this compilation:\n" +
-            " - Multiline supported");
+            "This is a SAMPLE NOTE provided at runtime by our Java interface");
 ```
 
 ### Show internal messages
