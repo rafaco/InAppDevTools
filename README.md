@@ -209,18 +209,20 @@ new IadtEvent()
 
 ## Contributing and building instructions
 
-First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving us a :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:.
+There are many ways to help us starting from giving this project a GitHub :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:.
 
-Check out our [CONTRIBUTING.md](CONTRIBUTING.md) document and our [Coding contributions guide](https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide) in our Wiki.
+For more, please check out our [CONTRIBUTING.md](CONTRIBUTING.md) document and our [Coding contributions guide](https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide) in our Wiki.
+
+   **Join our community and help us making your job easy! :)**
 
 
-## About the author
+## About this project
 
-I started this project to get the log from a real user located in another country. He has a nasty bug that we were unable to reproduce and we detect the issue by sending him a special apk. Then I added an overlay to see the logs over our app and the first info panels... and it became my personal tool for my daily duties as developer.
+I started this project while I was working on an international flight information app. We had a user located in another country with a really nasty bug that we were completely unable to reproduce. I send him a special apk that will send us back all their logs on crash. We were able to identify the problem straight away.
 
-After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a first complete version around Spring 2020.
+Days before I added an overlay to see the logs over our running app and the first info panels... and it became my personal tool for my daily duties as developer. I carry on adding more tools and starting to realise that it could be useful for other Android developers as well. Few months later, I quit my job to fully focus on this amazing project for a while.
 
-As a Senior Software Engineer, I have always worked on proprietary software and this is my first open source project. I am really excited to give back what I received during all this years and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
+I am very excited with the results obtained and I'm looking forward to create a friendly community around this project. This is my first open source project so I have a lot to learn. Advices and corrections will be more than welcome.
 
 
 ## Links <a name="links"/>
