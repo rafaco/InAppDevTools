@@ -185,7 +185,7 @@ Iadt.getConfig()
 ```
 
 ### Show internal messages
-You can show special toast messages on your internal compilations only (library enabled) that will never be shown on your external ones (release builds).
+You can show special toast messages only for your internal users. This messages will be shown when this library is enabled and will be ignored on your release builds.
 
 Your internal users can easily distinguish them from the standard toast as they are shown in a top position and they are colored base on the severity. This messages will auto generate an event.
 

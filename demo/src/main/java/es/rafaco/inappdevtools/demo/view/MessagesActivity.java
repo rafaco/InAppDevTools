@@ -59,7 +59,7 @@ public class MessagesActivity extends AppCompatActivity {
         }
 
         firstContent = findViewById(R.id.main_content);
-        firstContent.setText("Messages title");
+        firstContent.setText("You can show special toast messages only for your internal users. Try it now!");
 
         CardView devCard = findViewById(R.id.card_view_dev);
         devCard.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class MessagesActivity extends AppCompatActivity {
 
 
         secondContent = findViewById(R.id.secondary_content);
-        secondContent.setText("Messages description");
+        secondContent.setText("This messages will be shown when this library is enabled and will be ignored on your release builds.\n\nYour internal users can easily distinguish them from the standard toast as they are shown in a top position and they are colored base on the severity. This messages will auto generate an event.");
     }
 
     @Override
