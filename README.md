@@ -119,16 +119,16 @@ For additional setup details visit our wiki:
 
 After the [setup](#setup) process, you only need to *Run* a debug build of your app into a real device or emulator. 
 
-Our **welcome dialog** will pop up on first start and every time you deploy a new build over the device. It gives some information, allow to disable our tools, help user in accepting permissions required.
+On first start, our **welcome dialog** will pop up. It gives basic information about the running apk, allows to disable our tools and helps in accepting the permission to show over your app.
 
 </td><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Welcome_Screen.png"></td></tr></table>
 
 
 <table border="0"><tr><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Home_Screen.png"></td><td>
 
-You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground. 
+You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground. It gives you access to all our tools while you keep using your app.
 
-If your app crash, our UI will **automatically popup** showing full details about the crash and allowing to report it.
+Our UI will **auto popup on crash**, showing full details about the crash and allowing to report it.
 
 </td></tr></table>
 
