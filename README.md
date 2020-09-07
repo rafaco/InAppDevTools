@@ -159,7 +159,7 @@ inappdevtools {
 You can easily add buttons into your 'Team screen' to perform any logic or to call any of your methods. Pass a ```ButtonFlexData``` instance to ```Iadt.addTeamAction()```, with your action in a ```Runnable``` and details for the button (message, icon, color...). Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
 
 ```java
-Iadt.addTeamAction(new ButtonFlexData("Show message",
+Iadt.addTeamAction(new ButtonFlexData("Call yourMethod",
         R.drawable.ic_run_white_24dp,
         new Runnable() {
             @Override
@@ -190,20 +190,23 @@ You can show special toast messages only for your internal users. This messages 
 Your internal users can easily distinguish them from the standard toast as they are shown in a top position and they are colored base on the severity. This messages will auto generate an event.
 
 ```java
-Iadt.buildMessage("This is a DEV message").fire();              //Light blue
-Iadt.buildMessage("This is a ERROR message").isError().fire();  //Red
+Iadt.buildMessage("This is a DEV message").fire();                 //Light blue (default)
+Iadt.buildMessage("This is a INFO message").isInfo().fire();       //Green
+Iadt.buildMessage("This is a WARNING message").isWarning().fire(); //Yellow
+Iadt.buildMessage("This is a ERROR message").isError().fire();     //Red
 ```
 
 ### Fire your own events
-You can create and fire your own events manually. These events will be shown on our log screen like the auto-generated events and mixed with your logcat logs. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
+You can create and fire your own events manually. These events will be shown on our log screen like any other auto-generated events. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
 
 ```java
-new IadtEvent()
-    .setMessage("User logged in: " + userData.getName())
+Iadt.buildEvent("Quick event sample").fire();
+
+Iadt.buildEvent("User logged in: " + userData.getName())
     .setExtra(userData.toString())
-    .setSeverity("I")
     .setCategory("User")
     .setSubcategory("LogIn")
+    .setSeverity("I")
     .fire();
 ```
 
