@@ -46,11 +46,6 @@ public class IadtMessageBuilder {
         return this;
     }
 
-    public IadtMessageBuilder setType(int type) {
-        this.type = type;
-        return this;
-    }
-
     public IadtMessageBuilder isDev() {
         this.type = CustomToast.TYPE_DEV;
         return this;

@@ -206,7 +206,7 @@ Iadt.buildEvent("User logged in: " + userData.getName())
     .setExtra(userData.toString())
     .setCategory("User")
     .setSubcategory("LogIn")
-    .setSeverity("I")
+    .isInfo()
     .fire();
 ```
 

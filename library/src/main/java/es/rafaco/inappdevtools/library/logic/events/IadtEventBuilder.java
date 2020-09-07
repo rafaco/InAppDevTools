@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.logic.events;
 
+import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -68,6 +69,26 @@ public class IadtEventBuilder {
      */
     public IadtEventBuilder setSeverity(String severity) {
         this.severity = severity;
+        return this;
+    }
+
+    public IadtEventBuilder isDev() {
+        this.severity = FriendlyLog.LEVEL.D.name();
+        return this;
+    }
+
+    public IadtEventBuilder isInfo() {
+        this.severity = FriendlyLog.LEVEL.I.name();
+        return this;
+    }
+
+    public IadtEventBuilder isWarning() {
+        this.severity = FriendlyLog.LEVEL.W.name();
+        return this;
+    }
+
+    public IadtEventBuilder isError() {
+        this.severity = FriendlyLog.LEVEL.E.name();
         return this;
     }
 
