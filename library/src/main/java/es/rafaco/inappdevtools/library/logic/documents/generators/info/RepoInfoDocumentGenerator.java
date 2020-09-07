@@ -570,14 +570,14 @@ public class RepoInfoDocumentGenerator extends AbstractDocumentGenerator {
         if (hasTag){
             distanceDescription = gitInfo.getString(GitInfo.TAG_NAME);
             if (tagDistance > 0) {
-                distanceDescription += " + " + tagDistance;
+                distanceDescription += " + " + tagDistance + " commits";
             }
             distanceDescription += Humanizer.newLine();
         }
         else if (hasRemote){
             distanceDescription = gitInfo.getString(GitInfo.REMOTE_HEAD);
             if (remoteHeadDistance > 0) {
-                distanceDescription += " + " + remoteHeadDistance;
+                distanceDescription += " + " + remoteHeadDistance + " commits";
             }
             distanceDescription += Humanizer.newLine();
         }

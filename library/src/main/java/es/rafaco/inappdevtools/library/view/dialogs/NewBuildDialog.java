@@ -105,8 +105,13 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
         data.add(buildInfo);
 
         if (!TextUtils.isEmpty(notes)) {
-            data.add(new HeaderFlexData("Build note:"));
+            /*HeaderFlexData header = new HeaderFlexData("Build notes:");
+            header.setFontColor(R.color.iadt_text_solid);
+            data.add(header);*/
+
             data.add(new TextFlexData(notes));
+        }else{
+            //data.add(new HeaderFlexData(""));
         }
 
         LayoutInflater inflater = LayoutInflater.from(getContext());

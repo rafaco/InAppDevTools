@@ -186,7 +186,7 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
 
 
     public String getFriendlyElapsedTime() {
-        return Humanizer.getElapsedTime(
+        return Humanizer.getElapsedTimeLowered(
                 Long.parseLong(buildInfo.getString(BuildInfo.BUILD_TIME)));
     }
 
@@ -208,6 +208,6 @@ public class BuildInfoDocumentGenerator extends AbstractDocumentGenerator {
     public String getBuildOverviewForWelcome() {
         String firstLine = getFriendlyBuildType();
         String secondLine = getFriendlyElapsedTime();
-        return firstLine + " built " + secondLine;
+        return firstLine + " build from " + secondLine;
     }
 }
