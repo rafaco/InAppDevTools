@@ -10,15 +10,15 @@ There are many ways to contribute, starting from telling your friends about us, 
 ## Help us spreading
 You can start right now by giving this repo a GitHub start or telling your developer friends about us at work or in your social networks. It would be awesome if you write a tutorial or a blog post. Please notify us about publications and we will link it.
 
-## Feedback
+## Send us a feedback
 In this early stage your feedback is so valuable for us. Share us any thoughts or experiences you have had using our library, what did you like, what annoy you, what would you change... Create a [Feedback issues](https://github.com/rafaco/InAppDevTools/issues/new/choose) or [mail us](mailto:inappdevtools@gmail.com).
 
-## Bug report and security issue
+## Report bugs and security issues
 If you found any incompatibility or a runtime issues open a [Bug Report](https://github.com/rafaco/InAppDevTools/issues/new/choose) to let us know about any failure.
 
 Do NOT open a public issue if you find a security vulnerability that could be use in a malicious way. Please [email us](mailto:inappdevtools@gmail.com) instead.
 
-## Feature request
+## Request Features
 To suggest any idea or feature that fits into this project, open a [Feature Request](https://github.com/rafaco/InAppDevTools/issues/new/choose).
 
 ## Support
