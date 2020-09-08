@@ -85,7 +85,7 @@ jobs:
           destination: demo/reports
       - run:
           name: Sonar report ALL SupportDebug and upload to SonarCloud
-          command: ./gradlew :demo:assembleAndroidxDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=false -Pandroid.enableJetifier=false
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
