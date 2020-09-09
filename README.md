@@ -33,42 +33,42 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 
 *Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
 
+<p align="center">   
+ 
+ **Main features**</p>
 
 <table border="0">
-<tr><td>
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
  
-*Features*
-</td><td width="30%" align="center">
- 
-*Screenshots*
+**Info panels**  
+Get detiled information about what are you testing and where. App, build (user, host, remote repo, local changes...), device and OS.
 </td></tr>
-<tr><td>
- 
-**Crash handler**: intercept any exception and show details immediately including logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported and we will include a zip with all gathered details. 
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td><td>
 
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" height="15%"></td></tr>
-<tr><td>
+**Team resources**  
+Provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can also take screenshots and report issues without a chrash. 
+</td></tr>
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" height="15%"></td><td>
  
-**Info panels**: get details about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
-
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td></tr>
-<tr><td>
+ **Crash handler and details**  
+We intercept any exception and show their details immediately including logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details. 
+</td></tr>
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" height="15%"></td><td>
  
-**Team resources**: you can provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can also take screenshots and report issues without a chrash. 
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td></tr>
-<tr><td>
+**Logs and Events**  
+Brownse and filter your standard logcat logs as you use your app. They are contextualized by our auto generated reproduction steps and other recorded events (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
+</td></tr>
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" height="15%"></td><td>
  
-**View inspector**: navigate throught your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straigh away and see the results.
-View running components (tasks, activity and fragments), zoom the output or take measures and screenshots.
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" height="15%"></td></tr>
-<tr><td>
+**View inspector**  
+Navigate throught your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straigh away and see the results.
+Browse you current components and their sources (tasks, activity and fragments), zoom your screen, measure elements and take screenshots.
+</td></tr>
+<tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" height="15%"></td><td>
  
-Use our **logic** tools...
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" height="15%"></td></tr>
-<tr><td>
- 
-**Logs and Events**: filter your standard logs enriched by our auto generated reproduction steps and other recorded events (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
-</td><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" height="15%"></td></tr>
+**Logic and backend inspector**  
+Get details about your running logic components (processes, task, threads, services...) and inspect the network request/responses to/from your api. Browse your storages (databases, shared preferences and files) and modify their values directly.
+</td></tr>
 
 </table>
 
