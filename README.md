@@ -30,7 +30,11 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 - Flexible to configure via Gradle extension.
 - Handy integrations available to improve the experience of your testers and to assist your developers.
 
-<p align="center"><b>Main features</b></p>
+<p align="center"><b>Tools</b></br>
+Auto-logger, repro step generator, logcat viewer, crash handler, reports, source browser, layout inspector, component browser, storage editor, network activity, info panels (apk , build, repo, device and os), coding helpers and much more.
+</p>
+
+<p align="center"><b>Features</b></p>
 
 <table border="0">
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
@@ -65,9 +69,6 @@ Browse you current components and their sources (tasks, activity and fragments),
 Get details about your running logic components (processes, threads, services, content providers and broadcast receivers) and inspect the network request/responses between your backend and your app. Browse and edit your storages (databases, shared preferences and files) and edit their values.
 </td></tr>
 </table>
-
-
-*Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
 
 
 ## Setup <a name="setup"/>
