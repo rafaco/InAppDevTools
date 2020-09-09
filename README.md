@@ -34,7 +34,12 @@ Conceptually this's similar to Chrome DevTools but inside your app instead of in
 *Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
 
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" width="33%"> 
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" width="33%"> 
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" width="33%">  
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" width="33%"> 
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" width="33%"> 
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" width="33%"> 
 </p>
 
 
