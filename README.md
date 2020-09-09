@@ -20,7 +20,11 @@
 
 **A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
 
-Conceptually this's similar to Chrome DevTools but inside your app instead of in your browser. It allows to inspect, analyze and modify a running app from within it. Our interface get shown over your activities while you use them, helping you to understand what's really happening underneath in order to highlight issues and bug causes. 
+For developers this is conceptually similar to Chrome DevTools but packed inside your app. We provide tools to inspect, analyze and modify a running app from within it without needing a computer or a cable. It helps to understand what's really happening underneath in order to highlight issues and bug causes. 
+
+For tester and other internal users, this library provide exact information of what they are testing and allows to easily report any crash or isuess founded.  These reports include a zip with valuable information for developers like apk info, repro steps, logs, screenshots, etc.
+
+Your production users get neither any of our features nor apk size increase. They get a spotless app which has been thorughly polish in an agile development process, enhanced by our tools :)
 
 
 <p align="center"><b>Tools</b></p>
