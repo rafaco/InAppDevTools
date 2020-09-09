@@ -22,18 +22,15 @@
 
 Conceptually this's similar to Chrome DevTools but inside your app instead of in your browser. It allows to inspect, analyze and modify a running app from within it. Our interface get shown over your activities while you use them, helping you to understand what's really happening underneath in order to highlight issues and bug causes. 
 
-- Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
-- View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
-- Reports crashes or issues directly to developers, including a zip with logs, screenshots and other info.
-- Inspect your standard logs, view layout, source code (original and generated) and storage (db, SharedPrefs and Files).
-- Auto log events and create reproduction steps (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
-- Modify your app behaviour on runtime by editing your view layout or changing values in your db or SharedPrefs.
-- Easy installation and configuration. No Application class override needed, all from Gradle.
-- Customize our tools to your needs, add buttons to run your methods and use our dev helpers.
+<p align="center"><b>Characteristics</b></p>
 
-*Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
+- Usable everywhere without cable, our UI overlap your app.
+- Easy to install, just add our dependencies to your Gradle files.
+- Careful with your releases, where everything will be auto disabled by default.
+- Flexible to configure via Gradle extension.
+- Handy integrations available to improve the experience of your testers and to assist your developers.
 
-<p align="center"><b>Main features</b>  (touch screenshots to view in full size)</p>
+<p align="center"><b>Main features</b></p>
 
 <table border="0">
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
@@ -43,32 +40,34 @@ Get detailed information about what are you testing and where. The build process
 </td></tr>
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td><td>
 
-**Team resources**  
-Provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can also take screenshots and easily send reports with attached data. 
+**Team resources and reports**  
+Provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can easily send report directly to the development team. Reports can include a zip with all gathered data (environment info, logs, screenshots, crash details, network request, logic snapshot...).
 </td></tr>
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" height="15%"></td><td>
  
- **Crash handler and details**  
-We intercept any exception and show their details immediately including logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details. 
+ **Inmediate crash visualization and report**  
+We intercept any exception and show their details immediately en the same screen where it happen. These include app status, current activity, logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details. 
 </td></tr>
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" height="15%"></td><td>
  
-**Logs and Events**  
-Browse and filter your standard logcat logs as you use your app. To give you more context they are surrounded by our auto generated event logs. They cover from basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
+**Logs, reproduction steps and advance events**  
+Browse the standard logcat output from your sessions as you use your app. They are surrounded by our auto generated events to give you more context. Our event cover from basic reproduction steps (user interactions, navigations, network activity...) to advanced entries (lifecycle events, crashes, ANRs, device events...).
 </td></tr>
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" height="15%"></td><td>
  
 **View inspector**  
-Navigate throught your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straigh away and see the results.
+Navigate throught your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straigh away and see the results in your screen.
 Browse you current components and their sources (tasks, activity and fragments), zoom your screen, measure elements and take screenshots.
 </td></tr>
 <tr><td width="30%" align="center"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" height="15%"></td><td>
  
 **Logic and network inspector**  
-Get details about your running logic components (processes, task, threads, services...) and inspect the network request/responses between your backend and your app. Browse your storages (databases, shared preferences and files) and modify their values directly.
+Get details about your running logic components (processes, threads, services, content providers and broadcast receivers) and inspect the network request/responses between your backend and your app. Browse and edit your storages (databases, shared preferences and files) and edit their values.
 </td></tr>
 </table>
 
+
+*Keywords: Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.*
 
 
 ## Setup <a name="setup"/>
