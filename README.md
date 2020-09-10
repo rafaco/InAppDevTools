@@ -83,7 +83,7 @@ You only need to modify 2 gradle files. On your **root build.gradle** file:
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.56" apply false           // 1.
+    id "es.rafaco.inappdevtools" version "0.0.57" apply false           // 1.
 }
 
 allprojects {
@@ -110,10 +110,10 @@ android {
 }
 
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'         // 2.
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.57'         // 2.
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'        // 3.
-    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.57'        // 3.
+    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.57'
 }
 
 inappdevtools {                                                         // 4.
