@@ -18,13 +18,13 @@
       <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>-->
 </p>
 
-**A library to enhance the internal compilations of Android apps, adding usefull tools for their development team. It allows to inspect, report and debug your app from the same  screen when it's running, over your app.**
+**A library to enhance the internal compilations of Android apps, adding tools to improve the productivity of their internal users. We get included in debug builds and our UI shows over the app, allowing to inspect the running app and to send contextualized reports to the development team.**
 
-For developers this is conceptually similar to Chrome DevTools but packed inside your app. We provide tools to inspect, analyze and modify a running app from within it without needing a computer or a cable. It helps to understand what's really happening underneath in order to highlight issues and bug causes. 
+For developers this is conceptually similar to Chrome DevTools but packed inside your app. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable/computer. It helps to understand what's really happening underneath in order to highlight issues and bug causes.
 
-For tester and other internal users, this library provide exact information of what they are testing and allows to easily report any crash or isuess founded.  These reports include a zip with valuable information for developers like apk info, repro steps, logs, screenshots, etc.
+For tester and other internal users, this library provide exact information of what they are testing and allow them to easily report any crash or issues founded. These reports automatically include a zip with valuable information for developers like apk info, repro steps, logs, screenshots, etc.
 
-Your production users get neither any of our features nor apk size increase. They get a spotless app which has been thorughly polish in an agile development process, enhanced by our tools :)
+Your production users get neither any of our features nor apk size increase. They get a spotless app which has been thoroughly polish in an agile development process, enhanced by our tools :)
 
 
 #### Tools
@@ -44,7 +44,7 @@ Auto-logger, repro step generator, logcat viewer, crash handler, reports, source
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
  
 **Testing environment info**  
-Get detailed information about what are you testing and where. The build process (variant, type, date, machine, user, gradle versions, dependencies,...), the sources used (remote repo status, local repo, commits and change diffs...), the resulting app (manifest, version, namespace, signing, installation...), the device where is running (model, hardware, battery, sensors...) and their operative system (version, status, memory, storages, installed apps...).
+Get detailed information about what are you testing and where. The build process (variant, type, date, machine, user, gradle versions, dependencies,...), the sources used (remote repo status, local repo, commits and change diffs...), the resulting app (manifest, version, namespace, signing, installation...), the device where is running (model, hardware, battery, sensors...) and their operative system (version, status, memory, storage, installed apps...).
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td><td>
 
@@ -53,18 +53,18 @@ Provide your own resources for your internal users via Gradle configuration (tea
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" height="15%"></td><td>
  
- **Inmediate crash visualization and report**  
-We intercept any exception and show their details immediately en the same screen where it happen. These include app status, current activity, logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details. 
+ **Crash visualization and report**  
+We intercept any exception and show details immediately, on the same screen where it happen. These details include app status, current activity, logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details.
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" height="15%"></td><td>
  
 **Logs, reproduction steps and advance events**  
-Browse the standard logcat output from your sessions as you use your app. They are surrounded by our auto generated events to give you more context. Our event cover from basic reproduction steps (user interactions, navigations, network activity...) to advanced entries (lifecycle events, crashes, ANRs, device events...).
+Browse the standard logcat output from your sessions as you use your app. They are surrounded by our auto generated events to give you more context. Our event cover from basic reproduction steps (user interaction, navigation, network activity...) to advanced entries (lifecycle events, crashes, ANRs, device events...).
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" height="15%"></td><td>
  
 **View inspector**  
-Navigate throught your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straigh away and see the results in your screen.
+Navigate through your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straight away and see the results in your screen.
 Browse you current components and their sources (tasks, activity and fragments), zoom your screen, measure elements and take screenshots.
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" height="15%"></td><td>
@@ -95,7 +95,7 @@ allprojects {
 <details><summary align="center">Show details</summary><p>
  
 1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
-2. Add jitpack to `allprojects`, `repositories`.
+2. Add JitPack to `allprojects`, `repositories`.
 
 </br></p></details>
 
