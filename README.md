@@ -5,13 +5,25 @@
 
 <p align="center">
   <a href="https://www.android.com/" alt="Platform">
-      <img src="https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square"/></a>
-  <a href="https://github.com/rafaco/InAppDevTools/releases" alt="Version">
-      <img src="https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=Version&style=flat-square"/></a>
+      <img src="https://img.shields.io/badge/Platform-Android-green.svg?style=flat"/></a>
+  <a href="https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide#project-structure" alt="Artifacts">
+      <img src="https://img.shields.io/badge/Artifacts-Plugin_and_libraries-purple.svg?style=flat"/></a>
   <a href="https://github.com/rafaco/InAppDevTools/commits" alt="Maturity">
-      <img src="https://img.shields.io/badge/Maturity-development-orange.svg?style=flat-square"/></a>
+      <img src="https://img.shields.io/badge/Maturity-development-orange.svg?style=flat"/></a>
+  </br>
+  <a href="https://github.com/rafaco/InAppDevTools/releases" alt="Version">
+      <img src="https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=Version&style=flat"/></a>
+  <a href="https://circleci.com/gh/rafaco/InAppDevTools/tree/master" alt="CircleCi Status">
+      <img src="https://circleci.com/gh/rafaco/InAppDevTools/tree/master.svg?style=shield"/></a>
+  <a href="https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools" alt="Sonar Status">
+      <img src="https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=alert_status"/></a>
+  <a href="https://sonarcloud.io/dashboard?id=rafaco_InAppDevTools" alt="Sonar lines count">
+      <img src="https://sonarcloud.io/api/project_badges/measure?project=rafaco_InAppDevTools&metric=ncloc"/></a>
+  </br>
   <a href="https://git.io/IADT" alt="ShortLink">
-      <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat-square"/></a>
+      <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat&logo=github"/></a>
+  <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
+      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>
   <!-- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal">
       <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> 
   <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
