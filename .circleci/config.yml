@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: circleci/android:api-28-node
+    - image: circleci/android:api-29-node
   working_directory: ~/code
   environment:
     JVM_OPTS: -Xmx3200m
@@ -17,10 +17,6 @@ jobs:
     - restore_cache:
         key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
-    - run:
-        name: Download Dependencies
-        command: ./gradlew androidDependencies
-
     #Not needed: Plugin build already included in project (using includBuild)
     #- run:
     #    name: Assemble Plugin
@@ -28,6 +24,11 @@ jobs:
     - run:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug
+
+
+    - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
     - run:
         name: Assemble COMPAT SupportDebug
@@ -38,6 +39,7 @@ jobs:
     - run:
         name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug
+
 
     - run:
         name: Assemble COMPAT AndroidxDebug
@@ -63,23 +65,27 @@ jobs:
           key: jars-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "gradle/constants.gradle" }}-{{ checksum "compat/build.gradle" }}-{{ checksum "library/build.gradle" }}-{{ checksum "demo/build.gradle" }}
 
       - run:
-          name: Lint report LIBRARY SupportDebug
-          command: ./gradlew :library:lintSupportDebug
+          name: Download Dependencies
+          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+
+      - run:
+          name: Lint report LIBRARY Androidx Debug
+          command: ./gradlew :library:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
       - store_artifacts:
           name: Saving Lint report
           path: library/build/reports
           destination: library/reports
 
       - run:
-          name: Lint report DEMO SupportDebug
-          command: ./gradlew :demo:lintSupportDebug
+          name: Lint report DEMO Androidx Debug
+          command: ./gradlew :demo:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
       - store_artifacts:
           name: Saving Lint report
           path: demo/build/reports
           destination: demo/reports
       - run:
           name: Sonar report ALL SupportDebug and upload to SonarCloud
-          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info
+          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=false -Pandroid.enableJetifier=false
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
@@ -93,7 +99,7 @@ jobs:
 
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies
+          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
       - run: echo "Deploy job is currently DISABLED"
       #      - run:

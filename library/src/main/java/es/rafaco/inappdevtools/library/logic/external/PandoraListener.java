@@ -21,6 +21,7 @@ package es.rafaco.inappdevtools.library.logic.external;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetContent;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -67,24 +68,24 @@ public class PandoraListener implements NetStateListener {
                     iadtSummary = migrateSummary(null, pandoraSummary);
                     iadtContent = migrateContent(null, pandoraContent);
 
-                    long summaryId = IadtController.getDatabase().netSummaryDao().insert(iadtSummary);
-                    IadtController.getDatabase().netContentDao().insert(iadtContent);
+                    long summaryId = IadtDatabase.get().netSummaryDao().insert(iadtSummary);
+                    IadtDatabase.get().netContentDao().insert(iadtContent);
 
                     iadtSummary.uid = summaryId;
                     FriendlyLog.logNetStart(iadtSummary);
                 }
                 else{
-                    iadtSummary = IadtController.getDatabase().netSummaryDao()
+                    iadtSummary = IadtDatabase.get().netSummaryDao()
                             .findByCompositeId(sessionId, pandoraId);
-                    iadtContent = IadtController.getDatabase().netContentDao()
+                    iadtContent = IadtDatabase.get().netContentDao()
                             .findByCompositeId(sessionId, pandoraId);
 
                     iadtSummary = migrateSummary(iadtSummary, pandoraSummary);
                     iadtContent = migrateContent(iadtContent, pandoraContent);
                     iadtSummary = updateSummarySizes(iadtSummary, iadtContent);
 
-                    IadtController.getDatabase().netSummaryDao().update(iadtSummary);
-                    IadtController.getDatabase().netContentDao().update(iadtContent);
+                    IadtDatabase.get().netSummaryDao().update(iadtSummary);
+                    IadtDatabase.get().netContentDao().update(iadtContent);
 
                     FriendlyLog.logNetEnd(iadtSummary);
                 }

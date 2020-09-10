@@ -26,6 +26,7 @@ import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.AppInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.RepoInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.ToolsInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -39,6 +40,7 @@ public class DocumentFormatter {
     private void buildConstantHeader() {
         AppInfoDocumentGenerator app = (AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO);
         BuildInfoDocumentGenerator build = (BuildInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.BUILD_INFO);
+        RepoInfoDocumentGenerator repo = (RepoInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.REPO_INFO);
         DeviceInfoDocumentGenerator device = (DeviceInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.DEVICE_INFO);
         ToolsInfoDocumentGenerator tools = (ToolsInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.TOOLS_INFO);
 
@@ -47,7 +49,7 @@ public class DocumentFormatter {
 
         //TODO: Calculate correctly for previous builds (Store builds on DB?)
         constantHeader += "Build: " + build.getShortOverview() + Humanizer.newLine();
-        constantHeader += "Sources: " + build.getShortOverviewSources() + Humanizer.newLine();
+        constantHeader += "Sources: " + repo.getShortOverview() + Humanizer.newLine();
         constantHeader += Humanizer.newLine();
         constantHeader += "Generated with InAppDevTools " + tools.getShortOverview()
                 + Humanizer.newLine();
@@ -100,7 +102,7 @@ public class DocumentFormatter {
     }
 
     public String formatEmailTo(Report report) {
-        return IadtController.get().getConfig().getString(BuildConfigField.EMAIL);
+        return IadtController.get().getConfig().getString(BuildConfigField.TEAM_EMAIL);
     }
 
     public String formatEmailCc(Report report) {

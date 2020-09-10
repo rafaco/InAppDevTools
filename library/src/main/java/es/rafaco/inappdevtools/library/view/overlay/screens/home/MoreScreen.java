@@ -24,19 +24,17 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildsScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.ErrorsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.screenshots.ScreenshotsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
 
 public class MoreScreen extends AbstractFlexibleScreen {
-
-
+    
     public MoreScreen(ScreenManager manager) {
         super(manager);
     }
@@ -47,6 +45,11 @@ public class MoreScreen extends AbstractFlexibleScreen {
     }
 
     @Override
+    public int getSpanCount() {
+        return 3;
+    }
+
+    @Override
     protected void onAdapterStart() {
         updateAdapter(getFlexibleData());
     }
@@ -54,21 +57,11 @@ public class MoreScreen extends AbstractFlexibleScreen {
     private List<Object> getFlexibleData() {
         List<Object> data = new ArrayList<>();
 
-        data.add("Playgrounds and old screens (pending to remove):\n" +
-                " - Home 2 is a proposal in progress\n" +
-                " - All other items has been mixed at Log Screen\n");
-
-        data.add(new RunButton("Home 2",
-                R.drawable.ic_format_list_bulleted_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(Home2Screen.class);
-                    }
-                }));
+        data.add("Playgrounds and works in progress:");
 
 
         data.add("");
-        data.add(new RunButton("Builds",
+        data.add(new ButtonFlexData("Builds",
                 R.drawable.ic_build_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,7 +69,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Sessions",
+        data.add(new ButtonFlexData("Sessions",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
@@ -84,7 +77,7 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Screens",
+        data.add(new ButtonFlexData("Screens",
                 R.drawable.ic_photo_library_white_24dp,
                 new Runnable() {
                     @Override
@@ -92,17 +85,9 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Errors",
-                R.drawable.ic_bug_report_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() { OverlayService.performNavigation(ErrorsScreen.class);
-                    }
-                }));
-
 
         data.add("");
-        data.add(new RunButton("Network",
+        data.add(new ButtonFlexData("Network",
                 R.drawable.ic_cloud_queue_white_24dp,
                 new Runnable() {
                     @Override
@@ -111,13 +96,23 @@ public class MoreScreen extends AbstractFlexibleScreen {
                     }
                 }));
 
-        data.add(new RunButton("Pandora Net",
+        data.add(new ButtonFlexData("PND Net",
                 R.drawable.ic_extension_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
                         MoreScreen.this.getScreenManager().hide();
                         PandoraBridge.network();
+                    }
+                }));
+
+        data.add(new ButtonFlexData("Pandora",
+                R.drawable.ic_extension_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        MoreScreen.this.getScreenManager().hide();
+                        PandoraBridge.open();
                     }
                 }));
 
@@ -131,10 +126,5 @@ public class MoreScreen extends AbstractFlexibleScreen {
                 }));*/
 
         return data;
-    }
-
-    @Override
-    public int getSpanCount() {
-        return 3;
     }
 }

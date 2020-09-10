@@ -19,7 +19,6 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 //#ifdef ANDROIDX
@@ -31,24 +30,27 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleViewHolder;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
+import es.rafaco.inappdevtools.library.view.components.listener.OnlyOneExpandedListener;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 
 public abstract class AbstractDocumentScreen extends Screen {
-    private FlexibleAdapter adapter;
-    private int expandedPosition = -1;
+    private FlexAdapter adapter;
+    private OnlyOneExpandedListener helper;
 
     public AbstractDocumentScreen(ScreenManager manager) {
         super(manager);
     }
 
     public abstract String getTitle();
+
+    protected abstract DocumentType getDocumentType();
 
     @Override
     public int getBodyLayoutId() { return R.layout.flexible_container; }
@@ -79,42 +81,40 @@ public abstract class AbstractDocumentScreen extends Screen {
         return data;
     }
 
-    protected abstract DocumentType getDocumentType();
-
-    protected abstract Object getDocumentParam();
-
-    protected abstract List<Object> buildDataFromDocument(DocumentData reportData);
-
-    private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(3, data);
-        adapter.setOnItemActionListener(new FlexibleAdapter.OnItemActionListener() {
-            @Override
-            public Object onItemAction(FlexibleViewHolder viewHolder, View view, int position, long id) {
-                return toggleExpandedPosition(position);
-            }
-        });
-        RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(adapter);
+    protected Object getDocumentParam(){
+        return IadtController.get().getSessionManager().getCurrentUid();
     }
 
-    public boolean toggleExpandedPosition(int position){
-        int previousPosition = expandedPosition;
-        if (previousPosition == position){
-            //Collapse currently selected
-            expandedPosition = -1;
-            return false;
+    protected List<Object> buildDataFromDocument(DocumentData reportData) {
+        List<Object> objectList = new ArrayList<Object>(reportData.getSections());
+        objectList.add(0, buildOverviewData(reportData));
+        objectList.add(1, "");
+        return objectList;
+    }
+
+    protected OverviewData buildOverviewData(DocumentData reportData){
+        if (getMasterScreenClass()==null){
+            return reportData.getOverviewData();
         }
         else{
-            if (previousPosition >= 0){
-                //Collapse previously selected
-                DocumentSectionData previousData = (DocumentSectionData) adapter.getItems().get(previousPosition);
-                previousData.setExpanded(false);
-                adapter.notifyItemChanged(previousPosition);
-            }
-            //Expand current selection
-            expandedPosition = position;
-            return true;
+            OverviewData overviewData = reportData.getOverviewData();
+            overviewData.setPerformer(new Runnable() {
+                @Override
+                public void run() {
+                    getScreenManager().goTo(getMasterScreenClass(), null);
+                }
+            });
+            //overviewData.setPerformerText("Show all");
+            return overviewData;
         }
+    }
+
+    private void initAdapter(List<Object> data) {
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
+        helper = new OnlyOneExpandedListener(adapter);
+
+        RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

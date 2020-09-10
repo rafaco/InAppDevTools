@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This source file is part of InAppDevTools, which is available under
+  ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
+  ~
+  ~ Copyright 2018-2020 Rafael Acosta Alvarez
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <es.rafaco.compat.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        style="@style/IadtCard.Medium">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/standard_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextCondensed.Medium"
+                    android:textColor="@color/iadt_primary"
+                    android:textStyle="bold"
+                    android:alpha="0.7"
+                    tools:text="TITLE"/>
+
+                <TextView
+                    android:id="@+id/main_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="0.9"
+                    style="@style/TextCondensed.ExtraLarge"
+                    android:textColor="@color/iadt_text_high"
+                    tools:text="Main Content"/>
+
+                <TextView
+                    android:id="@+id/second_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="0.9"
+                    style="@style/TextCondensed.Medium"
+                    android:textColor="@color/iadt_text_low"
+                    tools:text="Secondary Content"/>
+
+                <FrameLayout
+                    android:id="@+id/chart_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="-1dp"
+                android:layout_marginRight="-1dp"
+                android:textColor="@color/iadt_primary"
+                android:textSize="@dimen/iadt_icon_font_size_l"
+                android:alpha="0.6"
+                tools:text="P"/>
+
+        </RelativeLayout>
+    </es.rafaco.compat.CardView>
+</LinearLayout>

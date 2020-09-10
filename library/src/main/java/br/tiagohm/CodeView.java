@@ -46,7 +46,7 @@
  * Changelog:
  *     - Added previous attribution notice and this changelog
  *     - Comments clean up and translation to English
- *     - Using VERSION.SDK_INT from OS_INFO instead of build
+ *     - Using VERSION.SDK_INT from OS instead of build
  *     - Added scrollToLine feature
  *     - Added findAllAsync compatible with API 15
  *     - Using our own HtmlUtils to encode on API 15

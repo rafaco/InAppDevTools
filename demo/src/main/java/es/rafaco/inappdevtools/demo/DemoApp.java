@@ -22,8 +22,7 @@ package es.rafaco.inappdevtools.demo;
 import android.app.Application;
 
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 
 public class DemoApp extends Application {
@@ -35,59 +34,31 @@ public class DemoApp extends Application {
         super.onCreate();
 
 
-        Iadt.addRunButton(new RunButton("Website",
-                R.drawable.ic_public_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewWebsite();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("Repository",
-                R.drawable.ic_cloud_done_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewReadme();
-                    }
-                }));
-
-        Iadt.addRunButton(new RunButton("Issues",
-                R.drawable.ic_error_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ExternalIntentUtils.viewIssues();
-                    }
-                }));
-
-
-        Iadt.addRunButton(new RunButton("Show message",
+        Iadt.addTeamAction(new ButtonFlexData("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Mostrando mensaje...");
+                        Iadt.buildMessage("Mostrando mensaje...").fire();
                     }
                 },
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Mensaje mostrado!");
+                        Iadt.buildMessage("Mensaje mostrado!").fire();
                     }
                 }));
 
-        Iadt.addRunButton(new RunButton("Select API...",
+        Iadt.addTeamAction(new ButtonFlexData("Select API...",
                 R.drawable.ic_settings_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Not already implemented");
+                        Iadt.buildMessage("Not already implemented").fire();
                     }
                 }));
 
-        Iadt.addRunButton(new RunButton("Add dummy thread",
+        Iadt.addTeamAction(new ButtonFlexData("Add dummy thread",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
@@ -96,13 +67,13 @@ public class DemoApp extends Application {
                         ThreadUtils.addDummy("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
+                                Iadt.buildMessage("Finished DemoDummy " + threadCounter).fire();
                             }
                         });
                     }
                 }));
 
-        Iadt.addRunButton(new RunButton("Add dummy async",
+        Iadt.addTeamAction(new ButtonFlexData("Add dummy async",
                 R.drawable.ic_application_white_24dp,
                 new Runnable() {
                     @Override
@@ -111,7 +82,7 @@ public class DemoApp extends Application {
                         ThreadUtils.addDummyAsync("DemoDummy " + threadCounter, 60000, new Runnable() {
                             @Override
                             public void run() {
-                                Iadt.showMessage("Finished DemoDummy " + threadCounter);
+                                Iadt.buildMessage("Finished DemoDummy " + threadCounter).fire();
                             }
                         });
                     }

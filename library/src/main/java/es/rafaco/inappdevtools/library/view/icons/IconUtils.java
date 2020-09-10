@@ -29,8 +29,12 @@ import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
+//@import androidx.annotation.StringRes;
+//@import androidx.annotation.ColorRes;
 //#else
 import android.support.v4.content.ContextCompat;
+import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
 //#endif
 
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -38,8 +42,14 @@ import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 public class IconUtils {
 
     public static final String ROOT = "fonts/";
-    public static final String FONTAWESOME = ROOT + "fa-solid-900.ttf";
     public static final String MATERIAL = ROOT + "MaterialIcons-Regular.ttf";
+    //public static final String FONTAWESOME = ROOT + "fa-solid-900.ttf";
+
+    //Disabled all usages of font icons.
+    //TODO: Layout Inspection tool from AndroidStudio get weird characters, this is a workaround
+    private static final boolean DISABLED = false;
+    private static final String DISABLED_REPLACEMENT = "@";
+
 
     public static Typeface getTypeface(Context context) {
         return Typeface.createFromAsset(context.getAssets(), MATERIAL);
@@ -74,10 +84,22 @@ public class IconUtils {
     }
 
     public static void set(TextView textView, int stringIcon){
+        if (DISABLED){
+            textView.setText(DISABLED_REPLACEMENT);
+            return;
+        }
         markAsIconContainer(textView, IconUtils.MATERIAL);
         textView.setText(stringIcon);
     }
 
+    public static void applyToTextView(TextView view, @StringRes int icon, @ColorRes int color) {
+        if (color!=0) {
+            int contextualizedColor = ContextCompat.getColor(view.getContext(), color);
+            view.setTextColor(contextualizedColor);
+        }
+
+        set(view, icon);
+    }
     public static void applyToImageView(ImageView view, int icon, int color) {
         view.setImageDrawable(UiUtils.getDrawable(icon));
         if (color>0){

@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -99,46 +101,6 @@ public class SourcesManager {
         }
 
         return NodesHelper.castToSourceEntry(results);
-    }
-
-
-    public boolean canOpenClassName(String fullClassName) {
-        String nodePath = getPathFromClassName(fullClassName);
-        return !TextUtils.isEmpty(nodePath);
-    }
-
-    /**
-     * Get the internal path to the source file of a class, that can be used to request the file to
-     * SourceManager, or null if not found or !canSourceInspection
-     *
-     * @param className fully qualified name of the class (output string of calling getClassName()
-     *                  in the class)
-     * @return          the internal path to the source to request
-     */
-    public String getPathFromClassName(String className){
-        if (!canSourceInspection())
-            return null;
-
-        String internalPath = className.replace(".", "/");
-        if (internalPath.contains("$"))
-            internalPath = internalPath.substring(0, internalPath.indexOf('$'));
-
-        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
-        for (String prefix: prefixes){
-            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath);
-            if (candidate != null){
-                return candidate.getPath();
-            }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".java");
-            if (candidate != null){
-                return candidate.getPath();
-            }
-            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".kt");
-            if (candidate != null){
-                return candidate.getPath();
-            }
-        }
-        return null;
     }
 
     public List<SourceEntry> getChildItems(String parentPath){
@@ -234,4 +196,87 @@ public class SourcesManager {
         }
         return f;
     }
+
+
+    //region [ SEARCH SOURCES ]
+
+    public boolean canOpenClassName(String fullClassName) {
+        String nodePath = getPathFromClassName(fullClassName);
+        return !TextUtils.isEmpty(nodePath);
+    }
+
+    /**
+     * Get the internal path to the source file of a class, that can be used to request the file to
+     * SourceManager, or null if not found or !canSourceInspection
+     *
+     * @param className fully qualified name of the class (output string of calling getClassName()
+     *                  in the class)
+     * @return          the internal path to the source to request
+     */
+    public String getPathFromClassName(String className){
+        if (!canSourceInspection())
+            return null;
+
+        String internalPath = className.replace(".", "/");
+        if (internalPath.contains("$"))
+            internalPath = internalPath.substring(0, internalPath.indexOf('$'));
+
+        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
+        for (String prefix: prefixes){
+            AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath);
+            if (candidate != null){
+                return candidate.getPath();
+            }
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".java");
+            if (candidate != null){
+                return candidate.getPath();
+            }
+            candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath + ".kt");
+            if (candidate != null){
+                return candidate.getPath();
+            }
+        }
+        return null;
+    }
+
+    public String getLayoutNameFromClassName(String pathToActivitySource) {
+        String content = IadtController.get().getSourcesManager().getContent(pathToActivitySource);
+        if (TextUtils.isEmpty(content))
+            return "";
+
+        //Detect layout included using setContentView (activities)
+        String layoutName = getFirstMatch(content, "setContentView\\(R\\.layout\\.(\\w+)\\)");
+        if (!TextUtils.isEmpty(layoutName))
+            return layoutName;
+
+        //Detect layout used with inflate (fragments and programmatic views)
+        layoutName = getFirstMatch(content, "inflate\\(R\\.layout\\.(\\w+),");
+        if (!TextUtils.isEmpty(layoutName))
+            return layoutName;
+
+        //Fallback to any R.layout in source file
+        layoutName = getFirstMatch(content, "R\\.layout\\.(\\w+)[ ,;)]");
+        if (!TextUtils.isEmpty(layoutName))
+            return layoutName;
+
+        return "";
+    }
+
+    private String getFirstMatch(String content, String regex){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(content);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    public String getLayoutPathFromLayoutName(String layoutName) {
+        if (TextUtils.isEmpty(layoutName))
+            return "";
+
+        return IadtPath.RESOURCES + "/" + "layout" + "/" + layoutName + ".xml";
+    }
+
+    //endregion
 }

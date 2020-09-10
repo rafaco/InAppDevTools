@@ -34,6 +34,9 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class ViewHierarchyUtils {
 
@@ -47,6 +50,18 @@ public class ViewHierarchyUtils {
                 printViewHierarchy(rootView.second);
             }
         }
+    }
+
+    public static Pair<String, View> getLayerRootView(Class<? extends Layer> layerClass) {
+        List<Pair<String, View>> rootViews = getRootViews(false);
+        for (Pair<String, View> current : rootViews) {
+            if (current.second.getContext() instanceof OverlayService
+                    && current.second.getTag() != null
+                    && current.second.getTag().equals(layerClass.getSimpleName())){
+                return current;
+            }
+        }
+        return null;
     }
 
     public static Pair<String, View> getAppRootView() {

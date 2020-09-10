@@ -31,15 +31,15 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.OrientationEventDetector;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
-import es.rafaco.inappdevtools.library.logic.utils.RunningProvidersUtils;
+import es.rafaco.inappdevtools.library.logic.utils.RunningContentProvidersUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningServicesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningThreadsUtils;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.home.InspectViewScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
@@ -53,7 +53,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " info from Session " + sessionId;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
     public String getOverview() {
         String result = RunningTasksUtils.getTopActivity() + " on " + RunningTasksUtils.getTopActivityStatus() + Humanizer.newLine()
                 + RunningTasksUtils.getCount() + " tasks with " + RunningTasksUtils.getActivitiesCount() + " activities" + Humanizer.newLine()
-                + RunningServicesUtils.getCount() + " services and " + RunningProvidersUtils.getCount() + " providers" + Humanizer.newLine()
+                + RunningServicesUtils.getCount() + " services and " + RunningContentProvidersUtils.getCount() + " providers" + Humanizer.newLine()
                 + RunningProcessesUtils.getCount() + " processes with " + RunningThreadsUtils.getCount() + " threads";
         return result;
     }
@@ -101,11 +101,11 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add(RunningTasksUtils.getTopActivityInfo());
 
         //TODO: when multiple buttons supported -> Add inspect source
-        builder.addButton(new RunButton("Inspect View",
+        builder.addButton(new ButtonBorderlessFlexData("Inspect View",
                 R.drawable.ic_view_carousel_white_24dp,
                 new Runnable() {
                         @Override
-                        public void run() { OverlayService.performNavigation(InspectViewScreen.class);
+                        public void run() { OverlayService.performNavigation(ViewScreen.class);
                         }
                     }));
         return builder.build();
@@ -130,8 +130,8 @@ public class LiveInfoDocumentGenerator extends AbstractDocumentGenerator {
     public DocumentSectionData getProvidersInfo() {
         return new DocumentSectionData.Builder("Provider")
                 .setIcon(R.string.gmd_local_convenience_store)
-                .setOverview(RunningProvidersUtils.getCount() + "")
-                .add(RunningProvidersUtils.getString())
+                .setOverview(RunningContentProvidersUtils.getCount() + "")
+                .add(RunningContentProvidersUtils.getString())
                 .build();
     }
 

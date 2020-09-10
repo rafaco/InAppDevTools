@@ -23,13 +23,13 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import es.rafaco.inappdevtools.library.BuildConfig;
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.builds.BuildFilesRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.files.utils.PluginListUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -44,7 +44,7 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " from Session " + sessionId;
     }
 
     @Override
@@ -76,13 +76,14 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
                 .add(getDbInfo())
                 .add(getBuildConfig())
                 .add(getBuildInfo())
+                .add(getGitInfo())
                 .build();
     }
 
     private DocumentSectionData getDbInfo() {
         DocumentSectionData group = new DocumentSectionData.Builder("Database")
                 .setIcon(R.string.gmd_sd_storage)
-                .add(IadtController.get().getDatabase().getOverview())
+                .add(IadtDatabase.get().getOverview())
                 .build();
         return group;
     }
@@ -90,7 +91,15 @@ public class ToolsInfoDocumentGenerator extends AbstractDocumentGenerator {
     private DocumentSectionData getBuildInfo() {
         String content = BuildFilesRepository.getBuildInfoHelper(sessionId).getAll();
         return new DocumentSectionData.Builder("Generated BuildInfo")
-                .setIcon(R.string.gmd_settings_system_daydream)
+                .setIcon(R.string.gmd_build)
+                .add(content)
+                .build();
+    }
+
+    private DocumentSectionData getGitInfo() {
+        String content = BuildFilesRepository.getGitInfoHelper(sessionId).getAll();
+        return new DocumentSectionData.Builder("Generated GitInfo")
+                .setIcon(R.string.gmd_kitchen)
                 .add(content)
                 .build();
     }

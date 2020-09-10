@@ -35,6 +35,7 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentFormatter;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
@@ -63,13 +64,13 @@ public class ReportSender {
 
     private void updateReportCompressed(String filePath) {
         report.setZipPath(filePath);
-        IadtController.getDatabase().reportDao().update(report);
+        IadtDatabase.get().reportDao().update(report);
     }
 
     private void updateReportSent() {
         //TODO: use a real sent! user can cancel the intent chooser
         report.setDateSent(DateUtils.getLong());
-        IadtController.getDatabase().reportDao().update(report);
+        IadtDatabase.get().reportDao().update(report);
     }
 
 
@@ -101,17 +102,17 @@ public class ReportSender {
     private Session getSessionObject() {
         //Fill sessionId if only crashId was provided (crash reports)
         if (report.getSessionId()<1 && report.getCrashId()>0){
-            Crash crash = IadtController.get().getDatabase().crashDao()
+            Crash crash = IadtDatabase.get().crashDao()
                     .findById(report.getCrashId());
             report.setSessionId(crash.getSessionId());
         }
 
         Session session;
         if (report.getSessionId()>0) {
-            session = IadtController.get().getDatabase().sessionDao()
+            session = IadtDatabase.get().sessionDao()
                     .findById(report.getSessionId());
         }else {
-            session = IadtController.get().getDatabase().sessionDao()
+            session = IadtDatabase.get().sessionDao()
                     .getLast();
         }
         return session;
@@ -137,7 +138,7 @@ public class ReportSender {
     private void addCrashDocument(Map<String, List<String>> reportMap, Session session) {
         if (session.getCrashId()>0){
             List<String> crashFiles = new ArrayList<>();
-            Crash crash = IadtController.get().getDatabase().crashDao()
+            Crash crash = IadtDatabase.get().crashDao()
                     .findById(session.getCrashId());
             //Add crash report only
             crashFiles.add(crash.getReportPath());
@@ -152,7 +153,7 @@ public class ReportSender {
 
     private void addScreenshots(Map<String, List<String>> reportMap, Session session) {
         List<String> screenFiles = new ArrayList<>();
-        List<Screenshot> screens = IadtController.getDatabase().screenshotDao().getAllBySessionId(session.getUid());
+        List<Screenshot> screens = IadtDatabase.get().screenshotDao().getAllBySessionId(session.getUid());
         for (Screenshot screen : screens) {
             screenFiles.add(screen.getPath());
         }
@@ -187,7 +188,8 @@ public class ReportSender {
         List<String> filesToSend;
         if (reportFilesMap.isEmpty()) {
             //TODO: No report files
-            Iadt.showError("Unable to send an empty report");
+            Iadt.buildMessage("Unable to send an empty report")
+                    .isError().fire();
             return null;
         }
         else if(reportFilesMap.size() == 1

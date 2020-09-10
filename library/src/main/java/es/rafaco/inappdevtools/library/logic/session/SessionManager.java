@@ -34,16 +34,16 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.utils.StopWatch;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysisRaw;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionDao;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildUtil;
-import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashUtil;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.FirstStartPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashPrefs;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class SessionManager {
@@ -61,11 +61,11 @@ public class SessionManager {
     }
 
     private SessionDao getDao() {
-        return DevToolsDatabase.getInstance().sessionDao();
+        return IadtDatabase.get().sessionDao();
     }
 
     private FriendlyDao getFriendlyDao() {
-        return DevToolsDatabase.getInstance().friendlyDao();
+        return IadtDatabase.get().friendlyDao();
     }
 
     public Context getContext() {
@@ -101,20 +101,20 @@ public class SessionManager {
         session.setPid(pid);
         session.setBuildId(IadtController.get().getBuildManager().getCurrentId());
 
-        if (FirstStartUtil.isFirstStart()){
-            FirstStartUtil.saveFirstStart();
+        if (FirstStartPrefs.isFirstStart()){
+            FirstStartPrefs.saveFirstStart();
             session.setFirstStart(true);
         }else{
             session.setFirstStart(false);
         }
 
-        if (NewBuildUtil.isNewBuild()){
+        if (NewBuildPrefs.isNewBuild()){
             session.setNewBuild(true);
         }else{
             session.setNewBuild(false);
         }
 
-        if (PendingCrashUtil.isPending()){
+        if (PendingCrashPrefs.isPending()){
             session.setPendingCrash(true);
         }else{
             session.setPendingCrash(false);
@@ -210,6 +210,10 @@ public class SessionManager {
         long firstNextDate = next.getDate();
         Friendly lastSessionLog = getFriendlyDao().getLastSessionLog(firstNextDate -1);
 
+        //TODO: research why this is needed on API 15 to prevent a crash on second execution
+        if (lastSessionLog==null){
+            return -1;
+        }
         long finishDate = lastSessionLog.getDate();
         target.setFinishDate(finishDate);
         getDao().update(target);
@@ -274,7 +278,7 @@ public class SessionManager {
     }
 
     public SessionAnalysis calculateCurrentSessionAnalysis() {
-        long startDate = getCurrent().getDetectionDate();
+        long startDate = getCurrent().getDate();
         List<SessionAnalysisRaw> logcatResume = getDao().analiseLiveSessionLogcat(startDate);
         List<SessionAnalysisRaw> eventResume = getDao().analiseLiveSessionEvents(startDate);
         SessionAnalysis analysis = SessionAnalysis.buildFromRaw(logcatResume, eventResume);
@@ -321,7 +325,7 @@ public class SessionManager {
             filePaths.add(DocumentRepository.getDocumentPath(documentType, sessionId));
         }
         if (IadtController.get().isDebug() && watch!=null)
-            FriendlyLog.log(watch.finish());
+            watch.finishToEvent();
         return filePaths;
     }
 

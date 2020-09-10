@@ -85,7 +85,7 @@ public class RemoveLayer extends Layer {
     }
 
     public void updateBoundedState(boolean isBounded) {
-        int color = isBounded ? R.color.rally_orange : R.color.rally_gray;
+        int color = isBounded ? R.color.rally_orange : R.color.iadt_background;
         UiUtils.setBackgroundColorToDrawable(manager.getContext(), color, removeImage.getBackground());
     }
 

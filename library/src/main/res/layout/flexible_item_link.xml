@@ -18,15 +18,16 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/link_wrapper"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:gravity="start|center_vertical"
     android:layout_marginTop="2dp"
     android:layout_marginBottom="2dp"
-    android:background = "?android:attr/selectableItemBackground"
+    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
@@ -34,16 +35,33 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
+        android:textSize="@dimen/iadt_icon_font_size_s"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"/>
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="5dp"
+        tools:text="X"/>
 
     <es.rafaco.compat.AppCompatTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:textColor="@color/rally_white"
-        style="@style/TextCondensedBig"/>
+        android:textColor="@color/iadt_text_high"
+        style="@style/TextCondensed.Large"
+        tools:text="Title"/>
+
+    <es.rafaco.compat.AppCompatTextView
+        android:id="@+id/overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:gravity="end|center_vertical"
+        android:layout_margin="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        style="@style/TextCondensed.Large"
+        android:textColor="@color/iadt_text_high"
+        tools:text="Overview"/>
 
 </LinearLayout>

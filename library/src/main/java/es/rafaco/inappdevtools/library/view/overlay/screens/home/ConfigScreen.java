@@ -28,8 +28,8 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
-import es.rafaco.inappdevtools.library.view.components.flex.ConfigData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.items.ConfigData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -45,7 +45,7 @@ import android.support.v7.app.AlertDialog;
 
 public class ConfigScreen extends Screen {
 
-    private FlexibleAdapter adapter;
+    private FlexAdapter adapter;
     private RecyclerView recyclerView;
     private boolean changesDiscarted = false;
 
@@ -90,7 +90,7 @@ public class ConfigScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        adapter = new FlexibleAdapter(1, data);
+        adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
         recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }

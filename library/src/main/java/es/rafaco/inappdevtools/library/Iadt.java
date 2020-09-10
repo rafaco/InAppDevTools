@@ -21,17 +21,13 @@ package es.rafaco.inappdevtools.library;
 
 import android.view.GestureDetector;
 
-//#ifdef ANDROIDX
-//@import androidx.annotation.NonNull; 
-//#else
-import android.support.annotation.NonNull;
-//#endif
-
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
+import es.rafaco.inappdevtools.library.logic.events.IadtEventBuilder;
+import es.rafaco.inappdevtools.library.logic.events.IadtMessageBuilder;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 
@@ -88,7 +84,7 @@ public class Iadt {
 
     //region [ INTEGRATIONS ]
 
-    public static void addRunButton(RunButton runnable){
+    public static void addTeamAction(ButtonFlexData runnable){
         if(!isEnabled()) return;
         getController().getRunnableManager().add(runnable);
     }
@@ -114,34 +110,27 @@ public class Iadt {
 
     //endregion
 
-    //region [ TOAST & LOG ]
+    //region [ MESSAGES & EVENTS ]
 
-    public static void showMessage(int stringId) {
-        if (!isEnabled()) return;
-        showMessage(getController().getContext().getResources().getString(stringId));
+    public static IadtMessageBuilder buildMessage(int textResource) {
+        return new IadtMessageBuilder(textResource);
     }
 
-    public static void showMessage(String text) {
-        if (!isEnabled()) return;
-        CustomToast.show(getController().getContext(), text, CustomToast.TYPE_INFO);
-        FriendlyLog.log("I", "Message", "Info", text);
+    public static IadtMessageBuilder buildMessage(String text) {
+        return new IadtMessageBuilder(text);
     }
 
-    public static void showWarning(String text) {
-        if (!isEnabled()) return;
-        CustomToast.show(getController().getContext(), text, CustomToast.TYPE_WARNING);
-        FriendlyLog.log("W", "Message", "Warning", text);
-    }
-
-    public static void showError(String text) {
-        if (!isEnabled()) return;
-        CustomToast.show(getController().getContext(), text, CustomToast.TYPE_ERROR);
-        FriendlyLog.log("E", "Message", "Error", text);
+    public static IadtEventBuilder buildEvent(String text) {
+        return new IadtEventBuilder(text);
     }
 
     public static void trackUserAction(String text) {
         if (!isEnabled()) return;
-        FriendlyLog.log("I", "User", "Action", text);
+        buildEvent(text)
+                .setSeverity("I")
+                .setCategory("User")
+                .setSubcategory("Action")
+                .fire();
     }
 
     //endregion
@@ -199,7 +188,17 @@ public class Iadt {
 
     //endregion
 
-    //region [ CLOSE & RESTART APP_INFO ]
+    //region [ CLOSE & RESTART APP ]
+
+    public static void disable(){
+        if (!isEnabled()) return;
+        getController().disable();
+    }
+
+    public static void cleanAll(){
+        if (!isEnabled()) return;
+        getController().cleanAll();
+    }
 
     public static void restartApp(){
         if (!isEnabled()) return;

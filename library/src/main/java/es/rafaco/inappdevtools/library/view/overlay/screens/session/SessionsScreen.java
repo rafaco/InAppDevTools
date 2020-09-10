@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.session;
 
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
@@ -37,8 +38,8 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -47,6 +48,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 public class SessionsScreen extends Screen {
 
     private long filterBuildId = -1;
+    private AsyncTask<Long, String, List<Object>> currentTask;
 
     public SessionsScreen(ScreenManager manager) {
         super(manager);
@@ -67,10 +69,31 @@ public class SessionsScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
+        showProgress(true);
         initParam();
-        List<Session> data = initData();
-        List<?> cardData = prepareData(data);
-        initAdapter((List<Object>) cardData);
+
+        if (currentTask != null){
+            currentTask.cancel(true);
+        }
+        currentTask = new AsyncTask<Long, String, List<Object>>(){
+            @Override
+            protected List<Object> doInBackground(Long... objects) {
+                List<Session> data = initData(objects[0]);
+                List<Object> cardData = prepareData(data);
+                return cardData;
+            }
+
+            @Override
+            protected void onPostExecute(final List<Object> filteredItems) {
+                super.onPostExecute(filteredItems);
+                if (!currentTask.isCancelled()){
+                    initAdapter((List<Object>) filteredItems);
+                    showProgress(false);
+                }
+                currentTask = null;
+            }
+        };
+        currentTask.execute(filterBuildId);
     }
 
     private void initParam() {
@@ -83,7 +106,7 @@ public class SessionsScreen extends Screen {
         }
     }
 
-    private List<Session> initData() {
+    private List<Session> initData(long filterBuildId) {
         List<Session> sessions;
         if (!TextUtils.isEmpty(getParam())) {
             sessions = IadtController.get().getSessionManager().getSessionsWithOverview(filterBuildId);
@@ -94,8 +117,8 @@ public class SessionsScreen extends Screen {
         return sessions;
     }
 
-    private List<CardData> prepareData(List<Session> sessions) {
-        List<CardData> cards = new ArrayList<>();
+    private List<Object> prepareData(List<Session> sessions) {
+        List<Object> cards = new ArrayList<>();
         for (int i = 0; i<sessions.size(); i++) {
             final Session session = sessions.get(i);
             boolean isCurrent = (i==0);
@@ -124,14 +147,14 @@ public class SessionsScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        FlexibleAdapter adapter = new FlexibleAdapter(3, data);
+        FlexAdapter adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onStop() {
-        //Nothing needed
+        showProgress(false);
     }
 
     @Override

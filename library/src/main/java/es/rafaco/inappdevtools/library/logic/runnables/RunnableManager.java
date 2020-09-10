@@ -24,6 +24,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
+
 public class RunnableManager {
 
     Context context;
@@ -35,25 +37,25 @@ public class RunnableManager {
 
     //region [ CUSTOM RUNNABLES ]
 
-    private List<RunButton> runButtonList;
+    private List<ButtonFlexData> buttonDataList;
 
-    public void add(RunButton config){
-        if (runButtonList == null)
-            runButtonList = new ArrayList<>();
-        runButtonList.add(config);
+    public void add(ButtonFlexData config){
+        if (buttonDataList == null)
+            buttonDataList = new ArrayList<>();
+        buttonDataList.add(config);
     }
 
-    public boolean remove(RunButton target){
-        if (runButtonList !=null && runButtonList.contains(target)) {
-            return runButtonList.remove(target);
+    public boolean remove(ButtonFlexData target){
+        if (buttonDataList !=null && buttonDataList.contains(target)) {
+            return buttonDataList.remove(target);
         }
         return false;
     }
 
-    public List<RunButton> getAll(){
-        if (runButtonList == null)
-            runButtonList = new ArrayList<>();
-        return runButtonList;
+    public List<ButtonFlexData> getAll(){
+        if (buttonDataList == null)
+            buttonDataList = new ArrayList<>();
+        return buttonDataList;
     }
 
     //endregion

@@ -27,6 +27,8 @@ public enum Event {
     APP_NEW_SESSION("AppNewSession"),
     APP_NEW_BUILD("AppNewBuild"),
     APP_START("AppStart"),
+    APP_NAVIGATION("app_navigation"),
+    APP_TASK_REMOVED("app_task_removed"),
 
     CONFIG_CHANGED("ConfigChanged"),
     OVERLAY_NAVIGATION("OverlayNavigation"),
@@ -44,7 +46,6 @@ public enum Event {
     PROCESS_ON_DESTROY("process_on_destroy"),
 
     //Activity
-    ACTIVITY_OPEN("activity_open"),
     ACTIVITY_ON_CREATE ("activity_on_create"),
     ACTIVITY_ON_START("activity_on_start"),
     ACTIVITY_ON_STOP("activity_on_stop"),
@@ -80,6 +81,8 @@ public enum Event {
     //ScreenChange
     IMPORTANCE_FOREGROUND("importance_foreground"),
     IMPORTANCE_BACKGROUND("importance_background"),
+    FOREGROUND_CHANGE_ENTER("foreground_change_enter"),
+    FOREGROUND_CHANGE_EXIT("foreground_change_exit"),
 
     //PowerManager
     POWER_DOZE("PowerDoze"),

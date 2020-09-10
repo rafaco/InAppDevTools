@@ -1,15 +1,46 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Iadt shape -->
+    <dimen name="iadt_shape_margin">7dp</dimen>
+    <dimen name="iadt_shape_stroke">2dp</dimen>
+    <dimen name="iadt_shape_stroke_negative">-2dp</dimen>
+    <dimen name="iadt_shape_radius">15dp</dimen>
+    <dimen name="iadt_toolbar_main_height">38dp</dimen>
+    <dimen name="iadt_toolbar_second_height">40dp</dimen>
+    <dimen name="iadt_shape_top_height">40dp</dimen>
+    <dimen name="iadt_shape_icon_size">40dp</dimen>
+    <dimen name="iadt_icon_font_size_s">18dp</dimen>
+    <dimen name="iadt_icon_font_size_m">24dp</dimen>
+    <dimen name="iadt_icon_font_size_l">30dp</dimen>
+    <dimen name="iadt_icon_font_size_xl">40dp</dimen>
+
+    <dimen name="iadt_text_size_s">13dp</dimen>
+    <dimen name="iadt_text_size_m">15dp</dimen>
+    <dimen name="iadt_text_size_l">17dp</dimen>
+    <dimen name="iadt_text_size_xl">21dp</dimen>
+
+    <!-- Iadt features -->
+    <dimen name="iadt_separator_stroke">1dp</dimen>
+    <dimen name="iadt_toast_y_offset">24dp</dimen>
+
+    <!-- Default screen margins -->
+    <dimen name="iadt_horizontal_margin">10dp</dimen>
+    <dimen name="iadt_vertical_margin">5dp</dimen>
+    <dimen name="iadt_flat_card_horizontal_margin">-3dp</dimen> <!-- Also at values-v21 -->
+
+
+
+    <!-- TODO: remove to Demo or add prefix, could override host app ones -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_offset">10dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
 
-    <dimen name="card_margin">5dp</dimen>
-    <dimen name="card_radius">0dp</dimen>
+    <!-- Default cards margins -->
+    <dimen name="card_padding_horizontal">6dp</dimen>
+    <dimen name="card_padding_vertical">3dp</dimen>
+    <dimen name="card_margin">20dp</dimen>
+    <dimen name="card_radius">6dp</dimen>
     <dimen name="card_cover_height">100dp</dimen>
     <dimen name="card_cover_width">10dp</dimen>
     <dimen name="card_title">15dp</dimen>
@@ -20,7 +51,4 @@
     <dimen name="card_overflow_height">25dp</dimen>
     <dimen name="card_overflow_margin_top">10dp</dimen>
 
-    <dimen name="overlay_dialog_margin">7dp</dimen>
-    <dimen name="toast_y_offset">24dp</dimen>
-    <dimen name="toolbar_height">40dp</dimen>
 </resources>

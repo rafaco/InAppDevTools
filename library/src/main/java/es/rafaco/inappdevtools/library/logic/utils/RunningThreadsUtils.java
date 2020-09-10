@@ -19,22 +19,88 @@
 
 package es.rafaco.inappdevtools.library.logic.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningThreadsUtils {
 
     private RunningThreadsUtils() { throw new IllegalStateException("Utility class"); }
 
+    public static List<Thread> getList() {
+        return getAllThreads();
+    }
+
     public static int getCount() {
         return getCurrentGroupThreads().size();
     }
 
-    private static List<java.lang.Thread> getList() {
-        return getAllThreads();
+    public static String getClassName(Thread info) {
+        return Humanizer.emptyString();
     }
+
+    public static String getTitle(Thread info) {
+        return info.getId() + " - " + info.getName();
+    }
+
+    public static String getContent(Thread info) {
+        StringBuilder contentBuffer = new StringBuilder();
+
+        contentBuffer.append(ThreadUtils.formatThread(info))
+                .append(Humanizer.newLine());
+
+        return contentBuffer.toString();
+    }
+
+    public static String formatOneLine(Thread info) {
+        return String.format("%s-%s (P%s)",
+                info.getId(), info.getName(), info.getPriority());
+    }
+
+    public static String formatOneLineOverview(Thread info) {
+        if (info.getState().equals(Thread.State.TIMED_WAITING)){
+            return "TIMED";
+        }
+        return info.getState().toString();
+    }
+
+    public static int getColor(Thread info) {
+        switch (info.getState()){
+            case NEW:
+                return R.color.rally_white;
+            case RUNNABLE:
+                return R.color.rally_green;
+            case BLOCKED:
+                return R.color.material_orange;
+            case WAITING:
+                return R.color.rally_green;
+            case TIMED_WAITING:
+                return R.color.rally_orange;
+            case TERMINATED:
+            default:
+                return R.color.android_gray;
+        }
+    }
+
+    public static int getIcon(Thread info) {
+        return R.string.gmd_line_style;
+    }
+
+    /*public static String getString() {
+        StringBuilder result = new StringBuilder("\n");
+        List<Thread> processes = getList();
+
+        for (Thread info : processes) {
+            result.append(getContent(info));
+            result.append(Humanizer.newLine());
+        }
+        return result.toString();
+    }*/
+
 
     public static String getString() {
         StringBuilder result = new StringBuilder(Humanizer.newLine());
@@ -68,6 +134,10 @@ public class RunningThreadsUtils {
         return result.toString();
     }
 
+
+
+
+
     private static void insertPreviousGroupInfo(StringBuilder result, ThreadGroup previousGroup, int previousGroupStart) {
         if (previousGroup != null){
             result.insert(previousGroupStart, Humanizer.newLine()
@@ -82,8 +152,6 @@ public class RunningThreadsUtils {
         return String.format( "Group %s has %s groups and %s active threads",
                     Humanizer.toCapitalCase(group.getName()), groupCount, threadCount);
     }
-
-
 
     public static List<Thread> getCurrentGroupThreads(){
         ThreadGroup targetGroup = getCurrentGroup();
@@ -109,15 +177,15 @@ public class RunningThreadsUtils {
     }
 
     public static List<Thread> getThreadsFromGroup(ThreadGroup group){
-        int size = group.activeCount();
-        if (group.getParent() != null){
-            size++;
-        }
-
-        Thread[] threads = new Thread[size];
-        while (group.enumerate(threads, true ) == threads.length) {
+        int initialSize = group.activeCount() + 1;
+        Thread[] threads = new Thread[initialSize];
+        while (group.enumerate(threads, false ) == threads.length) {
             threads = new Thread[threads.length * 2];
         }
-        return Arrays.asList(threads);
+
+        List<Thread> result = new ArrayList<>();
+        result.addAll(Arrays.asList(threads));
+        result.removeAll(Collections.singleton(null));
+        return result;
     }
 }

@@ -44,11 +44,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.compat.AppCompatTextView;
-import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 
 public class LogFilterDialog {
@@ -77,14 +76,14 @@ public class LogFilterDialog {
     public void showStandardDialog() {
         dialog = buildPresetDialog();
         dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog);
         dialog.show();
     }
 
     public void showAdvancedDialog() {
         dialog = buildCustomDialog();
         dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog);
         dialog.show();
     }
 
@@ -96,11 +95,7 @@ public class LogFilterDialog {
 
     private void onBackToPresets() {
         dialog.dismiss();
-
-        dialog = buildPresetDialog();
-        dialog.getWindow().setType(Layer.getLayoutType());
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_layer_screen_middle);
-        dialog.show();
+        showStandardDialog();
     }
 
     private AlertDialog buildPresetDialog() {
@@ -115,7 +110,7 @@ public class LogFilterDialog {
         alertDialogBuilder.setView(dialogView);
 
         List<Object> data = new ArrayList<>();
-
+        int cardBackground = R.color.iadt_surface_top;
         data.add(new CardData("Repro Steps",
                 "Important events from current session",
                 R.string.gmd_format_list_numbered,
@@ -124,7 +119,7 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.REPRO_STEPS);
                     }
-                }));
+                }).setBgColor(cardBackground));
 
         /*data.add(new CardData("Network",
                 "Data request from current session",
@@ -144,7 +139,8 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.DEBUG);
                     }
-                }));
+                })
+                .setBgColor(cardBackground));
 
         data.add(new CardData("Crashes",
                 "Crash events from all session",
@@ -154,7 +150,7 @@ public class LogFilterDialog {
                     public void run() {
                         onPresetSelected(LogFilterHelper.Preset.CRASHES);
                     }
-                }));
+                }).setBgColor(cardBackground));
 
         data.add("");
         data.add(new CardData("Custom",
@@ -166,9 +162,9 @@ public class LogFilterDialog {
                         onPresetSelected(LogFilterHelper.Preset.CUSTOM);
                         showAdvancedDialog();
                     }
-                }));
+                }).setBgColor(cardBackground));
 
-        FlexibleAdapter presetAdapter = new FlexibleAdapter(1, data);
+        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 1, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
         recyclerView.setAdapter(presetAdapter);
 
@@ -228,7 +224,7 @@ public class LogFilterDialog {
         lastSelectedSessionId = (filter.getSessionInt() < 3)? sessions.get(filter.getSessionInt())
             : R.id.session_other;
 
-        final boolean isFirstSession = IadtController.getDatabase().sessionDao().count()==1;
+        final boolean isFirstSession = IadtDatabase.get().sessionDao().count()==1;
         if (isFirstSession) sessionGroup.findViewById(R.id.session_previous).setVisibility(View.GONE);
         sessionGroup.check(lastSelectedSessionId);
         sessionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

@@ -18,37 +18,66 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/overview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/content_margin">
+    style="@style/content_margin"
+    tools:background="@color/iadt_surface_top">
 
-    <TextView
-        android:id="@+id/overview_icon"
+    <LinearLayout
+        android:id="@+id/icon_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="10dp"
-        android:textSize="24dp"/>
+        android:padding="5dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/iadt_icon_font_size_xl"
+            android:textColor="@color/iadt_text_high"
+            tools:text="[%]"/>
+
+        <TextView
+            android:id="@+id/icon_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/iadt_text_size_m"
+            android:textColor="@color/iadt_text_low"/>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/overview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/overview_icon"
+        android:layout_toRightOf="@id/icon_button"
         android:textStyle="bold"
-        style="@style/TextCondensedBig"/>
+        style="@style/TextCondensed.ExtraLarge"
+        android:textColor="@color/iadt_text_high"
+        tools:text="Title"/>
 
     <TextView
         android:id="@+id/overview_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/overview_icon"
+        android:layout_below="@id/overview_title"
         android:layout_alignLeft="@id/overview_title"
         android:layout_gravity="end"
-        android:textColor="@color/rally_white"
         android:layout_marginBottom="10dp"
-        style="@style/TextCondensedBig" />
+        style="@style/TextCondensed.Large"
+        android:textColor="@color/iadt_text_low"
+        tools:text="Title, a very long one to test ellipsize on title and stuff like that"/>
 
 </RelativeLayout>

@@ -15,15 +15,17 @@
     <string name="config_source_inspection">Disable source features and source inclusion</string>
     <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
     <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
-    <string name="config_invocation_by_notification">Disable showing our notification to open the UI</string>
     <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
     <string name="config_inject_events_on_logcat">Inject IadtEvents on logcat to see them on the standard Logcat output.</string>
     <string name="config_debug">Enable debug mode for the library. It print extra logs and include our sources to your compilation</string>
-    <string name="config_email">Default email to use for reports</string>
-    <string name="config_notes">Compilation notes to show on initial dialog</string>
+    <string name="config_notes">Compilation notes to show on initial dialog, build and team screen</string>
+    <string name="config_team_name">Short name for your team, shown in home and team screen</string>
+    <string name="config_team_email">Default email to use for reports</string>
+    <string name="config_team_desc">Long text about your team or anything else that you want to shown in team screen</string>
+    <string name="config_team_links">Collection of links to shown in team screen. Use Groovy map of name:url</string>
 
     <!-- Dialogs -->
-    <string name="welcome_welcome_title">Internal compilation</string>
+    <string name="welcome_welcome_message">This is a internal compilation with additional tools included:</string>
     <string name="welcome_privacy_title">Privacy</string>
     <string name="welcome_privacy_content">This compilation contains tools that are locally recording your usage of this app. Only you can share these records by using our report feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
     <string name="welcome_permission_title">Permission</string>
@@ -49,5 +51,8 @@
     <string name="simulated_crash_cause">The stage fright make you pressed that button :)</string>
     <string name="simulated_crash_background">Simulated crash on a BACK thread</string>
     <string name="simulated_crash_foreground">Simulated crash on the MAIN thread</string>
+
+    <!-- Override Pandora strings -->
+    <string name="pd_name_sandbox">Storage Inspector</string>
 
 </resources>

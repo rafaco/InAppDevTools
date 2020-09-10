@@ -27,10 +27,12 @@ import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 //#ifdef ANDROIDX
 //@import androidx.appcompat.widget.AppCompatImageView;
@@ -50,13 +52,12 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 public class ScreenLayer extends Layer {
 
     private NestedScrollView bodyScroll;
     private FrameLayout bodyContainer;
     private Toolbar toolbar;
+    private ProgressBar progressBar;
     private LinearLayout fullContainer;
 
     public ScreenLayer(LayerManager manager) {
@@ -105,6 +106,7 @@ public class ScreenLayer extends Layer {
     private void initScroll() {
         bodyScroll = getView().findViewById(R.id.scroll_view);
         bodyContainer = getView().findViewById(R.id.tool_body_container);
+        progressBar = getView().findViewById(R.id.progressBar);
         fullContainer = getView().findViewById(R.id.full_container);
     }
 
@@ -224,20 +226,18 @@ public class ScreenLayer extends Layer {
         toolbar.setLogo(logo);
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             View child = toolbar.getChildAt(i);
-            if (child != null)
-                if (child.getClass() == AppCompatImageView.class) {
-                    AppCompatImageView iv2 = (AppCompatImageView) child;
-                    if ( iv2.getDrawable() == logo ) {
-                        iv2.setAdjustViewBounds(true);
-                        iv2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                        //activity_horizontal_margin = 16dp
-                        int leftMargin = (int)UiUtils.getPixelsFromDp(iv2.getContext(), 16);
-                        int otherMargins = iv2.getHeight()/6;
-                        Toolbar.LayoutParams layout = (Toolbar.LayoutParams)iv2.getLayoutParams();
-                        layout.setMargins(leftMargin, otherMargins, otherMargins, otherMargins);
-                        iv2.requestLayout();
-                    }
+            if (child != null && child.getClass() == AppCompatImageView.class) {
+                AppCompatImageView iv2 = (AppCompatImageView) child;
+                if ( iv2.getDrawable() == logo ) {
+                    iv2.setAdjustViewBounds(true);
+                    iv2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                    int leftMargin = (int)UiUtils.getPixelsFromDp(iv2.getContext(), 16);
+                    int otherMargins = iv2.getHeight()/6;
+                    Toolbar.LayoutParams layout = (Toolbar.LayoutParams)iv2.getLayoutParams();
+                    layout.setMargins(leftMargin, otherMargins, otherMargins, otherMargins);
+                    iv2.requestLayout();
                 }
+            }
         }
     }
 
@@ -255,6 +255,12 @@ public class ScreenLayer extends Layer {
         else if (selected == R.id.action_config) {
             OverlayService.performNavigation(ConfigScreen.class);
         }
+        else if (selected == R.id.action_app_screenshot) {
+            IadtController.get().takeScreenshot();
+        }
+        else if (selected == R.id.action_lib_screenshot) {
+            IadtController.get().takeLibraryScreenshot();
+        }
         else if (selected == R.id.action_share) {
             ExternalIntentUtils.shareLibrary();
         }
@@ -266,6 +272,10 @@ public class ScreenLayer extends Layer {
 
     public View getFullContainer() {
         return fullContainer;
+    }
+
+    public void showProgress(boolean isVisible){
+        progressBar.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
     }
 
     //endregion
@@ -301,7 +311,7 @@ public class ScreenLayer extends Layer {
             currentSizePosition = SizePosition.FULL;
             item.setIcon(R.drawable.ic_arrow_down_white_24dp);
 
-            viewLayoutParams.height = MATCH_PARENT;
+            viewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
             viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
             childLayoutParams.gravity = Gravity.TOP;
         }

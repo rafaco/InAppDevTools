@@ -42,6 +42,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class FileProviderUtils {
 
@@ -126,6 +127,8 @@ public class FileProviderUtils {
 
     public static void addPlainText(Intent intent, String text) {
         //intent.setType("text/html");
+        /*ArrayList<CharSequence> charSequences = new ArrayList<>();
+        charSequences.add(text);*/
         intent.putExtra(Intent.EXTRA_TEXT, text);
     }
 
@@ -210,4 +213,17 @@ public class FileProviderUtils {
     }
 
     //endregion
+
+    public static void deleteAll(){
+        File file = new File(FileCreator.getIadtFolder());
+        deleteRecursive(file);
+    }
+
+    private static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
 }

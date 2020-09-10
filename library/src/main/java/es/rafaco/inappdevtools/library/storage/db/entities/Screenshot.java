@@ -43,6 +43,9 @@ public class Screenshot implements Serializable {
     @ColumnInfo(name = "sessionId")
     private long sessionId;
 
+    @ColumnInfo(name = "crashId")
+    private long crashId;
+
     @ColumnInfo(name = "path")
     private String path;
 
@@ -71,6 +74,14 @@ public class Screenshot implements Serializable {
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public long getCrashId() {
+        return crashId;
+    }
+
+    public void setCrashId(long crashId) {
+        this.crashId = crashId;
     }
 
     public String getPath() {

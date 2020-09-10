@@ -33,7 +33,6 @@ import android.util.Log;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
@@ -197,13 +196,7 @@ public class AppUtils {
     }
 
     public static boolean isForegroundImportance(Context context){
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
-        if (runningAppProcesses != null) {
-            int importance = runningAppProcesses.get(0).importance;
-            return importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
-        }
-        return false;
+        return RunningProcessesUtils.isAppForeground();
     }
 
     public static boolean isLaunchedFromHistory(Intent intent){

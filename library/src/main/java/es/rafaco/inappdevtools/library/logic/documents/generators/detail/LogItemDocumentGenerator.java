@@ -21,21 +21,14 @@ package es.rafaco.inappdevtools.library.logic.documents.generators.detail;
 
 import android.content.Context;
 
-import java.util.List;
-
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
-import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
-import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogViewHolder;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -82,7 +75,7 @@ public class LogItemDocumentGenerator extends AbstractDocumentGenerator {
 
 
     private void extractRawData() {
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        FriendlyDao dao = IadtDatabase.get().friendlyDao();
         rawData = dao.findById(logId);
     }
 

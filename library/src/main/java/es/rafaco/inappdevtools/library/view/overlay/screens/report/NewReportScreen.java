@@ -36,24 +36,23 @@ import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.reports.ReportFormatter;
 import es.rafaco.inappdevtools.library.logic.reports.ReportSenderType;
 import es.rafaco.inappdevtools.library.logic.reports.ReportType;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.detail.SessionDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Report;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.EditTextData;
-import es.rafaco.inappdevtools.library.view.components.flex.OverviewData;
-import es.rafaco.inappdevtools.library.view.components.flex.SelectorData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.items.EditTextData;
+import es.rafaco.inappdevtools.library.view.components.items.OverviewData;
+import es.rafaco.inappdevtools.library.view.components.items.SelectorData;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
-
 
 public class NewReportScreen extends AbstractFlexibleScreen {
 
@@ -107,8 +106,6 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         updateAdapter(getSenderOptionsData());
     }
 
-
-
     private CardData getOverview() {
         CardData card = new CardData(ReportFormatter.getTitle(report),
                 ReportFormatter.getAttachmentDescription(report),
@@ -127,13 +124,11 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         return card;
     }
 
-
-
     private List<Object> getIndexData() {
         List<Object> data = new ArrayList<>();
         data.add("");
-        OverviewData header = new OverviewData("Did you reproduce the issue? When?",
-                "Select the session when it happen to include all data available as context to help our developers",
+        OverviewData header = new OverviewData("Did you reproduce the issue?",
+                "Select a crash or the session when it happen, we will include collected data to help our developers",
                         R.string.gmd_attach_file,
                         R.color.rally_white);
         data.add(header);
@@ -155,7 +150,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         currentSessionCard.setTitleColor(R.color.rally_blue);
         data.add(currentSessionCard);
 
-        final Crash lastCrash = IadtController.getDatabase().crashDao().getLast();
+        final Crash lastCrash = IadtDatabase.get().crashDao().getLast();
         CardData crashCard;
         if (lastCrash==null){
             //TODO: use real pending, excluding reported ones
@@ -168,7 +163,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         }
         else {
             crashCard = new CardData("Last crashed session",
-                    "Report session " + lastCrash.getSessionId() + " crashed "
+                    "Session " + lastCrash.getSessionId() + " crashed "
                             + Humanizer.getElapsedTimeLowered(lastCrash.getDate()) + "."
                             + Humanizer.newLine()
                             + Humanizer.truncate(lastCrash.getMessage(), 90),
@@ -187,11 +182,10 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         }
         data.add(crashCard);
 
-        int sessions = IadtController.getDatabase().sessionDao().getAll().size();
-        int crashes = IadtController.getDatabase().crashDao().getAll().size();
+        int sessions = IadtDatabase.get().sessionDao().getAll().size();
+        int crashes = IadtDatabase.get().crashDao().getAll().size();
         CardData sessionCard = new CardData("Select other session",
-                "Select a previous session to include\n"
-                + sessions + " sessions available (" + crashes + " with crash)",
+                sessions + " sessions available (" + crashes + " with crash)",
                 R.string.gmd_history,
                 new Runnable() {
                     @Override
@@ -246,7 +240,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         data.add(overview);
         data.add("Choose a crash:");
 
-        List<Crash> crashes = IadtController.getDatabase().crashDao().getAll();
+        List<Crash> crashes = IadtDatabase.get().crashDao().getAll();
         if (crashes.size()==0){
             CardData cardData = new CardData("No crash detected",
                     new Runnable() {
@@ -330,7 +324,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
         data.add("//TODO: WORK IN PROGRESS");
         data.add("");
         data.add("Choose screenshots and press continue:");
-        data.add(new RunButton("Continue",
+        data.add(new ButtonFlexData("Continue",
                 new Runnable() {
                     @Override
                     public void run() {
@@ -340,7 +334,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                 }));
         data.add("");
 
-        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        ScreenshotDao screenshotDao = IadtDatabase.get().screenshotDao();
         final List<Screenshot> screenshots = screenshotDao.getAll();
 
         data.addAll(screenshots);
@@ -451,8 +445,9 @@ public class NewReportScreen extends AbstractFlexibleScreen {
 
         data.add("");
 
-        List<RunButton> reportButtons = new ArrayList<>();
-        reportButtons.add(new RunButton("Save",
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(new ButtonFlexData("Save",
                 R.drawable.ic_save_white_24dp,
                 new Runnable() {
                     @Override
@@ -460,7 +455,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                         onSaveReport();
                     }
                 }));
-        reportButtons.add(new RunButton("Next",
+        linearGroupData.add(new ButtonFlexData("Next",
                 R.drawable.ic_send_white_24dp,
                 R.color.rally_green,
                 new Runnable() {
@@ -469,7 +464,7 @@ public class NewReportScreen extends AbstractFlexibleScreen {
                         onContentFormNext();
                     }
                 }));
-        data.add(new ButtonGroupData(reportButtons));
+        data.add(linearGroupData);
 
         return data;
     }
@@ -548,9 +543,9 @@ public class NewReportScreen extends AbstractFlexibleScreen {
     private void saveReport() {
         report.setDate(DateUtils.getLong());
         if (report.getUid()>0){
-            IadtController.getDatabase().reportDao().update(report);
+            IadtDatabase.get().reportDao().update(report);
         }else{
-            long id = IadtController.getDatabase().reportDao().insert(report);
+            long id = IadtDatabase.get().reportDao().insert(report);
             report.setUid(id);
         }
     }

@@ -21,6 +21,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -36,11 +37,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        style="@style/IadtCard.Medium">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,42 +52,34 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/ic_arrow_right_white_24dp"
+                android:backgroundTint="@color/iadt_primary"
                 android:layout_centerVertical="true" />
 
             <LinearLayout
                 android:id="@+id/details"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/card_margin"
+                android:layout_marginHorizontal="@dimen/card_padding_horizontal"
+                android:layout_marginVertical="@dimen/card_padding_vertical"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/icon"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/exception"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextCondensedMedium"/>
-
-                <TextView
-                    android:id="@+id/message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextCondensedMedium" />
-
-                <TextView
-                    android:id="@+id/where"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_yellow"
-                    style="@style/TextCondensedMedium" />
+                    style="@style/TextCondensed.Medium"
+                    tools:text="Where"/>
 
                 <TextView
-                    android:id="@+id/where2"
+                    android:id="@+id/subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/rally_blue"
-                    style="@style/TextCondensedSmall"/>
+                    style="@style/TextCondensed.Small"
+                    tools:text="Where2"/>
 
                 <LinearLayout
                     android:layout_height="wrap_content"
@@ -99,25 +91,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_corner"
-                        android:textColor="@color/rally_gray"
+                        android:textColor="@color/iadt_text_low"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="10dp"
-                        style="@style/TextCondensedSmall" />
+                        style="@style/TextCondensed.Small"
+                        tools:text="Your App"/>
 
                     <TextView
-                        android:id="@+id/where3"
+                        android:id="@+id/link"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAlignment="textEnd"
-                        android:layout_gravity="end"
+                        android:layout_gravity="end|bottom"
                         android:gravity="end"
-                        android:textColor="@color/rally_gray"
-                        style="@style/TextCondensedMedium" />
+                        android:textColor="@color/iadt_text_low"
+                        style="@style/TextCondensed.Medium"
+                        tools:text="SomeClass.java:345"/>
 
                 </LinearLayout>
-
             </LinearLayout>
-
         </RelativeLayout>
     </es.rafaco.compat.CardView>
 </LinearLayout>

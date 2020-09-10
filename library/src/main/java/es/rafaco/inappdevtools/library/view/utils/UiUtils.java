@@ -20,9 +20,11 @@
 package es.rafaco.inappdevtools.library.view.utils;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -35,15 +37,18 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 //#ifdef ANDROIDX
 //@import androidx.cardview.widget.CardView;
 //@import androidx.core.content.ContextCompat;
+//@import androidx.appcompat.view.ContextThemeWrapper;
 //@import androidx.annotation.RequiresApi;
 //#else
 import android.support.v4.content.ContextCompat;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.annotation.RequiresApi;
 //#endif
@@ -60,6 +65,15 @@ public class UiUtils {
     public static void setAppIconAsBackground(ImageView imageView){
         Drawable d = getAppIconDrawable();
         imageView.setImageDrawable(d);
+    }
+
+    public static void setAppIconAsBackground(es.rafaco.compat.CardView cardView){
+        Drawable d = getAppIconDrawable();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundModern(cardView, d);
+        }else{
+            setBackgroundLegacy(cardView, d);
+        }
     }
 
     public static Drawable getAppIconDrawable() {
@@ -148,21 +162,21 @@ public class UiUtils {
     }
 
     public static void setCardViewClickable(CardView cardView, boolean isClickable){
-        Context context = cardView.getContext();
+        ContextWrapper ctw = new ContextThemeWrapper(cardView.getContext(), R.style.LibTheme);
         Drawable drawable;
         if(isClickable) {
             TypedValue outValue = new TypedValue();
-            context.getTheme().resolveAttribute(
-                    android.R.attr.selectableItemBackground, outValue, true);
-
-            drawable = getDrawable(outValue.resourceId);
+            ctw.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+            int backgroundResource = outValue.resourceId;
+            drawable = getDrawable(backgroundResource);
         }
         else{
             drawable = null;
         }
         cardView.setClickable(isClickable);
         cardView.setFocusable(isClickable);
-        cardView.setActivated(isClickable);
+        //cardView.setActivated(isClickable);
         cardView.setForeground(drawable);
     }
 
@@ -207,9 +221,12 @@ public class UiUtils {
         return findParentById(parent, targetId);
     }
 
-    public static int dpToPx(Context context, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                context.getResources().getDisplayMetrics());
+    public static float dpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    public static float pxToDp(Context context, float px) {
+        return px / context.getResources().getDisplayMetrics().density;
     }
 
     public static Drawable getDrawable(int icon) {
@@ -218,5 +235,21 @@ public class UiUtils {
         } else {
             return getContext().getResources().getDrawable(icon);
         }
+    }
+
+    public static void setupIconButton(ImageButton button, int iconId, View.OnClickListener listener) {
+
+        int backgroundColor = ContextCompat.getColor(getContext(), R.color.iadt_surface_top);
+        button.getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
+        //UiUtils.setBackground(button, ContextCompat.getDrawable(getContext(), R.drawable.shape_dialog));
+        //UiUtils.setStrokeToDrawable(button.getContext(), 1, R.color.rally_white, button.getBackground());
+
+        if (iconId>0){
+            Drawable icon = button.getContext().getResources().getDrawable(iconId);
+            int accentColor = ContextCompat.getColor(getContext(), R.color.iadt_primary);
+            icon.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
+            button.setImageDrawable(icon);
+        }
+        button.setOnClickListener(listener);
     }
 }

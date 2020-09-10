@@ -62,7 +62,7 @@ public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " from Session " + sessionId;
     }
 
     @Override
@@ -119,13 +119,22 @@ public class OSInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     protected DocumentSectionData getAndroidGroup(EasyDeviceMod deviceHelper) {
-        return new DocumentSectionData.Builder("Android OS_INFO")
+        DocumentSectionData.Builder builder = new DocumentSectionData.Builder("Operative System")
                 .setIcon(R.string.gmd_android)
                 .setOverview(getAndroidVersionFull())
-                .add("Version", getAndroidVersionFull())
-                .add("SDK version",  getVersionCodeName()+ " (" + Build.VERSION.SDK_INT + ")")
                 .add("isRooted", deviceHelper.isDeviceRooted())
-                    .build();
+                .add("Android version", getAndroidVersionFull())
+                .add("API version", getVersionCodeName() + " (" + Build.VERSION.SDK_INT + ")");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.add("Preview version", Build.VERSION.PREVIEW_SDK_INT)
+                    .add("Security patch", Build.VERSION.SECURITY_PATCH)
+                    .add("Base", Build.VERSION.BASE_OS);
+        }
+        builder.add("Incremental", Build.VERSION.INCREMENTAL)
+                .add("Compilation Number", Build.DISPLAY)
+                .add("Fingerprint", Build.FINGERPRINT);
+        return builder.build();
     }
 
     private String getAndroidVersionFull() {

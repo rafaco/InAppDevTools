@@ -24,7 +24,7 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Sourcetrace;
 
 public class FillTraceNavigationHeaderAsyncTask extends AsyncTask<Long, String, String> {
@@ -45,10 +45,10 @@ public class FillTraceNavigationHeaderAsyncTask extends AsyncTask<Long, String, 
     protected String doInBackground(Long... longs) {
         long traceId = screen.getParams().id;
 
-        Sourcetrace currentTrace = IadtController.getDatabase().sourcetraceDao().findById(traceId);
+        Sourcetrace currentTrace = IadtDatabase.get().sourcetraceDao().findById(traceId);
 
         //Filter group traces and detect currentPosition
-        List<Sourcetrace> allTraces = IadtController.getDatabase().sourcetraceDao()
+        List<Sourcetrace> allTraces = IadtDatabase.get().sourcetraceDao()
                 .filterCrash(currentTrace.getLinkedId());
         for (int i = allTraces.size() - 1; i>=0; i--){
             Sourcetrace trace = allTraces.get(i);

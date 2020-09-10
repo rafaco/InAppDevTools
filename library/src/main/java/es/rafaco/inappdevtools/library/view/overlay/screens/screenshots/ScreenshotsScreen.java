@@ -34,16 +34,18 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
 import es.rafaco.inappdevtools.library.storage.db.entities.ScreenshotDao;
 import es.rafaco.inappdevtools.library.storage.files.utils.FileProviderUtils;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class ScreenshotsScreen extends AbstractFlexibleScreen {
@@ -67,7 +69,7 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
 
         data.add("Take screenshots of your running activities, we will auto take a shot of your crashes. You can include them in your reports or share it directly.");
 
-        RunButton take = new RunButton( "Take Screenshot",
+        ButtonFlexData take = new ButtonFlexData( "Take Screenshot",
                 R.drawable.ic_add_a_photo_white_24dp,
                 new Runnable() {
                     @Override
@@ -76,50 +78,62 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
                     }
                 });
 
-        RunButton filter = new RunButton( "Filter by session",
+        ButtonFlexData filter = new ButtonFlexData( "Filter by session",
                 R.drawable.ic_history_white_24dp,
                 new Runnable() {
                     @Override
                     public void run() {
-                        Iadt.showMessage("Coming soon");
+                        Iadt.buildMessage("Coming soon")
+                                .isInfo().fire();
                     }
                 });
-        List<RunButton> buttons = new ArrayList<>();
-        buttons.add(take);
-        buttons.add(filter);
-        data.add(new ButtonGroupData(buttons));
+
+        LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
+        linearGroupData.setHorizontal(true);
+        linearGroupData.add(take);
+        linearGroupData.add(filter);
+        data.add(linearGroupData);
 
         data.add("");
 
-        ScreenshotDao screenshotDao = DevToolsDatabase.getInstance().screenshotDao();
+        ScreenshotDao screenshotDao = IadtDatabase.get().screenshotDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         final List<Screenshot> screenshots = screenshotDao.getAll();
         for (int i = 0; i<screenshots.size(); i++) {
             final Screenshot screenshot = screenshots.get(i);
 
             String title = String.format("Screenshot %s", screenshot.getUid());
-            String content = "Activity: " + screenshot.getActivityName()
+            if (screenshot.getCrashId()>0){
+                title +=  " (Crash)";
+            }
+
+            String content = screenshot.getActivityName()
+                    + " " + Humanizer.getElapsedTimeLowered(screenshot.getDate())
                     + Humanizer.newLine()
-                    + "Session: " + screenshot.getSessionId()
-                    + Humanizer.newLine()
-                    + "Elapsed: " + Humanizer.getElapsedTime(screenshot.getDate());
+                    + "Session " + screenshot.getSessionId() + Humanizer.newLine();
+
+            if (screenshot.getCrashId()>0){
+                content += "Crash " + screenshot.getCrashId() + Humanizer.newLine();
+            }
 
             CardData cardData = new CardData(title,
                     new Runnable() {
                         @Override
                         public void run() {
-                            onCardClick(screenshot);
+                            OverlayService.performNavigation(ZoomScreen.class,
+                                    screenshot.getUid() + "");
+                            //onCardClick(screenshot);
                         }
                     });
             cardData.setContent(content);
             cardData.setImagePath(screenshot.getPath());
-            cardData.setNavIcon(R.string.gmd_open_in_new);
+            cardData.setNavIcon(R.string.gmd_zoom_out_map);
 
             if (screenshot.getSessionId() == currentSession) {
                 cardData.setBgColor(R.color.rally_blue_dark);
             }
-            else if (screenshot.getPath().contains("crash_")){
-                cardData.setBgColor(R.color.rally_orange_dark);
+            else if (screenshot.getCrashId()>0){
+                cardData.setBgColor(R.color.rally_orange_alpha);
             }
             else {
                 cardData.setBgColor(R.color.rally_dark_green);
@@ -145,8 +159,8 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
     private void onCardClick(final Screenshot screenshot) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getView().getContext())
                 .setTitle("What do you want to do?")
-                .setMessage("To apply your changes safely, we currently need to restart your app. You can also discard them by now.")
-                .setCancelable(false)
+                //.setMessage("To apply your changes safely, we currently need to restart your app. You can also discard them by now.")
+                .setCancelable(true)
                 .setPositiveButton("VIEW",
                         new DialogInterface.OnClickListener(){
                             @Override

@@ -21,12 +21,19 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 import android.content.Context;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
 import es.rafaco.inappdevtools.library.storage.files.utils.JsonHelper;
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
 public class ConfigManager {
 
@@ -66,8 +73,8 @@ public class ConfigManager {
     }
 
     public boolean getBoolean(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getBoolean(config.getKey(), false);
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getBoolean(config.getKey(), false);
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getBoolean(config.getKey());
@@ -78,13 +85,13 @@ public class ConfigManager {
     }
 
     public void setBoolean(BuildConfigField config, boolean value) {
-        DevToolsPrefs.setBoolean(config.getKey(), value);
+        IadtPrefs.setBoolean(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public String getString(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getString(config.getKey(), "");
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getString(config.getKey(), "");
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getString(config.getKey());
@@ -95,13 +102,13 @@ public class ConfigManager {
     }
 
     public void setString(BuildConfigField config, String value) {
-        DevToolsPrefs.setString(config.getKey(), value);
+        IadtPrefs.setString(config.getKey(), value);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 
     public long getLong(BuildConfigField config) {
-        if (DevToolsPrefs.contains(config.getKey())){
-            return DevToolsPrefs.getLong(config.getKey(), 0);
+        if (IadtPrefs.contains(config.getKey())){
+            return IadtPrefs.getLong(config.getKey(), 0);
         }
         else if (compileConfig.contains(config.getKey())){
             return compileConfig.getLong(config.getKey());
@@ -112,7 +119,36 @@ public class ConfigManager {
     }
 
     public void setLong(BuildConfigField config, long value) {
-        DevToolsPrefs.setLong(config.getKey(), value);
+        IadtPrefs.setLong(config.getKey(), value);
+        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
+    }
+
+    public Map getMap(BuildConfigField config) {
+        if (IadtPrefs.contains(config.getKey())){
+            //TODO: not tested
+            String stringMap = IadtPrefs.getString(config.getKey(), "");
+            Map<String, Object> stringObjectMap = new HashMap<String, Object>();
+            try {
+                JSONObject jsonObject = new JSONObject(stringMap);
+                stringObjectMap = JsonHelper.toMap(jsonObject);
+            } catch (JSONException e) {
+                FriendlyLog.logException("Error getting map from configuration", e);
+            }
+            return stringObjectMap;
+        }
+        else if (compileConfig.contains(config.getKey())){
+            return compileConfig.getMap(config.getKey());
+        }
+        else{
+            return new HashMap<String, Object>();
+        }
+    }
+
+    public void setMap(BuildConfigField config, Map value) {
+        //TODO: not tested and it only seems to work with Map<String, String>
+        JSONObject jsonObject = new JSONObject(value);
+        String stringMap = jsonObject.toString();
+        IadtPrefs.setString(config.getKey(), stringMap);
         IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
     }
 }

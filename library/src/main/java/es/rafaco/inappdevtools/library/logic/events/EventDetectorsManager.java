@@ -28,9 +28,11 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.crash.OldCrashInterceptor;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ErrorAnrEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.app.ForegroundEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.app.SessionEventDetector;
+import es.rafaco.inappdevtools.library.logic.events.detectors.app.AppEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.AirplaneModeChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.ConnectivityChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.device.DeviceButtonsEventDetector;
@@ -39,13 +41,10 @@ import es.rafaco.inappdevtools.library.logic.events.detectors.doze.DozeEventDete
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.FragmentEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ProcessEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
-import es.rafaco.inappdevtools.library.logic.events.detectors.user.ActivityTouchEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.GestureEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ScreenChangeEventDetector;
 import es.rafaco.inappdevtools.library.logic.events.detectors.user.ShakeEventDetector;
-import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.utils.ClassHelper;
-import es.rafaco.inappdevtools.library.logic.events.detectors.crash.CrashHandler;
 
 public class EventDetectorsManager {
 
@@ -57,20 +56,19 @@ public class EventDetectorsManager {
         this.eventManager = eventManager;
         this.context = eventManager.getContext();
 
-        //TODO: Refactor into a detector
-        startCrashHandler();
+        //OldCrashInterceptor.initialise(context);
 
         initDetectors();
         startAll();
-
-        PandoraBridge.init();
     }
 
     private void initDetectors() {
-        // Session should be the first one, before Process
-        initDetector(SessionEventDetector.class);
+        // AppEventDetector should be the first one,
+        // then ProcessEventDetector and then the other ones.
+        initDetector(AppEventDetector.class);
         initDetector(ProcessEventDetector.class);
 
+        initDetector(ForegroundChangeEventDetector.class);
         initDetector(ForegroundEventDetector.class);
         initDetector(ActivityEventDetector.class);
         initDetector(FragmentEventDetector.class);
@@ -107,6 +105,9 @@ public class EventDetectorsManager {
     }
 
     private void stopAll() {
+        if (eventDetectors==null || eventDetectors.isEmpty()){
+            return;
+        }
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "EventDetector stopping all detectors");
         for (EventDetector eventDetector : eventDetectors) {
@@ -115,6 +116,9 @@ public class EventDetectorsManager {
     }
 
     public EventDetector get(Class<? extends EventDetector> className) {
+        if (eventDetectors == null)
+            return null;
+        
         for (EventDetector eventDetector : eventDetectors) {
             if (eventDetector.getClass().equals(className)){
                 return eventDetector;
@@ -126,19 +130,5 @@ public class EventDetectorsManager {
     public void destroy() {
         stopAll();
         eventDetectors = null;
-    }
-
-
-
-    //TODO: Refactor into an isolated watcher
-    private void startCrashHandler() {
-        Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
-        if (currentHandler != null && !currentHandler.getClass().isInstance(CrashHandler.class)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(context, currentHandler));
-            if (IadtController.get().isDebug())
-                Log.d(Iadt.TAG, "Exception handler added");
-        }else{
-            Log.w(Iadt.TAG, "Exception handler already attach on thread");
-        }
     }
 }

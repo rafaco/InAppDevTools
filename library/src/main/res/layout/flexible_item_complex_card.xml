@@ -20,6 +20,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_content"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -28,13 +29,12 @@
     <es.rafaco.compat.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="3dp">
+        style="@style/IadtCard.Top">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,6 +42,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/header_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -53,8 +54,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:textSize="24dp"
-                    android:layout_margin="4dp"/>
+                    android:textSize="@dimen/iadt_icon_font_size_m"
+                    android:layout_margin="4dp"
+                    android:textColor="@color/iadt_text_high"
+                    tools:text="C"/>
 
                 <TextView
                     android:id="@+id/title"
@@ -63,8 +66,10 @@
                     android:layout_toRightOf="@id/icon"
                     android:layout_centerVertical="true"
                     android:layout_margin="4dp"
-                    style="@style/TextCondensedBig" />
-
+                    android:textStyle="bold"
+                    style="@style/TextCondensed.Large"
+                    android:textColor="@color/iadt_text_high"
+                    tools:text="Title"/>
 
                 <ImageView
                     android:id="@+id/nav_icon"
@@ -72,7 +77,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_margin="4dp"/>
+                    android:layout_margin="4dp"
+                    android:textSize="@dimen/iadt_icon_font_size_m"
+                    android:textColor="@color/iadt_primary"/>
 
                 <TextView
                     android:id="@+id/overview"
@@ -82,9 +89,11 @@
                     android:layout_toRightOf="@id/title"
                     android:layout_centerVertical="true"
                     android:textAlignment="textEnd"
-                    android:layout_gravity="end"
+                    android:gravity="end"
                     android:layout_margin="4dp"
-                    style="@style/TextCondensedMedium"/>
+                    style="@style/TextCondensed.Large"
+                    android:textColor="@color/iadt_text_high"
+                    tools:text="Overview"/>
 
             </RelativeLayout>
 
@@ -98,23 +107,36 @@
                 <View
                     android:id="@+id/content_separator"
                     android:layout_marginTop="0dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
                     style="@style/horizontal_separator"/>
 
                 <TextView
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/card_margin"
-                    style="@style/TextCondensedMedium" />
+                    android:layout_margin="4dp"
+                    style="@style/TextCondensed.Medium"
+                    tools:text="Content, content and more content\nand a bit more"/>
 
             </LinearLayout>
 
             <View
+                android:id="@+id/internal_separator"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                style="@style/horizontal_separator"/>
+
+            <FrameLayout
+                android:id="@+id/internal_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
+
+            <View
                 android:id="@+id/button_separator"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
                 style="@style/horizontal_separator"/>
 
             <FrameLayout

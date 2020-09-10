@@ -22,17 +22,19 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.builds;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.RepoInfoScreen;
 
 public class BuildDetailScreen extends AbstractDocumentScreen {
 
@@ -45,7 +47,7 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Build Detail";
+        return "";
     }
 
     @Override
@@ -58,33 +60,43 @@ public class BuildDetailScreen extends AbstractDocumentScreen {
         return Long.parseLong(getParam());
     }
 
+    @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return BuildsScreen.class;
+    }
+
     protected long getRealBuildIdParam() {
         long sessionId = (long) getDocumentParam();
-        Build build = IadtController.getDatabase().buildDao().findBySessionId(sessionId);
+        Build build = IadtDatabase.get().buildDao().findBySessionId(sessionId);
         return build.getUid();
     }
 
     @Override
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getButtonGroupData());
-        objectList.add(2, "");
+        objectList.add(0, buildOverviewData(reportData));
+        objectList.add(getSecondaryButtonsList());
         return objectList;
     }
 
-
-    private ButtonGroupData getButtonGroupData() {
-        List<RunButton> buttons = new ArrayList<>();
-        buttons.add(new RunButton(
-                "Filter sessions",
-                R.drawable.ic_history_white_24dp,
-                R.color.rally_purple,
+    private LinearGroupFlexData getSecondaryButtonsList() {
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        composer.add("Repository status",
+                R.string.gmd_kitchen,
+                R.color.iadt_text_high,
+                new Runnable() {
+                    @Override
+                    public void run() {OverlayService.performNavigation(RepoInfoScreen.class, getDocumentParam() + "");
+                    }
+                });
+        composer.add("Sessions from this build",
+                R.string.gmd_timeline,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {OverlayService.performNavigation(SessionsScreen.class, buildId + "");
                     }
-                }));
-        return new ButtonGroupData(buttons);
+                });
+        return composer.compose();
     }
 }

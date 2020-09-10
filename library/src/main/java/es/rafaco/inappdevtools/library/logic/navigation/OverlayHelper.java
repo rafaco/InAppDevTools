@@ -22,12 +22,10 @@ package es.rafaco.inappdevtools.library.logic.navigation;
 import android.content.Context;
 import android.content.Intent;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
-import es.rafaco.inappdevtools.library.view.activities.IadtDialogActivity;
+import es.rafaco.inappdevtools.library.view.dialogs.WelcomeOverlayDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 
 public class OverlayHelper {
@@ -62,19 +60,7 @@ public class OverlayHelper {
                 return true;
         }
         else if (!PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)){
-            IadtDialogActivity.open(IadtDialogActivity.IntentAction.OVERLAY,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            showMain();
-                        }
-                    },
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            Iadt.showMessage(R.string.draw_other_app_permission_denied);
-                        }
-                    });
+            IadtController.get().getDialogManager().load(new WelcomeOverlayDialog());
             return true;
         }
         return false;

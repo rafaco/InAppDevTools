@@ -30,7 +30,7 @@ import android.support.annotation.StringRes;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -40,9 +40,10 @@ public class DocumentSectionData {
     private int icon;
     private String overview;
     private List<DocumentEntryData> entries;
+    private List<Object> internalData;
 
     //Extract to ComplexCardData
-    private List<RunButton> buttons;
+    private List<FlexData> buttons;
     private boolean isExpandable;
     private boolean isExpanded;
 
@@ -54,6 +55,7 @@ public class DocumentSectionData {
         this.entries = builder.entries;
         this.isExpandable = builder.isExpandable;
         this.isExpanded = builder.isExpanded;
+        this.internalData = builder.internalData;
     }
 
     public String getTitle() {
@@ -68,7 +70,7 @@ public class DocumentSectionData {
         return overview;
     }
 
-    public List<RunButton> getButtons() {
+    public List<FlexData> getButtons() {
         return buttons;
     }
 
@@ -104,6 +106,14 @@ public class DocumentSectionData {
         isExpanded = expanded;
     }
 
+    public List<Object> getInternalData() {
+        return internalData;
+    }
+
+    public void setInternalData(List<Object> internalData) {
+        this.internalData = internalData;
+    }
+
     public String entriesToString(){
         String result = "";
         for (DocumentEntryData entry : entries){
@@ -131,10 +141,11 @@ public class DocumentSectionData {
         private String name;
         private int icon;
         private String overview;
-        private List<RunButton> buttons;
+        private List<FlexData> buttons;
         private List<DocumentEntryData> entries;
         private boolean isExpandable = true;
         private boolean isExpanded;
+        private List<Object> internalData;
 
         public Builder() {
             this("");
@@ -156,7 +167,7 @@ public class DocumentSectionData {
             return this;
         }
 
-        public Builder addButton(RunButton button) {
+        public Builder addButton(FlexData button) {
             this.buttons.add(button);
             return this;
         }
@@ -220,6 +231,11 @@ public class DocumentSectionData {
 
         public Builder setExpanded(boolean isExpanded) {
             this.isExpanded = isExpanded;
+            return this;
+        }
+
+        public Builder setInternalData(List<Object> internalData) {
+            this.internalData = internalData;
             return this;
         }
 

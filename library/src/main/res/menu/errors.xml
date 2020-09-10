@@ -5,14 +5,14 @@
     <item
         android:id="@+id/action_simulate"
         android:title="Simulate error"
-        android:icon="@drawable/ic_bug_report_white_24dp"
+        android:icon="@drawable/ic_play_arrow_white_24dp"
         android:orderInCategory="200"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_send"
-        android:title="Send all"
-        android:icon="@drawable/ic_send_white_24dp"
+        android:title="Share"
+        android:icon="@drawable/ic_share_white_24dp"
         android:orderInCategory="300"
         app:showAsAction="always" />
 

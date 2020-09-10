@@ -112,16 +112,23 @@ dependencies {
 inappdevtools {
     //// Build flags (affect plugin behaviour)
     enabled = true
-    debug = false
+    debug = true
     //sourceInclusion = false
     //sourceInspection = false
     //enabledOnRelease = true
 
     //// Customization flags (runtime)
-    email = 'inappdevtools@gmail.com'
     notes = "This is a SAMPLE NOTE about this compilation:\n" +
             " - Developers can add any text here using Gradle configuration\n" +
             " - Useful to describe changes or to provide instructions"
+
+    teamName = "DemoTeam"
+    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
+    teamEmail = 'inappdevtools@gmail.com'
+    teamLinks = [ website   : "http://inappdevtools.org",
+                  repo      : "https://github.com/rafaco/InAppDevTools",
+                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
+                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
 
     // Feature switches (runtime)
     //overlayEnabled = false

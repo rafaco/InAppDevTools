@@ -21,15 +21,21 @@ package es.rafaco.inappdevtools.library.logic.config;
 
 public enum BuildConfigField {
 
-    EMAIL(),
     ENABLED(),
     ENABLED_ON_RELEASE(),
     DEBUG(),
     SOURCE_INCLUSION(),
     SOURCE_INSPECTION(),
+
+    NOTES(),
+    TEAM_NAME(),
+    TEAM_EMAIL(),
+    TEAM_DESC(),
+    TEAM_LINKS(),
+
     OVERLAY_ENABLED(),
     INVOCATION_BY_SHAKE(),
     INVOCATION_BY_ICON(),
-    INVOCATION_BY_NOTIFICATION(),
-    CALL_DEFAULT_CRASH_HANDLER();
+    CALL_DEFAULT_CRASH_HANDLER(),
+    INJECT_EVENTS_ON_LOGCAT(),
 }

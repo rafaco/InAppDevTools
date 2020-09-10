@@ -20,6 +20,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
     <es.rafaco.compat.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="2dp"
@@ -49,13 +50,15 @@
                 android:id="@+id/decorator"
                 android:layout_width="12dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:textAlignment="center"
                 android:paddingTop="2dp"
                 android:textColor="@color/iadt_background"
                 android:text=" "
                 android:textStyle="bold"
-                android:background="@color/iadt_background"/>
+                android:background="@color/iadt_background"
+                tools:text="W"
+                tools:background="@color/material_light_blue_200"/>
 
             <RelativeLayout
                 android:id="@+id/header"
@@ -89,7 +92,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
-                    style="@style/horizontal_separator"
+                    style="@style/horizontal_separator_log"
                     android:visibility="gone"/>
 
                 <LinearLayout
@@ -138,7 +141,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
-                    style="@style/horizontal_separator"
+                    style="@style/horizontal_separator_log"
                     android:visibility="gone"/>
 
                 <ImageView
@@ -174,6 +177,6 @@
         android:id="@+id/log_separator"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        style="@style/horizontal_separator"/>
+        style="@style/horizontal_separator_log"/>
 
 </LinearLayout>

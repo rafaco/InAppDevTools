@@ -24,20 +24,22 @@ import android.net.Uri;
 import android.util.Log;
 import java.io.File;
 
-import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 
 public class MediaScannerUtils {
 
     public static void scan(File file) {
+        scan(file, null);
+    }
+
+    public static void scan(File file, MediaScannerConnection.OnScanCompletedListener callback) {
         String[] paths =  new String[]{file.toString()};
-        scan(paths);
+        scan(paths, callback);
     }
 
     // Tell the media scanner about the new file so that it is immediately available to the user.
-    public static void scan(String[] paths) {
-        MediaScannerConnection.OnScanCompletedListener callback = null;
-        if (IadtController.get().isDebug()){
+    public static void scan(String[] paths, MediaScannerConnection.OnScanCompletedListener callback) {
+        if (IadtController.get().isDebug() && callback == null){
             callback = new MediaScannerConnection.OnScanCompletedListener() {
                 @Override
                 public void onScanCompleted(String path, Uri uri) {

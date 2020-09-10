@@ -120,6 +120,55 @@
     </es.rafaco.compat.CardView>
 
     <es.rafaco.compat.CardView
+        android:id="@+id/card_view_messages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="10dp"
+        card_view:cardBackgroundColor="@color/toastDev"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title_messages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/home_messages_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:textColor="@color/demo_white"/>
+
+            <TextView
+                android:id="@+id/detail_messages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_messages"
+                android:layout_toLeftOf="@id/image_messages"
+                android:text="@string/home_crash_desc"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/demo_white"/>
+
+            <ImageView
+                android:id="@+id/image_messages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_message_white_24dp"
+                android:tint="@color/demo_white"/>
+        </RelativeLayout>
+    </es.rafaco.compat.CardView>
+
+    <es.rafaco.compat.CardView
         android:id="@+id/card_view_browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

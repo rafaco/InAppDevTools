@@ -42,7 +42,6 @@ import android.support.v7.app.ActionBar;
 
 import es.rafaco.inappdevtools.demo.R;
 import es.rafaco.inappdevtools.library.Iadt;
-import es.rafaco.inappdevtools.library.storage.files.utils.ScreenshotUtils;
 
 public class CrashActivity extends AppCompatActivity {
 
@@ -77,7 +76,6 @@ public class CrashActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                ScreenshotUtils.takeAndSave(false);
                                 dialog.dismiss();
                             }
                         });
@@ -102,6 +100,14 @@ public class CrashActivity extends AppCompatActivity {
                 startCountDown();
             }
         });
+
+        // Dialog bouncing playground
+        /*customButton.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBackPressed();
+            }
+        }, 2000);*/
     }
 
     private void startCountDown() {

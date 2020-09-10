@@ -189,7 +189,8 @@ public class PermissionActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     onStoragePermissionGranted();
                 } else {
-                    Iadt.showMessage("Storage permission denied, operation cancelled");
+                    Iadt.buildMessage("Storage permission denied, operation cancelled")
+                            .isError().fire();
                     finish();
                 }
                 break;

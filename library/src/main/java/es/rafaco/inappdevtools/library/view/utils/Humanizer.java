@@ -22,8 +22,12 @@ package es.rafaco.inappdevtools.library.view.utils;
 import android.text.TextUtils;
 
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 
@@ -71,8 +75,29 @@ public class Humanizer {
     }
 
     public static String truncate(String text, int maxLength) {
-        if (!TextUtils.isEmpty(text) && text.length()>3-1 && text.length()>maxLength){
-            return text.substring(0, maxLength-3-1) + "...";
+        return truncate(text, maxLength, "...");
+    }
+    public static String truncate(String text, int maxLength, String tail) {
+        int tailLength = tail.length();
+        if (!TextUtils.isEmpty(text) && text.length()>tailLength-1 && text.length()>maxLength){
+            return text.substring(0, maxLength-tailLength-1) + tail;
+        }
+        return text;
+    }
+
+    public static String truncateLines(String text, int maxLines, boolean addTailInfo) {
+        if (!TextUtils.isEmpty(text)){
+            String[] lines = text.split(newLine());
+            int lineCount = lines.length;
+            if (lineCount>maxLines){
+                String[] truncatedLines = Arrays.copyOfRange(lines, 0, maxLines);
+                int truncatedCount = lineCount - truncatedLines.length;
+                String result = TextUtils.join(newLine(), truncatedLines);
+                if (addTailInfo){
+                    result += newLine() + "... (Truncated " + truncatedCount + " more lines)";
+                }
+                return result;
+            }
         }
         return text;
     }
@@ -109,6 +134,10 @@ public class Humanizer {
     //endregion
 
     //region [ MULTILINE TEXT ]
+
+    public static String emptyString() {
+        return "";
+    }
 
     public static String newLine(){
         return System.getProperty("line.separator");
@@ -318,6 +347,36 @@ public class Humanizer {
                 sb.append(separator);
         }
         return sb.toString();
+    }
+
+    public static String plural(int count, String singularName){
+        boolean isSingular = count == 1;
+        if (isSingular)
+            return count + " " + singularName;
+
+        String[] esPluralSuffixes = {"s", "ss", "sh", "ch", "x", "z", "y"};
+        boolean isEsPlural = false;
+        for (String esPluralSuffix: esPluralSuffixes) {
+            if (singularName.endsWith(esPluralSuffix)) {
+                isEsPlural = true;
+                break;
+            }
+        }
+        if (singularName.endsWith("y")){
+            singularName = singularName.substring(0, singularName.length() - 1) + "i";
+        }
+        return count + " " + singularName + (isEsPlural ? "es" : "s");
+    }
+
+    public static String packageFromClass(Class<?> objectClass) {
+        return Humanizer.removeTail(objectClass.getCanonicalName(), "."
+                + objectClass.getSimpleName());
+    }
+
+    public static String signed(Number number) {
+        if (number == null) return "";
+        NumberFormat plusMinusNF = new DecimalFormat("+ #;- #");
+        return plusMinusNF.format(number);
     }
 }
 

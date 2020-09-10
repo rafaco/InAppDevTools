@@ -19,7 +19,9 @@
 
 package es.rafaco.inappdevtools.library.storage.files.utils;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Pair;
 import android.view.View;
 
@@ -30,11 +32,12 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 import es.rafaco.inappdevtools.library.IadtController;
-import es.rafaco.inappdevtools.library.logic.events.detectors.lifecycle.ActivityEventDetector;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
+import es.rafaco.inappdevtools.library.logic.session.ActivityTracker;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Screenshot;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 import es.rafaco.inappdevtools.library.view.utils.ViewHierarchyUtils;
 
 public class ScreenshotUtils {
@@ -53,35 +56,33 @@ public class ScreenshotUtils {
         String subfolder;
         String filename;
         if (isFromCrash){
-            long sessionId = DevToolsDatabase.getInstance().sessionDao().count();
+            long sessionId = getDb().sessionDao().count();
             subfolder = "session/" + sessionId;
-            long fileId = DevToolsDatabase.getInstance().crashDao().count();
+            long fileId = getDb().crashDao().count();
             filename = "crash_" + fileId + "_screenshot";
         }
         else{
-            long sessionId = DevToolsDatabase.getInstance().sessionDao().count();
+            long sessionId = getDb().sessionDao().count();
             subfolder = "session/" + sessionId;
-            long fileId = DevToolsDatabase.getInstance().screenshotDao().count() + 1L ;
+            long fileId = getDb().screenshotDao().count() + 1L ;
             filename = "screenshot_" + fileId;
         }
 
         return grabAndSaveFile(subfolder, filename);
     }
 
+    private static IadtDatabase getDb() {
+        return IadtDatabase.get();
+    }
+
     private static Screenshot grabAndSaveFile(String subfolder, String filename) {
 
-        String activityName = "";
-        ActivityEventDetector activityWatcher = IadtController.get().getEventManager()
-                .getActivityWatcher();
-        if (activityWatcher != null || activityWatcher.getCurrentActivity()!=null){
-            activityName = activityWatcher.getCurrentActivityName();
-        }
-
+        ActivityTracker activityTracker = IadtController.get().getActivityTracker();
         File imageFile = FileCreator.prepare(subfolder, filename + ".jpg");
 
         try {
             //Take with Falcon but save our way (more compression)
-            Bitmap bitmap = Falcon.takeScreenshotBitmap(activityWatcher.getCurrentActivity());
+            Bitmap bitmap = Falcon.takeScreenshotBitmap(activityTracker.getCurrent());
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 80;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
@@ -90,8 +91,55 @@ public class ScreenshotUtils {
 
             MediaScannerUtils.scan(imageFile);
 
-            return fillDatabaseObject(activityName, imageFile.getAbsolutePath());
+            return fillDatabaseObject(activityTracker.getCurrentName(), imageFile.getAbsolutePath());
 
+        } catch (Exception e) {
+            if (IadtController.get().isDebug()){
+                // Several error may come out with file handling or DOM
+                FriendlyLog.logException("Exception", e);
+            }
+        }
+        return null;
+    }
+
+    public static Screenshot takeAndSaveOverlay() {
+        long sessionId = getDb().sessionDao().count();
+        String subfolder = "session/" + sessionId;
+        long fileId = getDb().screenshotDao().count() + 1L ;
+        String filename = "screen_" + fileId;
+
+        Screenshot screenshot = grabAndSaveOverlay(subfolder, filename);
+        saveDatabaseEntry(screenshot);
+        return screenshot;
+    }
+
+    private static Screenshot grabAndSaveOverlay(String subfolder, String filename) {
+        Pair<String, View> selectedRootView = ViewHierarchyUtils.getLayerRootView(ScreenLayer.class);
+        if (selectedRootView == null){
+            return null;
+        }
+
+        String selectedName = (String) selectedRootView.second.getTag();
+        View selectedView = selectedRootView.second;
+
+        String screenName = IadtController.get().getNavigationManager()
+                .getCurrent().getStringClassName();
+
+        try {
+            Bitmap bitmap = Bitmap.createBitmap(selectedView.getWidth(), selectedView.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(bitmap);
+            selectedView.draw(c);
+
+            File imageFile = FileCreator.prepare(subfolder, filename + ".png");
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 0 ;/* ignored for PNG */
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            MediaScannerUtils.scan(imageFile);
+
+            return fillDatabaseObject(screenName, imageFile.getAbsolutePath());
         } catch (Exception e) {
             // Several error may come out with file handling or DOM
             FriendlyLog.logException("Exception", e);
@@ -99,9 +147,39 @@ public class ScreenshotUtils {
         return null;
     }
 
+    public static Bitmap getBitmap(boolean fullSize){
+        Activity currentActivity = IadtController.get().getActivityTracker().getCurrent();
+        View targetView = currentActivity.getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+        Bitmap bitmap = null;
+        try {
+            if (fullSize){
+                bitmap = getBitmapFromView(targetView);
+                //TODO: Falcon grab our OverlayUI also
+                //bitmap = Falcon.takeScreenshotBitmap(currentActivity);
+            }
+            else{
+                bitmap = getThumbnailFromView(targetView);
+            }
+        }
+        catch (Exception e) {
+            if (IadtController.get().isDebug()){
+                FriendlyLog.logException("Exception on getBitmap()", e);
+            }
+        }
+        return bitmap;
+    }
+
+    public static Bitmap getThumbnailFromView(View view){
+        int width = 300;
+        int height = view.getHeight()*width/view.getWidth();
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createScaledBitmap(view.getDrawingCache(), width, height, true);
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
     public static Bitmap getBitmapFromView(View view){
         view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
         Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
         view.setDrawingCacheEnabled(false);
         return bitmap;
@@ -124,7 +202,7 @@ public class ScreenshotUtils {
                     new Runnable() {
                         @Override
                         public void run() {
-                            IadtController.getDatabase().screenshotDao().insert(screenshot);
+                            IadtDatabase.get().screenshotDao().insert(screenshot);
                         }
                     });
         }

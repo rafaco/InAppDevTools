@@ -21,7 +21,7 @@ package es.rafaco.inappdevtools.library.logic.log.filter;
 
 import com.google.gson.Gson;
 
-import es.rafaco.inappdevtools.library.storage.prefs.DevToolsPrefs;
+import es.rafaco.inappdevtools.library.storage.prefs.IadtPrefs;
 
 public class LogFilterStore {
 
@@ -29,7 +29,7 @@ public class LogFilterStore {
 
     public static LogUiFilter get(){
         Gson gson = new Gson();
-        String string = DevToolsPrefs.getString(PREF_VALUE_KEY, null);
+        String string = IadtPrefs.getString(PREF_VALUE_KEY, null);
         if (string == null){
             return null;
         }
@@ -39,6 +39,6 @@ public class LogFilterStore {
     public static void store(LogUiFilter filter){
         Gson gson = new Gson();
         String json = gson.toJson(filter);
-        DevToolsPrefs.setString(PREF_VALUE_KEY, json);
+        IadtPrefs.setString(PREF_VALUE_KEY, json);
     }
 }

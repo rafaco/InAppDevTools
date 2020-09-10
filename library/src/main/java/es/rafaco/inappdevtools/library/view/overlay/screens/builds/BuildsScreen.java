@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.builds;
 
+import android.os.AsyncTask;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -30,19 +31,21 @@ import java.util.List;
 import android.support.v7.widget.RecyclerView;
 //#endif
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfoDocumentGenerator;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Build;
-import es.rafaco.inappdevtools.library.view.components.flex.CardData;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleAdapter;
+import es.rafaco.inappdevtools.library.view.components.cards.CardData;
+import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 
 public class BuildsScreen extends Screen {
+
+    private AsyncTask<Long, String, List<Object>> currentTask;
 
     public BuildsScreen(ScreenManager manager) {
         super(manager);
@@ -63,14 +66,35 @@ public class BuildsScreen extends Screen {
 
     @Override
     protected void onStart(ViewGroup view) {
-        List<?> data = initData();
-        initAdapter((List<Object>) data);
+        showProgress(true);
+
+        if (currentTask != null){
+            currentTask.cancel(true);
+        }
+        currentTask = new AsyncTask<Long, String, List<Object>>(){
+            @Override
+            protected List<Object> doInBackground(Long... objects) {
+                List<Object> data = initData();
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(final List<Object> data) {
+                super.onPostExecute(data);
+                if (!currentTask.isCancelled()){
+                    initAdapter((List<Object>) data);
+                    showProgress(false);
+                }
+                currentTask = null;
+            }
+        };
+        currentTask.execute();
     }
 
-    private List<CardData> initData() {
-        List<Build> builds = IadtController.getDatabase().buildDao().getAll();
+    private List<Object> initData() {
+        List<Build> builds = IadtDatabase.get().buildDao().getAll();
 
-        List<CardData> cards = new ArrayList<>();
+        List<Object> cards = new ArrayList<>();
         for (int i = 0; i < builds.size(); i++) {
             final Build build = builds.get(i);
             boolean isCurrent = (i==0);
@@ -95,14 +119,14 @@ public class BuildsScreen extends Screen {
     }
 
     private void initAdapter(List<Object> data) {
-        FlexibleAdapter adapter = new FlexibleAdapter(3, data);
+        FlexAdapter adapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = bodyView.findViewById(R.id.flexible);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onStop() {
-        //Nothing needed
+        showProgress(false);
     }
 
     @Override

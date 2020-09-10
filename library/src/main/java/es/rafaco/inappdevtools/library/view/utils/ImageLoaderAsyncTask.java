@@ -30,10 +30,16 @@ import java.io.File;
 public class ImageLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
     private final ImageView imageView;
+    private final Runnable callback;
 
     public ImageLoaderAsyncTask(ImageView view) {
+        this(view, null);
+    }
+
+    public ImageLoaderAsyncTask(ImageView view, Runnable callback) {
         super();
         imageView = view;
+        this.callback = callback;
     }
 
     @Override
@@ -78,6 +84,9 @@ public class ImageLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap result){
         if (result != null){
             imageView.setImageBitmap(result);
+            if (callback!=null){
+                callback.run();
+            }
             imageView.requestLayout();
         }
     }

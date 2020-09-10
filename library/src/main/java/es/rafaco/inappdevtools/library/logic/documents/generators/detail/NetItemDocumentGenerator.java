@@ -25,13 +25,13 @@ import android.util.Pair;
 
 import java.util.List;
 
-import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetContent;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetFormatter;
@@ -47,7 +47,7 @@ public class NetItemDocumentGenerator extends AbstractDocumentGenerator {
     public NetItemDocumentGenerator(Context context, DocumentType report, NetSummary param) {
         super(context, report, param);
         this.netSummary = param;
-        this.netContent = IadtController.getDatabase().netContentDao()
+        this.netContent = IadtDatabase.get().netContentDao()
                 .findByCompositeId(netSummary.sessionId, netSummary.pandoraId);
         this.formatter = new NetFormatter(netSummary);
     }

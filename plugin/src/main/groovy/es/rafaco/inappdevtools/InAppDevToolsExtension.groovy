@@ -22,8 +22,12 @@ package es.rafaco.inappdevtools
 class InAppDevToolsExtension {
 
     //User features fags
-    String email
     String notes
+
+    String teamName
+    String teamEmail
+    String teamDesc
+    Map teamLinks
 
     // Build flags (affect plugin)
     Boolean enabled = true
@@ -36,7 +40,6 @@ class InAppDevToolsExtension {
     Boolean overlayEnabled
     Boolean invocationByShake
     Boolean invocationByIcon
-    Boolean invocationByNotification
     Boolean callDefaultCrashHandler
     Boolean injectEventsOnLogcat
 }

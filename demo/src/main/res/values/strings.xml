@@ -12,6 +12,8 @@
 
     <string name="home_crash_title">Crash Handler</string>
     <string name="home_crash_desc">Try what will happen if your app crash</string>
+    <string name="home_messages_title">Internal messages</string>
+    <string name="home_messages_desc">Show colorful messages only for your internal users</string>
     <string name="home_browse_title">Dummy Activities</string>
     <string name="home_browse_desc">Browse some activities to generate data to inspect</string>
     <string name="home_help_title">Setup and Support</string>
@@ -22,5 +24,6 @@
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_crash">Crash Demo</string>
+    <string name="title_activity_messages">Messages Demo</string>
 
 </resources>

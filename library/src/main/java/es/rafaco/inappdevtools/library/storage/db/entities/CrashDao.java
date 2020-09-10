@@ -47,6 +47,9 @@ public interface CrashDao {
     @Query("SELECT * FROM crash ORDER BY uid DESC LIMIT 1")
     Crash getLast();
 
+    @Query("SELECT uid FROM crash ORDER BY uid DESC LIMIT 1")
+    long getLastId();
+
     @Query("SELECT COUNT(*) from crash")
     int count();
 

@@ -1,164 +1,268 @@
-# InAppDevTools ![Latest version](https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=version&style=flat-square)  [![Maturity](https://img.shields.io/badge/maturity-alpha-orange.svg?style=flat-square)](https://github.com/rafaco/InAppDevTools/commits)  [![Project Stats](https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif)](https://www.openhub.net/p/InAppDevTools)
-
-<!---[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/887) -->
-
+<!-- # InAppDevTools -->
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="75%">
 </p>
 
-**InAppDevTools is an open source library that enhances the internal compilations of any Android app development teams. It allows to report, inspect and debug your app from the same screen when it's running. No cable needed, our UI shows over your app.**
-
-- Auto log events. From basic reproduction steps to advanced entries (navigation, network requests, lifecycle events, crashes, ANRs, device events, user interactions...).
-- View crash details immediately with graphic stacktrace, causing source lines, previous logs and screenshot.
-- Inspect your standard logs, view layout, source code (original and generated) and storage (db, SharedPrefs and Files).
-- Modify your app behaviour on runtime editing values at your view layout, db or SharedPrefs.
-- Get exclusive info about your running app (processes, task, threads, services...), your build (user, host, remote repo, local changes...), your app, the device and his OS.
-- Reports crashes or issues directly to developers, including a zip with logs, screenshots and other info.
-- Easy installation and configuration. No Application class override needed, all from Gradle.
-- Customize our tools to your needs, add buttons to run your methods and use our dev helpers.
-
-**Auto-logger, crash handler, source browser, layout inspector, storage editor, logcat viewer, network activity, info panels, flexible reports, class/method tracker, coding helpers and much more.**
-
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/images/screenshots.gif">
+  <a href="https://www.android.com/" alt="Platform">
+      <img src="https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square"/></a>
+  <a href="https://github.com/rafaco/InAppDevTools/releases" alt="Version">
+      <img src="https://img.shields.io/maven-metadata/v/https/jcenter.bintray.com/es/rafaco/inappdevtools/support/maven-metadata.xml.svg?colorB=blue&label=Version&style=flat-square"/></a>
+  <a href="https://github.com/rafaco/InAppDevTools/commits" alt="Maturity">
+      <img src="https://img.shields.io/badge/Maturity-development-orange.svg?style=flat-square"/></a>
+  <a href="https://git.io/IADT" alt="ShortLink">
+      <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat-square"/></a>
+  <!-- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal">
+      <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> 
+  <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
+      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>-->
 </p>
+
+**A library to enhance the internal compilations of Android apps, adding tools to improve the productivity of their internal users. We get included in debug builds and our UI shows over the app, allowing to inspect the running app and to send contextualized reports to the development team.**
+
+For developers this is conceptually similar to Chrome DevTools but packed inside your app. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable/computer. It helps to understand what's really happening underneath in order to highlight issues and bug causes.
+
+For tester and other internal users, this library provide exact information of what they are testing and allow them to easily report any crash or issues founded. These reports automatically include a zip with valuable information for developers like apk info, repro steps, logs, screenshots, etc.
+
+Your production users get neither any of our features nor apk size increase. They get a spotless app which has been thoroughly polish in an agile development process, enhanced by our tools :)
+
+
+#### Tools
+Auto-logger, repro step generator, logcat viewer, crash handler, reports, source browser, layout inspector, component browser, storage editor, network activity, info panels (apk , build, repo, device and os), coding helpers and much more.
+
+
+#### Characteristics
+- Usable everywhere without cable, our UI overlap your app.
+- Easy to install, just add our dependencies to your Gradle files.
+- Careful with your releases, where everything will be auto disabled by default.
+- Flexible to configure via Gradle extension.
+- Handy integrations available to improve the experience of your testers and to assist your developers.
+
+#### Features
+
+<table border="0">
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
+ 
+**Testing environment info**  
+Get detailed information about what are you testing and where. The build process (variant, type, date, machine, user, gradle versions, dependencies,...), the sources used (remote repo status, local repo, commits and change diffs...), the resulting app (manifest, version, namespace, signing, installation...), the device where is running (model, hardware, battery, sensors...) and their operative system (version, status, memory, storage, installed apps...).
+</td></tr>
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td><td>
+
+**Team resources and reports**  
+Provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can easily send report directly to the development team. Reports can include a zip with all gathered data (environment info, logs, screenshots, crash details, network request, logic snapshot...).
+</td></tr>
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif" height="15%"></td><td>
+ 
+ **Crash visualization and report**  
+We intercept any exception and show details immediately, on the same screen where it happen. These details include app status, current activity, logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details.
+</td></tr>
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif" height="15%"></td><td>
+ 
+**Logs, reproduction steps and advance events**  
+Browse the standard logcat output from your sessions as you use your app. They are surrounded by our auto generated events to give you more context. Our event cover from basic reproduction steps (user interaction, navigation, network activity...) to advanced entries (lifecycle events, crashes, ANRs, device events...).
+</td></tr>
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif" height="15%"></td><td>
+ 
+**View inspector**  
+Navigate through your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straight away and see the results in your screen.
+Browse you current components and their sources (tasks, activity and fragments), zoom your screen, measure elements and take screenshots.
+</td></tr>
+<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif" height="15%"></td><td>
+ 
+**Logic and network inspector**  
+Get details about your running logic components (processes, threads, services, content providers and broadcast receivers) and inspect the network request/responses between your backend and your app. Browse and edit your storages (databases, shared preferences and files) and edit their values.
+</td></tr>
+</table>
+
 
 ## Setup <a name="setup"/>
 
-Include our plugin and our libraries in your Gradle files and that's it! We will pop up in your debug compilations.
-
-On your **root build.gradle** file:
+You only need to modify 2 gradle files. On your **root build.gradle** file:
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.56" apply false
+    id "es.rafaco.inappdevtools" version "0.0.57" apply false           // 1.
 }
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io"}
+        maven { url "https://jitpack.io"}                               // 2.
     }
 }
 ```
+<details><summary align="center">Show details</summary><p>
+ 
+1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
+2. Add JitPack to `allprojects`, `repositories`.
+
+</br></p></details>
 
 On your **app** module **build.gradle** file:
 
 ```gradle
 apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'
+apply plugin: 'es.rafaco.inappdevtools'                                 // 1.
 
 android {
     ...
 }
+
 dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.56'
+    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.57'         // 2.
     
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.56'
-    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.56'
+    debugImplementation 'es.rafaco.inappdevtools:support:0.0.57'        // 3.
+    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.57'
 }
-```
 
-Choose only one between `androidx` or `support` artifacts, according to the Android libraries used in your project. `androidx` require Jetifier enabled.
-
-Ready to go! Just run a debug build and our welcome dialog will pop up on your device.
-
-For extended setup details visit our wiki:
-- [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
-- [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
-- [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
-- [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
-
-
-## Configuration <a name="configuration"/>
-
-You can easily configure our library behaviour at **build time** by using our gradle extension on your app module's build.gradle. This configuration also affect our plugin behaviour and cleaning your app's data will restore to this values.
-```gradle
-apply plugin: 'es.rafaco.inappdevtools'
-
-inappdevtools {
+inappdevtools {                                                         // 4.
     enabled = true
-    email = 'yourmail@yourdomain.com'
-    notes = 'This compilation fix the following issues:..'
+    teamName = 'YourTeam'
+    teamEmail = 'youremail@yourdomain.com
+    notes = 'First build note, replace me on the next ones.'
 }
 ```
-All available properties with descriptions can be found in our wiki. <a href="https://github.com/rafaco/InAppDevTools/wiki/Configurations">Read More</a>.
+<details><summary align="center">Show details</summary><p>
 
-You can also override your build configuration at **run time** from our UI (Overlay toolbar > More > Setting) or programmatically calling us from your sources. Runtime values will be lost when cleaning your app data, restoring the build ones from our gradle extension.
-```java
-Iadt.getConfig().setBoolean(BuildConfigField.ENABLED, false);
-Iadt.restartApp();
-```
+1. Apply our plugin
+2. Add our `noop` for your release builds
+3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
+4. Add our configuration closure `inappdevtools` and fill your email at least.
 
-## Important considerations
+</br></p></details>
 
-### Debug vs Release compilation
+From now on, when building your project artifacts:
 
-Our goal is to enhance your internal compilation without interfering in your production compilations. Our default configuration assume that your debug compilations are for internal use and your release ones are for production, but you can adjust it.
+* **Iadt will be enabled on your Debug builds**: all features will be available and **your source code will be exposed** throw our UI and in your APK files.
+* **Iadt will be disabled on your Release builds**: no feature will be available, your sources aren't exposed and your APK size will be minimally increased.
 
-You can disable our library and plugin in your **debug builds** by setting `enabled = false` in configuration or using our `noop` library. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#1-enabled).
+Ready to go! Just run a Debug build and our welcome dialog will pop up on your device.
 
-We have a **release protection mechanism** to auto-disable everything on your release builds even if you forget to use our `noop` artifact or if your configuration have `enabled = true`. On release builds, our plugin will not perform any of their tasks and our `androidx` and `support` libraries will behave like the `noop` one.
+For additional setup details visit our wiki:
 
-To enable our library and plugin in your **release builds** you have to explicitly override our protection mechanism by setting `enabledOnRelease = true` in configuration. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#2-enabled-on-release).
-
-### Source code exposition <a name="exposed_sources"/>
-
-When this library is enabled, **your source code get exposed to anyone who get your APK**. It can be navigated and visualized throw our UI and someone could also extract all of them from your APK file, un-compiled.
-
-You can adjust this behaviour to your needs, excluding some sources or disabling related features. [Read more](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection) .
+ - [Compatibility](https://github.com/rafaco/InAppDevTools/wiki/Setup#compatibility)
+ - [Detailed setup](https://github.com/rafaco/InAppDevTools/wiki/Setup#detailed-setup)
+ - [Configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations)
+ - [Redefine which are your internal compilations](https://github.com/rafaco/InAppDevTools/wiki/Configurations#debug-vs-release-compilation)
+ - [Limit source code exposition](https://github.com/rafaco/InAppDevTools/wiki/Configurations#3-source-inclusion-and-source-inspection)
+ - [Web apps and Hybrid apps](https://github.com/rafaco/InAppDevTools/wiki/Setup#hybrid-apps)
+ - [Including additional modules](https://github.com/rafaco/InAppDevTools/wiki/Setup#including-additional-gradle-modules-optional)
 
 
 ## Usage <a name="usage"/>
-After the [setup](#setup) you only need to *Run* a debug build of your app into a real device or emulator. Our welcome dialog will pop up.
 
-### Invocation <a name="invocation"/>
+<table border="0"><tr><td>
+
+After the [setup](#setup) process, you only need to *Run* a debug build of your app into a real device or emulator. 
+
+On first start, our **welcome dialog** will pop up. It gives basic information about the running apk, allows to disable our tools and helps in accepting the permission to show over your app.
+
+</td><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Welcome_Screen.png"></td></tr></table>
+
+
+<table border="0"><tr><td width="30%"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/overlays/Home_Screen.png"></td><td>
+
+You can **invoke our UI** at any time by tapping the new floating icon that appear over your app or by shaking your device with your app on foreground. It gives you access to all our tools while you keep using your app.
+
+Our UI will **auto popup on crash**, showing full details about the crash and allowing to report it.
+
+</td></tr></table>
+
+<!-- ### Invocation <a name="invocation"/>
 On crash our UI will automatically popup but you can also invoke it at any time by using one of the following methods:
 - Shake your device with your app on foreground
 - Tap our floating icon
-- Tap our notification (disabled by default, enable it with configuration)
-- Or programmatically calling `Iadt.show();`
+- Or programmatically calling `Iadt.show();` -->
 
 
 ## Integrations
 
-### Include compilation notes
-You can provide any text to describe your compilation using `notes` configuration. This is very useful to describe changes or to provide instructions and it will be show on first dialog and on BuildInfo panel. 
+There are multiple ways to integrate your app with our library for a better customization or to improve the experience of your internal users. All this methods will be safely ignored when our library is disabled (release builds, disabled configuration or using noop artifacts).
+
+### Customize your team info
+You can customize a lot of things in the 'Team Screen' of your compilations by using our Gradle configuration. For field details, visit [configurations](https://github.com/rafaco/InAppDevTools/wiki/Configurations).
 ```gradle
 inappdevtools {
-    notes = "This is a NOTE about this compilation:\n" +
-            " - Multiline supported"
+    teamName = "DemoTeam"
+    teamEmail = 'inappdevtools@gmail.com'
+    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
+    teamLinks = [ website   : "http://inappdevtools.org",
+                  repo      : "https://github.com/rafaco/InAppDevTools"]
+}
 ```
 
-### Add run button
-Add your own buttons to our Run screen. You have to provide a title and Runnable object, when you can perform any logic or call any of your app methods. 
-```gradle
-Iadt.addRunButton(new RunButton("Your text",
+### Add team actions
+You can easily add buttons into your 'Team screen' to perform any logic or to call any of your methods. Pass a ```ButtonFlexData``` instance to ```Iadt.addTeamAction()```, with your action in a ```Runnable``` and details for the button (message, icon, color...). Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in).
+
+```java
+Iadt.addTeamAction(new ButtonFlexData("Call yourMethod",
+        R.drawable.ic_run_white_24dp,
         new Runnable() {
             @Override
             public void run() {
-                YourClass.yourMethod();
+                YourClass.yourMethod("someParam");
             }
         }));
 ```
-Add them on startup (i.e. onCreate of your app or main activity) or dynamically at any point (i.e. after user log in). You can also specify an icon, a background color or a callback.
+
+### Add build notes
+You can provide a text to describe your compilation, their changes or to provide instructions. It will be shown at welcome dialog, team screen and build screen.
+
+Use our `notes` configuration in Gradle or modify `BuildConfigField.NOTES` at runtime:
+```gradle
+inappdevtools {
+    notes = "This is a SAMPLE NOTE provided at buildtime by our Gradle extension"
+}
+```
+```java
+Iadt.getConfig()
+    .setString(BuildConfigField.NOTES, 
+            "This is a SAMPLE NOTE provided at runtime by our Java interface");
+```
+
+### Show internal messages
+You can show special toast messages only for your internal users. This messages will be shown when this library is enabled and will be ignored on your release builds.
+
+Your internal users can easily distinguish them from the standard toast as they are shown in a top position and they are colored base on the severity. This messages will auto generate an event.
+
+```java
+Iadt.buildMessage("This is a DEV message").fire();                 //Light blue (default)
+Iadt.buildMessage("This is a INFO message").isInfo().fire();       //Green
+Iadt.buildMessage("This is a WARNING message").isWarning().fire(); //Yellow
+Iadt.buildMessage("This is a ERROR message").isError().fire();     //Red
+```
+
+### Fire your own events
+You can create and fire your own events manually. These events will be shown on our log screen like any other auto-generated events. It will also appear in reproduction steps if it has a verbosity greater than Info (I, W and E).
+
+```java
+Iadt.buildEvent("Quick event sample").fire();
+
+Iadt.buildEvent("User logged in: " + userData.getName())
+    .setExtra(userData.toString())
+    .setCategory("User")
+    .setSubcategory("LogIn")
+    .isInfo()
+    .fire();
+```
+
+## Contributing and building instructions
+
+There are many ways to help us starting from giving this project a GitHub :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:.
+
+For more, please check out our [CONTRIBUTING.md](CONTRIBUTING.md) document and our [Coding contributions guide](https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide) in our Wiki.
+
+   **Join our community and help us making your job easy! :)**
 
 
-## Contributing and building instructions [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/rafaco/InAppDevTools/issues)
+## About this project
 
-First off, thank you for considering contributing to InAppDevTools. It's people like you that make InAppDevTools such a great tool. There are many ways to contribute starting from giving us a :star:, recommending this library to your friends :loudspeaker: or sending us your feedback :love_letter:.
+I started this project while I was working on an international flight information app. We had a user located in another country with a really nasty bug that we were completely unable to reproduce. I send him a special apk that will send us back all their logs on crash. We were able to identify the problem straight away.
 
-Check out our [CONTRIBUTING.md](CONTRIBUTING.md) document and our [Coding contributions guide](https://github.com/rafaco/InAppDevTools/wiki/Coding-contributions-guide) in our Wiki.
+Days before I added an overlay to see the logs over our running app and the first info panels... and it became my personal tool for my daily duties as developer. I carry on adding more tools and starting to realise that it could be useful for other Android developers as well. Few months later, I quit my job to fully focus on this amazing project for a while.
 
-
-## About the author
-
-I started this project to get the log from a real user located in another country. He has a nasty bug that we were unable to reproduce and we detect the issue by sending him a special apk. Then I added an overlay to see the logs over our app and the first info panels... and it became my personal tool for my daily duties as developer.
-
-After tons of overnight coding fun, I've left my work position to fully focus on this amazing project for a while. I hope to publish a first complete version around Spring 2020.
-
-As a Senior Software Engineer, I have always worked on proprietary software and this is my first open source project. I am really excited to give back what I received during all this years and I'm looking forward to create a friendly community around this project. Please feel free to correct me, give me any advise or pointing me in the right direction.
+I am very excited with the results obtained and I'm looking forward to create a friendly community around this project. This is my first open source project so I have a lot to learn. Advices and corrections will be more than welcome.
 
 
 ## Links <a name="links"/>
@@ -199,3 +303,4 @@ limitations under the License.
 ```
 This project modify, include and use products with separate copyright
 notices and license terms. For details, see [LICENSE](LICENSE)
+

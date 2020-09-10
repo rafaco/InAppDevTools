@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
             android:contentDescription="Execute"/>
 
         <EditText
@@ -66,7 +65,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
             android:contentDescription="Clear output"/>
 
         <ImageButton
@@ -74,7 +72,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/btnClear"
-            android:layout_margin="10dp"
             android:contentDescription="Cancel running process"/>
 
         <Spinner

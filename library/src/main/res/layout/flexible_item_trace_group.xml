@@ -40,7 +40,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="6dp"
             android:background="@drawable/ic_arrow_down_white_24dp"
-            android:backgroundTint="@color/rally_white"
+            android:backgroundTint="@color/iadt_text_low"
             android:layout_centerVertical="true" />
 
         <LinearLayout
@@ -57,18 +57,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner"
-                android:textColor="@color/rally_gray"
+                android:textColor="@color/iadt_text_low"
                 android:layout_marginTop="3dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="10dp"
-                style="@style/TextCondensedSmall" />
+                style="@style/TextCondensed.Small" />
 
             <TextView
                 android:id="@+id/after_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/rally_gray"
-                style="@style/TextCondensedSmall" />
+                android:textColor="@color/iadt_text_low"
+                style="@style/TextCondensed.Small" />
 
             <TextView
                 android:id="@+id/icon_label"
@@ -77,8 +77,8 @@
                 android:textAlignment="textEnd"
                 android:layout_gravity="end"
                 android:gravity="end"
-                android:textColor="@color/rally_gray"
-                style="@style/TextCondensedMedium" />
+                android:textColor="@color/iadt_text_low"
+                style="@style/TextCondensed.Medium" />
 
         </LinearLayout>
     </RelativeLayout>

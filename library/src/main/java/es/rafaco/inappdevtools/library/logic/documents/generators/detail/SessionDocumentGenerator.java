@@ -33,7 +33,7 @@ import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.log.datasource.LogQueryHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
-import es.rafaco.inappdevtools.library.storage.db.DevToolsDatabase;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
@@ -68,7 +68,7 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getOverview() {
-        return getStartOverview()+ Humanizer.newLine()
+        return getStartOverview() + Humanizer.newLine()
                 + getFinishOverview() + Humanizer.newLine()
                 + getLogsOverview();
     }
@@ -100,18 +100,15 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private String getStartOverview() {
-        String flagsLine = "";
+        String result = "Started " + Humanizer.getElapsedTimeLowered(session.getDate());
 
         if (session.isFirstStart()){
-            flagsLine += "First start ";
+            result += " (First start)";
         }
         else if (session.isNewBuild()){
-            flagsLine += "New build ";
+            result += " (New build)";
         }
-        else {
-            flagsLine += "Started ";
-        }
-        return flagsLine + Humanizer.getElapsedTimeLowered(session.getDate());
+        return result;
     }
 
     private String getLogsOverview() {
@@ -179,7 +176,7 @@ public class SessionDocumentGenerator extends AbstractDocumentGenerator {
         LogFilterHelper logFilterHelper = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
         logFilterHelper.setSessionById(session.getUid());
         LogQueryHelper logQueryHelper = new LogQueryHelper(logFilterHelper.getBackFilter());
-        FriendlyDao dao = DevToolsDatabase.getInstance().friendlyDao();
+        FriendlyDao dao = IadtDatabase.get().friendlyDao();
         List<Friendly> rawData = dao.filterListWithQuery(logQueryHelper.getFilterQuery());
         int count = 0;
         for (Friendly step: rawData) {

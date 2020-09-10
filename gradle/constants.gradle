@@ -24,18 +24,21 @@ ext{
 
     /*
      BUILD OPTIONS
+        - Theoretically our MIN_SDK should be 15 due to the minSdk of our dependencies, but we removed this limitation.
+        - We avoid conflicts by using tools:overrideLibrary at our AndroidManifest and disabling our library when running on lower SDK.
+        - Min operational sdk is currently set to 16 due to some bugs on sdk 15.
      */
-    PROJECT_COMPILE_SDK = 28
-    PROJECT_BUILD_TOOLS = '28.0.3'
-    PROJECT_MIN_SDK = 15
-    PROJECT_TARGET_SDK = 28
+    PROJECT_MIN_SDK = 14
+    PROJECT_COMPILE_SDK = 29
+    PROJECT_BUILD_TOOLS = '29.0.2'
+    PROJECT_TARGET_SDK = 29
     PROJECT_TARGET_COMPATIBILITY = JavaVersion.VERSION_1_7
     PROJECT_SOURCE_COMPATIBILITY = JavaVersion.VERSION_1_7
 
     /*
      PROJECT VERSIONS
      */
-    PROJECT_VERSION = '0.0.56'
+    PROJECT_VERSION = '0.0.57'
     PROJECT_VERSION_CODE = 1
     DEMO_VERSION = '0.0.01'
     DEMO_VERSION_CODE = 45

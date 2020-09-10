@@ -204,12 +204,17 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    private Task addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
-        Task dependencyTask = project.task(DEPENDENCIES_TASK + buildVariant, type: DependencyTask) {
+    private void addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
+        DependencyTask dependencyTask = project.task(DEPENDENCIES_TASK + buildVariant, type: DependencyTask) {
             variantName = buildVariant
         }
-        superTask.dependsOn += [ dependencyTask ]
-        dependencyTask
+        //Manual skip comparing lastModified don't work inside the task but other skips are working.
+        //It seems that the parent class delete the output file in constructor, we always receive
+        //outputFile.lastModified() = 0 and outputfile.exists() = false inside the task
+        //TODO: it doesn't recalculate per variant
+        if (dependencyTask.outputFile.lastModified() < dependencyTask.inputFile.lastModified()){
+            superTask.dependsOn += [dependencyTask]
+        }
     }
 
     private Task addBuildInfoTask(Project project) {

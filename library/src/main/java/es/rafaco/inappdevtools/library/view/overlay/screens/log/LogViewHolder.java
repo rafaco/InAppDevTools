@@ -21,11 +21,9 @@ package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 
 //#ifdef ANDROIDX
 //@import androidx.core.content.ContextCompat;
-//@import androidx.appcompat.widget.AppCompatButton;
 //@import androidx.appcompat.widget.AppCompatTextView;
 //@import androidx.recyclerview.widget.RecyclerView;
 //#else
@@ -44,19 +42,20 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
+import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
-import es.rafaco.inappdevtools.library.view.components.flex.ButtonGroupViewHolder;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleItemDescriptor;
-import es.rafaco.inappdevtools.library.view.components.flex.FlexibleLoader;
+import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
+import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.AnrDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -129,10 +128,8 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         int cardColorId = isSelected ? R.color.iadt_surface_top : android.R.color.transparent;
         int cardColor = ContextCompat.getColor(wrapper.getContext(), cardColorId);
         card.setCardBackgroundColor(cardColor);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            card.setElevation(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
-            card.setRadius(isSelected ? UiUtils.dpToPx(card.getContext(), 12) : 0);
-        }
+        card.setRadius(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
+        card.setCardElevation(isSelected ? UiUtils.dpToPx(card.getContext(), 6) : 0);
 
         int severityColor = ContextCompat.getColor(itemView.getContext(), FriendlyLog.getColor(data));
         decorator.setBackgroundColor(severityColor);
@@ -153,7 +150,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
         }else{
-            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensedSmall));
+            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensed_Small));
             title.setTypeface(title.getTypeface(), Typeface.BOLD);
             title.setTextColor(severityColor);
         }
@@ -185,15 +182,17 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         }
 
         if(isSelected && getLinkedIdStep(data)!=null){
-            FlexibleItemDescriptor desc = FlexibleLoader.getDescriptor(ButtonGroupData.class);
-            ButtonGroupData buttonGroupData = new ButtonGroupData(new RunButton(
+            LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
+            linearGroupData.setHorizontal(true);
+            linearGroupData.add(new ButtonFlexData(
                     "Details", new Runnable() {
                 @Override
                 public void run() {
                     OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
                 }
             }));
-            desc.addToView(buttonGroupData, buttonGroupContainer);
+            FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
+            desc.addToView(linearGroupData, buttonGroupContainer);
 
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);
@@ -230,13 +229,26 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             details += "Source: " + "Iadt Event" + Humanizer.newLine();
             details += "Category: " + data.getCategory() + Humanizer.newLine();
             details += "Subcategory: " + data.getSubcategory();
+
+            if (data.getLinkedId()>0){
+                details += Humanizer.newLine() + "LinkedId: " + data.getLinkedId();
+            }
         }
         return details;
     }
 
     private NavigationStep getLinkedIdStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
-            return new NavigationStep(CrashDetailScreen.class, String.valueOf(data.getLinkedId()));
+            return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("Screenshot")){
+            return new NavigationStep(ZoomScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("Init")){
+            return new NavigationStep(SessionDetailScreen.class, String.valueOf(data.getLinkedId()));
+        }
+        else if (data.getSubcategory().equals("NewBuild")){
+            return new NavigationStep(BuildDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
         /* TODO: enable ANR screen
         else if(data.getSubcategory().equals("Anr")){

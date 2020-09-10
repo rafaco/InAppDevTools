@@ -27,14 +27,15 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
-import es.rafaco.inappdevtools.library.logic.runnables.ButtonGroupData;
-import es.rafaco.inappdevtools.library.logic.runnables.RunButton;
+import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractDocumentScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.errors.CrashDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 
 public class SessionDetailScreen extends AbstractDocumentScreen {
@@ -47,12 +48,17 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
 
     @Override
     public String getTitle() {
-        return "Session Detail";
+        return "";
     }
 
     @Override
     protected DocumentType getDocumentType() {
         return DocumentType.SESSION;
+    }
+
+    @Override
+    protected Class<? extends Screen> getMasterScreenClass() {
+        return SessionsScreen.class;
     }
 
     @Override
@@ -65,91 +71,60 @@ public class SessionDetailScreen extends AbstractDocumentScreen {
     @Override
     protected List<Object> buildDataFromDocument(DocumentData reportData) {
         List<Object> objectList = new ArrayList<Object>(reportData.getSections());
-        objectList.add(0, reportData.getOverviewData());
-        objectList.add(1, getFirstButtonGroupData(session));
-        objectList.add(2, getSecondButtonGroupData(session));
-        objectList.add(3, "");
+        objectList.add(0, buildOverviewData(reportData));
+        objectList.add(getSecondaryButtonsList());
         return objectList;
     }
 
-    private ButtonGroupData getFirstButtonGroupData(final Session session) {
-        List<RunButton> buttons = new ArrayList<>();
-        buttons.add(new RunButton(
-                "Repro Steps",
-                R.drawable.ic_format_list_numbered_white_24dp,
-                R.color.rally_green_alpha,
-                new Runnable() {
-            @Override
-            public void run() {
-                final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
-                stepsFilter.setSessionById(session.getUid());
-
-                OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(stepsFilter.getUiFilter()));
-            }
-        }));
-
-        buttons.add(new RunButton(
-                "Full Logs",
-                R.drawable.ic_format_align_left_white_24dp,
-                R.color.rally_blue_med,
-                new Runnable() {
-            @Override
-            public void run() {
-                final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
-                filter.setSessionById(session.getUid());
-
-                OverlayService.performNavigation(LogScreen.class,
-                        LogScreen.buildParams(filter.getUiFilter()));
-            }
-        }));
-
-        if (session.getCrashId()>0){
-            buttons.add(new RunButton(
-                    "Crash",
-                    R.drawable.ic_bug_report_white_24dp,
+    private LinearGroupFlexData getSecondaryButtonsList() {
+        SecondaryButtonsComposer composer = new SecondaryButtonsComposer("Related");
+        if (session.getCrashId()>0) {
+            composer.add("Crash Details",
+                    R.string.gmd_bug_report,
                     R.color.rally_orange,
                     new Runnable() {
                         @Override
                         public void run() {
-                            OverlayService.performNavigation(CrashDetailScreen.class,
+                            OverlayService.performNavigation(CrashScreen.class,
                                     session.getCrashId() + "");
                         }
-            }));
+                    });
         }
-
-        return new ButtonGroupData(buttons);
-    }
-
-    private ButtonGroupData getSecondButtonGroupData(final Session session) {
-        List<RunButton> buttons = new ArrayList<>();
-
-        buttons.add(new RunButton(
-                "View build",
-                R.drawable.ic_build_white_24dp,
-                R.color.rally_purple,
+        composer.add("Repro Steps",
+                R.string.gmd_format_list_numbered,
+                R.color.rally_green_alpha,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        final LogFilterHelper stepsFilter = new LogFilterHelper(LogFilterHelper.Preset.REPRO_STEPS);
+                        stepsFilter.setSessionById(session.getUid());
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(stepsFilter.getUiFilter()));
+                    }
+                });
+        composer.add("All Logs",
+                R.string.gmd_format_align_left,
+                R.color.iadt_primary,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        final LogFilterHelper filter = new LogFilterHelper(LogFilterHelper.Preset.DEBUG);
+                        filter.setSessionById(session.getUid());
+                        OverlayService.performNavigation(LogScreen.class,
+                                LogScreen.buildParams(filter.getUiFilter()));
+                    }
+                });
+        composer.add("Build",
+                R.string.gmd_build,
+                R.color.iadt_text_high,
                 new Runnable() {
                     @Override
                     public void run() {
                         OverlayService.performNavigation(BuildDetailScreen.class,
-                            session.getBuildId() + "");
+                                session.getBuildId() + "");
                     }
-                }));
+                });
 
-        if (session.getCrashId()>0){
-            buttons.add(new RunButton(
-                    "Crash",
-                    R.drawable.ic_bug_report_white_24dp,
-                    R.color.rally_orange,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            OverlayService.performNavigation(CrashDetailScreen.class,
-                                    session.getCrashId() + "");
-                        }
-                    }));
-        }
-
-        return new ButtonGroupData(buttons);
+        return composer.compose();
     }
 }

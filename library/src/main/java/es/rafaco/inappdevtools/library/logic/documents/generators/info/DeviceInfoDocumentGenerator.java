@@ -67,7 +67,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     @Override
     public String getTitle() {
-        return getDocumentType().getName() + " Info from Session " + sessionId;
+        return getDocumentType().getName() + " from Session " + sessionId;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private DocumentSectionData getDeviceInfo() {
-        return new DocumentSectionData.Builder("Device")
+        return new DocumentSectionData.Builder("Model")
                     .setIcon(R.string.gmd_phone_android)
                     .setOverview(Build.MODEL)
                     .add("Form factor", getDeviceType())

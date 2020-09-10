@@ -23,6 +23,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
@@ -36,60 +37,102 @@ public class RunningProcessesUtils {
         return IadtController.get().getContext();
     }
 
-    public static int getCount() {
-        if (getList() == null){
-            return 0;
-        }
-        return getList().size();
-    }
-
     public static String getString() {
         StringBuilder result = new StringBuilder("\n");
         List<ActivityManager.RunningAppProcessInfo> processes = getList();
-        if (processes == null){
-            return "";
-        }
         
         for (ActivityManager.RunningAppProcessInfo info : processes) {
-
-            String importance = info.importance + " ";
-            if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                importance += "Foreground";
-            }else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE) {
-                importance += "Service";
-            }
-            else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED) {
-                importance += "Cached";
-            }
-            else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE) {
-                importance += "Gone";
-            }
-            result
-                    .append(info.pid)
-                    .append(" - ")
-                    .append(info.processName)
-                    .append("\n")
-                    .append("  importance: ")
-                    .append(importance)
-                    //.append(" uid: ")
-                    //.append(info.uid)
-                    .append("\n");
-            for (String pkg : info.pkgList) {
-                result.append("  pkg: ").append(pkg).append("\n");
-            }
-
-            result.append(getMemoryInfoFormatted(info));
-
-            //result.append(getRunningServices(info.pid)).append("\n");
-            //result.append(getRunningProviders(info.processName, info.uid)).append("\n");
+            result.append(getContent(info));
+            result.append(Humanizer.newLine());
         }
         return result.toString();
     }
 
-
-    private static List<ActivityManager.RunningAppProcessInfo> getList() {
+    public static List<ActivityManager.RunningAppProcessInfo> getList() {
         ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        return manager.getRunningAppProcesses();
+        List<ActivityManager.RunningAppProcessInfo> runningProcesses = manager.getRunningAppProcesses();
+
+        //Older API levels return all processes running in device,
+        // we need to filter them by packageName
+        String myPackageName = getContext().getPackageName();
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = new ArrayList<>();
+        if (runningProcesses != null) {
+            for (ActivityManager.RunningAppProcessInfo process : runningProcesses) {
+                for (String processPackageName : process.pkgList) {
+                    if (processPackageName.equals(myPackageName)){
+                        appProcesses.add(process);
+                    }
+                }
+            }
+        }
+        return appProcesses;
+    }
+
+    public static int getCount() {
+        return getList().size();
+    }
+
+    public static String getClassName(ActivityManager.RunningAppProcessInfo info) {
+        return Humanizer.emptyString();
+    }
+
+    public static String getTitle(ActivityManager.RunningAppProcessInfo info) {
+        return info.pid + " - " + info.processName;
+    }
+
+    public static String getContent(ActivityManager.RunningAppProcessInfo info) {
+        StringBuilder contentBuffer = new StringBuilder();
+
+        contentBuffer.append("PID: " + info.pid);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("UID: " + info.uid);
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Importance: " + getImportanceString(info));
+        contentBuffer.append(Humanizer.newLine());
+
+        contentBuffer.append("Name: " + info.processName);
+        contentBuffer.append(Humanizer.newLine());
+
+        for (String pkg : info.pkgList) {
+            contentBuffer.append("Pkg: ").append(pkg).append(Humanizer.newLine());
+        }
+
+        contentBuffer.append("Memory:");
+        contentBuffer.append(Humanizer.newLine());
+        contentBuffer.append(getMemoryInfoFormatted(info));
+
+        return contentBuffer.toString();
+    }
+
+    public static boolean isAppForeground(){
+        List<ActivityManager.RunningAppProcessInfo> processes = RunningProcessesUtils.getList();
+        for (ActivityManager.RunningAppProcessInfo process : processes) {
+            int currentImportance = process.importance;
+            int foregroundImportance = ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+            boolean isForeground = currentImportance <= foregroundImportance;
+            if (isForeground) return true;
+        }
+        return false;
+    }
+
+    private static String getImportanceString(ActivityManager.RunningAppProcessInfo info) {
+        String importance = info.importance + " ";
+        if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+            importance += "Foreground";
+        }else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE) {
+            importance += "Service";
+        }
+        else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED) {
+            importance += "Cached";
+        }
+        else if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE) {
+            importance += "Gone";
+        }else{
+            importance += "Other";
+        }
+        return importance;
     }
 
     private static String getMemoryInfoFormatted(ActivityManager.RunningAppProcessInfo processInfo) {
@@ -109,23 +152,22 @@ public class RunningProcessesUtils {
     }
 
     private static String getMemoryInfoFormatted(Debug.MemoryInfo debugMemoryInfo) {
-        String result;
-        result = String.format("  Dalvik: %s pss, %s shared, %s private",
+        StringBuilder resultBuffer = new StringBuilder();
+        resultBuffer.append(String.format("  Dalvik: %s pss, %s shared, %s private",
                 Humanizer.parseKb(debugMemoryInfo.dalvikPss),
                 Humanizer.parseKb(debugMemoryInfo.dalvikSharedDirty),
-                Humanizer.parseKb(debugMemoryInfo.dalvikPrivateDirty));
-        result += Humanizer.newLine();
-        result += String.format("  Native: %s pss, %s shared, %s private",
+                Humanizer.parseKb(debugMemoryInfo.dalvikPrivateDirty)));
+        resultBuffer.append(Humanizer.newLine());
+        resultBuffer.append(String.format("  Native: %s pss, %s shared, %s private",
                 Humanizer.parseKb(debugMemoryInfo.nativePss),
                 Humanizer.parseKb(debugMemoryInfo.nativeSharedDirty),
-                Humanizer.parseKb(debugMemoryInfo.nativePrivateDirty));
-        result += Humanizer.newLine();
-        result += String.format("  Other: %s pss, %s shared, %s private",
+                Humanizer.parseKb(debugMemoryInfo.nativePrivateDirty)));
+        resultBuffer.append(Humanizer.newLine());
+        resultBuffer.append(String.format("  Other: %s pss, %s shared, %s private",
                 Humanizer.parseKb(debugMemoryInfo.otherPss),
                 Humanizer.parseKb(debugMemoryInfo.otherSharedDirty),
-                Humanizer.parseKb(debugMemoryInfo.otherPrivateDirty));
-        result += Humanizer.newLine();
-
-        return result;
+                Humanizer.parseKb(debugMemoryInfo.otherPrivateDirty)));
+        resultBuffer.append(Humanizer.newLine());
+        return resultBuffer.toString();
     }
 }

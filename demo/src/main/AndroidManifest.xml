@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="es.rafaco.inappdevtools.demo">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -30,6 +32,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
+            android:name=".view.MessagesActivity"
+            android:label="@string/title_activity_messages"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name=".view.ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -42,6 +49,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.ItemListActivity" />
         </activity>
+
+        <receiver android:name=".DemoBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>

@@ -34,11 +34,13 @@ import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
+import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Anr;
 import es.rafaco.inappdevtools.library.storage.db.entities.Crash;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.NetSummary;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetFormatter;
+import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class FriendlyLog {
 
@@ -83,12 +85,15 @@ public class FriendlyLog {
         insertOnBackground(log);
     }
 
-    private static void logAtLogcat(Friendly log) {
+    public static void log(Friendly log) {
+        logAtLogcat(log);
+        insertOnBackground(log);
+    }
 
+    private static void logAtLogcat(Friendly log) {
         if (!IadtController.get().getConfig().getBoolean(BuildConfigField.INJECT_EVENTS_ON_LOGCAT)){
             return;
         }
-
         runLogMethod(log);
     }
 
@@ -142,7 +147,7 @@ public class FriendlyLog {
                 new Runnable() {
             @Override
             public void run() {
-                IadtController.get().getDatabase().friendlyDao().insert(log);
+                IadtDatabase.get().friendlyDao().insert(log);
             }
         });
     }
@@ -193,7 +198,7 @@ public class FriendlyLog {
                 return R.drawable.ic_flag_white_24dp;
             }
             else if (log.getSubcategory().equals("Navigation")) {
-                return R.drawable.ic_view_carousel_white_24dp;
+                return R.drawable.ic_location_on_white_24dp;
             }
             else if (log.getSubcategory().equals("TaskRemoved")) {
                 return R.drawable.ic_close_white_24dp;
@@ -321,6 +326,9 @@ public class FriendlyLog {
             else if (log.getSubcategory().equals("Delete")){
                 return R.drawable.ic_delete_forever_white_24dp;
             }
+            /*else if (log.getSubcategory().equals("StopWatch")){
+                return R.drawable.iadt_logo;
+            }*/
             return R.drawable.ic_developer_mode_white_24dp;
         }
         else if (log.getCategory().equals("Log")){
@@ -329,10 +337,49 @@ public class FriendlyLog {
             }
             return R.drawable.ic_android_white_24dp;
         }
-        return -1;
+        else if (!log.getCategory().equals("Logcat")){
+            return R.drawable.ic_live_help_24;  //DEFAULT EVENT
+        }
+        return -1;                              //LOGCAT (No icon)
     }
 
-    public static long logCrash(String message) {
+    public static long logBuildStart(long buildId, long sessionId, long buildTime) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("V");
+        log.setCategory("Iadt");
+        log.setSubcategory("NewBuild");
+        log.setMessage("Build " + buildId + " initialised, compiled " + Humanizer.getElapsedTimeLowered(buildTime));
+        log.setLinkedId(buildId);
+        logAtLogcat(log);
+        return IadtDatabase.get().friendlyDao().insert(log);
+    }
+
+    public static long logScreenshot(long screenshotId) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("I");
+        log.setCategory("Iadt");
+        log.setSubcategory("Screenshot");
+        log.setMessage("Screenshot taken");
+        log.setLinkedId(screenshotId);
+        logAtLogcat(log);
+        return IadtDatabase.get().friendlyDao().insert(log);
+    }
+
+    public static long logSessionStart(long sessionId) {
+        final Friendly log = new Friendly();
+        log.setDate(new Date().getTime());
+        log.setSeverity("I");
+        log.setCategory("Iadt");
+        log.setSubcategory("Init");
+        log.setMessage("Session " + sessionId + " started");
+        log.setLinkedId(sessionId);
+        logAtLogcat(log);
+        return IadtDatabase.get().friendlyDao().insert(log);
+    }
+
+    public static long logCrashInitial(String message) {
         final Friendly log = new Friendly();
         log.setDate(new Date().getTime());
         log.setSeverity("E");
@@ -340,15 +387,15 @@ public class FriendlyLog {
         log.setSubcategory("Crash");
         log.setMessage(message);
         logAtLogcat(log);
-        return IadtController.get().getDatabase().friendlyDao().insert(log);
+        return IadtDatabase.get().friendlyDao().insert(log);
     }
 
-    public static void logCrashDetails(long friendlyLogId, long crashId, Crash crash) {
-        final Friendly log = IadtController.get().getDatabase().friendlyDao().findById(friendlyLogId);
+    public static void logCrashDetails(Crash crash) {
+        final Friendly log = IadtDatabase.get().friendlyDao().findById(crash.getLogcatId());
         log.setDate(crash.getDate());
-        log.setMessage("Session " + crash.getScreenId() + " crashed: " + crash.getMessage());
-        log.setLinkedId(crashId);
-        IadtController.get().getDatabase().friendlyDao().update(log);
+        log.setMessage("Session " + crash.getSessionId() + " crashed: " + crash.getMessage());
+        log.setLinkedId(crash.getUid());
+        IadtDatabase.get().friendlyDao().update(log);
     }
 
     public static void logAnr(long anrId, Anr anr) {
@@ -413,7 +460,7 @@ public class FriendlyLog {
                     @Override
                     public void run() {
                         //IadtController.get().getDatabase().friendlyDao().update(startLog);
-                        IadtController.get().getDatabase().friendlyDao().insert(endLog);
+                        IadtDatabase.get().friendlyDao().insert(endLog);
                     }
                 });
     }

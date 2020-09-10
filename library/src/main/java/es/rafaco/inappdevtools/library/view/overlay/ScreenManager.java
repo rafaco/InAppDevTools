@@ -120,7 +120,8 @@ public class ScreenManager {
     public void goTo(final Class<? extends Screen> screenClass, final String params){
 
         if (screenClass == null){
-            Iadt.showError("Unable to find the screen class, add it to our ScreenLoader");
+            Iadt.buildMessage("Unable to find the screen class, add it to our ScreenLoader")
+                    .isError().fire();
             return;
         }
 
