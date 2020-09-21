@@ -1,6 +1,6 @@
 <!-- # InAppDevTools -->
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="75%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/images/social.png" width="50%">
 </p>
 
 <p align="center">
@@ -30,13 +30,13 @@
       <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>-->
 </p>
 
-**A library to enhance the internal compilations of Android apps, adding tools to improve the productivity of their internal users. We get included in debug builds and our UI shows over the app, allowing to inspect the running app and to send contextualized reports to the development team.**
+**A library to enhance the internal compilations of any Android app, adding useful tools for early stage users. They can get info on what they are testing, send comprehensive crash reports and inspect their running app on the go. It also bring a customizable team panel and other helpful tools, all within their app.**
 
-For developers this is conceptually similar to Chrome DevTools but packed inside your app. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable/computer. It helps to understand what's really happening underneath in order to highlight issues and bug causes.
+**For developers** this is conceptually similar to Chrome DevTools but packed inside your app. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable/computer. It helps them to understand what's really happening underneath in order to highlight issues and bug causes.
 
-For tester and other internal users, this library provide exact information of what they are testing and allow them to easily report any crash or issues founded. These reports automatically include a zip with valuable information for developers like apk info, repro steps, logs, screenshots, etc.
+**For tester** and other internal users, this library provide exact information of what they are testing and allow them to easily report any crash or issues founded. These reports automatically include a zip with valuable information for developers like repro steps, screenshots, logs and info about app, build, device, info,  etc.
 
-Your production users get neither any of our features nor apk size increase. They get a spotless app which has been thoroughly polish in an agile development process, enhanced by our tools :)
+Your **production users** get neither any of our features nor apk size increase. They get a spotless app which has been thoroughly polish in an agile development process, enhanced by our tools :)
 
 
 #### Tools
@@ -55,7 +55,7 @@ Auto-logger, repro step generator, logcat viewer, crash handler, reports, source
 <table border="0">
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif" height="15%"></td><td>
  
-**Testing environment info**  
+**App and device info**  
 Get detailed information about what are you testing and where. The build process (variant, type, date, machine, user, gradle versions, dependencies,...), the sources used (remote repo status, local repo, commits and change diffs...), the resulting app (manifest, version, namespace, signing, installation...), the device where is running (model, hardware, battery, sensors...) and their operative system (version, status, memory, storage, installed apps...).
 </td></tr>
 <tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif" height="15%"></td><td>
@@ -270,12 +270,11 @@ For more, please check out our [CONTRIBUTING.md](CONTRIBUTING.md) document and o
 
 ## About this project
 
-I started this project while I was working on an international flight information app. We had a user located in another country with a really nasty bug that we were completely unable to reproduce. I send him a special apk that will send us back all their logs on crash. We were able to identify the problem straight away.
+I started this project while I was working on an international flight information app. We had a user in another country with a nasty bug that we were unable to reproduce. I send him a special apk to record their logs and to send them to us on crash. We identify the problem straight away just looking at the log.
 
-Days before I added an overlay to see the logs over our running app and the first info panels... and it became my personal tool for my daily duties as developer. I carry on adding more tools and starting to realise that it could be useful for other Android developers as well. Few months later, I quit my job to fully focus on this amazing project for a while.
+Days after I added an overlay to see the logs over our activities and the first info panel... and it became my personal tool for my daily duties. I carried on adding more tools and I started to realise that it could be useful for other Android developers as well. Few months later, I quit my job to fully focus on this project and to make it flexible for other apps.
 
-I am very excited with the results obtained and I'm looking forward to create a friendly community around this project. This is my first open source project so I have a lot to learn. Advices and corrections will be more than welcome.
-
+Year and a half later, I am very excited with the results obtained and I'm looking forward to create a friendly community to push this project to the moon, [join us!](CONTRIBUTING.md). Meanwhile, I'm currently searching for job at Madrid, ideally withing an Android team willing to use this tools. Check out my [LinkedIn profile](https://linkedin.com/in/rafaco).
 
 ## Links <a name="links"/>
 - External references:
