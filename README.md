@@ -33,14 +33,19 @@
 **A library to enhance the internal compilations of any Android app, adding useful tools for early stage users. They can get info on what they are testing, send comprehensive crash reports and inspect their running app on the go. It also bring a customizable team panel and other helpful tools, all within their app.**
 
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner1.gif" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner2.jpeg" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner3.jpeg" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner4.jpeg" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner5.gif" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner1.gif" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner2.jpeg" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner3.jpeg" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner4.jpeg" width="24%">
+</p>
+<p align="center">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/Devs/Screen1.gif" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/Devs/Screen2.gif" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/Devs/Screen3.gif" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/Devs/Screen4.gif" width="24%">
 </p>
 
-**Non-developer internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, repo status, device and OS).
+**All your internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, repo status, device and OS).</p>
 
 **For developers** this is conceptually similar to Chrome DevTools but packed inside your app, a revolutionary concept that enhance their daily compilations. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable and on the go. It helps them to understand what's really happening underneath in order to highlight issues and bug causes. They also receive comprehensive reports, can customize our tools for others and can make use of some coding helpers.
 
