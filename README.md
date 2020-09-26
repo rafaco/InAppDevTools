@@ -32,11 +32,19 @@
 
 **A library to enhance the internal compilations of any Android app, adding useful tools for early stage users. They can get info on what they are testing, send comprehensive crash reports and inspect their running app on the go. It also bring a customizable team panel and other helpful tools, all within their app.**
 
-**For developers** this is conceptually similar to Chrome DevTools but packed inside your app. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable/computer. It helps them to understand what's really happening underneath in order to highlight issues and bug causes.
+<p align="center">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner1.gif" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner2.png" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner3.png" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner4.png" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner5.gif" width="19%">
+</p>
 
-**For tester** and other internal users, this library provide exact information of what they are testing and allow them to easily report any crash or issues founded. These reports automatically include a zip with valuable information for developers like repro steps, screenshots, logs and info about app, build, device, info,  etc.
+**Non-developer internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, device, OS, etc).
 
-Your **production users** get neither any of our features nor apk size increase. They get a spotless app which has been thoroughly polish in an agile development process, enhanced by our tools :)
+**For developers** this is conceptually similar to Chrome DevTools but packed inside your app, a revolutionary concept that enhance their daily compilations. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable and on the go. It helps them to understand what's really happening underneath in order to highlight issues and bug causes. They also receive comprehensive reports, can customize our tools for others and can make use of some coding helpers.
+
+**Production users** get neither any of our features nor apk size increase. They get a spotless app thoroughly polished in an agile development process, enhanced by our tools :)
 
 
 #### Tools
