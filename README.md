@@ -40,7 +40,7 @@
  <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner5.gif" width="19%">
 </p>
 
-**Non-developer internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, device, OS, etc).
+**Non-developer internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, repo status, device and OS).
 
 **For developers** this is conceptually similar to Chrome DevTools but packed inside your app, a revolutionary concept that enhance their daily compilations. We provide a complete set of tools to inspect, analyze and modify a running app from within it, without cable and on the go. It helps them to understand what's really happening underneath in order to highlight issues and bug causes. They also receive comprehensive reports, can customize our tools for others and can make use of some coding helpers.
 
@@ -282,7 +282,7 @@ I started this project while I was working on an international flight informatio
 
 Days after I added an overlay to see the logs over our activities and the first info panel... and it became my personal tool for my daily duties. I carried on adding more tools and I started to realise that it could be useful for other Android developers as well. Few months later, I quit my job to fully focus on this project and to make it flexible for other apps.
 
-Year and a half later, I am very excited with the results obtained and I'm looking forward to create a friendly community to push this project to the moon, [join us!](CONTRIBUTING.md). Meanwhile, I'm currently searching for job at Madrid, ideally withing an Android team willing to use this tools. Check out my [LinkedIn profile](https://linkedin.com/in/rafaco).
+Year and a half later, I am very excited with the results obtained and I'm looking forward to create a friendly community to push this project to the moon, [join us!](CONTRIBUTING.md). Meanwhile, I'm currently searching for job at Madrid, ideally within an Android team open to use this tools. Check out my [LinkedIn profile](https://linkedin.com/in/rafaco).
 
 ## Links <a name="links"/>
 - External references:
