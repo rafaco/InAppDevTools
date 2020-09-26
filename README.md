@@ -33,11 +33,11 @@
 **A library to enhance the internal compilations of any Android app, adding useful tools for early stage users. They can get info on what they are testing, send comprehensive crash reports and inspect their running app on the go. It also bring a customizable team panel and other helpful tools, all within their app.**
 
 <p align="center">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner1.gif" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner2.png" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner3.png" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner4.png" width="19%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/HomeBanner/ScreenBanner5.gif" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner1.gif" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner2.jpeg" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner3.jpeg" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner4.jpeg" width="19%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner5.gif" width="19%">
 </p>
 
 **Non-developer internal users** (QA, managers, client, beta testers...) can get precise information on what they are testing and use an exclusive panel customized by the dev team with actions and resources. They also can send contextualized reports, which automagically include highly valuable information like repro steps, screenshots, crash details, full logs and environment info (app, build, repo status, device and OS).
