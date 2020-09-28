@@ -34,8 +34,8 @@
 
 <p align="center">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner1.gif" width="24%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner2.jpeg" width="24%">
- <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner3.jpeg" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner2.gif" width="24%">
+ <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner3.gif" width="24%">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner4.gif" width="24%">
 </p>
 <p align="center">
