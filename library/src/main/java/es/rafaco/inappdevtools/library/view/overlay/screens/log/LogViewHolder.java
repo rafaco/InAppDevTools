@@ -105,7 +105,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         boolean isSelected(long id);
         boolean isBeforeSelected(int position);
         void onItemClick(View itemView, int position, long id);
-        void onOverflowClick(View itemView, int position, long id);
+        void onOverflowClick(View itemView, long id);
     }
 
     public void bindTo(final Friendly data, int position) {
@@ -205,7 +205,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             overflow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onOverflowClick(v, getAdapterPosition(), uid);
+                    listener.onOverflowClick(v, uid);
                 }
             });
         }
