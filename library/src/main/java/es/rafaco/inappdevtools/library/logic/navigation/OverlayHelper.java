@@ -27,6 +27,7 @@ import es.rafaco.inappdevtools.library.logic.utils.AppUtils;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.WelcomeOverlayDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 
 public class OverlayHelper {
 
@@ -90,6 +91,11 @@ public class OverlayHelper {
     public void restoreAll() {
         if (cantShowOverlay()) return;
         OverlayService.performAction(OverlayService.IntentAction.RESTORE_ALL);
+    }
+
+    public void toggleScreenLayout(ScreenLayer.SizePosition newPosition) {
+        if (cantShowOverlay()) return;
+        OverlayService.performAction(OverlayService.IntentAction.TOGGLE_SCREEN_SIZE, newPosition.name());
     }
 
     //endregion
