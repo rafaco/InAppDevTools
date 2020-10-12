@@ -99,6 +99,21 @@ public class ScreenshotsScreen extends AbstractFlexibleScreen {
         ScreenshotDao screenshotDao = IadtDatabase.get().screenshotDao();
         long currentSession = IadtController.get().getSessionManager().getCurrentUid();
         final List<Screenshot> screenshots = screenshotDao.getAll();
+
+        if (screenshots ==null || screenshots.isEmpty()){
+            CardData cardData = new CardData("There are no screenshots",
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            onScreenshotButton();
+                        }
+                    });
+            cardData.setContent("You didn't take any screenshot, take one now to test this feature.");
+            cardData.setTitleColor(R.color.material_gray);
+            data.add(cardData);
+            return data;
+        }
+
         for (int i = 0; i<screenshots.size(); i++) {
             final Screenshot screenshot = screenshots.get(i);
 
