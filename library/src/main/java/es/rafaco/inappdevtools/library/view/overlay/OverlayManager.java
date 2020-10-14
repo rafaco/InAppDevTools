@@ -28,6 +28,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 
 public class OverlayManager {
 
@@ -116,6 +117,10 @@ public class OverlayManager {
 
     public void toggleVisibility(boolean isVisible) {
         layerManager.toggleAllLayerVisibility(isVisible);
+    }
+
+    public void toggleScreenLayout(ScreenLayer.SizePosition newPosition) {
+        layerManager.getMainLayer().toggleSizePosition(newPosition);
     }
 
     //endregion

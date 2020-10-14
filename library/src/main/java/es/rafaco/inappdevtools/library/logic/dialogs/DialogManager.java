@@ -123,10 +123,12 @@ public class DialogManager {
 
     //region [ DIALOG ]
 
-    private void dismiss() {
+    public void dismiss() {
         if (currentDialog!=null){// && currentDialog.isShowing()){
             isManagerDismiss = true;
             currentDialog.dismiss();
+            builder = null;
+            currentDialog = null;
             currentActivityHash = null;
         }
     }

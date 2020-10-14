@@ -105,7 +105,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         boolean isSelected(long id);
         boolean isBeforeSelected(int position);
         void onItemClick(View itemView, int position, long id);
-        void onOverflowClick(View itemView, int position, long id);
+        void onOverflowClick(View itemView, long id);
     }
 
     public void bindTo(final Friendly data, int position) {
@@ -184,13 +184,17 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         if(isSelected && getLinkedIdStep(data)!=null){
             LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
             linearGroupData.setHorizontal(true);
-            linearGroupData.add(new ButtonFlexData(
-                    "Details", new Runnable() {
-                @Override
-                public void run() {
-                    OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
-                }
-            }));
+
+            ButtonFlexData linkedButton = new ButtonFlexData(
+                    "Open " + getLinkedObjectName(data),
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
+                        }
+                    });
+            linkedButton.setColor(R.color.material_blue_900);
+            linearGroupData.add(linkedButton);
             FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(linearGroupData, buttonGroupContainer);
 
@@ -205,7 +209,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             overflow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onOverflowClick(v, getAdapterPosition(), uid);
+                    listener.onOverflowClick(v, uid);
                 }
             });
         }
@@ -237,7 +241,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         return details;
     }
 
-    private NavigationStep getLinkedIdStep(Friendly data) {
+    public static NavigationStep getLinkedIdStep(Friendly data) {
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
         }
@@ -258,6 +262,27 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
 
+        return null;
+    }
+
+    public static String getLinkedObjectName(Friendly data) {
+        if(data.getSubcategory().equals("Crash") ||
+                data.getSubcategory().equals("Screenshot")){
+            return data.getSubcategory();
+        }
+        else if (data.getSubcategory().equals("Init")){
+            return "Session";
+        }
+        else if (data.getSubcategory().equals("NewBuild")){
+            return "Build";
+        }
+        /* TODO: enable ANR screen
+        else if(data.getSubcategory().equals("Anr")){
+            return data.getSubcategory();
+        }*/
+        else if(data.getCategory().equals("Network")){
+            return data.getCategory();
+        }
         return null;
     }
 

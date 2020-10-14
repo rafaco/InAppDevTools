@@ -101,6 +101,10 @@ public abstract class IadtDialogBuilder {
         getManager().onDismiss(dialog);
     }
 
+    public void dismiss(){
+        getManager().dismiss();
+    }
+
     public void onDismiss(DialogInterface dialog) {
         //Intentionally empty, optional to override
     }
