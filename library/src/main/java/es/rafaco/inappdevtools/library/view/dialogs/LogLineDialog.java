@@ -39,6 +39,7 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
+import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
@@ -47,6 +48,7 @@ import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
+import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogViewHolder;
 
 public class LogLineDialog extends IadtDialogBuilder {
@@ -60,6 +62,10 @@ public class LogLineDialog extends IadtDialogBuilder {
 
     @Override
     public void onBuilderCreated(AlertDialog.Builder builder) {
+
+        final Friendly logData = IadtDatabase.get().friendlyDao().findById(logId);
+        final NavigationStep linkedStep = LogViewHolder.getLinkedIdStep(logData);
+
         builder
                 .setTitle("Log line")
                 /*.setMessage("You can force a crash now to test our library")
@@ -77,17 +83,27 @@ public class LogLineDialog extends IadtDialogBuilder {
         final View dialogView = inflater.inflate(R.layout.flexible_container, null);
         builder.setView(dialogView);
 
-        final Friendly logData = IadtDatabase.get().friendlyDao().findById(logId);
         List<Object> data = new ArrayList<>();
-
         HeaderFlexData message = new HeaderFlexData(logData.getMessage());
         message.setBold(true);
         message.setSize(TextFlexData.Size.LARGE);
         data.add(message);
-        
-        data.add(new HeaderFlexData(LogViewHolder.getFormattedDetails(logData)));
 
         data.add(new HeaderFlexData(""));
+        if (linkedStep!=null){
+            String linkedObjectName = LogViewHolder.getLinkedObjectName(logData);
+            ButtonFlexData linkedButton = new ButtonFlexData("Open " + linkedObjectName,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            dismiss();
+                            OverlayService.performNavigationStep(linkedStep);
+                        }
+                    });
+            linkedButton.setFullSpan(true);
+            linkedButton.setColor(R.color.material_blue_900);
+            data.add(linkedButton);
+        }
         data.add(new ButtonFlexData("Google",
                 R.drawable.ic_search_white_24dp,
                 new Runnable() {
@@ -121,6 +137,11 @@ public class LogLineDialog extends IadtDialogBuilder {
                         DocumentRepository.shareDocument(DocumentType.LOG_ITEM, logData.getUid());
                     }
                 }));
+
+        if (logData.getExtra()!=null && !logData.getExtra().isEmpty()){
+            data.add(new HeaderFlexData(logData.getExtra()));
+        }
+        data.add(new HeaderFlexData(LogViewHolder.getFormattedDetails(logData)));
 
         FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
