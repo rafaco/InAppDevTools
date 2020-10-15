@@ -44,18 +44,11 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -112,6 +105,8 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         boolean isSelected = listener.isSelected(data.getUid());
         boolean isBeforeSelected = listener.isBeforeSelected(position);
 
+        final LogLineFormatter formatter = new LogLineFormatter(data);
+
         if(LogScreen.isLogDebug() && isSelected){
             Log.d(Iadt.TAG, "LogScreen - bindTo selection " + data.getUid() + " at " + position);
         }
@@ -164,7 +159,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         titleSeparator.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
         if (isSelected){
-            String details = getFormattedDetails(data);
+            String details = formatter.getDetails();
             detail.setText(details);
             detailWrapper.setVisibility(View.VISIBLE);
         }
@@ -181,16 +176,16 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             extra_wrapper.setVisibility(View.GONE);
         }
 
-        if(isSelected && getLinkedIdStep(data)!=null){
+        if(isSelected && formatter.getLinkStep()!=null){
             LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
             linearGroupData.setHorizontal(true);
 
             ButtonFlexData linkedButton = new ButtonFlexData(
-                    "Open " + getLinkedObjectName(data),
+                    formatter.getLinkName(),
                     new Runnable() {
                         @Override
                         public void run() {
-                            OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
+                            OverlayService.performNavigationStep(formatter.getLinkStep());
                         }
                     });
             linkedButton.setColor(R.color.material_blue_900);
@@ -223,80 +218,10 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
                 : View.VISIBLE);
     }
 
-    public static String getFormattedDetails(Friendly data) {
-        String details = "";
-        if (data.isLogcat()){
-            details = data.getExtra();
-        }
-        else{
-            details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
-            details += "Source: " + "Iadt Event" + Humanizer.newLine();
-            details += "Category: " + data.getCategory() + Humanizer.newLine();
-            details += "Subcategory: " + data.getSubcategory();
-
-            if (data.getLinkedId()>0){
-                details += Humanizer.newLine() + "LinkedId: " + data.getLinkedId();
-            }
-        }
-        return details;
-    }
-
-    public static NavigationStep getLinkedIdStep(Friendly data) {
-        if(data.getSubcategory().equals("Crash")){
-            return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("Screenshot")){
-            return new NavigationStep(ZoomScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("Init")){
-            return new NavigationStep(SessionDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("NewBuild")){
-            return new NavigationStep(BuildDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        /* TODO: enable ANR screen
-        else if(data.getSubcategory().equals("Anr")){
-            return new NavigationStep(AnrDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }*/
-        else if(data.getCategory().equals("Network")){
-            return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-
-        return null;
-    }
-
-    public static String getLinkedObjectName(Friendly data) {
-        if(data.getSubcategory().equals("Crash") ||
-                data.getSubcategory().equals("Screenshot")){
-            return data.getSubcategory();
-        }
-        else if (data.getSubcategory().equals("Init")){
-            return "Session";
-        }
-        else if (data.getSubcategory().equals("NewBuild")){
-            return "Build";
-        }
-        /* TODO: enable ANR screen
-        else if(data.getSubcategory().equals("Anr")){
-            return data.getSubcategory();
-        }*/
-        else if(data.getCategory().equals("Network")){
-            return data.getCategory();
-        }
-        return null;
-    }
-
     public void showPlaceholder(int position) {
-        int color = ContextCompat.getColor(title.getContext(), R.color.rally_gray);
-
         decorator.setVisibility(View.VISIBLE);
-        //decorator.setBackgroundColor(color);
-
         title.setVisibility(View.VISIBLE);
-        //title.setBackgroundColor(color);
-
         icon.setVisibility(View.VISIBLE);
-        //icon.setBackgroundColor(color);
 
         extra_wrapper.setVisibility(View.GONE);
         buttonsSeparator.setVisibility(View.GONE);

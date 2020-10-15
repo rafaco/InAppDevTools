@@ -39,7 +39,6 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentRepository;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
-import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
@@ -49,7 +48,7 @@ import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogViewHolder;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineFormatter;
 
 public class LogLineDialog extends IadtDialogBuilder {
 
@@ -64,7 +63,7 @@ public class LogLineDialog extends IadtDialogBuilder {
     public void onBuilderCreated(AlertDialog.Builder builder) {
 
         final Friendly logData = IadtDatabase.get().friendlyDao().findById(logId);
-        final NavigationStep linkedStep = LogViewHolder.getLinkedIdStep(logData);
+        final LogLineFormatter formatter = new LogLineFormatter(logData);
 
         builder
                 .setTitle("Log line")
@@ -90,14 +89,13 @@ public class LogLineDialog extends IadtDialogBuilder {
         data.add(message);
 
         data.add(new HeaderFlexData(""));
-        if (linkedStep!=null){
-            String linkedObjectName = LogViewHolder.getLinkedObjectName(logData);
-            ButtonFlexData linkedButton = new ButtonFlexData("Open " + linkedObjectName,
+        if (formatter.getLinkStep() != null){
+            ButtonFlexData linkedButton = new ButtonFlexData(formatter.getLinkName(),
                     new Runnable() {
                         @Override
                         public void run() {
                             dismiss();
-                            OverlayService.performNavigationStep(linkedStep);
+                            OverlayService.performNavigationStep(formatter.getLinkStep());
                         }
                     });
             linkedButton.setFullSpan(true);
@@ -141,7 +139,7 @@ public class LogLineDialog extends IadtDialogBuilder {
         if (logData.getExtra()!=null && !logData.getExtra().isEmpty()){
             data.add(new HeaderFlexData(logData.getExtra()));
         }
-        data.add(new HeaderFlexData(LogViewHolder.getFormattedDetails(logData)));
+        data.add(new HeaderFlexData(formatter.getDetails()));
 
         FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
         RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
