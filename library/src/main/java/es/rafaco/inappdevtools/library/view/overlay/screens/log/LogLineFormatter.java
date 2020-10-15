@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
@@ -37,13 +38,34 @@ public class LogLineFormatter {
         this.data = data;
     }
 
+    public String getOneLine(){
+        return String.format("%s %s/%s: %s",
+                getDateWithoutYear(), getSeverity(), data.getSubcategory(), getMessage());
+    }
+
+    public String getMultiLine(){
+        return "Message: " + getMessage() + Humanizer.fullStop()
+                + "Extra: " + getExtra() + Humanizer.fullStop()
+                + "LogId: " + data.getUid() + Humanizer.newLine()
+                + getDetails();
+    }
+
+    public String getMessage() {
+        return data.getMessage();
+    }
+
+    public String getExtra() {
+        return data.getExtra();
+    }
+
     public String getDetails() {
         String details = "";
         if (data.isLogcat()){
             details = data.getExtra();
         }
         else{
-            details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
+            details += "Date: " + getDate() + Humanizer.newLine();
+            details += "Severity: " + getSeverity() + Humanizer.newLine();
             details += "Source: " + "Iadt Event" + Humanizer.newLine();
             details += "Category: " + data.getCategory() + Humanizer.newLine();
             details += "Subcategory: " + data.getSubcategory();
@@ -53,6 +75,19 @@ public class LogLineFormatter {
             }
         }
         return details;
+    }
+
+    public String getSeverity(){
+        String severity = FriendlyLog.convertCharToLongString(data.getSeverity());
+        return Humanizer.toCapitalCase(severity);
+    }
+
+    public String getDate() {
+        return DateUtils.format(data.getDate());
+    }
+
+    public String getDateWithoutYear(){
+        return DateUtils.formatLogcatDate(data.getDate());
     }
 
     public String getLinkName() {
@@ -96,6 +131,4 @@ public class LogLineFormatter {
 
         return null;
     }
-
-
 }
