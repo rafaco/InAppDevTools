@@ -25,7 +25,6 @@
     <string name="config_team_links">Collection of links to shown in team screen. Use Groovy map of name:url</string>
 
     <!-- Dialogs -->
-    <string name="welcome_welcome_message">This is a internal compilation with additional tools included:</string>
     <string name="welcome_privacy_title">Privacy</string>
     <string name="welcome_privacy_content">This compilation contains tools that are locally recording your usage of this app. Only you can share these records by using our report feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
     <string name="welcome_permission_title">Permission</string>

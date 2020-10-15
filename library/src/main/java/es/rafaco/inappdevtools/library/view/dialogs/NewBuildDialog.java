@@ -47,7 +47,6 @@ import es.rafaco.inappdevtools.library.logic.documents.generators.info.BuildInfo
 import es.rafaco.inappdevtools.library.storage.db.entities.Session;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.NewBuildPrefs;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
-import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -73,7 +72,6 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
 
         builder
                 .setTitle(R.string.library_name)
-                .setMessage(R.string.welcome_welcome_message)
                 .setIcon(UiUtils.getAppIconResourceId())
                 .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -94,6 +92,7 @@ public abstract class NewBuildDialog extends IadtDialogBuilder {
                     onDismiss();
                 }
             });
+            builder.setCancelable(true);
         }
 
         List<Object> data = new ArrayList<>();
