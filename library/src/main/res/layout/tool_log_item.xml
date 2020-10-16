@@ -116,49 +116,14 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/extra_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/detail_wrapper"
-                    android:orientation="horizontal"
-                    android:padding="4dp"
-                    android:layout_marginBottom="2dp"
-                    android:visibility="gone">
-
-                    <es.rafaco.compat.AppCompatTextView
-                        android:id="@+id/extra"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="italic"
-                        android:textColor="@color/rally_white"/>
-
-                </LinearLayout>
-
                 <View
                     android:id="@+id/buttons_separator"
-                    android:layout_below="@id/extra_wrapper"
+                    android:layout_below="@id/detail_wrapper"
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     style="@style/horizontal_separator_log"
                     android:visibility="gone"/>
-
-                <ImageView
-                    android:id="@+id/overflow"
-                    android:layout_width="37dp"
-                    android:layout_height="31dp"
-                    android:layout_below="@id/buttons_separator"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="6dp"
-                    android:paddingLeft="6dp"
-                    android:paddingRight="10dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_more_vert_white_24dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"/>
 
                 <FrameLayout
                     android:id="@+id/button_group_container"
@@ -166,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/buttons_separator"
                     android:layout_alignParentBottom="true"
-                    android:layout_toLeftOf="@id/overflow">
+                    android:layout_alignParentRight="true">
                 </FrameLayout>
 
             </RelativeLayout>

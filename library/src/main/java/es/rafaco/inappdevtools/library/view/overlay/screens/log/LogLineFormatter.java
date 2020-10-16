@@ -38,9 +38,15 @@ public class LogLineFormatter {
         this.data = data;
     }
 
+    public String getOneLineHeader(){
+        String tag = data.isLogcat() ? data.getSubcategory() :
+                data.getCategory() + "-" + data.getSubcategory();
+        return String.format("%s %s/%s",
+                getDateWithoutYear(), data.getSeverity(), tag);
+    }
+
     public String getOneLine(){
-        return String.format("%s %s/%s: %s",
-                getDateWithoutYear(), getSeverity(), data.getSubcategory(), getMessage());
+        return getOneLineHeader() + ": " + getMessage();
     }
 
     public String getMultiLine(){
@@ -107,7 +113,7 @@ public class LogLineFormatter {
         }
 
         if (objectName!=null){
-            return "Open " + objectName;
+            return objectName + " " + data.getLinkedId();
         }
         return null;
     }

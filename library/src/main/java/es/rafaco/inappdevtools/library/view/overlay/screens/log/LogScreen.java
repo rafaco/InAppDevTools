@@ -445,7 +445,7 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     //region [ ITEM OVERFLOW MENU ]
 
     @Override
-    public void onOverflowClick(View itemView, long uid) {
+    public void onOverflowClick(long uid) {
         IadtController.get().getDialogManager().load(new LogLineDialog(uid));
     }
 
