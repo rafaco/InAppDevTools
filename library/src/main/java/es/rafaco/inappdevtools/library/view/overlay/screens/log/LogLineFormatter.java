@@ -67,11 +67,12 @@ public class LogLineFormatter {
     public String getDetails() {
         String details = "";
         if (data.isLogcat()){
-            details = data.getExtra();
+            details += "Severity: " + getSeverity() + Humanizer.newLine();
+            details += data.getExtra();
         }
         else{
-            details += "Date: " + getDate() + Humanizer.newLine();
             details += "Severity: " + getSeverity() + Humanizer.newLine();
+            details += "Date: " + getDate() + Humanizer.newLine();
             details += "Source: " + "Iadt Event" + Humanizer.newLine();
             details += "Category: " + data.getCategory() + Humanizer.newLine();
             details += "Subcategory: " + data.getSubcategory();

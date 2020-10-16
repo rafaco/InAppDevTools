@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.dialogs;
 
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -44,6 +45,8 @@ import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
+import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
@@ -66,9 +69,7 @@ public class LogLineDialog extends IadtDialogBuilder {
         final LogLineFormatter formatter = new LogLineFormatter(logData);
 
         builder
-                .setTitle("Log line")
-                /*.setMessage("You can force a crash now to test our library")
-                .setIcon(R.drawable.ic_more_vert_white_24dp)*/
+                .setTitle("Log line details")
                 .setPositiveButton(R.string.button_close, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -84,13 +85,13 @@ public class LogLineDialog extends IadtDialogBuilder {
 
         List<Object> data = new ArrayList<>();
         HeaderFlexData message = new HeaderFlexData(logData.getMessage());
-        message.setBold(true);
-        message.setSize(TextFlexData.Size.LARGE);
+        message.setSize(TextFlexData.Size.EXTRA_LARGE);
         data.add(message);
 
         data.add(new HeaderFlexData(""));
         if (formatter.getLinkStep() != null){
             ButtonFlexData linkedButton = new ButtonFlexData(formatter.getLinkName(),
+                    R.drawable.ic_attach_file_24,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -99,10 +100,16 @@ public class LogLineDialog extends IadtDialogBuilder {
                         }
                     });
             linkedButton.setFullSpan(true);
+            linkedButton.setHorizontalMargin(true);
             linkedButton.setColor(R.color.material_blue_900);
             data.add(linkedButton);
         }
-        data.add(new ButtonFlexData("Google",
+
+        LinearGroupFlexData secondButtons = new LinearGroupFlexData();
+        secondButtons.setHorizontal(true);
+        secondButtons.setHorizontalMargin(true);
+        secondButtons.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
+        secondButtons.add(new ButtonFlexData("Google",
                 R.drawable.ic_search_white_24dp,
                 new Runnable() {
                     @Override
@@ -113,7 +120,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                         ExternalIntentUtils.search(logData.getMessage());
                     }
                 }));
-        data.add(new ButtonFlexData("Copy",
+        secondButtons.add(new ButtonFlexData("Copy",
                 R.drawable.ic_content_copy_white_24dp,
                 new Runnable() {
                     @Override
@@ -124,7 +131,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                         ClipboardUtils.save(IadtController.get().getContext(), logData.getMessage());
                     }
                 }));
-        data.add(new ButtonFlexData("Share",
+        secondButtons.add(new ButtonFlexData("Share",
                 R.drawable.ic_share_white_24dp,
                 new Runnable() {
                     @Override
@@ -135,8 +142,9 @@ public class LogLineDialog extends IadtDialogBuilder {
                         DocumentRepository.shareDocument(DocumentType.LOG_ITEM, logData.getUid());
                     }
                 }));
+        data.add(secondButtons);
 
-        if (logData.getExtra()!=null && !logData.getExtra().isEmpty()){
+        if (!logData.isLogcat() && !TextUtils.isEmpty(logData.getExtra())){
             data.add(new HeaderFlexData(logData.getExtra()));
         }
         data.add(new HeaderFlexData(formatter.getDetails()));
