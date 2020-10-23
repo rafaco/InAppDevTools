@@ -98,6 +98,10 @@ public class LogLineFormatter {
     }
 
     public String getLinkName() {
+        if (data.getLinkedId()<1){
+            return null;
+        }
+
         String objectName = null;
         if(data.getSubcategory().equals("Crash") ||
                 data.getSubcategory().equals("Screenshot")){
@@ -120,6 +124,10 @@ public class LogLineFormatter {
     }
 
     public NavigationStep getLinkStep() {
+        if (data.getLinkedId()<1){
+            return null;
+        }
+
         if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
         }
@@ -135,7 +143,6 @@ public class LogLineFormatter {
         else if(data.getCategory().equals("Network")){
             return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
         }
-
         return null;
     }
 }
