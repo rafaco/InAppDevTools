@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.logic.dialogs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 
 //#ifdef ANDROIDX
@@ -146,7 +145,7 @@ public class DialogManager {
     }
 
     private void show() {
-        Log.d("DIALOGS", "Showing dialog");
+        //Log.d("DIALOGS", "Showing dialog");
         currentDialog.show();
     }
 
