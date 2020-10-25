@@ -167,9 +167,9 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             linearGroupData.setHorizontal(true);
             linearGroupData.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
 
-            if (formatter.getLinkStep()!=null){
+            if (!isLogcat && formatter.getLinkStep() !=null){
                 ButtonFlexData linkedButton = new ButtonFlexData(formatter.getLinkName(),
-                        R.drawable.ic_attach_file_24,
+                        formatter.getLinkIcon(),
                         new Runnable() {
                             @Override
                             public void run() {
@@ -202,6 +202,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);
         }else{
+            buttonGroupContainer.removeAllViews();
             buttonGroupContainer.setVisibility(View.GONE);
             buttonsSeparator.setVisibility(View.GONE);
         }

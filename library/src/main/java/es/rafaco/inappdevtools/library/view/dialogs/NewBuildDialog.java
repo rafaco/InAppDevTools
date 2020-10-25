@@ -51,7 +51,7 @@ import es.rafaco.inappdevtools.library.view.components.items.TextFlexData;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
-public abstract class NewBuildDialog extends IadtDialogBuilder {
+public class NewBuildDialog extends IadtDialogBuilder {
 
     public NewBuildDialog() {
         super();

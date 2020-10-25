@@ -113,7 +113,7 @@ public class ActivityEventDetector extends EventDetector implements Application.
     //endregion
 
     private void trackAndFire(Event activityEvent, Activity activity, long uuid) {
-        Log.d("DEMO_activity", "trackAndFire at " + activityEvent.getName() + ". UUID is " + uuid);
+        //Log.d("DEMO_activity", "trackAndFire at " + activityEvent.getName() + ". UUID is " + uuid);
         tracker.track(activityEvent, activity, uuid);
         eventManager.fire(activityEvent, activity);
     }

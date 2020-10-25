@@ -152,7 +152,7 @@ public class SupportFragmentLifecycleCallbacks extends FragmentManager.FragmentL
 
 
     private void trackAndFire(Event fragmentEvent, Fragment fragment, long uuid) {
-        Log.d("DEMO_fragment", "trackAndFire at " + fragmentEvent.getName() + "for Fragment " + uuid);
+        //Log.d("DEMO_fragment", "trackAndFire at " + fragmentEvent.getName() + "for Fragment " + uuid);
         getTracker().track(fragmentEvent, fragment, uuid);
         getEventManager().fire(fragmentEvent, fragment);
     }

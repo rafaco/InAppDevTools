@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.logic.dialogs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 
 //#ifdef ANDROIDX
@@ -38,7 +37,6 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.IadtDialogBuilder;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
-
 
 /**
  * DialogManager.java
@@ -85,8 +83,12 @@ public class DialogManager {
         }
 
         if (IadtController.get().isDebug()){
+            String dialogName = builder.getName();
+            if (dialogName.isEmpty()){
+                dialogName = "Unknown";
+            }
             FriendlyLog.log("D", "Iadt", "Navigation",
-                    "Dialog navigation to " + builder.getClass().getSimpleName());
+                    "Dialog navigation to " + dialogName);
         }
         show();
     }
@@ -143,7 +145,7 @@ public class DialogManager {
     }
 
     private void show() {
-        Log.d("DIALOGS", "Showing dialog");
+        //Log.d("DIALOGS", "Showing dialog");
         currentDialog.show();
     }
 
