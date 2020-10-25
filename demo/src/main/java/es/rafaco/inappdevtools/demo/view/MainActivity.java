@@ -53,19 +53,13 @@ public class MainActivity extends AppCompatActivity {
         demoAPI.start(getApplicationContext());
 
         //Custom event samples
-        Iadt.buildEvent("Custom event sample1: Verbose event on default category (Custom-Default)")
+        Iadt.buildEvent("Custom event sample: develop event")
                 .fire();
 
-        Iadt.buildEvent("Custom event sample 2: Repro step (Info) with custom category and subcategory")
+        Iadt.buildEvent("Custom event sample: reproduction step event")
                 .setCategory("YourCategory")
                 .setSubcategory("YourSubcategory")
-                .setSeverity("I")
-                .fire();
-
-        Iadt.buildEvent("Custom event sample 3: Warning with same category but another subcategory")
-                .setCategory("YourCategory")
-                .setSubcategory("AnotherSubcategory")
-                .setSeverity("W")
+                .isInfo()
                 .fire();
     }
 
