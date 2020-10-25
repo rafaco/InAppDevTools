@@ -39,7 +39,6 @@ import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.IadtDialogBuilder;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 
-
 /**
  * DialogManager.java
  *  Build and show dialogs with custom styles, defined by a IadtDialogBuilder
@@ -85,8 +84,12 @@ public class DialogManager {
         }
 
         if (IadtController.get().isDebug()){
+            String dialogName = builder.getName();
+            if (dialogName.isEmpty()){
+                dialogName = "Unknown";
+            }
             FriendlyLog.log("D", "Iadt", "Navigation",
-                    "Dialog navigation to " + builder.getClass().getSimpleName());
+                    "Dialog navigation to " + dialogName);
         }
         show();
     }

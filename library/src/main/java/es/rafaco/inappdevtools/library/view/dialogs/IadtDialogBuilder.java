@@ -29,6 +29,7 @@ import android.content.DialogInterface;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.TextUtils;
 //#endif
 
 import es.rafaco.inappdevtools.library.IadtController;
@@ -90,6 +91,13 @@ public abstract class IadtDialogBuilder {
         return IadtController.get().getDialogManager();
     }
 
+    public String getName(){
+        String name = this.getClass().getSimpleName();
+        if (TextUtils.isEmpty(name) && this.getClass().getSuperclass() != null){
+            name = this.getClass().getSuperclass().getSimpleName();
+        }
+        return name;
+    }
 
     public IadtDialogBuilder setCancelable (boolean isCancelable){
         this.isCancelable = isCancelable;
