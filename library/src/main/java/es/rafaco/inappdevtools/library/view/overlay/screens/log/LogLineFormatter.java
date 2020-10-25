@@ -19,14 +19,17 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
+import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ProcessesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
@@ -98,12 +101,18 @@ public class LogLineFormatter {
     }
 
     public String getLinkName() {
-        if (data.getLinkedId()<1){
-            return null;
+        if(data.getCategory().equals("Process")){
+            return "Processes";
+        }
+        else if(data.getCategory().equals("Activity") || data.getCategory().equals("Fragment")){
+            return "View";
         }
 
         String objectName = null;
-        if(data.getSubcategory().equals("Crash") ||
+        if (data.getLinkedId()<1){
+            return null;
+        }
+        else if(data.getSubcategory().equals("Crash") ||
                 data.getSubcategory().equals("Screenshot")){
             objectName = data.getSubcategory();
         }
@@ -123,12 +132,43 @@ public class LogLineFormatter {
         return null;
     }
 
+    public int getLinkIcon() {
+        if(data.getCategory().equals("Process")){
+            return R.drawable.ic_developer_mode_white_24dp;
+        }
+        else if(data.getCategory().equals("Activity") || data.getCategory().equals("Fragment")){
+            return R.drawable.ic_view_carousel_white_24dp;
+        }
+        else if(data.getSubcategory().equals("Crash")){
+            return R.drawable.ic_bug_report_white_24dp;
+        }
+        else if (data.getSubcategory().equals("Screenshot")){
+            return R.drawable.ic_photo_library_white_24dp;
+        }
+        else if (data.getSubcategory().equals("Init")){
+            return R.drawable.ic_timeline_white_24dp;
+        }
+        else if (data.getSubcategory().equals("NewBuild")){
+            return R.drawable.ic_build_white_24dp;
+        }
+        else if(data.getCategory().equals("Network")){
+            return R.drawable.ic_cloud_queue_white_24dp;
+        }
+        return R.drawable.ic_attach_file_24;
+    }
+
     public NavigationStep getLinkStep() {
+        if(data.getCategory().equals("Process")){
+            return new NavigationStep(ProcessesScreen.class, null);
+        }
+        else if(data.getCategory().equals("Activity") || data.getCategory().equals("Fragment")){
+            return new NavigationStep(ViewScreen.class, null);
+        }
+
         if (data.getLinkedId()<1){
             return null;
         }
-
-        if(data.getSubcategory().equals("Crash")){
+        else if(data.getSubcategory().equals("Crash")){
             return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
         }
         else if (data.getSubcategory().equals("Screenshot")){

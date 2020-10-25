@@ -169,7 +169,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
 
             if (!isLogcat && formatter.getLinkStep() !=null){
                 ButtonFlexData linkedButton = new ButtonFlexData(formatter.getLinkName(),
-                        R.drawable.ic_attach_file_24,
+                        formatter.getLinkIcon(),
                         new Runnable() {
                             @Override
                             public void run() {
