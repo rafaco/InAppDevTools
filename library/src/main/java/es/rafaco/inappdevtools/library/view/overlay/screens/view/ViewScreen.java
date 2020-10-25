@@ -114,7 +114,7 @@ public class ViewScreen extends AbstractFlexibleScreen {
 
         OverviewData overviewData = new OverviewData("Current view",
                 tracker.getCurrentName() + " on top",
-                R.string.gmd_visibility,
+                R.string.gmd_view_carousel,
                 R.color.iadt_text_high);
         overviewData.setHorizontalMargin(true);
         data.add(overviewData);
