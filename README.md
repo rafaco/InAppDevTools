@@ -144,7 +144,7 @@ dependencies {
 inappdevtools {                                                         // 4.
     enabled = true
     teamName = 'YourTeam'
-    teamEmail = 'youremail@yourdomain.com
+    teamEmail = 'youremail@yourdomain.com'
     notes = 'First build note, replace me on the next ones.'
 }
 ```
