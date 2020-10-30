@@ -24,6 +24,7 @@ import android.util.Log;
 
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
@@ -47,7 +48,9 @@ public class PandoraBridge {
         if (IadtController.get().isDebug())
             Log.d(Iadt.TAG, "Pandora init");
 
-        setInterceptorListener();       //Set a listener to the network interceptor
+        if (IadtController.get().getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR))
+            setInterceptorListener();       //Set a listener to the network interceptor
+
         Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
         Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
         isInitialised = true;
