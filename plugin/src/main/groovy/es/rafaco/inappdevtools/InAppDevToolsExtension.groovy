@@ -35,6 +35,7 @@ class InAppDevToolsExtension {
     Boolean debug = false
     Boolean sourceInclusion
     Boolean sourceInspection
+    Boolean networkInterceptor
 
     // Runtime flags (used later on)
     Boolean overlayEnabled

@@ -93,6 +93,9 @@ class BuildInfoTask extends IadtBaseTask {
         if (extension.sourceInspection!=null)
             propertiesMap.put("sourceInspection", extension.sourceInspection)
 
+        if (extension.networkInterceptor!=null)
+            propertiesMap.put("networkInterceptor", extension.networkInterceptor)
+
         if (extension.invocationByIcon!=null)
             propertiesMap.put("invocationByIcon", extension.invocationByIcon)
 

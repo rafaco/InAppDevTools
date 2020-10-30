@@ -115,6 +115,7 @@ inappdevtools {
     debug = true
     //sourceInclusion = false
     //sourceInspection = false
+    //networkInterceptor = false
     //enabledOnRelease = true
 
     //// Customization flags (runtime)

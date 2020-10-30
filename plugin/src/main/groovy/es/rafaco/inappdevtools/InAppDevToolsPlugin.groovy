@@ -171,7 +171,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     return
                 }
 
-                applyPandoraPlugins(project)
+                if (isNetworkInterceptor()){
+                    applyPandoraPlugins(project)
+                }
 
                 theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
                 if (projectUtils.isAndroidApplication()) {
@@ -371,6 +373,14 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         InAppDevToolsExtension extension = getExtension()
         if (extension!=null && extension.sourceInspection!=null){
             return extension.sourceInspection
+        }
+        return true
+    }
+
+    boolean isNetworkInterceptor(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.networkInterceptor!=null){
+            return extension.networkInterceptor
         }
         return true
     }

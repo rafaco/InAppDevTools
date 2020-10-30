@@ -33,6 +33,7 @@ public enum BuildConfigField {
     DEBUG("debug", R.string.config_debug, boolean.class, false),
     SOURCE_INCLUSION("sourceInclusion", R.string.config_source_inclusion, boolean.class, true),
     SOURCE_INSPECTION("sourceInspection", R.string.config_source_inspection, boolean.class, true),
+    NETWORK_INTERCEPTOR("networkInterceptor", R.string.config_network_interceptor, boolean.class, true),
 
     // Customization flags (runtime)
     NOTES("notes", R.string.config_notes, String.class, ""),
