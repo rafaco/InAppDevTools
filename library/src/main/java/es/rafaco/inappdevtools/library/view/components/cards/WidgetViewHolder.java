@@ -60,15 +60,29 @@ public class WidgetViewHolder extends FlexViewHolder {
         final WidgetData data = (WidgetData) abstractData;
         if (data!=null){
 
-            itemView.setActivated(true);
+            int highlightColor = data.isDisabled() ? R.color.iadt_text_low : R.color.iadt_primary;
+            int highlightColorRes = ContextCompat.getColor(itemView.getContext(), highlightColor);
 
+            title.setTextColor(highlightColorRes);
             title.setText(data.getTitle().toUpperCase());
+
+            if (data.getIcon()>0){
+                IconUtils.applyToTextView(icon, data.getIcon(), highlightColor);
+            }
+
             mainContent.setText(data.getMainContent());
             secondContent.setText(data.getSecondContent());
             secondContent.setVisibility(TextUtils.isEmpty(data.getSecondContent()) ? View.GONE : View.VISIBLE);
+            if (data.isDisabled()){
+                mainContent.setTextColor(highlightColorRes);
+                secondContent.setTextColor(highlightColorRes);
+            }
 
-            if (data.getPerformer() != null) {
-                itemView.setClickable(true);
+            itemView.setActivated(!data.isDisabled());
+            itemView.setFocusable(!data.isDisabled());
+            itemView.setFocusableInTouchMode(!data.isDisabled());
+            itemView.setClickable(!data.isDisabled());
+            if (!data.isDisabled() && data.getPerformer() != null) {
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -77,11 +91,10 @@ public class WidgetViewHolder extends FlexViewHolder {
                 });
             }
 
-            if (data.getIcon()>0){
-                IconUtils.set(icon, data.getIcon());
+            if (data.isDisabled()){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.iadt_surface_bottom));
             }
-
-            if (data.getBgColor()>0){
+            else if (data.getBgColor()>0){
                 cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), data.getBgColor()));
             }
 

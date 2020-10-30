@@ -278,23 +278,36 @@ public class HomeScreen extends AbstractFlexibleScreen {
     }
 
     private void addNetwork(List<Object> data) {
-        NetSummaryDao netSummaryDao = IadtDatabase.get().netSummaryDao();
-        long currentSession = IadtController.get().getSessionManager().getCurrentUid();
-        int netCount = netSummaryDao.countBySession(currentSession);
-        long netSize = netSummaryDao.sizeBySession(currentSession);
-        int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
-        WidgetData networkData = new WidgetData.Builder("Network")
-                .setIcon(R.string.gmd_filter_drama)
-                .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
-                .setSecondContent(netCount +" req. and "
-                        + Humanizer.plural(netErrors, "error"))
-                .setPerformer(new Runnable() {
-                    @Override
-                    public void run() {
-                        OverlayService.performNavigation(NetScreen.class);
-                    }
-                })
-                .build();
+        boolean isEnabled = IadtController.get().getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR);
+        WidgetData networkData;
+        if (!isEnabled){
+            networkData = new WidgetData.Builder("Network")
+                    .setIcon(R.string.gmd_filter_drama)
+                    .setMainContent("")
+                    .setSecondContent("Disabled")
+                    .setDisabled()
+                    .build();
+        }
+        else{
+            NetSummaryDao netSummaryDao = IadtDatabase.get().netSummaryDao();
+            long currentSession = IadtController.get().getSessionManager().getCurrentUid();
+            int netCount = netSummaryDao.countBySession(currentSession);
+            long netSize = netSummaryDao.sizeBySession(currentSession);
+            int netErrors = netSummaryDao.countBySessionAndStatus(currentSession, NetSummary.Status.ERROR);
+             networkData = new WidgetData.Builder("Network")
+                    .setIcon(R.string.gmd_filter_drama)
+                    .setMainContent(Humanizer.humanReadableByteCount(netSize, false))
+                    .setSecondContent(netCount +" req. and "
+                            + Humanizer.plural(netErrors, "error"))
+                    .setPerformer(new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(NetScreen.class);
+                        }
+                    })
+                    .build();
+        }
+
         data.add(networkData);
     }
 
