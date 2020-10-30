@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.utils.ConfigUtils
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -85,7 +86,60 @@ class DependencyTask extends DependencyReportTask {
             return
         }
 
+        // Perform report
         super.generate();
+
+        // After report
         if (isDebug) println "Generated dependency report into ${outputFile}"
+        buildReactConfig(outputFile)
+    }
+
+
+    private String buildReactConfig(File dependenciesFile) {
+        String reactString = getVersion(dependenciesFile, "com.facebook.react:react-native")
+        boolean isReact = !reactString.isEmpty()
+        if (isReact){
+            Map propertiesMap = [
+                    enabled : isReact,
+                    version : reactString ]
+            propertiesMap
+            File file = InAppDevToolsPlugin.getOutputFile(getProject(), 'react_config.json')
+            new ConfigUtils(project).writeMap(file, propertiesMap)
+        }
+    }
+
+    private String getVersion(File file, String key) {
+        String rawLine = findLine(file, key)
+        if (rawLine.isEmpty()){
+            return ""
+        }
+        return parseVersion(rawLine)
+    }
+
+    private String findLine(File file, String key) {
+        def lines = file.readLines()
+        def found = ""
+        lines.find {
+            if (it.contains(key)) {
+                found = it
+                return true //break
+            }
+            return false //keep looping
+        }
+        return found
+    }
+
+    private String parseVersion(String line) {
+        String temp = line.drop(line.indexOf("--- ") + "--- ".length())
+        temp = temp.drop(temp.lastIndexOf(":") + ":".length())
+        boolean isOverride = temp.indexOf(" -> ")>0
+        if (isOverride){
+           return temp.drop(temp.indexOf(" -> ") + " -> ".length())
+        }
+        boolean isMax = temp.indexOf(" (*)")>0
+        if (isMax){
+            return temp.reverse().drop(" (*)").reverse()
+        }
+        return temp
     }
 }
