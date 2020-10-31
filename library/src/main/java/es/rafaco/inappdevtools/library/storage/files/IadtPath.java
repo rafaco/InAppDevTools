@@ -37,6 +37,7 @@ public class IadtPath {
     public static final String BUILD_CONFIG_FILE = "build_config.json";
     public static final String PLUGIN_LIST_FILE = "gradle_plugins.txt";
     public static final String DEPENDENCIES_FILE = "gradle_dependencies.txt";
+    public static final String REACT_NATIVE_CONFIG_FILE = "react_config.json";
     public static final String GIT_INFO_JSON_FILE = "git_info.json";
     public static final String GIT_REMOTE_BRANCH_TXT_FILE = "git_remote_branch.txt";
     public static final String GIT_LOCAL_BRANCH_DIFF_FILE = "git_local_branch.diff";
@@ -48,6 +49,7 @@ public class IadtPath {
     public static final String BUILD_CONFIG = SUBFOLDER + "/" + BUILD_CONFIG_FILE;
     public static final String PLUGIN_LIST = SUBFOLDER + "/" + PLUGIN_LIST_FILE;
     public static final String DEPENDENCIES = SUBFOLDER + "/" + DEPENDENCIES_FILE;
+    public static final String REACT_NATIVE = SUBFOLDER + "/" + REACT_NATIVE_CONFIG_FILE;
     public static final String GIT_INFO_JSON = SUBFOLDER + "/" + GIT_INFO_JSON_FILE;
     public static final String GIT_REMOTE_BRANCH_TXT = SUBFOLDER + "/" + GIT_REMOTE_BRANCH_TXT_FILE;
     public static final String GIT_LOCAL_BRANCH_TXT = SUBFOLDER + "/" + GIT_LOCAL_BRANCH_TXT_FILE;

@@ -48,6 +48,7 @@ import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.SessionAnalysis;
 import es.rafaco.inappdevtools.library.storage.files.utils.InternalFileReader;
+import es.rafaco.inappdevtools.library.storage.files.utils.ReactNativeHelper;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
 import es.rafaco.inappdevtools.library.logic.utils.RunningProcessesUtils;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
@@ -67,6 +68,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.history.HistoryScree
 import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.LogicScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.react.ReactNativeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceCodeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
@@ -143,6 +145,21 @@ public class HomeScreen extends AbstractFlexibleScreen {
         addNetwork(data);
 
         //addMore(data);
+
+        ReactNativeHelper helper = new ReactNativeHelper();
+        if (helper.isEnabled()){
+            data.add(new WideWidgetData.Builder("React Native")
+                    .setMainContent(helper.getVersion())
+                    .setSecondContent("Detected")
+                    .setIcon(R.string.gmd_filter_vintage)
+                    .setPerformer(new Runnable() {
+                        @Override
+                        public void run() {
+                            OverlayService.performNavigation(ReactNativeScreen.class);
+                        }
+                    })
+                    .build());
+        }
 
         return data;
     }
