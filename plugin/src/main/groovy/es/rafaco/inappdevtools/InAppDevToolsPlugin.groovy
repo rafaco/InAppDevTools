@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools
 
 import es.rafaco.inappdevtools.tasks.DependencyTask
 import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
+import es.rafaco.inappdevtools.tasks.ReactNativeTask
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
@@ -49,6 +50,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     final SOURCES_TASK = 'iadtSrcPack'
     final GENERATED_TASK = 'iadtGenPack'
     final RESOURCES_TASK = 'iadtResPack'
+    final REACT_NATIVE_TASK = 'iadtReactNative'
 
     InAppDevToolsExtension extension
     ProjectUtils projectUtils
@@ -178,6 +180,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
                 if (projectUtils.isAndroidApplication()) {
                     addAndLinkDependencyReportTask(project, theTask, buildVariant)
+                    addAndLinkReactNativeTask(project, theTask, buildVariant)
                 }
                 if (shouldIncludeSources(theTask)) {
                     theTask.dependsOn += [
@@ -217,6 +220,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         if (dependencyTask.outputFile.lastModified() < dependencyTask.inputFile.lastModified()){
             superTask.dependsOn += [dependencyTask]
         }
+    }
+
+    private void addAndLinkReactNativeTask(Project project, Task superTask, String buildVariant ) {
+        ReactNativeTask reactTask = project.task(REACT_NATIVE_TASK + buildVariant, type: ReactNativeTask)
+        superTask.dependsOn += [reactTask]
+        DependencyTask dependencyTask = project.tasks.getByName(DEPENDENCIES_TASK + buildVariant)
+        reactTask.dependsOn += [dependencyTask]
     }
 
     private Task addBuildInfoTask(Project project) {
