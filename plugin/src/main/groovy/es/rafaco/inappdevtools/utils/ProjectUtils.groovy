@@ -123,27 +123,25 @@ class ProjectUtils {
         Matcher matcher = getBuildVariantMatcher()
 
         if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
+            return matcher.group(2)
         } else {
             if (isDebug()) println "getCurrentFlavor: cannot_find"
             return ""
         }
     }
 
-    String getCurrentFlavor() {
+    String getCurrentBuildFlavor() {
         Matcher matcher = getBuildVariantMatcher()
 
         if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
+            return matcher.group(1)
         } else {
             if (isDebug()) println "getCurrentFlavor: cannot_find"
             return ""
         }
     }
 
-    String getCurrentBuildVariant() {
+    String getCurrentVariant() {
         Matcher matcher = getBuildVariantMatcher()
 
         if (matcher.find()) {
@@ -152,7 +150,7 @@ class ProjectUtils {
             String buildVariant = flavor + buildType
             return buildVariant
         } else {
-            if (isDebug()) println "getCurrentBuildVariant: cannot_find"
+            if (isDebug()) println "getCurrentVariant: cannot_find"
             return ""
         }
     }
@@ -187,7 +185,7 @@ class ProjectUtils {
 
     String getCurrentApplicationId() {
         def outStr = ''
-        def currFlavor = getCurrentFlavor(project)
+        def currFlavor = getCurrentBuildFlavor(project)
         project.android.productFlavors.all{ flavor ->
             if( flavor.name==currFlavor )
                 outStr=flavor.applicationId

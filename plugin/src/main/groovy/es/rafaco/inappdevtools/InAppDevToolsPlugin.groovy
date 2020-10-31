@@ -267,21 +267,59 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 type: Zip) {
 
             def outputName = "${project.name}_sources.zip"
-            from project.android.sourceSets.main.java.srcDirs
-
-            if (projectUtils.isAndroidApplication()){
-                from project.android.sourceSets.main.manifest.srcFile
-            }
-
             destinationDir project.file(getOutputDir(project))
             archiveName = outputName
             includeEmptyDirs = true
+
+            if (projectUtils.isAndroidApplication()){
+                from project.android.sourceSets.main.manifest.srcFile
+                if (isDebug()) println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
+            }
 
             def counter = 0
             eachFile {
                 counter++
                 if (isDebug()) { println it.path }
             }
+
+            doFirst {
+                def buildType = projectUtils.getCurrentBuildType().uncapitalize()
+                def buildFlavor = projectUtils.getCurrentBuildFlavor().uncapitalize()
+                def buildVariant = projectUtils.getCurrentVariant().uncapitalize()
+
+                if (projectUtils.isAndroidApplication()){
+                    if (isDebug()) println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
+                }
+
+                project.android.sourceSets.main.java.srcDirs.each { ss ->
+                    if(ss.exists()) {
+                        if (isDebug()) println "Added sourceSets: ${ss}"
+                        from ss
+                    }
+                }
+
+                project.android.sourceSets.getByName(buildType).java.srcDirs.each { ss ->
+                    if(ss.exists()) {
+                        if (isDebug()) println "Added sourceSets: ${ss}"
+                        from ss
+                    }
+                }
+
+                project.android.sourceSets.getByName(buildFlavor).java.srcDirs.each { ss ->
+                    if(ss.exists()) {
+                        if (isDebug()) println "Added sourceSets: ${ss}"
+                        from ss
+                    }
+                }
+
+                project.android.sourceSets.getByName(buildVariant).java.srcDirs.each { ss ->
+                    if(ss.exists()) {
+                        if (isDebug()) println "Added sourceSets: ${ss}"
+                        from ss
+                    }
+                }
+            }
+
             doLast {
                 if (isDebug())
                     println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
@@ -302,7 +340,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             if (projectUtils.isAndroidApplication()){
-                def variantName = projectUtils.getCurrentBuildVariant().uncapitalize()
+                def variantName = projectUtils.getCurrentVariant().uncapitalize()
                 from ("${project.buildDir}/intermediates/merged_manifests/${variantName}") {
                     include 'AndroidManifest.xml'
                     into 'merged_manifests'
