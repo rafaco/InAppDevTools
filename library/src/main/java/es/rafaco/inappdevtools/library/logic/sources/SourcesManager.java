@@ -221,7 +221,7 @@ public class SourcesManager {
         if (internalPath.contains("$"))
             internalPath = internalPath.substring(0, internalPath.indexOf('$'));
 
-        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED };
+        String[] prefixes = new String[]{ IadtPath.SOURCES, IadtPath.GENERATED, IadtPath.REACT_NATIVE_SOURCES };
         for (String prefix: prefixes){
             AbstractNode candidate = NodesHelper.getNodeByFullPath(root, prefix + "/" + internalPath);
             if (candidate != null){

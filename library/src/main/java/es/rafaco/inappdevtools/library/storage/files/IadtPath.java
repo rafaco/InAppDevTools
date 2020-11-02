@@ -25,10 +25,12 @@ public class IadtPath {
 
     public static final String ASSETS = "assets";
     public static final String SOURCES = "Sources";
+    public static final String REACT_NATIVE_SOURCES = "Sources(ReactNative)";
     public static final String RESOURCES = "Resources";
     public static final String GENERATED = "Generated";
 
     public static final String SOURCES_TAIL = "_sources.zip";
+    public static final String REACT_NATIVE_SOURCES_TAIL = "react_sources.zip";
     public static final String RESOURCES_TAIL = "_resources.zip";
     public static final String GENERATED_TAIL = "_generated.zip";
 
