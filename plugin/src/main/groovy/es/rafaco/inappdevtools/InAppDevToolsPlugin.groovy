@@ -387,6 +387,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
                 from(parentPath) {
                     include "*.js"
+                    exclude ".*"
                 }
             }
 
@@ -394,6 +395,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug()) println "Added sourceSets: ${parentPath + "\\src" + " - " + "**.js"}"
                 from(parentPath + "\\src") {
                     include "**/*.js"
+                    exclude ".*"
                     into 'src'
                 }
             }
