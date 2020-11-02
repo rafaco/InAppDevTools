@@ -22,7 +22,7 @@ package es.rafaco.inappdevtools
 
 import es.rafaco.inappdevtools.tasks.DependencyTask
 import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
-import es.rafaco.inappdevtools.tasks.ReactNativeTask
+import es.rafaco.inappdevtools.tasks.DetectReactNativeTask
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
@@ -50,7 +50,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     final SOURCES_TASK = 'iadtSrcPack'
     final GENERATED_TASK = 'iadtGenPack'
     final RESOURCES_TASK = 'iadtResPack'
-    final REACT_NATIVE_TASK = 'iadtReactNative'
+    final REACT_DETECT_TASK = 'iadtReactDetect'
+    final REACT_SOURCES_TASK = 'iadtReactSrcPack'
 
     InAppDevToolsExtension extension
     ProjectUtils projectUtils
@@ -143,6 +144,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         addEmptyBuildInfoTask(project)
         addBuildInfoTask(project)
         addSourcesTask(project)
+        addReactSourcesTask(project)
         addResourcesTask(project)
         addGeneratedTask(project)
 
@@ -180,11 +182,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
                 if (projectUtils.isAndroidApplication()) {
                     addAndLinkDependencyReportTask(project, theTask, buildVariant)
-                    addAndLinkReactNativeTask(project, theTask, buildVariant)
+                    addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
                 }
                 if (shouldIncludeSources(theTask)) {
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
+                            project.tasks.getByName(REACT_SOURCES_TASK),
                             project.tasks.getByName(RESOURCES_TASK),
                             project.tasks.getByName(GENERATED_TASK)]
                 }
@@ -222,8 +225,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
     }
 
-    private void addAndLinkReactNativeTask(Project project, Task superTask, String buildVariant ) {
-        ReactNativeTask reactTask = project.task(REACT_NATIVE_TASK + buildVariant, type: ReactNativeTask)
+    private void addAndLinkDetectReactNativeTask(Project project, Task superTask, String buildVariant ) {
+        DetectReactNativeTask reactTask = project.task(REACT_DETECT_TASK + buildVariant, type: DetectReactNativeTask)
         superTask.dependsOn += [reactTask]
         DependencyTask dependencyTask = project.tasks.getByName(DEPENDENCIES_TASK + buildVariant)
         reactTask.dependsOn += [dependencyTask]
@@ -269,7 +272,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             def outputName = "${project.name}_sources.zip"
             destinationDir project.file(getOutputDir(project))
             archiveName = outputName
-            includeEmptyDirs = true
+            includeEmptyDirs = false
 
             if (projectUtils.isAndroidApplication()){
                 from project.android.sourceSets.main.manifest.srcFile
@@ -283,39 +286,23 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             doFirst {
-                def buildType = projectUtils.getCurrentBuildType().uncapitalize()
-                def buildFlavor = projectUtils.getCurrentBuildFlavor().uncapitalize()
-                def buildVariant = projectUtils.getCurrentVariant().uncapitalize()
-
-                if (projectUtils.isAndroidApplication()){
+                if (projectUtils.isAndroidApplication()) {
                     if (isDebug()) println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
                 }
 
-                project.android.sourceSets.main.java.srcDirs.each { ss ->
-                    if(ss.exists()) {
-                        if (isDebug()) println "Added sourceSets: ${ss}"
-                        from ss
-                    }
+                def sourceSets = project.android.sourceSets
+                String [] targetNames = ["main", projectUtils.getCurrentBuildType().uncapitalize()]
+                def buildFlavor = projectUtils.getCurrentBuildFlavor().uncapitalize()
+                if (!buildFlavor.isEmpty()){
+                    targetNames += [ buildFlavor, projectUtils.getCurrentVariant().uncapitalize()]
                 }
-
-                project.android.sourceSets.getByName(buildType).java.srcDirs.each { ss ->
-                    if(ss.exists()) {
-                        if (isDebug()) println "Added sourceSets: ${ss}"
-                        from ss
-                    }
-                }
-
-                project.android.sourceSets.getByName(buildFlavor).java.srcDirs.each { ss ->
-                    if(ss.exists()) {
-                        if (isDebug()) println "Added sourceSets: ${ss}"
-                        from ss
-                    }
-                }
-
-                project.android.sourceSets.getByName(buildVariant).java.srcDirs.each { ss ->
-                    if(ss.exists()) {
-                        if (isDebug()) println "Added sourceSets: ${ss}"
-                        from ss
+                sourceSets.all { sourceSet ->
+                    if(sourceSet.name in targetNames) {
+                        for (File file : sourceSet.java.getSrcDirs())
+                            if (file.exists()) {
+                                if (isDebug()) println "Added sourceSets: ${file}"
+                                from file
+                            }
                     }
                 }
             }
@@ -368,7 +355,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
             destinationDir project.file(getOutputDir(project))
             archiveName = outputName
-            includeEmptyDirs = true
+            includeEmptyDirs = false
 
             def counter = 0
             eachFile {
@@ -379,6 +366,52 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug())
                     println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
+        }
+    }
+
+    Task addReactSourcesTask(Project project) {
+        Task srcTask = project.task(REACT_SOURCES_TASK,
+                description: 'Generate a Zip file with ReactNative js sources from parent',
+                group: TAG,
+                type: Zip) {
+
+            def outputName = "${project.name}_react_sources.zip"
+            destinationDir project.file(InAppDevToolsPlugin.getOutputDir(project))
+            archiveName outputName
+            includeEmptyDirs = false
+
+            String rootPath = new File('').getAbsolutePath()
+            String parentPath = rootPath.substring(0, rootPath.lastIndexOf("\\"))
+
+            if(true) { //TODO: Check react on parentPath
+                if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
+                from(parentPath) {
+                    include "*.js"
+                }
+            }
+
+            if(new File(parentPath + "\\src").exists()) {
+                if (isDebug()) println "Added sourceSets: ${parentPath + "\\src" + " - " + "**.js"}"
+                from(parentPath + "\\src") {
+                    include "**/*.js"
+                    into 'src'
+                }
+            }
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (isDebug()) { println it.path }
+            }
+
+            doLast {
+                if (isDebug())
+                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+            }
+        }
+
+        srcTask.onlyIf {
+            InAppDevToolsPlugin.getOutputFile(project, 'react_config.json').exists()
         }
     }
 
