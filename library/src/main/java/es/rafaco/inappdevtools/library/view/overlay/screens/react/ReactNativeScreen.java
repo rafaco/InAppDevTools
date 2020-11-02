@@ -35,6 +35,7 @@ import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourceDetailScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.sources.SourcesScreen;
 
 public class ReactNativeScreen extends AbstractFlexibleScreen {
 
@@ -68,10 +69,29 @@ public class ReactNativeScreen extends AbstractFlexibleScreen {
                 R.color.rally_white);
         data.add(overviewData);
 
-        TextFlexData coming_soon = new TextFlexData("          Coming soon");
+        TextFlexData coming_soon = new TextFlexData("        More coming soon");
         coming_soon.setFontColor(R.color.iadt_primary);
         coming_soon.setSize(TextFlexData.Size.EXTRA_LARGE);
+        coming_soon.setFullSpan(true);
         data.add(coming_soon);
+
+        data.add("");
+        data.add("Sources");
+        data.add(new ButtonFlexData("JS Sources", R.drawable.ic_code_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        String params = SourcesScreen.buildParams("TODO", IadtPath.REACT_NATIVE_SOURCES + "/");
+                        OverlayService.performNavigation(SourcesScreen.class, params);
+                    }
+                }));
+        data.add(new ButtonFlexData("All Sources", R.drawable.ic_code_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        OverlayService.performNavigation(SourcesScreen.class);
+                    }
+                }));
 
         data.add("");
         data.add("Shortcuts");
