@@ -45,14 +45,15 @@ public class PandoraBridge {
             Log.w(Iadt.TAG, "Pandora init skipped, already initialised");
             return;
         }
-        if (IadtController.get().isDebug())
-            Log.d(Iadt.TAG, "Pandora init");
+        if (IadtController.get().isDebug()) Log.d(Iadt.TAG, "Pandora init");
+
+        Pandora.get();
+        Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
+        Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
 
         if (IadtController.get().getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR))
             setInterceptorListener();       //Set a listener to the network interceptor
 
-        Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
-        Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
         isInitialised = true;
     }
 
