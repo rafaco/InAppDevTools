@@ -56,60 +56,8 @@ class BuildInfoTask extends IadtBaseTask {
     }
 
     private void generateCompileConfig() {
-        Map propertiesMap = [:]
-
-        //TODO: Validate and throw new InvalidUserDataException()
-
-        if (extension.enabled!=null)
-            propertiesMap.put("enabled", extension.enabled)
-
-        if (extension.enabledOnRelease!=null)
-            propertiesMap.put("enabledOnRelease", extension.enabledOnRelease)
-
-        if (extension.debug!=null)
-            propertiesMap.put("debug", extension.debug)
-
-        if (extension.notes!=null)
-            propertiesMap.put("notes", extension.notes)
-
-        if (extension.teamName!=null)
-            propertiesMap.put("teamName", extension.teamName)
-
-        if (extension.teamEmail!=null)
-            propertiesMap.put("teamEmail", extension.teamEmail)
-
-        if (extension.teamDesc!=null)
-            propertiesMap.put("teamDesc", extension.teamDesc)
-
-        if (extension.teamLinks!=null)
-            propertiesMap.put("teamLinks", extension.teamLinks)
-
-        if (extension.overlayEnabled!=null)
-            propertiesMap.put("overlayEnabled", extension.overlayEnabled)
-
-        if (extension.sourceInclusion!=null)
-            propertiesMap.put("sourceInclusion", extension.sourceInclusion)
-
-        if (extension.sourceInspection!=null)
-            propertiesMap.put("sourceInspection", extension.sourceInspection)
-
-        if (extension.networkInterceptor!=null)
-            propertiesMap.put("networkInterceptor", extension.networkInterceptor)
-
-        if (extension.invocationByIcon!=null)
-            propertiesMap.put("invocationByIcon", extension.invocationByIcon)
-
-        if (extension.invocationByShake!=null)
-            propertiesMap.put("invocationByShake", extension.invocationByShake)
-
-        if (extension.callDefaultCrashHandler!=null)
-            propertiesMap.put("callDefaultCrashHandler", extension.callDefaultCrashHandler)
-
-        if (extension.injectEventsOnLogcat!=null)
-            propertiesMap.put("injectEventsOnLogcat", extension.injectEventsOnLogcat)
-
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        configUtils.writeMap(file, propertiesMap)
+        configUtils.writeMap(file, extension.toMap())
     }
 
     private void generateBuildInfo() {

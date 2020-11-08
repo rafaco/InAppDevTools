@@ -230,7 +230,18 @@ public class HomeScreen extends AbstractFlexibleScreen {
     }
 
     private void addStorage(List<Object> data) {
-        WidgetData storageData = new WidgetData.Builder("Storage")
+        boolean isEnabled = IadtController.get().getConfig().getBoolean(BuildConfigField.STORAGE_INSPECTION);
+        WidgetData widget;
+        if (!isEnabled){
+            widget = new WidgetData.Builder("Storage")
+                    .setIcon(R.string.gmd_storage)
+                    .setMainContent("")
+                    .setSecondContent("Disabled")
+                    .setDisabled()
+                    .build();
+        }
+        else{
+            widget = new WidgetData.Builder("Storage")
                 .setIcon(R.string.gmd_storage)
                 .setMainContent(InternalFileReader.getTotalSizeFormatted())
                 .setSecondContent("DB - SharedPrefs - Files")
@@ -242,7 +253,8 @@ public class HomeScreen extends AbstractFlexibleScreen {
                     }
                 })
                 .build();
-        data.add(storageData);
+        }
+        data.add(widget);
     }
 
     private void addView(List<Object> data) {

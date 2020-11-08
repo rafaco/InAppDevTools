@@ -34,6 +34,8 @@ public enum BuildConfigField {
     SOURCE_INCLUSION("sourceInclusion", R.string.config_source_inclusion, boolean.class, true),
     SOURCE_INSPECTION("sourceInspection", R.string.config_source_inspection, boolean.class, true),
     NETWORK_INTERCEPTOR("networkInterceptor", R.string.config_network_interceptor, boolean.class, true),
+    VIEW_INSPECTION("viewInspection", R.string.config_view_inspection, boolean.class, true),
+    STORAGE_INSPECTION("storageInspection", R.string.config_storage_inspection, boolean.class, true),
 
     // Customization flags (runtime)
     NOTES("notes", R.string.config_notes, String.class, ""),
