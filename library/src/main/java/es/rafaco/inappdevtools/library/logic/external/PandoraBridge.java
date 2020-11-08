@@ -25,6 +25,8 @@ import android.util.Log;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
+import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
@@ -41,20 +43,62 @@ public class PandoraBridge {
     }
 
     public static void init() {
-        if (isInitialised){
+
+        if (!isAnyPandoraFeaturesEnabled()) {
+            if (IadtController.get().isDebug())
+                Log.d(Iadt.TAG, "Pandora init skipped, disabled by config");
+            return;
+        }
+        else if (isInitialised) {
             Log.w(Iadt.TAG, "Pandora init skipped, already initialised");
             return;
         }
+        try {
+            initLibrary();
+            isInitialised = true;
+        }
+        catch (Throwable e) {
+            Log.w(Iadt.TAG, "Pandora init error", e);
+            Log.w(Iadt.TAG, "Features DISABLED: network, view and storage inspector");
+            setPandoraFeaturesEnabled(false);
+        }
+    }
+
+    private static void initLibrary() {
         if (IadtController.get().isDebug()) Log.d(Iadt.TAG, "Pandora init");
-
         Pandora.get();
-        Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
         Config.setSHAKE_SWITCH(false);  //disable open overlay on shake
+        Config.setSANDBOX_DPM(true);    //enable DeviceProtectMode
 
-        if (IadtController.get().getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR))
+        if (getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR)){
             setInterceptorListener();       //Set a listener to the network interceptor
+        }
+        else{
+            Config.setNetLogEnable(false);
+        }
+        throw new RuntimeException();
+    }
 
-        isInitialised = true;
+    public static void setPandoraFeaturesEnabled(boolean isEnabled){
+        getConfig().setBoolean(BuildConfigField.NETWORK_INTERCEPTOR, isEnabled);
+        getConfig().setBoolean(BuildConfigField.VIEW_INSPECTION, isEnabled);
+        getConfig().setBoolean(BuildConfigField.STORAGE_INSPECTION, isEnabled);
+    }
+
+    public static boolean isAllPandoraFeaturesEnabled(){
+        return getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR)
+                && getConfig().getBoolean(BuildConfigField.VIEW_INSPECTION)
+                && getConfig().getBoolean(BuildConfigField.STORAGE_INSPECTION);
+    }
+
+    public static boolean isAnyPandoraFeaturesEnabled(){
+        return getConfig().getBoolean(BuildConfigField.NETWORK_INTERCEPTOR)
+                || getConfig().getBoolean(BuildConfigField.VIEW_INSPECTION)
+                || getConfig().getBoolean(BuildConfigField.STORAGE_INSPECTION);
+    }
+
+    private static ConfigManager getConfig() {
+        return IadtController.get().getConfig();
     }
 
     public static void setInterceptorListener() {
