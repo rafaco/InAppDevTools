@@ -26,7 +26,6 @@ import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
@@ -43,7 +42,6 @@ public class PandoraBridge {
     }
 
     public static void init() {
-
         if (!isAnyPandoraFeaturesEnabled()) {
             if (IadtController.get().isDebug())
                 Log.d(Iadt.TAG, "Pandora init skipped, disabled by config");
@@ -76,7 +74,6 @@ public class PandoraBridge {
         else{
             Config.setNetLogEnable(false);
         }
-        throw new RuntimeException();
     }
 
     public static void setPandoraFeaturesEnabled(boolean isEnabled){
