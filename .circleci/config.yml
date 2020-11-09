@@ -41,9 +41,9 @@ jobs:
         command: ./gradlew :demo:assembleSupportDebug --stacktrace
 
 
-  - run:
-      name: Download Dependencies AndroidX
-      command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
+    - run:
+        name: Download Dependencies AndroidX
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
 
     - run:
         name: Assemble COMPAT AndroidxDebug
