@@ -381,8 +381,18 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             includeEmptyDirs = false
 
             String rootPath = new File('').getAbsolutePath()
-            println rootPath
-            String parentPath = rootPath.substring(0, rootPath.lastIndexOf("\\"))
+            println "rootPath: " + rootPath
+            int lastFolderIndex = rootPath.lastIndexOf("\\") //Windows
+            if (lastFolderIndex == -1){
+                lastFolderIndex = rootPath.lastIndexOf("/")  //Linux
+            }
+
+            if (lastFolderIndex == -1){
+                println "Unable to get parent folder. Disabled react native detector"
+                return
+            }
+            String parentPath = rootPath.substring(0, lastFolderIndex)
+            println "parentPath: " + parentPath
 
             if(true) { //TODO: Check react on parentPath
                 if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
