@@ -35,6 +35,7 @@ import es.rafaco.inappdevtools.library.logic.sources.nodes.AssetsNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.RootNodeReader;
 import es.rafaco.inappdevtools.library.logic.sources.nodes.ZipNodeReader;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
+import es.rafaco.inappdevtools.library.storage.files.utils.ReactNativeHelper;
 
 public class NodesHelper {
 
@@ -44,8 +45,11 @@ public class NodesHelper {
         AssetFileReader fileReader = new AssetFileReader(context);
         AbstractNodeReader nodeReader = null;
 
+        boolean isReactEnabled = new ReactNativeHelper().isEnabled();
+
         //Prepare first level
         nodeReader = new RootNodeReader();
+        if (isReactEnabled) ((RootNodeReader) nodeReader).addNode(IadtPath.REACT_NATIVE_SOURCES);
         ((RootNodeReader) nodeReader).addNode(IadtPath.SOURCES);
         ((RootNodeReader) nodeReader).addNode(IadtPath.GENERATED);
         ((RootNodeReader) nodeReader).addNode(IadtPath.RESOURCES);
@@ -64,7 +68,12 @@ public class NodesHelper {
                 prefix = IadtPath.RESOURCES;
             }
             else if (node.getName().endsWith(IadtPath.SOURCES_TAIL)) {
-                prefix = IadtPath.SOURCES;
+                if (isReactEnabled && node.getName().endsWith(IadtPath.REACT_NATIVE_SOURCES_TAIL)){
+                    prefix = IadtPath.REACT_NATIVE_SOURCES;
+                }
+                else {
+                    prefix = IadtPath.SOURCES;
+                }
             }
             else if (node.getName().endsWith(IadtPath.GENERATED_TAIL)) {
                 prefix = IadtPath.GENERATED;

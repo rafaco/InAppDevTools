@@ -85,7 +85,10 @@ class DependencyTask extends DependencyReportTask {
             return
         }
 
-        super.generate();
+        // Perform report
+        super.generate()
+
+        // After report
         if (isDebug) println "Generated dependency report into ${outputFile}"
     }
 }

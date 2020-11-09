@@ -82,6 +82,7 @@ public class BuildFilesRepository {
         copier.copyToInternal(IadtPath.BUILD_CONFIG, destinationFolder);
         copier.copyToInternal(IadtPath.PLUGIN_LIST, destinationFolder);
         copier.copyToInternal(IadtPath.DEPENDENCIES, destinationFolder);
+        copier.copyToInternal(IadtPath.REACT_NATIVE, destinationFolder);
         copier.copyToInternal(IadtPath.GIT_INFO_JSON, destinationFolder);
         copier.copyToInternal(IadtPath.GIT_REMOTE_BRANCH_TXT, destinationFolder);
         copier.copyToInternal(IadtPath.GIT_LOCAL_BRANCH_DIFF, destinationFolder);

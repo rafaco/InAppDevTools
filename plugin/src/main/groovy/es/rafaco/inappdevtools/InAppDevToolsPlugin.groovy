@@ -22,6 +22,7 @@ package es.rafaco.inappdevtools
 
 import es.rafaco.inappdevtools.tasks.DependencyTask
 import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
+import es.rafaco.inappdevtools.tasks.DetectReactNativeTask
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
@@ -49,6 +50,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     final SOURCES_TASK = 'iadtSrcPack'
     final GENERATED_TASK = 'iadtGenPack'
     final RESOURCES_TASK = 'iadtResPack'
+    final REACT_DETECT_TASK = 'iadtReactDetect'
+    final REACT_SOURCES_TASK = 'iadtReactSrcPack'
 
     InAppDevToolsExtension extension
     ProjectUtils projectUtils
@@ -141,6 +144,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         addEmptyBuildInfoTask(project)
         addBuildInfoTask(project)
         addSourcesTask(project)
+        addReactSourcesTask(project)
         addResourcesTask(project)
         addGeneratedTask(project)
 
@@ -171,15 +175,19 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     return
                 }
 
-                applyPandoraPlugins(project)
+                if (isNetworkInterceptor()){
+                    applyPandoraPlugins(project)
+                }
 
                 theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
                 if (projectUtils.isAndroidApplication()) {
                     addAndLinkDependencyReportTask(project, theTask, buildVariant)
+                    addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
                 }
                 if (shouldIncludeSources(theTask)) {
                     theTask.dependsOn += [
                             project.tasks.getByName(SOURCES_TASK),
+                            project.tasks.getByName(REACT_SOURCES_TASK),
                             project.tasks.getByName(RESOURCES_TASK),
                             project.tasks.getByName(GENERATED_TASK)]
                 }
@@ -215,6 +223,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         if (dependencyTask.outputFile.lastModified() < dependencyTask.inputFile.lastModified()){
             superTask.dependsOn += [dependencyTask]
         }
+    }
+
+    private void addAndLinkDetectReactNativeTask(Project project, Task superTask, String buildVariant ) {
+        DetectReactNativeTask reactTask = project.task(REACT_DETECT_TASK + buildVariant, type: DetectReactNativeTask)
+        superTask.dependsOn += [reactTask]
+        DependencyTask dependencyTask = project.tasks.getByName(DEPENDENCIES_TASK + buildVariant)
+        reactTask.dependsOn += [dependencyTask]
     }
 
     private Task addBuildInfoTask(Project project) {
@@ -255,21 +270,43 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 type: Zip) {
 
             def outputName = "${project.name}_sources.zip"
-            from project.android.sourceSets.main.java.srcDirs
+            destinationDir project.file(getOutputDir(project))
+            archiveName = outputName
+            includeEmptyDirs = false
 
             if (projectUtils.isAndroidApplication()){
                 from project.android.sourceSets.main.manifest.srcFile
+                if (isDebug()) println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
             }
-
-            destinationDir project.file(getOutputDir(project))
-            archiveName = outputName
-            includeEmptyDirs = true
 
             def counter = 0
             eachFile {
                 counter++
                 if (isDebug()) { println it.path }
             }
+
+            doFirst {
+                if (projectUtils.isAndroidApplication()) {
+                    if (isDebug()) println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
+                }
+
+                def sourceSets = project.android.sourceSets
+                String [] targetNames = ["main", projectUtils.getCurrentBuildType().uncapitalize()]
+                def buildFlavor = projectUtils.getCurrentBuildFlavor().uncapitalize()
+                if (!buildFlavor.isEmpty()){
+                    targetNames += [ buildFlavor, projectUtils.getCurrentVariant().uncapitalize()]
+                }
+                sourceSets.all { sourceSet ->
+                    if(sourceSet.name in targetNames) {
+                        for (File file : sourceSet.java.getSrcDirs())
+                            if (file.exists()) {
+                                if (isDebug()) println "Added sourceSets: ${file}"
+                                from file
+                            }
+                    }
+                }
+            }
+
             doLast {
                 if (isDebug())
                     println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
@@ -290,7 +327,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             if (projectUtils.isAndroidApplication()){
-                def variantName = projectUtils.getCurrentBuildVariant().uncapitalize()
+                def variantName = projectUtils.getCurrentVariant().uncapitalize()
                 from ("${project.buildDir}/intermediates/merged_manifests/${variantName}") {
                     include 'AndroidManifest.xml'
                     into 'merged_manifests'
@@ -318,7 +355,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
             destinationDir project.file(getOutputDir(project))
             archiveName = outputName
-            includeEmptyDirs = true
+            includeEmptyDirs = false
 
             def counter = 0
             eachFile {
@@ -329,6 +366,54 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 if (isDebug())
                     println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
             }
+        }
+    }
+
+    Task addReactSourcesTask(Project project) {
+        Task srcTask = project.task(REACT_SOURCES_TASK,
+                description: 'Generate a Zip file with ReactNative js sources from parent',
+                group: TAG,
+                type: Zip) {
+
+            def outputName = "${project.name}_react_sources.zip"
+            destinationDir project.file(InAppDevToolsPlugin.getOutputDir(project))
+            archiveName outputName
+            includeEmptyDirs = false
+
+            String rootPath = new File('').getAbsolutePath()
+            String parentPath = rootPath.substring(0, rootPath.lastIndexOf("\\"))
+
+            if(true) { //TODO: Check react on parentPath
+                if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
+                from(parentPath) {
+                    include "*.js"
+                    exclude ".*"
+                }
+            }
+
+            if(new File(parentPath + "\\src").exists()) {
+                if (isDebug()) println "Added sourceSets: ${parentPath + "\\src" + " - " + "**.js"}"
+                from(parentPath + "\\src") {
+                    include "**/*.js"
+                    exclude ".*"
+                    into 'src'
+                }
+            }
+
+            def counter = 0
+            eachFile {
+                counter++
+                if (isDebug()) { println it.path }
+            }
+
+            doLast {
+                if (isDebug())
+                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+            }
+        }
+
+        srcTask.onlyIf {
+            InAppDevToolsPlugin.getOutputFile(project, 'react_config.json').exists()
         }
     }
 
@@ -371,6 +456,14 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         InAppDevToolsExtension extension = getExtension()
         if (extension!=null && extension.sourceInspection!=null){
             return extension.sourceInspection
+        }
+        return true
+    }
+
+    boolean isNetworkInterceptor(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.networkInterceptor!=null){
+            return extension.networkInterceptor
         }
         return true
     }

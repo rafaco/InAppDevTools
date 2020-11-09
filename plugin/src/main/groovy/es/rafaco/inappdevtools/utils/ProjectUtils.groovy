@@ -120,58 +120,45 @@ class ProjectUtils {
     //region [ VARIANT/FLAVOR EXTRACTORS ]
 
     String getCurrentBuildType() {
-        Matcher matcher = getBuildVariantMatcher()
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
-        } else {
-            if (isDebug()) println "getCurrentFlavor: cannot_find"
+        String tskReqStr = project.getGradle().getStartParameter().getTaskRequests().toString()
+        if (tskReqStr.contains("Debug"))
+            return "Debug"
+        else if (tskReqStr.contains("Release"))
+            return "Release"
+        else{
+            println "Unable to get current Build Type"
             return ""
         }
     }
 
-    String getCurrentFlavor() {
-        Matcher matcher = getBuildVariantMatcher()
-
+    String getCurrentBuildFlavor() {
+        Matcher matcher = getVariantMatcher()
         if (matcher.find()) {
-            String flavor = matcher.group(1)
-            return flavor
+            return matcher.group(1)
         } else {
-            if (isDebug()) println "getCurrentFlavor: cannot_find"
+            if (isDebug()) println "There are not Flavors"
             return ""
         }
     }
 
-    String getCurrentBuildVariant() {
-        Matcher matcher = getBuildVariantMatcher()
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1)
-            String buildType = matcher.group(2)
-            String buildVariant = flavor + buildType
-            return buildVariant
-        } else {
-            if (isDebug()) println "getCurrentBuildVariant: cannot_find"
-            return ""
-        }
+    String getCurrentVariant() {
+        String buildType = getCurrentBuildType()
+        String buildFlavor = getCurrentBuildFlavor()
+        String buildVariant = buildFlavor + buildType
+        return buildVariant.uncapitalize()
     }
 
     String getBuildVariantFolders() {
-        Matcher matcher = getBuildVariantMatcher()
-
-        if (matcher.find()) {
-            String flavor = matcher.group(1).toLowerCase()
-            String buildType = matcher.group(2).toLowerCase()
-            String buildVariantFolder = buildType + '/' + flavor + '/'
-            return buildVariantFolder
-        } else {
-            if (isDebug()) println "getBuildVariantFolders: cannot_find"
-            return ""
+        String buildType = getCurrentBuildType()
+        String buildFlavor = getCurrentBuildFlavor()
+        String resultFolder = buildType + '/'
+        if (!buildFlavor.isEmpty()){
+            resultFolder += buildFlavor + '/'
         }
+        return resultFolder
     }
 
-    private Matcher getBuildVariantMatcher() {
+    private Matcher getVariantMatcher() {
         Gradle gradle = project.getGradle()
         String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
         Pattern pattern
@@ -187,7 +174,7 @@ class ProjectUtils {
 
     String getCurrentApplicationId() {
         def outStr = ''
-        def currFlavor = getCurrentFlavor(project)
+        def currFlavor = getCurrentBuildFlavor(project)
         project.android.productFlavors.all{ flavor ->
             if( flavor.name==currFlavor )
                 outStr=flavor.applicationId

@@ -35,11 +35,13 @@ import java.util.List;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.config.BuildConfigField;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentSectionData;
 import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.utils.RunningTasksUtils;
+import es.rafaco.inappdevtools.library.view.components.cards.WidgetData;
 import es.rafaco.inappdevtools.library.view.components.composers.SecondaryButtonsComposer;
 import es.rafaco.inappdevtools.library.view.components.groups.CardGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonBorderlessFlexData;
@@ -149,6 +151,18 @@ public class ViewScreen extends AbstractFlexibleScreen {
         LinearGroupFlexData verticalButtons = new LinearGroupFlexData();
         verticalButtons.setFullSpan(false);
         verticalButtons.setHorizontalMargin(true);
+
+        boolean isEnabled = IadtController.get().getConfig().getBoolean(BuildConfigField.VIEW_INSPECTION);
+        if (!isEnabled){
+            WidgetData widget = new WidgetData.Builder()
+                    .setMainContent("View Inspection")
+                    .setSecondContent("Disabled" + Humanizer.fullStop())
+                    .setDisabled()
+                    .build();
+            verticalButtons.add(widget);
+            data.add(verticalButtons);
+            return;
+        }
 
         verticalButtons.add(new ButtonFlexData("Inspect by touch",
                 R.drawable.ic_touch_app_white_24dp,
