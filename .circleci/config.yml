@@ -25,10 +25,9 @@ jobs:
         name: Assemble NOOP Debug
         command: ./gradlew :noop:assembleDebug --stacktrace
 
-
     - run:
-        name: Download Dependencies Support
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=false -Pandroid.enableJetifier=false
+        name: Download Dependencies
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
     - run:
         name: Assemble COMPAT SupportDebug
@@ -39,11 +38,6 @@ jobs:
     - run:
         name: Assemble DEMO SupportDebug
         command: ./gradlew :demo:assembleSupportDebug --stacktrace
-
-
-    - run:
-        name: Download Dependencies AndroidX
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
 
     - run:
         name: Assemble COMPAT AndroidxDebug
