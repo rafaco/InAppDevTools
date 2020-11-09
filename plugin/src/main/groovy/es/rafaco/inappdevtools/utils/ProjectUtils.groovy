@@ -284,4 +284,10 @@ class ProjectUtils {
     }
 
     //endregion
+
+    static int getFolderSeparator() {
+        String osName = System.properties['os.name']
+        boolean isWindows = osName.toLowerCase().contains("windows")
+        return isWindows ? "\\" : "/"
+    }
 }

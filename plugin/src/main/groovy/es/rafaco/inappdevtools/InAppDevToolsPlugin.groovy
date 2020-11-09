@@ -334,12 +334,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 }
             }
 
-            eachFile { fileDetails ->
+            // File postprocessing
+            // Used to simplify folders of generated sources.
+            // Broke nodes navigation, could be due to empty folders
+            /*eachFile { fileDetails ->
                 def filePath = fileDetails.path
                 if (isDebug()) println "PROCESSED: " + filePath
 
-                /* Simplify folders of generated sources.
-                // Seems brokening nodes, could be empty folders
                 def currentVariantFolders = getBuildVariantFolders(project)
                 if (filePath.contains('/r/')) {
                     fileDetails.path = filePath.substring(filePath.indexOf('/r/')
@@ -350,8 +351,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     fileDetails.path = filePath.substring(filePath.indexOf(currentVariantFolders)
                             + currentVariantFolders.size(), filePath.length())
                     if (isDebug()) println "RENAMED into " + fileDetails.path
-                }*/
-            }
+                }
+            }*/
 
             destinationDir project.file(getOutputDir(project))
             archiveName = outputName
@@ -364,7 +365,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
             doLast {
                 if (isDebug())
-                    println "Packed ${counter} files into ${getOutputDir(project)}\\${outputName}"
+                    println "Packed ${counter} files into ${getOutputDir(project)}${ProjectUtils.getFolderSeparator()}${outputName}"
             }
         }
     }
@@ -381,20 +382,17 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             includeEmptyDirs = false
 
             String rootPath = new File('').getAbsolutePath()
-            println "rootPath: " + rootPath
-            int lastFolderIndex = rootPath.lastIndexOf("\\") //Windows
-            if (lastFolderIndex == -1){
-                lastFolderIndex = rootPath.lastIndexOf("/")  //Linux
-            }
-
+            int lastFolderIndex = rootPath.lastIndexOf(ProjectUtils.getFolderSeparator())
             if (lastFolderIndex == -1){
                 println "Unable to get parent folder. Disabled react native detector"
+                File configFile = InAppDevToolsPlugin.getOutputFile(project, 'react_config.json')
+                if (configFile.exists()) configFile.delete()
                 return
             }
             String parentPath = rootPath.substring(0, lastFolderIndex)
-            println "parentPath: " + parentPath
 
-            if(true) { //TODO: Check react on parentPath
+            //TODO: Check react on parentPath
+            if(true) {
                 if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
                 from(parentPath) {
                     include "*.js"
@@ -402,9 +400,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 }
             }
 
-            if(new File(parentPath + "\\src").exists()) {
-                if (isDebug()) println "Added sourceSets: ${parentPath + "\\src" + " - " + "**.js"}"
-                from(parentPath + "\\src") {
+            String sourcesPath = parentPath + ProjectUtils.getFolderSeparator() + "src"
+            if(new File(sourcesPath).exists()) {
+                if (isDebug()) println "Added sourceSets: ${sourcesPath + " - " + "**.js"}"
+                from(sourcesPath) {
                     include "**/*.js"
                     exclude ".*"
                     into 'src'
