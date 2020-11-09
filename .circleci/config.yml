@@ -23,7 +23,7 @@ jobs:
     #    command: ./gradlew :plugin:assemble
     - run:
         name: Assemble NOOP Debug
-        command: ./gradlew :noop:assembleDebug
+        command: ./gradlew :noop:assembleDebug --stacktrace --info
 
 
     - run:
