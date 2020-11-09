@@ -57,7 +57,7 @@ public class PandoraBridge {
         }
         catch (Throwable e) {
             Log.w(Iadt.TAG, "Pandora init error", e);
-            Log.w(Iadt.TAG, "Features DISABLED: network, view and storage inspector");
+            Log.w(Iadt.TAG, "Pandora features DISABLED: network, view and storage inspector");
             setPandoraFeaturesEnabled(false);
         }
     }
