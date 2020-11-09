@@ -381,6 +381,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             includeEmptyDirs = false
 
             String rootPath = new File('').getAbsolutePath()
+            println rootPath
             String parentPath = rootPath.substring(0, rootPath.lastIndexOf("\\"))
 
             if(true) { //TODO: Check react on parentPath
