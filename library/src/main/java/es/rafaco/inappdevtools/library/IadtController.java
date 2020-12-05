@@ -33,6 +33,7 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
@@ -174,7 +175,7 @@ public final class IadtController {
 
     private void initFull(){
         if (isDebug()) Log.d(Iadt.TAG, "IadtController init full");
-
+        PandoraBridge.init();
         initDelayedBackground();
         initForeground();
         isPendingInitFull = false;
