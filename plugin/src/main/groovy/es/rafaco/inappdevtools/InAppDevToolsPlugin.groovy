@@ -390,10 +390,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 return
             }
             String parentPath = rootPath.substring(0, lastFolderIndex)
-
             //TODO: Check react on parentPath
             if(true) {
-                if (isDebug()) println "Added sourceSets: ${parentPath + " - " + "*.js"}"
                 from(parentPath) {
                     include "*.js"
                     exclude ".*"
@@ -401,8 +399,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             }
 
             String sourcesPath = parentPath + ProjectUtils.getFolderSeparator() + "src"
-            if(new File(sourcesPath).exists()) {
-                if (isDebug()) println "Added sourceSets: ${sourcesPath + " - " + "**.js"}"
+            def existsInternals = new File(sourcesPath).exists()
+            if(existsInternals) {
                 from(sourcesPath) {
                     include "**/*.js"
                     exclude ".*"

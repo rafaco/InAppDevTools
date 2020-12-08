@@ -110,7 +110,7 @@ class BuildInfoTask extends IadtBaseTask {
         def remoteName = configUtils.shell('git config --get branch.' + localBranch + '.remote')
         def remoteUrl = configUtils.shell('git config remote.' + remoteName + '.url')
         def remoteBranchFull = remoteName + '/' + localBranch //TODO: trackingBranch
-        def remoteHeadFull = configUtils.shell(' git rev-parse --abbrev-ref ' + remoteName + '/HEAD')
+        def remoteHeadFull = configUtils.shell('git rev-parse --abbrev-ref ' + remoteName + '/HEAD')
 
         //def tag = configUtils.shell('git describe --tags --abbrev=0')
         def tagDescription = configUtils.shell('git describe --tags --always --dirty')
