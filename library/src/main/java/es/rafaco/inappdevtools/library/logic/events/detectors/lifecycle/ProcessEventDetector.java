@@ -31,6 +31,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 //#endif
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
@@ -69,6 +70,7 @@ public class ProcessEventDetector extends EventDetector implements LifecycleObse
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "Process", "Resume", "Process resumed");
+                IadtController.get().initFullIfPending();
             }
         });
 
