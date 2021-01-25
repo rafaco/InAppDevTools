@@ -138,7 +138,7 @@ inappdevtools {
     //invocationByShake = false
     //invocationByIcon = true
     //callDefaultCrashHandler = true
-    //injectEventsOnLogcat = true
+    //injectEventsOnLogcat = false
 }
 
 
