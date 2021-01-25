@@ -36,9 +36,10 @@ import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 
-public abstract class IadtDialogBuilder {
+public abstract class IadtDialogBuilder implements DialogInterface.OnDismissListener {
 
     ContextWrapper context;
+    AlertDialog dialog;
     private boolean isCancelable;
 
     public IadtDialogBuilder() {
@@ -49,24 +50,15 @@ public abstract class IadtDialogBuilder {
         setContext(baseContext);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        initBuilder(builder);
+        builder.setCancelable(isCancelable);
+        builder.setOnDismissListener(this);
         onBuilderCreated(builder);
 
-        AlertDialog dialog = builder.create();
+        dialog = builder.create();
         initDialog(dialog);
         onDialogCreated(dialog);
 
         return dialog;
-    }
-
-    private void initBuilder(AlertDialog.Builder builder) {
-        builder.setCancelable(isCancelable);
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                onDismissWrapper(dialog);
-            }
-        });
     }
 
     public abstract void onBuilderCreated(AlertDialog.Builder builder);
@@ -96,7 +88,7 @@ public abstract class IadtDialogBuilder {
         if (TextUtils.isEmpty(name) && this.getClass().getSuperclass() != null){
             name = this.getClass().getSuperclass().getSimpleName();
         }
-        return name;
+        return name.isEmpty() ? "Unknown" : name;
     }
 
     public IadtDialogBuilder setCancelable (boolean isCancelable){
@@ -104,16 +96,16 @@ public abstract class IadtDialogBuilder {
         return this;
     }
 
-    public void onDismissWrapper(DialogInterface dialog) {
-        onDismiss(dialog);
-        getManager().onDismiss(dialog);
-    }
-
     public void dismiss(){
         getManager().dismiss();
     }
 
+    public void destroy(){
+        getManager().destroy();
+    }
+
+    // Native dismiss catcher redirected to DialogManager
     public void onDismiss(DialogInterface dialog) {
-        //Intentionally empty, optional to override
+        getManager().onDialogDismissedExternally(dialog);
     }
 }

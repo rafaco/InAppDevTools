@@ -86,7 +86,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         IadtController.get().startReportWizard();
                     }
                 }));
@@ -95,7 +95,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         IadtController.get().takeScreenshot();
                     }
                 }));
@@ -104,7 +104,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         IadtController.get().takeLibraryScreenshot();
                     }
                 }));
@@ -124,7 +124,6 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
                         IadtController.get().getOverlayHelper()
                                 .toggleScreenLayout(ScreenLayer.SizePosition.HALF_FIRST);
                     }
@@ -134,7 +133,6 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
                         IadtController.get().getOverlayHelper()
                                 .toggleScreenLayout(ScreenLayer.SizePosition.FULL);
                     }
@@ -144,7 +142,6 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
                         IadtController.get().getOverlayHelper()
                                 .toggleScreenLayout(ScreenLayer.SizePosition.HALF_SECOND);
                     }
@@ -165,7 +162,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         OverlayService.performNavigation(ConfigScreen.class);
                     }
                 }));
@@ -174,7 +171,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         ExternalIntentUtils.viewReadme();
                     }
                 }));
@@ -183,7 +180,7 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         ExternalIntentUtils.shareLibrary();
                     }
                 }));

@@ -95,7 +95,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                     new Runnable() {
                         @Override
                         public void run() {
-                            dismiss();
+                            destroy();
                             OverlayService.performNavigationStep(formatter.getLinkStep());
                         }
                     });
@@ -114,7 +114,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         Iadt.buildMessage("Searching for log message")
                                 .isDev().fire();
                         ExternalIntentUtils.search(logData.getMessage());
@@ -125,7 +125,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         Iadt.buildMessage("Copied log message to clipboard")
                                 .isDev().fire();
                         ClipboardUtils.save(IadtController.get().getContext(), logData.getMessage());
@@ -136,7 +136,7 @@ public class LogLineDialog extends IadtDialogBuilder {
                 new Runnable() {
                     @Override
                     public void run() {
-                        dismiss();
+                        destroy();
                         Iadt.buildMessage("Sharing log overview")
                                 .isDev().fire();
                         DocumentRepository.shareDocument(DocumentType.LOG_ITEM, logData.getUid());
