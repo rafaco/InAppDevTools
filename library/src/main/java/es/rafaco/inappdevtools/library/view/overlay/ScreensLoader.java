@@ -38,6 +38,7 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ProcessesScree
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ServicesScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.TasksScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.logic.ThreadsScreen;
+import es.rafaco.inappdevtools.library.view.overlay.screens.react.ReactNativeScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.FragmentsScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.view.ViewScreen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.MoreScreen;
@@ -128,6 +129,7 @@ public class ScreensLoader {
         screenManager.registerScreen(CrashesScreen.class);
 
         //Under classification
+        screenManager.registerScreen(ReactNativeScreen.class);
         screenManager.registerScreen(ZoomScreen.class);
         screenManager.registerScreen(InfoOverviewScreen.class);
         screenManager.registerScreen(InfoScreen.class);

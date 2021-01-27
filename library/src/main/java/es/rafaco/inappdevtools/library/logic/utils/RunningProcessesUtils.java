@@ -22,11 +22,15 @@ package es.rafaco.inappdevtools.library.logic.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
+import android.os.SystemClock;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 
 public class RunningProcessesUtils {
@@ -85,8 +89,14 @@ public class RunningProcessesUtils {
 
         contentBuffer.append("PID: " + info.pid);
         contentBuffer.append(Humanizer.newLine());
-
         contentBuffer.append("UID: " + info.uid);
+        contentBuffer.append(Humanizer.newLine());
+
+        long startTime = getProcessStartTime(info.pid);
+        long elapsedTime = getProcessElapsedTime(info.pid);
+        contentBuffer.append("StartTime: " + DateUtils.formatPrecisionTime(startTime));
+        contentBuffer.append(Humanizer.newLine());
+        contentBuffer.append("ElapsedTime: " + Humanizer.getDuration(elapsedTime));
         contentBuffer.append(Humanizer.newLine());
 
         contentBuffer.append("Importance: " + getImportanceString(info));
@@ -169,5 +179,50 @@ public class RunningProcessesUtils {
                 Humanizer.parseKb(debugMemoryInfo.otherPrivateDirty)));
         resultBuffer.append(Humanizer.newLine());
         return resultBuffer.toString();
+    }
+
+
+    private static long getProcessElapsedTime(int pid) {
+        return SystemClock.elapsedRealtime() - getProcessStartTime(pid);
+    }
+
+    private static long getProcessStartTime(int pid) {
+        try{
+            return calculateProcessStartTime(pid);
+        } catch (Exception e){
+            FriendlyLog.logException("Error getting process start time", e);
+            return 0;
+        }
+    }
+
+    private static long calculateProcessStartTime(final int pid) throws Exception {
+        final String path = "/proc/" + pid + "/stat";
+        final BufferedReader reader = new BufferedReader(new FileReader(path));
+        final String stat;
+        try {
+            stat = reader.readLine();
+        } finally {
+            reader.close();
+        }
+        final String field2End = ") ";
+        final String fieldSep = " ";
+        final int fieldStartTime = 20;
+        final int msInSec = 1000;
+        try {
+            final String[] fields = stat.substring(stat.lastIndexOf(field2End)).split(fieldSep);
+            final long t = Long.parseLong(fields[fieldStartTime]);
+            int tckName;
+            try {
+                tckName = Class.forName("android.system.OsConstants").getField("_SC_CLK_TCK").getInt(null);
+            } catch (ClassNotFoundException e) {
+                tckName = Class.forName("libcore.io.OsConstants").getField("_SC_CLK_TCK").getInt(null);
+            }
+
+            final Object os = Class.forName("libcore.io.Libcore").getField("os").get(null);
+            final long tck = (Long)os.getClass().getMethod("sysconf", Integer.TYPE).invoke(os, tckName);
+            return t * msInSec / tck;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 }

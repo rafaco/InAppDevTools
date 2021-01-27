@@ -23,8 +23,7 @@ jobs:
     #    command: ./gradlew :plugin:assemble
     - run:
         name: Assemble NOOP Debug
-        command: ./gradlew :noop:assembleDebug
-
+        command: ./gradlew :noop:assembleDebug --stacktrace
 
     - run:
         name: Download Dependencies
@@ -32,24 +31,23 @@ jobs:
 
     - run:
         name: Assemble COMPAT SupportDebug
-        command: ./gradlew :compat:assembleSupportDebug
+        command: ./gradlew :compat:assembleSupportDebug --stacktrace
     - run:
         name: Assemble LIBRARY SupportDebug
-        command: ./gradlew :library:assembleSupportDebug
+        command: ./gradlew :library:assembleSupportDebug --stacktrace
     - run:
         name: Assemble DEMO SupportDebug
-        command: ./gradlew :demo:assembleSupportDebug
-
+        command: ./gradlew :demo:assembleSupportDebug --stacktrace
 
     - run:
         name: Assemble COMPAT AndroidxDebug
-        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
     - run:
         name: Assemble LIBRARY AndroidxDebug
-        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
     - run:
         name: Assemble DEMO AndroidxDebug
-        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
 
     - save_cache:
         paths:

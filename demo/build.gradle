@@ -108,13 +108,16 @@ dependencies {
 
 /*
  *  Iadt CONFIGURATION
- */
+*/
 inappdevtools {
     //// Build flags (affect plugin behaviour)
     enabled = true
     debug = true
     //sourceInclusion = false
     //sourceInspection = false
+    //viewInspection = false
+    //storageInspection = false
+    //networkInterceptor = false
     //enabledOnRelease = true
 
     //// Customization flags (runtime)
@@ -135,7 +138,7 @@ inappdevtools {
     //invocationByShake = false
     //invocationByIcon = true
     //callDefaultCrashHandler = true
-    //injectEventsOnLogcat = true
+    //injectEventsOnLogcat = false
 }
 
 

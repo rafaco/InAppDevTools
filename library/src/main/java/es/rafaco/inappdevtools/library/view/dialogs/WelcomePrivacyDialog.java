@@ -30,7 +30,7 @@ import es.rafaco.inappdevtools.library.storage.prefs.utils.PrivacyConsentPrefs;
 import android.support.v7.app.AlertDialog;
 //#endif
 
-public abstract class WelcomePrivacyDialog extends IadtDialogBuilder {
+public class WelcomePrivacyDialog extends IadtDialogBuilder {
 
     public WelcomePrivacyDialog() {
         super();

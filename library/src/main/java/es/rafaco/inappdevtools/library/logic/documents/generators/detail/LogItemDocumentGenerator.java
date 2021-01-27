@@ -24,13 +24,10 @@ import android.content.Context;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
 import es.rafaco.inappdevtools.library.logic.documents.data.DocumentData;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
-import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
-import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogViewHolder;
-import es.rafaco.inappdevtools.library.view.utils.Humanizer;
+import es.rafaco.inappdevtools.library.view.overlay.screens.log.LogLineFormatter;
 
 public class LogItemDocumentGenerator extends AbstractDocumentGenerator {
 
@@ -80,24 +77,11 @@ public class LogItemDocumentGenerator extends AbstractDocumentGenerator {
     }
 
     private void insertRawData(DocumentData.Builder builder) {
-        String severity = Humanizer.toCapitalCase(FriendlyLog.convertCharToLongString(rawData.getSeverity()));
-
-        String textOverview = "Message: " + rawData.getMessage() + Humanizer.fullStop()
-                + "Extra: " + rawData.getExtra() + Humanizer.fullStop()
-                + "LogId: " + rawData.getUid() + Humanizer.newLine()
-                + "LinkedId: " + rawData.getLinkedId() + Humanizer.newLine()
-                + "Severity: " + severity + Humanizer.newLine()
-                + LogViewHolder.getFormattedDetails(rawData);
-        builder.add(textOverview);
-
-        String parsedLine = String.format("%s %s/%s: %s",
-                DateUtils.formatLogcatDate(rawData.getDate()),
-                rawData.getSeverity(),
-                rawData.getSubcategory(),
-                rawData.getMessage());
+        LogLineFormatter formatter = new LogLineFormatter(rawData);
+        builder.add(formatter.getMultiLine());
         builder.add("");
         builder.add("Logcat formatted:");
-        builder.add(parsedLine);
+        builder.add(formatter.getOneLine());
     }
 }
 

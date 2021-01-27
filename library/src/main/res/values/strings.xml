@@ -13,6 +13,9 @@
     <string name="config_overlay_enable">Disable our overlay interface</string>
     <string name="config_source_inclusion">Disable including this module sources in your apk</string>
     <string name="config_source_inspection">Disable source features and source inclusion</string>
+    <string name="config_network_interceptor">Disable network interceptor and inspection feature. Auto disabled if Pandora startup failed.</string>
+    <string name="config_view_inspection">Disable view inspection feature. Auto disabled if Pandora startup failed.</string>
+    <string name="config_storage_inspection">Disable storage inspection features. Auto disabled if Pandora startup failed.</string>
     <string name="config_invocation_by_shake">Disable opening our UI on device shake</string>
     <string name="config_invocation_by_icon">Enable a permanent overlay icon to open our UI</string>
     <string name="config_call_default_crash_handler">Propagate unhandled exceptions to the default handler (for Crashlytics and similar)</string>
@@ -25,7 +28,6 @@
     <string name="config_team_links">Collection of links to shown in team screen. Use Groovy map of name:url</string>
 
     <!-- Dialogs -->
-    <string name="welcome_welcome_message">This is a internal compilation with additional tools included:</string>
     <string name="welcome_privacy_title">Privacy</string>
     <string name="welcome_privacy_content">This compilation contains tools that are locally recording your usage of this app. Only you can share these records by using our report feature.\n\nIf you don\'t know what this is or you are not agree, tap disable.</string>
     <string name="welcome_permission_title">Permission</string>

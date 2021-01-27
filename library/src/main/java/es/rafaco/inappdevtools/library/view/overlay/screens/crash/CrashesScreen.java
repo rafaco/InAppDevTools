@@ -90,6 +90,20 @@ public class CrashesScreen extends AbstractFlexibleScreen {
 
     private List<Object> prepareData(List<Crash> crashes) {
         List<Object> data = new ArrayList<>();
+        if (crashes ==null || crashes.isEmpty()){
+            CardData cardData = new CardData("There are no crashes.",
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            IadtController.get().getDialogManager().load(new ForceCrashDialog());
+                        }
+                    });
+            cardData.setContent("Congratulations, your app haven't crashed! You can force a crash to test this features");
+            cardData.setTitleColor(R.color.material_green);
+            data.add(cardData);
+            return data;
+        }
+
         for (int i = 0; i<crashes.size(); i++) {
             final Crash crash = crashes.get(i);
             boolean isCurrent = (i==0);

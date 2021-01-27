@@ -27,6 +27,7 @@ import android.support.annotation.StringRes;
 
 public class WidgetData {
 
+    private boolean disabled;
     private String title;
     private String mainContent;
     private String secondContent;
@@ -41,7 +42,7 @@ public class WidgetData {
         this.secondContent = builder.secondContent;
         this.performer = builder.performer;
         this.bgColor = builder.bgColor;
-
+        this.disabled = builder.disabled;
     }
 
     public String getTitle() {
@@ -72,6 +73,9 @@ public class WidgetData {
         this.bgColor = bgColor;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
 
     public static class Builder {
         private String title;
@@ -80,6 +84,7 @@ public class WidgetData {
         private String mainContent;
         private String secondContent;
         private Runnable performer;
+        private boolean disabled;
 
 
         public Builder() {
@@ -112,6 +117,11 @@ public class WidgetData {
 
         public Builder setPerformer(Runnable performer) {
             this.performer = performer;
+            return this;
+        }
+
+        public Builder setDisabled() {
+            this.disabled = true;
             return this;
         }
 

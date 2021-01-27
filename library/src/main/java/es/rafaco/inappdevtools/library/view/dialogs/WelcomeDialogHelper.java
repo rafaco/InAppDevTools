@@ -34,7 +34,7 @@ public class WelcomeDialogHelper {
 
     public void showIfNeededThen(Runnable onSuccessCallback) {
         if (!shouldShowInitialDialog()){
-            onSuccessCallback.run();
+            return;
         }
         onSuccess = onSuccessCallback;
         showAuto();

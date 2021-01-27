@@ -33,7 +33,6 @@ public class DemoApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-
         Iadt.addTeamAction(new ButtonFlexData("Show message",
                 R.drawable.ic_run_white_24dp,
                 new Runnable() {

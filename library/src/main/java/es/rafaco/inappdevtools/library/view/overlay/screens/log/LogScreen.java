@@ -19,11 +19,9 @@
 
 package es.rafaco.inappdevtools.library.view.overlay.screens.log;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +37,6 @@ import android.view.ViewGroup;
 //@import androidx.paging.LivePagedListBuilder;
 //@import androidx.paging.PagedList;
 //@import androidx.sqlite.db.SupportSQLiteQuery;
-//@import androidx.appcompat.view.ContextThemeWrapper;
-//@import androidx.appcompat.widget.PopupMenu;
 //#else
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
@@ -52,8 +48,6 @@ import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.arch.persistence.db.SupportSQLiteQuery;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 //#endif
 
 import com.google.gson.Gson;
@@ -73,13 +67,12 @@ import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterStore;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogUiFilter;
 import es.rafaco.inappdevtools.library.logic.log.filter.LogFilterHelper;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
-import es.rafaco.inappdevtools.library.logic.utils.ClipboardUtils;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
-import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.logic.utils.ThreadUtils;
 import es.rafaco.inappdevtools.library.storage.db.IadtDatabase;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.storage.db.entities.FriendlyDao;
+import es.rafaco.inappdevtools.library.view.dialogs.LogLineDialog;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 import es.rafaco.inappdevtools.library.view.overlay.ScreenManager;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
@@ -452,62 +445,8 @@ public class LogScreen extends Screen implements LogViewHolder.Listener {
     //region [ ITEM OVERFLOW MENU ]
 
     @Override
-    public void onOverflowClick(View itemView, int position, long id) {
-        showPopupMenu(itemView, position, id);
-    }
-
-    private void showPopupMenu(View view, int position, long id) {
-        Context wrapper = new ContextThemeWrapper(view.getContext(), R.style.LibPopupMenuStyle);
-        PopupMenu popup = new PopupMenu(wrapper, view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.log_item, popup.getMenu());
-        popup.setOnMenuItemClickListener(new OverflowClickListener(position, id));
-        popup.show();
-    }
-
-    class OverflowClickListener implements PopupMenu.OnMenuItemClickListener {
-
-        private final int position;
-        private final long id;
-
-        public OverflowClickListener(int position, long id) {
-            this.position = position;
-            this.id = id;
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            int action = menuItem.getItemId();
-            Friendly data = adapter.getCurrentList().get(position);
-
-            if (action == R.id.action_search) {
-                Iadt.buildMessage("Searching for log message")
-                        .isInfo().fire();
-                ExternalIntentUtils.search(data.getMessage());
-                return true;
-            }
-            /*else if (action == R.id.action_include) {
-                Iadt.showMessage("TODO: Filter similar logs");
-                return true;
-            }
-            else if (action == R.id.action_exclude) {
-                Iadt.showMessage("TODO: Exclude similar logs");
-                return true;
-            }*/
-            else if (action == R.id.action_share) {
-                Iadt.buildMessage("Sharing log overview")
-                        .isInfo().fire();
-                DocumentRepository.shareDocument(DocumentType.LOG_ITEM, data.getUid());
-                return true;
-            }
-            else if (action == R.id.action_copy) {
-                Iadt.buildMessage("Copied log message to clipboard")
-                        .isInfo().fire();
-                ClipboardUtils.save(IadtController.get().getContext(), data.getMessage());
-                return true;
-            }
-            return false;
-        }
+    public void onOverflowClick(long uid) {
+        IadtController.get().getDialogManager().load(new LogLineDialog(uid));
     }
 
     //endregion

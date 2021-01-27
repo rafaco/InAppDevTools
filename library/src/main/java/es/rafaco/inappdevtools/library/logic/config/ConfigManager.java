@@ -29,6 +29,7 @@ import java.util.Map;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
+import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.files.IadtPath;
 import es.rafaco.inappdevtools.library.storage.files.utils.AssetFileReader;
@@ -86,7 +87,10 @@ public class ConfigManager {
 
     public void setBoolean(BuildConfigField config, boolean value) {
         IadtPrefs.setBoolean(config.getKey(), value);
-        IadtController.get().getEventManager().fire(Event.CONFIG_CHANGED, config);
+        EventManager eventManager = IadtController.get().getEventManager();
+        if (eventManager != null) { //Safe for disabling things on startup
+            eventManager.fire(Event.CONFIG_CHANGED, config);
+        }
     }
 
     public String getString(BuildConfigField config) {

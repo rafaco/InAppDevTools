@@ -47,6 +47,8 @@ import android.support.v7.widget.Toolbar;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
+import es.rafaco.inappdevtools.library.view.dialogs.ForceCrashDialog;
+import es.rafaco.inappdevtools.library.view.dialogs.ToolbarMoreDialog;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
 import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
@@ -246,23 +248,8 @@ public class ScreenLayer extends Layer {
         if (selected == R.id.action_close) {
             IadtController.get().getOverlayHelper().showIcon();
         }
-        else if (selected == R.id.action_half_position) {
-            toggleSizePosition(item);
-        }
-        else if (selected == R.id.action_help) {
-            ExternalIntentUtils.viewReadme();
-        }
-        else if (selected == R.id.action_config) {
-            OverlayService.performNavigation(ConfigScreen.class);
-        }
-        else if (selected == R.id.action_app_screenshot) {
-            IadtController.get().takeScreenshot();
-        }
-        else if (selected == R.id.action_lib_screenshot) {
-            IadtController.get().takeLibraryScreenshot();
-        }
-        else if (selected == R.id.action_share) {
-            ExternalIntentUtils.shareLibrary();
+        else if (selected == R.id.action_more) {
+            IadtController.get().getDialogManager().load(new ToolbarMoreDialog());
         }
     }
 
@@ -285,36 +272,29 @@ public class ScreenLayer extends Layer {
     public enum SizePosition { FULL, HALF_FIRST, HALF_SECOND}
     private SizePosition currentSizePosition = SizePosition.FULL;
 
-    public void toggleSizePosition(MenuItem item) {
-
+    public void toggleSizePosition(SizePosition newPosition) {
         WindowManager.LayoutParams viewLayoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
         LinearLayout child = view.findViewById(R.id.main_container);
         FrameLayout.LayoutParams childLayoutParams = (FrameLayout.LayoutParams) child.getLayoutParams();
 
-        if (currentSizePosition.equals(SizePosition.FULL)) {
-            currentSizePosition = SizePosition.HALF_FIRST;
-            item.setIcon(R.drawable.ic_arrow_up_white_24dp);
-
+        if (newPosition.equals(SizePosition.HALF_FIRST)) {
+            int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+            viewLayoutParams.height = halfHeight;
+            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+            childLayoutParams.gravity = Gravity.TOP;
+        }
+        else if (newPosition.equals(SizePosition.HALF_SECOND)) {
             int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
             viewLayoutParams.height = halfHeight;
             viewLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
             childLayoutParams.gravity = Gravity.BOTTOM;
         }
-        else if (currentSizePosition.equals(SizePosition.HALF_FIRST)) {
-            currentSizePosition = SizePosition.HALF_SECOND;
-            item.setIcon(R.drawable.ic_unfold_more_white_24dp);
-
-            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
-            childLayoutParams.gravity = Gravity.TOP;
-        }
         else {
-            currentSizePosition = SizePosition.FULL;
-            item.setIcon(R.drawable.ic_arrow_down_white_24dp);
-
             viewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
             viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
             childLayoutParams.gravity = Gravity.TOP;
         }
+        currentSizePosition = newPosition;
         child.setLayoutParams(childLayoutParams);
         manager.getWindowManager().updateViewLayout(view, viewLayoutParams);
     }

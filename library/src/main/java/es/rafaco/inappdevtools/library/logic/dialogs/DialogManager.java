@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.logic.dialogs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 
 //#ifdef ANDROIDX
@@ -39,7 +38,6 @@ import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.IadtDialogBuilder;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 
-
 /**
  * DialogManager.java
  *  Build and show dialogs with custom styles, defined by a IadtDialogBuilder
@@ -53,7 +51,6 @@ public class DialogManager {
     IadtDialogBuilder builder;
     AlertDialog currentDialog;
     String currentActivityHash;
-    private boolean isManagerDismiss = false;
 
     private Boolean isOverlayMode;
     private EventManager.Listener activityOpenListener;
@@ -86,7 +83,7 @@ public class DialogManager {
 
         if (IadtController.get().isDebug()){
             FriendlyLog.log("D", "Iadt", "Navigation",
-                    "Dialog navigation to " + builder.getClass().getSimpleName());
+                    "Dialog navigation to " + builder.getName());
         }
         show();
     }
@@ -106,12 +103,7 @@ public class DialogManager {
         return builder != null;
     }
 
-    private void cleanLoaded() {
-        builder = null;
-        currentDialog = null;
-        currentActivityHash = null;
-        isManagerDismiss = false;
-    }
+
 
     private boolean canDrawOverlay() {
         return PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
@@ -123,12 +115,39 @@ public class DialogManager {
 
     //region [ DIALOG ]
 
-    private void dismiss() {
-        if (currentDialog!=null){// && currentDialog.isShowing()){
-            isManagerDismiss = true;
+    public void dismiss() {
+        if (currentDialog!=null && currentDialog.isShowing()){
+            if (IadtController.get().isDebug()) {
+                FriendlyLog.log("D", "Iadt", "Navigation",
+                        "Dialog dismissed " + builder.getName());
+            }
+            currentDialog.setOnDismissListener(null);
             currentDialog.dismiss();
             currentActivityHash = null;
         }
+    }
+
+    public void destroy() {
+        dismiss();
+        if (IadtController.get().isDebug()) {
+            FriendlyLog.log("D", "Iadt", "Navigation",
+                    "Dialog destroy " + builder.getName());
+        }
+        cleanAll();
+    }
+
+    private void cleanAll() {
+        builder = null;
+        currentDialog = null;
+        currentActivityHash = null;
+    }
+
+    public void onDialogDismissedExternally(DialogInterface dialog) {
+        if (IadtController.get().isDebug()){
+            FriendlyLog.log("D", "Iadt", "Navigation",
+                    "Dialog dismissed externally, destroying.");
+        }
+        cleanAll();
     }
 
     private void build(IadtDialogBuilder builder, Context context) {
@@ -141,18 +160,11 @@ public class DialogManager {
     }
 
     private void show() {
-        Log.d("DIALOGS", "Showing dialog");
+        if (IadtController.get().isDebug()){
+            FriendlyLog.log("D", "Iadt", "Navigation",
+                    "Dialog show " + builder.getName());
+        }
         currentDialog.show();
-    }
-
-    public void onDismiss(DialogInterface dialog) {
-        if (isManagerDismiss) {
-            isManagerDismiss = false;
-        }
-        else{
-            //Dismissed by user
-            cleanLoaded();
-        }
     }
 
     public void onPause(){
@@ -171,13 +183,14 @@ public class DialogManager {
         if (isLoaded() && !isOverlayMode
                 && (currentActivityHash == null || !currentActivityHash.equals(activity.toString()))){
 
+            if (IadtController.get().isDebug()){
+                FriendlyLog.log("D", "Iadt", "Navigation",
+                        "Dialog restoration over " + activity.toString() + " activity");
+            }
             dismiss();
             currentActivityHash = activity.toString();
             build(builder, activity);
-            if (IadtController.get().isDebug()){
-                FriendlyLog.log("D", "Iadt", "Navigation",
-                        "Dialog restored " + builder.getClass().getSimpleName());
-            }
+
             show();
         }
     }
@@ -185,11 +198,6 @@ public class DialogManager {
     private void onActivityDestroy(Activity activity) {
         if (isLoaded() && !isOverlayMode
                 && currentActivityHash!=null && currentActivityHash.equals(activity.toString())){
-            if (IadtController.get().isDebug()){
-                FriendlyLog.log("D", "Iadt", "Navigation",
-                        "Dialog destroyed " + builder.getClass().getSimpleName());
-            }
-            isManagerDismiss = true;
             dismiss();
         }
     }

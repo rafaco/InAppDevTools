@@ -33,6 +33,7 @@ import es.rafaco.inappdevtools.library.logic.config.ConfigManager;
 import es.rafaco.inappdevtools.library.logic.dialogs.DialogManager;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.crash.ForcedRuntimeException;
+import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.reader.LogcatReaderService;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationManager;
 import es.rafaco.inappdevtools.library.logic.navigation.OverlayHelper;
@@ -101,16 +102,9 @@ public final class IadtController {
         this.context = context.getApplicationContext();
 
         IadtDatabase.checkVersion();
-
         boolean isEssentialUp = initEssential();
-        if (!isEssentialUp)
-            return;
-
-        if (shouldDelayInitFull()){
+        if (isEssentialUp)
             isPendingInitFull = true;
-        }else{
-            initFull();
-        }
 
         new WelcomeDialogHelper().showIfNeededThen(new Runnable() {
             @Override
@@ -150,31 +144,38 @@ public final class IadtController {
         return true;
     }
 
+    public void initFullIfPending(){
+        Log.d(Iadt.TAG, "RAFA: initFullIfPending");
+        if (isPendingInitFull){
+            if (shouldDelayInitFull()){
+                Log.d(Iadt.TAG, "RAFA: shouldDelayInitFull");
+                return;
+            }
+            else{
+                Log.d(Iadt.TAG, "RAFA: isPendingInitFull");
+                initFull();
+            }
+        }
+        else if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
+                && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)
+                && !OverlayService.isRunning()){
+            Log.d(Iadt.TAG, "RAFA: Restarting OverlayHelper");
+            if (isDebug()) Log.d(Iadt.TAG, "Restarting OverlayHelper");
+            overlayHelper = new OverlayHelper(getContext());
+        }
+        else {
+            Log.d(Iadt.TAG, "RAFA: nothing");
+        }
+    }
+
     private boolean shouldDelayInitFull() {
         return !AppUtils.isForegroundImportance(context) ||
                 !PrivacyConsentPrefs.isAccepted() ||
                 !PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY);
     }
 
-    public void initFullIfPending(){
-        if (shouldDelayInitFull()){
-            return;
-        }
-
-        if (isPendingInitFull){
-            initFull();
-        }
-        else if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
-                && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)
-                && !OverlayService.isRunning()){
-            if (isDebug()) Log.d(Iadt.TAG, "Restarting OverlayHelper");
-            overlayHelper = new OverlayHelper(getContext());
-        }
-    }
-
     private void initFull(){
         if (isDebug()) Log.d(Iadt.TAG, "IadtController init full");
-
         initDelayedBackground();
         initForeground();
         isPendingInitFull = false;
@@ -189,6 +190,8 @@ public final class IadtController {
 
         Intent intent = LogcatReaderService.getStartIntent(getContext(), "Started from IadtController");
         LogcatReaderService.enqueueWork(getContext(), intent);
+
+        PandoraBridge.init();
     }
 
     private void initForeground(){

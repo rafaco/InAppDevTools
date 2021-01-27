@@ -42,20 +42,15 @@ import android.widget.LinearLayout;
 import es.rafaco.compat.CardView;
 import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.view.components.base.FlexData;
 import es.rafaco.inappdevtools.library.view.components.groups.LinearGroupFlexData;
 import es.rafaco.inappdevtools.library.view.components.items.ButtonFlexData;
-import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.db.entities.Friendly;
 import es.rafaco.inappdevtools.library.view.components.FlexDescriptor;
 import es.rafaco.inappdevtools.library.view.components.FlexLoader;
+import es.rafaco.inappdevtools.library.view.components.items.HeaderFlexData;
 import es.rafaco.inappdevtools.library.view.overlay.OverlayService;
-import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
-import es.rafaco.inappdevtools.library.view.overlay.screens.builds.BuildDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.network.NetDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.session.SessionDetailScreen;
-import es.rafaco.inappdevtools.library.view.overlay.screens.view.ZoomScreen;
 import es.rafaco.inappdevtools.library.view.utils.Humanizer;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 
@@ -74,11 +69,8 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     View titleSeparator;
     LinearLayout detailWrapper;
     AppCompatTextView detail;
-    LinearLayout extra_wrapper;
-    AppCompatTextView extra;
     View buttonsSeparator;
     FrameLayout buttonGroupContainer;
-    ImageView overflow;
 
     public LogViewHolder(View view, Listener listener) {
         super(view);
@@ -94,10 +86,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         buttonsSeparator = view.findViewById(R.id.buttons_separator);
         detailWrapper = view.findViewById(R.id.detail_wrapper);
         detail = view.findViewById(R.id.detail);
-        extra_wrapper = view.findViewById(R.id.extra_wrapper);
-        extra = view.findViewById(R.id.extra);
         buttonGroupContainer = view.findViewById(R.id.button_group_container);
-        overflow = view.findViewById(R.id.overflow);
     }
 
     public interface Listener {
@@ -105,12 +94,14 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         boolean isSelected(long id);
         boolean isBeforeSelected(int position);
         void onItemClick(View itemView, int position, long id);
-        void onOverflowClick(View itemView, int position, long id);
+        void onOverflowClick(long id);
     }
 
     public void bindTo(final Friendly data, int position) {
         boolean isSelected = listener.isSelected(data.getUid());
         boolean isBeforeSelected = listener.isBeforeSelected(position);
+
+        final LogLineFormatter formatter = new LogLineFormatter(data);
 
         if(LogScreen.isLogDebug() && isSelected){
             Log.d(Iadt.TAG, "LogScreen - bindTo selection " + data.getUid() + " at " + position);
@@ -123,7 +114,6 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
                 listener.onItemClick(v, getAdapterPosition(), uid);
             }
         });
-        //itemView.setOnLongClickListener(this);
 
         int cardColorId = isSelected ? R.color.iadt_surface_top : android.R.color.transparent;
         int cardColor = ContextCompat.getColor(wrapper.getContext(), cardColorId);
@@ -150,7 +140,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             title.setTypeface(Typeface.create(Typeface.MONOSPACE, R.style.TextMonospaceSmall));
             title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rally_white));
         }else{
-            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensed_Small));
+            title.setTypeface(Typeface.create(Typeface.SANS_SERIF, R.style.TextCondensed));
             title.setTypeface(title.getTypeface(), Typeface.BOLD);
             title.setTextColor(severityColor);
         }
@@ -164,7 +154,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
         titleSeparator.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
         if (isSelected){
-            String details = getFormattedDetails(data);
+            String details = formatter.getOneLineHeader();
             detail.setText(details);
             detailWrapper.setVisibility(View.VISIBLE);
         }
@@ -172,111 +162,62 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             detailWrapper.setVisibility(View.GONE);
         }
 
-        if (isSelected){
-            boolean showExtra = !isLogcat && !TextUtils.isEmpty(data.getExtra());
-            extra_wrapper.setVisibility(showExtra ? View.VISIBLE : View.GONE);
-            extra.setText(showExtra ? data.getExtra() : "");
-        }
-        else{
-            extra_wrapper.setVisibility(View.GONE);
-        }
-
-        if(isSelected && getLinkedIdStep(data)!=null){
+        if(isSelected){
             LinearGroupFlexData linearGroupData = new LinearGroupFlexData();
             linearGroupData.setHorizontal(true);
-            linearGroupData.add(new ButtonFlexData(
-                    "Details", new Runnable() {
-                @Override
-                public void run() {
-                    OverlayService.performNavigationStep(LogViewHolder.this.getLinkedIdStep(data));
-                }
-            }));
+            linearGroupData.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
+
+            if (!isLogcat && formatter.getLinkStep() !=null){
+                ButtonFlexData linkedButton = new ButtonFlexData(formatter.getLinkName(),
+                        formatter.getLinkIcon(),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                OverlayService.performNavigationStep(formatter.getLinkStep());
+                            }
+                        });
+                linkedButton.setColor(R.color.material_blue_900);
+                linearGroupData.add(linkedButton);
+            }
+            else{
+                HeaderFlexData placeholder = new HeaderFlexData(" ");
+                placeholder.setHorizontalMargin(false);
+                placeholder.setVerticalMargin(false);
+                linearGroupData.add(placeholder);
+            }
+
+            ButtonFlexData moreButton = new ButtonFlexData("Details",
+                    R.drawable.ic_info_white_24dp,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onOverflowClick(uid);
+                        }
+                    });
+            moreButton.setColor(R.color.rally_dark_green);
+            linearGroupData.add(moreButton);
+
             FlexDescriptor desc = FlexLoader.getDescriptor(LinearGroupFlexData.class);
             desc.addToView(linearGroupData, buttonGroupContainer);
-
             buttonGroupContainer.setVisibility(View.VISIBLE);
             buttonsSeparator.setVisibility(View.VISIBLE);
         }else{
+            buttonGroupContainer.removeAllViews();
             buttonGroupContainer.setVisibility(View.GONE);
             buttonsSeparator.setVisibility(View.GONE);
         }
-
-        if(isSelected){
-            overflow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onOverflowClick(v, getAdapterPosition(), uid);
-                }
-            });
-        }
-        else{
-            overflow.setOnClickListener(null);
-        }
-        overflow.setVisibility(isSelected ? View.VISIBLE : View.GONE);
-
 
         logSeparator.setVisibility(isSelected || isBeforeSelected ? View.GONE
                 : View.VISIBLE);
     }
 
-    public static String getFormattedDetails(Friendly data) {
-        String details = "";
-        if (data.isLogcat()){
-            details = data.getExtra();
-        }
-        else{
-            details += "Date: " + DateUtils.format(data.getDate()) + Humanizer.newLine();
-            details += "Source: " + "Iadt Event" + Humanizer.newLine();
-            details += "Category: " + data.getCategory() + Humanizer.newLine();
-            details += "Subcategory: " + data.getSubcategory();
-
-            if (data.getLinkedId()>0){
-                details += Humanizer.newLine() + "LinkedId: " + data.getLinkedId();
-            }
-        }
-        return details;
-    }
-
-    private NavigationStep getLinkedIdStep(Friendly data) {
-        if(data.getSubcategory().equals("Crash")){
-            return new NavigationStep(CrashScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("Screenshot")){
-            return new NavigationStep(ZoomScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("Init")){
-            return new NavigationStep(SessionDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        else if (data.getSubcategory().equals("NewBuild")){
-            return new NavigationStep(BuildDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-        /* TODO: enable ANR screen
-        else if(data.getSubcategory().equals("Anr")){
-            return new NavigationStep(AnrDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }*/
-        else if(data.getCategory().equals("Network")){
-            return new NavigationStep(NetDetailScreen.class, String.valueOf(data.getLinkedId()));
-        }
-
-        return null;
-    }
-
     public void showPlaceholder(int position) {
-        int color = ContextCompat.getColor(title.getContext(), R.color.rally_gray);
-
         decorator.setVisibility(View.VISIBLE);
-        //decorator.setBackgroundColor(color);
-
         title.setVisibility(View.VISIBLE);
-        //title.setBackgroundColor(color);
-
         icon.setVisibility(View.VISIBLE);
-        //icon.setBackgroundColor(color);
 
-        extra_wrapper.setVisibility(View.GONE);
         buttonsSeparator.setVisibility(View.GONE);
         buttonGroupContainer.setVisibility(View.GONE);
-        overflow.setVisibility(View.GONE);
 
         if (Humanizer.isEven(position)){
             title.setMaxWidth(title.getWidth()/2);

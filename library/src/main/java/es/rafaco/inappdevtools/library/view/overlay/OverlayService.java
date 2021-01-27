@@ -38,6 +38,7 @@ import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.storage.prefs.utils.PendingCrashPrefs;
 import es.rafaco.inappdevtools.library.logic.navigation.NavigationStep;
+import es.rafaco.inappdevtools.library.view.overlay.layers.ScreenLayer;
 import es.rafaco.inappdevtools.library.view.overlay.screens.Screen;
 import es.rafaco.inappdevtools.library.view.overlay.screens.crash.CrashScreen;
 
@@ -61,6 +62,8 @@ public class OverlayService extends Service {
         SHOW_TOGGLE,
         HIDE_ALL,
         RESTORE_ALL,
+        TOGGLE_SCREEN_SIZE,
+        ;
     }
 
     public OverlayService() {}
@@ -231,6 +234,9 @@ public class OverlayService extends Service {
         }
         else if (action.equals(IntentAction.RESTORE_ALL)) {
             overlayManager.toggleVisibility(true);
+        }
+        else if (action.equals(IntentAction.TOGGLE_SCREEN_SIZE)) {
+            overlayManager.toggleScreenLayout(ScreenLayer.SizePosition.valueOf(target));
         }
     }
 

@@ -31,10 +31,10 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 //#endif
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.events.Event;
 import es.rafaco.inappdevtools.library.logic.events.EventDetector;
 import es.rafaco.inappdevtools.library.logic.events.EventManager;
-import es.rafaco.inappdevtools.library.logic.external.PandoraBridge;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 
 public class ProcessEventDetector extends EventDetector implements LifecycleObserver {
@@ -49,7 +49,6 @@ public class ProcessEventDetector extends EventDetector implements LifecycleObse
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "Process", "Create", "Process created");
-                PandoraBridge.init();
             }
         });
 
@@ -71,6 +70,7 @@ public class ProcessEventDetector extends EventDetector implements LifecycleObse
             @Override
             public void onEvent(Event event, Object param) {
                 FriendlyLog.log("D", "Process", "Resume", "Process resumed");
+                IadtController.get().initFullIfPending();
             }
         });
 
