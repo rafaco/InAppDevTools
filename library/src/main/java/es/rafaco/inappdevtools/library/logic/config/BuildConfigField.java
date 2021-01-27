@@ -31,25 +31,27 @@ public enum BuildConfigField {
     ENABLED("enabled", R.string.config_enabled, boolean.class, false),
     ENABLED_ON_RELEASE("enabledOnRelease", R.string.config_enabled_on_release, boolean.class, false),
     DEBUG("debug", R.string.config_debug, boolean.class, false),
+
+    // Build feature switches (affect plugin behaviour)
     SOURCE_INCLUSION("sourceInclusion", R.string.config_source_inclusion, boolean.class, true),
     SOURCE_INSPECTION("sourceInspection", R.string.config_source_inspection, boolean.class, true),
     NETWORK_INTERCEPTOR("networkInterceptor", R.string.config_network_interceptor, boolean.class, true),
+
+    // Runtime feature switches
     VIEW_INSPECTION("viewInspection", R.string.config_view_inspection, boolean.class, true),
     STORAGE_INSPECTION("storageInspection", R.string.config_storage_inspection, boolean.class, true),
+    OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
+    INVOCATION_BY_SHAKE("invocationByShake", R.string.config_invocation_by_shake, boolean.class, true),
+    INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, true),
+    CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
+    INJECT_EVENTS_ON_LOGCAT("injectEventsOnLogcat", R.string.config_inject_events_on_logcat, boolean.class, true),
 
     // Customization flags (runtime)
     NOTES("notes", R.string.config_notes, String.class, ""),
     TEAM_NAME("teamName", R.string.config_team_name, String.class, ""),
     TEAM_EMAIL("teamEmail", R.string.config_team_email, String.class, ""),
     TEAM_DESC("teamDesc", R.string.config_team_desc, String.class, ""),
-    TEAM_LINKS("teamLinks", R.string.config_team_links, Map.class, null),
-
-    // Feature switches (runtime)
-    OVERLAY_ENABLED("overlayEnabled", R.string.config_overlay_enable, boolean.class, true),
-    INVOCATION_BY_SHAKE("invocationByShake", R.string.config_invocation_by_shake, boolean.class, true),
-    INVOCATION_BY_ICON("invocationByIcon", R.string.config_invocation_by_icon, boolean.class, true),
-    CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
-    INJECT_EVENTS_ON_LOGCAT("injectEventsOnLogcat", R.string.config_inject_events_on_logcat, boolean.class, true);
+    TEAM_LINKS("teamLinks", R.string.config_team_links, Map.class, null);
 
     private final String key;
     private final int desc;
