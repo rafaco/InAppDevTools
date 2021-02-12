@@ -66,33 +66,33 @@ Auto-logger, repro step generator, logcat viewer, crash handler, reports, source
 #### Features
 
 <table border="0">
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif"></td><td>
+<tr><td width="2%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Info.gif"></td><td>
  
 **App and device info**  
 Get detailed information about what are you testing and where. The build process (variant, type, date, machine, user, gradle versions, dependencies,...), the sources used (remote repo status, local repo, commits and change diffs...), the resulting app (manifest, version, namespace, signing, installation...), the device where is running (model, hardware, battery, sensors...) and their operative system (version, status, memory, storage, installed apps...).
 </td></tr>
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif"></td><td>
+<tr><td width="20%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Team.gif"></td><td>
 
 **Team resources and reports**  
 Provide your own resources for your internal users via Gradle configuration (team name, description, build notes, external links and action buttons. Your users can easily send report directly to the development team. Reports can include a zip with all gathered data (environment info, logs, screenshots, crash details, network request, logic snapshot...).
 </td></tr>
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif"></td><td>
+<tr><td width="20%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Crash.gif"></td><td>
  
  **Crash visualization and report**  
 We intercept any exception and show details immediately, on the same screen where it happen. These details include app status, current activity, logs, screenshots and graphic stacktrace with navigation to causing source lines. Crashes can be reported via email and we will include a zip with all gathered details.
 </td></tr>
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif"></td><td>
+<tr><td width="20%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logs.gif"></td><td>
  
 **Logs, reproduction steps and advance events**  
 Browse the standard logcat output from your sessions as you use your app. They are surrounded by our auto generated events to give you more context. Our event cover from basic reproduction steps (user interaction, navigation, network activity...) to advanced entries (lifecycle events, crashes, ANRs, device events...).
 </td></tr>
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif"></td><td>
+<tr><td width="20%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_UI.gif"></td><td>
  
 **View inspector**  
 Navigate through your current layout components by touching elements or by browsing your hierarchy. Modify xml properties straight away and see the results in your screen.
 Browse you current components and their sources (tasks, activity and fragments), zoom your screen, measure elements and take screenshots.
 </td></tr>
-<tr><td width="30%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif"></td><td>
+<tr><td width="20%" align="center" valign="top"><img src="https://github.com/rafaco/InAppDevTools/wiki/screenshots/Animated/Screenshots_Logic.gif"></td><td>
  
 **Logic and network inspector**  
 Get details about your running logic components (processes, threads, services, content providers and broadcast receivers) and inspect the network request/responses between your backend and your app. Browse and edit your storages (databases, shared preferences and files) and edit their values.
