@@ -14,7 +14,7 @@ buildscript {
         /*
          *  Iadt PLUGIN: import using legacy plugin application (support dynamic versioning).
          */
-        classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
+        //classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
 
         // Internal plugins for publications
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
@@ -34,13 +34,49 @@ plugins {
      *
      * id "es.rafaco.inappdevtools" version "X.X.X" apply false
      */
+    id "es.rafaco.inappdevtools" version "0.0.58"
     id "org.sonarqube" version "2.8"
+}
+
+/*
+ *  Iadt CONFIGURATION
+*/
+inappdevtools {
+    //// Build flags (affect plugin behaviour)
+    enabled = true
+    debug = true
+    //sourceInclusion = false
+    //sourceInspection = false
+    //viewInspection = false
+    //storageInspection = false
+    //networkInterceptor = false
+    //enabledOnRelease = true
+
+    //// Customization flags (runtime)
+    notes = "This is a SAMPLE NOTE about this compilation:\n" +
+            " - Developers can add any text here using Gradle configuration\n" +
+            " - Useful to describe changes or to provide instructions"
+
+    teamName = "DemoTeam"
+    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
+    teamEmail = 'inappdevtools@gmail.com'
+    teamLinks = [ website   : "http://inappdevtools.org",
+                  repo      : "https://github.com/rafaco/InAppDevTools",
+                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
+                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
+
+    // Feature switches (runtime)
+    //overlayEnabled = false
+    //invocationByShake = false
+    //invocationByIcon = true
+    //callDefaultCrashHandler = true
+    //injectEventsOnLogcat = false
 }
 
 allprojects {
     repositories {
         mavenLocal()
-        maven { url "https://jitpack.io"}
+        //maven { url "https://jitpack.io"}
         google()
         jcenter()
     }

@@ -102,60 +102,32 @@ Get details about your running logic components (processes, threads, services, c
 
 ## Setup <a name="setup"/>
 
-You only need to modify 2 gradle files. On your **root build.gradle** file:
+You only need to add a line in a Gradle file to include our plugin in your builds. Go to your **root build.gradle** file and...
 
 ```gradle
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.58" apply false           // 1.
-}
-
-allprojects {
-    repositories {
-        maven { url "https://jitpack.io"}                               // 2.
-    }
+    id "es.rafaco.inappdevtools" version "0.0.58"
 }
 ```
 <details><summary align="center">Show details</summary><p>
  
-1. Add our plugin in your `plugins` closure, which should be just before `buildscript`.
-2. Add JitPack to `allprojects`, `repositories`.
+1. Ensure `buildscript` is on top, it means that you are in the **root build.gradle** file.
+2. Add our plugin in your existing `plugins` closure.
+3. If you don't have `plugins`, it has to be just after `buildscript`
 
 </br></p></details>
 
-On your **app** module **build.gradle** file:
-
+Optionally you can add our configuration closure `inappdevtools` to the same file. Fill your email at least to receive your reports:
 ```gradle
-apply plugin: 'com.android.application'
-apply plugin: 'es.rafaco.inappdevtools'                                 // 1.
-
-android {
-    ...
-}
-
-dependencies {
-    releaseImplementation 'es.rafaco.inappdevtools:noop:0.0.58'         // 2.
-    
-    debugImplementation 'es.rafaco.inappdevtools:support:0.0.58'        // 3.
-    //debugImplementation 'es.rafaco.inappdevtools:androidx:0.0.58'
-}
-
-inappdevtools {                                                         // 4.
+inappdevtools {
     enabled = true
     teamName = 'YourTeam'
     teamEmail = 'youremail@yourdomain.com'
     notes = 'First build note, replace me on the next ones.'
 }
 ```
-<details><summary align="center">Show details</summary><p>
-
-1. Apply our plugin
-2. Add our `noop` for your release builds
-3. Choose between `androidx` or `support` for your debug builds, according to the Android libraries in your project. `androidx` require Jetifier enabled.
-4. Add our configuration closure `inappdevtools` and fill your email at least.
-
-</br></p></details>
 
 From now on, when building your project artifacts:
 

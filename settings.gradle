@@ -16,6 +16,7 @@ if (VersionNumber.parse(gradle.gradleVersion) > VersionNumber.parse('4.6') &&
 //Includes a build of plugin module (Composite build)
 // Required to develop and test the plugin in the same project
 includeBuild ('./plugin')
+gradle.ext.iadtIsLocalDev = true
 
 //Include other modules as sources
 include ':noop'

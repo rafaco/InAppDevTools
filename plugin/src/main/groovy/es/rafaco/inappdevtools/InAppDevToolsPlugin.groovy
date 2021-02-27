@@ -26,6 +26,7 @@ import es.rafaco.inappdevtools.tasks.DetectReactNativeTask
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -58,37 +59,60 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     File outputFolder
 
     void apply(Project project) {
+
+        println "IADT apply() on project ${project}"
         projectUtils = new ProjectUtils(project)
-        boolean isValidModule = validateModule()
-        if (!isValidModule)
-            return
 
-        initPlugin(project, projectUtils)
-        initTasks(project)
+        if (projectUtils.isRoot()) {
+            extension = project.extensions.create(TAG, InAppDevToolsExtension)
+        }
+
+        project.afterEvaluate {
+            if (projectUtils.isRoot()){
+                applyToRoot(project)
+            }
+            else if (projectUtils.isAndroidModule()) {
+                applyToAndroidModule(project)
+            }
+            else{
+                println "IADT skipped for ${project} project. " +
+                        "Only Android application module is currently supported."
+            }
+        }
     }
 
-    private boolean validateModule(Project project) {
-        if (projectUtils.isRoot()){
-            println "IATD skipped for root project"
-            return false
-        }
-        else if (!projectUtils.isAndroidModule()){
-            println "IATD skipped for ${project.name} project. " +
-                    "Only Android application, library or feature project are currently allowed."
-            return false
-        }
-        return true
-    }
+    private void applyToRoot(Project project) {
+        println "IADT root:"
 
-    //region [ INIT PLUGIN ]
-
-    private void initPlugin(Project project, ProjectUtils projectUtils) {
-        extension = project.extensions.create(TAG, InAppDevToolsExtension)
-
-        println(getPluginNameAndVersion())
+        println("${getPluginName()} ${getPluginVersion()}")
         if (isDebug()) {
             println "Gradle $project.gradle.gradleVersion"
             println "Android Gradle Plugin ${new AndroidPluginUtils(projectUtils.getProject()).getVersion()}"
+        }
+
+        project.subprojects { subproject ->
+            //TODO: Auto detect application modules
+            //TODO: filter modules from configuration
+            if (subproject.name == "demo"){
+
+                // Add JitPack repository for dependencies
+                println "IADT root: add repositories to ${subproject}"
+                subproject.repositories {
+                    maven { url "https://jitpack.io" }
+                }
+
+                // Add dependencies
+                println "IADT root: add dependencies to ${subproject}"
+
+                // Apply this plugin
+                println "IADT root: apply plugin to ${subproject}"
+                subproject.getPluginManager().apply('es.rafaco.inappdevtools')
+            }
+        }
+    }
+
+    private void applyToAndroidModule(Project project) {
+        if (isDebug()) {
             AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
                 @Override
                 void execute(Project project2) {
@@ -99,18 +123,33 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             })
         }
 
-        outputFolder = getOutputDir(project)
-        outputFolder.mkdirs()
-        project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
-
-        //Extend current project's Clean task to clear our outputs
-        project.tasks.clean {
-            delete getOutputPath(project)
-        }
+        initOutputFolder(project)
 
         if (projectUtils.isAndroidApplication()) {
             injectInternalPackage(project)
             applySafePlugins(project)
+        }
+
+        addDependencies(project)
+        initTasks(project)
+    }
+
+    //region [ INIT PLUGIN ]
+
+    private void initOutputFolder(Project project) {
+        println "IADT initOutputFolder()"
+
+        // Prepare output folder
+        outputFolder = getOutputDir(project)
+        outputFolder.mkdirs()
+
+        // Include output folder in source sets
+        //TODO: Is variant filter needed? I believe they get exclude but I don't remember where
+        project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent()
+
+        // Include output folder in standard clean task
+        project.tasks.clean {
+            delete getOutputPath(project)
         }
     }
 
@@ -122,7 +161,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
     }
 
-    //Apply external plugins required for Iadt (save to be applied even if we dont use them)
+    //Apply external plugins required for Iadt (safe to be applied even if we dont use them)
     private void applySafePlugins(Project project) {
         project.getPluginManager().apply(ProjectReportsPlugin.class)
         //TODO: research other reports (tasks, properties, dashboard,...)
@@ -135,6 +174,51 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     }
 
     //endregion
+
+    private void addDependencies(Project project) {
+        if (projectUtils.isLocalDev()){
+            println "IADT dependencies skipped, local development"
+            /*project.dependencies.add("debugApi",
+                    project.dependencies.project([path : ":library"]))
+            project.dependencies.add("releaseApi",
+                    project.dependencies.project([path : ":noop"]))*/
+        } else {
+            println "IADT remote dependencies from version ${getPluginVersion()}"
+            //TODO: Filter by variant from configuration!!
+            if (projectUtils.useAndroidX()){
+                if (!projectUtils.enableJetifier()) {
+                    //TODO: Fail the build or fallback to noop?
+                    throw new GradleException("InAppDevTools require Jetifier enabled if you " +
+                            "use AndroidX.\n" +
+                            "- Set 'android.enableJetifier' to true in the gradle.properties " +
+                            "file and retry.\n" +
+                            "- Sorry, all my sources are migrated but there still a incompatible " +
+                            "transitional dependency. Working on it.")
+                }
+                project.dependencies.add("debugImplementation",
+                        "es.rafaco.inappdevtools:androidx:${getPluginVersion()}")
+            } else {
+                project.dependencies.add("debugImplementation",
+                        "es.rafaco.inappdevtools:support:${getPluginVersion()}")
+            }
+            project.dependencies.add("releaseImplementation",
+                    "es.rafaco.inappdevtools:noop:${getPluginVersion()}")
+
+        }
+
+        if (projectUtils.isAndroidApplication()) {
+            project.afterEvaluate {
+                println "IADT  project.configurations.each and conf.allDependencies.each"
+                println "  Project:" + project.name
+                project.configurations.each { conf ->
+                    println "    Configuration: ${conf.name}"
+                    conf.allDependencies.each { dep ->
+                        println "      ${dep.group}:${dep.name}:${dep.version}"
+                    }
+                }
+            }
+        }
+    }
 
     //region [ INIT TASKS ]
 
@@ -522,7 +606,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     //region [ STATIC ACCESS TO PLUGIN ]
 
     static InAppDevToolsExtension getExtension(Project project) {
-        project.extensions.getByName(TAG)
+        project.rootProject.extensions.getByName(TAG)
     }
 
     static boolean isDebug(Project project){
@@ -548,10 +632,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     //region [ PROPERTY EXTRACTORS ]
 
-    String getPluginNameAndVersion() {
-        String pluginName = this.getClass().getPackage().getSpecificationTitle()
-        String pluginVersion = this.getClass().getPackage().getSpecificationVersion()
-        "${pluginName} ${pluginVersion}"
+    String getPluginName() {
+        this.getClass().getPackage().getSpecificationTitle()
+    }
+
+    String getPluginVersion() {
+        this.getClass().getPackage().getSpecificationVersion()
     }
 
     String getInternalPackageFromManifest() {

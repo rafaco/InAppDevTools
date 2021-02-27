@@ -112,6 +112,21 @@ class ProjectUtils {
         return project.plugins.hasPlugin('com.android.feature')
     }
 
+    boolean isLocalDev(){
+        return project.rootProject.gradle.hasProperty('iadtIsLocalDev') &&
+                project.rootProject.gradle.ext.iadtIsLocalDev
+    }
+
+    boolean useAndroidX(){
+        return project.rootProject.hasProperty('android.useAndroidX') &&
+                project.rootProject.properties['android.useAndroidX'] == 'true'
+    }
+
+    boolean enableJetifier(){
+        return project.rootProject.hasProperty('android.enableJetifier') &&
+                project.rootProject.properties['android.enableJetifier'] == 'true'
+    }
+
     //endregion
 
 
@@ -202,7 +217,7 @@ class ProjectUtils {
     }
 
     void printConfigurations(){
-        println 'Configurations for project ' + project.getName()
+        println 'Configurations for project ' + project.getName() + " -> " + getConfigurations().size()
         getConfigurations().each { println " - " + it.name }
     }
 

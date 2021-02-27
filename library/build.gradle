@@ -69,6 +69,11 @@ android {
 //supportImplementation "es.rafaco.compat:support:$PROJECT_VERSION"
 */
 
+
+repositories {
+    maven { url "https://jitpack.io"}
+}
+
 dependencies {
 
     api project(path: ':compat')

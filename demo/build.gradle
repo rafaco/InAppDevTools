@@ -2,17 +2,6 @@ apply plugin: 'com.android.application'
 apply from: '../compat/preprocess.gradle'
 apply from: '../gradle/constants.gradle'
 
-/*
- *  Iadt PLUGIN: import directly from modules. For development.
- */
-//apply from: '../plugin/build.gradle'
-
-/*
- *  Iadt PLUGIN: import from repository (jCenter or localMaven). Standard usage
- */
-apply plugin: 'es.rafaco.inappdevtools'
-
-
 android {
     compileSdkVersion PROJECT_COMPILE_SDK
     buildToolsVersion PROJECT_BUILD_TOOLS
@@ -60,39 +49,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     /*
-     *  Iadt COMPAT: import directly from modules.
+     *  IADT dependencies directly from sources. For development environment only.
+     *  It require gradle.ext.iadtIsLocalDev to true in settings.gradle.
      */
     api project(path: ':compat')
-
-    /*
-     *  Iadt COMPAT: import from repository (jCenter or localMaven). Standard usage
-     */
-    //androidxImplementation "es.rafaco.compat:androidx:$PROJECT_VERSION"
-    //supportImplementation "es.rafaco.compat:support:$PROJECT_VERSION"
-
-    // AndroidX/Support view components added by compat module:
-    //    androidxApi "androidx.appcompat:appcompat:$rootProject.ext.ANDROIDX_MAIN_VERSION"
-    //    supportApi "com.android.support:appcompat-v7:$rootProject.ext.appSupportVersion"
-    //    androidxApi "com.google.android.material:material:$rootProject.ext.ANDROIDX_MATERIAL_VERSION"
-    //    supportApi "com.android.support:design:$rootProject.ext.appSupportVersion"
-    //    supportApi "com.android.support:support-v4:$rootProject.ext.appSupportVersion"
-    //    androidxApi "androidx.recyclerview:recyclerview:$rootProject.ext.ANDROIDX_MAIN_VERSION"
-    //    supportApi "com.android.support:recyclerview-v7:$rootProject.ext.appSupportVersion"
-
-
-    /*
-     *  Iadt LIBRARY: import directly from modules. For development.
-     */
     debugApi project(path: ':library')
     releaseApi project(path: ':noop')
-
-    /*
-     *  Iadt LIBRARY: import from repository (jCenter or localMaven). Standard usage
-     */
-    //supportImplementation "es.rafaco.inappdevtools:support:$PROJECT_VERSION"
-    //androidxImplementation "es.rafaco.inappdevtools:androidx:$PROJECT_VERSION"
-    //releaseImplementation "es.rafaco.inappdevtools:noop:$PROJECT_VERSION"
-
 
     //Retrofit
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
@@ -105,43 +67,6 @@ dependencies {
     androidTestSupportImplementation "com.android.support.test:runner:$SUPPORT_TEST_RUNNER"
     androidTestSupportImplementation "com.android.support.test.espresso:espresso-core:$SUPPORT_TEST_ESPRESSO"
 }
-
-/*
- *  Iadt CONFIGURATION
-*/
-inappdevtools {
-    //// Build flags (affect plugin behaviour)
-    enabled = true
-    debug = true
-    //sourceInclusion = false
-    //sourceInspection = false
-    //viewInspection = false
-    //storageInspection = false
-    //networkInterceptor = false
-    //enabledOnRelease = true
-
-    //// Customization flags (runtime)
-    notes = "This is a SAMPLE NOTE about this compilation:\n" +
-            " - Developers can add any text here using Gradle configuration\n" +
-            " - Useful to describe changes or to provide instructions"
-
-    teamName = "DemoTeam"
-    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
-    teamEmail = 'inappdevtools@gmail.com'
-    teamLinks = [ website   : "http://inappdevtools.org",
-                  repo      : "https://github.com/rafaco/InAppDevTools",
-                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
-                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
-
-    // Feature switches (runtime)
-    //overlayEnabled = false
-    //invocationByShake = false
-    //invocationByIcon = true
-    //callDefaultCrashHandler = true
-    //injectEventsOnLogcat = false
-}
-
-
 
 sonarqube {
     androidVariant 'supportDebug'
