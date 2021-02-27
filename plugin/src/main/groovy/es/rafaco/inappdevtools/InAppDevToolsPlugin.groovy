@@ -59,42 +59,64 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     File outputFolder
 
     void apply(Project project) {
-
-        println "IADT apply() on project ${project}"
         projectUtils = new ProjectUtils(project)
 
         if (projectUtils.isRoot()) {
-            extension = project.extensions.create(TAG, InAppDevToolsExtension)
+            onApplyToRoot(project)
         }
 
-        project.afterEvaluate {
-            if (projectUtils.isRoot()){
-                applyToRoot(project)
+        //TODO: Check isEnabled? IMPORTANT!
+
+        AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
+            @Override
+            void execute(Project project2) {
+
+                //TODO: Filter modules from configuration
+
+                if (projectUtils.isRoot()){
+                    afterEvaluateRoot(project)
+                }
+                else if (projectUtils.isAndroidApplication()) {
+                    //TODO: Unlock for any Android Modules
+                    afterEvaluateAndroidModule(project)
+                }
+                else{
+                    if (isDebug()){
+                        println "IADT skipped for ${project} project. " +
+                                "Only Android application module is currently supported."
+                    }
+                }
             }
-            else if (projectUtils.isAndroidModule()) {
-                applyToAndroidModule(project)
-            }
-            else{
-                println "IADT skipped for ${project} project. " +
-                        "Only Android application module is currently supported."
-            }
+        })
+    }
+
+    private void onApplyToRoot(Project project) {
+        // Init configuration extension
+        extension = project.extensions.create(TAG, InAppDevToolsExtension)
+
+        // Apply to all submodules, we will filter them afterEvaluate
+        project.subprojects { subproject ->
+            //TODO: Filter modules from configuration?
+            //println "IADT root: apply plugin to ${subproject}"
+            subproject.getPluginManager().apply('es.rafaco.inappdevtools')
         }
     }
 
-    private void applyToRoot(Project project) {
-        println "IADT root:"
+    private void afterEvaluateRoot(Project project) {
 
-        println("${getPluginName()} ${getPluginVersion()}")
         if (isDebug()) {
-            println "Gradle $project.gradle.gradleVersion"
-            println "Android Gradle Plugin ${new AndroidPluginUtils(projectUtils.getProject()).getVersion()}"
+            def gradleVersion = project.gradle.gradleVersion
+            def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
+            println "IADT -> Gradle $gradleVersion"
+            println "IADT -> Android Gradle Plugin $androidPluginVersion"
         }
 
-        project.subprojects { subproject ->
-            subprojectUtils = new ProjectUtils(subproject)
+        /*project.subprojects { subproject ->
+            println "IADT root: subproject ${subproject}"
             //TODO: Open for other application modules
-            //TODO: filter modules from configuration
-            if (subprojectUtils.isAndroidApplication()){
+            //TODO: Filter modules from configuration
+            def isEnabledForModule = subproject.plugins.hasPlugin('com.android.application')
+            if (isEnabledForModule){
 
                 // Add JitPack repository for dependencies
                 println "IADT root: add repositories to ${subproject}"
@@ -104,15 +126,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
                 // Add dependencies
                 println "IADT root: add dependencies to ${subproject}"
-
-                // Apply this plugin
-                println "IADT root: apply plugin to ${subproject}"
-                subproject.getPluginManager().apply('es.rafaco.inappdevtools')
             }
-        }
+        }*/
     }
 
-    private void applyToAndroidModule(Project project) {
+    private void afterEvaluateAndroidModule(Project project) {
+        println("IADT -> InAppDevTools ${getPluginVersion()} enabled for $project")
         if (isDebug()) {
             AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
                 @Override
@@ -125,14 +144,15 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
 
         initOutputFolder(project)
+        initTasks(project)
 
         if (projectUtils.isAndroidApplication()) {
             injectInternalPackage(project)
             applySafePlugins(project)
-        }
 
-        addDependencies(project)
-        initTasks(project)
+            injectRepositories(project)
+            injectDependencies(project)
+        }
     }
 
     //region [ INIT PLUGIN ]
@@ -176,7 +196,16 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     //endregion
 
-    private void addDependencies(Project project) {
+    private void injectRepositories(Project project) {
+        // Add JitPack repository for transitive dependencies
+        println "IADT add repositories to ${project}"
+        project.repositories {
+            maven { url "https://jitpack.io" }
+        }
+
+    }
+
+    private void injectDependencies(Project project) {
         if (projectUtils.isLocalDev()){
             println "IADT dependencies skipped, local development"
             /*project.dependencies.add("debugApi",
@@ -206,19 +235,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     "es.rafaco.inappdevtools:noop:${getPluginVersion()}")
 
         }
-
-        /*if (projectUtils.isAndroidApplication()) {
-            project.afterEvaluate {
-                println "IADT  project.configurations.each and conf.allDependencies.each"
-                println "  Project:" + project.name
-                project.configurations.each { conf ->
-                    println "    Configuration: ${conf.name}"
-                    conf.allDependencies.each { dep ->
-                        println "      ${dep.group}:${dep.name}:${dep.version}"
-                    }
-                }
-            }
-        }*/
     }
 
     //region [ INIT TASKS ]

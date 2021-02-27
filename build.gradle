@@ -12,7 +12,7 @@ buildscript {
         //classpath 'com.android.tools.build:gradle:3.6.1' //Latest tested
 
         /*
-         *  Iadt PLUGIN: import using legacy plugin application (support dynamic versioning).
+         *  IADT Setup: Old way using legacy plugin application.
          */
         //classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
 
@@ -28,13 +28,12 @@ buildscript {
 
 plugins {
     /*
-     *  Iadt PLUGIN: Standard usage using plugins DSL.
-     *  NOTE: Replace "X.X.X" for latest version.
-     *  TODO: Upgrade to Gradle 5.6, it allow dynamic version
-     *
-     * id "es.rafaco.inappdevtools" version "X.X.X" apply false
+     *  IADT Setup: Modern way using plugins DSL.
+     *  Dynamic versioning if Gradle version > 5.6
      */
-    id "es.rafaco.inappdevtools" version "0.0.58"
+    id "es.rafaco.inappdevtools" version "1.0.0"
+
+    // Reports from local development environment
     id "org.sonarqube" version "2.8"
 }
 

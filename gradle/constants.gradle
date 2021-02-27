@@ -19,7 +19,7 @@ ext{
     AUTHOR_URL = 'http://rafaco.es'
 
     PLUGIN_NAME = 'inappdevtools-plugin'
-    PLUGIN_DISPLAY_NAME = 'InAppDevtools Plugin'
+    PLUGIN_DISPLAY_NAME = 'InAppDevTools Plugin'
     PLUGIN_DESCRIPTION = 'Companion plugin for InAppDevTools, an Android library for debugging, inspecting and reporting from within your own apps'
 
     /*

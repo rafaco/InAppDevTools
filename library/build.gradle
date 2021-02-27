@@ -74,6 +74,7 @@ repositories {
     maven { url "https://jitpack.io"}
 }
 
+
 dependencies {
 
     api project(path: ':compat')
@@ -137,27 +138,6 @@ dependencies {
     testSupportImplementation "android.arch.core:core-testing:$SUPPORT_ARCH_VERSION"
     testSupportImplementation "android.arch.paging:common:$SUPPORT_PAGING_VERSION"
 }
-
-/*
-apply plugin: 'es.rafaco.inappdevtools'
-
-inappdevtools {
-    //// User features fags
-    //teamEmail = 'inappdevtools@gmail.com'
-
-    //// Build flags (affect plugin)
-    //enabled = true
-    //enabledOnRelease = true
-    debug = true
-    //sourceInclusion = false
-    //sourceInspection = false
-
-    //// Runtime flags (used later on)
-    //overlayEnabled = false
-    //invocationByShake = false
-    //invocationByIcon = true
-    //callDefaultCrashHandler = true
-}*/
 
 
 sonarqube {
