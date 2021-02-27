@@ -61,34 +61,52 @@ class DependencyTask extends DependencyReportTask {
     @TaskAction
     void generate() {
         boolean isDebug = InAppDevToolsPlugin.isDebug(getProject())
-        if (isDebug) println "OutputFile: ${outputFile}"
-        if (isDebug) println "InputFile: ${inputFile}"
-        if (isDebug) println "VariantName: ${variantName}"
+        if (isDebug){
+            println "OutputFile: ${outputFile}"
+            println "InputFile: ${inputFile}"
+            println "VariantName: ${variantName}"
+        }
 
         if (!projectUtils.isAndroidApplication()) {
-            if (isDebug) println 'Skipped by error: Not AndroidApplication module'
+            if (isDebug)
+                println 'Skipped by error: Not AndroidApplication module'
+            return
+        }
+
+        def variantFile = InAppDevToolsPlugin.getOutputFile(getProject(),
+                'gradle_dependencies_variant.txt')
+
+        // Manual skip needed because AbstractReportTask constructor have Task.upToDateWhen{false}
+        if (variantFile.exists() &&
+                variantFile.text == variantName &&
+                outputFile.lastModified() > inputFile.lastModified()){
+            if (isDebug)
+                print 'Skipped manually: UP-TO-DATE'
             return
         }
 
         def variantConfiguration = variantName.uncapitalize() + 'Runtime' + 'Classpath'
         if (!projectUtils.existsConfiguration(variantConfiguration)) {
-            if (isDebug) println "Skipped by error: configuration not found ${variantConfiguration}"
+            if (isDebug)
+                println "Skipped by error: configuration not found ${variantConfiguration}"
             return
         }
 
-        if (isDebug) println "Configuration selected: ${variantConfiguration}"
+        if (isDebug)
+            println "Configuration selected: ${variantConfiguration}"
         setConfiguration(variantConfiguration)
-
-        // Manual skip needed because AbstractReportTask constructor have Task.upToDateWhen{false}
-        if (outputFile.lastModified() >inputFile.lastModified()){
-            if (isDebug) print 'Skipped manually: UP-TO-DATE'
-            return
-        }
 
         // Perform report
         super.generate()
 
         // After report
-        if (isDebug) println "Generated dependency report into ${outputFile}"
+        if (isDebug)
+            println "Generated dependency report into ${outputFile}"
+
+        if (!variantFile.exists() || variantFile.text != variantName){
+            variantFile.write(variantName)
+            if (isDebug)
+                println " gradle_dependencies_variant = " + variantFile.text
+        }
     }
 }
