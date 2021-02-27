@@ -91,9 +91,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         }
 
         project.subprojects { subproject ->
-            //TODO: Auto detect application modules
+            subprojectUtils = new ProjectUtils(subproject)
+            //TODO: Open for other application modules
             //TODO: filter modules from configuration
-            if (subproject.name == "demo"){
+            if (subprojectUtils.isAndroidApplication()){
 
                 // Add JitPack repository for dependencies
                 println "IADT root: add repositories to ${subproject}"
@@ -206,7 +207,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         }
 
-        if (projectUtils.isAndroidApplication()) {
+        /*if (projectUtils.isAndroidApplication()) {
             project.afterEvaluate {
                 println "IADT  project.configurations.each and conf.allDependencies.each"
                 println "  Project:" + project.name
@@ -217,7 +218,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     }
                 }
             }
-        }
+        }*/
     }
 
     //region [ INIT TASKS ]
