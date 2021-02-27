@@ -20,7 +20,7 @@
 package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
-import es.rafaco.inappdevtools.utils.ConfigUtils
+import es.rafaco.inappdevtools.config.ConfigUtils
 import es.rafaco.inappdevtools.utils.DependencyUtils
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
