@@ -24,10 +24,7 @@
     android:layout_width="match_parent"
     android:orientation="horizontal">
 
-    <com.alorma.timeline.RoundTimelineView
-        android:id="@+id/timeline"
-        android:layout_width="16dp"
-        android:layout_height="match_parent"/>
+    <include layout="@layout/timeline"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

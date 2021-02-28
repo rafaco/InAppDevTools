@@ -58,6 +58,8 @@ public class TimelineFlexViewHolder extends ContainerFlexViewHolder {
             float indicatorSize = (data.getIndicatorSize()>0) ? data.getIndicatorSize() : 8;
 
             timeline.setLineColor(ContextCompat.getColor(getContext(), lineColor));
+
+//#ifdef SUPPORT
             timeline.setIndicatorColor(ContextCompat.getColor(getContext(), indicatorColor));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), indicatorSize));
             timeline.setTimelineAlignment(TimelineView.ALIGNMENT_MIDDLE);
@@ -72,6 +74,7 @@ public class TimelineFlexViewHolder extends ContainerFlexViewHolder {
             else{
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
+//#endif
         }
     }
 

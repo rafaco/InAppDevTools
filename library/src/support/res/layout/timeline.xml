@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ This source file is part of InAppDevTools, which is available under
   ~ Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
@@ -18,17 +17,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:orientation="horizontal">
-
-    <include layout="@layout/timeline"/>
-
-    <FrameLayout
-        android:id="@+id/timecontent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-</LinearLayout>
+<com.alorma.timeline.RoundTimelineView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xsi:schemaLocation="http://schemas.android.com/apk/res/android"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    android:id="@+id/timeline"
+    android:layout_width="16dp"
+    android:layout_height="match_parent" />

@@ -79,6 +79,9 @@ public class TraceGroupViewHolder extends FlexViewHolder {
                 }
             });
 
+            timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
+
+//#ifdef SUPPORT
             if (!data.isExpanded()){
                 timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 6));
             }else{
@@ -94,7 +97,7 @@ public class TraceGroupViewHolder extends FlexViewHolder {
             }else{
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
-
+//#endif
             tag.setText(data.getTag());
             tag.setTextColor(ContextCompat.getColor(getContext(), data.getColor()));
             UiUtils.setStrokeToDrawable(getContext(), 1, data.getColor(), tag.getBackground());

@@ -77,6 +77,8 @@ public class TraceViewHolder extends FlexViewHolder {
             int color = (data.getColor()>0) ? data.getColor() : R.color.iadt_text_low;
 
             timeline.setLineColor(ContextCompat.getColor(getContext(), R.color.iadt_trace_line));
+
+//#ifdef SUPPORT
             timeline.setIndicatorColor(ContextCompat.getColor(getContext(), color));
             timeline.setIndicatorSize(UiUtils.getPixelsFromDp(getContext(), 6));
 
@@ -93,7 +95,7 @@ public class TraceViewHolder extends FlexViewHolder {
                 title.setTextColor(ContextCompat.getColor(getContext(), R.color.rally_yellow));
                 timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
             }
-
+//#endif
             title.setText(data.getTitle());
             subtitle.setText(data.getSubtitle());
             if (data.getColor()>0)

@@ -180,27 +180,28 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             project.dependencies.add("releaseApi",
                     project.dependencies.project([path : ":noop"]))*/
         } else {
+            /*if (projectUtils.useAndroidX() && !projectUtils.enableJetifier()) {
+                throw new GradleException("InAppDevTools require Jetifier enabled if you " +
+                        "use AndroidX.\n" +
+                        "- Set 'android.enableJetifier' to true in the gradle.properties " +
+                        "file and retry.\n" +
+                        "- Sorry, all my sources are migrated but there still a incompatible " +
+                        "transitional dependency. Working on it.")
+            }*/
+
             println "IADT remote dependencies from version ${getPluginVersion()}"
             //TODO: Filter by variant from configuration!!
             if (projectUtils.useAndroidX()){
-                if (!projectUtils.enableJetifier()) {
-                    //TODO: Fail the build or fallback to noop?
-                    throw new GradleException("InAppDevTools require Jetifier enabled if you " +
-                            "use AndroidX.\n" +
-                            "- Set 'android.enableJetifier' to true in the gradle.properties " +
-                            "file and retry.\n" +
-                            "- Sorry, all my sources are migrated but there still a incompatible " +
-                            "transitional dependency. Working on it.")
-                }
                 project.dependencies.add("debugImplementation",
                         "es.rafaco.inappdevtools:androidx:${getPluginVersion()}")
             } else {
                 project.dependencies.add("debugImplementation",
                         "es.rafaco.inappdevtools:support:${getPluginVersion()}")
             }
+
+            //TODO: Noop usage from configuration
             project.dependencies.add("releaseImplementation",
                     "es.rafaco.inappdevtools:noop:${getPluginVersion()}")
-
         }
     }
 
