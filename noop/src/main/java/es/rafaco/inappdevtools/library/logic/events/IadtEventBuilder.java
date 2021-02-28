@@ -64,5 +64,7 @@ public class IadtEventBuilder {
         return this;
     }
 
+    public IadtEventBuilder isInfo() { return this; }
+
     public void fire(){ }
 }
