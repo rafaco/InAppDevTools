@@ -97,10 +97,11 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         if (configHelper.isDebug()) {
             def gradleVersion = project.gradle.gradleVersion
             def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
+            println "IADT InAppDevTools ${getPluginVersion()}"
             println "IADT Build info:"
             println "IADT   Gradle $gradleVersion"
             println "IADT   Android Gradle Plugin $androidPluginVersion"
-            println "IADT   InAppDevTools ${getPluginVersion()}"
+            println "IADT   Start task " + project.getGradle().getStartParameter().taskRequests[0].getArgs()[0]
             println "IADT Configuration:"
             println "IADT   enabled: " + configHelper.isEnabled()
             println "IADT   variantFilter: " + configHelper.isVariantFilter()

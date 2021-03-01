@@ -23,8 +23,12 @@ import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
+
+import java.util.logging.Logger
 
 class TasksHelper {
 
@@ -75,45 +79,77 @@ class TasksHelper {
     private void onTaskAdded(Task theTask) {
         if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
 
-            def buildVariant = theTask.name.drop("generate".length()).reverse()
+            def buildVariant = theTask.name
+                    .drop("generate".length()).reverse()
                     .drop("Assets".length()).reverse()
 
+            boolean isTest = buildVariant.toLowerCase().contains("test")
             boolean isNoop = plugin.configHelper.isNoopIncluded(buildVariant)
-            if (isNoop) {
-                println "Iadt DISABLED for $buildVariant (noop artifact)"
-            } else if (!plugin.configHelper.isPluginEnabled(theTask)) {
-                if (!plugin.configHelper.isEnabled())
-                    println "Iadt DISABLED for $buildVariant (configuration)"
-                else
-                    println "Iadt DISABLED for ${buildVariant}. Auto-disabled for Release, use noop to reduce apk size."
-            } else {
-                println "Iadt ENABLED for $buildVariant"
+            boolean isDisabledByConfig = !plugin.configHelper.isEnabled()
+            boolean isDisabledByVariantFilter = false
+            boolean isEnabledByVariantFilter = true
+
+            if (plugin.configHelper.isVariantFilter()) {
+                isEnabledByVariantFilter = false
+                plugin.configHelper.getVariantFilterIn().each { filterIn ->
+                    if (buildVariant.toLowerCase().contains(filterIn))
+                        isEnabledByVariantFilter = true
+                }
+                plugin.configHelper.getVariantFilterOut().each { filterOut ->
+                    if (buildVariant.toLowerCase().contains(filterOut))
+                        isDisabledByVariantFilter = true
+                }
             }
 
-            if (isNoop || !plugin.configHelper.isPluginEnabled(theTask)) {
-                Task emptyTask = project.tasks.getByName(EMPTY_BUILD_INFO_TASK)
-                Task cleanTask = project.tasks.getByName(CLEAN_TASK)
-                emptyTask.dependsOn += [cleanTask]
-                theTask.dependsOn += [emptyTask]
-                return
+            if (isDisabledByConfig){
+                disableTasksForVariant(theTask, buildVariant, "Configuration enabled=false")
             }
+            else if (isTest){
+                disableTasksForVariant(theTask, buildVariant, "Is for tests")
+            }
+            else if (isDisabledByVariantFilter){
+                disableTasksForVariant(theTask, buildVariant, "Match variantFilterOut")
+            }
+            else if (!isEnabledByVariantFilter){
+                disableTasksForVariant(theTask, buildVariant, "Doesn't match variantFilterIn")
+            }
+            else if (isNoop){
+                Log.warn("WARNING $buildVariant configuration was ENABLED but it have noop artifact included.\n" +
+                        " Tasks has been DISABLED and you should review your variantFilters")
+                disableTasksForVariant(theTask, buildVariant, "Noop artifact detected!")
+            }
+            else {
+                enableTasksForVariant(theTask, buildVariant)
+            }
+        }
+    }
 
-            if (plugin.configHelper.isNetworkInterceptor()) {
-                plugin.applyPandoraPlugins(project)
-            }
+    private void disableTasksForVariant(Task theTask, String buildVariant, String reason) {
+        if (plugin.configHelper.isDebug()) {
+            println "IADT DISABLED for variant $buildVariant: $reason."
+        }
+        Task emptyTask = project.tasks.getByName(EMPTY_BUILD_INFO_TASK)
+        Task cleanTask = project.tasks.getByName(CLEAN_TASK)
+        emptyTask.dependsOn += [cleanTask]
+        theTask.dependsOn += [emptyTask]
+    }
 
-            theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
-            if (plugin.projectUtils.isAndroidApplication()) {
-                addAndLinkDependencyReportTask(project, theTask, buildVariant)
-                addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
-            }
-            if (plugin.configHelper.shouldIncludeSources(theTask)) {
-                theTask.dependsOn += [
-                        project.tasks.getByName(SOURCES_TASK),
-                        project.tasks.getByName(REACT_SOURCES_TASK),
-                        project.tasks.getByName(RESOURCES_TASK),
-                        project.tasks.getByName(GENERATED_TASK)]
-            }
+    private void enableTasksForVariant(Task theTask, String buildVariant) {
+        println "IADT ENABLED for variant $buildVariant"
+        theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
+        if (plugin.projectUtils.isAndroidApplication()) {
+            addAndLinkDependencyReportTask(project, theTask, buildVariant)
+            addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
+        }
+        if (plugin.configHelper.isNetworkInterceptor()) {
+            plugin.applyPandoraPlugins(project)
+        }
+        if (plugin.configHelper.shouldIncludeSources(theTask)) {
+            theTask.dependsOn += [
+                    project.tasks.getByName(SOURCES_TASK),
+                    project.tasks.getByName(REACT_SOURCES_TASK),
+                    project.tasks.getByName(RESOURCES_TASK),
+                    project.tasks.getByName(GENERATED_TASK)]
         }
     }
 
