@@ -280,16 +280,30 @@ class ProjectUtils {
         else return []
     }
 
+    void printProjectType() {
+        print "IADT   type: "
+
+        if (isAndroidApplication()){
+            print "Android Application"
+        }
+        else if (isAndroidLibrary()){
+            print "Android Library"
+        }
+        else if (isAndroidFeature()){
+            print "Android Feature"
+        }
+        println()
+    }
     void printBuildTypes() {
-        printArray("Project buildTypes", getBuildTypes())
+        printArray("IADT   buildTypes", getBuildTypes())
     }
 
     void printFlavors() {
-        printArray("Project flavors", getFlavors())
+        printArray("IADT   flavors", getFlavors())
     }
 
     void printVariants() {
-        printArray("Project variants", getVariants())
+        printArray("IADT   variants", getVariants())
     }
 
     void printArray(String title, String[] array) {

@@ -24,7 +24,6 @@ import es.rafaco.inappdevtools.tasks.TasksHelper
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Action
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ProjectReportsPlugin
@@ -38,7 +37,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final ASSETS_PATH = '/generated/assets'
     static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
 
-
     InAppDevToolsExtension extension
     ProjectUtils projectUtils
     ConfigHelper configHelper
@@ -48,16 +46,21 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         projectUtils = new ProjectUtils(project)
         configHelper = new ConfigHelper(project)
 
+        //println "IADT apply for $project"
         if (projectUtils.isRoot()) {
             onApplyToRoot(project)
         }
 
         //TODO: Check isEnabled? IMPORTANT!
+        //  optionally if not enabled globally:
+        //   - stop linking output folder (project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent())
+        //   - if noopEnabled -> afterEvaluate add noop dependency, skip repository
+        //   - add Noop tasks from TaskHelper... or direct cleanup bypassing tasks
 
         AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
             @Override
             void execute(Project project2) {
-
+                //println "IADT Apply after evaluate for $project"
                 //TODO: Filter modules from configuration
 
                 if (projectUtils.isRoot()){
@@ -94,20 +97,31 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         if (configHelper.isDebug()) {
             def gradleVersion = project.gradle.gradleVersion
             def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
-            println "IADT -> Gradle $gradleVersion"
-            println "IADT -> Android Gradle Plugin $androidPluginVersion"
+            println "IADT Build info:"
+            println "IADT   Gradle $gradleVersion"
+            println "IADT   Android Gradle Plugin $androidPluginVersion"
+            println "IADT   InAppDevTools ${getPluginVersion()}"
+            println "IADT Configuration:"
+            println "IADT   enabled: " + configHelper.isEnabled()
+            println "IADT   variantFilter: " + configHelper.isVariantFilter()
+            println "IADT   variantFilterIn: " + configHelper.getVariantFilterIn()
+            println "IADT   variantFilterOut: " + configHelper.getVariantFilterOut()
+            println "IADT   noopEnabled: " + configHelper.isNoopEnabled()
+            //TODO: remove or ad more
+            println "IADT   teamName: " + configHelper.getTeamName()
         }
     }
 
     private void afterEvaluateAndroidModule(Project project) {
-        println("IADT -> InAppDevTools ${getPluginVersion()} enabled for $project")
+        println "IADT ENABLED for module $project.name:"
         if (configHelper.isDebug()) {
             AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
                 @Override
                 void execute(Project project2) {
+                    projectUtils.printProjectType()
                     projectUtils.printBuildTypes()
                     projectUtils.printFlavors()
-                    projectUtils.printVariants()
+                    //projectUtils.printVariants()
                 }
             })
         }
@@ -118,7 +132,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             applySafePlugins(project)
 
             injectRepositories(project)
-            injectDependencies(project)
+            //if (!projectUtils.isLocalDev()){
+                injectDependencies(project)
+            //}
         }
 
         new TasksHelper(this, project).initTasks()
@@ -127,7 +143,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     //region [ INIT PLUGIN ]
 
     private void initOutputFolder(Project project) {
-        println "IADT initOutputFolder()"
+        println "IADT prepare output folder"
 
         // Prepare output folder
         outputFolder = getOutputDir(project)
@@ -165,7 +181,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     private void injectRepositories(Project project) {
         // Add JitPack repository for transitive dependencies
-        println "IADT add repositories to ${project}"
+        println "IADT add repositories:"
+        println "IADT   maven { url \"https://jitpack.io\"}"
         project.repositories {
             maven { url "https://jitpack.io" }
         }
@@ -173,36 +190,53 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     }
 
     private void injectDependencies(Project project) {
-        if (projectUtils.isLocalDev()){
-            println "IADT dependencies skipped, local development"
-            /*project.dependencies.add("debugApi",
-                    project.dependencies.project([path : ":library"]))
-            project.dependencies.add("releaseApi",
-                    project.dependencies.project([path : ":noop"]))*/
-        } else {
-            /*if (projectUtils.useAndroidX() && !projectUtils.enableJetifier()) {
-                throw new GradleException("InAppDevTools require Jetifier enabled if you " +
-                        "use AndroidX.\n" +
-                        "- Set 'android.enableJetifier' to true in the gradle.properties " +
-                        "file and retry.\n" +
-                        "- Sorry, all my sources are migrated but there still a incompatible " +
-                        "transitional dependency. Working on it.")
-            }*/
+        println "IADT add dependencies:"
 
-            println "IADT remote dependencies from version ${getPluginVersion()}"
-            //TODO: Filter by variant from configuration!!
-            if (projectUtils.useAndroidX()){
-                project.dependencies.add("debugImplementation",
-                        "es.rafaco.inappdevtools:androidx:${getPluginVersion()}")
-            } else {
-                project.dependencies.add("debugImplementation",
-                        "es.rafaco.inappdevtools:support:${getPluginVersion()}")
+        if (configHelper.isEnabled()){
+            if (configHelper.isVariantFilter()){
+                configHelper.getVariantFilterIn().each { filterIn ->
+                    addDependency(project, filterIn,
+                            "es.rafaco.inappdevtools", "library")
+                }
+                if (configHelper.isNoopEnabled()) {
+                    configHelper.getVariantFilterOut().each { filterOut ->
+                        addDependency(project, filterOut,
+                                "es.rafaco.inappdevtools", "noop")
+                    }
+                }
+                return
             }
-
-            //TODO: Noop usage from configuration
-            project.dependencies.add("releaseImplementation",
-                    "es.rafaco.inappdevtools:noop:${getPluginVersion()}")
+            //All enabled
+            addDependency(project, "",
+                    "es.rafaco.inappdevtools", "library")
         }
+        else {
+            //All disable
+            if (configHelper.isNoopEnabled()){
+                addDependency(project, "",
+                        "es.rafaco.inappdevtools", "noop")
+            }
+        }
+    }
+
+    private void addDependency(Project project, String configuration, String group, String id) {
+        def isLocal = projectUtils.isLocalDev()
+        String configName = configuration + "Implementation" //(isLocal ? "Api" : "Implementation")
+        configName = configName[0].toLowerCase() + configName.substring(1)
+        String configValue
+
+        if (isLocal){
+            String modulePath = ":" + id
+            configValue = "project([path: \"$modulePath\")"
+            project.dependencies.add(configName,
+                    project.dependencies.project([path: modulePath]))
+        } else {
+            String extendedId = (id != "library") ? id :
+                    projectUtils.useAndroidX() ? "androidx" : "support"
+            configValue = group + ":" + extendedId + ":" + getPluginVersion()
+            project.dependencies.add(configName, configValue)
+        }
+        println "IADT   ${configName} ${configValue}"
     }
 
     //endregion

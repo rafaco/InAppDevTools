@@ -49,12 +49,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     /*
-     *  IADT dependencies directly from sources. For development environment only.
-     *  It require gradle.ext.iadtIsLocalDev to true in settings.gradle.
+     * IADT dependencies are injected by our plugin as usual but it will detect the local
+     * development environment and it will use project paths.
+     * With default configuration it will add:
+     *      debugApi project(':library')
+     *      releaseApi project(':noop')
      */
-    api project(path: ':compat')
-    debugApi project(path: ':library')
-    releaseApi project(path: ':noop')
+
+    // Compat library from project path
+    api project(':compat')
 
     //Retrofit
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
