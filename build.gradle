@@ -11,11 +11,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.0.1'
         //classpath 'com.android.tools.build:gradle:3.6.1' //Latest tested
 
-        /*
-         *  IADT Setup: Old way using legacy plugin application.
-         */
-        //classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
-
         // Internal plugins for publications
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
@@ -23,6 +18,11 @@ buildscript {
         // Compat Preprocessor: custom artifact from my fork. PR sent to dannyhe.
         //classpath 'wang.dannyhe.tools:plugin:0.0.7'
         classpath files('./compat/libs/wang.dannyhe.tools.preprocessor-0.0.7a.jar')
+
+        /*
+         *  IADT Setup: Old way using legacy plugin application.
+         */
+        //classpath "es.rafaco.inappdevtools:inappdevtools-plugin:${PROJECT_VERSION}"
     }
 }
 
@@ -38,39 +38,10 @@ plugins {
 }
 
 /*
- *  Iadt CONFIGURATION
+ *  IADT Configuration from external file
 */
-inappdevtools {
-    //// Build flags (affect plugin behaviour)
-    enabled = true
-    debug = true
-    //sourceInclusion = false
-    //sourceInspection = false
-    //viewInspection = false
-    //storageInspection = false
-    //networkInterceptor = false
-    //enabledOnRelease = true
+apply from: 'inappdevtools.gradle'
 
-    //// Customization flags (runtime)
-    notes = "This is a SAMPLE NOTE about this compilation:\n" +
-            " - Developers can add any text here using Gradle configuration\n" +
-            " - Useful to describe changes or to provide instructions"
-
-    teamName = "DemoTeam"
-    teamDesc = "Team description or any text you want to show on top of Team screen. Change it with 'teamDesc' configuration."
-    teamEmail = 'inappdevtools@gmail.com'
-    teamLinks = [ website   : "http://inappdevtools.org",
-                  repo      : "https://github.com/rafaco/InAppDevTools",
-                  issues    : "https://github.com/rafaco/InAppDevTools/issues",
-                  readme    : "https://github.com/rafaco/InAppDevTools/blob/master/README.md" ]
-
-    // Feature switches (runtime)
-    //overlayEnabled = false
-    //invocationByShake = false
-    //invocationByIcon = true
-    //callDefaultCrashHandler = true
-    //injectEventsOnLogcat = false
-}
 
 allprojects {
     repositories {
