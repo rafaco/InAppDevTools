@@ -89,6 +89,46 @@ class ConfigHelper {
         return true
     }
 
+    boolean isNoopEnabled(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.noopEnabled!=null){
+            return extension.noopEnabled
+        }
+        return false
+    }
+
+    boolean isVariantFilter(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.variantFilter!=null){
+            return extension.variantFilter
+        }
+        return true
+    }
+
+    String[] getVariantFilterIn(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.variantFilterIn!=null){
+            return extension.variantFilterIn
+        }
+        return []
+    }
+
+    String[] getVariantFilterOut(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.variantFilterOut!=null){
+            return extension.variantFilterOut
+        }
+        return []
+    }
+
+    String getTeamName(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.teamName!=null){
+            return extension.teamName
+        }
+        return
+    }
+
     //endregion
 
     //region [ COMPUTED PROPERTIES ]
