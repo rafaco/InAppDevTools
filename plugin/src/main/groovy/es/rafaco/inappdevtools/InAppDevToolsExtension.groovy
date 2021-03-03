@@ -31,10 +31,9 @@ class InAppDevToolsExtension {
 
     // Build flags (affect plugin)
     Boolean enabled = true
-    Boolean noopEnabled = false
+    Boolean useNoop = false
     Boolean variantFilter = true
-    String[] variantFilterIn = [ "debug" ]
-    String[] variantFilterOut = [ "release", "test" ]
+    String[] exclude = ["release"]
 
     Boolean enabledOnRelease
     Boolean debug = false
@@ -54,10 +53,8 @@ class InAppDevToolsExtension {
     Map toMap(){
         Map map = [:]
         if (enabled!=null) map.put("enabled", enabled)
-        if (noopEnabled!=null) map.put("noopEnabled", noopEnabled)
-        if (variantFilter!=null) map.put("variantFilter", variantFilter)
-        if (variantFilterIn!=null) map.put("variantFilterIn", variantFilterIn)
-        if (variantFilterOut!=null) map.put("variantFilterOut", variantFilterOut)
+        if (exclude!=null) map.put("exclude", exclude)
+        if (useNoop!=null) map.put("noopEnabled", useNoop)
         if (enabledOnRelease!=null) map.put("enabledOnRelease", enabledOnRelease)
         if (debug!=null) map.put("debug", debug)
         if (notes!=null) map.put("notes", notes)

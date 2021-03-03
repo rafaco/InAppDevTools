@@ -254,12 +254,22 @@ class ProjectUtils {
         return !project.android.productFlavors.isEmpty()
     }
 
-    String[] getFlavors() {
+    def getFlavors() {
         if (!isAndroidModule()) return []
-        def results = []
-        project.android.productFlavors.each {
-            results.add(it.name)
+        def results = [:]
+        project.android.flavorDimensionList.each{
+            results[(it)]=[]
         }
+        project.android.productFlavors.each {
+            def values = results.get(it.dimension)
+            values.add(it.name)
+        }
+        return results
+    }
+
+    def getDimensions() {
+        def results = getFlavors()
+        results["buildType"] = getBuildTypes()
         return results
     }
 
@@ -281,7 +291,7 @@ class ProjectUtils {
     }
 
     void printProjectType() {
-        print "IADT   type: "
+        print "IADT   Module: "
 
         if (isAndroidApplication()){
             print "Android Application"
@@ -294,6 +304,11 @@ class ProjectUtils {
         }
         println()
     }
+
+    void printDimensions() {
+        printArray("IADT   Dimensions", getDimensions())
+    }
+
     void printBuildTypes() {
         printArray("IADT   buildTypes", getBuildTypes())
     }
@@ -306,7 +321,7 @@ class ProjectUtils {
         printArray("IADT   variants", getVariants())
     }
 
-    void printArray(String title, String[] array) {
+    void printArray(String title, array) {
         print "$title: "
         print array
         println()

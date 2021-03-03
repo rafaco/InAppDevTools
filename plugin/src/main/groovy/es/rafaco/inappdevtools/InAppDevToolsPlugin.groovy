@@ -20,16 +20,17 @@
 package es.rafaco.inappdevtools
 
 import es.rafaco.inappdevtools.config.ConfigHelper
-import es.rafaco.inappdevtools.tasks.TasksHelper
+import es.rafaco.inappdevtools.workers.AddPluginsJob
+import es.rafaco.inappdevtools.workers.AddRepositoriesJob
+import es.rafaco.inappdevtools.workers.AddTasksJob
+import es.rafaco.inappdevtools.workers.AddDependenciesJob
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
-import groovy.util.slurpersupport.GPathResult
+import es.rafaco.inappdevtools.workers.RecordInternalPackageJob
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.ProjectReportsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
-import tech.linjiang.pandora.gradle.PandoraPlugin
 
 class InAppDevToolsPlugin implements Plugin<Project> {
 
@@ -104,10 +105,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             println "IADT   Start task " + project.getGradle().getStartParameter().taskRequests[0].getArgs()[0]
             println "IADT Configuration:"
             println "IADT   enabled: " + configHelper.isEnabled()
-            println "IADT   variantFilter: " + configHelper.isVariantFilter()
-            println "IADT   variantFilterIn: " + configHelper.getVariantFilterIn()
-            println "IADT   variantFilterOut: " + configHelper.getVariantFilterOut()
-            println "IADT   noopEnabled: " + configHelper.isNoopEnabled()
+            println "IADT   exclude: " + configHelper.getExclude()
+            println "IADT   useNoop: " + configHelper.isUseNoop()
+            println "IADT   debug: " + configHelper.isDebug()
             //TODO: remove or ad more
             println "IADT   teamName: " + configHelper.getTeamName()
         }
@@ -116,35 +116,26 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     private void afterEvaluateAndroidModule(Project project) {
         println "IADT ENABLED for module $project.name:"
         if (configHelper.isDebug()) {
-            AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
-                @Override
-                void execute(Project project2) {
-                    projectUtils.printProjectType()
-                    projectUtils.printBuildTypes()
-                    projectUtils.printFlavors()
-                    //projectUtils.printVariants()
-                }
-            })
+            projectUtils.printProjectType()
+            projectUtils.printDimensions()
+            //projectUtils.printBuildTypes()
+            //projectUtils.printFlavors()
         }
-
+        println "IADT prepare project:"
         initOutputFolder(project)
         if (projectUtils.isAndroidApplication()) {
-            injectInternalPackage(project)
-            applySafePlugins(project)
-
-            injectRepositories(project)
-            //if (!projectUtils.isLocalDev()){
-                injectDependencies(project)
-            //}
+            new RecordInternalPackageJob(this, project).do()
+            new AddPluginsJob(this, project).do()
+            new AddRepositoriesJob(this, project).do()
+            new AddDependenciesJob(this, project).do()
         }
-
-        new TasksHelper(this, project).initTasks()
+        new AddTasksJob(this, project).do()
     }
 
     //region [ INIT PLUGIN ]
 
     private void initOutputFolder(Project project) {
-        println "IADT prepare output folder"
+        println "IADT   init output folder."
 
         // Prepare output folder
         outputFolder = getOutputDir(project)
@@ -158,86 +149,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         project.tasks.clean {
             delete getOutputPath(project)
         }
-    }
-
-    //Inject internal package from host app manifest into resValue
-    private void injectInternalPackage(Project project) {
-        //TODO: Incremental issue: check if already set before perform to avoid updating modified date
-        def internalPackage = getInternalPackageFromManifest()
-        project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"
-        //project.android.defaultConfig.buildConfigField("String", "INTERNAL_PACKAGE", "\"${internalPackage}\"")
-    }
-
-    //Apply external plugins required for Iadt (safe to be applied even if we dont use them)
-    private void applySafePlugins(Project project) {
-        project.getPluginManager().apply(ProjectReportsPlugin.class)
-        //TODO: research other reports (tasks, properties, dashboard,...)
-        // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
-    }
-
-    //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
-    private void applyPandoraPlugins(Project project){
-        project.getPluginManager().apply(PandoraPlugin.class)
-    }
-
-    private void injectRepositories(Project project) {
-        // Add JitPack repository for transitive dependencies
-        println "IADT add repositories:"
-        println "IADT   maven { url \"https://jitpack.io\"}"
-        project.repositories {
-            maven { url "https://jitpack.io" }
-        }
-
-    }
-
-    private void injectDependencies(Project project) {
-        println "IADT add dependencies:"
-
-        if (configHelper.isEnabled()){
-            if (configHelper.isVariantFilter()){
-                configHelper.getVariantFilterIn().each { filterIn ->
-                    addDependency(project, filterIn,
-                            "es.rafaco.inappdevtools", "library")
-                }
-                if (configHelper.isNoopEnabled()) {
-                    configHelper.getVariantFilterOut().each { filterOut ->
-                        addDependency(project, filterOut,
-                                "es.rafaco.inappdevtools", "noop")
-                    }
-                }
-                return
-            }
-            //All enabled
-            addDependency(project, "",
-                    "es.rafaco.inappdevtools", "library")
-        }
-        else {
-            //All disable
-            if (configHelper.isNoopEnabled()){
-                addDependency(project, "",
-                        "es.rafaco.inappdevtools", "noop")
-            }
-        }
-    }
-
-    private void addDependency(Project project, String configuration, String group, String id) {
-        def isLocal = projectUtils.isLocalDev()
-        String configName = configuration + "Implementation" //(isLocal ? "Api" : "Implementation")
-        configName = configName[0].toLowerCase() + configName.substring(1)
-        String configValue
-
-        if (isLocal){
-            String modulePath = ":" + id
-            configValue = "project([path: \"$modulePath\")"
-            project.dependencies.add(configName,
-                    project.dependencies.project([path: modulePath]))
-        } else {
-            String extendedId = (id != "library") ? id :
-                    projectUtils.useAndroidX() ? "androidx" : "support"
-            configValue = group + ":" + extendedId + ":" + getPluginVersion()
-            project.dependencies.add(configName, configValue)
-        }
-        println "IADT   ${configName} ${configValue}"
     }
 
     //endregion
@@ -277,13 +188,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     String getPluginVersion() {
         this.getClass().getPackage().getSpecificationVersion()
-    }
-
-    String getInternalPackageFromManifest() {
-        String manifestPath = projectUtils.getProject().android.sourceSets.main.manifest.srcFile
-        File manifestFile = projectUtils.getFile(manifestPath)
-        GPathResult parsedManifest = new XmlSlurper().parse(manifestFile)
-        parsedManifest.@package.text()
     }
 
     //endregion

@@ -23,8 +23,6 @@ import es.rafaco.inappdevtools.InAppDevToolsExtension
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
-import org.gradle.api.Task
-
 class ConfigHelper {
 
     Project project
@@ -57,12 +55,21 @@ class ConfigHelper {
         return true
     }
 
-    boolean isEnabledOnRelease(){
+
+    boolean isUseNoop(){
         InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.enabledOnRelease!=null){
-            return extension.enabledOnRelease
+        if (extension!=null && extension.useNoop!=null){
+            return extension.useNoop
         }
         return false
+    }
+
+    String[] getExclude(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.exclude!=null){
+            return extension.exclude
+        }
+        return []
     }
 
     boolean isSourceInclusion(){
@@ -89,38 +96,6 @@ class ConfigHelper {
         return true
     }
 
-    boolean isNoopEnabled(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.noopEnabled!=null){
-            return extension.noopEnabled
-        }
-        return false
-    }
-
-    boolean isVariantFilter(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.variantFilter!=null){
-            return extension.variantFilter
-        }
-        return true
-    }
-
-    String[] getVariantFilterIn(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.variantFilterIn!=null){
-            return extension.variantFilterIn
-        }
-        return []
-    }
-
-    String[] getVariantFilterOut(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.variantFilterOut!=null){
-            return extension.variantFilterOut
-        }
-        return []
-    }
-
     String getTeamName(){
         InAppDevToolsExtension extension = getExtension()
         if (extension!=null && extension.teamName!=null){
@@ -133,20 +108,43 @@ class ConfigHelper {
 
     //region [ COMPUTED PROPERTIES ]
 
-    boolean isPluginEnabled(Task buildTask) {
-        return isEnabled() &&
-                (!isReleaseTask(buildTask) ||
-                        (isReleaseTask(buildTask) && isEnabledOnRelease()))
+    boolean hasExclude(){
+        InAppDevToolsExtension extension = getExtension()
+        if (extension!=null && extension.exclude!=null &&
+                extension.exclude.getClass().getName() == "[Ljava.lang.String;"){
+            return extension.exclude.length>0
+        }
+        return false
     }
 
-    boolean isReleaseTask(Task task){
-        return task.name.contains("Release")
+    String[] calculateInclude() {
+        String[] result = []
+        String[] exclude = getExclude()
+        if (exclude==null || exclude.length<1){
+            return result
+        }
+        def dimensions = new ProjectUtils(project).getDimensions()
+        def usedDimensionName = getDimensionUsedInExclude(dimensions, exclude)
+        def usedDimensionValues = dimensions[usedDimensionName]
+        usedDimensionValues.each {
+            if (!exclude.contains(it)){
+                result += it
+            }
+        }
+        return result
     }
 
-    boolean shouldIncludeSources(Task task) {
-        return isPluginEnabled(task) &&
-                isSourceInclusion() &&
-                isSourceInspection()
+    private String getDimensionUsedInExclude(def dimensions, def exclude) {
+        String result
+        dimensions.each{ name, values ->
+            if (values!=null && values.size()>0){
+                if (values.contains(exclude[0])){
+                    result = name
+                    return result
+                }
+            }
+        }
+        return result
     }
 
     boolean isNoopIncluded(String variantName) {

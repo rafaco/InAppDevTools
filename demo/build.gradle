@@ -56,6 +56,9 @@ dependencies {
      *      releaseApi project(':noop')
      */
 
+    debugApi project(':library')
+    releaseApi project(':noop')
+
     // Compat library from project path
     api project(':compat')
 

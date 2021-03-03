@@ -3,7 +3,7 @@ apply plugin: 'wang.dannyhe.tools.preprocessor'
 preprocessor {
     def iadtExtension
     try {
-        iadtExtension = project.extensions.getByName('inappdevtools')
+        iadtExtension = project.rootProject.extensions.getByName('inappdevtools')
     } catch(Exception ex) {
         //println("Silent preprocessor: No extension detected")
     }

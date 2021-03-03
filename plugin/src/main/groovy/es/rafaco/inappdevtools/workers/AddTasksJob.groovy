@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright 2018-2021 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,21 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.tasks
+package es.rafaco.inappdevtools.workers
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.tasks.BuildInfoTask
+import es.rafaco.inappdevtools.tasks.DependencyTask
+import es.rafaco.inappdevtools.tasks.DetectReactNativeTask
+import es.rafaco.inappdevtools.tasks.EmptyBuildInfoTask
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
 
-import java.util.logging.Logger
-
-class TasksHelper {
+class AddTasksJob extends Job {
 
     final CLEAN_TASK = 'iadtClean'
     final EMPTY_BUILD_INFO_TASK = 'iadtEmptyBuildInfo'
@@ -42,26 +43,19 @@ class TasksHelper {
     final REACT_DETECT_TASK = 'iadtReactDetect'
     final REACT_SOURCES_TASK = 'iadtReactSrcPack'
 
-    InAppDevToolsPlugin plugin
-    Project project
+    boolean isFirstTask = true
 
-    TasksHelper(InAppDevToolsPlugin plugin, Project project) {
-        this.plugin = plugin
-        this.project = project
+    AddTasksJob(InAppDevToolsPlugin plugin, Project project) {
+        super(plugin, project)
     }
 
-    Project getProject() {
-        project
+    def 'do'(){
+        addTasks()
+        addHook()
     }
 
-    InAppDevToolsPlugin getPlugin() {
-        plugin
-    }
-
-    //region [ MODULE CLASSIFIER ]
-
-    public void initTasks() {
-        // Add our tasks to the project (just add)
+    // Add our tasks to the project (just add)
+    private void addTasks() {
         addCleanTask(project)
         addEmptyBuildInfoTask(project)
         addBuildInfoTask(project)
@@ -69,65 +63,73 @@ class TasksHelper {
         addReactSourcesTask(project)
         addResourcesTask(project)
         addGeneratedTask(project)
+    }
 
-        // Selectively link our tasks to each variant base on configuration
+    // Add a hook to detect when standard Android generate tasks get added
+    private void addHook() {
         project.tasks.whenTaskAdded { theTask ->
-            onTaskAdded(theTask)
+            if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
+                def buildVariant = theTask.name
+                        .drop("generate".length()).reverse()
+                        .drop("Assets".length()).reverse()
+                onGenerateTaskAdded(theTask, buildVariant)
+            }
         }
     }
 
-    private void onTaskAdded(Task theTask) {
-        if (theTask.name.contains("generate") & theTask.name.contains("Assets")) {
+    // Selectively link our tasks to each variant
+    private void onGenerateTaskAdded(Task theTask, String buildVariant) {
+        if(isFirstTask){
+            println "IADT adding tasks:"
+            isFirstTask = false
+        }
+        boolean isTest = buildVariant.toLowerCase().contains("test")
+        boolean isNoop = configHelper.isNoopIncluded(buildVariant)
+        boolean isDisabledByConfig = !configHelper.isEnabled()
+        boolean isDisabledByExclude = false
+        boolean isEnabledByInclude = false
 
-            def buildVariant = theTask.name
-                    .drop("generate".length()).reverse()
-                    .drop("Assets".length()).reverse()
+        if (configHelper.hasExclude()) {
+            configHelper.getExclude().each { exclusion ->
+                if (buildVariant.toLowerCase().contains(exclusion))
+                    isDisabledByExclude = true
+            }
+            configHelper.calculateInclude().each { inclusion ->
+                if (buildVariant.toLowerCase().contains(inclusion))
+                    isEnabledByInclude = true
+            }
+        }
 
-            boolean isTest = buildVariant.toLowerCase().contains("test")
-            boolean isNoop = plugin.configHelper.isNoopIncluded(buildVariant)
-            boolean isDisabledByConfig = !plugin.configHelper.isEnabled()
-            boolean isDisabledByVariantFilter = false
-            boolean isEnabledByVariantFilter = true
-
-            if (plugin.configHelper.isVariantFilter()) {
-                isEnabledByVariantFilter = false
-                plugin.configHelper.getVariantFilterIn().each { filterIn ->
-                    if (buildVariant.toLowerCase().contains(filterIn))
-                        isEnabledByVariantFilter = true
-                }
-                plugin.configHelper.getVariantFilterOut().each { filterOut ->
-                    if (buildVariant.toLowerCase().contains(filterOut))
-                        isDisabledByVariantFilter = true
-                }
-            }
-
-            if (isDisabledByConfig){
-                disableTasksForVariant(theTask, buildVariant, "Configuration enabled=false")
-            }
-            else if (isTest){
-                disableTasksForVariant(theTask, buildVariant, "Is for tests")
-            }
-            else if (isDisabledByVariantFilter){
-                disableTasksForVariant(theTask, buildVariant, "Match variantFilterOut")
-            }
-            else if (!isEnabledByVariantFilter){
-                disableTasksForVariant(theTask, buildVariant, "Doesn't match variantFilterIn")
-            }
-            else if (isNoop){
-                Log.warn("WARNING $buildVariant configuration was ENABLED but it have noop artifact included.\n" +
-                        " Tasks has been DISABLED and you should review your variantFilters")
-                disableTasksForVariant(theTask, buildVariant, "Noop artifact detected!")
-            }
-            else {
-                enableTasksForVariant(theTask, buildVariant)
-            }
+        if (isDisabledByConfig){
+            disableTasksForVariant(theTask, buildVariant, "Configuration 'enabled' is false")
+        }
+        else if (isTest){
+            disableTasksForVariant(theTask, buildVariant, "Is for tests")
+        }
+        else if (isDisabledByExclude){
+            disableTasksForVariant(theTask, buildVariant, "Include in 'exclude' list")
+        }
+        else if (!isEnabledByInclude){
+            disableTasksForVariant(theTask, buildVariant, "Something went wrong")
+        }
+        else if (isNoop){
+            Log.warn("WARNING $buildVariant was ENABLED by confifuration but it have noop artifact included.\n" +
+                    " Tasks has not been added. Review your variantFilters for duplicated or missing values!")
+            disableTasksForVariant(theTask, buildVariant, "Noop artifact detected!")
+        }
+        else {
+            enableTasksForVariant(theTask, buildVariant)
         }
     }
 
     private void disableTasksForVariant(Task theTask, String buildVariant, String reason) {
-        if (plugin.configHelper.isDebug()) {
-            println "IADT DISABLED for variant $buildVariant: $reason."
+        if (configHelper.isDebug()) {
+            println "IADT   DISABLED for variant $buildVariant: $reason."
         }
+        //TODO: Does this still have sense?
+        //TODO: We are not suppose to have mixed artifacts with enabled configs
+        //TODO: Does we need the empty build info?? When?
+        //TODO: Clean can be improve removing entry from srcDirs
         Task emptyTask = project.tasks.getByName(EMPTY_BUILD_INFO_TASK)
         Task cleanTask = project.tasks.getByName(CLEAN_TASK)
         emptyTask.dependsOn += [cleanTask]
@@ -135,16 +137,15 @@ class TasksHelper {
     }
 
     private void enableTasksForVariant(Task theTask, String buildVariant) {
-        println "IADT ENABLED for variant $buildVariant"
+        println "IADT   ENABLED for variant $buildVariant"
         theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
-        if (plugin.projectUtils.isAndroidApplication()) {
+        if (projectUtils.isAndroidApplication()) {
             addAndLinkDependencyReportTask(project, theTask, buildVariant)
             addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
         }
-        if (plugin.configHelper.isNetworkInterceptor()) {
-            plugin.applyPandoraPlugins(project)
-        }
-        if (plugin.configHelper.shouldIncludeSources(theTask)) {
+        boolean shouldIncludeSources = configHelper.isSourceInclusion() &&
+                configHelper.isSourceInspection()
+        if (shouldIncludeSources) {
             theTask.dependsOn += [
                     project.tasks.getByName(SOURCES_TASK),
                     project.tasks.getByName(REACT_SOURCES_TASK),
@@ -152,8 +153,6 @@ class TasksHelper {
                     project.tasks.getByName(GENERATED_TASK)]
         }
     }
-
-    //endregion
 
     //region [ ADD TASKS ]
 
@@ -169,7 +168,7 @@ class TasksHelper {
 
             doLast {
                 project.delete plugin.getOutputDir(project)
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println "Deleted ${plugin.getOutputDir(project)} from ${project.name}"
             }
         }
@@ -217,12 +216,12 @@ class TasksHelper {
             def counter = 0
             eachFile {
                 counter++
-                if (plugin.configHelper.isDebug()) {
+                if (configHelper.isDebug()) {
                     println it.path
                 }
             }
             doLast {
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
             }
         }
@@ -239,36 +238,36 @@ class TasksHelper {
             archiveName = outputName
             includeEmptyDirs = false
 
-            if (plugin.projectUtils.isAndroidApplication()){
+            if (projectUtils.isAndroidApplication()){
                 from project.android.sourceSets.main.manifest.srcFile
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
             }
 
             def counter = 0
             eachFile {
                 counter++
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println it.path
             }
 
             doFirst {
-                if (plugin.projectUtils.isAndroidApplication()) {
-                    if (plugin.configHelper.isDebug())
+                if (projectUtils.isAndroidApplication()) {
+                    if (configHelper.isDebug())
                         println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
                 }
 
                 def sourceSets = project.android.sourceSets
-                String [] targetNames = ["main", plugin.projectUtils.getCurrentBuildType().uncapitalize()]
-                def buildFlavor = plugin.projectUtils.getCurrentBuildFlavor().uncapitalize()
+                String [] targetNames = ["main", projectUtils.getCurrentBuildType().uncapitalize()]
+                def buildFlavor = projectUtils.getCurrentBuildFlavor().uncapitalize()
                 if (!buildFlavor.isEmpty()){
-                    targetNames += [ buildFlavor, plugin.projectUtils.getCurrentVariant().uncapitalize()]
+                    targetNames += [ buildFlavor, projectUtils.getCurrentVariant().uncapitalize()]
                 }
                 sourceSets.all { sourceSet ->
                     if(sourceSet.name in targetNames) {
                         for (File file : sourceSet.java.getSrcDirs())
                             if (file.exists()) {
-                                if (plugin.configHelper.isDebug())
+                                if (configHelper.isDebug())
                                     println "Added sourceSets: ${file}"
                                 from file
                             }
@@ -277,7 +276,7 @@ class TasksHelper {
             }
 
             doLast {
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
             }
         }
@@ -295,8 +294,8 @@ class TasksHelper {
                 excludes = ["assets/**", "**/res/pngs/**"]
             }
 
-            if (plugin.projectUtils.isAndroidApplication()){
-                def variantName = plugin.projectUtils.getCurrentVariant().uncapitalize()
+            if (projectUtils.isAndroidApplication()){
+                def variantName = projectUtils.getCurrentVariant().uncapitalize()
                 from ("${project.buildDir}/intermediates/merged_manifests/${variantName}") {
                     include 'AndroidManifest.xml'
                     into 'merged_manifests'
@@ -330,13 +329,13 @@ class TasksHelper {
             def counter = 0
             eachFile {
                 counter++
-                if (plugin.configHelper.isDebug()) {
+                if (configHelper.isDebug()) {
                     println it.path
                 }
             }
             doLast {
-                if (plugin.configHelper.isDebug())
-                    println "Packed ${counter} files into ${plugin.getOutputDir(project)}${plugin.projectUtils.getFolderSeparator()}${outputName}"
+                if (configHelper.isDebug())
+                    println "Packed ${counter} files into ${plugin.getOutputDir(project)}${projectUtils.getFolderSeparator()}${outputName}"
             }
         }
     }
@@ -353,7 +352,7 @@ class TasksHelper {
             includeEmptyDirs = false
 
             String rootPath = new File('').getAbsolutePath()
-            int lastFolderIndex = rootPath.lastIndexOf(plugin.projectUtils.getFolderSeparator())
+            int lastFolderIndex = rootPath.lastIndexOf(projectUtils.getFolderSeparator())
             if (lastFolderIndex == -1){
                 println "Unable to get parent folder. Disabled react native detector"
                 File configFile = plugin.getOutputFile(project, 'react_config.json')
@@ -382,13 +381,13 @@ class TasksHelper {
             def counter = 0
             eachFile {
                 counter++
-                if (plugin.configHelper.isDebug()) {
+                if (configHelper.isDebug()) {
                     println it.path
                 }
             }
 
             doLast {
-                if (plugin.configHelper.isDebug())
+                if (configHelper.isDebug())
                     println "Packed ${counter} files " +
                             "into ${plugin.getOutputDir(project)}\\${outputName}"
             }
