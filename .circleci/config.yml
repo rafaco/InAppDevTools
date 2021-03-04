@@ -27,7 +27,7 @@ jobs:
 
     - run:
         name: Download Dependencies
-        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+        command: ./gradlew androidDependencies -Pandroid.useAndroidX=true
 
     - run:
         name: Assemble COMPAT SupportDebug
@@ -41,13 +41,13 @@ jobs:
 
     - run:
         name: Assemble COMPAT AndroidxDebug
-        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
+        command: ./gradlew :compat:assembleAndroidxDebug -Pandroid.useAndroidX=true --stacktrace
     - run:
         name: Assemble LIBRARY AndroidxDebug
-        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
+        command: ./gradlew :library:assembleAndroidxDebug -Pandroid.useAndroidX=true --stacktrace
     - run:
         name: Assemble DEMO AndroidxDebug
-        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
+        command: ./gradlew :demo:assembleAndroidxDebug -Pandroid.useAndroidX=true --stacktrace
 
     - save_cache:
         paths:
@@ -64,11 +64,11 @@ jobs:
 
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true
 
       - run:
           name: Lint report LIBRARY Androidx Debug
-          command: ./gradlew :library:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          command: ./gradlew :library:lintAndroidxDebug -Pandroid.useAndroidX=true
       - store_artifacts:
           name: Saving Lint report
           path: library/build/reports
@@ -76,14 +76,14 @@ jobs:
 
       - run:
           name: Lint report DEMO Androidx Debug
-          command: ./gradlew :demo:lintAndroidxDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          command: ./gradlew :demo:lintAndroidxDebug -Pandroid.useAndroidX=true
       - store_artifacts:
           name: Saving Lint report
           path: demo/build/reports
           destination: demo/reports
       - run:
           name: Sonar report ALL SupportDebug and upload to SonarCloud
-          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=false -Pandroid.enableJetifier=false
+          command: ./gradlew :demo:assembleSupportDebug sonarqube -Dsonar.branch.name=${CIRCLE_BRANCH} --info -Pandroid.useAndroidX=false
 
       - run: echo "Analized branch" ${CIRCLE_BRANCH}
 
@@ -97,7 +97,7 @@ jobs:
 
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          command: ./gradlew androidDependencies -Pandroid.useAndroidX=true
 
       - run: echo "Deploy job is currently DISABLED"
       #      - run:

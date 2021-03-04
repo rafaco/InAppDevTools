@@ -5,7 +5,7 @@
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
     <option name="ARTIFACT_NAME" value="" />
-    <option name="PM_INSTALL_OPTIONS" value="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
+    <option name="PM_INSTALL_OPTIONS" value="-Pandroid.useAndroidX=true" />
     <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
     <option name="ACTIVITY_EXTRA_FLAGS" value="" />
     <option name="MODE" value="default_activity" />
@@ -48,7 +48,7 @@
     <option name="ACTIVITY_CLASS" value="" />
     <method v="2">
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true -Pandroid.enableJetifier=true" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true" />
     </method>
   </configuration>
 </component>
