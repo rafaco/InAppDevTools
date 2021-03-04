@@ -74,7 +74,7 @@ class AddDependenciesJob extends Job {
         } else {
             String extendedId = (id != "library") ? id :
                     projectUtils.useAndroidX() ? "androidx" : "support"
-            configValue = group + ":" + extendedId + ":" + getPluginVersion()
+            configValue = group + ":" + extendedId + ":" + plugin.getPluginVersion()
             project.dependencies.add(configName, configValue)
         }
         println "IADT   ${configName} ${configValue}"
