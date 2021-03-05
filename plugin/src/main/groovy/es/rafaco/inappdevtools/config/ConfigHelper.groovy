@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.InAppDevToolsExtension
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
+
 class ConfigHelper {
 
     Project project

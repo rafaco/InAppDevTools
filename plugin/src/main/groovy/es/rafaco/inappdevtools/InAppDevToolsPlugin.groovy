@@ -74,7 +74,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                 else{
                     if (configHelper.isDebug()){
                         println "IADT skipped for ${project} project. " +
-                                "Only Android application module is currently supported."
+                                "Only Android Application modules are currently supported."
                     }
                 }
             }
@@ -114,14 +114,39 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     }
 
     private void afterEvaluateAndroidModule(Project project) {
-        println "IADT ENABLED for module $project.name:"
+        println "IADT InAppDevTools ${getPluginVersion()}"
+        String opMode = projectUtils.useAndroidX() ? "ANDROIDX artifact" : "SUPPORT artifact"
+        String noopMode = configHelper.isUseNoop() ? "NOOP artifact" : "Nothing"
+        if (configHelper.isEnabled()) {
+            if (configHelper.hasExclude()) {
+                println "IADT   ENABLED for ${configHelper.calculateInclude()} builds --> $opMode"
+                println "IADT   DISABLED for ${configHelper.getExclude()} builds --> $noopMode"
+            }
+            else{
+                println "IADT   ENABLED for ALL builds --> $opMode"
+            }
+        }
+        else {
+            println "IADT   DISABLED for ALL builds --> $noopMode"
+        }
+        if (!configHelper.isEnabled() && !configHelper.isUseNoop()) {
+            if (configHelper.isDebug()) {
+                println "IADT Skipping everything (disabled and don't use noop)"
+            }
+            return
+        }
+
         if (configHelper.isDebug()) {
             projectUtils.printProjectType()
             projectUtils.printDimensions()
             //projectUtils.printBuildTypes()
             //projectUtils.printFlavors()
+            println "IADT prepare project:"
         }
-        println "IADT prepare project:"
+        applyToAndroidModule(project)
+    }
+
+    private void applyToAndroidModule(Project project) {
         initOutputFolder(project)
         if (projectUtils.isAndroidApplication()) {
             new RecordInternalPackageJob(this, project).do()
@@ -135,7 +160,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     //region [ INIT PLUGIN ]
 
     private void initOutputFolder(Project project) {
-        println "IADT   init output folder."
+        if (configHelper.isDebug()) {
+            println "IADT   init output folder."
+        }
 
         // Prepare output folder
         outputFolder = getOutputDir(project)

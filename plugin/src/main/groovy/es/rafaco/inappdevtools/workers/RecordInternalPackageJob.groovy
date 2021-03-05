@@ -23,6 +23,7 @@ import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 
+//Inject internal package from host app manifest into resValue
 class RecordInternalPackageJob extends Job {
 
     RecordInternalPackageJob(InAppDevToolsPlugin plugin, Project project) {
@@ -30,8 +31,9 @@ class RecordInternalPackageJob extends Job {
     }
 
     def 'do'(){
-        //Inject internal package from host app manifest into resValue
-        println "IADT   record internal package."
+        if (configHelper.isDebug()) {
+            println "IADT   record internal package."
+        }
         //TODO: Incremental issue: check if already set before perform to avoid updating modified date
         def internalPackage = getInternalPackageFromManifest()
         project.android.defaultConfig.resValue "string", "internal_package", "${internalPackage}"

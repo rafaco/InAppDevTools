@@ -39,7 +39,9 @@ class AddPluginsJob extends Job {
 
     //Apply external plugins required for Iadt (safe to be applied even if we don't use them)
     private void applyReportPlugin(Project project) {
-        println "IADT   apply ProjectReportsPlugin."
+        if (configHelper.isDebug()) {
+            println "IADT   apply ProjectReportsPlugin."
+        }
         project.getPluginManager().apply(ProjectReportsPlugin.class)
         //TODO: research other reports (tasks, properties, dashboard,...)
         // project.getPluginManager().apply(org.gradle.api.reporting.plugins.BuildDashboardPlugin.class)
@@ -47,7 +49,9 @@ class AddPluginsJob extends Job {
 
     //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
     private void applyPandoraPlugin(Project project){
-        println "IADT   apply PandoraPlugin."
+        if (configHelper.isDebug()) {
+            println "IADT   apply PandoraPlugin."
+        }
         project.getPluginManager().apply(PandoraPlugin.class)
     }
 }

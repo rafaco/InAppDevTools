@@ -79,10 +79,6 @@ class AddTasksJob extends Job {
 
     // Selectively link our tasks to each variant
     private void onGenerateTaskAdded(Task theTask, String buildVariant) {
-        if(isFirstTask){
-            println "IADT adding tasks:"
-            isFirstTask = false
-        }
         boolean isTest = buildVariant.toLowerCase().contains("test")
         boolean isNoop = configHelper.isNoopIncluded(buildVariant)
         boolean isDisabledByConfig = !configHelper.isEnabled()
@@ -124,6 +120,10 @@ class AddTasksJob extends Job {
 
     private void disableTasksForVariant(Task theTask, String buildVariant, String reason) {
         if (configHelper.isDebug()) {
+            if(isFirstTask){
+                println "IADT adding tasks:"
+                isFirstTask = false
+            }
             println "IADT   DISABLED for variant $buildVariant: $reason."
         }
         //TODO: Does this still have sense?
@@ -137,6 +137,10 @@ class AddTasksJob extends Job {
     }
 
     private void enableTasksForVariant(Task theTask, String buildVariant) {
+        if(isFirstTask){
+            println "IADT adding tasks:"
+            isFirstTask = false
+        }
         println "IADT   ENABLED for variant $buildVariant"
         theTask.dependsOn += [project.tasks.getByName(BUILD_INFO_TASK)]
         if (projectUtils.isAndroidApplication()) {

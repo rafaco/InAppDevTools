@@ -64,20 +64,19 @@ class AddDependenciesJob extends Job {
         def isLocal = projectUtils.isLocalDev()
         String configName = configuration + (isLocal ? "Api" : "Implementation")
         configName = configName[0].toLowerCase() + configName.substring(1)
-        String configValue
+        String localConfigValue = "project([path: \":$id\"])"
+        String externalId = (id != "library") ? id :
+                projectUtils.useAndroidX() ? "androidx" : "support"
+        String externalConfigValue = group + ":" + externalId + ":" + plugin.getPluginVersion()
 
         if (isLocal){
-            String modulePath = ":" + id
-            configValue = "project([path: \"$modulePath\"])"
-            /*project.dependencies.add(configName,
-                    project.dependencies.project([path: modulePath]))*/
+            println "IADT   ${configName} '${externalConfigValue}' SKIPPED (isLocalDev)"
+            //println "IADT   ${configName} ${localConfigValue} (isLocalDev)"
+            //project.dependencies.add(configName, project.dependencies.project([path: localConfigValue]))
         } else {
-            String extendedId = (id != "library") ? id :
-                    projectUtils.useAndroidX() ? "androidx" : "support"
-            configValue = group + ":" + extendedId + ":" + plugin.getPluginVersion()
-            project.dependencies.add(configName, configValue)
+            println "IADT   ${configName} '${externalConfigValue}'"
+            project.dependencies.add(configName, externalConfigValue)
         }
-        println "IADT   ${configName} ${configValue}"
     }
 
 }
