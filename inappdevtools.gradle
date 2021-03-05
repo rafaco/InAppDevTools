@@ -9,7 +9,6 @@ inappdevtools {
     //viewInspection = false
     //storageInspection = false
     //networkInterceptor = false
-    //enabledOnRelease = true
 
     //// Customization flags (runtime)
     notes = "This is a SAMPLE NOTE about this compilation:\n" +

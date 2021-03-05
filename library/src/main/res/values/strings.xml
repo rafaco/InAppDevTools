@@ -9,7 +9,6 @@
     <string name="config_host_address">Builder machine IP address</string>
     <string name="config_gradle_version">Builder machine Gradle version</string>
     <string name="config_enabled">Disable all and simulate the no-op library and plugin</string>
-    <string name="config_enabled_on_release">Force enabling our library for release builds of your app</string>
     <string name="config_overlay_enable">Disable our overlay interface</string>
     <string name="config_source_inclusion">Disable including this module sources in your apk</string>
     <string name="config_source_inspection">Disable source features and source inclusion</string>

@@ -22,7 +22,6 @@ package es.rafaco.inappdevtools.library.logic.config;
 public enum BuildConfigField {
 
     ENABLED(),
-    ENABLED_ON_RELEASE(),
     DEBUG(),
     SOURCE_INCLUSION(),
     SOURCE_INSPECTION(),

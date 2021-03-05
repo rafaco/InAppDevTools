@@ -29,7 +29,6 @@ public enum BuildConfigField {
 
     // Build flags (affect plugin behaviour)
     ENABLED("enabled", R.string.config_enabled, boolean.class, false),
-    ENABLED_ON_RELEASE("enabledOnRelease", R.string.config_enabled_on_release, boolean.class, false),
     DEBUG("debug", R.string.config_debug, boolean.class, false),
 
     // Build feature switches (affect plugin behaviour)

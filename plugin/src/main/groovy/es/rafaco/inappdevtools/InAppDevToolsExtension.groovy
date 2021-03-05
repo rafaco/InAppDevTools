@@ -35,7 +35,6 @@ class InAppDevToolsExtension {
     Boolean variantFilter = true
     String[] exclude = ["release"]
 
-    Boolean enabledOnRelease
     Boolean debug = false
     Boolean sourceInclusion
     Boolean sourceInspection
@@ -55,7 +54,6 @@ class InAppDevToolsExtension {
         if (enabled!=null) map.put("enabled", enabled)
         if (exclude!=null) map.put("exclude", exclude)
         if (useNoop!=null) map.put("noopEnabled", useNoop)
-        if (enabledOnRelease!=null) map.put("enabledOnRelease", enabledOnRelease)
         if (debug!=null) map.put("debug", debug)
         if (notes!=null) map.put("notes", notes)
         if (teamName!=null) map.put("teamName", teamName)
