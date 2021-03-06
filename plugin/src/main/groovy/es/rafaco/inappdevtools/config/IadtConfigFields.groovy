@@ -19,7 +19,7 @@
 
 package es.rafaco.inappdevtools.config
 
-class ConfigField {
+class IadtConfigFields {
 
     //// Build flags (affect plugin behaviour)
     static final String ENABLED = 'enabled'

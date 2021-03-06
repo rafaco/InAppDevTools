@@ -33,18 +33,18 @@ class ExtensionConfigReader implements IConfigReader {
         this.extension = project.rootProject.extensions.getByName(InAppDevToolsPlugin.TAG)
     }
 
-    String getName() {
-        return NAME
-    }
-
-    boolean hasConfig(String field){
+    boolean has(String field){
         return extension && extension.hasProperty(getKey(field))
     }
 
-    Object getConfig(String field) {
-        if (!hasConfig(field))
+    Object get(String field) {
+        if (!has(field))
             return null
         return extension[getKey(field)]
+    }
+
+    String getName() {
+        return NAME
     }
 
     String getKey(String field){

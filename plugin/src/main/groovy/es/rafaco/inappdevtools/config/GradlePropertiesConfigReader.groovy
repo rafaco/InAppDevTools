@@ -21,7 +21,7 @@ package es.rafaco.inappdevtools.config
 
 import org.gradle.api.Project
 
-class GradlePropertiesConfigReader {
+class GradlePropertiesConfigReader implements IConfigReader {
 
     static final String NAME = 'Gradle properties'
     static final String PREFIX = 'iadt.'
@@ -32,18 +32,18 @@ class GradlePropertiesConfigReader {
         this.project = project.rootProject
     }
 
-    String getName() {
-        return NAME
-    }
-
-    boolean hasConfig(String field){
+    boolean has(String field){
         return project.properties.containsKey(getKey(field))
     }
 
-    Object getConfig(String field) {
-        if (!hasConfig(field))
+    Object get(String field) {
+        if (!has(field))
             return null
         return project.properties[getKey(field)]
+    }
+
+    String getName() {
+        return NAME
     }
 
     String getKey(String field){

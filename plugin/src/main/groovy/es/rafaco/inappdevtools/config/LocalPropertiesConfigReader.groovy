@@ -21,7 +21,7 @@ package es.rafaco.inappdevtools.config
 
 import org.gradle.api.Project
 
-class LocalPropertiesConfigReader {
+class LocalPropertiesConfigReader implements IConfigReader {
 
     static final String NAME = 'local.properties'
     static final String PREFIX = 'iadt.'
@@ -36,18 +36,18 @@ class LocalPropertiesConfigReader {
         }
     }
 
-    String getName() {
-        return NAME
-    }
-
-    boolean hasConfig(String field){
+    boolean has(String field){
         return localProperties && localProperties.containsKey(getKey(field))
     }
 
-    Object getConfig(String field) {
-        if (!hasConfig(field))
+    Object get(String field) {
+        if (!has(field))
             return null
         return localProperties[getKey(field)]
+    }
+
+    String getName() {
+        return NAME
     }
 
     String getKey(String field){

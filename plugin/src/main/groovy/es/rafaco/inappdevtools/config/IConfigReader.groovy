@@ -20,8 +20,8 @@
 package es.rafaco.inappdevtools.config
 
 interface IConfigReader{
+    boolean has(String field)
+    Object get(String field)
     String getName()
-    boolean hasConfig(String field)
-    Object getConfig(String field)
     String getKey(String field)
 }

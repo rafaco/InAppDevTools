@@ -57,26 +57,35 @@ class ConfigHelper {
         readers += new ExtensionConfigReader(project)       // Lowest priority
     }
 
-    boolean hasConfig(String key){
+    boolean has(String key){
         for (def reader : readers){
-            if (reader.hasConfig(key))
+            if (reader.has(key))
                 return true
         }
         return false
     }
 
-    Object getConfig(String key) {
+    Object get(String key) {
         for (def reader : readers){
-            if (reader.hasConfig(key))
-                return reader.getConfig(key)
+            if (reader.has(key))
+                return reader.get(key)
         }
         return null
     }
 
-    Object getConfigSource(String field) {
+    String getName(String field) {
         for (def reader : readers){
-            if (reader.hasConfig(field)){
+            if (reader.has(field)){
                 return reader.getName()
+            }
+        }
+        return null
+    }
+
+    String getKey(String field) {
+        for (def reader : readers){
+            if (reader.has(field)){
+                return reader.getKey()
             }
         }
         return null
@@ -86,9 +95,9 @@ class ConfigHelper {
         println "IADT Configuration resolution info for '$field':"
         readers.each {
             println "IADT   ${it.getName()}: '${it.getKey(field)}' is " +
-                    (it.hasConfig(field) ? "'${it.getConfig(field)}'" : "not set")
+                    (it.has(field) ? "'${it.get(field)}'" : "not set")
         }
-        println "IADT      Resolved value is '${getConfig(field)}' (${getConfigSource(field)})"
+        println "IADT      Resolved value is '${get(field)}' (${getName(field)})"
     }
 
 

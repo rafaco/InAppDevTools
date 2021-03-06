@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools
 
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.config.ConfigHelper
 import es.rafaco.inappdevtools.workers.AddPluginsJob
 import es.rafaco.inappdevtools.workers.AddRepositoriesJob
@@ -73,7 +74,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
                     afterEvaluateAndroidModule(project)
                 }
                 else{
-                    if (configHelper.isDebug()){
+                    if (configHelper.get(IadtConfigFields.DEBUG)){
                         println "IADT skipped for ${project} project. " +
                                 "Only Android Application modules are currently supported."
                     }
@@ -96,7 +97,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     private void afterEvaluateRoot(Project project) {
 
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             def gradleVersion = project.gradle.gradleVersion
             def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
             println "IADT InAppDevTools ${getPluginVersion()}"
@@ -108,7 +109,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             println "IADT   enabled: " + configHelper.isEnabled()
             println "IADT   exclude: " + configHelper.getExclude()
             println "IADT   useNoop: " + configHelper.isUseNoop()
-            println "IADT   debug: " + configHelper.isDebug()
+            println "IADT   debug: " + configHelper.get(IadtConfigFields.DEBUG)
             //TODO: remove or ad more
             println "IADT   teamName: " + configHelper.getTeamName()
             configHelper.printConfig('enabled')
@@ -132,13 +133,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             println "IADT   DISABLED for ALL builds --> $noopMode"
         }
         if (!configHelper.isEnabled() && !configHelper.isUseNoop()) {
-            if (configHelper.isDebug()) {
+            if (configHelper.get(IadtConfigFields.DEBUG)) {
                 println "IADT Skipping everything (disabled and don't use noop)"
             }
             return
         }
 
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             projectUtils.printProjectType()
             projectUtils.printDimensions()
             //projectUtils.printBuildTypes()
@@ -162,7 +163,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     //region [ INIT PLUGIN ]
 
     private void initOutputFolder(Project project) {
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT   init output folder."
         }
 

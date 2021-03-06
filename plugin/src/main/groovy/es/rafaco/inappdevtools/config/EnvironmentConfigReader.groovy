@@ -27,19 +27,20 @@ class EnvironmentConfigReader implements IConfigReader {
     EnvironmentConfigReader() {
     }
 
+    boolean has(String field){
+        return System.getenv().containsKey(getKey(field))
+    }
+
+    Object get(String field) {
+        if (!has(field))
+            return null
+        return System.getenv()[getKey(field)]
+    }
+
     String getName() {
         return NAME
     }
 
-    boolean hasConfig(String field){
-        return System.getenv().containsKey(getKey(field))
-    }
-
-    Object getConfig(String field) {
-        if (!hasConfig(field))
-            return null
-        return System.getenv()[getKey(field)]
-    }
 
     String getKey(String field){
         return (PREFIX + toSnakeCase(field)).toUpperCase()
