@@ -27,14 +27,72 @@ import org.gradle.api.Project
 class ConfigHelper {
 
     Project project
+    def readers
 
     ConfigHelper(Project project) {
         this.project = project
+        initReaders()
     }
 
-    Project getProject() {
-        project
+    /**
+     * TODO: Define priorities and document it
+     * https://tomgregory.com/gradle-project-properties-best-practices/
+     *
+     *  0. Runtime configuration provide thought our UI
+     *  1. local.properties file in root folder: myPropName1=myPropValue1
+     *  2. Gradle properties:
+     *      1. Command line properties: ./gradlew <task-name> -PmyPropName1=myPropValue1
+     *      2. Java system properties: ./gradlew <task-name> -Dorg.gradle.project.myPropName1=myPropValue1
+     *      3. Env variables: ORG_GRADLE_PROJECT_myPropName1=myPropValue1
+     *      4. User home gradle.properties: myPropName1=myPropValue1
+     *      5. Project root gradle.properties: myPropName1=myPropValue1
+     *  3. InAppDevTools extension in root project: inappdevtools { myPropName1=myPropValue1 }
+     */
+    private void initReaders(){
+        readers = []
+        // Following order is important as it set the priority
+        readers += new EnvironmentConfigReader()            // Highest priority
+        readers += new GradlePropertiesConfigReader(project)
+        readers += new LocalPropertiesConfigReader(project)
+        readers += new ExtensionConfigReader(project)       // Lowest priority
     }
+
+    boolean hasConfig(String key){
+        for (def reader : readers){
+            if (reader.hasConfig(key))
+                return true
+        }
+        return false
+    }
+
+    Object getConfig(String key) {
+        for (def reader : readers){
+            if (reader.hasConfig(key))
+                return reader.getConfig(key)
+        }
+        return null
+    }
+
+    Object getConfigSource(String field) {
+        for (def reader : readers){
+            if (reader.hasConfig(field)){
+                return reader.getName()
+            }
+        }
+        return null
+    }
+
+    void printConfig(String field) {
+        println "IADT Configuration resolution info for '$field':"
+        readers.each {
+            println "IADT   ${it.getName()}: '${it.getKey(field)}' is " +
+                    (it.hasConfig(field) ? "'${it.getConfig(field)}'" : "not set")
+        }
+        println "IADT      Resolved value is '${getConfig(field)}' (${getConfigSource(field)})"
+    }
+
+
+
 
     InAppDevToolsExtension getExtension() {
         project.rootProject.extensions.getByName(InAppDevToolsPlugin.TAG)

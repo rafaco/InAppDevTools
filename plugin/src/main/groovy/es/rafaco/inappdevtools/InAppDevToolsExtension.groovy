@@ -21,21 +21,19 @@ package es.rafaco.inappdevtools
 
 class InAppDevToolsExtension {
 
+    // Build flags (affect plugin)
+    Boolean enabled = true
+    Boolean useNoop = false
+    String[] exclude = ["release"]
+    Boolean debug = false
+
     //User features fags
     String notes
-
     String teamName
     String teamEmail
     String teamDesc
     Map teamLinks
 
-    // Build flags (affect plugin)
-    Boolean enabled = true
-    Boolean useNoop = false
-    Boolean variantFilter = true
-    String[] exclude = ["release"]
-
-    Boolean debug = false
     Boolean sourceInclusion
     Boolean sourceInspection
     Boolean networkInterceptor
@@ -55,11 +53,13 @@ class InAppDevToolsExtension {
         if (exclude!=null) map.put("exclude", exclude)
         if (useNoop!=null) map.put("noopEnabled", useNoop)
         if (debug!=null) map.put("debug", debug)
+
         if (notes!=null) map.put("notes", notes)
         if (teamName!=null) map.put("teamName", teamName)
         if (teamEmail!=null) map.put("teamEmail", teamEmail)
         if (teamDesc!=null) map.put("teamDesc", teamDesc)
         if (teamLinks!=null) map.put("teamLinks", teamLinks)
+
         if (overlayEnabled!=null) map.put("overlayEnabled", overlayEnabled)
         if (sourceInclusion!=null) map.put("sourceInclusion", sourceInclusion)
         if (sourceInspection!=null) map.put("sourceInspection", sourceInspection)

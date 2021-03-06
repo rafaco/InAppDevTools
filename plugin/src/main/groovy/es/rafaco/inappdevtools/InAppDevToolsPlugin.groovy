@@ -44,10 +44,9 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     File outputFolder
 
     void apply(Project project) {
-        projectUtils = new ProjectUtils(project)
-        configHelper = new ConfigHelper(project)
-
         //println "IADT apply for $project"
+        projectUtils = new ProjectUtils(project)
+
         if (projectUtils.isRoot()) {
             onApplyToRoot(project)
         }
@@ -61,6 +60,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
             @Override
             void execute(Project project2) {
+                configHelper = new ConfigHelper(project)
+
                 //println "IADT Apply after evaluate for $project"
                 //TODO: Filter modules from configuration
 
@@ -110,6 +111,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             println "IADT   debug: " + configHelper.isDebug()
             //TODO: remove or ad more
             println "IADT   teamName: " + configHelper.getTeamName()
+            configHelper.printConfig('enabled')
         }
     }
 

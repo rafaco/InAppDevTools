@@ -1,9 +1,11 @@
 inappdevtools {
     //// Build flags (affect plugin behaviour)
-    enabled = true
-    useNoop = true
+    enabled = false
     exclude = ["release"]
+    useNoop = true
     debug = true
+
+    //// Feature switches (build)
     //sourceInclusion = false
     //sourceInspection = false
     //viewInspection = false
