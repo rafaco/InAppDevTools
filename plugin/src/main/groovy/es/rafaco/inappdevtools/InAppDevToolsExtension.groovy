@@ -46,30 +46,4 @@ class InAppDevToolsExtension {
     Boolean invocationByIcon
     Boolean callDefaultCrashHandler
     Boolean injectEventsOnLogcat
-    
-    Map toMap(){
-        Map map = [:]
-        if (enabled!=null) map.put("enabled", enabled)
-        if (exclude!=null) map.put("exclude", exclude)
-        if (useNoop!=null) map.put("noopEnabled", useNoop)
-        if (debug!=null) map.put("debug", debug)
-
-        if (notes!=null) map.put("notes", notes)
-        if (teamName!=null) map.put("teamName", teamName)
-        if (teamEmail!=null) map.put("teamEmail", teamEmail)
-        if (teamDesc!=null) map.put("teamDesc", teamDesc)
-        if (teamLinks!=null) map.put("teamLinks", teamLinks)
-
-        if (overlayEnabled!=null) map.put("overlayEnabled", overlayEnabled)
-        if (sourceInclusion!=null) map.put("sourceInclusion", sourceInclusion)
-        if (sourceInspection!=null) map.put("sourceInspection", sourceInspection)
-        if (viewInspection!=null) map.put("viewInspection", viewInspection)
-        if (storageInspection!=null) map.put("storageInspection", storageInspection)
-        if (networkInterceptor!=null) map.put("networkInterceptor", networkInterceptor)
-        if (invocationByIcon!=null) map.put("invocationByIcon", invocationByIcon)
-        if (invocationByShake!=null) map.put("invocationByShake", invocationByShake)
-        if (callDefaultCrashHandler!=null) map.put("callDefaultCrashHandler", callDefaultCrashHandler)
-        if (injectEventsOnLogcat!=null) map.put("injectEventsOnLogcat", injectEventsOnLogcat)
-        return map
-    }
 }

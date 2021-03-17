@@ -31,6 +31,7 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import es.rafaco.inappdevtools.utils.ProjectUtils
+import es.rafaco.inappdevtools.utils.PluginUtils
 import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
 
 class InAppDevToolsPlugin implements Plugin<Project> {
@@ -100,30 +101,30 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         if (configHelper.get(IadtConfigFields.DEBUG)) {
             def gradleVersion = project.gradle.gradleVersion
             def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
-            println "IADT InAppDevTools ${getPluginVersion()}"
+            println "IADT InAppDevTools ${PluginUtils.getVersion(this)}"
             println "IADT Build info:"
             println "IADT   Gradle $gradleVersion"
             println "IADT   Android Gradle Plugin $androidPluginVersion"
             println "IADT   Start task " + project.getGradle().getStartParameter().taskRequests[0].getArgs()[0]
             println "IADT Configuration:"
-            println "IADT   enabled: " + configHelper.isEnabled()
-            println "IADT   exclude: " + configHelper.getExclude()
-            println "IADT   useNoop: " + configHelper.isUseNoop()
+            println "IADT   enabled: " + configHelper.get(IadtConfigFields.ENABLED)
+            println "IADT   exclude: " + configHelper.get(IadtConfigFields.EXCLUDE)
+            println "IADT   useNoop: " + configHelper.get(IadtConfigFields.USE_NOOP)
             println "IADT   debug: " + configHelper.get(IadtConfigFields.DEBUG)
             //TODO: remove or ad more
-            println "IADT   teamName: " + configHelper.getTeamName()
-            configHelper.printConfig('enabled')
+            println "IADT   teamName: " + configHelper.get(IadtConfigFields.TEAM_NAME)
+            configHelper.printResolution('enabled')
         }
     }
 
     private void afterEvaluateAndroidModule(Project project) {
-        println "IADT InAppDevTools ${getPluginVersion()}"
+        println "IADT InAppDevTools ${PluginUtils.getVersion(this)}"
         String opMode = projectUtils.useAndroidX() ? "ANDROIDX artifact" : "SUPPORT artifact"
-        String noopMode = configHelper.isUseNoop() ? "NOOP artifact" : "Nothing"
-        if (configHelper.isEnabled()) {
-            if (configHelper.hasExclude()) {
+        String noopMode = configHelper.get(IadtConfigFields.USE_NOOP) ? "NOOP artifact" : "Nothing"
+        if (configHelper.get(IadtConfigFields.ENABLED)) {
+            if (configHelper.hasExcludeWithValues()) {
                 println "IADT   ENABLED for ${configHelper.calculateInclude()} builds --> $opMode"
-                println "IADT   DISABLED for ${configHelper.getExclude()} builds --> $noopMode"
+                println "IADT   DISABLED for ${configHelper.get(IadtConfigFields.EXCLUDE)} builds --> $noopMode"
             }
             else{
                 println "IADT   ENABLED for ALL builds --> $opMode"
@@ -132,7 +133,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         else {
             println "IADT   DISABLED for ALL builds --> $noopMode"
         }
-        if (!configHelper.isEnabled() && !configHelper.isUseNoop()) {
+        if (!configHelper.get(IadtConfigFields.ENABLED) && !configHelper.get(IadtConfigFields.USE_NOOP)) {
             if (configHelper.get(IadtConfigFields.DEBUG)) {
                 println "IADT Skipping everything (disabled and don't use noop)"
             }
@@ -185,13 +186,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     //region [ STATIC ACCESS TO PLUGIN ]
 
-    static boolean isDebug(Project project) {
-        if (getExtension(project)!=null){
-            return getExtension(project).debug
-        }
-        return false
-    }
-
     static InAppDevToolsExtension getExtension(Project project) {
         project.rootProject.extensions.getByName(TAG)
     }
@@ -206,18 +200,6 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
     static File getOutputFile(Project project, String filename){
         project.file("${getOutputPath(project)}/${filename}")
-    }
-
-    //endregion
-
-    //region [ PROPERTY EXTRACTORS ]
-
-    String getPluginName() {
-        this.getClass().getPackage().getSpecificationTitle()
-    }
-
-    String getPluginVersion() {
-        this.getClass().getPackage().getSpecificationVersion()
     }
 
     //endregion

@@ -2,7 +2,7 @@
  * This source file is part of InAppDevTools, which is available under
  * Apache License, Version 2.0 at https://github.com/rafaco/InAppDevTools
  *
- * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright 2018-2021 Rafael Acosta Alvarez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,17 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.tasks
+package es.rafaco.inappdevtools.utils
 
-import es.rafaco.inappdevtools.InAppDevToolsPlugin
-import org.gradle.api.DefaultTask
-import org.gradle.api.Project
+import org.gradle.api.Plugin
 
-class IadtBaseTask extends DefaultTask{
+class PluginUtils {
 
-    final TAG = InAppDevToolsPlugin.TAG
-    String outputPath
-
-    IadtBaseTask() {
-        this.group = TAG
-        outputPath = InAppDevToolsPlugin.getOutputPath(project)
+    static String getName(Plugin plugin) {
+        plugin.getClass().getPackage().getSpecificationTitle()
     }
 
-    protected File getFile(Project project, String path) {
-        def file = project.file(path)
-        file.parentFile.mkdirs()
-        file
-    }
-
-    protected boolean isDebug() {
-        return extension.debug
+    static String getVersion(Plugin plugin) {
+        plugin.getClass().getPackage().getSpecificationVersion()
     }
 }

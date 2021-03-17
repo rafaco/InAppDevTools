@@ -24,8 +24,8 @@ class IadtConfigFields {
     //// Build flags (affect plugin behaviour)
     static final String ENABLED = 'enabled'
     static final String USE_NOOP = 'useNoop'
-    static final String EXCLUDE = 'enabled'
-    static final String DEBUG = 'enabled'
+    static final String EXCLUDE = 'exclude'
+    static final String DEBUG = 'debug'
 
     //// Customization flags (runtime)
     static final String NOTES = 'notes'

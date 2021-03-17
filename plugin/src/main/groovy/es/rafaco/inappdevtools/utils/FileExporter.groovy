@@ -17,22 +17,22 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.config
+package es.rafaco.inappdevtools.utils
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import groovy.json.JsonOutput
 import org.gradle.api.Project
 
-class ConfigUtils {
+class FileExporter {
 
     Project project
+    boolean isDebug
 
-    ConfigUtils(Project project) {
+    FileExporter(Project project) {
         this.project = project
-    }
-
-    private boolean isDebug(){
-        return InAppDevToolsPlugin.isDebug(project)
+        this.isDebug = new ConfigHelper(project).get(IadtConfigFields.DEBUG)
     }
 
     private String getTag(){
@@ -50,7 +50,7 @@ class ConfigUtils {
             return
         }
         file.write extensionJson
-        if (isDebug()) {
+        if (isDebug) {
             println "Generated: " + file.getPath()
             println extensionJson
         }
@@ -65,17 +65,17 @@ class ConfigUtils {
             return
         }
         file.write content
-        if (isDebug()) println "Generated: " + file.getPath()
+        if (isDebug) println "Generated: " + file.getPath()
     }
 
     String shell(String command) {
         String result = null
         try {
-            if (isDebug()) println ("Shell command: " + command)
+            if (isDebug) println ("Shell command: " + command)
             result = command.execute([], project.rootProject.rootDir).text.trim()
         }
         catch (Exception e) {
-            if (isDebug()) e.printStackTrace()
+            if (isDebug) e.printStackTrace()
         }
         result
     }

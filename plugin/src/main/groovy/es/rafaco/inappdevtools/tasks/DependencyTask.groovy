@@ -20,6 +20,8 @@
 package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -60,7 +62,7 @@ class DependencyTask extends DependencyReportTask {
     @Override
     @TaskAction
     void generate() {
-        boolean isDebug = InAppDevToolsPlugin.isDebug(getProject())
+        boolean isDebug = new ConfigHelper(project).get(IadtConfigFields.DEBUG)
         if (isDebug){
             println "OutputFile: ${outputFile}"
             println "InputFile: ${inputFile}"

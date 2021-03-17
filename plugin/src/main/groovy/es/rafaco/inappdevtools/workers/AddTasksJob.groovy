@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.workers
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.tasks.BuildInfoTask
 import es.rafaco.inappdevtools.tasks.DependencyTask
 import es.rafaco.inappdevtools.tasks.DetectReactNativeTask
@@ -81,12 +82,12 @@ class AddTasksJob extends Job {
     private void onGenerateTaskAdded(Task theTask, String buildVariant) {
         boolean isTest = buildVariant.toLowerCase().contains("test")
         boolean isNoop = configHelper.isNoopIncluded(buildVariant)
-        boolean isDisabledByConfig = !configHelper.isEnabled()
+        boolean isDisabledByConfig = !configHelper.get(IadtConfigFields.ENABLED)
         boolean isDisabledByExclude = false
         boolean isEnabledByInclude = false
 
-        if (configHelper.hasExclude()) {
-            configHelper.getExclude().each { exclusion ->
+        if (configHelper.has(IadtConfigFields.EXCLUDE)) {
+            configHelper.get(IadtConfigFields.EXCLUDE).each { exclusion ->
                 if (buildVariant.toLowerCase().contains(exclusion))
                     isDisabledByExclude = true
             }
@@ -119,7 +120,7 @@ class AddTasksJob extends Job {
     }
 
     private void disableTasksForVariant(Task theTask, String buildVariant, String reason) {
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             if(isFirstTask){
                 println "IADT adding tasks:"
                 isFirstTask = false
@@ -147,8 +148,8 @@ class AddTasksJob extends Job {
             addAndLinkDependencyReportTask(project, theTask, buildVariant)
             addAndLinkDetectReactNativeTask(project, theTask, buildVariant)
         }
-        boolean shouldIncludeSources = configHelper.isSourceInclusion() &&
-                configHelper.isSourceInspection()
+        boolean shouldIncludeSources = configHelper.get(IadtConfigFields.SOURCE_INCLUSION) &&
+                configHelper.get(IadtConfigFields.SOURCE_INSPECTION)
         if (shouldIncludeSources) {
             theTask.dependsOn += [
                     project.tasks.getByName(SOURCES_TASK),
@@ -172,7 +173,7 @@ class AddTasksJob extends Job {
 
             doLast {
                 project.delete plugin.getOutputDir(project)
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Deleted ${plugin.getOutputDir(project)} from ${project.name}"
             }
         }
@@ -220,12 +221,12 @@ class AddTasksJob extends Job {
             def counter = 0
             eachFile {
                 counter++
-                if (configHelper.isDebug()) {
+                if (configHelper.get(IadtConfigFields.DEBUG)) {
                     println it.path
                 }
             }
             doLast {
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
             }
         }
@@ -244,20 +245,20 @@ class AddTasksJob extends Job {
 
             if (projectUtils.isAndroidApplication()){
                 from project.android.sourceSets.main.manifest.srcFile
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
             }
 
             def counter = 0
             eachFile {
                 counter++
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println it.path
             }
 
             doFirst {
                 if (projectUtils.isAndroidApplication()) {
-                    if (configHelper.isDebug())
+                    if (configHelper.get(IadtConfigFields.DEBUG))
                         println "Added sourceSets: ${project.android.sourceSets.main.manifest.srcFile}"
                 }
 
@@ -271,7 +272,7 @@ class AddTasksJob extends Job {
                     if(sourceSet.name in targetNames) {
                         for (File file : sourceSet.java.getSrcDirs())
                             if (file.exists()) {
-                                if (configHelper.isDebug())
+                                if (configHelper.get(IadtConfigFields.DEBUG))
                                     println "Added sourceSets: ${file}"
                                 from file
                             }
@@ -280,7 +281,7 @@ class AddTasksJob extends Job {
             }
 
             doLast {
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
             }
         }
@@ -333,12 +334,12 @@ class AddTasksJob extends Job {
             def counter = 0
             eachFile {
                 counter++
-                if (configHelper.isDebug()) {
+                if (configHelper.get(IadtConfigFields.DEBUG)) {
                     println it.path
                 }
             }
             doLast {
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Packed ${counter} files into ${plugin.getOutputDir(project)}${projectUtils.getFolderSeparator()}${outputName}"
             }
         }
@@ -385,13 +386,13 @@ class AddTasksJob extends Job {
             def counter = 0
             eachFile {
                 counter++
-                if (configHelper.isDebug()) {
+                if (configHelper.get(IadtConfigFields.DEBUG)) {
                     println it.path
                 }
             }
 
             doLast {
-                if (configHelper.isDebug())
+                if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Packed ${counter} files " +
                             "into ${plugin.getOutputDir(project)}\\${outputName}"
             }

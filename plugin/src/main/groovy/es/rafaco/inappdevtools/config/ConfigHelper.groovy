@@ -19,8 +19,6 @@
 
 package es.rafaco.inappdevtools.config
 
-import es.rafaco.inappdevtools.InAppDevToolsExtension
-import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
 
@@ -91,7 +89,7 @@ class ConfigHelper {
         return null
     }
 
-    void printConfig(String field) {
+    void printResolution(String field) {
         println "IADT Configuration resolution info for '$field':"
         readers.each {
             println "IADT   ${it.getName()}: '${it.getKey(field)}' is " +
@@ -100,95 +98,42 @@ class ConfigHelper {
         println "IADT      Resolved value is '${get(field)}' (${getName(field)})"
     }
 
-
-
-
-    InAppDevToolsExtension getExtension() {
-        project.rootProject.extensions.getByName(InAppDevToolsPlugin.TAG)
-    }
-
-    //region [ DIRECT PROPERTIES ]
-
-    boolean isDebug(){
-        if (getExtension()!=null){
-            return getExtension().debug
+    Map extractResolutionMap(){
+        def allConfigFields = []
+        IadtConfigFields.declaredFields.findAll {!it.synthetic}.each {
+            allConfigFields.add(it.name)
         }
-        return false
-    }
-
-    boolean isEnabled(){
-        if (getExtension()!=null){
-            return getExtension().enabled
+        Map resolvedValues = [:]
+        Map resolutionSources = [:]
+        for (String fieldClassName : allConfigFields) {
+            def field = IadtConfigFields."$fieldClassName"
+            if (has(IadtConfigFields."$field")){
+                resolvedValues.put(field, get(field))
+                resolutionSources.put(field, getName(field))
+            }
         }
-        return true
+        resolvedValues.put("resolutions", resolutionSources)
+        return resolvedValues
     }
-
-
-    boolean isUseNoop(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.useNoop!=null){
-            return extension.useNoop
-        }
-        return false
-    }
-
-    String[] getExclude(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.exclude!=null){
-            return extension.exclude
-        }
-        return []
-    }
-
-    boolean isSourceInclusion(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.sourceInclusion!=null){
-            return extension.sourceInclusion
-        }
-        return true
-    }
-
-    boolean isSourceInspection(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.sourceInspection!=null){
-            return extension.sourceInspection
-        }
-        return true
-    }
-
-    boolean isNetworkInterceptor(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.networkInterceptor!=null){
-            return extension.networkInterceptor
-        }
-        return true
-    }
-
-    String getTeamName(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.teamName!=null){
-            return extension.teamName
-        }
-        return
-    }
-
-    //endregion
 
     //region [ COMPUTED PROPERTIES ]
 
-    boolean hasExclude(){
-        InAppDevToolsExtension extension = getExtension()
-        if (extension!=null && extension.exclude!=null &&
-                extension.exclude.getClass().getName() == "[Ljava.lang.String;"){
-            return extension.exclude.length>0
+    //TODO: is this really necessary?
+    // If so, add to standard has() or generalize to hasArrayWithValues()
+    boolean hasExcludeWithValues(){
+        if (has(IadtConfigFields.EXCLUDE) &&
+                get(IadtConfigFields.EXCLUDE).getClass().getName() == "[Ljava.lang.String;"){
+            return  get(IadtConfigFields.EXCLUDE).length>0
         }
         return false
     }
 
     String[] calculateInclude() {
         String[] result = []
-        String[] exclude = getExclude()
+        String[] exclude = get(IadtConfigFields.EXCLUDE)
         if (exclude==null || exclude.length<1){
+            // Warning: validate hasExcludeWithValues() before
+            // We can not solve the dimension without exclusions
             return result
         }
         def dimensions = new ProjectUtils(project).getDimensions()

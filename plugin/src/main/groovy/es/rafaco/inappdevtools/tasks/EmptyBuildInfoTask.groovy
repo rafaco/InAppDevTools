@@ -19,7 +19,7 @@
 
 package es.rafaco.inappdevtools.tasks
 
-import es.rafaco.inappdevtools.config.ConfigUtils
+import es.rafaco.inappdevtools.utils.FileExporter
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.tasks.TaskAction
 
@@ -34,7 +34,7 @@ class EmptyBuildInfoTask extends IadtBaseTask {
         Map propertiesMap = [ enabled : false ]
 
         ProjectUtils projectUtils = new ProjectUtils(project)
-        ConfigUtils configUtils = new ConfigUtils(project)
+        FileExporter configUtils = new FileExporter(project)
         File file = projectUtils.getFile("${outputPath}/build_config.json")
         configUtils.writeMap(file, propertiesMap)
 

@@ -19,7 +19,8 @@
 
 package es.rafaco.inappdevtools.utils
 
-import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.invocation.Gradle
@@ -44,10 +45,6 @@ class ProjectUtils {
         def file = project.file(path)
         file.parentFile.mkdirs()
         file
-    }
-
-    boolean isDebug(){
-        InAppDevToolsPlugin.isDebug(project)
     }
 
     boolean existsTask(String target){
@@ -147,11 +144,13 @@ class ProjectUtils {
     }
 
     String getCurrentBuildFlavor() {
+        //TODO: this is ugly but is going to be removed soon
+        def isDebug = new ConfigHelper(project).get(IadtConfigFields.DEBUG)
         Matcher matcher = getVariantMatcher()
         if (matcher.find()) {
             return matcher.group(1)
         } else {
-            if (isDebug()) println "There are not Flavors"
+            if (isDebug) println "There are not Flavors"
             return ""
         }
     }

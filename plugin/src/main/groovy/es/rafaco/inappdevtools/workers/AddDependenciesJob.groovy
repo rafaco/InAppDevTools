@@ -20,6 +20,8 @@
 package es.rafaco.inappdevtools.workers
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.IadtConfigFields
+import es.rafaco.inappdevtools.utils.PluginUtils
 import org.gradle.api.Project
 
 class AddDependenciesJob extends Job {
@@ -31,15 +33,15 @@ class AddDependenciesJob extends Job {
     def 'do'(){
         println "IADT add dependencies:"
 
-        if (configHelper.isEnabled()){
-            if (configHelper.hasExclude()){
-                String[] exclude = configHelper.getExclude()
+        if (configHelper.get(IadtConfigFields.ENABLED)){
+            if (configHelper.hasExcludeWithValues()){
+                String[] exclude = configHelper.get(IadtConfigFields.EXCLUDE)
                 String[] include = configHelper.calculateInclude()
                 include.each {
                     addDependency(project, it,
                             "es.rafaco.inappdevtools", "library")
                 }
-                if (configHelper.isUseNoop()) {
+                if (configHelper.get(IadtConfigFields.USE_NOOP)) {
                     exclude.each {
                         addDependency(project, it,
                                 "es.rafaco.inappdevtools", "noop")
@@ -53,7 +55,7 @@ class AddDependenciesJob extends Job {
         }
         else {
             //All disable
-            if (configHelper.isUseNoop()){
+            if (configHelper.get(IadtConfigFields.USE_NOOP)){
                 addDependency(project, "",
                         "es.rafaco.inappdevtools", "noop")
             }
@@ -67,7 +69,7 @@ class AddDependenciesJob extends Job {
         String localConfigValue = "project([path: \":$id\"])"
         String externalId = (id != "library") ? id :
                 projectUtils.useAndroidX() ? "androidx" : "support"
-        String externalConfigValue = group + ":" + externalId + ":" + plugin.getPluginVersion()
+        String externalConfigValue = group + ":" + externalId + ":" + PluginUtils.getVersion(plugin)
 
         if (isLocal){
             println "IADT   ${configName} '${externalConfigValue}' SKIPPED (isLocalDev)"

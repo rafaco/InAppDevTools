@@ -20,7 +20,7 @@
 package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
-import es.rafaco.inappdevtools.config.ConfigUtils
+import es.rafaco.inappdevtools.utils.FileExporter
 import es.rafaco.inappdevtools.utils.DependencyUtils
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
@@ -52,7 +52,7 @@ class DetectReactNativeTask extends IadtBaseTask {
 
     private void saveConfiguration(Project project, Map config) {
         File configFile = InAppDevToolsPlugin.getOutputFile(project, 'react_config.json')
-        ConfigUtils configUtils = new ConfigUtils(project)
+        FileExporter configUtils = new FileExporter(project)
         configUtils.writeMap(configFile, config)
     }
 

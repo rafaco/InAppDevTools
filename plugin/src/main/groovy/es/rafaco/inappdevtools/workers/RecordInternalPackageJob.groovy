@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.workers
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 
@@ -31,7 +32,7 @@ class RecordInternalPackageJob extends Job {
     }
 
     def 'do'(){
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT   record internal package."
         }
         //TODO: Incremental issue: check if already set before perform to avoid updating modified date

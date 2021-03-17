@@ -19,7 +19,8 @@
 
 package es.rafaco.inappdevtools.tasks
 
-import es.rafaco.inappdevtools.config.ConfigUtils
+import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.utils.FileExporter
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import org.gradle.api.tasks.TaskAction
@@ -32,7 +33,7 @@ import java.util.regex.Pattern
 class BuildInfoTask extends IadtBaseTask {
 
     ProjectUtils projectUtils
-    ConfigUtils configUtils
+    FileExporter configExporter
 
     BuildInfoTask() {
         this.description = "Generate config files (build_config, build_info, git_config,...)"
@@ -42,7 +43,7 @@ class BuildInfoTask extends IadtBaseTask {
     void perform() {
         def configStartTime = Instant.now()
         projectUtils = new ProjectUtils(project)
-        configUtils = new ConfigUtils(project)
+        configExporter = new FileExporter(project)
 
         generateCompileConfig()
         generateBuildInfo()
@@ -56,8 +57,10 @@ class BuildInfoTask extends IadtBaseTask {
     }
 
     private void generateCompileConfig() {
+        ConfigHelper configHelper= new ConfigHelper(project)
+        Map allConfigurations = configHelper.extractResolutionMap()
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        configUtils.writeMap(file, extension.toMap())
+        configExporter.writeMap(file, allConfigurations)
     }
 
     private void generateBuildInfo() {
@@ -79,55 +82,55 @@ class BuildInfoTask extends IadtBaseTask {
         ]
 
         File file = projectUtils.getFile("${outputPath}/build_info.json")
-        configUtils.writeMap(file, propertiesMap)
+        configExporter.writeMap(file, propertiesMap)
     }
 
     private void generatePluginsList() {
         def plugins = ""
         project.rootProject.buildscript.configurations.classpath.each { plugins += it.name + "\n" }
         File pluginsFile = new File("${outputPath}/gradle_plugins.txt")
-        configUtils.writeString(pluginsFile, plugins)
+        configExporter.writeString(pluginsFile, plugins)
     }
 
     private void generateGitInfo() {
-        def canShellGit = configUtils.canShell("git --version")
+        def canShellGit = configExporter.canShell("git --version")
         if (!canShellGit){
             println "DISABLED GIT INFO: Unable to reach git command, check your PATH!"
             generateEmptyGitInfo()
             return
         }
 
-        def isGitFolder = configUtils.shell('git rev-parse --is-inside-git-dir')
+        def isGitFolder = configExporter.shell('git rev-parse --is-inside-git-dir')
         if (!isGitFolder){
             println "DISABLED GIT INFO: Project folder is not in a Git repository. Run 'git init' to initialise."
             generateEmptyGitInfo()
             return
         }
 
-        def gitPath = configUtils.shell('git rev-parse --show-toplevel')
+        def gitPath = configExporter.shell('git rev-parse --show-toplevel')
         //def localBranch = configUtils.shell("git name-rev --name-only HEAD")
-        def localBranch = configUtils.shell("git rev-parse --abbrev-ref HEAD")
-        def remoteName = configUtils.shell('git config --get branch.' + localBranch + '.remote')
-        def remoteUrl = configUtils.shell('git config remote.' + remoteName + '.url')
+        def localBranch = configExporter.shell("git rev-parse --abbrev-ref HEAD")
+        def remoteName = configExporter.shell('git config --get branch.' + localBranch + '.remote')
+        def remoteUrl = configExporter.shell('git config remote.' + remoteName + '.url')
         def remoteBranchFull = remoteName + '/' + localBranch //TODO: trackingBranch
-        def remoteHeadFull = configUtils.shell('git rev-parse --abbrev-ref ' + remoteName + '/HEAD')
+        def remoteHeadFull = configExporter.shell('git rev-parse --abbrev-ref ' + remoteName + '/HEAD')
 
         //def tag = configUtils.shell('git describe --tags --abbrev=0')
-        def tagDescription = configUtils.shell('git describe --tags --always --dirty')
+        def tagDescription = configExporter.shell('git describe --tags --always --dirty')
         Matcher tagDescriptionMatcher = getTagMatcher(tagDescription)
         def tagParser = new TagParser(tagDescription);
 
-        def remoteBranchDistance = configUtils.shell('git rev-list --count ' + remoteBranchFull + '..HEAD')
-        def localBranchCount = configUtils.shell('git rev-list --count HEAD')
-        def localBranchLog = configUtils.shell('git log ' + localBranch +' -' + remoteBranchDistance)
+        def remoteBranchDistance = configExporter.shell('git rev-list --count ' + remoteBranchFull + '..HEAD')
+        def localBranchCount = configExporter.shell('git rev-list --count HEAD')
+        def localBranchLog = configExporter.shell('git log ' + localBranch +' -' + remoteBranchDistance)
 
-        def localBranchGraph = configUtils.shell('git log --graph --oneline ' + remoteBranchFull + '..HEAD')
-        def remoteBranchGraph = configUtils.shell('git log --graph --oneline ' + remoteHeadFull + '..' + remoteBranchFull)
-        def localChangesDiff = configUtils.shell('git diff HEAD')
-        def localChangesTxt = configUtils.shell('git status --short')
-        def localCommitsDiff = configUtils.shell('git log ' + remoteBranchFull + '..HEAD -p')
-        def localUntracked = configUtils.shell('git ls-files -o --exclude-standard')
-        def localCommits = configUtils.shell('git cherry -v')
+        def localBranchGraph = configExporter.shell('git log --graph --oneline ' + remoteBranchFull + '..HEAD')
+        def remoteBranchGraph = configExporter.shell('git log --graph --oneline ' + remoteHeadFull + '..' + remoteBranchFull)
+        def localChangesDiff = configExporter.shell('git diff HEAD')
+        def localChangesTxt = configExporter.shell('git status --short')
+        def localCommitsDiff = configExporter.shell('git log ' + remoteBranchFull + '..HEAD -p')
+        def localUntracked = configExporter.shell('git ls-files -o --exclude-standard')
+        def localCommits = configExporter.shell('git cherry -v')
 
         def localTotalCount = countLines(localChangesTxt)
         def localUntrackedCount = countLines(localUntracked)
@@ -138,23 +141,23 @@ class BuildInfoTask extends IadtBaseTask {
         Map propertiesMap = [
                 ENABLED         : true,
 
-                VERSION         : configUtils.shell('git --version').minus("git version "),
+                VERSION         : configExporter.shell('git --version').minus("git version "),
                 PATH            : gitPath,
-                USER_NAME       : configUtils.shell('git config user.name'),
-                USER_EMAIL      : configUtils.shell('git config user.email'),
+                USER_NAME       : configExporter.shell('git config user.name'),
+                USER_EMAIL      : configExporter.shell('git config user.email'),
 
                 HAS_REMOTE     : !remoteName.isEmpty(),
                 REMOTE_NAME     : remoteName,
                 REMOTE_URL      : remoteUrl,
                 REMOTE_HEAD     : remoteHeadFull,
-                REMOTE_HEAD_COUNT      : configUtils.shell('git rev-list --count ' + remoteName),
-                REMOTE_HEAD_DISTANCE     : configUtils.shell('git rev-list --count ' + remoteName + '..HEAD'),
+                REMOTE_HEAD_COUNT      : configExporter.shell('git rev-list --count ' + remoteName),
+                REMOTE_HEAD_DISTANCE     : configExporter.shell('git rev-list --count ' + remoteName + '..HEAD'),
                 REMOTE_BRANCH   : remoteBranchFull,
-                REMOTE_BRANCH_COUNT    : configUtils.shell('git rev-list --count ' + remoteBranchFull),
+                REMOTE_BRANCH_COUNT    : configExporter.shell('git rev-list --count ' + remoteBranchFull),
                 REMOTE_BRANCH_DISTANCE   : remoteBranchDistance,
                 REMOTE_BRANCH_GRAPH   : remoteBranchGraph,
                 REMOTE_LAST_FETCH_TIME      : fetchFile.lastModified(),
-                REMOTE_LAST_COMMIT     : configUtils.shell('git log ' + remoteBranchFull +' -1'),
+                REMOTE_LAST_COMMIT     : configExporter.shell('git log ' + remoteBranchFull +' -1'),
 
                 HAS_TAG     : !tagParser.getName().isEmpty(),
                 TAG_DESCRIPTION : tagDescription,
@@ -174,41 +177,41 @@ class BuildInfoTask extends IadtBaseTask {
                 LOCAL_UNTRACKED : localUntracked,
                 LOCAL_TRACKED_COUNT : localTrackedCount,
                 LOCAL_TOTAL_COUNT :  localTotalCount,
-                LOCAL_UNSTAGED_STATS :  configUtils.shell('git diff --shortstat'),
-                LOCAL_STAGED_STATS :  configUtils.shell('git diff --shortstat --cached'),
-                LOCAL_TRACKED_STATS :  configUtils.shell('git diff --shortstat HEAD'),
+                LOCAL_UNSTAGED_STATS :  configExporter.shell('git diff --shortstat'),
+                LOCAL_STAGED_STATS :  configExporter.shell('git diff --shortstat --cached'),
+                LOCAL_TRACKED_STATS :  configExporter.shell('git diff --shortstat HEAD'),
 
-                FIRST_COMMIT_TIME      : configUtils.shell('git log --reverse --format=%cd || head -1'),
-                LAST_COMMIT_TIME      : configUtils.shell('git log -1 --format=%cd'),
+                FIRST_COMMIT_TIME      : configExporter.shell('git log --reverse --format=%cd || head -1'),
+                LAST_COMMIT_TIME      : configExporter.shell('git log -1 --format=%cd'),
         ]
 
         File file = projectUtils.getFile("${outputPath}/git_info.json")
-        configUtils.writeMap(file, propertiesMap)
+        configExporter.writeMap(file, propertiesMap)
 
-        def localCommitsLong = configUtils.shell('git log -p' + remoteBranchFull + '..HEAD')
+        def localCommitsLong = configExporter.shell('git log -p' + remoteBranchFull + '..HEAD')
         File commitsFile = new File("${outputPath}/local_commits.txt")
-        configUtils.writeString(commitsFile, localCommitsLong)
+        configExporter.writeString(commitsFile, localCommitsLong)
 
         File remoteBranchGraphFile = new File("${outputPath}/git_remote_branch.txt")
-        configUtils.writeString(remoteBranchGraphFile, remoteBranchGraph)
+        configExporter.writeString(remoteBranchGraphFile, remoteBranchGraph)
 
         File localBranchGraphFile = new File("${outputPath}/git_local_branch.txt")
-        configUtils.writeString(localBranchGraphFile, localBranchGraph)
+        configExporter.writeString(localBranchGraphFile, localBranchGraph)
 
         File localCommitsDiffFile = new File("${outputPath}/git_local_branch.diff")
-        configUtils.writeString(localCommitsDiffFile, localCommitsDiff)
+        configExporter.writeString(localCommitsDiffFile, localCommitsDiff)
 
         File localChangesTxtFile = new File("${outputPath}/git_local_changes.txt")
-        configUtils.writeString(localChangesTxtFile, localChangesTxt)
+        configExporter.writeString(localChangesTxtFile, localChangesTxt)
 
         File localChangesDiffFile = new File("${outputPath}/git_local_changes.diff")
-        configUtils.writeString(localChangesDiffFile, localChangesDiff)
+        configExporter.writeString(localChangesDiffFile, localChangesDiff)
     }
 
     private void generateEmptyGitInfo() {
         Map propertiesMap = [ ENABLED : false ]
         File file = projectUtils.getFile("${outputPath}/git_info.json")
-        configUtils.writeMap(file, propertiesMap)
+        configExporter.writeMap(file, propertiesMap)
 
         new File("${outputPath}/local_commits.txt").delete()
         new File("${outputPath}/git_local_changes.diff").delete()

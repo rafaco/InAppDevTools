@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.workers
 
 import es.rafaco.inappdevtools.InAppDevToolsPlugin
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import org.gradle.api.Project
 
 // Add JitPack repository for transitive dependencies
@@ -30,7 +31,7 @@ class AddRepositoriesJob extends Job {
     }
 
     def 'do'(){
-        if (configHelper.isDebug()) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT add repositories:"
             println "IADT   maven { url \"https://jitpack.io\"}"
         }
