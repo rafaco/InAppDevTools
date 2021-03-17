@@ -19,6 +19,8 @@
 
 package es.rafaco.inappdevtools.tasks
 
+import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.utils.FileExporter
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.tasks.TaskAction
@@ -34,10 +36,12 @@ class EmptyBuildInfoTask extends IadtBaseTask {
         Map propertiesMap = [ enabled : false ]
 
         ProjectUtils projectUtils = new ProjectUtils(project)
-        FileExporter configUtils = new FileExporter(project)
+        FileExporter fileExporter = new FileExporter(project)
         File file = projectUtils.getFile("${outputPath}/build_config.json")
-        configUtils.writeMap(file, propertiesMap)
+        fileExporter.writeMap(file, propertiesMap)
 
-        if (isDebug()) println "   Generated empty build_config for Iadt disabled"
+        boolean isDebug = new ConfigHelper(project).get(IadtConfigFields.DEBUG)
+        if (isDebug)
+            println "   Generated empty build_config for Iadt disabled"
     }
 }

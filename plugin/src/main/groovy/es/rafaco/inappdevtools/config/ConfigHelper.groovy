@@ -107,7 +107,7 @@ class ConfigHelper {
         Map resolutionSources = [:]
         for (String fieldClassName : allConfigFields) {
             def field = IadtConfigFields."$fieldClassName"
-            if (has(IadtConfigFields."$field")){
+            if (has(field)){
                 resolvedValues.put(field, get(field))
                 resolutionSources.put(field, getName(field))
             }

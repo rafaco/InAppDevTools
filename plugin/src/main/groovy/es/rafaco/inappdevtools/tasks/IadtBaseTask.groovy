@@ -38,8 +38,4 @@ class IadtBaseTask extends DefaultTask{
         file.parentFile.mkdirs()
         file
     }
-
-    protected boolean isDebug() {
-        return extension.debug
-    }
 }

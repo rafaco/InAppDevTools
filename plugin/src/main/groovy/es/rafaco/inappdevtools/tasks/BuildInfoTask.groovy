@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.tasks
 
 import es.rafaco.inappdevtools.config.ConfigHelper
+import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.utils.FileExporter
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
@@ -50,7 +51,8 @@ class BuildInfoTask extends IadtBaseTask {
         generateGitInfo()
         generatePluginsList()
 
-        if (isDebug()) {
+        boolean isDebug = new ConfigHelper(project).get(IadtConfigFields.DEBUG)
+        if (isDebug) {
             def duration = Duration.between(configStartTime, Instant.now()).toSeconds()
             println "   BuildInfoTask took " + duration + " secs for ${project.name}"
         }
