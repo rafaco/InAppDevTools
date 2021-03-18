@@ -257,11 +257,14 @@ public final class IadtController {
         return overlayHelper;
     }
 
-    public boolean isEnabled() {
+    public static boolean isEnabled() {
+        if (INSTANCE==null){
+            return false;
+        }
         boolean isEnabledForSdk = Build.VERSION.SDK_INT >= IadtLauncher.MIN_SDK_INT;
         if (!isEnabledForSdk)
             return false;
-        return getConfig().getBoolean(BuildConfigField.ENABLED);
+        return INSTANCE.getConfig().getBoolean(BuildConfigField.ENABLED);
     }
 
     public boolean isDebug() {

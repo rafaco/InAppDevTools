@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools.library.logic.events;
 
+import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.logic.external.CustomToast;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.logic.utils.DateUtils;
@@ -113,6 +114,9 @@ public class IadtEventBuilder {
     }
 
     public void fire(){
+        if (!IadtController.isEnabled())
+            return;
+
         final Friendly log = new Friendly();
         log.setDate(date);
         log.setSeverity(severity);
