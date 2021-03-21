@@ -17,36 +17,41 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.config
+package es.rafaco.inappdevtools.config.parser
 
-class EnvironmentConfigReader implements IConfigReader {
+import es.rafaco.inappdevtools.config.IadtConfigFields
+import org.gradle.api.Project
+import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
 
-    static final String NAME = 'Environment'
-    static final String PREFIX = 'IADT_'
+class DefaultConfigReader implements IConfigReader {
 
-    EnvironmentConfigReader() {
+    static final String NAME = 'Default'
+
+    DefaultConfigReader(Project project) {
     }
 
     boolean has(String field){
-        return System.getenv().containsKey(getKey(field))
+        return true
+    }
+
+    boolean hasValidValue(String field){
+        // Should be always valid, but we ensure it exists in the default values list
+        if (IadtConfigFields.getDefault(field) == null){
+            Log.error("IADT: Ignored an invalid config value in ${getName()}. '$field' not found) ")
+            return false
+        }
+        return true
     }
 
     Object get(String field) {
-        if (!has(field))
-            return null
-        return System.getenv()[getKey(field)]
+        return IadtConfigFields.getDefault(field)
     }
 
     String getName() {
         return NAME
     }
 
-
     String getKey(String field){
-        return (PREFIX + toSnakeCase(field)).toUpperCase()
-    }
-
-    String toSnakeCase(String text) {
-        text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
+        return field
     }
 }

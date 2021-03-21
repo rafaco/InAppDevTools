@@ -17,36 +17,12 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.config
+package es.rafaco.inappdevtools.config.parser
 
-import org.gradle.api.Project
-
-class GradlePropertiesConfigReader implements IConfigReader {
-
-    static final String NAME = 'Gradle properties'
-    static final String PREFIX = 'iadt.'
-
-    Project project
-
-    GradlePropertiesConfigReader(Project project) {
-        this.project = project.rootProject
-    }
-
-    boolean has(String field){
-        return project.properties.containsKey(getKey(field))
-    }
-
-    Object get(String field) {
-        if (!has(field))
-            return null
-        return project.properties[getKey(field)]
-    }
-
-    String getName() {
-        return NAME
-    }
-
-    String getKey(String field){
-        return PREFIX + field
-    }
+interface IConfigReader{
+    boolean has(String field)
+    boolean hasValidValue(String field)
+    Object get(String field)
+    String getName()
+    String getKey(String field)
 }

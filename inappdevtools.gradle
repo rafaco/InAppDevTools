@@ -1,6 +1,6 @@
 inappdevtools {
     //// Build flags (affect plugin behaviour)
-    enabled = false
+    enabled = true
     exclude = ["release"]
     useNoop = true
     debug = true

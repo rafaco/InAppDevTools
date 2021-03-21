@@ -29,6 +29,8 @@ public enum BuildConfigField {
 
     // Build flags (affect plugin behaviour)
     ENABLED("enabled", R.string.config_enabled, boolean.class, false),
+    EXCLUDE("useNoop", R.string.config_exclude, String[].class, new String[0]),
+    USE_NOOP("useNoop", R.string.config_use_noop, boolean.class, false),
     DEBUG("debug", R.string.config_debug, boolean.class, false),
 
     // Build feature switches (affect plugin behaviour)
@@ -45,7 +47,7 @@ public enum BuildConfigField {
     CALL_DEFAULT_CRASH_HANDLER("callDefaultCrashHandler", R.string.config_call_default_crash_handler, boolean.class, false),
     INJECT_EVENTS_ON_LOGCAT("injectEventsOnLogcat", R.string.config_inject_events_on_logcat, boolean.class, true),
 
-    // Customization flags (runtime)
+    // Runtime customizations
     NOTES("notes", R.string.config_notes, String.class, ""),
     TEAM_NAME("teamName", R.string.config_team_name, String.class, ""),
     TEAM_EMAIL("teamEmail", R.string.config_team_email, String.class, ""),

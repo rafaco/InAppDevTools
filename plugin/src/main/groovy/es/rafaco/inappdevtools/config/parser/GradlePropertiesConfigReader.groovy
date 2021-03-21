@@ -17,33 +17,24 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.config
+package es.rafaco.inappdevtools.config.parser
 
 import org.gradle.api.Project
 
-class LocalPropertiesConfigReader implements IConfigReader {
+class GradlePropertiesConfigReader extends StringConfigReader {
 
-    static final String NAME = 'local.properties'
+    static final String NAME = 'Gradle properties'
     static final String PREFIX = 'iadt.'
 
-    Properties localProperties
+    Project project
 
-    LocalPropertiesConfigReader(Project project) {
-        def propertiesFile = project.rootProject.file('local.properties')
-        if (propertiesFile.exists()) {
-            localProperties = new Properties()
-            localProperties.load(propertiesFile.newDataInputStream())
-        }
+    GradlePropertiesConfigReader(Project project) {
+        super(project)
+        data = project.properties
     }
 
     boolean has(String field){
-        return localProperties && localProperties.containsKey(getKey(field))
-    }
-
-    Object get(String field) {
-        if (!has(field))
-            return null
-        return localProperties[getKey(field)]
+        return data.containsKey(getKey(field))
     }
 
     String getName() {

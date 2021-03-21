@@ -17,30 +17,18 @@
  * limitations under the License.
  */
 
-package es.rafaco.inappdevtools.config
+package es.rafaco.inappdevtools.config.parser
 
-import es.rafaco.inappdevtools.InAppDevToolsExtension
-import es.rafaco.inappdevtools.InAppDevToolsPlugin
 import org.gradle.api.Project
 
-class ExtensionConfigReader implements IConfigReader {
+class EnvironmentConfigReader extends StringConfigReader {
 
-    static final String NAME = 'Extension'
+    static final String NAME = 'Environment'
+    static final String PREFIX = 'IADT_'
 
-    InAppDevToolsExtension extension
-
-    ExtensionConfigReader(Project project) {
-        this.extension = project.rootProject.extensions.getByName(InAppDevToolsPlugin.TAG)
-    }
-
-    boolean has(String field){
-        return extension && extension.hasProperty(getKey(field))
-    }
-
-    Object get(String field) {
-        if (!has(field))
-            return null
-        return extension[getKey(field)]
+    EnvironmentConfigReader(Project project) {
+        super(project)
+        data = System.getenv()
     }
 
     String getName() {
@@ -48,6 +36,10 @@ class ExtensionConfigReader implements IConfigReader {
     }
 
     String getKey(String field){
-        return field
+        return (PREFIX + toSnakeCase(field)).toUpperCase()
+    }
+
+    String toSnakeCase(String text) {
+        text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
     }
 }

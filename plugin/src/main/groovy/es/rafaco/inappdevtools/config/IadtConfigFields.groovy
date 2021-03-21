@@ -47,4 +47,65 @@ class IadtConfigFields {
     static final String INVOCATION_BY_ICON = 'invocationByIcon'
     static final String CALL_DEFAULT_CRASH_HANDLER = 'callDefaultCrashHandler'
     static final String INJECT_EVENTS_ON_LOGCAT = 'injectEventsOnLogcat'
+
+    static getType(String field) {
+        switch (field) {
+            case ENABLED:
+            case USE_NOOP:
+            case DEBUG:
+            case SOURCE_INCLUSION:
+            case SOURCE_INSPECTION:
+            case NETWORK_INTERCEPTOR:
+            case VIEW_INSPECTION:
+            case STORAGE_INSPECTION:
+            case OVERLAY_ENABLED:
+            case INVOCATION_BY_SHAKE:
+            case INVOCATION_BY_ICON:
+            case CALL_DEFAULT_CRASH_HANDLER:
+            case INJECT_EVENTS_ON_LOGCAT:
+                return Boolean
+            case NOTES:
+            case TEAM_NAME:
+            case TEAM_EMAIL:
+            case TEAM_DESC:
+                return String
+            case EXCLUDE:
+                return Class.forName("[Ljava.lang.String;")
+            case TEAM_LINKS:
+                return Map
+            default:
+                return null
+        }
+    }
+
+    static getDefault(String field) {
+        switch (field) {
+            case ENABLED:
+            case USE_NOOP:
+            case DEBUG:
+                return false
+            case EXCLUDE:
+                return [ 'release' ]
+            case SOURCE_INCLUSION:
+            case SOURCE_INSPECTION:
+            case NETWORK_INTERCEPTOR:
+            case VIEW_INSPECTION:
+            case STORAGE_INSPECTION:
+            case OVERLAY_ENABLED:
+            case INVOCATION_BY_SHAKE:
+            case INVOCATION_BY_ICON:
+            case CALL_DEFAULT_CRASH_HANDLER:
+            case INJECT_EVENTS_ON_LOGCAT:
+                return true
+            case NOTES:
+            case TEAM_NAME:
+            case TEAM_EMAIL:
+            case TEAM_DESC:
+                return ''
+            case TEAM_LINKS:
+                return [:]
+            default:
+                return null
+        }
+    }
 }

@@ -19,6 +19,7 @@
 
 package es.rafaco.inappdevtools
 
+import es.rafaco.inappdevtools.config.parser.ConfigParser
 import es.rafaco.inappdevtools.config.IadtConfigFields
 import es.rafaco.inappdevtools.config.ConfigHelper
 import es.rafaco.inappdevtools.workers.AddPluginsJob
@@ -27,6 +28,7 @@ import es.rafaco.inappdevtools.workers.AddTasksJob
 import es.rafaco.inappdevtools.workers.AddDependenciesJob
 import es.rafaco.inappdevtools.utils.AndroidPluginUtils
 import es.rafaco.inappdevtools.workers.RecordInternalPackageJob
+import groovy.json.JsonOutput
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -62,12 +64,12 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
             @Override
             void execute(Project project2) {
+                //println "IADT Apply after evaluate for $project"
+
                 configHelper = new ConfigHelper(project)
 
-                //println "IADT Apply after evaluate for $project"
-                //TODO: Filter modules from configuration
-
                 if (projectUtils.isRoot()){
+                    new ConfigParser(configHelper)
                     afterEvaluateRoot(project)
                 }
                 else if (projectUtils.isAndroidApplication()) {
@@ -106,14 +108,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             println "IADT   Gradle $gradleVersion"
             println "IADT   Android Gradle Plugin $androidPluginVersion"
             println "IADT   Start task " + project.getGradle().getStartParameter().taskRequests[0].getArgs()[0]
-            println "IADT Configuration:"
+            println "IADT Configurations affecting build:"
             println "IADT   enabled: " + configHelper.get(IadtConfigFields.ENABLED)
             println "IADT   exclude: " + configHelper.get(IadtConfigFields.EXCLUDE)
             println "IADT   useNoop: " + configHelper.get(IadtConfigFields.USE_NOOP)
             println "IADT   debug: " + configHelper.get(IadtConfigFields.DEBUG)
-            //TODO: remove or ad more
-            println "IADT   teamName: " + configHelper.get(IadtConfigFields.TEAM_NAME)
-            configHelper.printResolution('enabled')
+            println("IADT Configurations all: ")
+            println(JsonOutput.prettyPrint(JsonOutput.toJson(configHelper.getAll())))
         }
     }
 
@@ -122,7 +123,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         String opMode = projectUtils.useAndroidX() ? "ANDROIDX artifact" : "SUPPORT artifact"
         String noopMode = configHelper.get(IadtConfigFields.USE_NOOP) ? "NOOP artifact" : "Nothing"
         if (configHelper.get(IadtConfigFields.ENABLED)) {
-            if (configHelper.hasExcludeWithValues()) {
+            if (configHelper.get(IadtConfigFields.EXCLUDE).length>0) {
                 println "IADT   ENABLED for ${configHelper.calculateInclude()} builds --> $opMode"
                 println "IADT   DISABLED for ${configHelper.get(IadtConfigFields.EXCLUDE)} builds --> $noopMode"
             }

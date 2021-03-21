@@ -60,7 +60,7 @@ class BuildInfoTask extends IadtBaseTask {
 
     private void generateCompileConfig() {
         ConfigHelper configHelper= new ConfigHelper(project)
-        Map allConfigurations = configHelper.extractResolutionMap()
+        Map allConfigurations = configHelper.getAll()
         File file = projectUtils.getFile("${outputPath}/build_config.json")
         configExporter.writeMap(file, allConfigurations)
     }

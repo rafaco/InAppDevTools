@@ -21,104 +21,38 @@ package es.rafaco.inappdevtools.config
 
 import es.rafaco.inappdevtools.utils.ProjectUtils
 import org.gradle.api.Project
+import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
 
 class ConfigHelper {
 
     Project project
-    def readers
 
     ConfigHelper(Project project) {
         this.project = project
-        initReaders()
     }
 
-    /**
-     * TODO: Define priorities and document it
-     * https://tomgregory.com/gradle-project-properties-best-practices/
-     *
-     *  0. Runtime configuration provide thought our UI
-     *  1. local.properties file in root folder: myPropName1=myPropValue1
-     *  2. Gradle properties:
-     *      1. Command line properties: ./gradlew <task-name> -PmyPropName1=myPropValue1
-     *      2. Java system properties: ./gradlew <task-name> -Dorg.gradle.project.myPropName1=myPropValue1
-     *      3. Env variables: ORG_GRADLE_PROJECT_myPropName1=myPropValue1
-     *      4. User home gradle.properties: myPropName1=myPropValue1
-     *      5. Project root gradle.properties: myPropName1=myPropValue1
-     *  3. InAppDevTools extension in root project: inappdevtools { myPropName1=myPropValue1 }
-     */
-    private void initReaders(){
-        readers = []
-        // Following order is important as it set the priority
-        readers += new EnvironmentConfigReader()            // Highest priority
-        readers += new GradlePropertiesConfigReader(project)
-        readers += new LocalPropertiesConfigReader(project)
-        readers += new ExtensionConfigReader(project)       // Lowest priority
-    }
-
-    boolean has(String key){
-        for (def reader : readers){
-            if (reader.has(key))
-                return true
-        }
-        return false
+    void save(Map resolvedConfig) {
+        project.rootProject.ext.iadt_resolved_config = resolvedConfig
+        /*project.subprojects.each {
+            project.ext.iadt_resolved_config = resolvedConfig
+        }*/
     }
 
     Object get(String key) {
-        for (def reader : readers){
-            if (reader.has(key))
-                return reader.get(key)
+        if (project.rootProject.ext.iadt_resolved_config == null){
+            Log.error("IADT resolved configuration don't exists. Ensure to use it after evaluate")
+            return
         }
-        return null
+        project.rootProject.ext.iadt_resolved_config[key]
     }
 
-    String getName(String field) {
-        for (def reader : readers){
-            if (reader.has(field)){
-                return reader.getName()
-            }
-        }
-        return null
-    }
-
-    String getKey(String field) {
-        for (def reader : readers){
-            if (reader.has(field)){
-                return reader.getKey()
-            }
-        }
-        return null
-    }
-
-    void printResolution(String field) {
-        println "IADT Configuration resolution info for '$field':"
-        readers.each {
-            println "IADT   ${it.getName()}: '${it.getKey(field)}' is " +
-                    (it.has(field) ? "'${it.get(field)}'" : "not set")
-        }
-        println "IADT      Resolved value is '${get(field)}' (${getName(field)})"
-    }
-
-    Map extractResolutionMap(){
-        def allConfigFields = []
-        IadtConfigFields.declaredFields.findAll {!it.synthetic}.each {
-            allConfigFields.add(it.name)
-        }
-        Map resolvedValues = [:]
-        Map resolutionSources = [:]
-        for (String fieldClassName : allConfigFields) {
-            def field = IadtConfigFields."$fieldClassName"
-            if (has(field)){
-                resolvedValues.put(field, get(field))
-                resolutionSources.put(field, getName(field))
-            }
-        }
-        resolvedValues.put("resolutions", resolutionSources)
-        return resolvedValues
+    Map getAll() {
+        project.rootProject.ext.iadt_resolved_config
     }
 
     //region [ COMPUTED PROPERTIES ]
 
-    //TODO: is this really necessary?
+    //TODO: DELETE AFTER PARSING CORRECTLY from Config Parser
     // If so, add to standard has() or generalize to hasArrayWithValues()
     boolean hasExcludeWithValues(){
         if (has(IadtConfigFields.EXCLUDE) &&

@@ -170,7 +170,7 @@ public class IadtLauncher extends ContentProvider {
                 return iadtSharedPrefs.getBoolean(enableKey, false);
             }
             else if (iadtBuildConfig.contains(enableKey)){
-                extra = "gradle extension";
+                extra = "build configuration";
                 return iadtBuildConfig.getBoolean(enableKey);
             }
             else{

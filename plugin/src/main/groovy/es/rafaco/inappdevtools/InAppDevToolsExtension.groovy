@@ -21,29 +21,30 @@ package es.rafaco.inappdevtools
 
 class InAppDevToolsExtension {
 
-    // Build flags (affect plugin)
-    Boolean enabled = true
-    Boolean useNoop = false
-    String[] exclude = ["release"]
-    Boolean debug = false
+    // Build flags (affect plugin behaviour)
+    Boolean enabled
+    String[] exclude
+    Boolean useNoop
+    Boolean debug
 
-    //User features fags
-    String notes
-    String teamName
-    String teamEmail
-    String teamDesc
-    Map teamLinks
-
+    // Build feature switches (affect plugin behaviour)
     Boolean sourceInclusion
     Boolean sourceInspection
     Boolean networkInterceptor
+
+    // Runtime feature switches
     Boolean viewInspection
     Boolean storageInspection
-
-    // Runtime flags (used later on)
     Boolean overlayEnabled
     Boolean invocationByShake
     Boolean invocationByIcon
     Boolean callDefaultCrashHandler
     Boolean injectEventsOnLogcat
+
+    // Runtime customizations
+    String notes
+    String teamName
+    String teamEmail
+    String teamDesc
+    Map teamLinks
 }

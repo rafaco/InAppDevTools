@@ -86,7 +86,7 @@ class AddTasksJob extends Job {
         boolean isDisabledByExclude = false
         boolean isEnabledByInclude = false
 
-        if (configHelper.has(IadtConfigFields.EXCLUDE)) {
+        if (configHelper.get(IadtConfigFields.EXCLUDE).length > 0) {
             configHelper.get(IadtConfigFields.EXCLUDE).each { exclusion ->
                 if (buildVariant.toLowerCase().contains(exclusion))
                     isDisabledByExclude = true
