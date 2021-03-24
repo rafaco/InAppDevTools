@@ -20,9 +20,11 @@
 package es.rafaco.inappdevtools.library.logic.documents.generators.info;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 //#ifdef ANDROIDX
@@ -31,8 +33,10 @@ import android.view.WindowManager;
 import android.support.annotation.NonNull;
 //#endif
 
+import java.util.Arrays;
 import java.util.List;
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.logic.documents.generators.AbstractDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.documents.DocumentType;
@@ -93,7 +97,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
 
     public String getFirstLineOverview() {
         return (configHelper.isRunningOnEmulator() ? "Emulated " : "Real ")
-                + getDeviceType();
+                + getDeviceType(context);
     }
 
     public String getSecondLineOverview() {
@@ -116,7 +120,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
         return new DocumentSectionData.Builder("Model")
                     .setIcon(R.string.gmd_phone_android)
                     .setOverview(Build.MODEL)
-                    .add("Form factor", getDeviceType())
+                    .add("Form factor", getDeviceType(context))
                     .add("Brand", Build.BRAND)
                     .add("Model", Build.MODEL)
                     .add("isEmulator", configHelper.isRunningOnEmulator())
@@ -131,6 +135,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
                     .add("Screen", displayHelper.getResolution()
                             + " @ " + String.valueOf((int)displayHelper.getRefreshRate() + " fps"))
                     .add("Screen Density", getDensity())
+                    .add("Is big screen", isBigScreen(context))
                     .add("Internal",  Humanizer.parseByte(memoryHelper.getAvailableInternalMemorySize())
                            + "/" + Humanizer.parseByte(memoryHelper.getTotalInternalMemorySize()))
                     .add("External", Humanizer.parseByte(memoryHelper.getAvailableExternalMemorySize())
@@ -205,7 +210,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
         return helperDensity;
     }
 
-    private String getDeviceType() {
+    public static String getDeviceType(Context context) {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -226,6 +231,21 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
         }
     }
 
+    public static boolean isBigScreen(Context context) {
+        boolean device_large = ((context.getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                Configuration.SCREENLAYOUT_SIZE_LARGE);
+        if (device_large) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            WindowManager windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+            if (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getFormattedDevice() {
         return String.format("%s %s %s", Humanizer.toCapitalCase(Build.BRAND), Build.MODEL, "");
     }
@@ -234,7 +254,7 @@ public class DeviceInfoDocumentGenerator extends AbstractDocumentGenerator {
     public String getFormattedDeviceLong() {
         return String.format("%s %s with Android %s",
                 configHelper.isRunningOnEmulator() ? "Emulated" : Humanizer.toCapitalCase(Build.BRAND),
-                configHelper.isRunningOnEmulator() ? getDeviceType() : Build.MODEL,
+                configHelper.isRunningOnEmulator() ? getDeviceType(context) : Build.MODEL,
                 Build.VERSION.RELEASE);
     }
 

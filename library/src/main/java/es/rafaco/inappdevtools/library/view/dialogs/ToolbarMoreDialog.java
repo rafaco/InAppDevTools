@@ -20,6 +20,7 @@
 package es.rafaco.inappdevtools.library.view.dialogs;
 
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -36,6 +37,7 @@ import java.util.List;
 
 import es.rafaco.inappdevtools.library.IadtController;
 import es.rafaco.inappdevtools.library.R;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.components.FlexAdapter;
 import es.rafaco.inappdevtools.library.view.components.base.FlexData;
@@ -71,12 +73,177 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
         builder.setView(dialogView);
 
         List<Object> data = new ArrayList<>();
+        addPositionButtons(data);
+        addShortcutButtons(data);
+        addAboutButtons(data);
 
+        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
+        recyclerView.setAdapter(presetAdapter);
+    }
+
+    private void addPositionButtons(List<Object> data) {
+        HeaderFlexData visualizationHeader = new HeaderFlexData("UI position");
+        visualizationHeader.setBold(false);
+        visualizationHeader.setSize(TextFlexData.Size.LARGE);
+        data.add(visualizationHeader);
+
+        Boolean isBigScreen = DeviceInfoDocumentGenerator.isBigScreen(context);
+        Boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        if (isBigScreen) addPositionFirstLine(data);
+        addPositionMiddleLine(data, isBigScreen, isLandscape);
+        if (isBigScreen) addPositionLastLine(data);
+    }
+
+    private void addPositionFirstLine(List<Object> data) {
+        LinearGroupFlexData visualizationButtons1 = new LinearGroupFlexData();
+        visualizationButtons1.setHorizontal(true);
+        visualizationButtons1.setHorizontalMargin(true);
+        visualizationButtons1.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
+        visualizationButtons1.add(new ButtonFlexData("TOP LEFT",
+                R.drawable.ic_arrow_north_west_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.QUARTER_1);
+                        destroy();
+                    }
+                }));
+        visualizationButtons1.add(new ButtonFlexData("Top",
+                R.drawable.ic_arrow_up_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.HALF_TOP);
+                        destroy();
+                    }
+                }));
+        visualizationButtons1.add(new ButtonFlexData("TOP RIGHT",
+                R.drawable.ic_arrow_north_east_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.QUARTER_2);
+                        destroy();
+                    }
+                }));
+        data.add(visualizationButtons1);
+    }
+
+    private void addPositionMiddleLine(List<Object> data, Boolean isBigScreen, Boolean isLandscape) {
+        LinearGroupFlexData visualizationButtons2 = new LinearGroupFlexData();
+        visualizationButtons2.setHorizontal(true);
+        visualizationButtons2.setHorizontalMargin(true);
+        visualizationButtons2.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
+
+        String firstHalfLabel;
+        String secondHalfLabel;
+        int firstHalfIcon;
+        int secondHalfIcon;
+        final ScreenLayer.SizePosition firstPosition;
+        final ScreenLayer.SizePosition secondPosition;
+
+        // TODO: listen for screen rotation and update values
+        if (isBigScreen || isLandscape){
+            // Standard middle line
+            firstHalfLabel = "Left";
+            secondHalfLabel = "Right";
+            firstHalfIcon = R.drawable.ic_arrow_left_white_24dp;
+            secondHalfIcon = R.drawable.ic_arrow_right_white_24dp;
+            firstPosition = ScreenLayer.SizePosition.HALF_LEFT;
+            secondPosition = ScreenLayer.SizePosition.HALF_RIGHT;
+        }
+        else{
+            // Landscape phones middle line
+            firstHalfLabel = "Top";
+            secondHalfLabel = "Bottom";
+            firstHalfIcon = R.drawable.ic_arrow_up_white_24dp;
+            secondHalfIcon = R.drawable.ic_arrow_down_white_24dp;
+            firstPosition = ScreenLayer.SizePosition.HALF_TOP;
+            secondPosition = ScreenLayer.SizePosition.HALF_BOTTOM;
+        }
+
+        visualizationButtons2.add(new ButtonFlexData(firstHalfLabel,
+                firstHalfIcon,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(firstPosition);
+                        destroy();
+                    }
+                }));
+        visualizationButtons2.add(new ButtonFlexData("Full",
+                R.drawable.ic_unfold_more_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.FULL);
+                        destroy();
+                    }
+                }));
+        visualizationButtons2.add(new ButtonFlexData(secondHalfLabel,
+                secondHalfIcon,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(secondPosition);
+                        destroy();
+                    }
+                }));
+        data.add(visualizationButtons2);
+    }
+
+    private void addPositionLastLine(List<Object> data) {
+        LinearGroupFlexData visualizationButtons3 = new LinearGroupFlexData();
+        visualizationButtons3.setHorizontal(true);
+        visualizationButtons3.setHorizontalMargin(true);
+        visualizationButtons3.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
+        visualizationButtons3.add(new ButtonFlexData("BOTTOM LEFT",
+                R.drawable.ic_arrow_south_west_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.QUARTER_3);
+                        destroy();
+                    }
+                }));
+        visualizationButtons3.add(new ButtonFlexData("Bottom",
+                R.drawable.ic_arrow_down_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.HALF_BOTTOM);
+                        destroy();
+                    }
+                }));
+        visualizationButtons3.add(new ButtonFlexData("BOTTOM RIGHT",
+                R.drawable.ic_arrow_south_east_white_24dp,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        IadtController.get().getOverlayHelper()
+                                .toggleScreenLayout(ScreenLayer.SizePosition.QUARTER_4);
+                        destroy();
+                    }
+                }));
+        data.add(visualizationButtons3);
+    }
+
+    private void addShortcutButtons(List<Object> data) {
         HeaderFlexData screenHeader = new HeaderFlexData("Report shortcuts");
         screenHeader.setBold(false);
         screenHeader.setSize(TextFlexData.Size.LARGE);
         data.add(screenHeader);
-        
+
         LinearGroupFlexData screenButtons = new LinearGroupFlexData();
         screenButtons.setHorizontal(true);
         screenButtons.setHorizontalMargin(true);
@@ -109,45 +276,9 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                     }
                 }));
         data.add(screenButtons);
+    }
 
-        HeaderFlexData visualizationHeader = new HeaderFlexData("Overlay position");
-        visualizationHeader.setBold(false);
-        visualizationHeader.setSize(TextFlexData.Size.LARGE);
-        data.add(visualizationHeader);
-
-        LinearGroupFlexData visualizationButtons = new LinearGroupFlexData();
-        visualizationButtons.setHorizontal(true);
-        visualizationButtons.setHorizontalMargin(true);
-        visualizationButtons.setChildLayout(FlexData.LayoutType.SAME_WIDTH);
-        visualizationButtons.add(new ButtonFlexData("Top",
-                R.drawable.ic_arrow_up_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().getOverlayHelper()
-                                .toggleScreenLayout(ScreenLayer.SizePosition.HALF_FIRST);
-                    }
-                }));
-        visualizationButtons.add(new ButtonFlexData("Full",
-                R.drawable.ic_unfold_more_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().getOverlayHelper()
-                                .toggleScreenLayout(ScreenLayer.SizePosition.FULL);
-                    }
-                }));
-        visualizationButtons.add(new ButtonFlexData("Bottom",
-                R.drawable.ic_arrow_down_white_24dp,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        IadtController.get().getOverlayHelper()
-                                .toggleScreenLayout(ScreenLayer.SizePosition.HALF_SECOND);
-                    }
-                }));
-        data.add(visualizationButtons);
-
+    private void addAboutButtons(List<Object> data) {
         HeaderFlexData iadtHeader = new HeaderFlexData("About this library...");
         iadtHeader.setBold(false);
         iadtHeader.setSize(TextFlexData.Size.LARGE);
@@ -185,12 +316,8 @@ public class ToolbarMoreDialog extends IadtDialogBuilder {
                     }
                 }));
         data.add(iadtOptions);
-
-        FlexAdapter presetAdapter = new FlexAdapter(FlexAdapter.Layout.GRID, 3, data);
-        RecyclerView recyclerView = dialogView.findViewById(R.id.flexible);
-        recyclerView.setAdapter(presetAdapter);
     }
-  
+
     public void onDisable() {
     }
 }

@@ -20,10 +20,13 @@
 package es.rafaco.inappdevtools.library.view.overlay.layers;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,8 +47,10 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 //#endif
 
+import es.rafaco.inappdevtools.library.Iadt;
 import es.rafaco.inappdevtools.library.R;
 import es.rafaco.inappdevtools.library.IadtController;
+import es.rafaco.inappdevtools.library.logic.documents.generators.info.DeviceInfoDocumentGenerator;
 import es.rafaco.inappdevtools.library.logic.utils.ExternalIntentUtils;
 import es.rafaco.inappdevtools.library.view.dialogs.ForceCrashDialog;
 import es.rafaco.inappdevtools.library.view.dialogs.ToolbarMoreDialog;
@@ -54,6 +59,10 @@ import es.rafaco.inappdevtools.library.view.overlay.screens.home.ConfigScreen;
 import es.rafaco.inappdevtools.library.view.utils.UiUtils;
 import es.rafaco.inappdevtools.library.view.overlay.LayerManager;
 
+import static android.content.Context.WINDOW_SERVICE;
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 public class ScreenLayer extends Layer {
 
     private NestedScrollView bodyScroll;
@@ -61,6 +70,10 @@ public class ScreenLayer extends Layer {
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private LinearLayout fullContainer;
+
+    public enum SizePosition { FULL, HALF_TOP, HALF_BOTTOM, HALF_LEFT, HALF_RIGHT, QUARTER_1, QUARTER_2, QUARTER_3, QUARTER_4 }
+    private int currentOrientation;
+    private SizePosition currentSizePosition;
 
     public ScreenLayer(LayerManager manager) {
         super(manager);
@@ -85,6 +98,8 @@ public class ScreenLayer extends Layer {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.CENTER;
+
+        initSizePosition(params);
 
         return params;
     }
@@ -269,30 +284,89 @@ public class ScreenLayer extends Layer {
 
     //region [ TOGGLE SIZE POSITION ]
 
-    public enum SizePosition { FULL, HALF_FIRST, HALF_SECOND}
-    private SizePosition currentSizePosition = SizePosition.FULL;
+    private void initSizePosition(WindowManager.LayoutParams params) {
+        currentOrientation = manager.getContext().getResources().getConfiguration().orientation;
+        if (!DeviceInfoDocumentGenerator.isBigScreen(manager.getContext())){
+            currentSizePosition = SizePosition.FULL;
+        }
+        else{
+            boolean isPortrait = currentOrientation == ORIENTATION_PORTRAIT;
+            if (isPortrait) {
+                currentSizePosition = SizePosition.HALF_BOTTOM;
+                params.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                params.gravity = Gravity.BOTTOM;
+            }
+            else{
+                currentSizePosition = SizePosition.HALF_RIGHT;
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.width = UiUtils.getDisplaySize(manager.getContext()).x / 2;
+                params.gravity = Gravity.RIGHT | Gravity.TOP;
+            }
+        }
+    }
 
     public void toggleSizePosition(SizePosition newPosition) {
         WindowManager.LayoutParams viewLayoutParams = (WindowManager.LayoutParams) view.getLayoutParams();
         LinearLayout child = view.findViewById(R.id.main_container);
         FrameLayout.LayoutParams childLayoutParams = (FrameLayout.LayoutParams) child.getLayoutParams();
 
-        if (newPosition.equals(SizePosition.HALF_FIRST)) {
-            int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
-            viewLayoutParams.height = halfHeight;
-            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
-            childLayoutParams.gravity = Gravity.TOP;
-        }
-        else if (newPosition.equals(SizePosition.HALF_SECOND)) {
-            int halfHeight = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
-            viewLayoutParams.height = halfHeight;
-            viewLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
-            childLayoutParams.gravity = Gravity.BOTTOM;
-        }
-        else {
-            viewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
-            childLayoutParams.gravity = Gravity.TOP;
+        switch (newPosition){
+            case FULL:
+                viewLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                viewLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                viewLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case HALF_TOP:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                viewLayoutParams.gravity = Gravity.TOP;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case HALF_BOTTOM:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                viewLayoutParams.gravity = Gravity.BOTTOM;
+                childLayoutParams.gravity = Gravity.BOTTOM;
+                break;
+            case HALF_LEFT:
+                viewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.LEFT;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case HALF_RIGHT:
+                viewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.RIGHT;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case QUARTER_1:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case QUARTER_2:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
+                childLayoutParams.gravity = Gravity.TOP;
+                break;
+            case QUARTER_3:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
+                childLayoutParams.gravity = Gravity.BOTTOM;
+                break;
+            case QUARTER_4:
+                viewLayoutParams.height = UiUtils.getDisplaySize(this.view.getContext()).y / 2;
+                viewLayoutParams.width = UiUtils.getDisplaySize(this.view.getContext()).x / 2;
+                viewLayoutParams.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+                childLayoutParams.gravity = Gravity.BOTTOM;
+                break;
+
         }
         currentSizePosition = newPosition;
         child.setLayoutParams(childLayoutParams);
@@ -303,7 +377,40 @@ public class ScreenLayer extends Layer {
 
     @Override
     public void onConfigurationChange(Configuration newConfig) {
-        //TODO: adapt half to landscape
-        // if half: top is left and bottom is right
+        if (currentSizePosition.equals(SizePosition.FULL))
+            return;
+        
+        int newOrientation = newConfig.orientation;
+        if (newOrientation == currentOrientation)
+            return;
+
+        // On orientation change
+        currentOrientation = newOrientation;
+
+        // For small devices, swap half columns to rows
+        if (!DeviceInfoDocumentGenerator.isBigScreen(manager.getContext())) {
+            if (currentOrientation == ORIENTATION_PORTRAIT){
+                switch (currentSizePosition){
+                    case HALF_LEFT:
+                        currentSizePosition = SizePosition.HALF_TOP;
+                        break;
+                    case HALF_RIGHT:
+                        currentSizePosition = SizePosition.HALF_BOTTOM;
+                        break;
+                }
+            }else{
+                switch (currentSizePosition){
+                    case HALF_TOP:
+                        currentSizePosition = SizePosition.HALF_LEFT;
+                        break;
+                    case HALF_BOTTOM:
+                        currentSizePosition = SizePosition.HALF_RIGHT;
+                        break;
+                }
+            }
+
+        }
+        // Update all with new width and height
+        toggleSizePosition(currentSizePosition);
     }
 }

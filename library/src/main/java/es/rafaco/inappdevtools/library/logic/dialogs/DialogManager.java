@@ -36,6 +36,7 @@ import es.rafaco.inappdevtools.library.logic.events.EventManager;
 import es.rafaco.inappdevtools.library.logic.log.FriendlyLog;
 import es.rafaco.inappdevtools.library.view.activities.PermissionActivity;
 import es.rafaco.inappdevtools.library.view.dialogs.IadtDialogBuilder;
+import es.rafaco.inappdevtools.library.view.dialogs.ToolbarMoreDialog;
 import es.rafaco.inappdevtools.library.view.overlay.layers.Layer;
 
 /**
@@ -53,6 +54,7 @@ public class DialogManager {
     String currentActivityHash;
 
     private Boolean isOverlayMode;
+    private EventManager.Listener orientationChangeListener;
     private EventManager.Listener activityOpenListener;
     private EventManager.Listener activityStopListener;
     private EventManager.Listener onForegroundListener;
@@ -202,6 +204,12 @@ public class DialogManager {
         }
     }
 
+    private void onOrientationChanged(Event event) {
+        if (isLoaded() && builder instanceof ToolbarMoreDialog){
+            load(builder);
+        }
+    }
+
     //endregion
 
     //region [ LISTENERS ]
@@ -220,6 +228,10 @@ public class DialogManager {
             unregisterNonOverlayListener();
         }
         isOverlayMode = getOverlayMode();
+
+        if (orientationChangeListener==null){
+            registerOrientationListeners();
+        }
     }
 
     private Boolean getOverlayMode(){
@@ -285,6 +297,17 @@ public class DialogManager {
             getEventManager().unsubscribe(Event.FOREGROUND_CHANGE_EXIT, onBackgroundListener);
             onBackgroundListener = null;
         }
+    }
+
+    public void registerOrientationListeners() {
+        orientationChangeListener = new EventManager.Listener() {
+            @Override
+            public void onEvent(Event event, Object param) {
+                onOrientationChanged(event);
+            }
+        };
+        getEventManager().subscribe(Event.ORIENTATION_LANDSCAPE, orientationChangeListener);
+        getEventManager().subscribe(Event.ORIENTATION_PORTRAIT, orientationChangeListener);
     }
 
     //endregion
