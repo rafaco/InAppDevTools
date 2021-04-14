@@ -145,26 +145,24 @@ public final class IadtController {
     }
 
     public void initFullIfPending(){
-        Log.d(Iadt.TAG, "RAFA: initFullIfPending");
+        if (isDebug()) Log.d(Iadt.TAG, "initFullIfPending");
         if (isPendingInitFull){
             if (shouldDelayInitFull()){
-                Log.d(Iadt.TAG, "RAFA: shouldDelayInitFull");
+                if (isDebug()) Log.d(Iadt.TAG, "shouldDelayInitFull");
                 return;
             }
             else{
-                Log.d(Iadt.TAG, "RAFA: isPendingInitFull");
                 initFull();
             }
         }
         else if (getConfig().getBoolean(BuildConfigField.OVERLAY_ENABLED)
                 && PermissionActivity.check(PermissionActivity.IntentAction.OVERLAY)
                 && !OverlayService.isRunning()){
-            Log.d(Iadt.TAG, "RAFA: Restarting OverlayHelper");
             if (isDebug()) Log.d(Iadt.TAG, "Restarting OverlayHelper");
             overlayHelper = new OverlayHelper(getContext());
         }
         else {
-            Log.d(Iadt.TAG, "RAFA: nothing");
+            if (isDebug()) Log.d(Iadt.TAG, "initFullIfPending skipped");
         }
     }
 
