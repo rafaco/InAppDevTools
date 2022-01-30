@@ -71,6 +71,9 @@ android {
 
 
 repositories {
+    maven {
+        url uri("../3party-repository")
+    }
     maven { url "https://jitpack.io"}
 }
 
@@ -118,12 +121,13 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
-    // Timeline
-    androidxApi 'com.github.alorma:timelineview:3.0.0-RC1'
-    supportApi 'com.github.alorma:timelineview:2.3.0'
+    // TimelineView from local copy (discontinued from github)
+    androidxApi files('../3party-repository/com/github/alorma/timelineview/3.0.0-RC1/timelineview-3.0.0-RC1.aar')
+    androidxApi "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
+    supportApi files('../3party-repository/com/github/alorma/timelineview/2.3.0/timelineview-2.3.0.aar')
 
     // Others
-    api 'com.jraska:falcon:2.1.1'
+    api 'com.jraska:falcon:2.2.0'
 
     api 'com.github.anrwatchdog:anrwatchdog:1.3.0'
     api "com.github.nisrulz:easydeviceinfo-base:2.4.1"

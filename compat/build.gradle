@@ -46,8 +46,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     // AndroidX flavor
     androidxApi "com.google.android.material:material:$ANDROIDX_MATERIAL_VERSION"
     androidxApi "androidx.appcompat:appcompat:$ANDROIDX_MAIN_VERSION"

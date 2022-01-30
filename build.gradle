@@ -2,7 +2,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     apply from: './gradle/constants.gradle'
@@ -51,9 +51,8 @@ apply from: 'inappdevtools.gradle'
 allprojects {
     repositories {
         mavenLocal()
-        //maven { url "https://jitpack.io"}
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
