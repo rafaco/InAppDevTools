@@ -28,6 +28,7 @@ android {
             processor.symbols "SUPPORT"
             matchingFallbacks = ['debug', 'release']
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            getIsDefault().set(true)
         }
         androidx {
             dimension "compatibility"

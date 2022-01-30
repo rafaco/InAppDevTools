@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/compat/compat.iml" filepath="$PROJECT_DIR$/compat/compat.iml" group="inappdevtools/compat" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" group="inappdevtools/demo" />
-      <module fileurl="file://$PROJECT_DIR$/inappdevtools.iml" filepath="$PROJECT_DIR$/inappdevtools.iml" group="inappdevtools" />
-      <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" group="inappdevtools-plugin" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" group="inappdevtools/library" />
-      <module fileurl="file://$PROJECT_DIR$/noop/noop.iml" filepath="$PROJECT_DIR$/noop/noop.iml" group="inappdevtools/noop" />
-      <module fileurl="file://$PROJECT_DIR$/website/website.iml" filepath="$PROJECT_DIR$/website/website.iml" group="inappdevtools/website" />
+      <module fileurl="file://$PROJECT_DIR$/inappdevtools.iml" filepath="$PROJECT_DIR$/inappdevtools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compat/inappdevtools.compat.iml" filepath="$PROJECT_DIR$/.idea/modules/compat/inappdevtools.compat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo/inappdevtools.demo.iml" filepath="$PROJECT_DIR$/.idea/modules/demo/inappdevtools.demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/inappdevtools.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/inappdevtools.library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/noop/inappdevtools.noop.iml" filepath="$PROJECT_DIR$/.idea/modules/noop/inappdevtools.noop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/website/inappdevtools.website.iml" filepath="$PROJECT_DIR$/.idea/modules/website/inappdevtools.website.iml" />
     </modules>
   </component>
 </project>

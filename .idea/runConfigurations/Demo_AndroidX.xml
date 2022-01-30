@@ -51,7 +51,6 @@
     <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
     <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
     <method v="2">
-      <option name="Android.Gradle.BeforeRunTask" enabled="true" goal="" />
       <option name="Gradle.BeforeRunTask" enabled="false" tasks="installAndroidxDebug" externalProjectPath="$PROJECT_DIR$/demo" vmOptions="" scriptParameters="-Pandroid.useAndroidX=true" />
     </method>
   </configuration>
