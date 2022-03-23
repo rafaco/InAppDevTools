@@ -19,9 +19,14 @@ if (VersionNumber.parse(gradle.gradleVersion) > VersionNumber.parse('4.6') &&
 includeBuild ('plugin')
 gradle.ext.iadtIsLocalDev = true
 
-//Include other modules as sources
+//Include iadt modules as sources
 include ':noop'
 include ':compat'
 include ':library'
 include ':demo'
 include ':website'
+
+//Include 3rd party aars as module
+// TODO: Replace TimelineView library (removed from github and repositories)
+include ':3party-modules:timelineview-androidx'
+include ':3party-modules:timelineview-support'

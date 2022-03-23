@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/inappdevtools.iml" filepath="$PROJECT_DIR$/inappdevtools.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" filepath="$PROJECT_DIR$/plugin/inappdevtools-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/3party-modules/inappdevtools.3party-modules.iml" filepath="$PROJECT_DIR$/.idea/modules/3party-modules/inappdevtools.3party-modules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/3party-modules/timelineview-androidx/inappdevtools.3party-modules.timelineview-androidx.iml" filepath="$PROJECT_DIR$/.idea/modules/3party-modules/timelineview-androidx/inappdevtools.3party-modules.timelineview-androidx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/3party-modules/timelineview-support/inappdevtools.3party-modules.timelineview-support.iml" filepath="$PROJECT_DIR$/.idea/modules/3party-modules/timelineview-support/inappdevtools.3party-modules.timelineview-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compat/inappdevtools.compat.iml" filepath="$PROJECT_DIR$/.idea/modules/compat/inappdevtools.compat.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo/inappdevtools.demo.iml" filepath="$PROJECT_DIR$/.idea/modules/demo/inappdevtools.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/inappdevtools.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/inappdevtools.library.iml" />
