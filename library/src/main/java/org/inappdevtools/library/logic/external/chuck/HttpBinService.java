@@ -6,7 +6,7 @@
  * Apache License, Version 2.0 at https://github.com/jgilfelt/chuck
  *
  *
- * Copyright 2018-2020 Rafael Acosta Alvarez
+ * Copyright 2018-2022 Rafael Acosta Alvarez
  * Copyright (C) 2017 Jeff Gilfelt.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
