@@ -29,7 +29,7 @@
         android:orientation="horizontal"
         style="@style/content_margin">
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/info_nav_previous"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:text="Previous"
             android:drawableLeft="@drawable/ic_arrow_left_white_24dp"/>
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/info_nav_index"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:text="Index"
             android:drawableLeft="@drawable/ic_format_list_bulleted_white_24dp"/>
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/info_nav_next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
 
     </LinearLayout>
 
-    <es.rafaco.compat.RecyclerView
+    <org.inappdevtools.compat.RecyclerView
         android:id="@+id/flexible_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

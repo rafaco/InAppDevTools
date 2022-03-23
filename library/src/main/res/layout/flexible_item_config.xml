@@ -48,7 +48,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"/>
 
-        <es.rafaco.compat.AppCompatTextView
+        <org.inappdevtools.compat.AppCompatTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:textColor="@color/rally_white"
             style="@style/TextCondensed.Large"/>
 
-        <es.rafaco.compat.AppCompatTextView
+        <org.inappdevtools.compat.AppCompatTextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
             android:layout_below="@id/title"
             style="@style/TextCondensed.Small"/>
 
-        <es.rafaco.compat.AppCompatTextView
+        <org.inappdevtools.compat.AppCompatTextView
             android:id="@+id/text_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

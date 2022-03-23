@@ -2,7 +2,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
 ext {
-    //groupId = 'es.rafaco.inappdevtools'     // GroupId - WIP, relocated to importer module
+    //groupId = 'org.inappdevtools'         // GroupId - WIP, relocated to importer module
     //artifactId = 'inappdevtools'          // ArtifactId: Renamed into flavor
     //libraryVersion = 'X.X.XX'             // Version: Relocated to root script
 

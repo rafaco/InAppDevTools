@@ -19,7 +19,7 @@
   ~ limitations under the License.
   -->
 
-<es.rafaco.compat.CardView
+<org.inappdevtools.compat.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
@@ -35,4 +35,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
 
-</es.rafaco.compat.CardView>
+</org.inappdevtools.compat.CardView>

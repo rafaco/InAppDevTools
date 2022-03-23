@@ -1,7 +1,7 @@
 ext {
-    groupId = 'es.rafaco.compat'
+    groupId = 'org.inappdevtools.compat'
     bintrayRepo = "Compat"
-    bintrayRepoDesc = "Android library to switch usage of AndroidX/Support libraries without duplicating source code. Currently tightly coupled with project es.rafaco.inappdevtools, but it could become a flexible adapter in the future."
+    bintrayRepoDesc = "Android library to switch usage of AndroidX/Support libraries without duplicating source code. Currently tightly coupled with project org.inappdevtools, but it could become a flexible adapter in the future."
     vcsUrl = 'https://github.com/rafaco/InAppDevTools/tree/master/compat'
 
     bintrayDynamicPkg = true
@@ -10,11 +10,11 @@ ext {
     if (isAndroidX){
         bintrayPkg = "androidx"
         projectName = 'Compat-AndroidX'
-        projectDesc = 'AndroidX flavor of es.rafaco.compat'
+        projectDesc = 'AndroidX flavor of org.inappdevtools.compat'
     }else{
         bintrayPkg = "support"
         projectName = 'Compat-Support'
-        projectDesc = 'Support flavor of es.rafaco.compat'
+        projectDesc = 'Support flavor of org.inappdevtools.compat'
     }
 }
 

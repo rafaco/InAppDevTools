@@ -2,7 +2,7 @@ ext{
     /*
      METADATA FOR PUBLICATIONS
      */
-    PROJECT_ARTIFACT_GROUP = 'es.rafaco.inappdevtools'
+    PROJECT_ARTIFACT_GROUP = 'org.inappdevtools'
     PROJECT_NAME = 'InAppDevTools'
     PROJECT_URL = 'https://github.com/rafaco/InAppDevTools'
     PROJECT_TAGS = ['android', 'library', 'devtools', 'debug', 'inspect', 'report']
@@ -38,10 +38,10 @@ ext{
     /*
      PROJECT VERSIONS
      */
-    PROJECT_VERSION = '1.0.0'
-    PROJECT_VERSION_CODE = 1
-    DEMO_VERSION = '0.0.01'
-    DEMO_VERSION_CODE = 45
+    PROJECT_VERSION = '0.0.90'
+    PROJECT_VERSION_CODE = 90
+    DEMO_VERSION = '0.0.90'
+    DEMO_VERSION_CODE = 90
 
     /*
      DEPENDENCIES VERSIONS

@@ -18,7 +18,7 @@
   ~ limitations under the License.
   -->
 
-<es.rafaco.compat.RecyclerView
+<org.inappdevtools.compat.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/group_container"
     android:layout_width="match_parent"

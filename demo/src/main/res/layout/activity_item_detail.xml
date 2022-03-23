@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<es.rafaco.compat.CoordinatorLayout
+<org.inappdevtools.compat.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.ItemDetailActivity"
+    tools:context="org.inappdevtools.demo.view.ItemDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <es.rafaco.compat.AppBarLayout
+    <org.inappdevtools.compat.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <es.rafaco.compat.CollapsingToolbarLayout
+        <org.inappdevtools.compat.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,24 +25,24 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <es.rafaco.compat.ToolBar
+            <org.inappdevtools.compat.ToolBar
                 android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        </es.rafaco.compat.CollapsingToolbarLayout>
+        </org.inappdevtools.compat.CollapsingToolbarLayout>
 
-    </es.rafaco.compat.AppBarLayout>
+    </org.inappdevtools.compat.AppBarLayout>
 
-    <es.rafaco.compat.NestedScrollView
+    <org.inappdevtools.compat.NestedScrollView
         android:id="@+id/item_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <es.rafaco.compat.FloatingActionButton
+    <org.inappdevtools.compat.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,4 +52,4 @@
         app:layout_anchorGravity="top|end"
         app:srcCompat="@android:drawable/stat_notify_chat" />
 
-</es.rafaco.compat.CoordinatorLayout>
+</org.inappdevtools.compat.CoordinatorLayout>

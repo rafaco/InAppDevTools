@@ -22,20 +22,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/label1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Severities"
         style="@style/content_margin"/>
 
-    <es.rafaco.compat.RecyclerView
+    <org.inappdevtools.compat.RecyclerView
         android:id="@+id/flexible1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"/>
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/label2"
         android:text="Event categories"
         android:layout_marginTop="10dp"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         style="@style/content_margin"/>
 
-    <es.rafaco.compat.RecyclerView
+    <org.inappdevtools.compat.RecyclerView
         android:id="@+id/flexible2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <es.rafaco.compat.RecyclerView
+    <org.inappdevtools.compat.RecyclerView
         android:id="@+id/flexible_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:visibility="gone"
         style="@style/content_margin"/>
 
-    <es.rafaco.compat.AppCompatButton
+    <org.inappdevtools.compat.AppCompatButton
         android:id="@+id/test_icon2"
         android:layout_width="match_parent"
         android:textSize="24dp"
@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/prev_trace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:text="Back"
             android:drawableTop="@drawable/ic_arrow_left_white_24dp"/>
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/next_trace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

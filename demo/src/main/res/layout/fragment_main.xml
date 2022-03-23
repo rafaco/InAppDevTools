@@ -70,7 +70,7 @@
 
     </LinearLayout>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:id="@+id/card_view_crash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,9 +117,9 @@
                 android:src="@drawable/ic_bug_report_white_24dp"
                 android:tint="@color/demo_white"/>
         </RelativeLayout>
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:id="@+id/card_view_messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -166,9 +166,9 @@
                 android:src="@drawable/ic_message_white_24dp"
                 android:tint="@color/demo_white"/>
         </RelativeLayout>
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:id="@+id/card_view_browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -215,9 +215,9 @@
                 android:src="@drawable/ic_run_white_24dp"
                 android:tint="@color/demo_white"/>
         </RelativeLayout>
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:id="@+id/card_view_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -264,6 +264,6 @@
                 android:src="@drawable/ic_help_outline_white_24dp"
                 android:tint="@color/demo_white"/>
         </RelativeLayout>
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
 </LinearLayout>

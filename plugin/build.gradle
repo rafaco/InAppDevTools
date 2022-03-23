@@ -27,7 +27,7 @@ gradlePlugin {
             id = PROJECT_ARTIFACT_GROUP
             displayName = PLUGIN_DISPLAY_NAME
             description = PLUGIN_DESCRIPTION
-            implementationClass = 'es.rafaco.inappdevtools.InAppDevToolsPlugin'
+            implementationClass = 'org.inappdevtools.plugin.InAppDevToolsPlugin'
         }
     }
 }
@@ -60,7 +60,7 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url  "https://dl.bintray.com/yanglssc/maven" }
+    maven { url uri("../3party-repository") }
 }
 
 uploadArchives {

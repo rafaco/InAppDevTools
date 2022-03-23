@@ -11,7 +11,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".view.ItemListActivity">
+    tools:context="org.inappdevtools.demo.view.ItemListActivity">
 
     <!--
     This layout is a two-pane layout for the Items
@@ -19,11 +19,11 @@
     
     -->
 
-    <es.rafaco.compat.RecyclerView 
+    <org.inappdevtools.compat.RecyclerView
 		xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/item_list"
-        android:name="es.rafaco.inappdevtools.ItemListFragment"
+        android:name="org.inappdevtools.ItemListFragment"
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"

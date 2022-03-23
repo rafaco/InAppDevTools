@@ -39,10 +39,10 @@ android{
 def compatVersion = "0.0.50"
 android.applicationVariants.all { variant ->
     if (variant.flavorName == 'androidx'){
-        dependencies.androidxApi "es.rafaco.compat:androidx:$compatVersion"
+        dependencies.androidxApi "org.inappdevtools:comnpat_androidx:$compatVersion"
     }
     else{
-        dependencies.supportApi "es.rafaco.compat:support:$compatVersion"
+        dependencies.supportApi "org.inappdevtools:comnpat_support:$compatVersion"
     }
 }
 
@@ -70,7 +70,7 @@ This is specially useful on imports as shown on the previous example. It can als
 
 ### 2. Conditional namespace in XML layouts
 
-Instead of duplicate your XML layouts, you can replace the namespace of standard view components to es.rafaco.compat. This will automatically apply the correct view component base on the build variant (support or androidx)
+Instead of duplicate your XML layouts, you can replace the namespace of standard view components to org.inappdevtools.compat. This will automatically apply the correct view component base on the build variant (support or androidx)
 
 ```xml
 <!-- Replace: 
@@ -78,7 +78,7 @@ Instead of duplicate your XML layouts, you can replace the namespace of standard
         .../> and
     <android.support.v7.widget.AppCompatButton  /> -->
 <!-- By: -->
-<es.rafaco.compat.AppCompatButton
+<org.inappdevtools.compat.AppCompatButton
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 ``` 

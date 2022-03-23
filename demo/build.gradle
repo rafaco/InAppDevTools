@@ -6,7 +6,7 @@ android {
     compileSdkVersion PROJECT_COMPILE_SDK
     buildToolsVersion PROJECT_BUILD_TOOLS
     defaultConfig {
-        applicationId "es.rafaco.inappdevtools.demo"
+        applicationId "org.inappdevtools.demo"
         minSdkVersion PROJECT_MIN_SDK
         targetSdkVersion PROJECT_TARGET_SDK
         versionCode DEMO_VERSION_CODE
@@ -80,7 +80,7 @@ sonarqube {
 }
 
 task startApp(type: Exec) {
-    def NAMESPACE_AND_ACTIVITY = 'es.rafaco.inappdevtools.demo/.view.MainActivity'
+    def NAMESPACE_AND_ACTIVITY = 'org.inappdevtools.demo/.view.MainActivity'
 
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'adb', 'shell', 'am', 'start', '-n', NAMESPACE_AND_ACTIVITY

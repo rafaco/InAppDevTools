@@ -57,7 +57,7 @@ package br.tiagohm;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.rafaco.inappdevtools.library.logic.sources.NodesHelper;
+import org.inappdevtools.library.logic.sources.NodesHelper;
 
 public enum Language {
 

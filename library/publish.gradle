@@ -10,11 +10,11 @@ ext {
     if (isAndroidX){
         bintrayPkg = "androidx"
         projectName = 'IADT-AndroidX'
-        projectDesc = 'AndroidX flavor of es.rafaco.inappdevtools'
+        projectDesc = 'AndroidX flavor of org.inappdevtools'
     }else{
         bintrayPkg = "support"
         projectName = 'IADT-Support'
-        projectDesc = 'Support flavor of es.rafaco.inappdevtools'
+        projectDesc = 'Support flavor of org.inappdevtools'
     }
 }
 

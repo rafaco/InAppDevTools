@@ -53,8 +53,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.view.utils.UiUtils;
+import org.inappdevtools.library.R;
+import org.inappdevtools.library.view.utils.UiUtils;
 
 /**
  * Material Design Toast class

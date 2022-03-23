@@ -47,7 +47,7 @@
             android:layout_marginRight="1dp"
             style="@style/elevated">
 
-            <es.rafaco.compat.ToolBar
+            <org.inappdevtools.compat.ToolBar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/iadt_toolbar_main_height"
@@ -64,7 +64,7 @@
                 app:contentInsetEnd="0dp"
                 android:backgroundTint="@android:color/transparent"/>
 
-            <es.rafaco.compat.ToolBar
+            <org.inappdevtools.compat.ToolBar
                 android:id="@+id/tool_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/iadt_toolbar_second_height"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content">
             </FrameLayout>
 
-            <es.rafaco.compat.NestedScrollView
+            <org.inappdevtools.compat.NestedScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -113,7 +113,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                 </FrameLayout>
-            </es.rafaco.compat.NestedScrollView>
+            </org.inappdevtools.compat.NestedScrollView>
 
             <FrameLayout
                 android:id="@+id/tool_body_container2"

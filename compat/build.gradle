@@ -14,6 +14,10 @@ android {
         versionName PROJECT_VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Fix AGP 4.1.0 (https://stackoverflow.com/questions/64333763/buildconfig-version-code-is-missing-after-update-to-com-android-tools-buildgra)
+        buildConfigField("int", "VERSION_CODE", "${PROJECT_VERSION_CODE}")
+        buildConfigField("String","VERSION_NAME","\"${PROJECT_VERSION}\"")
     }
 
     compileOptions {

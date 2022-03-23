@@ -72,8 +72,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import es.rafaco.inappdevtools.library.R;
-import es.rafaco.inappdevtools.library.logic.utils.HtmlUtils;
+import org.inappdevtools.library.R;
+import org.inappdevtools.library.logic.utils.HtmlUtils;
 
 public class CodeView extends WebView {
 

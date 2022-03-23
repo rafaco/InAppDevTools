@@ -31,7 +31,7 @@
     android:clickable="true"
     android:focusable="true">
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_marginRight="5dp"
         tools:text="X"/>
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
         style="@style/TextCondensed.Large"
         tools:text="Title"/>
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

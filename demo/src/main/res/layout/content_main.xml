@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:es.rafaco.devtools.tools="http://schemas.android.com/es.rafaco.devtools.tools"
     android:id="@+id/fragment"
-    android:name="es.rafaco.inappdevtools.demo.view.MainActivityFragment"
+    android:name="org.inappdevtools.demo.view.MainActivityFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"

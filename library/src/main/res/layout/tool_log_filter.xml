@@ -24,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Type: "
@@ -34,7 +34,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensed.Medium"/>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -72,10 +72,10 @@
 
         </RadioGroup>
 
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Session: "
@@ -85,7 +85,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensed.Medium"/>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -135,10 +135,10 @@
 
         </RadioGroup>
 
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Severity: "
@@ -148,7 +148,7 @@
         android:layout_marginRight="10dp"
         style="@style/TextCondensed.Medium"/>
 
-    <es.rafaco.compat.CardView
+    <org.inappdevtools.compat.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/content_margin"
@@ -199,7 +199,7 @@
 
         </RadioGroup>
 
-    </es.rafaco.compat.CardView>
+    </org.inappdevtools.compat.CardView>
 
 
     <LinearLayout
@@ -213,7 +213,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <es.rafaco.compat.AppCompatTextView
+            <org.inappdevtools.compat.AppCompatTextView
                 android:id="@+id/category_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <es.rafaco.compat.AppCompatTextView
+            <org.inappdevtools.compat.AppCompatTextView
                 android:id="@+id/logcat_tag_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
 
     </LinearLayout>
 
-    <es.rafaco.compat.AppCompatTextView
+    <org.inappdevtools.compat.AppCompatTextView
         android:id="@+id/current_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

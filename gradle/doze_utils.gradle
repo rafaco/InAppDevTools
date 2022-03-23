@@ -88,7 +88,7 @@ task dozeCheck(type: Exec) {
 
 task appStandbyEnter(type: Exec) {
     group = 'iadt_doze'
-    def command = 'adb shell am set-inactive es.rafaco.inappdevtools.demo true'
+    def command = 'adb shell am set-inactive org.inappdevtools.demo true'
 
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', command
@@ -99,7 +99,7 @@ task appStandbyEnter(type: Exec) {
 
 task appStandbyRestore(type: Exec) {
     group = 'iadt_doze'
-    def command = 'adb shell am set-inactive es.rafaco.inappdevtools.demo false'
+    def command = 'adb shell am set-inactive org.inappdevtools.demo false'
 
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', command
@@ -109,7 +109,7 @@ task appStandbyRestore(type: Exec) {
 }
 task appStandbyCheck(type: Exec) {
     group = 'iadt_doze'
-    def command = 'adb shell am get-inactive es.rafaco.inappdevtools.demo'
+    def command = 'adb shell am get-inactive org.inappdevtools.demo'
 
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', command

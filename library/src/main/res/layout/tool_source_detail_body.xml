@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/prev_trace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:text="Called by"
             android:drawableTop="@drawable/ic_arrow_left_white_24dp"/>
 
-        <es.rafaco.compat.AppCompatButton
+        <org.inappdevtools.compat.AppCompatButton
             android:id="@+id/next_trace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

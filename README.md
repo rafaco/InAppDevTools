@@ -24,13 +24,16 @@
       <img src="https://img.shields.io/badge/ShortLink-git.io%2FIADT-blueviolet.svg?style=flat&logo=github"/></a>
   <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
       <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>
-  <!-- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal">
-      <img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a> 
-  <a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub">
-      <img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a>-->
 </p>
 
+<!--- <a href="https://android-arsenal.com/details/1/887" alt="Android Arsenal"><img src="https://img.shields.io/badge/Android%20Arsenal-InAppDevTools-brightgreen.svg?style=flat"/></a><a href="https://www.openhub.net/p/InAppDevTools" alt="OpenHub"><img src="https://www.openhub.net/p/InAppDevTools/widgets/project_thin_badge.gif"/></a> --->
+
+
+
+
 **A library to enhance the internal compilations of any Android app, adding useful tools for their early stage users. They can get info on what they are testing, send comprehensive crash reports and deeply inspect their running app on the go. It also bring a customizable team panel and other helpful tools, all within your app.**
+
+
 
 <p align="center">
  <img src="https://github.com/rafaco/InAppDevTools/wiki/Lunatic/NonDevBanners/ScreenBanner1.gif" width="24%">
@@ -108,7 +111,7 @@ You only need to add a line in a Gradle file to include our plugin in your build
 buidscript {...}
 
 plugins {
-    id "es.rafaco.inappdevtools" version "0.0.58"
+    id "org.inappdevtools" version "1.0.0"
 }
 ```
 <details><summary align="center">Show details</summary><p>

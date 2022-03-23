@@ -7,7 +7,7 @@
         android:title="Search"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="es.rafaco.compat.SearchView"/>
+        app:actionViewClass="org.inappdevtools.compat.SearchView"/>
 
     <item
         android:id="@+id/action_session"
