@@ -130,10 +130,9 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     api "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
-    // TimelineView from local copy (discontinued from github)
-    androidxApi project(path: ":3party-modules:timelineview-androidx", configuration: "default")
-    androidxApi "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
-    supportApi project(path: ":3party-modules:timelineview-support", configuration: "default")
+    // TimelineView
+    androidxApi 'com.github.alorma:timelineview:3.0.0-RC1'
+    supportApi 'com.github.alorma:timelineview:2.3.0'
 
     // Others
     api 'com.jraska:falcon:2.2.0'

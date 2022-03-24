@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('timelineview-3.0.0-RC1.aar'))
