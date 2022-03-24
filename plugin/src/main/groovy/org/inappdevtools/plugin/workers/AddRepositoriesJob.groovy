@@ -19,10 +19,10 @@
 
 package org.inappdevtools.plugin.workers
 
-
+import java.net.URI;
 import org.gradle.api.Project
 
-// Add JitPack repository for transitive dependencies
+// Add repositories needed for transitive dependencies (google, mavencentral, jitpack and jcenter)
 class AddRepositoriesJob extends Job {
 
     AddRepositoriesJob(org.inappdevtools.plugin.InAppDevToolsPlugin plugin, Project project) {
@@ -32,10 +32,32 @@ class AddRepositoriesJob extends Job {
     def 'do'(){
         if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
             println "IADT add repositories:"
-            println "IADT   maven { url \"https://jitpack.io\"}"
         }
-        project.repositories {
-            maven { url "https://jitpack.io" }
+        safeAddMavenRepository("https://dl.google.com/dl/android/maven2/")
+        safeAddMavenRepository("https://repo.maven.apache.org/maven2/")
+        safeAddMavenRepository("https://jitpack.io")
+        safeAddMavenRepository("https://jcenter.bintray.com/")
+    }
+
+    private Boolean safeAddMavenRepository(String repoUrl) {
+        if (!repositoriesContainsUrl(repoUrl)){
+            project.repositories{
+                maven { url repoUrl }
+            }
+            if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+                println "IADT   maven { url \"" + repoUrl + "\"}"
+            }
         }
+    }
+
+    private Boolean repositoriesContainsUrl(String repoUrl) {
+        Boolean founded = false
+        URI uri = new URI(repoUrl);
+        project.repositories.each {
+            if (it.url == uri){
+                founded = true
+            }
+        }
+        return founded
     }
 }
