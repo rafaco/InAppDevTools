@@ -60,7 +60,7 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url uri("../3party-repository") }
+    jcenter()
 }
 
 uploadArchives {

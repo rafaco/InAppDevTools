@@ -80,9 +80,7 @@ android {
 
 
 repositories {
-    maven {
-        url uri("../3party-repository")
-    }
+    jcenter()
     maven { url "https://jitpack.io"}
 }
 

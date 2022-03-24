@@ -35,8 +35,8 @@ class AddRepositoriesJob extends Job {
         }
         safeAddMavenRepository("https://dl.google.com/dl/android/maven2/")
         safeAddMavenRepository("https://repo.maven.apache.org/maven2/")
-        safeAddMavenRepository("https://jitpack.io")
         safeAddMavenRepository("https://jcenter.bintray.com/")
+        safeAddMavenRepository("https://jitpack.io")
     }
 
     private Boolean safeAddMavenRepository(String repoUrl) {

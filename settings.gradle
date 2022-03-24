@@ -2,7 +2,6 @@
 pluginManagement {
     repositories {
         mavenLocal()
-        maven { url uri("/3party-repository") }
         gradlePluginPortal()
     }
 }
