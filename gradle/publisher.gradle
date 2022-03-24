@@ -134,8 +134,9 @@ publishing.publications {
 
                         //TODO: Remapping COMPAT, project dependency
                         def artifact = it.name
-                        if (it.group == 'es.rafaco.compat'){
-                            if (project.rootProject.properties['android.useAndroidX'] == 'true')
+                        if (it.group == 'org.inappdevtools.compat'){
+                            def isAndroidX = project.rootProject.properties['android.useAndroidX'] == 'true'
+                            if (isAndroidX)
                                 artifact = 'androidx'
                             else
                                 artifact = 'support'
