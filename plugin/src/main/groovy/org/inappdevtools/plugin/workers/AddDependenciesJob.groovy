@@ -34,7 +34,7 @@ class AddDependenciesJob extends Job {
         println "IADT add dependencies:"
 
         if (configHelper.get(IadtConfigFields.ENABLED)){
-            if (configHelper.get(IadtConfigFields.EXCLUDE).length>0){
+            if (configHelper.get(IadtConfigFields.EXCLUDE).size()>0){
                 String[] exclude = configHelper.get(IadtConfigFields.EXCLUDE)
                 String[] include = configHelper.calculateInclude()
                 include.each {

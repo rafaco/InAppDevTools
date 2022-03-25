@@ -121,9 +121,10 @@ class InAppDevToolsPlugin implements Plugin<Project> {
         String opMode = projectUtils.useAndroidX() ? "ANDROIDX artifact" : "SUPPORT artifact"
         String noopMode = configHelper.get(IadtConfigFields.USE_NOOP) ? "NOOP artifact" : "Nothing"
         if (configHelper.get(IadtConfigFields.ENABLED)) {
-            if (configHelper.get(IadtConfigFields.EXCLUDE).length>0) {
+            ArrayList<String> excludeConfig = configHelper.get(IadtConfigFields.EXCLUDE)
+            if (excludeConfig != null && excludeConfig.size>0) {
                 println "IADT   ENABLED for ${configHelper.calculateInclude()} builds --> $opMode"
-                println "IADT   DISABLED for ${configHelper.get(IadtConfigFields.EXCLUDE)} builds --> $noopMode"
+                println "IADT   DISABLED for ${excludeConfig} builds --> $noopMode"
             }
             else{
                 println "IADT   ENABLED for ALL builds --> $opMode"
