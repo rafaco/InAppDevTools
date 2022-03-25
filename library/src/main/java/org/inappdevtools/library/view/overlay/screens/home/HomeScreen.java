@@ -131,16 +131,18 @@ public class HomeScreen extends AbstractFlexibleScreen {
         OSInfoDocumentGenerator osHelper = ((OSInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.OS_INFO));
         ConfigManager configManager = IadtController.get().getConfig();
 
-        addTeam(data, configManager);
+        addTeam(data, configManager, appHelper);
+        addApp(data, appHelper, buildReporter);
+
+        addDevice(data, deviceHelper, osHelper);
         addHistory(data);
 
-        addApp(data, appHelper, buildReporter);
-        addDevice(data, deviceHelper, osHelper);
         addSources(data, repoReporter);
         addStorage(data);
 
         addView(data);
         addLogic(data);
+        
         addLog(data);
         addNetwork(data);
 
@@ -362,10 +364,12 @@ public class HomeScreen extends AbstractFlexibleScreen {
         data.add(historyBuilder.build());
     }
 
-    private void addTeam(List<Object> data, ConfigManager configManager) {
+    private void addTeam(List<Object> data, ConfigManager configManager, AppInfoDocumentGenerator appHelper) {
         String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
-        if (TextUtils.isEmpty(teamName))
-            teamName = "Undefined";
+        if (TextUtils.isEmpty(teamName)){
+            String alternativeTeamName = appHelper.getAlternativeTeamName();
+            teamName = alternativeTeamName + "'s team";
+        }
         WideWidgetData teamData = (WideWidgetData) new WideWidgetData.Builder("Team")
                 .setIcon(R.string.gmd_people)
                 .setMainContent(teamName)

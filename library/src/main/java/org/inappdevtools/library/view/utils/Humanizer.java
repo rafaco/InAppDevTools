@@ -116,18 +116,31 @@ public class Humanizer {
             return text;
         }
 
-        //Matcher matcher = Pattern.compile(separator, Pattern.LITERAL).matcher(text);
         String[] parts = text.split("[" + separator + "]");
         if (parts == null || parts.length == 0)
             return text;
 
-        //String lastPart = matcher.group(matcher.groupCount());
         String lastPart = parts[parts.length-1];
-        if (lastPart != null
-                && lastPart.length()>0)
+        if (lastPart != null && lastPart.length()>0)
             return lastPart;
 
         return text;
+    }
+
+    public static String getSecondPartOrNull(String text, String separator) {
+        if (TextUtils.isEmpty(text)) {
+            return null;
+        }
+
+        String[] parts = text.split("[" + separator + "]");
+        if (parts == null || parts.length < 2)
+            return null;
+
+        String secondPart = parts[1];
+        if (secondPart != null && secondPart.length()>0)
+            return secondPart;
+
+        return null;
     }
 
     //endregion

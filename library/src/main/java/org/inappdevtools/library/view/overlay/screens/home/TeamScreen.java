@@ -55,6 +55,7 @@ import org.inappdevtools.library.view.overlay.OverlayService;
 import org.inappdevtools.library.view.overlay.ScreenManager;
 import org.inappdevtools.library.view.overlay.layers.Layer;
 import org.inappdevtools.library.view.overlay.screens.AbstractFlexibleScreen;
+import org.inappdevtools.library.view.utils.Humanizer;
 
 public class TeamScreen extends AbstractFlexibleScreen {
 
@@ -84,8 +85,8 @@ public class TeamScreen extends AbstractFlexibleScreen {
         String teamName = configManager.getString(BuildConfigField.TEAM_NAME);
         if (TextUtils.isEmpty(teamName)){
             AppInfoDocumentGenerator appHelper = ((AppInfoDocumentGenerator) DocumentRepository.getGenerator(DocumentType.APP_INFO));
-            String appName = appHelper.getAppName();
-            teamName = appName + "'s team";
+            String alternativeTeamName = appHelper.getAlternativeTeamName();
+            teamName = alternativeTeamName + "'s team";
         }
 
         String teamDescription = configManager.getString(BuildConfigField.TEAM_DESC);

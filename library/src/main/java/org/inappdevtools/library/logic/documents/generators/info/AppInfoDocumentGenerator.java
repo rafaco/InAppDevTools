@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.text.TextUtils;
 
 //#ifdef ANDROIDX
 //@import androidx.annotation.NonNull;
@@ -281,5 +282,13 @@ public class AppInfoDocumentGenerator extends AbstractDocumentGenerator {
             }
         }
         return result;
+    }
+
+    public String getAlternativeTeamName(){
+        String secondPackageName = Humanizer.getSecondPartOrNull(getPackageName(), ".");
+        if (!TextUtils.isEmpty(secondPackageName)){
+            return Humanizer.toCapitalCase(secondPackageName);
+        }
+        return Humanizer.toCapitalCase(getAppName());
     }
 }
