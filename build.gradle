@@ -66,6 +66,13 @@ subprojects {
     rootProject.clean.dependsOn tasks.matching { it.name == 'clean' }
 }
 
+// Gradle Sync
+task sync {
+    doLast {
+        println "SYNC SUCCESSFUL"
+    }
+}
+
 
 //TODO: Re-enable JavaDoc generation after common-logging removed.
 subprojects {

@@ -1,0 +1,1 @@
+gradlew sync -Dorg.gradle.debug=true --no-daemon
