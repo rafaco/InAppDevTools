@@ -23,6 +23,9 @@ package org.inappdevtools.plugin.tasks
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.gradle.api.tasks.TaskAction
+import org.inappdevtools.plugin.utils.AndroidPluginUtils
+import org.inappdevtools.plugin.utils.FileExporter
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 import java.time.Duration
 import java.time.Instant
@@ -31,8 +34,8 @@ import java.util.regex.Pattern
 
 class BuildInfoTask extends IadtBaseTask {
 
-    org.inappdevtools.plugin.utils.ProjectUtils projectUtils
-    org.inappdevtools.plugin.utils.FileExporter configExporter
+    ProjectUtils projectUtils
+    FileExporter configExporter
 
     BuildInfoTask() {
         this.description = "Generate config files (build_config, build_info, git_config,...)"
@@ -41,8 +44,8 @@ class BuildInfoTask extends IadtBaseTask {
     @TaskAction
     void perform() {
         def configStartTime = Instant.now()
-        projectUtils = new org.inappdevtools.plugin.utils.ProjectUtils(project)
-        configExporter = new org.inappdevtools.plugin.utils.FileExporter(project)
+        projectUtils = new ProjectUtils(project)
+        configExporter = new FileExporter(project)
 
         generateCompileConfig()
         generateBuildInfo()
@@ -74,7 +77,7 @@ class BuildInfoTask extends IadtBaseTask {
                 HOST_USER       : System.properties['user.name'],
 
                 IADT_PLUGIN_VERSION     : this.getClass().getPackage().getImplementationVersion(),
-                ANDROID_PLUGIN_VERSION  : new org.inappdevtools.plugin.utils.AndroidPluginUtils(projectUtils.getProject()).getVersion(),
+                ANDROID_PLUGIN_VERSION  : new AndroidPluginUtils(projectUtils.getProject()).getVersion(),
                 GRADLE_VERSION  : project.gradle.gradleVersion,
                 JAVA_VERSION    : "${System.properties['java.version']}",
                 JAVA_VENDOR     : "${System.properties['java.vendor']} ${System.properties['java.vm.version']}",

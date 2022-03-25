@@ -28,16 +28,17 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.diagnostics.DependencyReportTask
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class DependencyTask extends DependencyReportTask {
 
-    org.inappdevtools.plugin.utils.ProjectUtils projectUtils
+    ProjectUtils projectUtils
 
     DependencyTask() {
         super()
         this.description = 'Generated dependencies report if needed'
         this.group = InAppDevToolsPlugin.TAG
-        this.projectUtils = new org.inappdevtools.plugin.utils.ProjectUtils(getProject())
+        this.projectUtils = new ProjectUtils(getProject())
     }
 
     @InputFile

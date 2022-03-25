@@ -22,6 +22,7 @@ package org.inappdevtools.plugin.config.parser
 
 import org.gradle.api.Project
 import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
+import org.inappdevtools.plugin.config.IadtConfigFields
 
 class DefaultConfigReader implements IConfigReader {
 
@@ -36,7 +37,7 @@ class DefaultConfigReader implements IConfigReader {
 
     boolean hasValidValue(String field){
         // Should be always valid, but we ensure it exists in the default values list
-        if (org.inappdevtools.plugin.config.IadtConfigFields.getDefault(field) == null){
+        if (IadtConfigFields.getDefault(field) == null){
             Log.error("IADT: Ignored an invalid config value in ${getName()}. '$field' not found) ")
             return false
         }
@@ -44,7 +45,7 @@ class DefaultConfigReader implements IConfigReader {
     }
 
     Object get(String field) {
-        return org.inappdevtools.plugin.config.IadtConfigFields.getDefault(field)
+        return IadtConfigFields.getDefault(field)
     }
 
     String getName() {

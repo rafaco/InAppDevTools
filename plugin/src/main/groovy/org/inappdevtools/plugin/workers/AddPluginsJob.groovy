@@ -22,16 +22,18 @@ package org.inappdevtools.plugin.workers
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.ProjectReportsPlugin
+import org.inappdevtools.plugin.InAppDevToolsPlugin
+import org.inappdevtools.plugin.config.IadtConfigFields
 import tech.linjiang.pandora.gradle.PandoraPlugin
 
 class AddPluginsJob extends Job {
 
-    AddPluginsJob(org.inappdevtools.plugin.InAppDevToolsPlugin plugin, Project project) {
+    AddPluginsJob(InAppDevToolsPlugin plugin, Project project) {
         super(plugin, project)
     }
 
     def 'do'(){
-        if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.NETWORK_INTERCEPTOR)) {
+        if (configHelper.get(IadtConfigFields.NETWORK_INTERCEPTOR)) {
             applyPandoraPlugin(project)
         }
         applyReportPlugin(project)
@@ -39,7 +41,7 @@ class AddPluginsJob extends Job {
 
     //Apply external plugins required for Iadt (safe to be applied even if we don't use them)
     private void applyReportPlugin(Project project) {
-        if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT   apply ProjectReportsPlugin."
         }
         project.getPluginManager().apply(ProjectReportsPlugin.class)
@@ -49,7 +51,7 @@ class AddPluginsJob extends Job {
 
     //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
     private void applyPandoraPlugin(Project project){
-        if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT   apply PandoraPlugin."
         }
         project.getPluginManager().apply(PandoraPlugin.class)

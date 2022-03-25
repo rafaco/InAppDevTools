@@ -23,6 +23,8 @@ package org.inappdevtools.plugin.tasks
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.gradle.api.tasks.TaskAction
+import org.inappdevtools.plugin.utils.FileExporter
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class EmptyBuildInfoTask extends IadtBaseTask {
 
@@ -34,8 +36,8 @@ class EmptyBuildInfoTask extends IadtBaseTask {
     void perform() {
         Map propertiesMap = [ enabled : false ]
 
-        org.inappdevtools.plugin.utils.ProjectUtils projectUtils = new org.inappdevtools.plugin.utils.ProjectUtils(project)
-        org.inappdevtools.plugin.utils.FileExporter fileExporter = new org.inappdevtools.plugin.utils.FileExporter(project)
+        ProjectUtils projectUtils = new ProjectUtils(project)
+        FileExporter fileExporter = new FileExporter(project)
         File file = projectUtils.getFile("${outputPath}/build_config.json")
         fileExporter.writeMap(file, propertiesMap)
 

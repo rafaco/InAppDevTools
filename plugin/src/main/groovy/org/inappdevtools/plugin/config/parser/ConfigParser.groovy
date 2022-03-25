@@ -21,13 +21,15 @@ package org.inappdevtools.plugin.config.parser
 
 
 import org.gradle.api.Project
+import org.inappdevtools.plugin.config.ConfigHelper
+import org.inappdevtools.plugin.config.IadtConfigFields
 
 class ConfigParser {
 
     Project project
     def readers
 
-    ConfigParser(org.inappdevtools.plugin.config.ConfigHelper configHelper) {
+    ConfigParser(ConfigHelper configHelper) {
         this.project = configHelper.getProject()
         initReaders()
         configHelper.save(getAll())
@@ -102,13 +104,13 @@ class ConfigParser {
 
     Map getAll(){
         def allConfigFields = []
-        org.inappdevtools.plugin.config.IadtConfigFields.declaredFields.findAll {!it.synthetic}.each {
+        IadtConfigFields.declaredFields.findAll {!it.synthetic}.each {
             allConfigFields.add(it.name)
         }
         Map resolvedValues = [:]
         Map resolutionSources = [:]
         for (String fieldClassName : allConfigFields) {
-            def field = org.inappdevtools.plugin.config.IadtConfigFields."$fieldClassName"
+            def field = IadtConfigFields."$fieldClassName"
             if (has(field)){
                 resolvedValues.put(field, get(field))
                 resolutionSources.put(field, getName(field))

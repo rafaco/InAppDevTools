@@ -19,13 +19,18 @@
 
 package org.inappdevtools.plugin.workers
 
-
+import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
+import org.inappdevtools.plugin.tasks.BuildInfoTask
+import org.inappdevtools.plugin.tasks.DependencyTask
+import org.inappdevtools.plugin.tasks.DetectReactNativeTask
+import org.inappdevtools.plugin.tasks.EmptyBuildInfoTask
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class AddTasksJob extends Job {
 
@@ -41,7 +46,7 @@ class AddTasksJob extends Job {
 
     boolean isFirstTask = true
 
-    AddTasksJob(org.inappdevtools.plugin.InAppDevToolsPlugin plugin, Project project) {
+    AddTasksJob(InAppDevToolsPlugin plugin, Project project) {
         super(plugin, project)
     }
 
@@ -157,7 +162,7 @@ class AddTasksJob extends Job {
     //region [ ADD TASKS ]
 
     private Task addEmptyBuildInfoTask(Project project) {
-        project.task(EMPTY_BUILD_INFO_TASK, type: org.inappdevtools.plugin.tasks.EmptyBuildInfoTask)
+        project.task(EMPTY_BUILD_INFO_TASK, type: EmptyBuildInfoTask)
     }
 
     private Task addCleanTask(Project project) {
@@ -175,7 +180,7 @@ class AddTasksJob extends Job {
     }
 
     private void addAndLinkDependencyReportTask(Project project, Task superTask, String buildVariant ) {
-        org.inappdevtools.plugin.tasks.DependencyTask dependencyTask = project.task(DEPENDENCIES_TASK + buildVariant, type: org.inappdevtools.plugin.tasks.DependencyTask) {
+        DependencyTask dependencyTask = project.task(DEPENDENCIES_TASK + buildVariant, type: DependencyTask) {
             variantName = buildVariant
         }
         //Manual skip comparing lastModified don't work inside the task but other skips are working.
@@ -188,14 +193,14 @@ class AddTasksJob extends Job {
     }
 
     private void addAndLinkDetectReactNativeTask(Project project, Task superTask, String buildVariant ) {
-        org.inappdevtools.plugin.tasks.DetectReactNativeTask reactTask = project.task(REACT_DETECT_TASK + buildVariant, type: org.inappdevtools.plugin.tasks.DetectReactNativeTask)
+        DetectReactNativeTask reactTask = project.task(REACT_DETECT_TASK + buildVariant, type: DetectReactNativeTask)
         superTask.dependsOn += [reactTask]
-        org.inappdevtools.plugin.tasks.DependencyTask dependencyTask = project.tasks.getByName(DEPENDENCIES_TASK + buildVariant)
+        DependencyTask dependencyTask = project.tasks.getByName(DEPENDENCIES_TASK + buildVariant)
         reactTask.dependsOn += [dependencyTask]
     }
 
     private Task addBuildInfoTask(Project project) {
-        project.task(BUILD_INFO_TASK, type: org.inappdevtools.plugin.tasks.BuildInfoTask)
+        project.task(BUILD_INFO_TASK, type: BuildInfoTask)
     }
 
     private Task addResourcesTask(Project project) {
@@ -368,7 +373,7 @@ class AddTasksJob extends Job {
                 }
             }
 
-            String sourcesPath = parentPath + org.inappdevtools.plugin.utils.ProjectUtils.getFolderSeparator() + "src"
+            String sourcesPath = parentPath + ProjectUtils.getFolderSeparator() + "src"
             def existsInternals = new File(sourcesPath).exists()
             if(existsInternals) {
                 from(sourcesPath) {

@@ -22,16 +22,18 @@ package org.inappdevtools.plugin.workers
 
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
+import org.inappdevtools.plugin.InAppDevToolsPlugin
+import org.inappdevtools.plugin.config.IadtConfigFields
 
 //Inject internal package from host app manifest into resValue
 class RecordInternalPackageJob extends Job {
 
-    RecordInternalPackageJob(org.inappdevtools.plugin.InAppDevToolsPlugin plugin, Project project) {
+    RecordInternalPackageJob(InAppDevToolsPlugin plugin, Project project) {
         super(plugin, project)
     }
 
     def 'do'(){
-        if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT   record internal package."
         }
         //TODO: Incremental issue: check if already set before perform to avoid updating modified date

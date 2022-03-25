@@ -23,6 +23,8 @@ package org.inappdevtools.plugin.tasks
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
+import org.inappdevtools.plugin.utils.DependencyUtils
+import org.inappdevtools.plugin.utils.FileExporter
 
 class DetectReactNativeTask extends IadtBaseTask {
 
@@ -34,7 +36,7 @@ class DetectReactNativeTask extends IadtBaseTask {
     void perform() {
         File dependencies = InAppDevToolsPlugin.getOutputFile(getProject(),
                 'gradle_dependencies.txt')
-        String reactString = new org.inappdevtools.plugin.utils.DependencyUtils(getProject()).getCurrentVersion(dependencies,
+        String reactString = new DependencyUtils(getProject()).getCurrentVersion(dependencies,
                 "com.facebook.react:react-native")
 
         boolean isReact = !reactString.isEmpty()
@@ -51,7 +53,7 @@ class DetectReactNativeTask extends IadtBaseTask {
 
     private void saveConfiguration(Project project, Map config) {
         File configFile = InAppDevToolsPlugin.getOutputFile(project, 'react_config.json')
-        org.inappdevtools.plugin.utils.FileExporter configUtils = new org.inappdevtools.plugin.utils.FileExporter(project)
+        FileExporter configUtils = new FileExporter(project)
         configUtils.writeMap(configFile, config)
     }
 

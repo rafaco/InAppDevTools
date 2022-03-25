@@ -19,18 +19,21 @@
 
 package org.inappdevtools.plugin.workers
 
+import org.inappdevtools.plugin.InAppDevToolsPlugin
+import org.inappdevtools.plugin.config.IadtConfigFields
+
 import java.net.URI;
 import org.gradle.api.Project
 
 // Add repositories needed for transitive dependencies (google, mavencentral, jitpack and jcenter)
 class AddRepositoriesJob extends Job {
 
-    AddRepositoriesJob(org.inappdevtools.plugin.InAppDevToolsPlugin plugin, Project project) {
+    AddRepositoriesJob(InAppDevToolsPlugin plugin, Project project) {
         super(plugin, project)
     }
 
     def 'do'(){
-        if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
             println "IADT add repositories:"
         }
         safeAddMavenRepository("https://dl.google.com/dl/android/maven2/")
@@ -44,7 +47,7 @@ class AddRepositoriesJob extends Job {
             project.repositories{
                 maven { url repoUrl }
             }
-            if (configHelper.get(org.inappdevtools.plugin.config.IadtConfigFields.DEBUG)) {
+            if (configHelper.get(IadtConfigFields.DEBUG)) {
                 println "IADT   maven { url \"" + repoUrl + "\"}"
             }
         }

@@ -23,6 +23,7 @@ package org.inappdevtools.plugin.config.parser
 import groovy.json.JsonSlurper
 import org.gradle.api.Project
 import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
+import org.inappdevtools.plugin.config.IadtConfigFields
 
 abstract class StringConfigReader implements IConfigReader {
 
@@ -38,7 +39,7 @@ abstract class StringConfigReader implements IConfigReader {
     boolean hasValidValue(String field){
         def isValid
         def value = data[getKey(field)]
-        Class<?> targetClass = org.inappdevtools.plugin.config.IadtConfigFields.getType(field)
+        Class<?> targetClass = IadtConfigFields.getType(field)
         switch (targetClass) {
             case Boolean:
                 isValid = value != null && ["true", "false"].contains(value.toLowerCase())
@@ -64,7 +65,7 @@ abstract class StringConfigReader implements IConfigReader {
         if (!has(field))
             return null
         def value = data[getKey(field)]
-        Class<?> targetClass = org.inappdevtools.plugin.config.IadtConfigFields.getType(field)
+        Class<?> targetClass = IadtConfigFields.getType(field)
         switch (targetClass) {
             case Boolean:
                 return value.toBoolean()

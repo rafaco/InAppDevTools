@@ -23,6 +23,9 @@ package org.inappdevtools.plugin
 import org.inappdevtools.plugin.config.parser.ConfigParser
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.inappdevtools.plugin.config.ConfigHelper
+import org.inappdevtools.plugin.utils.AndroidPluginUtils
+import org.inappdevtools.plugin.utils.ProjectUtils
+import org.inappdevtools.plugin.workers.AddDependenciesJob
 import org.inappdevtools.plugin.workers.AddPluginsJob
 import org.inappdevtools.plugin.workers.AddRepositoriesJob
 import org.inappdevtools.plugin.workers.AddTasksJob
@@ -41,13 +44,13 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
 
     InAppDevToolsExtension extension
-    org.inappdevtools.plugin.utils.ProjectUtils projectUtils
+    ProjectUtils projectUtils
     ConfigHelper configHelper
     File outputFolder
 
     void apply(Project project) {
         //println "IADT apply for $project"
-        projectUtils = new org.inappdevtools.plugin.utils.ProjectUtils(project)
+        projectUtils = new ProjectUtils(project)
 
         if (projectUtils.isRoot()) {
             onApplyToRoot(project)
@@ -100,7 +103,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
 
         if (configHelper.get(IadtConfigFields.DEBUG)) {
             def gradleVersion = project.gradle.gradleVersion
-            def androidPluginVersion = new org.inappdevtools.plugin.utils.AndroidPluginUtils(projectUtils.getProject()).getVersion()
+            def androidPluginVersion = new AndroidPluginUtils(projectUtils.getProject()).getVersion()
             println "IADT InAppDevTools ${PluginUtils.getVersion(this)}"
             println "IADT Build info:"
             println "IADT   Gradle $gradleVersion"
@@ -156,7 +159,7 @@ class InAppDevToolsPlugin implements Plugin<Project> {
             new RecordInternalPackageJob(this, project).do()
             new AddPluginsJob(this, project).do()
             new AddRepositoriesJob(this, project).do()
-            new org.inappdevtools.plugin.workers.AddDependenciesJob(this, project).do()
+            new AddDependenciesJob(this, project).do()
         }
         new AddTasksJob(this, project).do()
     }

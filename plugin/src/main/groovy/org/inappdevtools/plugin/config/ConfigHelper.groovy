@@ -22,6 +22,7 @@ package org.inappdevtools.plugin.config
 
 import org.gradle.api.Project
 import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class ConfigHelper {
 
@@ -70,7 +71,7 @@ class ConfigHelper {
             // We can not solve the dimension without exclusions
             return result
         }
-        def dimensions = new org.inappdevtools.plugin.utils.ProjectUtils(project).getDimensions()
+        def dimensions = new ProjectUtils(project).getDimensions()
         def usedDimensionName = getDimensionUsedInExclude(dimensions, exclude)
         def usedDimensionValues = dimensions[usedDimensionName]
         usedDimensionValues.each {
@@ -95,7 +96,7 @@ class ConfigHelper {
     }
 
     boolean isNoopIncluded(String variantName) {
-        org.inappdevtools.plugin.utils.ProjectUtils projectUtils = new org.inappdevtools.plugin.utils.ProjectUtils(project)
+        ProjectUtils projectUtils = new ProjectUtils(project)
         def variantConfigurationName = variantName.uncapitalize() + 'Runtime' + 'Classpath'
         if (!projectUtils.existsConfiguration(variantConfigurationName)) {
             if (isDebug) println "Skipped by error: configuration not found ${variantConfigurationName}"

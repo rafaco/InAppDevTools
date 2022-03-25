@@ -22,12 +22,13 @@ package org.inappdevtools.plugin.workers
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.gradle.api.Project
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 abstract class Job {
     InAppDevToolsPlugin plugin
     Project project
     ConfigHelper configHelper
-    org.inappdevtools.plugin.utils.ProjectUtils projectUtils
+    ProjectUtils projectUtils
 
     Job(InAppDevToolsPlugin plugin, Project project) {
         this.plugin = plugin
