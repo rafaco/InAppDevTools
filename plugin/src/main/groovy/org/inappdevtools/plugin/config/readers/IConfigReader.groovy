@@ -17,29 +17,12 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config.readers
 
-import org.gradle.api.Project
-
-class EnvironmentConfigReader extends StringConfigReader {
-
-    static final String NAME = 'Environment'
-    static final String PREFIX = 'IADT_'
-
-    EnvironmentConfigReader(Project project) {
-        super(project)
-        data = System.getenv()
-    }
-
-    String getName() {
-        return NAME
-    }
-
-    String getKey(String field){
-        return (PREFIX + toSnakeCase(field)).toUpperCase()
-    }
-
-    String toSnakeCase(String text) {
-        text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
-    }
+interface IConfigReader{
+    boolean has(String field)
+    boolean hasValidValue(String field)
+    Object get(String field)
+    String getName()
+    String getKey(String field)
 }

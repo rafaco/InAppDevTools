@@ -17,24 +17,18 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config.readers
 
 import org.gradle.api.Project
 
-class GradlePropertiesConfigReader extends StringConfigReader {
+class EnvironmentConfigReader extends StringConfigReader {
 
-    static final String NAME = 'Gradle properties'
-    static final String PREFIX = 'iadt.'
+    static final String NAME = 'Environment'
+    static final String PREFIX = 'IADT_'
 
-    Project project
-
-    GradlePropertiesConfigReader(Project project) {
+    EnvironmentConfigReader(Project project) {
         super(project)
-        data = project.properties
-    }
-
-    boolean has(String field){
-        return data.containsKey(getKey(field))
+        data = System.getenv()
     }
 
     String getName() {
@@ -42,6 +36,10 @@ class GradlePropertiesConfigReader extends StringConfigReader {
     }
 
     String getKey(String field){
-        return PREFIX + field
+        return (PREFIX + toSnakeCase(field)).toUpperCase()
+    }
+
+    String toSnakeCase(String text) {
+        text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
     }
 }

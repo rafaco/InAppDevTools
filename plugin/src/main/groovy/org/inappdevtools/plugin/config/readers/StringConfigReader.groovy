@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config.readers
 
 
 import groovy.json.JsonSlurper

@@ -17,22 +17,24 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config.readers
 
 import org.gradle.api.Project
 
-class LocalPropertiesConfigReader extends StringConfigReader {
+class GradlePropertiesConfigReader extends StringConfigReader {
 
-    static final String NAME = 'local.properties'
+    static final String NAME = 'Gradle properties'
     static final String PREFIX = 'iadt.'
 
-    LocalPropertiesConfigReader(Project project) {
+    Project project
+
+    GradlePropertiesConfigReader(Project project) {
         super(project)
-        def propertiesFile = project.rootProject.file('local.properties')
-        if (propertiesFile.exists()) {
-            data = new Properties()
-            data.load(propertiesFile.newDataInputStream())
-        }
+        data = project.properties
+    }
+
+    boolean has(String field){
+        return data.containsKey(getKey(field))
     }
 
     String getName() {

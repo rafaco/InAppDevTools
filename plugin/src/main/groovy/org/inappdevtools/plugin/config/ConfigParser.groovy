@@ -17,12 +17,15 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config
 
 
 import org.gradle.api.Project
-import org.inappdevtools.plugin.config.ConfigHelper
-import org.inappdevtools.plugin.config.IadtConfigFields
+import org.inappdevtools.plugin.config.readers.DefaultConfigReader
+import org.inappdevtools.plugin.config.readers.EnvironmentConfigReader
+import org.inappdevtools.plugin.config.readers.ExtensionConfigReader
+import org.inappdevtools.plugin.config.readers.GradlePropertiesConfigReader
+import org.inappdevtools.plugin.config.readers.LocalPropertiesConfigReader
 
 class ConfigParser {
 

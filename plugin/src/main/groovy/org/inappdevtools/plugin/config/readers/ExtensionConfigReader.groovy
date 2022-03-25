@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
+package org.inappdevtools.plugin.config.readers
 
 import org.inappdevtools.plugin.InAppDevToolsExtension
 import org.inappdevtools.plugin.InAppDevToolsPlugin

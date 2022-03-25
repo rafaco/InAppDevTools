@@ -17,35 +17,22 @@
  * limitations under the License.
  */
 
-package org.inappdevtools.plugin.config.parser
-
+package org.inappdevtools.plugin.config.readers
 
 import org.gradle.api.Project
-import org.gradle.internal.impldep.com.esotericsoftware.minlog.Log
-import org.inappdevtools.plugin.config.IadtConfigFields
 
-class DefaultConfigReader implements IConfigReader {
+class LocalPropertiesConfigReader extends StringConfigReader {
 
-    static final String NAME = 'Default'
+    static final String NAME = 'local.properties'
+    static final String PREFIX = 'iadt.'
 
-    DefaultConfigReader(Project project) {
-    }
-
-    boolean has(String field){
-        return true
-    }
-
-    boolean hasValidValue(String field){
-        // Should be always valid, but we ensure it exists in the default values list
-        if (IadtConfigFields.getDefault(field) == null){
-            Log.error("IADT: Ignored an invalid config value in ${getName()}. '$field' not found) ")
-            return false
+    LocalPropertiesConfigReader(Project project) {
+        super(project)
+        def propertiesFile = project.rootProject.file('local.properties')
+        if (propertiesFile.exists()) {
+            data = new Properties()
+            data.load(propertiesFile.newDataInputStream())
         }
-        return true
-    }
-
-    Object get(String field) {
-        return IadtConfigFields.getDefault(field)
     }
 
     String getName() {
@@ -53,6 +40,6 @@ class DefaultConfigReader implements IConfigReader {
     }
 
     String getKey(String field){
-        return field
+        return PREFIX + field
     }
 }

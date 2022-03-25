@@ -20,7 +20,7 @@
 package org.inappdevtools.plugin
 
 
-import org.inappdevtools.plugin.config.parser.ConfigParser
+import org.inappdevtools.plugin.config.ConfigParser
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.inappdevtools.plugin.utils.AndroidPluginUtils
