@@ -82,10 +82,6 @@ class IadtConfigFields {
         switch (field) {
             case ENABLED:
             case USE_NOOP:
-            case DEBUG:
-                return false
-            case EXCLUDE:
-                return [ 'release' ]
             case SOURCE_INCLUSION:
             case SOURCE_INSPECTION:
             case NETWORK_INTERCEPTOR:
@@ -97,6 +93,10 @@ class IadtConfigFields {
             case CALL_DEFAULT_CRASH_HANDLER:
             case INJECT_EVENTS_ON_LOGCAT:
                 return true
+            case DEBUG:
+                return false
+            case EXCLUDE:
+                return [ 'release' ]
             case NOTES:
             case TEAM_NAME:
             case TEAM_EMAIL:
