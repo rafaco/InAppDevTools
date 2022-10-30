@@ -5,7 +5,6 @@ apply from: '../compat/preprocess.gradle'
 
 android {
     compileSdkVersion PROJECT_COMPILE_SDK
-    buildToolsVersion PROJECT_BUILD_TOOLS
 
     buildFeatures {
         // Determines whether to generate a BuildConfig class.
@@ -15,8 +14,6 @@ android {
     defaultConfig {
         minSdkVersion PROJECT_MIN_SDK
         targetSdkVersion PROJECT_TARGET_SDK
-        versionCode PROJECT_VERSION_CODE
-        versionName PROJECT_VERSION
 
         javaCompileOptions {
             annotationProcessorOptions {

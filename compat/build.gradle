@@ -5,13 +5,10 @@ apply from: 'publish.gradle'
 
 android {
     compileSdkVersion PROJECT_COMPILE_SDK
-    buildToolsVersion PROJECT_BUILD_TOOLS
 
     defaultConfig {
         minSdkVersion PROJECT_MIN_SDK
         targetSdkVersion PROJECT_TARGET_SDK
-        versionCode PROJECT_VERSION_CODE
-        versionName PROJECT_VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
