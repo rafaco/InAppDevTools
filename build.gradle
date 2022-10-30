@@ -9,16 +9,17 @@ buildscript {
     apply from: './gradle/constants.gradle'
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'com.android.tools.build:gradle:7.2.0'
         //classpath 'com.android.tools.build:gradle:3.6.1' //Oldest tested
 
         // Internal plugins for publications
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
-        // Compat Preprocessor: custom artifact from my fork. PR sent to dannyhe.
+        // Compat Preprocessor: custom artifact from my fork.
+        //  Old PR has been accepted but new changes are required for Gradle 7.
         //classpath 'wang.dannyhe.tools:plugin:0.0.7'
-        classpath files('./compat/libs/wang.dannyhe.tools.preprocessor-0.0.7a.jar')
+        classpath files('./compat/libs/wang.dannyhe.tools.preprocessor-0.0.7b.jar')
 
         /*
          *  IADT Setup: Old way using legacy plugin application.

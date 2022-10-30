@@ -85,7 +85,7 @@ publishing.publications {
             classpath += files(android.getBootClasspath().join(File.pathSeparator))
             //TODO:
             //configurations.compile.setCanBeResolved(true)
-            classpath += files(configurations.compile)
+            classpath += files(configurations.implementation)
             options.links("http://docs.oracle.com/javase/7/docs/api/")
             options.links("http://d.android.com/reference/")
             exclude '**/BuildConfig.java'
