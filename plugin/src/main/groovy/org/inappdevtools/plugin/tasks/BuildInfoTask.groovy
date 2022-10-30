@@ -19,7 +19,7 @@
 
 package org.inappdevtools.plugin.tasks
 
-
+import org.gradle.api.tasks.Internal
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.gradle.api.tasks.TaskAction
@@ -34,7 +34,10 @@ import java.util.regex.Pattern
 
 class BuildInfoTask extends IadtBaseTask {
 
+    @Internal
     ProjectUtils projectUtils
+
+    @Internal
     FileExporter configExporter
 
     BuildInfoTask() {

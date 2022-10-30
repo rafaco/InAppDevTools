@@ -19,7 +19,7 @@
 
 package org.inappdevtools.plugin.tasks
 
-
+import org.gradle.api.tasks.Internal
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.ConfigHelper
 import org.inappdevtools.plugin.config.IadtConfigFields
@@ -32,6 +32,7 @@ import org.inappdevtools.plugin.utils.ProjectUtils
 
 class DependencyTask extends DependencyReportTask {
 
+    @Internal
     ProjectUtils projectUtils
 
     DependencyTask() {

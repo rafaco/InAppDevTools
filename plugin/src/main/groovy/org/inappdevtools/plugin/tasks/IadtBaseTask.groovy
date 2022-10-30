@@ -19,13 +19,17 @@
 
 package org.inappdevtools.plugin.tasks
 
+import org.gradle.api.tasks.Internal
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 
 class IadtBaseTask extends DefaultTask{
 
+    @Internal
     final TAG = InAppDevToolsPlugin.TAG
+
+    @Internal
     String outputPath
 
     IadtBaseTask() {
