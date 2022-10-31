@@ -16,27 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.inappdevtools.plugin.workers
+
+package org.inappdevtools.plugin.setup
 
 
-import org.inappdevtools.plugin.config.ConfigHelper
 import org.gradle.api.Project
+import org.inappdevtools.plugin.config.ConfigHelper
+import org.inappdevtools.plugin.config.IadtConfigFields
 import org.inappdevtools.plugin.utils.ProjectUtils
 
-abstract class Job {
-    Project project
-    ConfigHelper configHelper
-    ProjectUtils projectUtils
+class OtherProjectSetup {
 
-    Job(Project project) {
+    Project project
+    ProjectUtils projectUtils
+    ConfigHelper configHelper
+
+    OtherProjectSetup(Project project) {
         this.project = project
-        this.configHelper = new ConfigHelper(project)
         this.projectUtils = new ProjectUtils(project)
+        this.configHelper = new ConfigHelper(project)
     }
 
-    abstract def 'do'()
+    void beforeEvaluate() {
+    }
 
-    def concreteMethod() {
-        println 'concrete'
+    void afterEvaluate() {
+        if (configHelper.get(IadtConfigFields.DEBUG)) {
+            //TODO: Unlock for other Android Modules
+            println "IADT skipped for ${project} project. " +
+                    "Only Android Application modules are currently supported."
+        }
     }
 }

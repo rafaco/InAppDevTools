@@ -46,8 +46,8 @@ class AddTasksJob extends Job {
 
     boolean isFirstTask = true
 
-    AddTasksJob(InAppDevToolsPlugin plugin, Project project) {
-        super(plugin, project)
+    AddTasksJob(Project project) {
+        super(project)
     }
 
     def 'do'(){
@@ -168,13 +168,13 @@ class AddTasksJob extends Job {
     private Task addCleanTask(Project project) {
         project.task(CLEAN_TASK,
                 description: 'Clean generated files',
-                group: plugin.TAG,
+                group: InAppDevToolsPlugin.TAG,
                 type: Delete) {
 
             doLast {
-                project.delete plugin.getOutputDir(project)
+                project.delete projectUtils.getOutputDir()
                 if (configHelper.get(IadtConfigFields.DEBUG))
-                    println "Deleted ${plugin.getOutputDir(project)} from ${project.name}"
+                    println "Deleted ${projectUtils.getOutputDir()} from ${project.name}"
             }
         }
     }
@@ -206,7 +206,7 @@ class AddTasksJob extends Job {
     private Task addResourcesTask(Project project) {
         project.task(RESOURCES_TASK,
                 description: 'Generate a Zip file with the resources',
-                group: plugin.TAG,
+                group: InAppDevToolsPlugin.TAG,
                 type: Zip) {
 
             from ('src/main/res') {
@@ -214,7 +214,7 @@ class AddTasksJob extends Job {
             }
 
             def outputName = "${project.name}_resources.zip"
-            destinationDir project.file(plugin.getOutputDir(project))
+            destinationDir project.file(projectUtils.getOutputDir())
             archiveName = outputName
             includeEmptyDirs = false
 
@@ -227,7 +227,7 @@ class AddTasksJob extends Job {
             }
             doLast {
                 if (configHelper.get(IadtConfigFields.DEBUG))
-                    println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
+                    println "Packed ${counter} files into ${projectUtils.getOutputDir()}\\${outputName}"
             }
         }
     }
@@ -235,11 +235,11 @@ class AddTasksJob extends Job {
     private Task addSourcesTask(Project project) {
         project.task(SOURCES_TASK,
                 description: 'Generate a Zip file with all java sources',
-                group: plugin.TAG,
+                group: InAppDevToolsPlugin.TAG,
                 type: Zip) {
 
             def outputName = "${project.name}_sources.zip"
-            destinationDir project.file(plugin.getOutputDir(project))
+            destinationDir project.file(projectUtils.getOutputDir())
             archiveName = outputName
             includeEmptyDirs = false
 
@@ -282,7 +282,7 @@ class AddTasksJob extends Job {
 
             doLast {
                 if (configHelper.get(IadtConfigFields.DEBUG))
-                    println "Packed ${counter} files into ${plugin.getOutputDir(project)}\\${outputName}"
+                    println "Packed ${counter} files into ${projectUtils.getOutputDir()}\\${outputName}"
             }
         }
     }
@@ -290,7 +290,7 @@ class AddTasksJob extends Job {
     private Task addGeneratedTask(Project project) {
         project.task(GENERATED_TASK,
                 description: 'Generate a Zip file with generated sources',
-                group: plugin.TAG,
+                group: InAppDevToolsPlugin.TAG,
                 type: Zip) {
 
             def outputName = "${project.name}_generated.zip"
@@ -327,7 +327,7 @@ class AddTasksJob extends Job {
                 }
             }*/
 
-            destinationDir project.file(plugin.getOutputDir(project))
+            destinationDir project.file(projectUtils.getOutputDir())
             archiveName = outputName
             includeEmptyDirs = false
 
@@ -340,7 +340,7 @@ class AddTasksJob extends Job {
             }
             doLast {
                 if (configHelper.get(IadtConfigFields.DEBUG))
-                    println "Packed ${counter} files into ${plugin.getOutputDir(project)}${projectUtils.getFolderSeparator()}${outputName}"
+                    println "Packed ${counter} files into ${projectUtils.getOutputDir()}${projectUtils.getFolderSeparator()}${outputName}"
             }
         }
     }
@@ -348,11 +348,11 @@ class AddTasksJob extends Job {
     Task addReactSourcesTask(Project project) {
         Task srcTask = project.task(REACT_SOURCES_TASK,
                 description: 'Generate a Zip file with ReactNative js sources from parent',
-                group: plugin.TAG,
+                group: InAppDevToolsPlugin.TAG,
                 type: Zip) {
 
             def outputName = "${project.name}_react_sources.zip"
-            destinationDir project.file(plugin.getOutputDir(project))
+            destinationDir project.file(projectUtils.getOutputDir())
             archiveName outputName
             includeEmptyDirs = false
 
@@ -360,7 +360,7 @@ class AddTasksJob extends Job {
             int lastFolderIndex = rootPath.lastIndexOf(projectUtils.getFolderSeparator())
             if (lastFolderIndex == -1){
                 println "Unable to get parent folder. Disabled react native detector"
-                File configFile = plugin.getOutputFile(project, 'react_config.json')
+                File configFile = projectUtils.getOutputFile('react_config.json')
                 if (configFile.exists()) configFile.delete()
                 return
             }
@@ -394,12 +394,12 @@ class AddTasksJob extends Job {
             doLast {
                 if (configHelper.get(IadtConfigFields.DEBUG))
                     println "Packed ${counter} files " +
-                            "into ${plugin.getOutputDir(project)}\\${outputName}"
+                            "into ${projectUtils.getOutputDir()}\\${outputName}"
             }
         }
 
         srcTask.onlyIf {
-            plugin.getOutputFile(project, 'react_config.json').exists()
+            projectUtils.getOutputFile('react_config.json').exists()
         }
     }
 

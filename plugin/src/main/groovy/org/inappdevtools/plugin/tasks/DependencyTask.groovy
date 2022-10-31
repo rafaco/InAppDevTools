@@ -46,8 +46,7 @@ class DependencyTask extends DependencyReportTask {
     File inputFile = project.file(getProject().buildscript.sourceFile)
 
     @OutputFile
-    File outputFile = InAppDevToolsPlugin.getOutputFile(getProject(),
-            'gradle_dependencies.txt')
+    File outputFile = new ProjectUtils(getProject()).getOutputFile('gradle_dependencies.txt')
 
     @Input
     String variantName
@@ -76,8 +75,7 @@ class DependencyTask extends DependencyReportTask {
             return
         }
 
-        def variantFile = InAppDevToolsPlugin.getOutputFile(getProject(),
-                'gradle_dependencies_variant.txt')
+        def variantFile = projectUtils.getOutputFile('gradle_dependencies_variant.txt')
 
         // Manual skip needed because AbstractReportTask constructor have Task.upToDateWhen{false}
         if (variantFile.exists() &&

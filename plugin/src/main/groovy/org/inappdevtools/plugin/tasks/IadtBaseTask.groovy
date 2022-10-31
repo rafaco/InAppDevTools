@@ -23,6 +23,7 @@ import org.gradle.api.tasks.Internal
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class IadtBaseTask extends DefaultTask{
 
@@ -34,7 +35,7 @@ class IadtBaseTask extends DefaultTask{
 
     IadtBaseTask() {
         this.group = TAG
-        outputPath = InAppDevToolsPlugin.getOutputPath(project)
+        outputPath = new ProjectUtils(project).getOutputPath()
     }
 
     protected File getFile(Project project, String path) {

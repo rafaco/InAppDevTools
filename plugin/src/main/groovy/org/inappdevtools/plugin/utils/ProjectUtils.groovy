@@ -30,6 +30,9 @@ import java.util.regex.Pattern
 
 class ProjectUtils {
 
+    static final ASSETS_PATH = '/generated/assets'
+    static final OUTPUT_PATH = ASSETS_PATH + '/iadt'
+
     Project project
 
     ProjectUtils(Project project) {
@@ -328,9 +331,26 @@ class ProjectUtils {
 
     //endregion
 
+
+    //region [ OUTPUT FOLDERS ]
+
     static String getFolderSeparator() {
         String osName = System.properties['os.name']
         boolean isWindows = osName.toLowerCase().contains("windows")
         return isWindows ? "\\" : "/"
     }
+
+    String getOutputPath(){
+        "${project.buildDir}${OUTPUT_PATH}"
+    }
+
+    File getOutputDir(){
+        project.file(getOutputPath())
+    }
+
+    File getOutputFile(String filename){
+        project.file("${getOutputPath()}/${filename}")
+    }
+
+    //endregion
 }

@@ -19,15 +19,14 @@
 
 package org.inappdevtools.plugin.workers
 
-import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.inappdevtools.plugin.utils.PluginUtils
 import org.gradle.api.Project
 
 class AddDependenciesJob extends Job {
 
-    AddDependenciesJob(InAppDevToolsPlugin plugin, Project project) {
-        super(plugin, project)
+    AddDependenciesJob(Project project) {
+        super(project)
     }
 
     def 'do'(){
@@ -69,7 +68,7 @@ class AddDependenciesJob extends Job {
         String localConfigValue = "project([path: \":$id\"])"
         String externalId = (id != "library") ? id :
                 projectUtils.useAndroidX() ? "androidx" : "support"
-        String externalConfigValue = group + ":" + externalId + ":" + PluginUtils.getVersion(plugin)
+        String externalConfigValue = group + ":" + externalId + ":" + PluginUtils.getVersion()
 
         if (isLocal){
             println "IADT   ${configName} '${externalConfigValue}' SKIPPED (isLocalDev)"
