@@ -9,7 +9,7 @@ buildscript {
     apply from: './gradle/constants.gradle'
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         //classpath 'com.android.tools.build:gradle:3.6.1' //Oldest tested
 
         // Internal plugins for publications
