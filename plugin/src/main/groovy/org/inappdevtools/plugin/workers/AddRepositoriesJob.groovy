@@ -19,7 +19,6 @@
 
 package org.inappdevtools.plugin.workers
 
-import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.IadtConfigFields
 
 import java.net.URI;
@@ -28,8 +27,8 @@ import org.gradle.api.Project
 // Add repositories needed for transitive dependencies (google, mavencentral, jitpack and jcenter)
 class AddRepositoriesJob extends Job {
 
-    AddRepositoriesJob(InAppDevToolsPlugin plugin, Project project) {
-        super(plugin, project)
+    AddRepositoriesJob(Project project) {
+        super(project)
     }
 
     def 'do'(){

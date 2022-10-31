@@ -19,15 +19,15 @@
 
 package org.inappdevtools.plugin.utils
 
-import org.gradle.api.Plugin
+import org.inappdevtools.plugin.InAppDevToolsPlugin
 
 class PluginUtils {
 
-    static String getName(Plugin plugin) {
-        plugin.getClass().getPackage().getSpecificationTitle()
+    static String getName() {
+        InAppDevToolsPlugin.class.getPackage().getSpecificationTitle()
     }
 
-    static String getVersion(Plugin plugin) {
-        plugin.getClass().getPackage().getSpecificationVersion()
+    static String getVersion() {
+        InAppDevToolsPlugin.class.getPackage().getSpecificationVersion()
     }
 }

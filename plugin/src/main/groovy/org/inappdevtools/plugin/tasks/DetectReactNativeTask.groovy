@@ -19,23 +19,27 @@
 
 package org.inappdevtools.plugin.tasks
 
-
+import org.gradle.api.tasks.Internal
 import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 import org.inappdevtools.plugin.utils.DependencyUtils
 import org.inappdevtools.plugin.utils.FileExporter
+import org.inappdevtools.plugin.utils.ProjectUtils
 
 class DetectReactNativeTask extends IadtBaseTask {
 
+    @Internal
+    ProjectUtils projectUtils
+
     DetectReactNativeTask() {
         this.description = "Generate a react_config file if ReactNative present in dependencies"
+        this.projectUtils = new ProjectUtils(getProject())
     }
 
     @TaskAction
     void perform() {
-        File dependencies = InAppDevToolsPlugin.getOutputFile(getProject(),
-                'gradle_dependencies.txt')
+        File dependencies = projectUtils.getOutputFile('gradle_dependencies.txt')
         String reactString = new DependencyUtils(getProject()).getCurrentVersion(dependencies,
                 "com.facebook.react:react-native")
 
@@ -52,13 +56,13 @@ class DetectReactNativeTask extends IadtBaseTask {
     }
 
     private void saveConfiguration(Project project, Map config) {
-        File configFile = InAppDevToolsPlugin.getOutputFile(project, 'react_config.json')
+        File configFile = projectUtils.getOutputFile('react_config.json')
         FileExporter configUtils = new FileExporter(project)
         configUtils.writeMap(configFile, config)
     }
 
     private void cleanConfiguration(Project project) {
-        File configFile = InAppDevToolsPlugin.getOutputFile(project, 'react_config.json')
+        File configFile = projectUtils.getOutputFile('react_config.json')
         if (configFile.exists()){
             configFile.delete()
         }

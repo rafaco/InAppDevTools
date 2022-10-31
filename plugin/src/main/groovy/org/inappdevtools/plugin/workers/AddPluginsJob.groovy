@@ -22,14 +22,13 @@ package org.inappdevtools.plugin.workers
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.ProjectReportsPlugin
-import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.IadtConfigFields
 import tech.linjiang.pandora.gradle.PandoraPlugin
 
 class AddPluginsJob extends Job {
 
-    AddPluginsJob(InAppDevToolsPlugin plugin, Project project) {
-        super(plugin, project)
+    AddPluginsJob(Project project) {
+        super(project)
     }
 
     def 'do'(){
@@ -52,8 +51,9 @@ class AddPluginsJob extends Job {
     //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
     private void applyPandoraPlugin(Project project){
         if (configHelper.get(IadtConfigFields.DEBUG)) {
-            println "IADT   apply PandoraPlugin."
+            println "IADT   apply PandoraPlugin $project."
         }
-        project.getPluginManager().apply(PandoraPlugin.class)
+        //TODO: RE-ENABLE Pandora
+        //project.getPluginManager().apply(PandoraPlugin.class)
     }
 }

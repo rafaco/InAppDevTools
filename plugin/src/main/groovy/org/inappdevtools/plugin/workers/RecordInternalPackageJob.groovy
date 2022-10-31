@@ -22,14 +22,13 @@ package org.inappdevtools.plugin.workers
 
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
-import org.inappdevtools.plugin.InAppDevToolsPlugin
 import org.inappdevtools.plugin.config.IadtConfigFields
 
 //Inject internal package from host app manifest into resValue
 class RecordInternalPackageJob extends Job {
 
-    RecordInternalPackageJob(InAppDevToolsPlugin plugin, Project project) {
-        super(plugin, project)
+    RecordInternalPackageJob(Project project) {
+        super(project)
     }
 
     def 'do'(){
