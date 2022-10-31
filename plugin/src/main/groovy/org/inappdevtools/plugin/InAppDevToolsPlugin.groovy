@@ -19,7 +19,12 @@
 
 package org.inappdevtools.plugin
 
-
+import org.gradle.BuildListener
+import org.gradle.BuildResult
+import org.gradle.api.ProjectEvaluationListener
+import org.gradle.api.ProjectState
+import org.gradle.api.initialization.Settings
+import org.gradle.api.invocation.Gradle
 import org.inappdevtools.plugin.config.ConfigParser
 import org.inappdevtools.plugin.config.IadtConfigFields
 import org.inappdevtools.plugin.config.ConfigHelper
@@ -31,13 +36,11 @@ import org.inappdevtools.plugin.workers.AddRepositoriesJob
 import org.inappdevtools.plugin.workers.AddTasksJob
 import org.inappdevtools.plugin.workers.RecordInternalPackageJob
 import groovy.json.JsonOutput
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.inappdevtools.plugin.utils.PluginUtils
-import org.gradle.plugins.ide.eclipse.internal.AfterEvaluateHelper
 
-class InAppDevToolsPlugin implements Plugin<Project> {
+class InAppDevToolsPlugin implements Plugin<Settings> {
 
     static final TAG = 'inappdevtools'
     static final ASSETS_PATH = '/generated/assets'
@@ -48,58 +51,86 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     ConfigHelper configHelper
     File outputFolder
 
-    void apply(Project project) {
-        //println "IADT apply for $project"
-        projectUtils = new ProjectUtils(project)
+    void apply(Settings settings) {
+        println "IADT apply for settings $settings"
+        println "IADT InAppDevTools ${PluginUtils.getVersion(this)} from Settings"
 
-        if (projectUtils.isRoot()) {
-            onApplyToRoot(project)
-        }
+        //settings.getPluginManager().apply('org.inappdevtools')
+
+        settings.getGradle().addBuildListener(new BuildListener() {
+            @Override
+            void settingsEvaluated(Settings evaluatedSettings) {
+                println "IADT settingsEvaluated $evaluatedSettings"
+            }
+
+            @Override
+            void projectsLoaded(Gradle gradle) {
+                println "IADT projectsLoaded $gradle"
+
+            }
+
+            @Override
+            void projectsEvaluated(Gradle gradle) {
+                println "IADT projectsEvaluated $gradle"
+            }
+
+            @Override
+            void buildFinished(BuildResult buildResult) {
+                println "IADT buildFinished $buildResult"
+            }
+        })
+
+        settings.getGradle().addProjectEvaluationListener(new ProjectEvaluationListener() {
+            @Override
+            void beforeEvaluate(Project project) {
+                println "IADT beforeEvaluate $project"
+                projectUtils = new ProjectUtils(project)
+                if (projectUtils.isRoot()) {
+                    // Init configuration extension
+                    extension = project.extensions.create(TAG, InAppDevToolsExtension)
+                   // onApplyToRoot(project)
+                }
+            }
+
+            @Override
+            void afterEvaluate(Project project, ProjectState projectState) {
+                println "IADT afterEvaluate $project"
+                projectUtils = new ProjectUtils(project)
+                if (projectUtils.isRoot()) {
+                    afterEvaluateRoot(project)
+                }
+                else if (projectUtils.isAndroidApplication()) {
+                    afterEvaluateAndroidModule(project)
+                }
+                else if (configHelper.get(IadtConfigFields.DEBUG)) {
+                    //TODO: Unlock for other Android Modules
+                    println "IADT skipped for ${project} project. " +
+                            "Only Android Application modules are currently supported."
+                }
+            }
+        })
 
         //TODO: Check isEnabled? IMPORTANT!
         //  optionally if not enabled globally:
         //   - stop linking output folder (project.android.sourceSets.main.assets.srcDirs += outputFolder.getParent())
         //   - if noopEnabled -> afterEvaluate add noop dependency, skip repository
         //   - add Noop tasks from TaskHelper... or direct cleanup bypassing tasks
-
-        AfterEvaluateHelper.afterEvaluateOrExecute(project, new Action<Project>() {
-            @Override
-            void execute(Project project2) {
-                //println "IADT Apply after evaluate for $project"
-
-                configHelper = new ConfigHelper(project)
-
-                if (projectUtils.isRoot()){
-                    new ConfigParser(configHelper)
-                    afterEvaluateRoot(project)
-                }
-                else if (projectUtils.isAndroidApplication()) {
-                    //TODO: Unlock for any Android Modules
-                    afterEvaluateAndroidModule(project)
-                }
-                else{
-                    if (configHelper.get(IadtConfigFields.DEBUG)){
-                        println "IADT skipped for ${project} project. " +
-                                "Only Android Application modules are currently supported."
-                    }
-                }
-            }
-        })
     }
 
     private void onApplyToRoot(Project project) {
-        // Init configuration extension
-        extension = project.extensions.create(TAG, InAppDevToolsExtension)
+        println "IADT onApplyToRoot $project"
 
         // Apply to all submodules, we will filter them afterEvaluate
         project.subprojects { subproject ->
             //TODO: Filter modules from configuration?
             //println "IADT root: apply plugin to ${subproject}"
-            subproject.getPluginManager().apply('org.inappdevtools')
+            //subproject.getPluginManager().apply('org.inappdevtools')
         }
     }
 
     private void afterEvaluateRoot(Project project) {
+        configHelper = new ConfigHelper(project)
+        new ConfigParser(configHelper)
 
         if (configHelper.get(IadtConfigFields.DEBUG)) {
             def gradleVersion = project.gradle.gradleVersion
@@ -120,6 +151,8 @@ class InAppDevToolsPlugin implements Plugin<Project> {
     }
 
     private void afterEvaluateAndroidModule(Project project) {
+        projectUtils = new ProjectUtils(project)
+        configHelper = new ConfigHelper(project)
         println "IADT InAppDevTools ${PluginUtils.getVersion(this)}"
         String opMode = projectUtils.useAndroidX() ? "ANDROIDX artifact" : "SUPPORT artifact"
         String noopMode = configHelper.get(IadtConfigFields.USE_NOOP) ? "NOOP artifact" : "Nothing"

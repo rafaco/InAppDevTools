@@ -254,7 +254,7 @@ class ProjectUtils {
     }
 
     def getFlavors() {
-        if (!isAndroidModule()) return []
+        if (!isAndroidModule()) return [:]
         def results = [:]
         project.android.flavorDimensionList.each{
             results[(it)]=[]

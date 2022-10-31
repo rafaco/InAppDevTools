@@ -4,7 +4,35 @@ pluginManagement {
         mavenLocal()
         gradlePluginPortal()
     }
+
+    // use local copy of your plugin if available,
+    // otherwise load plugin from repo
+    /*
+    def name = 'your_plugin_project'
+    if (file(name).isDirectory()) {
+        includeBuild(name)
+    }
+    */
+
+    //Includes a build of plugin module (Composite build)
+    // Required to develop and test the plugin in the same project
+    includeBuild ('plugin')
+    gradle.ext.iadtIsLocalDev = true
 }
+
+/*
+ *  IADT Setup: Modern way using plugins DSL.
+ *  Dynamic versioning if Gradle version > 5.6
+ */
+plugins {
+    id "org.inappdevtools"
+}
+
+/*
+ *  IADT Configuration from external file
+*/
+//apply from: 'inappdevtools.gradle'
+
 
 //Allow to publish plugin to local in a range of Gradle version
 import org.gradle.util.VersionNumber
@@ -13,10 +41,6 @@ if (VersionNumber.parse(gradle.gradleVersion) > VersionNumber.parse('4.6') &&
     enableFeaturePreview('STABLE_PUBLISHING')
 }
 
-//Includes a build of plugin module (Composite build)
-// Required to develop and test the plugin in the same project
-includeBuild ('plugin')
-gradle.ext.iadtIsLocalDev = true
 
 //Include iadt modules as sources
 include ':noop'
