@@ -51,8 +51,9 @@ class AddPluginsJob extends Job {
     //Apply Pandora plugin. It cause a crash on startup when using noop (no Pandora libraries)
     private void applyPandoraPlugin(Project project){
         if (configHelper.get(IadtConfigFields.DEBUG)) {
-            println "IADT   apply PandoraPlugin."
+            println "IADT   apply PandoraPlugin $project."
         }
-        project.getPluginManager().apply(PandoraPlugin.class)
+        //TODO: RE-ENABLE Pandora
+        //project.getPluginManager().apply(PandoraPlugin.class)
     }
 }
