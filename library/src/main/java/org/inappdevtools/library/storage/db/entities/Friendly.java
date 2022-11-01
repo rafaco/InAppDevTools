@@ -177,4 +177,17 @@ public class Friendly {
     public boolean isLogcat() {
         return getCategory().equals("Logcat");
     }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getUid() ^ (getUid() >>> 32));
+        result = 31 * result + (int) (getDate() ^ (getDate() >>> 32));
+        result = 31 * result + (getSeverity() != null ? getSeverity().hashCode() : 0);
+        result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
+        result = 31 * result + (getSubcategory() != null ? getSubcategory().hashCode() : 0);
+        result = 31 * result + (getMessage() != null ? getMessage().hashCode() : 0);
+        result = 31 * result + (getExtra() != null ? getExtra().hashCode() : 0);
+        result = 31 * result + (int) (getLinkedId() ^ (getLinkedId() >>> 32));
+        return result;
+    }
 }

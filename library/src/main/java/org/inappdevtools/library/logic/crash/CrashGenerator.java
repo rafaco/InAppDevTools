@@ -29,6 +29,10 @@ import org.inappdevtools.library.Iadt;
 
 public class CrashGenerator {
 
+    private CrashGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void stackOverflow() {
         logAdvise("StackOverflow");
         generateStackOverflow();
@@ -44,6 +48,7 @@ public class CrashGenerator {
         generateIndexOutOfBounds();
     }
 
+    @SuppressWarnings("rawtypes")
     private static void generateIndexOutOfBounds() {
         new ArrayList().get(1);
     }
@@ -63,6 +68,7 @@ public class CrashGenerator {
         generateNullPointer();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static void generateNullPointer() {
         throw null;
     }

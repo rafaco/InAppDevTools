@@ -40,6 +40,10 @@ import org.inappdevtools.library.view.utils.Humanizer;
 
 public class LogFilterHelper {
 
+    public static final String TYPE_LOGCAT = "Logcat";
+    public static final String TYPE_EVENTS = "Events";
+    public static final String TYPE_ALL = "All";
+
     public enum Preset { REPRO_STEPS, DEBUG, CRASHES, NETWORK, CUSTOM, ALL }
     private LogUiFilter uiFilter;
 
@@ -130,9 +134,9 @@ public class LogFilterHelper {
         uiFilter.setSeverityInt(0);
         uiFilter.setTypeInt(0);
         uiFilter.setCategoryInt(0);
-        uiFilter.setCategoryName("All");
+        uiFilter.setCategoryName(TYPE_ALL);
         uiFilter.setTagInt(0);
-        uiFilter.setTagName("All");
+        uiFilter.setTagName(TYPE_ALL);
     }
 
     private void applyCustomPreset() {
@@ -151,7 +155,7 @@ public class LogFilterHelper {
     public List<String> getSessionOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisData> sessions = analysis.getSessionResult();
-        list.add("All");
+        list.add(TYPE_ALL);
         String sessionOrdinal;
         for (AnalysisData item : sessions) {
             sessionOrdinal = Humanizer.ordinal(Integer.valueOf(item.getName()));
@@ -185,16 +189,16 @@ public class LogFilterHelper {
 
     public List<String> getTypeOptions() {
         List<String> list = new ArrayList<>();
-        list.add("All");
-        list.add("Events");
-        list.add("Logcat");
+        list.add(TYPE_ALL);
+        list.add(TYPE_EVENTS);
+        list.add(TYPE_LOGCAT);
         return list;
     }
 
     public List<String> getCategoryOptions() {
         List<String> list = new ArrayList<>();
         List<AnalysisData> categoryResult = analysis.getCategoryResult();
-        list.add("All");
+        list.add(TYPE_ALL);
         for (AnalysisData item : categoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -205,7 +209,7 @@ public class LogFilterHelper {
     public List<String> getTagOptions() {
         ArrayList<String> list = new ArrayList<>();
         List<AnalysisData> subcategoryResult = analysis.getLogcatTagResult();
-        list.add("All");
+        list.add(TYPE_ALL);
         for (AnalysisData item : subcategoryResult) {
             list.add(item.getName() + " " + item.getPercentage()+ "%");
         }
@@ -234,7 +238,7 @@ public class LogFilterHelper {
         }
 
         if (uiFilter.getTypeInt() != 0){
-            result += ((uiFilter.getTypeInt() == 1) ? "Events" : "Logs") + " ";
+            result += ((uiFilter.getTypeInt() == 1) ? TYPE_EVENTS : "Logs") + " ";
         }else{
             result += "Events and Logs ";
         }
@@ -365,9 +369,9 @@ public class LogFilterHelper {
         }
 
         if(uiFilter.getTypeInt() == 1){
-            notInSelection.add("Logcat");
+            notInSelection.add(TYPE_LOGCAT);
         }else if (uiFilter.getTypeInt() == 2){
-            inSelection.add("Logcat");
+            inSelection.add(TYPE_LOGCAT);
         }
         backFilter.setNotCategories(notInSelection);
         backFilter.setCategories(inSelection);

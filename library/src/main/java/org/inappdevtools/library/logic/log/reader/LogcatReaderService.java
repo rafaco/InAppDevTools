@@ -62,13 +62,14 @@ import org.inappdevtools.library.view.utils.Humanizer;
 public class LogcatReaderService extends JobIntentService {
 
     private static final int JOB_ID = 3003;
-    private static final long LIVE_MAX_TIME = 2 * 1000;
-    private static final long BACKGROUND_MAX_TIME = 5 * 60 * 1000;
+    private static final long LIVE_MAX_TIME = 2 * 1000L;
+    private static final long BACKGROUND_MAX_TIME = 5 * 60 * 1000L;
     private static final int QUEUE_MAX_SIZE = 500;
-    private final int BUFFER_SIZE = 1024;
-    public final static String START_ACTION = "start_action";
-    public final static String CANCEL_ACTION = "cancel_action";
-    public final static String PARAM_KEY = "param";
+    public static final String EXCEPTION_MESSAGE = "Exception";
+    private static final int BUFFER_SIZE = 1024;
+    public static final String START_ACTION = "start_action";
+    public static final String CANCEL_ACTION = "cancel_action";
+    public static final String PARAM_KEY = "param";
     public static final String LOGCAT_COMMAND = "logcat -v long";
 
     private boolean isReaderRunning = false;
@@ -240,7 +241,7 @@ public class LogcatReaderService extends JobIntentService {
             logcatProcess = Runtime.getRuntime().exec(fullCommand);
         }
         catch (Exception e) {
-            FriendlyLog.logException("Exception", e);
+            FriendlyLog.logException(EXCEPTION_MESSAGE, e);
             isReaderRunning = false;
         }
 
@@ -249,7 +250,7 @@ public class LogcatReaderService extends JobIntentService {
                     logcatProcess.getInputStream()),BUFFER_SIZE);
         }
         catch(IllegalArgumentException e){
-            FriendlyLog.logException("Exception", e);
+            FriendlyLog.logException(EXCEPTION_MESSAGE, e);
             isReaderRunning = false;
         }
 
@@ -267,7 +268,7 @@ public class LogcatReaderService extends JobIntentService {
             }
         }
         catch (IOException e) {
-            FriendlyLog.logException("Exception", e);
+            FriendlyLog.logException(EXCEPTION_MESSAGE, e);
             isReaderRunning = false;
         }
 
