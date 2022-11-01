@@ -83,8 +83,7 @@ publishing.publications {
             source = sourceDirs //variant.javaCompileProvider.get().source //Was deprecated: variant.javaCompile.source
             destinationDir = javaDocDestDir
             classpath += files(android.getBootClasspath().join(File.pathSeparator))
-            //TODO:
-            //configurations.compile.setCanBeResolved(true)
+            configurations.implementation.setCanBeResolved(true)
             classpath += files(configurations.implementation)
             options.links("http://docs.oracle.com/javase/7/docs/api/")
             options.links("http://d.android.com/reference/")
@@ -160,8 +159,8 @@ publishing.publications {
                     }
 
                     // Add general dependencies
-                    println("Processing compile dependencies...")
-                    configurations.compile.allDependencies.each addDependency
+                    //println("Processing compile dependencies...")
+                    //configurations.compile.allDependencies.each addDependency
                     println("Processing implementation dependencies...")
                     configurations.implementation.allDependencies.each addDependency
 
@@ -171,8 +170,8 @@ publishing.publications {
 
                     // Add flavor dependencies
                     if (flavored) {
-                        println("Processing flavorCompile dependencies...")
-                        configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
+                        //println("Processing flavorCompile dependencies...")
+                        //configurations["${variant.flavorName}Compile"].allDependencies.each addDependency
                         println("Processing flavorImplementation dependencies...")
                         configurations["${variant.flavorName}Implementation"].allDependencies.each addDependency
                     }

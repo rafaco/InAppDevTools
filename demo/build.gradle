@@ -12,7 +12,7 @@ android {
         versionName DEMO_VERSION
 
         //TODO: remove
-        multiDexEnabled false
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -60,7 +60,7 @@ dependencies {
     releaseApi project(':noop')
 
     // Compat library from project path
-    api project(':compat')
+    //api project(':compat')
 
     //Retrofit
     api "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
