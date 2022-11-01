@@ -65,15 +65,12 @@ android {
     }
     else {
         if (variant.flavorName == 'androidx') {
-            dependencies.androidxApi "es.rafaco.compat:androidx:$PROJECT_VERSION"
+            dependencies.androidxApi "org.inappdevtools.compat:androidx:$PROJECT_VERSION"
         } else {
-            dependencies.supportApi "es.rafaco.compat:support:$PROJECT_VERSION"
+            dependencies.supportApi "org.inappdevtools.compat:support:$PROJECT_VERSION"
         }
     }
-}
-//androidxImplementation "es.rafaco.compat:androidx:$PROJECT_VERSION"
-//supportImplementation "es.rafaco.compat:support:$PROJECT_VERSION"
-*/
+}*/
 
 
 repositories {
@@ -81,10 +78,13 @@ repositories {
     maven { url "https://jitpack.io"}
 }
 
-
 dependencies {
 
-    api project(path: ':compat')
+    //api project(path: ':compat')
+    //api project(path: ':compat', configuration: 'default')
+    androidxApi "org.inappdevtools.compat:androidx:$PROJECT_VERSION"
+    supportApi "org.inappdevtools.compat:support:$PROJECT_VERSION"
+
     // AndroidX/Support view components, inherited from compat module:
     //    androidxApi "androidx.appcompat:appcompat:$ANDROIDX_MAIN_VERSION"
     //    supportApi "com.android.support:appcompat-v7:$appSupportVersion"
@@ -151,6 +151,7 @@ dependencies {
     testSupportImplementation "android.arch.core:core-testing:$SUPPORT_ARCH_VERSION"
     testSupportImplementation "android.arch.paging:common:$SUPPORT_PAGING_VERSION"
 }
+
 
 
 sonarqube {
